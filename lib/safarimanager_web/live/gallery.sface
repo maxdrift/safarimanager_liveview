@@ -1,0 +1,7 @@
+<!-- GPhotos grid clone using just CSS -->
+<!-- https://github.com/xieranmaya/blog/issues/6 -->
+<section class="photo-grid-section">
+  {#for {url, width, height} <- generate_random_images(50)}
+    <Thumbnail {=url} {=width} {=height} click="open-image" />
+  {/for}
+</section>

@@ -1,0 +1,37 @@
+<Dialog {=@id} {=@show}>
+  <div class="card card-compact">
+    <div class="card-title">
+      {String.capitalize(Atom.to_string(@action))} Organization
+    </div>
+    <Form for={@changeset} change="validate" submit="submit" opts={autocomplete: "off"}>
+      <div class="card-body">
+        <Field name={:name} class="form-control">
+          <Label class="label">
+            <span class="label-text">Name</span>
+          </Label>
+          <TextInput
+            class={
+              "input",
+              "input-bordered",
+              "input-error": not is_nil(@changeset.action) and not @changeset.valid?,
+              "input-success": @changeset.action == :validate and @changeset.valid?
+            }
+            opts={phx_debounce: "1000"}
+          />
+          <Label class="label h-7">
+            <ErrorTag />
+          </Label>
+        </Field>
+      </div>
+      <Alert level="error" message={@error_message} show={not is_nil(@error_message)} />
+      <div class="modal-action">
+        <Submit class={
+          "btn btn-md",
+          "btn-success": @changeset.action == nil or @changeset.valid?,
+          "btn-disabled": @changeset.action == :validate and !@changeset.valid?
+        }>Save</Submit>
+        <Reset click="hide" class="btn btn-md btn-ghost" value="Close" />
+      </div>
+    </Form>
+  </div>
+</Dialog>

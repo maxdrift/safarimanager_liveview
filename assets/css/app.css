@@ -1,0 +1,39 @@
+/* This file is for your main application CSS */
+
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
+
+/* Custom */
+
+
+/* GPhotos grid clone using just CSS
+https: //github.com/xieranmaya/blog/issues/6 */
+
+
+/* .photo-grid-section {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.photo-grid-section::after {
+    content: '';
+    flex-grow: 999999999;
+}
+
+.photo-grid-div {
+    margin: 2px;
+    background-color: lightGray;
+    position: relative;
+}
+
+.photo-grid-i {
+    display: block;
+}
+
+.photo-grid-img {
+    position: absolute;
+    top: 0;
+    width: 100%;
+    vertical-align: bottom;
+} */

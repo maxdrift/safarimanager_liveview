@@ -1,0 +1,3 @@
+<Dialog {=@id} {=@show}>
+  <#slot />
+</Dialog>

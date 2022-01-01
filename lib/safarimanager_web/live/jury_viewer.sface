@@ -1,0 +1,47 @@
+<div class="flex flex-col flex-nowrap h-screen" :on-window-keyup="vote-key">
+  <div class="flex-initial">
+    <div class="flex flex-row justify-between">
+      <div class="btn-group">
+        <span class="inline-block align-sub p-1 pl-3 font-bold">Donzella Pavonina</span>
+        <span class="inline-block align-sub p-1 pl-3 font-bold">{@curr_index + 1} of {@image_count}</span>
+        <span :if={@given_votes != []} class="inline-block align-sub p-1 pl-3 font-bold">Votes: {Enum.join(@given_votes, " | ")}</span>
+      </div>
+      <div class="flex flex-row justify-between gap-2">
+        <div class="btn-group">
+          <JuryToolbarButton click="prev-image">Prev</JuryToolbarButton>
+          <JuryToolbarButton click="next-image">Next</JuryToolbarButton>
+        </div>
+        <div class="btn-group">
+          <JuryToolbarButton id="zoom-out">-</JuryToolbarButton>
+          <JuryToolbarButton id="zoom-100">100%</JuryToolbarButton>
+          <JuryToolbarButton id="home">Fit</JuryToolbarButton>
+          <JuryToolbarButton id="zoom-in">+</JuryToolbarButton>
+        </div>
+        <JuryToolbarButton id="full-page">FS</JuryToolbarButton>
+      </div>
+    </div>
+  </div>
+  <!-- phx-update="ignore" is VERY VERY important! -->
+  <div id="openseadragon-viewer" class="flex-1" :hook="Lightbox" phx-update="ignore"> </div>
+  <div class="flex-initial">
+    <div class="flex flex-row justify-between">
+      <div class="flex flex-row justify-between gap-2">
+        <div class="btn-group">
+          {#for vote <- @votes}
+            <JuryToolbarButton click="vote" click_key="vote" click_value={vote}>{vote}</JuryToolbarButton>
+          {#else}
+            No votes available
+          {/for}
+        </div>
+        <JuryToolbarButton click="clear-votes">Clear</JuryToolbarButton>
+      </div>
+      <div class="btn-group">
+        {#for prize <- @prizes}
+          <JuryToolbarButton click="prize" click_key="prize" click_value={prize}>{prize}</JuryToolbarButton>
+        {#else}
+          No prizes available
+        {/for}
+      </div>
+    </div>
+  </div>
+</div>

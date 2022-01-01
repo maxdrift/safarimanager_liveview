@@ -1,0 +1,6 @@
+<div id={@id} class={"modal", "modal-open": @show} :on-window-keydown="hide" phx-key="Escape">
+  <div :if={@show} class="modal-box">
+    <#slot />
+    <#slot name="actions" />
+  </div>
+</div>

@@ -1,0 +1,28 @@
+defmodule SMWeb.Gallery do
+  @moduledoc """
+  Live view handling display of a Slide gallery
+  """
+  use Surface.LiveView
+  alias SMWeb.Molecules.Thumbnail
+
+  @lorempicsum_url "https://picsum.photos"
+
+  def handle_event("open-image", _, socket) do
+    {:noreply, socket}
+  end
+
+  defp generate_random_images(amount) do
+    Enum.map(1..amount, fn index ->
+      width = Enum.random(200..1000)
+      height = Enum.random(200..1000)
+
+      url =
+        @lorempicsum_url
+        |> URI.parse()
+        |> URI.merge("/seed/#{index}/#{width}/#{height}")
+        |> URI.to_string()
+
+      {url, width, height}
+    end)
+  end
+end

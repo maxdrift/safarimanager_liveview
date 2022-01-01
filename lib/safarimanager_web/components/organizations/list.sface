@@ -1,0 +1,74 @@
+<div>
+  <ConfirmationDialog id="delete-confirmation">
+    <div class="card">
+      <div class="card-title">
+        Confirmation
+      </div>
+      <div class="card-body">
+        <span :if={length(@selected) < 2}>Are you sure you want to delete this organization?</span>
+        <span :if={length(@selected) >= 2}>Are you sure you want to delete {length(@selected)} organizations?</span>
+      </div>
+      <div class="modal-action">
+        <button :on-click="confirm" class="btn btn-md btn-error">Delete</button>
+        <button :on-click="abort" class="btn btn-md btn-ghost">Cancel</button>
+      </div>
+    </div>
+  </ConfirmationDialog>
+  <Show id="show-dialog" />
+  <Edit id="edit-dialog" />
+  <div class="flex flex-row-reverse my-2">
+    <div>
+      <LivePatch to="?action=new" class="btn btn-sm btn-success">Create</LivePatch>
+      <button :if={@any_selected?} class="btn btn-sm btn-error" :on-click="delete-many">Delete selected</button>
+    </div>
+  </div>
+  <table class="table table-zebra table-fixed w-full">
+    <thead>
+      <tr>
+        <th class="w-1">
+          <label>
+            <input
+              type="checkbox"
+              checked={@all_selected?}
+              class="checkbox checkbox-sm"
+              :on-click="toggle-select-all"
+            />
+          </label>
+        </th>
+        <th class="w-1/12">ID</th>
+        <th class="w-auto">Name</th>
+        <th class="w-2/12">Created</th>
+        <th class="w-2/12">Modified</th>
+        <th class="w-2/12">Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {#for item <- @items}
+        <tr>
+          <th>
+            <label>
+              <input
+                type="checkbox"
+                checked={item.selected?}
+                class="checkbox checkbox-sm"
+                :on-click="toggle-select-item"
+                :values={id: item.id, selected: not item.selected?}
+              />
+            </label>
+          </th>
+          <th class="truncate">{format_id(item.id)}</th>
+          <td class="truncate">{item.name}</td>
+          <td class="truncate">{format_date(item.inserted_at)}</td>
+          <td class="truncate">{format_date(item.updated_at)}</td>
+          <td class="truncate">
+            <LivePatch to={"?action=show&id=#{item.id}"} class="btn btn-xs btn-outline btn-info">Show</LivePatch>
+            <LivePatch to={"?action=edit&id=#{item.id}"} class="btn btn-xs btn-warning">Edit</LivePatch>
+            <button class="btn btn-xs btn-error" :on-click="delete-one" :values={id: item.id}>Delete</button>
+          </td>
+        </tr>
+      {#else}
+        No items yet!
+      {/for}
+    </tbody>
+  </table>
+</div>
