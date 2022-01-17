@@ -4,36 +4,18 @@ defmodule SMWeb.Components.Organizations.Show do
   """
   use Surface.LiveComponent
 
-  require Logger
-
-  alias SM.Organizations
   alias SMWeb.Components.Dialog
 
   data show, :boolean, default: false
-  data organization, :struct
+  data entity, :struct
 
   # Public API
 
-  def show(dialog_id, organization_id) do
-    case Organizations.get(organization_id) do
-      {:ok, organization} ->
-        send_update(__MODULE__, id: dialog_id, organization: organization, show: true)
-
-      {:error, reason} = error ->
-        Logger.error("Error showing Show modal: #{inspect(reason)}")
-        error
-    end
+  def show(dialog_id, entity) do
+    send_update(__MODULE__, id: dialog_id, entity: entity, show: true)
   end
 
   # Event handlers
-
-  def handle_event("show", _, socket) do
-    socket =
-      socket
-      |> assign(show: true)
-
-    {:noreply, socket}
-  end
 
   def handle_event("hide", _, socket) do
     socket =

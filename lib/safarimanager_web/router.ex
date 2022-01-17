@@ -23,9 +23,7 @@ defmodule SMWeb.Router do
   scope "/", SMWeb do
     pipe_through :browser
 
-    scope "/organizations", Organizations do
-      live "/", List
-    end
+    live "/organizations", Organizations
 
     # live "/", Main
     live "/gallery", Gallery
