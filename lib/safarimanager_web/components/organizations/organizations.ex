@@ -115,7 +115,7 @@ defmodule SMWeb.Organizations do
   def handle_event("validate", %{"entity" => params}, socket) do
     changeset =
       socket.assigns.editing_entity
-      |> Organizations.change(params)
+      |> change(params)
       |> Map.put(:action, :validate)
 
     socket = assign(socket, :editing_changeset, changeset)
@@ -176,17 +176,18 @@ defmodule SMWeb.Organizations do
   end
 
   def handle_params(%{"id" => id, "action" => "edit"}, _url, socket) do
-    with {:ok, organization} <- get(id),
-         {:ok, changeset} <- change(organization, %{}) do
-      Edit.show("edit-dialog", :edit)
+    case get(id) do
+      {:ok, organization} ->
+        changeset = change(organization, %{})
+        Edit.show("edit-dialog", :edit)
 
-      socket =
-        socket
-        |> assign(:editing_entity, organization)
-        |> assign(:editing_changeset, changeset)
+        socket =
+          socket
+          |> assign(:editing_entity, organization)
+          |> assign(:editing_changeset, changeset)
 
-      {:noreply, socket}
-    else
+        {:noreply, socket}
+
       {:error, reason} ->
         Logger.error("Error showing Edit modal: #{inspect(reason)}")
         socket = set_alert(socket, "error", "Unable to edit this Organization", @alert_duration)
@@ -243,7 +244,7 @@ defmodule SMWeb.Organizations do
   end
 
   defp change(organization, params) do
-    {:ok, Organizations.change(organization, params)}
+    Organizations.change(organization, params)
   end
 
   defp delete(ids) when is_list(ids) do
@@ -319,15 +320,11 @@ defmodule SMWeb.Organizations do
   defp reset_current_editing(socket) do
     entity = new()
 
-    with {:ok, changeset} <- change(entity, %{}) do
-      socket
-      |> assign(:editing_entity, entity)
-      |> assign(:editing_changeset, changeset)
-    else
-      {:error, reason} ->
-        Logger.error("Error resetting editing entity: #{inspect(reason)}")
-        socket
-    end
+    changeset = change(entity, %{})
+
+    socket
+    |> assign(:editing_entity, entity)
+    |> assign(:editing_changeset, changeset)
   end
 
   defp update_selection(socket, items) do
