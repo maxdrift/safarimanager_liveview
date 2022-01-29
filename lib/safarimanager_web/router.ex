@@ -34,6 +34,7 @@ defmodule SMWeb.Router do
   #
   # Note that preview only shows emails that were sent by the same
   # node running the Phoenix server.
+  # credo:disable-for-next-line Credo.Check.Warning.MixEnv
   if Mix.env() == :dev do
     scope "/dev" do
       pipe_through [:fetch_session, :protect_from_forgery]
@@ -42,6 +43,7 @@ defmodule SMWeb.Router do
     end
   end
 
+  # credo:disable-for-next-line Credo.Check.Warning.MixEnv
   if Mix.env() == :dev do
     scope "/" do
       pipe_through :browser

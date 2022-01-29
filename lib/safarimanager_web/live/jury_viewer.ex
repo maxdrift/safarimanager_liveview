@@ -17,6 +17,7 @@ defmodule SMWeb.JuryViewer do
     "/images/slides/IMG_7385.JPG"
   ]
 
+  @impl Phoenix.LiveView
   def mount(_params, _session, socket) do
     # next_image = Enum.at(@images, 0)
 
@@ -35,12 +36,12 @@ defmodule SMWeb.JuryViewer do
     {:ok, socket}
   end
 
+  @impl Phoenix.LiveView
   def handle_params(%{"img" => image_name}, _url, socket) do
+    # Note: remember events pushed from the server via push_event are global
+    # and will be dispatched to all active hooks on the client who are handling that event.
     socket =
-      socket
-      # Note: remember events pushed from the server via push_event are global
-      # and will be dispatched to all active hooks on the client who are handling that event.
-      |> push_event("new-image", %{options: %{image_url: "/images/slides/#{image_name}"}})
+      push_event(socket, "new-image", %{options: %{image_url: "/images/slides/#{image_name}"}})
 
     {:noreply, socket}
   end
@@ -62,6 +63,8 @@ defmodule SMWeb.JuryViewer do
     {:noreply, socket}
   end
 
+  # @spec handle_event(String.t(), %{String.t() => any()}, Socket.t()) :: {:noreply, Socket.t()}
+  @impl Phoenix.LiveView
   def handle_event("next-image", _data, socket) do
     next_index = rem(socket.assigns.curr_index + 1, socket.assigns.image_count)
 
@@ -102,9 +105,7 @@ defmodule SMWeb.JuryViewer do
     # next_image = Enum.at(socket.assigns.images, socket.assigns.curr_index)
     # image_name = String.split(next_image, "/") |> Enum.reverse() |> hd()
 
-    socket =
-      socket
-      |> add_vote(int_vote)
+    socket = add_vote(socket, int_vote)
 
     # # Note: remember events pushed from the server via push_event are global
     # # and will be dispatched to all active hooks on the client who are handling that event.
@@ -140,7 +141,8 @@ defmodule SMWeb.JuryViewer do
   end
 
   defp add_vote(socket, vote) do
-    assign(socket, :given_votes, socket.assigns.given_votes ++ [vote])
+    votes = Enum.reverse([vote | socket.assigns.given_votes])
+    assign(socket, :given_votes, votes)
   end
 
   # defp generate_random_images(amount) do

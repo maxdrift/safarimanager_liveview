@@ -15,6 +15,7 @@ defmodule SMWeb.Components.Hero do
   @doc "The color"
   prop color, :string, values!: ["danger", "info", "warning"]
 
+  @impl Surface.Component
   def render(assigns) do
     ~F"""
     <section class={"phx-hero", "alert-#{@color}": @color}>

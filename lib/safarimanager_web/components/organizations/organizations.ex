@@ -4,8 +4,6 @@ defmodule SMWeb.Organizations do
   """
   use Surface.LiveView
 
-  require Logger
-
   alias SM.Organizations
   alias SM.Organizations.Organization
   alias SMWeb.Atoms.Alert
@@ -15,12 +13,14 @@ defmodule SMWeb.Organizations do
   alias SMWeb.Components.Organizations.Show
   alias Surface.Components.LivePatch
 
+  require Logger
+
   # Alert duration in milliseconds
   @alert_duration 15_000
 
   @impl Phoenix.LiveView
   def mount(_params, _session, socket) do
-    _ = subscribe(socket)
+    _result = subscribe(socket)
 
     socket =
       socket
@@ -51,16 +51,14 @@ defmodule SMWeb.Organizations do
     {:noreply, socket}
   end
 
-  def handle_event("toggle-select-all", _, socket) do
+  def handle_event("toggle-select-all", _value, socket) do
     items =
       if socket.assigns.all_selected? do
-        socket.assigns.items
-        |> Enum.map(fn item ->
+        Enum.map(socket.assigns.items, fn item ->
           Map.put(item, :selected?, false)
         end)
       else
-        socket.assigns.items
-        |> Enum.map(fn item ->
+        Enum.map(socket.assigns.items, fn item ->
           Map.put(item, :selected?, true)
         end)
       end
@@ -254,7 +252,6 @@ defmodule SMWeb.Organizations do
         :ok
 
       :error ->
-        # TODO: return error to UI
         Logger.error("""
         Error deleting multiple Organizations:
           - #{Enum.join(ids, "\n  - ")}
@@ -270,7 +267,6 @@ defmodule SMWeb.Organizations do
       :ok
     else
       {:error, reason} ->
-        # TODO: return error to UI
         Logger.error("Error deleting Organization #{inspect(id)}: #{inspect(reason)}")
         :error
     end
@@ -328,8 +324,13 @@ defmodule SMWeb.Organizations do
   end
 
   defp update_selection(socket, items) do
+    selected =
+      items
+      |> Enum.filter(& &1.selected?)
+      |> Enum.map(& &1.id)
+
     socket
-    |> assign(:selected, Enum.filter(items, & &1.selected?) |> Enum.map(& &1.id))
+    |> assign(:selected, selected)
     |> assign(:all_selected?, Enum.all?(items, & &1.selected?))
     |> assign(:any_selected?, Enum.any?(items, & &1.selected?))
   end

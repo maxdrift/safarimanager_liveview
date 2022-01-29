@@ -7,6 +7,8 @@ defmodule SM do
   if it comes from the database, an external API or others.
   """
 
+  # credo:disable-for-this-file Credo.Check.Readability.Specs
+
   def schema do
     quote do
       use Ecto.Schema

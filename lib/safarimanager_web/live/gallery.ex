@@ -7,7 +7,8 @@ defmodule SMWeb.Gallery do
 
   @lorempicsum_url "https://picsum.photos"
 
-  def handle_event("open-image", _, socket) do
+  @impl Phoenix.LiveView
+  def handle_event("open-image", _value, socket) do
     {:noreply, socket}
   end
 

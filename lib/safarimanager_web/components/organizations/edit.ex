@@ -4,8 +4,6 @@ defmodule SMWeb.Components.Organizations.Edit do
   """
   use Surface.LiveComponent
 
-  require Logger
-
   alias SMWeb.Components.Dialog
   alias Surface.Components.Form
   alias Surface.Components.Form.ErrorTag
@@ -15,6 +13,8 @@ defmodule SMWeb.Components.Organizations.Edit do
   alias Surface.Components.Form.Reset
   alias Surface.Components.Form.Submit
   alias Surface.Components.Form.TextInput
+
+  require Logger
 
   data show, :boolean, default: false
   data action, :atom, values!: [:create, :edit]
@@ -28,6 +28,7 @@ defmodule SMWeb.Components.Organizations.Edit do
 
   # Public API
 
+  @spec show(String.t(), :create | :edit) :: any()
   def show(dialog_id, action) when action in [:create, :edit] do
     send_update(__MODULE__,
       id: dialog_id,
@@ -36,13 +37,15 @@ defmodule SMWeb.Components.Organizations.Edit do
     )
   end
 
+  @spec hide(String.t()) :: any()
   def hide(dialog_id) do
     send_update(__MODULE__, id: dialog_id, show: false)
   end
 
   # Event handlers
 
-  def handle_event("hide", _, socket) do
+  @impl Phoenix.LiveComponent
+  def handle_event("hide", _value, socket) do
     socket =
       socket
       |> assign(show: false)

@@ -6,6 +6,7 @@ defmodule SMWeb.ErrorHelpers do
   @doc """
   Translates an error message using gettext.
   """
+  @spec translate_error({String.t(), Keyword.t()}) :: String.t()
   def translate_error({msg, opts}) do
     # When using gettext, we typically pass the strings we want
     # to translate as a static argument:

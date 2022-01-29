@@ -14,13 +14,15 @@ defmodule SMWeb.Components.Organizations.Show do
 
   # Public API
 
+  @spec show(String.t(), struct()) :: any()
   def show(dialog_id, entity) do
     send_update(__MODULE__, id: dialog_id, entity: entity, show: true)
   end
 
   # Event handlers
 
-  def handle_event("hide", _, socket) do
+  @impl Phoenix.LiveComponent
+  def handle_event("hide", _value, socket) do
     socket =
       socket
       |> assign(show: false)

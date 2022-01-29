@@ -17,6 +17,8 @@ defmodule SMWeb do
   and import those modules here.
   """
 
+  # credo:disable-for-this-file Credo.Check.Readability.Specs
+
   def controller do
     quote do
       use Phoenix.Controller, namespace: SMWeb
