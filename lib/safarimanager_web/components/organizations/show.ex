@@ -1,6 +1,6 @@
 defmodule SMWeb.Components.Organizations.Show do
   @moduledoc """
-  Organization display component.
+  Display entity Live Component.
   """
   use Surface.LiveComponent
 
@@ -8,6 +8,9 @@ defmodule SMWeb.Components.Organizations.Show do
 
   data show, :boolean, default: false
   data entity, :struct
+
+  prop redirect_to, :string, required: true
+  prop entity_name, :string, required: true
 
   # Public API
 
@@ -21,7 +24,7 @@ defmodule SMWeb.Components.Organizations.Show do
     socket =
       socket
       |> assign(show: false)
-      |> push_patch(to: "/organizations")
+      |> push_patch(to: socket.assigns.redirect_to)
 
     {:noreply, socket}
   end

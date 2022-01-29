@@ -6,5 +6,4 @@ defmodule SMWeb.Components.Dialog do
   prop show, :boolean, default: false
 
   slot default, required: true
-  slot actions
 end

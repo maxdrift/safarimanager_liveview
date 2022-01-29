@@ -1,6 +1,11 @@
-<div id={@id} class={"modal", "modal-open": @show} :on-window-keydown="hide" phx-key="Escape">
-  <div :if={@show} class="modal-box">
+<div
+  id={@id}
+  class={"modal", "modal-open": @show}
+  :on-window-keydown="hide"
+  phx-key="Escape"
+  phx-target={"#" <> @id}
+>
+  <div :if={@show} class="modal-box card card-compact">
     <#slot />
-    <#slot name="actions" />
   </div>
 </div>

@@ -7,11 +7,16 @@ defmodule SMWeb.Organizations do
   require Logger
 
   alias SM.Organizations
+  alias SM.Organizations.Organization
+  alias SMWeb.Atoms.Alert
   alias SMWeb.Components.ConfirmationDialog
   alias SMWeb.Components.Organizations.Edit
   alias SMWeb.Components.Organizations.List
   alias SMWeb.Components.Organizations.Show
   alias Surface.Components.LivePatch
+
+  # Alert duration in milliseconds
+  @alert_duration 15_000
 
   @impl Phoenix.LiveView
   def mount(_params, _session, socket) do
@@ -20,6 +25,8 @@ defmodule SMWeb.Organizations do
     socket =
       socket
       |> load_entities()
+      |> reset_alert()
+      |> reset_current_editing()
       |> reset_selection()
 
     {:ok, socket}
@@ -76,18 +83,23 @@ defmodule SMWeb.Organizations do
     {:noreply, assign(socket, :to_be_deleted, socket.assigns.selected)}
   end
 
-  def handle_event("confirm", %{}, %{assigns: %{to_be_deleted: [_ | _] = ids}} = socket)
-      when is_list(ids) do
-    # TODO: Handle deletion errors
-    delete(ids)
+  def handle_event("confirm", %{}, %{assigns: %{to_be_deleted: [id]}} = socket) do
+    socket =
+      case delete(id) do
+        :ok -> set_alert(socket, "info", "Organization deleted successfully", @alert_duration)
+        :error -> set_alert(socket, "error", "Unable to delete Organization", @alert_duration)
+      end
 
     ConfirmationDialog.hide("delete-confirmation")
     {:noreply, socket}
   end
 
-  def handle_event("confirm", %{}, %{assigns: %{to_be_deleted: [id]}} = socket) do
-    # TODO: Handle deletion error
-    delete(id)
+  def handle_event("confirm", %{}, %{assigns: %{to_be_deleted: [_ | _] = ids}} = socket) do
+    socket =
+      case delete(ids) do
+        :ok -> set_alert(socket, "info", "Organizations deleted successfully", @alert_duration)
+        :error -> set_alert(socket, "error", "Unable to delete Organizations", @alert_duration)
+      end
 
     ConfirmationDialog.hide("delete-confirmation")
     {:noreply, socket}
@@ -99,15 +111,87 @@ defmodule SMWeb.Organizations do
     {:noreply, socket}
   end
 
-  @impl Phoenix.LiveView
-  def handle_params(%{"action" => "new"}, _url, socket) do
-    Edit.show("edit-dialog")
+  # Create/Edit dialog validate callback
+  def handle_event("validate", %{"entity" => params}, socket) do
+    changeset =
+      socket.assigns.editing_entity
+      |> Organizations.change(params)
+      |> Map.put(:action, :validate)
+
+    socket = assign(socket, :editing_changeset, changeset)
     {:noreply, socket}
   end
 
+  # Create/Edit dialog submit callback
+  def handle_event(
+        "submit",
+        %{"entity" => %{"_action" => "create"} = params},
+        socket
+      ) do
+    case Organizations.create(params) do
+      {:ok, _entity} ->
+        socket =
+          socket
+          |> reset_current_editing()
+          |> push_patch(to: "/organizations")
+
+        Edit.hide("edit-dialog")
+        socket = set_alert(socket, "info", "Organization created successfully", @alert_duration)
+        {:noreply, socket}
+
+      {:error, changeset} ->
+        {:noreply, assign(socket, :editing_changeset, changeset)}
+    end
+  end
+
+  def handle_event(
+        "submit",
+        %{"entity" => %{"_action" => "edit"} = params},
+        socket
+      ) do
+    case Organizations.update(socket.assigns.editing_entity, params) do
+      {:ok, entity} ->
+        socket =
+          socket
+          |> reset_current_editing()
+          |> push_patch(to: "/organizations")
+
+        Edit.hide("edit-dialog")
+
+        socket =
+          set_alert(socket, "info", ~s(Edited organization "#{entity.name}"), @alert_duration)
+
+        {:noreply, socket}
+
+      {:error, changeset} ->
+        {:noreply, assign(socket, :changeset, changeset)}
+    end
+  end
+
+  @impl Phoenix.LiveView
+  def handle_params(%{"action" => "new"}, _url, socket) do
+    Edit.show("edit-dialog", :create)
+
+    {:noreply, reset_current_editing(socket)}
+  end
+
   def handle_params(%{"id" => id, "action" => "edit"}, _url, socket) do
-    Edit.show("edit-dialog", id)
-    {:noreply, socket}
+    with {:ok, organization} <- get(id),
+         {:ok, changeset} <- change(organization, %{}) do
+      Edit.show("edit-dialog", :edit)
+
+      socket =
+        socket
+        |> assign(:editing_entity, organization)
+        |> assign(:editing_changeset, changeset)
+
+      {:noreply, socket}
+    else
+      {:error, reason} ->
+        Logger.error("Error showing Edit modal: #{inspect(reason)}")
+        socket = set_alert(socket, "error", "Unable to edit this Organization", @alert_duration)
+        {:noreply, socket}
+    end
   end
 
   def handle_params(%{"id" => id, "action" => "show"}, _url, socket) do
@@ -115,12 +199,13 @@ defmodule SMWeb.Organizations do
       {:ok, organization} ->
         Show.show("show-dialog", organization)
 
-      {:error, reason} = error ->
-        Logger.error("Error showing Organization: #{inspect(reason)}")
-        error
-    end
+        {:noreply, socket}
 
-    {:noreply, socket}
+      {:error, reason} ->
+        socket = set_alert(socket, "error", "Unable to show this Organization", @alert_duration)
+        Logger.error("Error showing Organization: #{inspect(reason)}")
+        {:noreply, socket}
+    end
   end
 
   def handle_params(%{} = _params, _url, socket) do
@@ -137,6 +222,12 @@ defmodule SMWeb.Organizations do
     {:noreply, socket}
   end
 
+  def handle_info(:remove_alert, socket) do
+    socket = reset_alert(socket)
+
+    {:noreply, socket}
+  end
+
   # Internal
 
   defp list do
@@ -145,6 +236,14 @@ defmodule SMWeb.Organizations do
 
   defp get(id) do
     Organizations.get(id)
+  end
+
+  defp new do
+    %Organization{}
+  end
+
+  defp change(organization, params) do
+    {:ok, Organizations.change(organization, params)}
   end
 
   defp delete(ids) when is_list(ids) do
@@ -169,10 +268,10 @@ defmodule SMWeb.Organizations do
          {:ok, _result} <- Organizations.delete(organization) do
       :ok
     else
-      {:error, reason} = error ->
+      {:error, reason} ->
         # TODO: return error to UI
         Logger.error("Error deleting Organization #{inspect(id)}: #{inspect(reason)}")
-        error
+        :error
     end
   end
 
@@ -196,6 +295,39 @@ defmodule SMWeb.Organizations do
       end)
 
     assign(socket, :items, items)
+  end
+
+  defp set_alert(socket, level, message) do
+    socket
+    |> assign(:error_level, level)
+    |> assign(:error_message, message)
+  end
+
+  defp set_alert(socket, level, message, remove_after) when is_integer(remove_after) do
+    socket = set_alert(socket, level, message)
+    :timer.send_after(remove_after, :remove_alert)
+
+    socket
+  end
+
+  defp reset_alert(socket) do
+    socket
+    |> assign(:error_level, "info")
+    |> assign(:error_message, nil)
+  end
+
+  defp reset_current_editing(socket) do
+    entity = new()
+
+    with {:ok, changeset} <- change(entity, %{}) do
+      socket
+      |> assign(:editing_entity, entity)
+      |> assign(:editing_changeset, changeset)
+    else
+      {:error, reason} ->
+        Logger.error("Error resetting editing entity: #{inspect(reason)}")
+        socket
+    end
   end
 
   defp update_selection(socket, items) do

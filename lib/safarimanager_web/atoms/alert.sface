@@ -5,7 +5,7 @@
   "alert-success": @level == "success",
   "alert-warning": @level == "warning",
   "alert-error": @level == "error",
-  hidden: !@show
+  invisible: !@show
 }>
   <div class="flex-1">
     <svg
