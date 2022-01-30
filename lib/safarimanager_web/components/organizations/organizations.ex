@@ -302,7 +302,7 @@ defmodule SMWeb.Organizations do
 
   defp set_alert(socket, level, message, remove_after) when is_integer(remove_after) do
     socket = set_alert(socket, level, message)
-    :timer.send_after(remove_after, :remove_alert)
+    {:ok, _tref} = :timer.send_after(remove_after, :remove_alert)
 
     socket
   end

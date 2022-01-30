@@ -10,7 +10,8 @@ defmodule SM.MixProject do
       compilers: [:gettext] ++ Mix.compilers() ++ [:surface],
       start_permanent: Mix.env() == :prod,
       aliases: aliases(),
-      deps: deps()
+      deps: deps(),
+      dialyzer: dialyzer()
     ]
   end
 
@@ -35,6 +36,7 @@ defmodule SM.MixProject do
   defp deps do
     [
       {:credo, "~> 1.6", only: [:dev, :test], runtime: false},
+      {:dialyzex, "~> 1.3.0", only: :dev, runtime: false},
       {:ecto_sql, "~> 3.6"},
       {:esbuild, "~> 0.3", runtime: Mix.env() == :dev},
       {:gettext, "~> 0.18"},
@@ -76,6 +78,13 @@ defmodule SM.MixProject do
   def catalogues do
     [
       "priv/catalogue"
+    ]
+  end
+
+  defp dialyzer do
+    [
+      flags: [:error_handling, :race_conditions, :underspecs],
+      plt_add_apps: [:ex_unit, :mix]
     ]
   end
 end
