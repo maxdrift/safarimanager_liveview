@@ -26,6 +26,42 @@ defmodule SM do
       import Ecto.Query
 
       alias SM.Repo
+
+      # Phoenix PubSub subscription
+
+      @topic inspect(__MODULE__)
+
+      @spec subscribe() :: :ok | {:error, {:already_registered, pid()}}
+      def subscribe do
+        Phoenix.PubSub.subscribe(SM.PubSub, @topic)
+      end
+
+      @spec subscribe(String.t()) :: :ok | {:error, {:already_registered, pid()}}
+      def subscribe(id) do
+        Phoenix.PubSub.subscribe(SM.PubSub, @topic <> "#{id}")
+      end
+
+      defp notify_subscribers({:ok, result}, event) when is_struct(result) do
+        :ok = Phoenix.PubSub.broadcast(SM.PubSub, @topic, {__MODULE__, event, result})
+
+        :ok =
+          Phoenix.PubSub.broadcast(
+            SM.PubSub,
+            @topic <> "#{result.id}",
+            {__MODULE__, event, result}
+          )
+
+        {:ok, result}
+      end
+
+      defp notify_subscribers({:ok, result}, event) do
+        :ok = Phoenix.PubSub.broadcast(SM.PubSub, @topic, {__MODULE__, event, result})
+
+        {:ok, result}
+      end
+
+      defp notify_subscribers({:error, reason}, _event), do: {:error, reason}
+      defp notify_subscribers(:error, _event), do: :error
     end
   end
 

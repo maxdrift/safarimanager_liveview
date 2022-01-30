@@ -6,18 +6,6 @@ defmodule SM.Organizations do
 
   alias SM.Organizations.Organization
 
-  @topic inspect(__MODULE__)
-
-  @spec subscribe() :: :ok | {:error, {:already_registered, pid()}}
-  def subscribe do
-    Phoenix.PubSub.subscribe(SM.PubSub, @topic)
-  end
-
-  @spec subscribe(String.t()) :: :ok | {:error, {:already_registered, pid()}}
-  def subscribe(organization_id) do
-    Phoenix.PubSub.subscribe(SM.PubSub, @topic <> "#{organization_id}")
-  end
-
   @doc """
   Returns the list of organizations.
 
@@ -36,8 +24,6 @@ defmodule SM.Organizations do
 
   @doc """
   Gets a single organization.
-
-  Raises `Ecto.NoResultsError` if the Organization does not exist.
 
   ## Examples
 
@@ -68,7 +54,7 @@ defmodule SM.Organizations do
   {:error, %Ecto.Changeset{}}
 
   """
-  @spec create(%{String.t() => any()}) :: {:error, any()} | {:ok, any()}
+  @spec create(%{String.t() => any()}) :: {:error, any()} | {:ok, Organization.t()}
   def create(attrs \\ %{}) do
     %Organization{}
     |> Organization.changeset(attrs)
@@ -88,7 +74,8 @@ defmodule SM.Organizations do
   {:error, %Ecto.Changeset{}}
 
   """
-  @spec update(Organization.t(), %{String.t() => any()}) :: {:ok, any} | {:error, any()}
+  @spec update(Organization.t(), %{String.t() => any()}) ::
+          {:ok, Organization.t()} | {:error, any()}
   def update(%Organization{} = organization, attrs) do
     organization
     |> Organization.changeset(attrs)
@@ -96,19 +83,19 @@ defmodule SM.Organizations do
     |> notify_subscribers([:organization, :updated])
   end
 
-  @spec delete(Organization.t()) :: {:ok, any} | :error | {:error, any}
   @doc """
   Deletes a Organization.
 
   ## Examples
 
-      iex> delete(organization)
-      {:ok, %Organization{}}
+  iex> delete(organization)
+  {:ok, %Organization{}}
 
-      iex> delete(organization)
-      {:error, %Ecto.Changeset{}}
+  iex> delete(organization)
+  {:error, %Ecto.Changeset{}}
 
   """
+  @spec delete(Organization.t()) :: {:ok, Organization.t()} | {:error, any()}
   def delete(%Organization{} = organization) do
     organization
     |> Repo.delete()
@@ -127,9 +114,9 @@ defmodule SM.Organizations do
   :error
 
   """
-  @spec delete_many([String.t()]) :: {:ok, any()} | :error | {:error, any()}
+  @spec delete_many([String.t()]) :: {:ok, integer()} | :error
   def delete_many(ids) do
-    {deleted, nil} = Repo.delete_all(from org in Organization, where: org.id in ^ids)
+    {deleted, nil} = Repo.delete_all(from entity in Organization, where: entity.id in ^ids)
 
     if deleted == Enum.count(ids) do
       notify_subscribers({:ok, deleted}, [:organization, :deleted])
@@ -151,27 +138,4 @@ defmodule SM.Organizations do
   def change(%Organization{} = organization, params \\ %{}) do
     Organization.changeset(organization, params)
   end
-
-  # Internal
-
-  defp notify_subscribers({:ok, result}, event) when is_struct(result) do
-    Phoenix.PubSub.broadcast(SM.PubSub, @topic, {__MODULE__, event, result})
-
-    Phoenix.PubSub.broadcast(
-      SM.PubSub,
-      @topic <> "#{result.id}",
-      {__MODULE__, event, result}
-    )
-
-    {:ok, result}
-  end
-
-  defp notify_subscribers({:ok, result}, event) do
-    Phoenix.PubSub.broadcast(SM.PubSub, @topic, {__MODULE__, event, result})
-
-    {:ok, result}
-  end
-
-  defp notify_subscribers({:error, reason}, _event), do: {:error, reason}
-  defp notify_subscribers(:error, _event), do: :error
 end
