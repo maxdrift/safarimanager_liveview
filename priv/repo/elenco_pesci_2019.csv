@@ -1,0 +1,160 @@
+1;ACCIUGA;Engraulis encrasicolus;6
+2;AGUGLIA;Belone belone;6
+3;ANGUILLA;Anguilla anguilla;2
+4;BAVOSA ADRIATICA;Microlipophrys adriaticus;2
+5;BAVOSA BASILISCO;Salaria basilisca;2
+6;BAVOSA BIANCA;Parablennius rouxi;2
+7;BAVOSA CAPONE;Lipophrys trigloides;2
+8;BAVOSA CERVINA;Parablennius zvonimiri;2
+9;BAVOSA CORNUTA;Parablennius tentacularis;2
+10;BAVOSA CRESTATA;Scartella cristata;2
+11;BAVOSA DALMATA;Microlipophrys dalmatinus;2
+12;BAVOSA GALLETTO;Coryphoblennius galerita;2
+13;BAVOSA GOTE GIALLE;Microlipophrys canevae;2
+14;BAVOSA OCCHIUTA;Blennius ocellaris;2
+15;BAVOSA PAVONE;Salaria pavo;2
+16;BAVOSA AFRICANA;Parablennius pilicornis;2
+17;BAVOSA PONTICA;Parablennius incognitus;2
+18;BAVOSA ROSSA;Microlipophrys nigriceps;2
+19;BAVOSA RUGGINE;Parablennius gattorugine;2
+20;BAVOSA SANGUIGNA;Parablennius sanguinolentus;2
+21;BAVOSA SFINGE;Aidablennius sphynx;2
+22;BAVOSELLA D'ALGA;Clinitrachus argentatus;2
+23;BISCIA DI MARE;Dalophis imberbis;2
+24;BOGA;Boops boops;6
+25;BROTOLA NERA;Grammonus ater;6
+26;CAPONE;TRIGLIDAE fam.;2
+27;CARANGO;Caranx sp.;6
+28;CASTAGNOLA;Chromis chromis;4
+29;CASTAGNOLA ROSSA;Anthias anthias;4
+30;CAVALLUCCIO MARINO;Hippocampus guttulatus;2
+31;CAV. MARINO CAMUSO;Hippocampus hippocampus;2
+32;CEFALO;MUGILIDAE fam.;6
+33;CEFALO LABBRONE;Oedalechilus labeo;6
+34;CERNIA;Epinephelus marginatus;6
+35;CERNIA BIANCA;Epinephelus aeneus;6
+36;CERNIA DORATA;Epinephelus costae;6
+37;CERNIA ROSSA;Mycteroperca rubra;6
+38;CICERELLO;Gymnammodytes cicerelus;6
+39;CORVINA;Sciaena umbra;6
+40;NUOVA SPECIE A;non in elenco;6
+41;DENTICE;Dentex dentex;6
+42;DONZELLA;Coris julis;4
+43;DONZELLA  PAVONINA;Thalassoma pavo;4
+44;DRAGONCELLO;Callionymus sp.;2
+45;GALLETTO;Ophidion barbatum;6
+46;GHIOZZO DI FERRER;Pseudaphya ferreri;2
+47;GHIOZZETTO;Pomatoschistus sp.;2
+48;GHIOZZETTO QUAGGA;Pomatoschistus quagga;2
+49;GHIOZZO;GOBIIDAE fam.;2
+50;GHIOZZO BOCCAROSSA;Gobius cruentatus;2
+51;GHIOZZO FALLACE;Gobius fallax;2
+52;GHIOZZO GENIPORO;Gobius geniporus;2
+53;GHIOZZO DORATO;Gobius auratus;2
+54;GHIOZZO GO';Zosterisessor ophiocephalus;2
+55;GHIOZZO LEOPARDO;Thorogobius ephippiatus;2
+56;GHIOZZO LISTATO;Gobius vittatus;2
+57;GHIOZZO NERO/VARIEGATO;Gobius niger/roulei;2
+58;GHIOZZO PAGANELLO;Gobius paganellus;2
+59;GHIOZZO RASPOSO;Gobius incognitus;2
+60;GHIOZZO TESTONE;Gobius cobitis;2
+61;GHIOZZO ZEBRA;Zebrus zebrus;2
+62;GRONGO;Conger conger;2
+63;GRONGO DELLE BALEARI;Ariosoma balearicum;2
+64;LAMPUGA;Coryphaena hippurus;6
+65;LATTERINO;Atherina sp.;6
+66;LECCIA;Lichia amia;6
+67;LECCIA FASCIATA;Campogramma glaycos;6
+68;LECCIA STELLA;Trachinotus ovatus;6
+69;LUCCIO MARINO;Sphyraena sp.;6
+70;MENNOLA/GARIZZO;Spicara maena;6
+71;MERLUZZO;Trisopterus sp.;6
+72;MIRO;Echelus myrus;2
+73;MORMORA;Lithognatus mormyrus;6
+74;MOTELLA;Gaidropsarus mediterraneus;6
+75;MOTELLA MACULATA;Gaidropsarus vulgaris;6
+76;MURENA;Muraena helena;2
+77;MURENA NERA;Gymnothorax unicolor;2
+78;MUSDEA;Phycis phycis;2
+79;NASELLO;Merluccius merluccius;6
+80;NONO;Aphanius fasciatus;6
+81;OCCHIATA;Oblada melanura;6
+82;OMBRINA;Umbrina cirrosa;6
+83;ORATA;Sparus aurata;6
+84;PAGELLO BASTARDO;Pagellus acarne;6
+85;PAGELLO FRAGOLINO;Pagellus erythrinus;6
+86;PAGRO;Pagrus sp.;6
+87;PALAMITA;Sarda sarda;6
+88;PALOMBO;TRIAKIDAE fam.;6
+89;PASSERA;PLEURONECTIDAE fam.;2
+90;PEPERONCINO;Tripterygion tripteronotum;2
+91;PEPERONCINO GIALLO;Tripterygion delaisi;2
+92;PEPERONCINO MINORE;Tripterygion melanurum;2
+93;PERCHIA;Serranus cabrilla;4
+94;PESCE AGO;Syngnathus acus;2
+95;PESCE AGO CAVALLINO;Syngnathus typhle;2
+96;PESCE AGO SOTTILE;Nerophis ophidion;2
+97;PESCE BALESTRA;Balistes capriscus;6
+98;PESCE CHITARRA;Rhinobatos sp.;2
+99;PESCE CIVETTA;Dactylopterus volitans;4
+100;PESCE LUCERTOLA;Synodus saurus;2
+101;PESCE LUNA;Mola mola;6
+102;PESCE PAPPAGALLO;Sparisoma cretense;6
+103;PESCE PETTINE;Xyrichthys novacula;4
+104;PESCE PILOTA;Naucrates ductor;6
+105;PESCE PRETE;Uranoscopus scaber;2
+106;PESCE SAN PIETRO;Zeus faber;6
+107;PESCE SERRA;Pomatomus saltatrix;6
+108;PESCE TROMBETTA;Macroramphosus scolopax;6
+109;RANA PESCATRICE;Lophius sp.;2
+110;RAZZA;RAJIDAE fam.;2
+111;RE DI TRIGLIE;Apogon imberbis;4
+112;RICCIOLA;Seriola dumerili;6
+113;ROMBO;SCOPHTHALMIDAE fam.;2
+114;ROMBO DI RENA;Bothus podas;2
+115;SACCHETTO;Serranus hepatus;4
+116;SALPA;Sarpa salpa;6
+117;SARAGO FARAONE;Diplodus cervinus cervinus;6
+118;SARAGO FASCIATO;Diplodus vulgaris;6
+119;SARAGO MAGGIORE;Diplodus sargus sargus;6
+120;SARAGO PIZZUTO;Diplodus puntazzo;6
+121;SARAGO SPARAGLIONE;Diplodus annularis;6
+122;SARDINA;CLUPEIDAE fam.;6
+123;SCIARRANO;Serranus scriba;4
+124;SCORFANO;Scorpaena sp.;2
+125;SCORFANO NERO;Scorpaena porcus;2
+126;SCORFANO ROSSO;Scorpaena scrofa;2
+127;SCORFANOTTO;Scorpaena notata;2
+128;SERPENTE DI MARE;Ophisurus serpens;2
+129;SGOMBRO;Scomber scombrus;6
+130;SOGLIOLA;SOLEIDAE fam.;2
+131;SPIGOLA/SPIG.MACULATA;Dicentrarchus sp.;6
+132;GHIOZZETTO ISOLANO;Didogobius splechtnai;6
+133;GHIOZZETTO DI MARSIGLIA;Gammogobius  steinitzi;6
+134;SAUCIA MORA;Arnoglossus thori;2
+135;SUCCIASCOGLIO;Lapadogaster lepadogaster;2
+136;SUCCIASC. OLIVACEO;Lapadogaster candolii;2
+137;SUGARELLO;Trachurus sp.;6
+138;TANUTA;Spondyliosoma cantharus;6
+139;TONNO;Thunnus sp.;6
+140;TORDO/TORDO NERO;Labrus sp.;4
+141;TORDO CANINO;Lappanella fasciata;4
+142;TORDO CODANERA;Symphodus melanocercus;4
+143;TORDO DI FONDALE;Acantholabrus palloni;4
+144;TORDO DORATO;Ctenolabrus rupestris;4
+145;TORDO FASCIATO;Symphodus doderleini;4
+146;TORDO FISCHIETTO;Labrus mixtus;4
+147;TORDO GRIGIO;Symphodus cinereus;4
+148;TORDO MUSOLUNGO;Symphodus rostratus;4
+149;TORDO OCCHIONERO;Symphodus melops;4
+150;TORDO OCELLATO;Symphodus ocellatus;4
+151;TORDO PAVONE;Symphodus tinca;4
+152;TORDO ROSSO;Symphodus mediterraneus;4
+153;TORDO VERDE;Symphodus roissali;4
+154;TORPEDINE;TORPEDINIDAE fam.;2
+155;TRACINA;Trachinus sp.;2
+156;TRIGLIA;Mullus sp.;4
+157;TRIGONE;DASYATIDAE fam.;2
+158;TROTA DI MARE;Salmo trutta trutta;6
+159;ZERRO;Spicara smaris;6
+160;NUOVA SPECIE B;non in elenco;6
