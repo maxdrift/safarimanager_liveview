@@ -36,7 +36,7 @@ defmodule SMWeb.Organizations do
   def handle_event("toggle-select-item", %{"id" => id, "selected" => selected?}, socket) do
     items =
       Enum.map(socket.assigns.items, fn
-        %_{id: ^id} = item ->
+        %_struct{id: ^id} = item ->
           Map.put(item, :selected?, String.to_existing_atom(selected?))
 
         item ->
@@ -212,7 +212,7 @@ defmodule SMWeb.Organizations do
   end
 
   @impl Phoenix.LiveView
-  def handle_info({Organizations, [:organization, _], _}, socket) do
+  def handle_info({Organizations, [:organization, _action], _result}, socket) do
     socket =
       socket
       |> load_entities()
