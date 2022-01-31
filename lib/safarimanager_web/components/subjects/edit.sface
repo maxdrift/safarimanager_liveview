@@ -1,0 +1,115 @@
+<Dialog {=@id} {=@show}>
+  <div class="card-title">
+    {String.capitalize(Atom.to_string(@action))} {@entity_name}
+  </div>
+  <Form
+    for={@changeset}
+    change={@validate}
+    submit={@submit}
+    as={:entity}
+    opts={autocomplete: "off"}
+  >
+    <div class="card-body">
+      <Field name={:numeric_id} class="form-control">
+        <Label class="label">
+          <span class="label-text">Numeric ID</span>
+        </Label>
+        <NumberInput
+          class={
+            "input",
+            "input-bordered",
+            "input-error": not is_nil(@changeset.action) and not @changeset.valid?,
+            "input-success": @changeset.action == :validate and @changeset.valid?
+          }
+          opts={phx_debounce: "1000"}
+        />
+        <Label class="label h-7">
+          <ErrorTag />
+        </Label>
+      </Field>
+      <Field name={:name} class="form-control">
+        <Label class="label">
+          <span class="label-text">Name</span>
+        </Label>
+        <TextInput
+          class={
+            "input",
+            "input-bordered",
+            "input-error": not is_nil(@changeset.action) and not @changeset.valid?,
+            "input-success": @changeset.action == :validate and @changeset.valid?
+          }
+          opts={phx_debounce: "1000"}
+        />
+        <Label class="label h-7">
+          <ErrorTag />
+        </Label>
+      </Field>
+      <Field name={:scientific_name} class="form-control">
+        <Label class="label">
+          <span class="label-text">Scientific Name</span>
+        </Label>
+        <TextInput
+          class={
+            "input",
+            "input-bordered",
+            "input-error": not is_nil(@changeset.action) and not @changeset.valid?,
+            "input-success": @changeset.action == :validate and @changeset.valid?
+          }
+          opts={phx_debounce: "1000"}
+        />
+        <Label class="label h-7">
+          <ErrorTag />
+        </Label>
+      </Field>
+      <Field name={:coefficient} class="form-control">
+        <Label class="label">
+          <span class="label-text">Coefficient</span>
+        </Label>
+        <NumberInput
+          class={
+            "input",
+            "input-bordered",
+            "input-error": not is_nil(@changeset.action) and not @changeset.valid?,
+            "input-success": @changeset.action == :validate and @changeset.valid?
+          }
+          opts={phx_debounce: "1000"}
+        />
+        <Label class="label h-7">
+          <ErrorTag />
+        </Label>
+      </Field>
+      <Field name={:type} class="form-control">
+        <Label class="label">
+          <span class="label-text">Type</span>
+        </Label>
+        <Select
+          options={@subject_types}
+          selected={@entity.type}
+          prompt="Select a type"
+          class={
+            "input",
+            "input-bordered",
+            "input-error": not is_nil(@changeset.action) and not @changeset.valid?,
+            "input-success": @changeset.action == :validate and @changeset.valid?
+          }
+          opts={phx_debounce: "1000"}
+        />
+        <Label class="label h-7">
+          <ErrorTag />
+        </Label>
+      </Field>
+      <HiddenInput field={:_action} value={@action} />
+    </div>
+    <div class="modal-action">
+      <Submit
+        values={[action: @action]}
+        class={
+          "btn btn-md",
+          "btn-success": @changeset.action == nil or @changeset.valid?,
+          "btn-disabled": @changeset.action == :validate and !@changeset.valid?
+        }
+      >Save</Submit>
+      <Reset click="hide" class="btn btn-md btn-ghost" value="Close" />
+    </div>
+  </Form>
+</Dialog>

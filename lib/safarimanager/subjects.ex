@@ -62,7 +62,7 @@ defmodule SM.Subjects do
   """
   @spec get(String.t()) :: {:error, :not_found} | {:ok, Subject.t()}
   def get(id) do
-    case Repo.get(Organization, id) do
+    case Repo.get(Subject, id) do
       nil -> {:error, :not_found}
       result -> {:ok, result}
     end

@@ -24,6 +24,7 @@ defmodule SMWeb.Router do
     pipe_through :browser
 
     live "/organizations", Organizations
+    live "/subjects", Subjects
 
     # live "/", Main
     live "/gallery", Gallery

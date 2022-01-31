@@ -1,0 +1,55 @@
+<table class="table table-zebra table-fixed w-full">
+  <thead>
+    <tr>
+      <th class="w-1">
+        <label>
+          <input
+            type="checkbox"
+            checked={@all_selected?}
+            class="checkbox checkbox-sm"
+            :on-click={@select_all}
+          />
+        </label>
+      </th>
+      <th class="w-1/12">Num.</th>
+      <th class="w-auto">Name</th>
+      <th class="w-1/12">Coeff.</th>
+      <th class="w-1/12">Type</th>
+      <th class="w-2/12">Created</th>
+      <th class="w-2/12">Modified</th>
+      <th class="w-2/12">Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    {#for item <- @items}
+      <tr>
+        <th>
+          <label>
+            <input
+              type="checkbox"
+              checked={item.selected?}
+              class="checkbox checkbox-sm"
+              :on-click={@select_one}
+              :values={id: item.id, selected: not item.selected?}
+            />
+          </label>
+        </th>
+        <th class="truncate">{item.numeric_id}</th>
+        <td class="truncate">
+          {item.name} (<i>{item.scientific_name}</i>)
+        </td>
+        <td class="truncate">{item.coefficient}</td>
+        <td class="truncate">{item.type}</td>
+        <td class="truncate">{format_date(item.inserted_at)}</td>
+        <td class="truncate">{format_date(item.updated_at)}</td>
+        <td class="overflow-x-auto">
+          <LivePatch to={"?action=show&id=#{item.id}"} class="btn btn-xs btn-outline btn-info">Show</LivePatch>
+          <LivePatch to={"?action=edit&id=#{item.id}"} class="btn btn-xs btn-warning">Edit</LivePatch>
+          <button class="btn btn-xs btn-error" :on-click={@delete_one} :values={id: item.id}>Delete</button>
+        </td>
+      </tr>
+    {#else}
+      No items yet!
+    {/for}
+  </tbody>
+</table>
