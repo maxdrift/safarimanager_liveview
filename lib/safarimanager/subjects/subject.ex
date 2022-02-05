@@ -4,7 +4,7 @@ defmodule SM.Subjects.Subject do
   """
   use SM, :schema
 
-  @available_types Application.compile_env(:safarimanager, [__MODULE__, :available_types], [])
+  @available_types Application.compile_env!(:safarimanager, [__MODULE__, :available_types])
 
   schema "subjects" do
     field :name, :string
