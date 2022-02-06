@@ -22,6 +22,7 @@ defmodule SMWeb.Components.Subjects.Edit do
   data show, :boolean, default: false
   data action, :atom, values!: [:create, :edit]
   data subject_types, :list, default: Subjects.list_subject_types()
+  data coefficients, :list, default: Subjects.list_subject_coefficients()
 
   prop entity, :struct, required: true
   prop changeset, :changeset, required: true

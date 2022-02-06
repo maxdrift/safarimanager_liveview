@@ -65,7 +65,10 @@
         <Label class="label">
           <span class="label-text">Coefficient</span>
         </Label>
-        <NumberInput
+        <Select
+          options={@coefficients}
+          selected={@entity.coefficient}
+          prompt="Select a coefficient"
           class={
             "input",
             "input-bordered",

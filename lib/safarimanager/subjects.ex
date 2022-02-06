@@ -6,30 +6,32 @@ defmodule SM.Subjects do
 
   alias SM.Subjects.Subject
 
-  # @topic inspect(__MODULE__)
-
-  # @spec subscribe() :: :ok | {:error, {:already_registered, pid()}}
-  # def subscribe do
-  #   Phoenix.PubSub.subscribe(SM.PubSub, @topic)
-  # end
-
-  # @spec subscribe(String.t()) :: :ok | {:error, {:already_registered, pid()}}
-  # def subscribe(id) do
-  #   Phoenix.PubSub.subscribe(SM.PubSub, @topic <> "#{id}")
-  # end
-
   @doc """
-  Returns the list of subject_types.
+  Returns the list of subject types.
 
   ## Examples
 
   iex> list_subject_types()
-  [%Type{}, ...]
+  [:ambient, :fish, :fish_macro, :macro]
 
   """
   @spec list_subject_types :: [:ambient | :fish | :fish_macro | :macro, ...]
   def list_subject_types do
-    Subject.get_available_types()
+    Subject.get_types()
+  end
+
+  @doc """
+  Returns the list of subject coefficients.
+
+  ## Examples
+
+  iex> list_subject_coefficients()
+  [2, 4, 6]
+
+  """
+  @spec list_subject_coefficients :: [2 | 4 | 6, ...]
+  def list_subject_coefficients do
+    Subject.get_coefficients()
   end
 
   @doc """

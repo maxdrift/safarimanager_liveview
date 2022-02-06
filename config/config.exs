@@ -32,7 +32,8 @@ config :safarimanager, SMWeb.Endpoint,
 config :safarimanager, SM.Mailer, adapter: Swoosh.Adapters.Local
 
 config :safarimanager, SM.Subjects.Subject,
-  available_types: [:fish, :macro, :fish_macro, :ambient]
+  types: [:fish, :macro, :fish_macro, :ambient],
+  coefficients: [2, 4, 6]
 
 # Swoosh API client is needed for adapters other than SMTP.
 config :swoosh, :api_client, false
