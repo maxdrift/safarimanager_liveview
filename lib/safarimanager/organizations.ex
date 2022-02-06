@@ -50,7 +50,7 @@ defmodule SM.Organizations do
   iex> create(%{field: value})
   {:ok, %Organization{}}
 
-  iex> create(%{field: bad_value})
+  iex> create(%{"field" => "bad_value"})
   {:error, %Ecto.Changeset{}}
 
   """
@@ -67,10 +67,10 @@ defmodule SM.Organizations do
 
   ## Examples
 
-  iex> update(organization, %{field: new_value})
+  iex> update(organization, %{"field" => "new_value"})
   {:ok, %Organization{}}
 
-  iex> update(organization, %{field: bad_value})
+  iex> update(organization, %{"field" => "bad_value"})
   {:error, %Ecto.Changeset{}}
 
   """

@@ -78,7 +78,7 @@ defmodule SM.Subjects do
       iex> create(%{field: value})
       {:ok, %Subject{}}
 
-      iex> create(%{field: bad_value})
+      iex> create(%{"field" => "bad_value"})
       {:error, %Ecto.Changeset{}}
 
   """
@@ -95,10 +95,10 @@ defmodule SM.Subjects do
 
   ## Examples
 
-      iex> update(subject, %{field: new_value})
+      iex> update(subject, %{"field" => "new_value"})
       {:ok, %Subject{}}
 
-      iex> update(subject, %{field: bad_value})
+      iex> update(subject, %{"field" => "bad_value"})
       {:error, %Ecto.Changeset{}}
 
   """
