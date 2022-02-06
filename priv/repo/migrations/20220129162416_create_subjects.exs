@@ -4,11 +4,11 @@ defmodule SM.Repo.Migrations.CreateSubjects do
   def change do
     create table(:subjects, primary_key: false) do
       add :id, :uuid, primary_key: true
-      add :name, :string
-      add :numeric_id, :integer
+      add :name, :string, null: false
+      add :numeric_id, :integer, null: false
       add :scientific_name, :string
       add :coefficient, :integer
-      add :type, :string
+      add :type, :string, null: false
 
       timestamps()
     end
