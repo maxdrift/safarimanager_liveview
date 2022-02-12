@@ -49,7 +49,9 @@
         </td>
       </tr>
     {#else}
-      No items yet!
+      <tr>
+        <th>No items yet!</th>
+      </tr>
     {/for}
   </tbody>
 </table>

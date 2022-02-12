@@ -25,6 +25,7 @@ defmodule SMWeb.Router do
 
     live "/organizations", Organizations
     live "/subjects", Subjects
+    live "/competitions", Competitions
 
     # live "/", Main
     live "/gallery", Gallery

@@ -13,8 +13,10 @@
       </th>
       <th class="w-1/12">ID</th>
       <th class="w-auto">Name</th>
+      <th class="w-auto">Location</th>
+      <th class="w-2/12">From</th>
+      <th class="w-2/12">To</th>
       <th class="w-2/12">Created</th>
-      <th class="w-2/12">Modified</th>
       <th class="w-2/12">Actions</th>
     </tr>
   </thead>
@@ -34,8 +36,10 @@
         </th>
         <th class="truncate">{format_id(item.id)}</th>
         <td class="truncate">{item.name}</td>
+        <td class="truncate">{"#{value_or_na(item.city)} (#{value_or_na(item.country)})"}</td>
+        <td class="truncate">{format_date(item.start_time)}</td>
+        <td class="truncate">{format_date(item.end_time)}</td>
         <td class="truncate">{format_date(item.inserted_at)}</td>
-        <td class="truncate">{format_date(item.updated_at)}</td>
         <td class="overflow-x-auto">
           <LivePatch to={"?action=show&id=#{item.id}"} class="btn btn-xs btn-outline btn-info">Show</LivePatch>
           <LivePatch to={"?action=edit&id=#{item.id}"} class="btn btn-xs btn-warning">Edit</LivePatch>
