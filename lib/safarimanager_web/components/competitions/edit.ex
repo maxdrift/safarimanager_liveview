@@ -4,18 +4,9 @@ defmodule SMWeb.Components.Competitions.Edit do
   """
   use Surface.LiveComponent
 
+  alias SMWeb.Components.Competitions.Form
+  alias SMWeb.Components.Competitions.FormActions
   alias SMWeb.Components.Dialog
-  alias Surface.Components.Form
-  alias Surface.Components.Form.DateTimeLocalInput
-  alias Surface.Components.Form.ErrorTag
-  alias Surface.Components.Form.Field
-  alias Surface.Components.Form.HiddenInput
-  alias Surface.Components.Form.Label
-  alias Surface.Components.Form.Reset
-  alias Surface.Components.Form.Submit
-  alias Surface.Components.Form.TextInput
-
-  require Logger
 
   data show, :boolean, default: false
   data action, :atom, values!: [:create, :edit]

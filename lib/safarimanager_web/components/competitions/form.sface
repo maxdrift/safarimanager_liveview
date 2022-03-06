@@ -1,0 +1,118 @@
+<Form
+  for={@changeset}
+  change={@validate}
+  submit={@submit}
+  as={:entity}
+  opts={autocomplete: "off"}
+>
+  <div class="flex flex-wrap pt-3">
+    <Field name={:name} class="form-control w-full px-3">
+      <Label class="label">
+        <span class="label-text">Name</span>
+      </Label>
+      <TextInput
+        class={state_class("input input-bordered", @changeset, :name, [])}
+        opts={phx_debounce: "1000"}
+      />
+      <Label class="label h-7">
+        <ErrorTag />
+      </Label>
+    </Field>
+    <Field name={:start_time} class="form-control w-1/2 px-3">
+      <Label class="label">
+        <span class="label-text">Start date/time</span>
+      </Label>
+      <DateTimeLocalInput
+        class={state_class("input input-bordered", @changeset, :start_time, [])}
+        opts={phx_debounce: "1000"}
+      />
+      <Label class="label h-7">
+        <ErrorTag />
+      </Label>
+    </Field>
+    <Field name={:end_time} class="form-control w-1/2 px-3">
+      <Label class="label">
+        <span class="label-text">End date/time</span>
+      </Label>
+      <DateTimeLocalInput
+        class={state_class("input input-bordered", @changeset, :end_time, [])}
+        opts={phx_debounce: "1000"}
+      />
+      <Label class="label h-7">
+        <ErrorTag />
+      </Label>
+    </Field>
+    <Field name={:address_line1} class="form-control w-full px-3">
+      <Label class="label">
+        <span class="label-text">Address 1</span>
+      </Label>
+      <TextInput
+        class={state_class("input input-bordered", @changeset, :address_line1, [])}
+        opts={phx_debounce: "1000"}
+      />
+      <Label class="label h-7">
+        <ErrorTag />
+      </Label>
+    </Field>
+    <Field name={:address_line2} class="form-control w-full px-3">
+      <Label class="label">
+        <span class="label-text">Address 2</span>
+      </Label>
+      <TextInput
+        class={state_class("input input-bordered", @changeset, :address_line2, [])}
+        opts={phx_debounce: "1000"}
+      />
+      <Label class="label h-7">
+        <ErrorTag />
+      </Label>
+    </Field>
+    <Field name={:postal_code} class="form-control w-1/2 px-3">
+      <Label class="label">
+        <span class="label-text">Postal code</span>
+      </Label>
+      <TextInput
+        class={state_class("input input-bordered", @changeset, :postal_code, [])}
+        opts={phx_debounce: "1000"}
+      />
+      <Label class="label h-7">
+        <ErrorTag />
+      </Label>
+    </Field>
+    <Field name={:city} class="form-control w-1/2 px-3">
+      <Label class="label">
+        <span class="label-text">City</span>
+      </Label>
+      <TextInput
+        class={state_class("input input-bordered", @changeset, :city, [])}
+        opts={phx_debounce: "1000"}
+      />
+      <Label class="label h-7">
+        <ErrorTag />
+      </Label>
+    </Field>
+    <Field name={:state} class="form-control w-1/2 px-3">
+      <Label class="label">
+        <span class="label-text">State/Province</span>
+      </Label>
+      <TextInput
+        class={state_class("input input-bordered", @changeset, :state, [])}
+        opts={phx_debounce: "1000"}
+      />
+      <Label class="label h-7">
+        <ErrorTag />
+      </Label>
+    </Field>
+    <Field name={:country} class="form-control w-1/2 px-3">
+      <Label class="label">
+        <span class="label-text">Country</span>
+      </Label>
+      <TextInput
+        class={state_class("input input-bordered", @changeset, :country, [])}
+        opts={phx_debounce: "1000"}
+      />
+      <Label class="label h-7"><ErrorTag /></Label>
+    </Field>
+    <HiddenInput field={:_action} value={@action} />
+  </div>
+  <#slot />
+</Form>
