@@ -23,6 +23,9 @@ defmodule SMWeb.Router do
   scope "/", SMWeb do
     pipe_through :browser
 
+    live "/organize/new", NewCompetition
+    live "/organize/:competition_id/participants", Participants
+
     # live "/", Main
     live "/gallery", Gallery
     live "/jury_viewer", JuryViewer

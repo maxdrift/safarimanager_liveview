@@ -1,0 +1,11 @@
+<div class="flex flex-col w-full mt-10">
+  <div class="grid card">
+    <Form {=@action} {=@entity} {=@changeset} {=@validate} {=@submit}>
+      <FormActions
+        container_class="justify-end mb-1 card-actions"
+        submit_enabled?={@changeset.valid?}
+        reset="hide"
+      />
+    </Form>
+  </div>
+</div>
