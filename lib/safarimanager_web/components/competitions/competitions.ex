@@ -131,7 +131,7 @@ defmodule SMWeb.Competitions do
         socket =
           socket
           |> reset_current_editing()
-          |> push_patch(to: "/competitions")
+          |> push_patch(to: "/admin/competitions")
 
         Edit.hide("edit-dialog")
         socket = set_alert(socket, "info", "Competition created successfully", @alert_duration)
@@ -152,7 +152,7 @@ defmodule SMWeb.Competitions do
         socket =
           socket
           |> reset_current_editing()
-          |> push_patch(to: "/competitions")
+          |> push_patch(to: "/admin/competitions")
 
         Edit.hide("edit-dialog")
 

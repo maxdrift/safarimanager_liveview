@@ -33,6 +33,8 @@ defmodule SMWeb.Components.Competitions.Show do
 
   # Internal
 
+  defp format_date(nil), do: "N/A"
+
   defp format_date(datetime) do
     Calendar.strftime(datetime, "%d/%m/%Y %I:%M:%S %P %Z")
   end

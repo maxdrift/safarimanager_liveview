@@ -12,14 +12,14 @@
       <button :on-click="abort" class="btn btn-md btn-ghost">Cancel</button>
     </div>
   </ConfirmationDialog>
-  <Show id="show-dialog" redirect_to="/competitions" entity_name="competition" />
+  <Show id="show-dialog" redirect_to="/admin/competitions" entity_name="competition" />
   <Edit
     id="edit-dialog"
     entity={@editing_entity}
     changeset={@editing_changeset}
     validate="validate"
     submit="submit"
-    redirect_to="/competitions"
+    redirect_to="/admin/competitions"
     entity_name="competition"
   />
   <Alert level={@error_level} message={@error_message} show={not is_nil(@error_message)} />

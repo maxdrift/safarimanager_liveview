@@ -131,7 +131,7 @@ defmodule SMWeb.Organizations do
         socket =
           socket
           |> reset_current_editing()
-          |> push_patch(to: "/organizations")
+          |> push_patch(to: "/admin/organizations")
 
         Edit.hide("edit-dialog")
         socket = set_alert(socket, "info", "Organization created successfully", @alert_duration)
@@ -152,7 +152,7 @@ defmodule SMWeb.Organizations do
         socket =
           socket
           |> reset_current_editing()
-          |> push_patch(to: "/organizations")
+          |> push_patch(to: "/admin/organizations")
 
         Edit.hide("edit-dialog")
 

@@ -131,7 +131,7 @@ defmodule SMWeb.Evaluations do
         socket =
           socket
           |> reset_current_editing()
-          |> push_patch(to: "/evaluations")
+          |> push_patch(to: "/admin/evaluations")
 
         Edit.hide("edit-dialog")
         socket = set_alert(socket, "info", "Evaluation created successfully", @alert_duration)
@@ -152,7 +152,7 @@ defmodule SMWeb.Evaluations do
         socket =
           socket
           |> reset_current_editing()
-          |> push_patch(to: "/evaluations")
+          |> push_patch(to: "/admin/evaluations")
 
         Edit.hide("edit-dialog")
 

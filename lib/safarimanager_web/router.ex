@@ -23,14 +23,18 @@ defmodule SMWeb.Router do
   scope "/", SMWeb do
     pipe_through :browser
 
+    # live "/", Main
+    live "/gallery", Gallery
+    live "/jury_viewer", JuryViewer
+  end
+
+  scope "/admin", SMWeb do
+    pipe_through :browser
+
     live "/organizations", Organizations
     live "/subjects", Subjects
     live "/competitions", Competitions
     live "/evaluations", Evaluations
-
-    # live "/", Main
-    live "/gallery", Gallery
-    live "/jury_viewer", JuryViewer
   end
 
   # Enables the Swoosh mailbox preview in development.
