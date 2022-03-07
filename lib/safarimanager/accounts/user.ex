@@ -1,6 +1,11 @@
 defmodule SM.Accounts.User do
-  use Ecto.Schema
-  import Ecto.Changeset
+  @moduledoc """
+  User account schema
+  """
+  use SM, :schema
+
+  alias SM.Organizations.Organization
+
   @primary_key {:id, :binary_id, autogenerate: true}
   @foreign_key_type :binary_id
   schema "users" do
@@ -8,6 +13,9 @@ defmodule SM.Accounts.User do
     field :password, :string, virtual: true, redact: true
     field :hashed_password, :string, redact: true
     field :confirmed_at, :naive_datetime
+    field :first_name, :string
+    field :last_name, :string
+    belongs_to :organization, Organization
 
     timestamps()
   end
@@ -22,13 +30,15 @@ defmodule SM.Accounts.User do
 
   ## Options
 
-    * `:hash_password` - Hashes the password so it can be stored securely
-      in the database and ensures the password field is cleared to prevent
-      leaks in the logs. If password hashing is not needed and clearing the
-      password field is not desired (like when using this changeset for
-      validations on a LiveView form), this option can be set to `false`.
-      Defaults to `true`.
+  * `:hash_password` - Hashes the password so it can be stored securely
+  in the database and ensures the password field is cleared to prevent
+  leaks in the logs. If password hashing is not needed and clearing the
+  password field is not desired (like when using this changeset for
+  validations on a LiveView form), this option can be set to `false`.
+  Defaults to `true`.
   """
+  @spec registration_changeset(User.t(), %{(String.t() | atom()) => any()}, Keyword.t()) ::
+          Ecto.Changeset.t()
   def registration_changeset(user, attrs, opts \\ []) do
     user
     |> cast(attrs, [:email, :password])
@@ -71,10 +81,44 @@ defmodule SM.Accounts.User do
   end
 
   @doc """
+  A user changeset for registration during Competition organization.
+  """
+  @spec competition_registration_changeset(User.t(), %{(String.t() | atom()) => any()}) ::
+          Ecto.Changeset.t()
+  def competition_registration_changeset(user, attrs) do
+    user
+    |> cast(attrs, [:first_name, :last_name])
+    |> validate_required([:first_name])
+    |> put_email()
+    |> put_default_password()
+  end
+
+  # TODO: Remove in Production!
+  defp put_email(changeset) do
+    first_name = get_field(changeset, :first_name)
+    last_name = get_field(changeset, :last_name)
+
+    full_name =
+      [first_name, last_name]
+      |> Enum.reject(&(&1 in [nil, ""]))
+      |> Enum.map(&String.downcase/1)
+      |> Enum.join(".")
+
+    put_change(changeset, :email, "#{full_name}@maxdrift.org")
+  end
+
+  defp put_default_password(changeset) do
+    changeset
+    |> cast(%{password: SM.DefaultPassword.generate()}, [:password])
+    |> validate_password([])
+  end
+
+  @doc """
   A user changeset for changing the email.
 
   It requires the email to change otherwise an error is added.
   """
+  @spec email_changeset(User.t(), %{(String.t() | atom()) => any()}) :: Ecto.Changeset.t()
   def email_changeset(user, attrs) do
     user
     |> cast(attrs, [:email])
@@ -90,13 +134,15 @@ defmodule SM.Accounts.User do
 
   ## Options
 
-    * `:hash_password` - Hashes the password so it can be stored securely
-      in the database and ensures the password field is cleared to prevent
-      leaks in the logs. If password hashing is not needed and clearing the
-      password field is not desired (like when using this changeset for
-      validations on a LiveView form), this option can be set to `false`.
-      Defaults to `true`.
+  * `:hash_password` - Hashes the password so it can be stored securely
+  in the database and ensures the password field is cleared to prevent
+  leaks in the logs. If password hashing is not needed and clearing the
+  password field is not desired (like when using this changeset for
+  validations on a LiveView form), this option can be set to `false`.
+  Defaults to `true`.
   """
+  @spec password_changeset(User.t(), %{(String.t() | atom()) => any()}, Keyword.t()) ::
+          Ecto.Changeset.t()
   def password_changeset(user, attrs, opts \\ []) do
     user
     |> cast(attrs, [:password])
@@ -107,8 +153,9 @@ defmodule SM.Accounts.User do
   @doc """
   Confirms the account by setting `confirmed_at`.
   """
+  @spec confirm_changeset(User.t()) :: Ecto.Changeset.t()
   def confirm_changeset(user) do
-    now = NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
+    now = NaiveDateTime.truncate(NaiveDateTime.utc_now(), :second)
     change(user, confirmed_at: now)
   end
 
@@ -118,6 +165,7 @@ defmodule SM.Accounts.User do
   If there is no user or the user doesn't have a password, we call
   `Bcrypt.no_user_verify/0` to avoid timing attacks.
   """
+  @spec valid_password?(User.t(), String.t()) :: boolean
   def valid_password?(%SM.Accounts.User{hashed_password: hashed_password}, password)
       when is_binary(hashed_password) and byte_size(password) > 0 do
     Bcrypt.verify_pass(password, hashed_password)
@@ -128,6 +176,7 @@ defmodule SM.Accounts.User do
     false
   end
 
+  @spec validate_current_password(Ecto.Changeset.t(), String.t()) :: Ecto.Changeset.t()
   @doc """
   Validates the current password otherwise adds an error to the changeset.
   """

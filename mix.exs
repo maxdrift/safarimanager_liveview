@@ -53,6 +53,7 @@ defmodule SM.MixProject do
       {:phoenix, "~> 1.6.5"},
       {:plug_cowboy, "~> 2.5"},
       {:postgrex, ">= 0.0.0"},
+      {:random_password, "~> 1.0"},
       {:surface_catalogue, "~> 0.3.0"},
       {:surface_formatter, "~> 0.7.4"},
       {:surface, "~> 0.7.1"},

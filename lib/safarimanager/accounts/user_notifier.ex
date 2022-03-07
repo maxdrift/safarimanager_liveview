@@ -1,6 +1,10 @@
 defmodule SM.Accounts.UserNotifier do
+  @moduledoc """
+  User notifier helper
+  """
   import Swoosh.Email
 
+  alias SM.Accounts.User
   alias SM.Mailer
 
   # Delivers the email using the application mailer.
@@ -20,6 +24,8 @@ defmodule SM.Accounts.UserNotifier do
   @doc """
   Deliver instructions to confirm account.
   """
+  @spec deliver_confirmation_instructions(User.t(), String.t()) ::
+          {:error, any()} | {:ok, Swoosh.Email.t()}
   def deliver_confirmation_instructions(user, url) do
     deliver(user.email, "Confirmation instructions", """
 
@@ -40,6 +46,8 @@ defmodule SM.Accounts.UserNotifier do
   @doc """
   Deliver instructions to reset a user password.
   """
+  @spec deliver_reset_password_instructions(User.t(), String.t()) ::
+          {:error, any()} | {:ok, Swoosh.Email.t()}
   def deliver_reset_password_instructions(user, url) do
     deliver(user.email, "Reset password instructions", """
 
@@ -60,6 +68,8 @@ defmodule SM.Accounts.UserNotifier do
   @doc """
   Deliver instructions to update a user email.
   """
+  @spec deliver_update_email_instructions(User.t(), String.t()) ::
+          {:error, any()} | {:ok, Swoosh.Email.t()}
   def deliver_update_email_instructions(user, url) do
     deliver(user.email, "Update email instructions", """
 
