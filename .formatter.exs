@@ -1,11 +1,10 @@
 [
   import_deps: [:ecto, :phoenix, :surface],
   inputs: [
-    "lib/**/*.{ex,sface}",
-    "*.{ex,exs}",
+    "*.{ex,exs,heex}",
     "priv/*/seeds.exs",
-    "{config,lib,test}/**/*.{ex,exs}"
+    "{config,lib,test}/**/*.{ex,exs,sface,heex}"
   ],
   subdirectories: ["priv/*/migrations"],
-  plugins: [Surface.Formatter.Plugin]
+  plugins: [Surface.Formatter.Plugin, Phoenix.LiveView.HTMLFormatter]
 ]

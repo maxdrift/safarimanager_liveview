@@ -3,6 +3,18 @@ defmodule SMWeb.ErrorHelpers do
   Conveniences for translating and building error messages.
   """
 
+  use Phoenix.HTML
+
+  @doc """
+  Generates tag for inlined form input errors.
+  """
+  @spec error_tag(Phoenix.HTML.Form.t(), atom(), Keyword.t()) :: {:safe, list()}
+  def error_tag(form, field, opts \\ []) do
+    if error = form.errors[field] do
+      content_tag(:span, translate_error(error), opts)
+    end
+  end
+
   @doc """
   Translates an error message using gettext.
   """

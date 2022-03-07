@@ -2,7 +2,7 @@ defmodule SMWeb.Evaluations do
   @moduledoc """
   Evaluations live view
   """
-  use Surface.LiveView
+  use SMWeb, :surface_view
 
   alias SM.Evaluations
   alias SM.Evaluations.Evaluation

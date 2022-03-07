@@ -35,6 +35,10 @@ config :safarimanager, SM.Subjects.Subject,
   types: [:fish, :macro, :fish_macro, :ambient],
   coefficients: [2, 4, 6]
 
+config :safarimanager, :generators,
+  binary_id: true,
+  sample_binary_id: "11111111-1111-1111-1111-111111111111"
+
 # Swoosh API client is needed for adapters other than SMTP.
 config :swoosh, :api_client, false
 

@@ -1,7 +1,7 @@
 <div
   id={@url}
   class="photo-grid-div"
-  style={"width:#{@width * 200 / @height}px;flex-grow:#{@width * 200 / @height}"}
+  style={"width:#{@width * 200 / @height}px;grow:#{@width * 200 / @height}"}
 >
   <LiveRedirect
     to="/jury_viewer"

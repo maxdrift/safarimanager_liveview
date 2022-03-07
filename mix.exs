@@ -35,6 +35,7 @@ defmodule SM.MixProject do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
+      {:bcrypt_elixir, "~> 2.0"},
       {:credo, "~> 1.6", only: [:dev, :test], runtime: false},
       {:dialyzex, "~> 1.3.0", only: :dev, runtime: false},
       {:ecto_sql, "~> 3.6"},
@@ -42,13 +43,19 @@ defmodule SM.MixProject do
       {:gettext, "~> 0.19"},
       {:jason, "~> 1.2"},
       {:phoenix_ecto, "~> 4.4"},
+      {:phoenix_html, "~> 3.2"},
       {:phoenix_live_reload, "~> 1.2", only: :dev},
+      # {:phoenix_live_view, "~> 0.17.7"},
+      {:phoenix_live_view,
+       git: "https://github.com/phoenixframework/phoenix_live_view.git",
+       branch: "master",
+       override: true},
       {:phoenix, "~> 1.6.5"},
       {:plug_cowboy, "~> 2.5"},
       {:postgrex, ">= 0.0.0"},
-      {:surface_catalogue, "~> 0.2.0"},
-      {:surface_formatter, "~> 0.6"},
-      {:surface, "~> 0.6.0"},
+      {:surface_catalogue, "~> 0.3.0"},
+      {:surface_formatter, "~> 0.7.4"},
+      {:surface, "~> 0.7.1"},
       {:swoosh, "~> 1.3"},
       {:telemetry_metrics, "~> 0.6"},
       {:telemetry_poller, "~> 1.0"}

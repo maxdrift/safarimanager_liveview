@@ -2,7 +2,7 @@ defmodule SMWeb.NewCompetition do
   @moduledoc """
   NewCompetition live view
   """
-  use Surface.LiveView
+  use SMWeb, :surface_view
 
   alias SM.Competitions
   alias SM.Competitions.Competition

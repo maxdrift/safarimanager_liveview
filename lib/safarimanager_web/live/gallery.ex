@@ -2,7 +2,8 @@ defmodule SMWeb.Gallery do
   @moduledoc """
   Live view handling display of a Slide gallery
   """
-  use Surface.LiveView
+  use SMWeb, :surface_view
+
   alias SMWeb.Molecules.Thumbnail
 
   @lorempicsum_url "https://picsum.photos"

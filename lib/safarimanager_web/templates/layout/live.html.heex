@@ -1,0 +1,69 @@
+<!-- begin drawer -->
+<div class="rounded-2xl shadow bg-base-400 drawer drawer-mobile h-full">
+  <input id="sm-drawer" type="checkbox" class="drawer-toggle" />
+  <div class="flex flex-col px-4 bg-base-100 drawer-content h-max rounded-box m-1">
+    <!-- begin breadcrumb -->
+    <div class="text-sm breadcrumbs p-5 ml-1">
+      <ul>
+        <li>
+          <a>Home</a>
+        </li>
+        <li>
+          Organizations
+        </li>
+      </ul>
+    </div>
+    <!-- end breadcrumb -->
+    <div class="flex flex-col items-center justify-center">
+      <div class="container w-11/12">
+        <!-- begin alert -->
+        <div class="alert alert-info mb-1 hidden">
+          <div class="flex-1">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              class="w-6 h-6 mx-2 stroke-current"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+              />
+            </svg>
+            <label>This is an alert!!</label>
+          </div>
+        </div>
+        <!-- end alert -->
+        <%= @inner_content %>
+      </div>
+    </div>
+  </div>
+  <div class="drawer-side">
+    <label for="sm-drawer" class="drawer-overlay" />
+    <ul class="menu py-3 bg-base-100 rounded-box shadow-xl overflow-y-auto m-1">
+      <li>
+        <a href="/organize/new">Organize competition</a>
+      </li>
+      <li class="menu-title">
+        <span>
+          Admin
+        </span>
+      </li>
+      <li>
+        <a href="/admin/organizations">Organizations</a>
+      </li>
+      <li>
+        <a href="/admin/subjects">Subjects</a>
+      </li>
+      <li>
+        <a href="/admin/competitions">Competitions</a>
+      </li>
+      <li>
+        <a href="/admin/evaluations">Evaluations</a>
+      </li>
+    </ul>
+  </div>
+</div>
+<!-- end drawer -->

@@ -41,13 +41,22 @@ defmodule SMWeb do
 
       # Include shared imports and aliases for views
       unquote(view_helpers())
-      import Surface
+      # import Surface
     end
   end
 
   def live_view do
     quote do
       use Phoenix.LiveView,
+        layout: {SMWeb.LayoutView, "live.html"}
+
+      unquote(view_helpers())
+    end
+  end
+
+  def surface_view do
+    quote do
+      use Surface.LiveView,
         layout: {SMWeb.LayoutView, "live.html"}
 
       unquote(view_helpers())

@@ -2,7 +2,7 @@ defmodule SMWeb.Subjects do
   @moduledoc """
   Subjects live view
   """
-  use Surface.LiveView
+  use SMWeb, :surface_view
 
   alias SM.Subjects
   alias SM.Subjects.Subject

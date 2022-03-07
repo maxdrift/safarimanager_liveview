@@ -2,7 +2,7 @@ defmodule SMWeb.Organizations do
   @moduledoc """
   Organizations live view
   """
-  use Surface.LiveView
+  use SMWeb, :surface_view
 
   alias SM.Organizations
   alias SM.Organizations.Organization

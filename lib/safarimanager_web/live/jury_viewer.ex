@@ -2,7 +2,7 @@ defmodule SMWeb.JuryViewer do
   @moduledoc """
   Live view to handle Jury operations i.e. evaluation of Slides
   """
-  use Surface.LiveView
+  use SMWeb, :surface_view
 
   alias SMWeb.Atoms.JuryToolbarButton
 
