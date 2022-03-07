@@ -8,8 +8,8 @@
       <li><b>Name:</b> {@entity.name}</li>
       <li><b>Start:</b> {format_date(@entity.start_time)}</li>
       <li><b>End:</b> {format_date(@entity.end_time)}</li>
-      <li><b>Address 1:</b> {@entity.address_line1}</li>
-      <li><b>Address 2:</b> {@entity.address_line2}</li>
+      <li><b>Street name:</b> {@entity.street_name}</li>
+      <li><b>Street number:</b> {@entity.street_number}</li>
       <li><b>Postal code:</b> {@entity.postal_code}</li>
       <li><b>City:</b> {@entity.city}</li>
       <li><b>State:</b> {@entity.state}</li>

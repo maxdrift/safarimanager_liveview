@@ -7,8 +7,8 @@ defmodule SM.Repo.Migrations.CreateCompetitions do
       add :name, :text, null: false
       add :start_time, :utc_datetime_usec
       add :end_time, :utc_datetime_usec
-      add :address_line1, :string
-      add :address_line2, :string
+      add :street_name, :string
+      add :street_number, :string
       add :postal_code, :string
       add :city, :string
       add :state, :string

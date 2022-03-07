@@ -42,24 +42,24 @@
         <ErrorTag />
       </Label>
     </Field>
-    <Field name={:address_line1} class="form-control w-full px-3">
+    <Field name={:street_name} class="form-control w-4/5 px-3">
       <Label class="label">
-        <span class="label-text">Address 1</span>
+        <span class="label-text">Street name</span>
       </Label>
       <TextInput
-        class={state_class("input input-bordered", @changeset, :address_line1, [])}
+        class={state_class("input input-bordered", @changeset, :street_name, [])}
         opts={phx_debounce: "1000"}
       />
       <Label class="label h-7">
         <ErrorTag />
       </Label>
     </Field>
-    <Field name={:address_line2} class="form-control w-full px-3">
+    <Field name={:street_number} class="form-control w-1/5 px-3">
       <Label class="label">
-        <span class="label-text">Address 2</span>
+        <span class="label-text">Number</span>
       </Label>
       <TextInput
-        class={state_class("input input-bordered", @changeset, :address_line2, [])}
+        class={state_class("input input-bordered", @changeset, :street_number, [])}
         opts={phx_debounce: "1000"}
       />
       <Label class="label h-7">

@@ -8,8 +8,8 @@ defmodule SM.Competitions.Competition do
     field :name, :string
     field :start_time, :utc_datetime_usec
     field :end_time, :utc_datetime_usec
-    field :address_line1, :string
-    field :address_line2, :string
+    field :street_name, :string
+    field :street_number, :string
     field :postal_code, :string
     field :city, :string
     field :state, :string
@@ -28,8 +28,8 @@ defmodule SM.Competitions.Competition do
       :name,
       :start_time,
       :end_time,
-      :address_line1,
-      :address_line2,
+      :street_name,
+      :street_number,
       :postal_code,
       :city,
       :state,
