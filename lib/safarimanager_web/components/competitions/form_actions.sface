@@ -3,6 +3,6 @@
     "btn btn-md",
     "btn-success": @submit_enabled?,
     "btn-disabled": not @submit_enabled?
-  }>Save</Submit>
-  <Reset click={@reset} class="btn btn-md btn-ghost" value="Close" />
+  }>{@submit_label}</Submit>
+  <Reset click={@reset} class="btn btn-md btn-ghost" value={@reset_label} />
 </div>

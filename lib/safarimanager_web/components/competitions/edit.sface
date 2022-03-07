@@ -3,6 +3,6 @@
     {String.capitalize(Atom.to_string(@action))} {@entity_name}
   </div>
   <Form {=@action} {=@entity} {=@changeset} {=@validate} {=@submit} {=@redirect_to}>
-    <FormActions container_class="modal-action" submit_enabled?={@changeset.valid?} reset="hide" />
+    <FormActions container_class="modal-action" submit_enabled?={@changeset.valid?} reset="hide" reset_label="Close" />
   </Form>
 </Dialog>

@@ -47,18 +47,20 @@ defmodule SMWeb.NewCompetition do
           |> assign(:changeset, Competitions.change(socket.assigns.entity))
           |> push_redirect(to: "/organize/#{competition_id}/participants")
 
-        # socket =
-        #   socket
-        #   |> reset_current_editing()
-        #   |> push_patch(to: "/admin/competitions")
-
-        # Edit.hide("edit-dialog")
-        # socket = set_alert(socket, "info", "Competition created successfully", @alert_duration)
         {:noreply, socket}
 
       {:error, changeset} ->
         {:noreply, assign(socket, :changeset, changeset)}
     end
+  end
+
+  def handle_event("reset", %{}, socket) do
+    socket =
+      socket
+      |> assign(:entity, %Competition{})
+      |> assign(:changeset, Competitions.change(socket.assigns.entity))
+
+    {:noreply, socket}
   end
 
   # def handle_event(event_name, params, socket) do
