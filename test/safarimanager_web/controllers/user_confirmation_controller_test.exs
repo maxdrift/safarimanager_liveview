@@ -1,9 +1,10 @@
 defmodule SMWeb.UserConfirmationControllerTest do
   use SMWeb.ConnCase, async: true
 
+  import SM.AccountsFixtures
+
   alias SM.Accounts
   alias SM.Repo
-  import SM.AccountsFixtures
 
   setup do
     %{user: user_fixture()}

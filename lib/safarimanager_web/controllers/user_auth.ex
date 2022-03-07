@@ -24,6 +24,7 @@ defmodule SMWeb.UserAuth do
   disconnected on log out. The line can be safely removed
   if you are not using LiveView.
   """
+  @spec log_in_user(Plug.Conn.t(), SM.Accounts.User.t(), any) :: Plug.Conn.t()
   def log_in_user(conn, user, params \\ %{}) do
     token = Accounts.generate_user_session_token(user)
     user_return_to = get_session(conn, :user_return_to)
@@ -70,6 +71,7 @@ defmodule SMWeb.UserAuth do
 
   It clears all session data for safety. See renew_session.
   """
+  @spec log_out_user(Plug.Conn.t()) :: Plug.Conn.t()
   def log_out_user(conn) do
     user_token = get_session(conn, :user_token)
     user_token && Accounts.delete_session_token(user_token)
@@ -88,6 +90,7 @@ defmodule SMWeb.UserAuth do
   Authenticates the user by looking into the session
   and remember me token.
   """
+  @spec fetch_current_user(Plug.Conn.t(), any) :: Plug.Conn.t()
   def fetch_current_user(conn, _opts) do
     {user_token, conn} = ensure_user_token(conn)
     user = user_token && Accounts.get_user_by_session_token(user_token)
@@ -108,6 +111,7 @@ defmodule SMWeb.UserAuth do
     end
   end
 
+  @spec redirect_if_user_is_authenticated(Plug.Conn.t(), any) :: Plug.Conn.t()
   @doc """
   Used for routes that require the user to not be authenticated.
   """
@@ -121,6 +125,7 @@ defmodule SMWeb.UserAuth do
     end
   end
 
+  @spec require_authenticated_user(Plug.Conn.t(), any) :: Plug.Conn.t()
   @doc """
   Used for routes that require the user to be authenticated.
 

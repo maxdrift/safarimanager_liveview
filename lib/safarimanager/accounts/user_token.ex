@@ -155,7 +155,7 @@ defmodule SM.Accounts.UserToken do
   The context must always start with "change:".
   """
   @spec verify_change_email_token_query(String.t(), String.t()) :: :error | {:ok, Ecto.Query.t()}
-  def verify_change_email_token_query(token, "change:" <> _ = context) do
+  def verify_change_email_token_query(token, "change:" <> _context = context) do
     case Base.url_decode64(token, padding: false) do
       {:ok, decoded_token} ->
         hashed_token = :crypto.hash(@hash_algorithm, decoded_token)

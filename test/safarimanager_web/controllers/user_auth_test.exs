@@ -1,9 +1,10 @@
 defmodule SMWeb.UserAuthTest do
   use SMWeb.ConnCase, async: true
 
+  import SM.AccountsFixtures
+
   alias SM.Accounts
   alias SMWeb.UserAuth
-  import SM.AccountsFixtures
 
   @remember_me_cookie "_sm_web_user_remember_me"
 
@@ -106,7 +107,7 @@ defmodule SMWeb.UserAuthTest do
     end
 
     test "does not authenticate if data is missing", %{conn: conn, user: user} do
-      _ = Accounts.generate_user_session_token(user)
+      _token = Accounts.generate_user_session_token(user)
       conn = UserAuth.fetch_current_user(conn, [])
       refute get_session(conn, :user_token)
       refute conn.assigns.current_user

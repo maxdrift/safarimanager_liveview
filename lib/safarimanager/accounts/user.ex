@@ -101,8 +101,7 @@ defmodule SM.Accounts.User do
     full_name =
       [first_name, last_name]
       |> Enum.reject(&(&1 in [nil, ""]))
-      |> Enum.map(&String.downcase/1)
-      |> Enum.join(".")
+      |> Enum.map_join(".", &String.downcase/1)
 
     put_change(changeset, :email, "#{full_name}@maxdrift.org")
   end
@@ -171,7 +170,7 @@ defmodule SM.Accounts.User do
     Bcrypt.verify_pass(password, hashed_password)
   end
 
-  def valid_password?(_, _) do
+  def valid_password?(_user, _password) do
     Bcrypt.no_user_verify()
     false
   end

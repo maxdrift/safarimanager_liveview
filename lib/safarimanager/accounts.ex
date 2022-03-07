@@ -6,7 +6,9 @@ defmodule SM.Accounts do
   import Ecto.Query, warn: false
   alias SM.Repo
 
-  alias SM.Accounts.{User, UserToken, UserNotifier}
+  alias SM.Accounts.User
+  alias SM.Accounts.UserNotifier
+  alias SM.Accounts.UserToken
 
   ## Database getters
 
@@ -142,7 +144,7 @@ defmodule SM.Accounts do
          {:ok, _} <- Repo.transaction(user_email_multi(user, email, context)) do
       :ok
     else
-      _ -> :error
+      _result -> :error
     end
   end
 
@@ -211,7 +213,7 @@ defmodule SM.Accounts do
     |> Repo.transaction()
     |> case do
       {:ok, %{user: user}} -> {:ok, user}
-      {:error, :user, changeset, _} -> {:error, changeset}
+      {:error, :user, changeset, _changes} -> {:error, changeset}
     end
   end
 
@@ -279,7 +281,7 @@ defmodule SM.Accounts do
          {:ok, %{user: user}} <- Repo.transaction(confirm_user_multi(user)) do
       {:ok, user}
     else
-      _ -> :error
+      _result -> :error
     end
   end
 
@@ -324,7 +326,7 @@ defmodule SM.Accounts do
          %User{} = user <- Repo.one(query) do
       user
     else
-      _ -> nil
+      _result -> nil
     end
   end
 
@@ -347,7 +349,7 @@ defmodule SM.Accounts do
     |> Repo.transaction()
     |> case do
       {:ok, %{user: user}} -> {:ok, user}
-      {:error, :user, changeset, _} -> {:error, changeset}
+      {:error, :user, changeset, _changes} -> {:error, changeset}
     end
   end
 end
