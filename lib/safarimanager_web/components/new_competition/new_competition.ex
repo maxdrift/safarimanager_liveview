@@ -20,12 +20,18 @@ defmodule SMWeb.NewCompetition do
   data submit, :event, default: "submit"
   data redirect_to, :string
   data entity_name, :string
+  data competitions, :list, default: []
 
   @impl Phoenix.LiveView
   def mount(_params, _session, socket) do
     changeset = Ecto.Changeset.change(%Competition{})
 
-    {:ok, assign(socket, :changeset, changeset)}
+    socket =
+      socket
+      |> assign(:changeset, changeset)
+      |> assign(:competitions, Competitions.list())
+
+    {:ok, socket}
   end
 
   @impl Phoenix.LiveView
@@ -63,10 +69,27 @@ defmodule SMWeb.NewCompetition do
     {:noreply, socket}
   end
 
+  def handle_event("open", %{"id" => competition_id}, socket) do
+    socket =
+      socket
+      |> push_redirect(to: "/organize/#{competition_id}/participants")
+
+    {:noreply, socket}
+  end
+
   # def handle_event(event_name, params, socket) do
   #   IO.inspect(event_name)
   #   IO.inspect(params)
 
   #   {:noreply, socket}
   # end
+
+  defp value_or_na(nil), do: "N/A"
+  defp value_or_na(value), do: value
+
+  defp format_date(nil), do: "N/A"
+
+  defp format_date(datetime) do
+    Calendar.strftime(datetime, "%d/%m/%Y %I:%M:%S %P %Z")
+  end
 end

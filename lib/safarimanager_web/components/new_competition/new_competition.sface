@@ -1,5 +1,32 @@
-<div class="flex flex-col w-full mt-10">
-  <div class="grid card">
+<div class="flex flex-col w-full lg:flex-row mt-10">
+  <div class="flex-grow card h-full flex-grow bg-base-200 p-4 shadow-lg">
+    <div class="text-2xl font-bold text-center">Select an existing competition</div>
+    <table class="table m-2">
+      <thead>
+        <tr>
+          <th class="w-auto">Name</th>
+          <th class="w-1/12">Location</th>
+          <th class="w-1/12">Date</th>
+        </tr>
+      </thead>
+      <tbody>
+        {#for item <- @competitions}
+          <tr class="hover" :on-click="open" :values={id: item.id}>
+            <td class="truncate">{item.name}</td>
+            <td class="truncate">{"#{value_or_na(item.city)} (#{value_or_na(item.country)})"}</td>
+            <td class="truncate">{format_date(item.start_time)}</td>
+          </tr>
+        {#else}
+          <tr>
+            <th>No items yet!</th>
+          </tr>
+        {/for}
+      </tbody>
+    </table>
+  </div>
+  <div class="divider lg:divider-horizontal">OR</div>
+  <div class="flex-grow lg:w-1/3 h-full card place-items-center p-4">
+    <div class="text-2xl font-bold text-center">Create a new one</div>
     <Form {=@action} {=@entity} {=@changeset} {=@validate} {=@submit}>
       <FormActions
         container_class="justify-end mb-1 card-actions"
