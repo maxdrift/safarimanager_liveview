@@ -4,6 +4,9 @@ defmodule SM.Competitions.Competition do
   """
   use SM, :schema
 
+  alias SM.Accounts.User
+  alias SM.Participants.Participant
+
   schema "competitions" do
     field :name, :string
     field :start_time, :utc_datetime_usec
@@ -17,6 +20,7 @@ defmodule SM.Competitions.Competition do
     field :allowed_evaluations, {:array, Ecto.UUID}, default: []
     field :req_evaluations_count, :integer, default: 0
     field :req_jurors_count, :integer, default: 0
+    many_to_many :participants, User, join_through: Participant
 
     timestamps()
   end

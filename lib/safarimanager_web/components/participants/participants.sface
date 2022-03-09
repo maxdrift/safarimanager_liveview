@@ -1,19 +1,62 @@
 <div class="flex flex-col w-full mt-10">
-  <div class="grid h-20 card">
-    Participants selection
-  </div>
-  <div class="divider" />
-  <div class="grid card">
-    <Form {=@action} {=@entity} {=@changeset} {=@validate} {=@submit}>
-      <FormActions
-        container_class="justify-end mb-1 card-actions"
-        submit_enabled?={@changeset.valid?}
-        reset="hide"
-      />
-    </Form>
-  </div>
-  <div class="divider" />
-  <div class="grid h-20 card">
-    Jurors selection
+  <span class="text-2xl text-center">{@competition.name}</span>
+  <div class="flex flex-col w-full lg:flex-row mt-10">
+    <div class="flex-grow card h-full flex-grow bg-base-200 p-4 shadow-lg">
+      <div class="text-2xl font-bold text-center">Users</div>
+      <table class="table m-2">
+        <thead>
+          <tr>
+            <th class="w-auto">First Name</th>
+            <th class="w-auto">Last Name</th>
+            <th class="w-auto">Email</th>
+          </tr>
+        </thead>
+        <tbody>
+          {#for item <- @users}
+            <tr>
+              <td class="truncate">{item.first_name}</td>
+              <td class="truncate">{item.last_name}</td>
+              <td class="truncate">{item.email}</td>
+              <td>
+                <button class="btn btn-xs btn-success" :on-click="enroll" :values={user_id: item.id}>Enroll</button>
+              </td>
+            </tr>
+          {#else}
+            <tr>
+              <th>No items yet!</th>
+            </tr>
+          {/for}
+        </tbody>
+      </table>
+    </div>
+    <div class="divider lg:divider-horizontal" />
+    <div class="flex-grow card h-full flex-grow bg-base-200 p-4 shadow-lg">
+      <div class="text-2xl font-bold text-center">Participants</div>
+      <table class="table m-2">
+        <thead>
+          <tr>
+            <th class="w-auto">First Name</th>
+            <th class="w-auto">Last Name</th>
+            <th class="w-auto">Email</th>
+          </tr>
+        </thead>
+        <tbody>
+          {#for item <- @competition.participants}
+            <tr>
+              <td class="truncate">{item.first_name}</td>
+              <td class="truncate">{item.last_name}</td>
+              <td class="truncate">{item.email}</td>
+              <td>
+                <button class="btn btn-xs btn-error" :on-click="remove" :values={user_id: item.id}>Remove</button>
+              </td>
+            </tr>
+          {#else}
+            <tr>
+              <th>No items yet!</th>
+            </tr>
+          {/for}
+        </tbody>
+      </table>
+    </div>
   </div>
 </div>

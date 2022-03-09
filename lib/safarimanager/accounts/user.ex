@@ -4,7 +4,9 @@ defmodule SM.Accounts.User do
   """
   use SM, :schema
 
+  alias SM.Competitions.Competition
   alias SM.Organizations.Organization
+  alias SM.Participants.Participant
 
   @primary_key {:id, :binary_id, autogenerate: true}
   @foreign_key_type :binary_id
@@ -16,6 +18,7 @@ defmodule SM.Accounts.User do
     field :first_name, :string
     field :last_name, :string
     belongs_to :organization, Organization
+    many_to_many :competitions, Competition, join_through: Participant
 
     timestamps()
   end

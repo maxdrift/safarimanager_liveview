@@ -4,67 +4,70 @@ defmodule SMWeb.Participants do
   """
   use SMWeb, :surface_view
 
+  alias SM.Accounts
   alias SM.Competitions
-  alias SM.Competitions.Competition
-
-  alias SMWeb.Components.Competitions.Form
-  alias SMWeb.Components.Competitions.FormActions
+  alias SM.Participants
 
   require Logger
 
-  data action, :atom, values!: [:create, :edit], default: :create
-
-  data entity, :struct, default: %Competition{}
-  data changeset, :changeset
-  data validate, :event, default: "validate"
-  data submit, :event, default: "submit"
-  data redirect_to, :string
-  data entity_name, :string
+  # data competition, :struct
 
   @impl Phoenix.LiveView
   def mount(_params, _session, socket) do
-    changeset = Ecto.Changeset.change(%Competition{})
-
-    {:ok, assign(socket, :changeset, changeset)}
+    {:ok, socket}
   end
 
   @impl Phoenix.LiveView
-  def handle_event("validate", %{"entity" => entity}, socket) do
-    changeset =
-      socket.assigns.entity
-      |> Competitions.change(entity)
-      |> Map.put(:action, :validate)
+  def handle_event("enroll", %{"user-id" => user_id}, socket) do
+    {:ok, _participant} =
+      Participants.create(%{user_id: user_id, competition_id: socket.assigns.competition_id})
 
-    {:noreply, assign(socket, :changeset, changeset)}
+    {:noreply, socket}
   end
 
-  def handle_event("submit", %{"entity" => entity}, socket) do
-    case Competitions.create(entity) do
-      {:ok, %Competition{id: competition_id}} ->
-        socket =
-          socket
-          |> assign(:entity, %Competition{})
-          |> assign(:changeset, Competitions.change(socket.assigns.entity))
-          |> push_redirect(to: "/organize/#{competition_id}/participants")
+  def handle_event("remove", %{"user-id" => user_id}, socket) do
+    {:ok, _participant} = Participants.delete(user_id, socket.assigns.competition_id)
 
-        # socket =
-        #   socket
-        #   |> reset_current_editing()
-        #   |> push_patch(to: "/admin/competitions")
-
-        # Edit.hide("edit-dialog")
-        # socket = set_alert(socket, "info", "Competition created successfully", @alert_duration)
-        {:noreply, socket}
-
-      {:error, changeset} ->
-        {:noreply, assign(socket, :changeset, changeset)}
-    end
+    {:noreply, socket}
   end
 
-  # def handle_event(event_name, params, socket) do
-  #   IO.inspect(event_name)
-  #   IO.inspect(params)
+  def handle_event(event_name, params, socket) do
+    IO.inspect(event_name)
+    IO.inspect(params)
 
-  #   {:noreply, socket}
-  # end
+    {:noreply, socket}
+  end
+
+  @impl Phoenix.LiveView
+  def handle_params(%{"competition_id" => competition_id}, _uri, socket) do
+    if connected?(socket), do: Participants.subscribe()
+
+    {:ok, competition} = Competitions.get(competition_id)
+    users = Accounts.list_not_enrolled(competition_id)
+
+    socket =
+      socket
+      |> assign(:competition_id, competition_id)
+      |> assign(:competition, competition)
+      |> assign(:users, users)
+
+    {:noreply, socket}
+  end
+
+  @impl Phoenix.LiveView
+  def handle_info({Participants, [:competition, :updated], _result}, socket) do
+    {:ok, competition} = Competitions.get(socket.assigns.competition_id)
+
+    socket = assign(socket, :competition, competition)
+
+    {:noreply, socket}
+  end
+
+  def handle_info({Participants, [:user, :updated], _result}, socket) do
+    users = Accounts.list_not_enrolled(socket.assigns.competition_id)
+
+    socket = assign(socket, :users, users)
+
+    {:noreply, socket}
+  end
 end

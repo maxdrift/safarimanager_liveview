@@ -3,27 +3,72 @@ defmodule SM.Accounts do
   The Accounts context.
   """
 
-  import Ecto.Query, warn: false
-  alias SM.Repo
+  use SM, :context
 
   alias SM.Accounts.User
   alias SM.Accounts.UserNotifier
   alias SM.Accounts.UserToken
+  alias SM.Participants.Participant
 
   ## Database getters
+
+  @doc """
+  Returns the list of users.
+
+  ## Examples
+
+      iex> list()
+      [%User{}, ...]
+
+  """
+  @spec list :: [User.t()]
+  def list do
+    User
+    |> order_by(desc: :inserted_at)
+    |> Repo.all()
+  end
+
+  @doc """
+  Returns the list of users who are not
+  participants of a specific Competition.
+
+  SQL query:
+    select *
+      from users u
+        left join participants p
+          on p.user_id = u.id and p.competition_id = '<competition-id>'
+      where p.user_id is null;
+
+  ## Examples
+
+      iex> list_not_enrolled("competition_id")
+      [%User{}, ...]
+
+  """
+  @spec list_not_enrolled(String.t()) :: [User.t()]
+  def list_not_enrolled(competition_id) do
+    User
+    |> join(:left, [u], p in Participant,
+      on: p.user_id == u.id and p.competition_id == ^competition_id
+    )
+    |> where([_u, p], is_nil(p.user_id))
+    |> order_by(desc: :inserted_at)
+    |> Repo.all()
+  end
 
   @doc """
   Gets a user by email.
 
   ## Examples
 
-      iex> get_user_by_email("foo@example.com")
-      %User{}
+  iex> get_user_by_email("foo@example.com")
+  %User{}
 
-      iex> get_user_by_email("unknown@example.com")
-      nil
+  iex> get_user_by_email("unknown@example.com")
+  nil
 
   """
+  @spec get_user_by_email(String.t()) :: User.t()
   def get_user_by_email(email) when is_binary(email) do
     Repo.get_by(User, email: email)
   end

@@ -41,27 +41,31 @@ defmodule SM do
         Phoenix.PubSub.subscribe(SM.PubSub, @topic <> "#{id}")
       end
 
-      defp notify_subscribers({:ok, result}, event) when is_struct(result) do
+      defp notify_subscribers(result, event, opts \\ [])
+
+      defp notify_subscribers({:ok, result}, event, opts) when is_struct(result) do
+        id_key = Keyword.get(opts, :id_key, :id)
         :ok = Phoenix.PubSub.broadcast(SM.PubSub, @topic, {__MODULE__, event, result})
+        id = Map.get(result, id_key)
 
         :ok =
           Phoenix.PubSub.broadcast(
             SM.PubSub,
-            @topic <> "#{result.id}",
+            @topic <> "#{id}",
             {__MODULE__, event, result}
           )
 
         {:ok, result}
       end
 
-      defp notify_subscribers({:ok, result}, event) do
+      defp notify_subscribers({:ok, result}, event, _opts) do
         :ok = Phoenix.PubSub.broadcast(SM.PubSub, @topic, {__MODULE__, event, result})
 
         {:ok, result}
       end
 
-      defp notify_subscribers({:error, reason}, _event), do: {:error, reason}
-      defp notify_subscribers(:error, _event), do: :error
+      defp notify_subscribers({:error, reason}, _event, _opts), do: {:error, reason}
+      defp notify_subscribers(:error, _event, _opts), do: :error
     end
   end
 
