@@ -5,6 +5,7 @@ defmodule SM.Competitions.Competition do
   use SM, :schema
 
   alias SM.Accounts.User
+  alias SM.Jurors.Juror
   alias SM.Participants.Participant
 
   schema "competitions" do
@@ -21,6 +22,7 @@ defmodule SM.Competitions.Competition do
     field :req_evaluations_count, :integer, default: 0
     field :req_jurors_count, :integer, default: 0
     many_to_many :participants, User, join_through: Participant
+    many_to_many :jurors, User, join_through: Juror
 
     timestamps()
   end

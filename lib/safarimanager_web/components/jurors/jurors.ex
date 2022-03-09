@@ -1,17 +1,15 @@
-defmodule SMWeb.Participants do
+defmodule SMWeb.Jurors do
   @moduledoc """
-  Participants live view
+  Jurors live view
   """
   use SMWeb, :surface_view
 
   alias SM.Accounts
   alias SM.Competitions
-  alias SM.Participants
+  alias SM.Jurors
   alias Surface.Components.LiveRedirect
 
   require Logger
-
-  # data competition, :struct
 
   @impl Phoenix.LiveView
   def mount(_params, _session, socket) do
@@ -20,28 +18,21 @@ defmodule SMWeb.Participants do
 
   @impl Phoenix.LiveView
   def handle_event("enroll", %{"user-id" => user_id}, socket) do
-    {:ok, _participant} =
-      Participants.create(%{user_id: user_id, competition_id: socket.assigns.competition_id})
+    {:ok, _juror} =
+      Jurors.create(%{user_id: user_id, competition_id: socket.assigns.competition_id})
 
     {:noreply, socket}
   end
 
   def handle_event("remove", %{"user-id" => user_id}, socket) do
-    {:ok, _participant} = Participants.delete(user_id, socket.assigns.competition_id)
+    {:ok, _juror} = Jurors.delete(user_id, socket.assigns.competition_id)
 
     {:noreply, socket}
   end
 
-  # def handle_event(event_name, params, socket) do
-  #   IO.inspect(event_name)
-  #   IO.inspect(params)
-
-  #   {:noreply, socket}
-  # end
-
   @impl Phoenix.LiveView
   def handle_params(%{"competition_id" => competition_id}, _uri, socket) do
-    if connected?(socket), do: Participants.subscribe()
+    if connected?(socket), do: Jurors.subscribe()
 
     {:ok, competition} = Competitions.get(competition_id)
     users = Accounts.list_enrollable(competition_id)
@@ -56,7 +47,7 @@ defmodule SMWeb.Participants do
   end
 
   @impl Phoenix.LiveView
-  def handle_info({Participants, [:competition, :updated], _result}, socket) do
+  def handle_info({Jurors, [:competition, :updated], _result}, socket) do
     {:ok, competition} = Competitions.get(socket.assigns.competition_id)
 
     socket = assign(socket, :competition, competition)
@@ -64,7 +55,7 @@ defmodule SMWeb.Participants do
     {:noreply, socket}
   end
 
-  def handle_info({Participants, [:user, :updated], _result}, socket) do
+  def handle_info({Jurors, [:user, :updated], _result}, socket) do
     users = Accounts.list_enrollable(socket.assigns.competition_id)
 
     socket = assign(socket, :users, users)

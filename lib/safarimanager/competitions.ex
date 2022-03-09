@@ -38,7 +38,7 @@ defmodule SM.Competitions do
   def get(id) do
     case Repo.get(Competition, id) do
       nil -> {:error, :not_found}
-      result -> {:ok, Repo.preload(result, [:participants])}
+      result -> {:ok, Repo.preload(result, [:participants, :jurors])}
     end
   end
 

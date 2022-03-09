@@ -8,6 +8,7 @@ defmodule SM.Accounts do
   alias SM.Accounts.User
   alias SM.Accounts.UserNotifier
   alias SM.Accounts.UserToken
+  alias SM.Jurors.Juror
   alias SM.Participants.Participant
 
   ## Database getters
@@ -30,7 +31,7 @@ defmodule SM.Accounts do
 
   @doc """
   Returns the list of users who are not
-  participants of a specific Competition.
+  participants or jurors of a specific Competition.
 
   SQL query:
     select *
@@ -41,17 +42,21 @@ defmodule SM.Accounts do
 
   ## Examples
 
-      iex> list_not_enrolled("competition_id")
+      iex> list_enrollable("competition_id")
       [%User{}, ...]
 
   """
-  @spec list_not_enrolled(String.t()) :: [User.t()]
-  def list_not_enrolled(competition_id) do
+  @spec list_enrollable(String.t()) :: [User.t()]
+  def list_enrollable(competition_id) do
     User
     |> join(:left, [u], p in Participant,
       on: p.user_id == u.id and p.competition_id == ^competition_id
     )
     |> where([_u, p], is_nil(p.user_id))
+    |> join(:left, [u, _p], j in Juror,
+      on: j.user_id == u.id and j.competition_id == ^competition_id
+    )
+    |> where([_u, _p, j], is_nil(j.user_id))
     |> order_by(desc: :inserted_at)
     |> Repo.all()
   end

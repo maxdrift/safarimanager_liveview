@@ -31,7 +31,7 @@
     </div>
     <div class="divider lg:divider-horizontal" />
     <div class="flex-grow card max-h-96 overflow-auto flex-grow bg-base-200 p-4 shadow-lg">
-      <div class="text-2xl font-bold text-center">Participants</div>
+      <div class="text-2xl font-bold text-center">Jurors</div>
       <table class="table m-2">
         <thead>
           <tr>
@@ -41,7 +41,7 @@
           </tr>
         </thead>
         <tbody>
-          {#for item <- @competition.participants}
+          {#for item <- @competition.jurors}
             <tr>
               <td class="truncate">{item.first_name}</td>
               <td class="truncate">{item.last_name}</td>
@@ -59,7 +59,7 @@
       </table>
     </div>
   </div>
-  <div class="flex flex-row-reverse my-10 w-full">
-    <LiveRedirect to={"/organize/#{@competition_id}/jurors"} class="btn btn-success">Next</LiveRedirect>
+  <div class="flex my-10 w-full">
+    <LiveRedirect to={"/organize/#{@competition_id}/participants"} class="btn btn-success">Previous</LiveRedirect>
   </div>
 </div>

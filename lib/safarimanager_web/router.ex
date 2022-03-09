@@ -29,6 +29,7 @@ defmodule SMWeb.Router do
     get "/", HomeController, :new
     live "/organize/new", NewCompetition
     live "/organize/:competition_id/participants", Participants
+    live "/organize/:competition_id/jurors", Jurors
 
     # live "/", Main
     live "/gallery", Gallery
