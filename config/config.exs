@@ -13,6 +13,7 @@ config :safarimanager,
 
 config :safarimanager, SM.Repo,
   migration_primary_key: [name: :id, type: :binary_id],
+  migration_foreign_key: [column: :id, type: :binary_id],
   migration_timestamps: [type: :utc_datetime_usec]
 
 # Configures the endpoint
@@ -34,6 +35,8 @@ config :safarimanager, SM.Mailer, adapter: Swoosh.Adapters.Local
 config :safarimanager, SM.Subjects.Subject,
   types: [:fish, :macro, :fish_macro, :ambient],
   coefficients: [2, 4, 6]
+
+config :safarimanager, SM.Slides.Slide, statuses: [:discarded, :submitted_jury, :submitted_fixed]
 
 config :safarimanager, :generators,
   binary_id: true,

@@ -59,7 +59,33 @@
       </table>
     </div>
   </div>
-  <div class="flex my-10 w-full">
-    <LiveRedirect to={"/organize/#{@competition_id}/participants"} class="btn btn-success">Previous</LiveRedirect>
+  <div class="flex flex-row my-10 w-full">
+    <LiveRedirect to={"/organize/#{@competition_id}/participants"} class="flex-none btn gap-2">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        class="h-6 w-6"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+        stroke-width="2"
+      >
+        <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+      </svg>
+      Participants
+    </LiveRedirect>
+    <div class="grow" />
+    <LiveRedirect to={"/organize/#{@competition_id}/slides"} class="flex-none btn btn-primary gap-2">
+      Slides
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        class="h-6 w-6"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+        stroke-width="2"
+      >
+        <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+      </svg>
+    </LiveRedirect>
   </div>
 </div>

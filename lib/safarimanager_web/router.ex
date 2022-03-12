@@ -30,6 +30,7 @@ defmodule SMWeb.Router do
     live "/organize/new", NewCompetition
     live "/organize/:competition_id/participants", Participants
     live "/organize/:competition_id/jurors", Jurors
+    live "/organize/:competition_id/slides", Slides
 
     # live "/", Main
     live "/gallery", Gallery

@@ -7,6 +7,7 @@ defmodule SM.Accounts.User do
   alias SM.Competitions.Competition
   alias SM.Organizations.Organization
   alias SM.Participants.Participant
+  alias SM.Slides.Slide
 
   @primary_key {:id, :binary_id, autogenerate: true}
   @foreign_key_type :binary_id
@@ -19,6 +20,7 @@ defmodule SM.Accounts.User do
     field :last_name, :string
     belongs_to :organization, Organization
     many_to_many :competitions, Competition, join_through: Participant
+    has_many :slides, Slide
 
     timestamps()
   end
