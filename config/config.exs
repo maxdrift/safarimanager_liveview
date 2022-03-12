@@ -36,7 +36,9 @@ config :safarimanager, SM.Subjects.Subject,
   types: [:fish, :macro, :fish_macro, :ambient],
   coefficients: [2, 4, 6]
 
-config :safarimanager, SM.Slides.Slide, statuses: [:discarded, :submitted_jury, :submitted_fixed]
+config :safarimanager, SM.Slides.Slide,
+  statuses: [:discarded, :submitted_jury, :submitted_fixed],
+  uploads_path: fn competition_id, user_id -> "/uploads/#{competition_id}/#{user_id}" end
 
 config :safarimanager, :generators,
   binary_id: true,

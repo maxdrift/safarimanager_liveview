@@ -20,6 +20,16 @@ defmodule SM.Slides do
     Slide.get_statuses()
   end
 
+  @spec get_uploads_path(String.t(), String.t()) :: String.t()
+  def get_uploads_path(competition_id, user_id) do
+    fun =
+      :safarimanager
+      |> Application.fetch_env!(Slide)
+      |> Keyword.fetch!(:uploads_path)
+
+    fun.(competition_id, user_id)
+  end
+
   @doc """
   Returns the list of slides.
 
@@ -86,7 +96,7 @@ defmodule SM.Slides do
       {:error, %Ecto.Changeset{}}
 
   """
-  @spec create(%{String.t() => any()}) :: {:error, any()} | {:ok, Slide.t()}
+  @spec create(%{(String.t() | atom()) => any()}) :: {:error, any()} | {:ok, Slide.t()}
   def create(attrs \\ %{}) do
     %Slide{}
     |> Slide.changeset(attrs)

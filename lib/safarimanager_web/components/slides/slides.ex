@@ -4,6 +4,7 @@ defmodule SMWeb.Slides do
   """
   use SMWeb, :surface_view
 
+  alias Phoenix.LiveView
   alias SM.Accounts
   alias SM.Competitions
   alias SM.Slides
@@ -27,40 +28,69 @@ defmodule SMWeb.Slides do
       socket
       |> assign(:user, nil)
       |> assign(:slides, [])
-      |> allow_upload(:images, accept: ~w(.jpg .jpeg .png), max_entries: 150)
+      |> allow_upload(:images,
+        accept: ~w(.jpg .jpeg .png),
+        max_entries: 150,
+        max_file_size: 100_000_000,
+        auto_upload: true
+      )
 
     {:ok, socket}
   end
 
   @impl Phoenix.LiveView
-  def handle_event("select", %{"id" => user_id}, socket) do
-    socket =
-      socket
-      |> assign(:user, Accounts.get_user!(user_id))
-
-    {:noreply, socket}
-  end
-
   def handle_event("submit", %{}, socket) do
+    IO.inspect("submit")
     assigns = socket.assigns
 
+    uploads_path = Slides.get_uploads_path(assigns.competition_id, assigns.user.id)
+
+    :ok =
+      "priv/static"
+      |> Path.join(uploads_path)
+      |> File.mkdir_p!()
+
+    # uploaded_files =
+    LiveView.consume_uploaded_entries(socket, :images, fn %{path: path}, entry ->
+      uploads_path = Path.join(uploads_path, entry.client_name)
+      dest = Path.join("priv/static", uploads_path)
+      File.cp!(path, dest)
+      {:ok, Routes.static_path(socket, uploads_path) |> IO.inspect(label: :uploaded_file)}
+    end)
+
+    # IO.inspect(uploaded_files, label: :uploaded_files)
+
     Enum.each(socket.assigns.uploads.images.entries, fn entry ->
-      Slides.create(%{
-        user_id: assigns.user.id,
-        competition_id: assigns.competition_id,
-        file_name: entry.client_name,
-        file_size: entry.client_size,
-        file_type: entry.client_type
-      })
+      {:ok, _slide} =
+        Slides.create(%{
+          user_id: assigns.user.id,
+          competition_id: assigns.competition_id,
+          file_name: entry.client_name,
+          file_size: entry.client_size,
+          file_type: entry.client_type
+        })
     end)
 
     {:noreply, socket}
   end
 
-  def handle_event(event_name, params, socket) do
-    IO.inspect(event_name)
-    IO.inspect(params)
-    IO.inspect(socket.assigns.uploads)
+  def handle_event("delete-slide", %{"id" => slide_id}, socket) do
+    {:ok, slide} = Slides.get(slide_id)
+    {:ok, _slide} = Slides.delete(slide)
+
+    uploads_path = Slides.get_uploads_path(socket.assigns.competition_id, socket.assigns.user.id)
+
+    ["priv/static", uploads_path, slide.file_name]
+    |> Path.join()
+    |> File.rm!()
+
+    {:noreply, socket}
+  end
+
+  def handle_event(_event_name, _params, socket) do
+    # IO.inspect(event_name)
+    # IO.inspect(params)
+    # IO.inspect(socket.assigns.uploads)
 
     {:noreply, socket}
   end
@@ -68,7 +98,8 @@ defmodule SMWeb.Slides do
   @impl Phoenix.LiveView
 
   def handle_params(%{"competition_id" => competition_id} = params, _uri, socket) do
-    if connected?(socket), do: {Competitions.subscribe(), Accounts.subscribe()}
+    if connected?(socket),
+      do: {Competitions.subscribe(), Accounts.subscribe(), Slides.subscribe()}
 
     user_id = params["user_id"]
 
@@ -86,19 +117,30 @@ defmodule SMWeb.Slides do
   end
 
   @impl Phoenix.LiveView
-  def handle_info({Slides, [:competition, :updated], _result}, socket) do
-    {:ok, competition} = Competitions.get(socket.assigns.competition_id)
+  def handle_info({Slides, [:slide, _], _result}, socket) do
+    user_id = socket.assigns.user.id
+    competition_id = socket.assigns.competition_id
 
-    socket = assign(socket, :competition, competition)
+    socket = assign(socket, :slides, user_id && Slides.list(user_id, competition_id))
 
     {:noreply, socket}
   end
 
-  def handle_info({Slides, [:user, :updated], _result}, socket) do
-    users = Accounts.list_enrollable(socket.assigns.competition_id)
+  def handle_info({_, [:competition, :updated], _result}, socket) do
+    {:ok, competition} = Competitions.get(socket.assigns.competition_id)
 
-    socket = assign(socket, :users, users)
+    socket =
+      socket
+      |> assign(:competition, competition)
 
     {:noreply, socket}
+  end
+
+  defp image_path(socket, competition_id, user_id, file_name) do
+    uploads_path = Slides.get_uploads_path(competition_id, user_id)
+
+    socket
+    |> Routes.static_path(uploads_path)
+    |> Path.join(file_name)
   end
 end
