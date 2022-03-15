@@ -41,7 +41,6 @@ defmodule SMWeb do
 
       # Include shared imports and aliases for views
       unquote(view_helpers())
-      # import Surface
     end
   end
 
@@ -58,6 +57,15 @@ defmodule SMWeb do
     quote do
       use Surface.LiveView,
         layout: {SMWeb.LayoutView, "live.html"}
+
+      unquote(view_helpers())
+    end
+  end
+
+  def surface_jury_view do
+    quote do
+      use Surface.LiveView,
+        layout: {SMWeb.LayoutView, "live_jury.html"}
 
       unquote(view_helpers())
     end

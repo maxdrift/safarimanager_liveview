@@ -12,7 +12,7 @@ defmodule SM.Evaluations.Evaluation do
     timestamps()
   end
 
-  @spec changeset(Evaluation.t(), %{String.t() => any()}) :: Ecto.Changeset.t()
+  @spec changeset(Evaluation.t(), %{(String.t() | atom()) => any()}) :: Ecto.Changeset.t()
   def changeset(evaluation, attrs) do
     evaluation
     |> cast(attrs, [:value, :type, :description])

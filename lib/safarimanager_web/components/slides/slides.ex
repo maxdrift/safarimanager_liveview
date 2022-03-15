@@ -32,7 +32,7 @@ defmodule SMWeb.Slides do
         accept: ~w(.jpg .jpeg .png),
         max_entries: 150,
         max_file_size: 100_000_000,
-        auto_upload: true
+        auto_upload: false
       )
 
     {:ok, socket}
@@ -87,10 +87,9 @@ defmodule SMWeb.Slides do
     {:noreply, socket}
   end
 
-  def handle_event(_event_name, _params, socket) do
+  def handle_event(event_name, params, socket) do
     # IO.inspect(event_name)
     # IO.inspect(params)
-    # IO.inspect(socket.assigns.uploads)
 
     {:noreply, socket}
   end

@@ -15,6 +15,16 @@ defmodule SMWeb.Router do
     plug :fetch_current_user
   end
 
+  pipeline :jury_browser do
+    plug :accepts, ["html"]
+    plug :fetch_session
+    plug :fetch_live_flash
+    plug :put_root_layout, {SMWeb.LayoutView, :jury}
+    plug :protect_from_forgery
+    plug :put_secure_browser_headers
+    plug :fetch_current_user
+  end
+
   # pipeline :api do
   #   plug :accepts, ["json"]
   # end
@@ -31,10 +41,18 @@ defmodule SMWeb.Router do
     live "/organize/:competition_id/participants", Participants
     live "/organize/:competition_id/jurors", Jurors
     live "/organize/:competition_id/slides", Slides
+    live "/organize/:competition_id/csv_import", CSVImport
+    live "/organize/:competition_id/jury_launcher", JuryLauncher
 
     # live "/", Main
     live "/gallery", Gallery
     live "/jury_viewer", JuryViewer
+  end
+
+  scope "/", SMWeb do
+    pipe_through :jury_browser
+
+    live "/organize/:competition_id/jury", Jury
   end
 
   scope "/admin", SMWeb do

@@ -27,6 +27,8 @@ defmodule SM do
 
       alias SM.Repo
 
+      require Logger
+
       # Phoenix PubSub subscription
 
       @topic inspect(__MODULE__)

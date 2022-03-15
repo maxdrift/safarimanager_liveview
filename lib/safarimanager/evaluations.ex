@@ -54,7 +54,7 @@ defmodule SM.Evaluations do
       {:error, %Ecto.Changeset{}}
 
   """
-  @spec create(%{String.t() => any()}) :: {:error, any()} | {:ok, Evaluation.t()}
+  @spec create(%{(String.t() | atom()) => any()}) :: {:error, any()} | {:ok, Evaluation.t()}
   def create(attrs \\ %{}) do
     %Evaluation{}
     |> Evaluation.changeset(attrs)

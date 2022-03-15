@@ -1,0 +1,11 @@
+<div class="flex flex-col w-full mt-10 text-center">
+  <span class="text-2xl text-center">{@competition.name}</span>
+  <div class="mt-20">
+    <!-- <LiveRedirect to={"/organize/#{@competition_id}/jury"} class="btn btn-xl btn-primary">
+      Launch Jury
+    </LiveRedirect> -->
+    <a href={"/organize/#{@competition_id}/jury"} class="btn btn-xl btn-primary">
+      Launch Jury
+    </a>
+  </div>
+</div>

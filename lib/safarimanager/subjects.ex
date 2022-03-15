@@ -71,6 +71,30 @@ defmodule SM.Subjects do
   end
 
   @doc """
+  Gets a single Subject by numeric ID.
+
+  ## Examples
+
+  iex> get_by_numeric_id(123)
+  {:ok, %Subject{}}
+
+  iex> get_by_numeric_id(456)
+  {:error, :not_found}
+
+  """
+  @spec get_by_numeric_id(String.t() | integer()) :: {:error, :not_found} | {:ok, Subject.t()}
+  def get_by_numeric_id(numeric_id) do
+    case Repo.get_by(Subject, numeric_id: numeric_id) do
+      nil ->
+        Logger.error("Subject with numeric ID '#{numeric_id}' not found")
+        {:error, :not_found}
+
+      result ->
+        {:ok, result}
+    end
+  end
+
+  @doc """
   Creates a subject.
 
   ## Examples
@@ -82,7 +106,7 @@ defmodule SM.Subjects do
       {:error, %Ecto.Changeset{}}
 
   """
-  @spec create(%{String.t() => any()}) :: {:error, any()} | {:ok, Subject.t()}
+  @spec create(%{(String.t() | atom()) => any()}) :: {:error, any()} | {:ok, Subject.t()}
   def create(attrs \\ %{}) do
     %Subject{}
     |> Subject.changeset(attrs)

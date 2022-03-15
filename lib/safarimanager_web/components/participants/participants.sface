@@ -60,7 +60,7 @@
     </div>
   </div>
   <div class="flex flex-row-reverse my-10 w-full">
-    <LiveRedirect to={"/organize/#{@competition_id}/jurors"} class="btn btn-success gap-2">
+    <LiveRedirect to={"/organize/#{@competition_id}/jurors"} class="btn btn-primary gap-2">
       Jurors
       <svg
         xmlns="http://www.w3.org/2000/svg"

@@ -44,6 +44,7 @@ defmodule SM.Slides do
     Slide
     |> order_by(asc: :inserted_at)
     |> Repo.all()
+    |> Repo.preload([:subject])
   end
 
   @doc """
@@ -62,6 +63,49 @@ defmodule SM.Slides do
     |> where(competition_id: ^competition_id)
     |> order_by(asc: :inserted_at)
     |> Repo.all()
+    |> Repo.preload([:subject])
+  end
+
+  @doc """
+  Returns the list of slides grouped by subject, in random order.
+
+  select
+      sl.id,
+      su.name
+      sl.file_name,
+  from
+      slides sl
+      inner join subjects su on su.id = sl.subject_id
+  where
+      sl.competition_id = '7e1ce81a-fc38-4f9d-a182-6f7bbbcf6504'
+      and sl.status = 'submitted_jury'
+  group by
+      sl.id,
+      sl.subject_id,
+      su.name,
+      u.first_name
+  order by
+      sl.subject_id;
+
+  ## Examples
+
+      iex> list(competition_id)
+      [%Slide{}, ...]
+
+  """
+  @spec list(String.t()) :: [Slide.t()]
+  def list(competition_id) do
+    query =
+      from(sl in Slide,
+        join: su in assoc(sl, :subject),
+        where: [competition_id: ^competition_id, status: :submitted_jury],
+        group_by: [sl.id, sl.subject_id, su.numeric_id],
+        order_by: [asc: su.numeric_id, asc: sl.id],
+        preload: [:subject],
+        select: sl
+      )
+
+    Repo.all(query)
   end
 
   @doc """
@@ -79,6 +123,26 @@ defmodule SM.Slides do
   @spec get(String.t()) :: {:error, :not_found} | {:ok, Slide.t()}
   def get(id) do
     case Repo.get(Slide, id) do
+      nil -> {:error, :not_found}
+      result -> {:ok, result}
+    end
+  end
+
+  @doc """
+  Gets a single Slide by competition, user and file name.
+
+  ## Examples
+
+  iex> get(123, 123, "foobar")
+  {:ok, %Slide{}}
+
+  iex> get(456, 456, "foobar")
+  {:error, :not_found}
+
+  """
+  @spec get(String.t(), String.t(), String.t()) :: {:error, :not_found} | {:ok, Slide.t()}
+  def get(competition_id, user_id, file_name) do
+    case Repo.get_by(Slide, competition_id: competition_id, user_id: user_id, file_name: file_name) do
       nil -> {:error, :not_found}
       result -> {:ok, result}
     end
@@ -116,7 +180,7 @@ defmodule SM.Slides do
       {:error, %Ecto.Changeset{}}
 
   """
-  @spec update(Slide.t(), %{String.t() => any()}) :: {:ok, Slide.t()} | {:error, any()}
+  @spec update(Slide.t(), %{(String.t() | atom()) => any()}) :: {:ok, Slide.t()} | {:error, any()}
   def update(%Slide{} = slide, attrs) do
     slide
     |> Slide.changeset(attrs)

@@ -42,6 +42,7 @@ defmodule SM.MixProject do
       {:esbuild, "~> 0.3", runtime: Mix.env() == :dev},
       {:gettext, "~> 0.19"},
       {:jason, "~> 1.2"},
+      {:nimble_csv, "~> 1.2"},
       {:phoenix_ecto, "~> 4.4"},
       {:phoenix_html, "~> 3.2"},
       {:phoenix_live_reload, "~> 1.2", only: :dev},

@@ -18,7 +18,7 @@ defmodule SM.Subjects.Subject do
   end
 
   @doc false
-  @spec changeset(t(), %{String.t() => any()}) :: Ecto.Changeset.t()
+  @spec changeset(t(), %{(String.t() | atom()) => any()}) :: Ecto.Changeset.t()
   def changeset(subject, attrs) do
     subject
     |> cast(attrs, [:name, :coefficient, :numeric_id, :scientific_name, :type])
