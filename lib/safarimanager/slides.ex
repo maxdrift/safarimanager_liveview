@@ -126,7 +126,7 @@ defmodule SM.Slides do
   def get(id) do
     case Repo.get(Slide, id) do
       nil -> {:error, :not_found}
-      result -> {:ok, Repo.preload(result, [:evaluations])}
+      result -> {:ok, Repo.preload(result, [:subject, :evaluations])}
     end
   end
 

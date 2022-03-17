@@ -55,7 +55,7 @@ defmodule SMWeb.Slides do
       uploads_path = Path.join(uploads_path, entry.client_name)
       dest = Path.join("priv/static", uploads_path)
       File.cp!(path, dest)
-      {:ok, Routes.static_path(socket, uploads_path) |> IO.inspect(label: :uploaded_file)}
+      {:ok, Routes.static_path(socket, uploads_path)}
     end)
 
     # IO.inspect(uploaded_files, label: :uploaded_files)

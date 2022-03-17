@@ -150,10 +150,7 @@ defmodule SMWeb.Jury do
   end
 
   @impl Phoenix.LiveView
-  def handle_info({Slides, [:slide, action], result}, socket) do
-    IO.inspect(action, label: :action)
-    IO.inspect(result, label: :result)
-
+  def handle_info({Slides, [:slide, _action], _result}, socket) do
     curr_slide_id = socket.assigns.curr_slide.id
     {:ok, updated_slide} = Slides.get(curr_slide_id)
 

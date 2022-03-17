@@ -6,6 +6,7 @@ defmodule SMWeb.Results do
 
   alias SM.Competitions
   alias SM.Results
+  alias SM.Slides
   alias Surface.Components.LiveRedirect
 
   require Logger
@@ -14,6 +15,7 @@ defmodule SMWeb.Results do
 
   @impl Phoenix.LiveView
   def mount(_params, _session, socket) do
+    if connected?(socket), do: Slides.subscribe()
     {:ok, socket}
   end
 
@@ -40,7 +42,11 @@ defmodule SMWeb.Results do
   end
 
   @impl Phoenix.LiveView
-  def handle_info({_entity, [:competition, _action], _result}, socket) do
+  def handle_info({Slides, [:slide, _action], _result}, socket) do
+    {:ok, results} = Results.list(socket.assigns.competition_id)
+
+    socket = assign(socket, :results, results)
+
     {:noreply, socket}
   end
 end
