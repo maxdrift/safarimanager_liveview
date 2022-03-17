@@ -4,7 +4,7 @@ defmodule SM.Slides do
   """
   use SM, :context
 
-  alias SM.Evaluations
+  alias SM.Jurors.Juror
   alias SM.Slides.Slide
   alias SM.Slides.SlideEvaluation
 
@@ -191,47 +191,46 @@ defmodule SM.Slides do
   end
 
   @doc """
-  Evaluate a slide.
+  Evaluate a slide using a free Juror.
 
   ## Examples
 
-      iex> evaluate(123, 456)
-      {:ok, %Slide{}}
+      iex> evaluate(123, 456, 789)
+      {:ok, %SlideEvaluation{}}
 
-      iex> evaluate(678, 901)
+      iex> evaluate(321, 654, 987)
       {:error, %Ecto.Changeset{}}
 
   """
-  @spec evaluate(String.t(), String.t(), String.t(), Keyword.t()) ::
-          {:ok, Slide.t()} | {:error, any()}
-  def evaluate(slide_id, user_id, evaluation_id, _opts \\ []) do
-    # max_evaluations = Keyword.get(opts, :max_evaluations)
+  @spec evaluate(String.t(), String.t(), String.t()) ::
+          {:ok, SlideEvaluation.t()} | {:error, any()}
+  def evaluate(competition_id, slide_id, evaluation_id) do
+    free_jurors =
+      Repo.all(
+        from(
+          j in Juror,
+          left_join: se in SlideEvaluation,
+          on: se.user_id == j.user_id and se.slide_id == ^slide_id,
+          where: is_nil(se.user_id),
+          where: [competition_id: ^competition_id],
+          order_by: [asc: :inserted_at],
+          limit: 1
+        )
+      )
 
-    changeset =
-      SlideEvaluation.changeset(%SlideEvaluation{}, %{
-        slide_id: slide_id,
-        user_id: user_id,
-        evaluation_id: evaluation_id
-      })
+    case free_jurors do
+      [juror] ->
+        %SlideEvaluation{}
+        |> SlideEvaluation.changeset(%{
+          slide_id: slide_id,
+          user_id: juror.user_id,
+          evaluation_id: evaluation_id
+        })
+        |> Repo.insert()
+        |> notify_subscribers([:slide, :updated])
 
-    Multi.new()
-    # |> Multi.run(:evaluations, fn _repo, %{} ->
-    #   evaluations = Evaluations.list(slide_id)
-
-    #   if is_nil(max_evaluations) or Enum.count(evaluations) < max_evaluations do
-    #     {:ok, evaluations}
-    #   else
-    #     {:error, {:max_evaluations, evaluations}}
-    #   end
-    # end)
-    |> Multi.insert(:evaluate, changeset)
-    |> Repo.transaction()
-    |> case do
-      {:ok, %{evaluate: slide_evaluation}} ->
-        notify_subscribers({:ok, slide_evaluation}, [:slide, :updated])
-
-      {:error, failed_operation, failed_value, _context} ->
-        {:error, {failed_operation, failed_value}}
+      [] ->
+        {:error, :already_evaluated}
     end
   end
 

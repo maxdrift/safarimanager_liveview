@@ -8,18 +8,18 @@
           <th>Name</th>
           <th>Organization</th>
           <th>Category</th>
-          <th>Points</th>
+          <th>Score</th>
           <th>Species</th>
         </tr>
       </thead>
       <tbody>
         {#for result <- @results}
           <tr>
-            <th></th>
+            <th>{result.rank}</th>
             <th>{result.user.last_name} {result.user.first_name}</th>
             <th>N/A</th>
             <th>N/A</th>
-            <th>{result.total_points}</th>
+            <th>{result.total_score}</th>
             <th>{Enum.count(result.slides)}</th>
           </tr>
         {#else}

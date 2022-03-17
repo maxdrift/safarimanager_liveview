@@ -112,10 +112,8 @@ defmodule SMWeb.Jury do
   end
 
   def handle_event("evaluate", %{"evaluation-id" => evaluation_id}, socket) do
-    juror = Enum.at(socket.assigns.jurors, socket.assigns.jurors_index)
-
     {:ok, _slide_evaluation} =
-      Slides.evaluate(socket.assigns.curr_slide.id, juror.id, evaluation_id)
+      Slides.evaluate(socket.assigns.competition.id, socket.assigns.curr_slide.id, evaluation_id)
 
     socket = assign(socket, :jurors_index, socket.assigns.jurors_index + 1)
 
@@ -130,7 +128,7 @@ defmodule SMWeb.Jury do
   def handle_event("evaluation-key", %{"key" => evaluation}, socket) do
     case Integer.parse(evaluation) do
       {int_evaluation, ""} ->
-        IO.inspect(int_evaluation, label: :key_evaluationd)
+        IO.inspect(int_evaluation, label: :key_evaluation)
         {:noreply, socket}
 
       :error ->
