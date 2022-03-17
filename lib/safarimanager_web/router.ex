@@ -43,6 +43,7 @@ defmodule SMWeb.Router do
     live "/organize/:competition_id/slides", Slides
     live "/organize/:competition_id/csv_import", CSVImport
     live "/organize/:competition_id/jury_launcher", JuryLauncher
+    live "/organize/:competition_id/results", Results
 
     # live "/", Main
     live "/gallery", Gallery

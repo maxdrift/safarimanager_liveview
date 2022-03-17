@@ -65,7 +65,7 @@ defmodule SM.Slides do
     |> where(competition_id: ^competition_id)
     |> order_by(asc: :inserted_at)
     |> Repo.all()
-    |> Repo.preload([:subject])
+    |> Repo.preload([:subject, :evaluations])
   end
 
   @doc """

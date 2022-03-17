@@ -1,0 +1,49 @@
+<div class="flex flex-col w-full mt-10">
+  <span class="text-2xl text-center">{@competition.name}</span>
+  <div class="overflow-x-auto">
+    <table class="table table-zebra w-full">
+      <thead>
+        <tr>
+          <th>Rank</th>
+          <th>Name</th>
+          <th>Organization</th>
+          <th>Category</th>
+          <th>Points</th>
+          <th>Species</th>
+        </tr>
+      </thead>
+      <tbody>
+        {#for result <- @results}
+          <tr>
+            <th></th>
+            <th>{result.user.last_name} {result.user.first_name}</th>
+            <th>N/A</th>
+            <th>N/A</th>
+            <th>{result.total_points}</th>
+            <th>{Enum.count(result.slides)}</th>
+          </tr>
+        {#else}
+          <tr>
+            No results available yet
+          </tr>
+        {/for}
+      </tbody>
+    </table>
+  </div>
+  <div class="flex flex-row my-10 w-full">
+    <LiveRedirect to={"/organize/#{@competition_id}/jury_launcher"} class="flex-none btn gap-2">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        class="h-6 w-6"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+        stroke-width="2"
+      >
+        <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+      </svg>
+      Jury
+    </LiveRedirect>
+    <div class="grow" />
+  </div>
+</div>

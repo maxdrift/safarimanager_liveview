@@ -1,15 +1,16 @@
-defmodule SMWeb.JuryLauncher do
+defmodule SMWeb.Results do
   @moduledoc """
-  Jury launcher live view
+  Results live view
   """
   use SMWeb, :surface_view
 
   alias SM.Competitions
+  alias SM.Results
   alias Surface.Components.LiveRedirect
 
   require Logger
 
-  # data user, :struct
+  # data competition, :struct
 
   @impl Phoenix.LiveView
   def mount(_params, _session, socket) do
@@ -17,14 +18,29 @@ defmodule SMWeb.JuryLauncher do
   end
 
   @impl Phoenix.LiveView
+  def handle_event(event_name, params, socket) do
+    IO.inspect(event_name)
+    IO.inspect(params)
+
+    {:noreply, socket}
+  end
+
+  @impl Phoenix.LiveView
   def handle_params(%{"competition_id" => competition_id}, _uri, socket) do
+    {:ok, results} = Results.list(competition_id)
     {:ok, competition} = Competitions.get(competition_id)
 
     socket =
       socket
       |> assign(:competition_id, competition_id)
       |> assign(:competition, competition)
+      |> assign(:results, results)
 
+    {:noreply, socket}
+  end
+
+  @impl Phoenix.LiveView
+  def handle_info({_entity, [:competition, _action], _result}, socket) do
     {:noreply, socket}
   end
 end

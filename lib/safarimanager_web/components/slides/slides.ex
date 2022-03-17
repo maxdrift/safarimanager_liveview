@@ -8,13 +8,13 @@ defmodule SMWeb.Slides do
   alias SM.Accounts
   alias SM.Competitions
   alias SM.Slides
-  alias Surface.Components.LiveFileInput
   alias Surface.Components.Form
   alias Surface.Components.Form.ErrorTag
   alias Surface.Components.Form.Field
   alias Surface.Components.Form.Label
   alias Surface.Components.Form.Reset
   alias Surface.Components.Form.Submit
+  alias Surface.Components.LiveFileInput
   alias Surface.Components.LiveRedirect
   alias Surface.Components.LivePatch
 
