@@ -4,7 +4,9 @@ defmodule SM.Slides do
   """
   use SM, :context
 
+  alias SM.Evaluations
   alias SM.Slides.Slide
+  alias SM.Slides.SlideEvaluation
 
   @doc """
   Returns the list of slide statuses.
@@ -67,7 +69,7 @@ defmodule SM.Slides do
   end
 
   @doc """
-  Returns the list of slides grouped by subject, in random order.
+  Returns the list of slides grouped by subject, in random order (by slide ID).
 
   select
       sl.id,
@@ -101,7 +103,7 @@ defmodule SM.Slides do
         where: [competition_id: ^competition_id, status: :submitted_jury],
         group_by: [sl.id, sl.subject_id, su.numeric_id],
         order_by: [asc: su.numeric_id, asc: sl.id],
-        preload: [:subject],
+        preload: [:subject, :evaluations],
         select: sl
       )
 
@@ -124,7 +126,7 @@ defmodule SM.Slides do
   def get(id) do
     case Repo.get(Slide, id) do
       nil -> {:error, :not_found}
-      result -> {:ok, result}
+      result -> {:ok, Repo.preload(result, [:evaluations])}
     end
   end
 
@@ -186,6 +188,57 @@ defmodule SM.Slides do
     |> Slide.changeset(attrs)
     |> Repo.update()
     |> notify_subscribers([:slide, :updated])
+  end
+
+  @doc """
+  Evaluate a slide.
+
+  ## Examples
+
+      iex> evaluate(123, 456)
+      {:ok, %Slide{}}
+
+      iex> evaluate(678, 901)
+      {:error, %Ecto.Changeset{}}
+
+  """
+  @spec evaluate(String.t(), String.t(), String.t(), Keyword.t()) ::
+          {:ok, Slide.t()} | {:error, any()}
+  def evaluate(slide_id, user_id, evaluation_id, _opts \\ []) do
+    # max_evaluations = Keyword.get(opts, :max_evaluations)
+
+    changeset =
+      SlideEvaluation.changeset(%SlideEvaluation{}, %{
+        slide_id: slide_id,
+        user_id: user_id,
+        evaluation_id: evaluation_id
+      })
+
+    Multi.new()
+    # |> Multi.run(:evaluations, fn _repo, %{} ->
+    #   evaluations = Evaluations.list(slide_id)
+
+    #   if is_nil(max_evaluations) or Enum.count(evaluations) < max_evaluations do
+    #     {:ok, evaluations}
+    #   else
+    #     {:error, {:max_evaluations, evaluations}}
+    #   end
+    # end)
+    |> Multi.insert(:evaluate, changeset)
+    |> Repo.transaction()
+    |> case do
+      {:ok, %{evaluate: slide_evaluation}} ->
+        notify_subscribers({:ok, slide_evaluation}, [:slide, :updated])
+
+      {:error, failed_operation, failed_value, _context} ->
+        {:error, {failed_operation, failed_value}}
+    end
+  end
+
+  @spec clear_evaluations(String.t()) :: {:ok, integer()} | {:error, any()}
+  def clear_evaluations(slide_id) do
+    {deleted, nil} = Repo.delete_all(from(SlideEvaluation, where: [slide_id: ^slide_id]))
+    notify_subscribers({:ok, deleted}, [:slide, :updated])
   end
 
   @doc """

@@ -24,11 +24,9 @@ defmodule SMWeb.NewCompetition do
 
   @impl Phoenix.LiveView
   def mount(_params, _session, socket) do
-    changeset = Ecto.Changeset.change(%Competition{})
-
     socket =
       socket
-      |> assign(:changeset, changeset)
+      |> assign(:changeset, Competitions.change(%Competition{}))
       |> assign(:competitions, Competitions.list())
 
     {:ok, socket}

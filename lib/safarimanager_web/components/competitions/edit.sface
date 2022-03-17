@@ -5,7 +5,7 @@
   <Form {=@action} {=@entity} {=@changeset} {=@validate} {=@submit} {=@redirect_to}>
     <FormActions
       container_class="modal-action"
-      submit_enabled?={@changeset.valid?}
+      submit_enabled?={@changeset.action && @changeset.valid?}
       reset="hide"
       reset_label="Close"
     />

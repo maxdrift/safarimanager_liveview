@@ -30,7 +30,7 @@
     <Form {=@action} {=@entity} {=@changeset} {=@validate} {=@submit}>
       <FormActions
         container_class="justify-end mb-1 card-actions"
-        submit_enabled?={@changeset.valid?}
+        submit_enabled?={@changeset.action && @changeset.valid?}
         reset="reset"
       />
     </Form>

@@ -5,6 +5,7 @@ defmodule SM.Competitions.Competition do
   use SM, :schema
 
   alias SM.Accounts.User
+  alias SM.Evaluations.Evaluation
   alias SM.Jurors.Juror
   alias SM.Participants.Participant
   alias SM.Slides.Slide
@@ -19,9 +20,9 @@ defmodule SM.Competitions.Competition do
     field :city, :string
     field :state, :string
     field :country, :string
-    field :allowed_evaluations, {:array, Ecto.UUID}, default: []
-    field :req_evaluations_count, :integer, default: 0
     field :req_jurors_count, :integer, default: 0
+    field :evaluations_per_juror, :integer, default: 0
+    many_to_many :allowed_evaluations, Evaluation, join_through: "competitions_evaluations"
     many_to_many :participants, User, join_through: Participant
     many_to_many :jurors, User, join_through: Juror
     has_many :slides, Slide
@@ -42,8 +43,29 @@ defmodule SM.Competitions.Competition do
       :city,
       :state,
       :country,
-      :allowed_evaluations,
-      :req_evaluations_count,
+      :evaluations_per_juror,
+      :req_jurors_count
+    ])
+    |> validate_required([
+      :name
+    ])
+    |> put_assoc(:allowed_evaluations, Map.get(attrs, "allowed_evaluations", []))
+  end
+
+  @spec update_changeset(Competition.t(), %{String.t() => any()}) :: Ecto.Changeset.t()
+  def update_changeset(competition, attrs) do
+    competition
+    |> cast(attrs, [
+      :name,
+      :start_time,
+      :end_time,
+      :street_name,
+      :street_number,
+      :postal_code,
+      :city,
+      :state,
+      :country,
+      :evaluations_per_juror,
       :req_jurors_count
     ])
     |> validate_required([

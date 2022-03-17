@@ -125,7 +125,7 @@ defmodule SMWeb.Slides do
     {:noreply, socket}
   end
 
-  def handle_info({_, [:competition, :updated], _result}, socket) do
+  def handle_info({_context, [:competition, :updated], _result}, socket) do
     {:ok, competition} = Competitions.get(socket.assigns.competition_id)
 
     socket =

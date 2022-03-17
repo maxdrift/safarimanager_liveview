@@ -23,6 +23,23 @@ defmodule SM.Evaluations do
   end
 
   @doc """
+  Returns the list of evaluations by slide ID.
+
+  ## Examples
+
+      iex> list(123)
+      [%Evaluation{}, ...]
+
+  """
+  @spec list(String.t()) :: [Evaluation.t()]
+  def list(slide_id) do
+    Evaluation
+    |> where(slide_id: ^slide_id)
+    |> order_by(asc: :inserted_at)
+    |> Repo.all()
+  end
+
+  @doc """
   Gets a single Evaluation.
 
   ## Examples

@@ -25,6 +25,7 @@ defmodule SM do
     quote do
       import Ecto.Query
 
+      alias Ecto.Multi
       alias SM.Repo
 
       require Logger

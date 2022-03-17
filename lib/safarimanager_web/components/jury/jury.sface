@@ -1,10 +1,10 @@
-<div class="flex flex-col flex-nowrap h-screen" :on-window-keyup="vote-key">
+<div class="flex flex-col flex-nowrap h-screen" :on-window-keyup="evaluation-key">
   <div class="flex-initial">
     <div class="flex flex-row justify-between">
       <div class="btn-group">
-        <span class="inline-block align-sub p-1 pl-3 font-bold">{@subject_name}</span>
+        <span class="inline-block align-sub p-1 pl-3 font-bold">{String.capitalize(@curr_slide.subject.name)}</span>
         <span class="inline-block align-sub p-1 pl-3 font-bold">{@curr_index + 1} of {@image_count}</span>
-        <span :if={@given_votes != []} class="inline-block align-sub p-1 pl-3 font-bold">Votes: {Enum.join(@given_votes, " | ")}</span>
+        <span :if={@curr_slide.evaluations != []} class="inline-block align-sub p-1 pl-3 font-bold">Evaluations: {Enum.map_join(@curr_slide.evaluations, " | ", & &1.value)}</span>
       </div>
       <div class="flex flex-row justify-between gap-2">
         <div class="btn-group">
@@ -21,7 +21,6 @@
         <a href={"/organize/#{@competition.id}/jury_launcher"} class="btn btn-sm">
           Exit
         </a>
-
       </div>
     </div>
   </div>
@@ -29,15 +28,15 @@
   <div id="openseadragon-viewer" class="flex-1" :hook="Lightbox" phx-update="ignore"> </div>
   <div class="flex-initial">
     <div class="flex flex-row justify-between">
-      <div class="flex flex-row justify-between gap-2">
-        <div class="btn-group">
-          {#for vote <- @votes}
-            <JuryToolbarButton click="vote" click_key="vote" click_value={vote}>{vote}</JuryToolbarButton>
+      <div class={["flex", "flex-row", "justify-between", "gap-2"]}>
+        <div class={["btn-group", "btn-disabled": !can_evaluate?(@competition, @curr_slide)]}>
+          {#for evaluation <- @evaluations}
+            <JuryToolbarButton click="evaluate" click_key="evaluation-id" click_value={evaluation.id}>{evaluation.value}</JuryToolbarButton>
           {#else}
-            No votes available
+            No evaluations available
           {/for}
         </div>
-        <JuryToolbarButton click="clear-votes">Clear</JuryToolbarButton>
+        <JuryToolbarButton click="clear-evaluations">Clear</JuryToolbarButton>
       </div>
       <div class="btn-group">
         {#for prize <- @prizes}

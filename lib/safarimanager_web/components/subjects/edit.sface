@@ -87,7 +87,6 @@
         </Label>
         <Select
           options={@subject_types}
-          selected={@entity.type}
           prompt="Select a type"
           class={
             "input",
@@ -95,7 +94,7 @@
             "input-error": not is_nil(@changeset.action) and not @changeset.valid?,
             "input-success": @changeset.action == :validate and @changeset.valid?
           }
-          opts={phx_debounce: "1000"}
+          opts={phx_debounce: "1000", selected: @entity.type}
         />
         <Label class="label h-7">
           <ErrorTag />
@@ -108,8 +107,8 @@
         values={[action: @action]}
         class={
           "btn btn-md",
-          "btn-success": @changeset.action == nil or @changeset.valid?,
-          "btn-disabled": @changeset.action == :validate and !@changeset.valid?
+          "btn-success": @changeset.action && @changeset.valid?,
+          "btn-disabled": !(@changeset.action && @changeset.valid?)
         }
       >Save</Submit>
       <Reset click="hide" class="btn btn-md btn-ghost" value="Close" />

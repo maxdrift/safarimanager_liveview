@@ -31,7 +31,7 @@
     </div>
     <div class="divider lg:divider-horizontal" />
     <div class="flex-grow card max-h-96 overflow-auto flex-grow bg-base-200 p-4 shadow-lg">
-      <div class="text-2xl font-bold text-center">Jurors</div>
+      <div class="text-2xl font-bold text-center">Jurors (max: {@competition.req_jurors_count})</div>
       <table class="table m-2">
         <thead>
           <tr>

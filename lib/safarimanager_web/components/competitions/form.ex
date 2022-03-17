@@ -10,6 +10,7 @@ defmodule SMWeb.Components.Competitions.Form do
   alias Surface.Components.Form.Field
   alias Surface.Components.Form.HiddenInput
   alias Surface.Components.Form.Label
+  alias Surface.Components.Form.NumberInput
   alias Surface.Components.Form.TextInput
 
   prop action, :atom, values!: [:create, :edit]

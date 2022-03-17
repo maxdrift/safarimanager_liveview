@@ -20,6 +20,7 @@ defmodule SM.Participants.Participant do
     participant
     |> cast(attrs, [:user_id, :competition_id])
     |> validate_required([:user_id, :competition_id])
-    |> unique_constraint(:user_id, name: :participants_user_id_competition_id_index)
+    |> foreign_key_constraint(:user_id)
+    |> foreign_key_constraint(:competition_id)
   end
 end

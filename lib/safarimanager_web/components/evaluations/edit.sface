@@ -68,8 +68,8 @@
         values={[action: @action]}
         class={
           "btn btn-md",
-          "btn-success": @changeset.action == nil or @changeset.valid?,
-          "btn-disabled": @changeset.action == :validate and !@changeset.valid?
+          "btn-success": @changeset.action && @changeset.valid?,
+          "btn-disabled": !(@changeset.action && @changeset.valid?)
         }
       >Save</Submit>
       <Reset click="hide" class="btn btn-md btn-ghost" value="Close" />

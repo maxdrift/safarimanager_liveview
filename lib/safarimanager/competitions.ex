@@ -5,6 +5,7 @@ defmodule SM.Competitions do
   use SM, :context
 
   alias SM.Competitions.Competition
+  alias SM.Evaluations
 
   @doc """
   Returns the list of competitions.
@@ -38,7 +39,7 @@ defmodule SM.Competitions do
   def get(id) do
     case Repo.get(Competition, id) do
       nil -> {:error, :not_found}
-      result -> {:ok, Repo.preload(result, [:participants, :jurors])}
+      result -> {:ok, Repo.preload(result, [:participants, :jurors, :allowed_evaluations])}
     end
   end
 
@@ -56,8 +57,13 @@ defmodule SM.Competitions do
   """
   @spec create(%{String.t() => any()}) :: {:error, any()} | {:ok, Competition.t()}
   def create(attrs \\ %{}) do
+    # TODO: Perform evaluations selection in the UI
+    all_evaluations = Enum.map(Evaluations.list(), & &1.id)
+
+    attrs = Map.put(attrs, "allowed_evaluations", all_evaluations)
+
     %Competition{}
-    |> Competition.changeset(attrs)
+    |> change(attrs)
     |> Repo.insert()
     |> notify_subscribers([:competition, :created])
   end
@@ -78,7 +84,7 @@ defmodule SM.Competitions do
           {:ok, Competition.t()} | {:error, any()}
   def update(%Competition{} = competition, attrs) do
     competition
-    |> Competition.changeset(attrs)
+    |> Competition.update_changeset(attrs)
     |> Repo.update()
     |> notify_subscribers([:competition, :updated])
   end
@@ -135,7 +141,19 @@ defmodule SM.Competitions do
 
   """
   @spec change(Competition.t(), %{String.t() => any()}) :: Ecto.Changeset.t()
-  def change(%Competition{} = competition, params \\ %{}) do
-    Competition.changeset(competition, params)
+  def change(%Competition{} = competition, attrs \\ %{}) do
+    allowed_evaluations =
+      attrs
+      |> Map.get("allowed_evaluations", [])
+      |> Enum.map(fn evaluation_id ->
+        {:ok, evaluation} = Evaluations.get(evaluation_id)
+        evaluation
+      end)
+
+    attrs = Map.put(attrs, "allowed_evaluations", allowed_evaluations)
+
+    competition
+    |> Repo.preload([:allowed_evaluations])
+    |> Competition.changeset(attrs)
   end
 end

@@ -6,6 +6,8 @@ defmodule SM.Slides.Slide do
 
   alias SM.Accounts.User
   alias SM.Competitions.Competition
+  alias SM.Evaluations.Evaluation
+  alias SM.Slides.SlideEvaluation
   alias SM.Subjects.Subject
 
   @statuses Application.compile_env!(:safarimanager, [__MODULE__, :statuses])
@@ -19,6 +21,7 @@ defmodule SM.Slides.Slide do
     belongs_to :user, User
     belongs_to :competition, Competition
     belongs_to :subject, Subject
+    many_to_many :evaluations, Evaluation, join_through: SlideEvaluation
 
     timestamps()
   end

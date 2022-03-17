@@ -7,10 +7,9 @@ defmodule SM.Jurors.Juror do
   alias SM.Accounts.User
   alias SM.Competitions.Competition
 
-  @primary_key false
   schema "jurors" do
-    belongs_to :user, User, primary_key: true
-    belongs_to :competition, Competition, primary_key: true
+    belongs_to :user, User
+    belongs_to :competition, Competition
 
     timestamps()
   end
