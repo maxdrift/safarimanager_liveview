@@ -220,17 +220,32 @@ defmodule SM.Slides do
 
     case free_jurors do
       [juror] ->
-        %SlideEvaluation{}
-        |> SlideEvaluation.changeset(%{
+        create_slide_evaluation(%{
           slide_id: slide_id,
           user_id: juror.user_id,
           evaluation_id: evaluation_id
         })
-        |> Repo.insert()
-        |> notify_subscribers([:slide, :updated])
 
       [] ->
         {:error, :already_evaluated}
+    end
+  end
+
+  @spec create_slide_evaluation(%{(String.t() | atom()) => any()}) ::
+          {:error, any()} | {:ok, SlideEvaluation.t()}
+  def create_slide_evaluation(attrs \\ %{}) do
+    %SlideEvaluation{}
+    |> SlideEvaluation.changeset(attrs)
+    |> Repo.insert()
+    |> case do
+      {:ok, slide_evaluation} ->
+        notify_subscribers({:ok, Repo.preload(slide_evaluation, [:evaluation])}, [
+          :slide,
+          :updated
+        ])
+
+      {:error, _reason} = error ->
+        error
     end
   end
 
