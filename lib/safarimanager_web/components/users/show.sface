@@ -1,0 +1,18 @@
+<Dialog {=@id} {=@show}>
+  <div class="card-title">
+    {String.capitalize(@entity_name)} details
+  </div>
+  <div class="card-body">
+    <ul class="leading-loose">
+      <li><b>ID:</b> {@entity.id}</li>
+      <li><b>First Name:</b> {@entity.first_name}</li>
+      <li><b>Last Name:</b> {@entity.last_name}</li>
+      <li><b>Email:</b> {@entity.email}</li>
+      <li><b>Inserted:</b> {format_date(@entity.inserted_at)}</li>
+      <li><b>Updated:</b> {format_date(@entity.updated_at)}</li>
+    </ul>
+  </div>
+  <div class="modal-action">
+    <button :on-click="hide" class="btn btn-md btn-ghost">Close</button>
+  </div>
+</Dialog>

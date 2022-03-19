@@ -92,23 +92,27 @@ defmodule SM.Accounts.User do
           Ecto.Changeset.t()
   def competition_registration_changeset(user, attrs) do
     user
-    |> cast(attrs, [:first_name, :last_name])
+    |> cast(attrs, [:first_name, :last_name, :email])
     |> validate_required([:first_name])
-    |> put_email()
+    |> maybe_put_email()
     |> put_default_password()
   end
 
   # TODO: Remove in Production!
-  defp put_email(changeset) do
-    first_name = get_field(changeset, :first_name)
-    last_name = get_field(changeset, :last_name)
+  defp maybe_put_email(changeset) do
+    if is_nil(get_field(changeset, :email)) do
+      first_name = get_field(changeset, :first_name)
+      last_name = get_field(changeset, :last_name)
 
-    full_name =
-      [first_name, last_name]
-      |> Enum.reject(&(&1 in [nil, ""]))
-      |> Enum.map_join(".", &String.downcase/1)
+      full_name =
+        [first_name, last_name]
+        |> Enum.reject(&(&1 in [nil, ""]))
+        |> Enum.map_join(".", &String.downcase/1)
 
-    put_change(changeset, :email, "#{full_name}@maxdrift.org")
+      put_change(changeset, :email, "#{full_name}@maxdrift.org")
+    else
+      changeset
+    end
   end
 
   defp put_default_password(changeset) do

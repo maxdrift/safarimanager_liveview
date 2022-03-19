@@ -63,6 +63,7 @@ defmodule SMWeb.Router do
     live "/subjects", Subjects
     live "/competitions", Competitions
     live "/evaluations", Evaluations
+    live "/users", Users
   end
 
   # Enables the Swoosh mailbox preview in development.

@@ -83,13 +83,14 @@ defmodule SM.Accounts do
 
   ## Examples
 
-      iex> get_user_by_email_and_password("foo@example.com", "correct_password")
-      %User{}
+  iex> get_user_by_email_and_password("foo@example.com", "correct_password")
+  %User{}
 
-      iex> get_user_by_email_and_password("foo@example.com", "invalid_password")
-      nil
+  iex> get_user_by_email_and_password("foo@example.com", "invalid_password")
+  nil
 
   """
+  @spec get_user_by_email_and_password(String.t(), String.t()) :: User.t()
   def get_user_by_email_and_password(email, password)
       when is_binary(email) and is_binary(password) do
     user = Repo.get_by(User, email: email)
@@ -103,14 +104,37 @@ defmodule SM.Accounts do
 
   ## Examples
 
-      iex> get_user!(123)
-      %User{}
+  iex> get_user!(123)
+  %User{}
 
-      iex> get_user!(456)
-      ** (Ecto.NoResultsError)
+  iex> get_user!(456)
+  ** (Ecto.NoResultsError)
 
   """
+  @spec get_user!(String.t()) :: User.t()
   def get_user!(id), do: Repo.get!(User, id)
+
+  @doc """
+  Gets a single user.
+
+  Raises `Ecto.NoResultsError` if the User does not exist.
+
+  ## Examples
+
+  iex> get_user!(123)
+  %User{}
+
+  iex> get_user!(456)
+  ** (Ecto.NoResultsError)
+
+  """
+  @spec get_user(String.t()) :: {:ok, User.t()}
+  def get_user(id) do
+    case Repo.get(User, id) do
+      user -> {:ok, user}
+      nil -> {:error, :not_found}
+    end
+  end
 
   ## User registration
 
@@ -129,6 +153,15 @@ defmodule SM.Accounts do
   def register_user(attrs) do
     %User{}
     |> User.registration_changeset(attrs)
+    |> Repo.insert()
+  end
+
+  @doc """
+  Registers a user by name and optional email.
+  """
+  def register_simplified_user(attrs) do
+    %User{}
+    |> User.competition_registration_changeset(attrs)
     |> Repo.insert()
   end
 
@@ -158,6 +191,19 @@ defmodule SM.Accounts do
   """
   def change_user_email(user, attrs \\ %{}) do
     User.email_changeset(user, attrs)
+  end
+
+  @doc """
+  Returns an `%Ecto.Changeset{}` for changing the user name and email.
+
+  ## Examples
+
+      iex> change_user_name_and_email(user)
+      %Ecto.Changeset{data: %User{}}
+
+  """
+  def change_user_name_and_email(user, attrs \\ %{}) do
+    User.competition_registration_changeset(user, attrs)
   end
 
   @doc """
@@ -264,6 +310,48 @@ defmodule SM.Accounts do
     |> case do
       {:ok, %{user: user}} -> {:ok, user}
       {:error, :user, changeset, _changes} -> {:error, changeset}
+    end
+  end
+
+  @doc """
+  Deletes a User.
+
+  ## Examples
+
+  iex> delete(user)
+  {:ok, %User{}}
+
+  iex> delete(user)
+  {:error, %Ecto.Changeset{}}
+
+  """
+  @spec delete(User.t()) :: {:ok, User.t()} | {:error, any()}
+  def delete(%User{} = user) do
+    user
+    |> Repo.delete()
+    |> notify_subscribers([:user, :deleted])
+  end
+
+  @doc """
+  Deletes many Users by ID.
+
+  ## Examples
+
+  iex> delete_many(["id1", "id2", "id3"])
+  {:ok, 3}
+
+  iex> delete_many(["id1", "id2", "id3"])
+  :error
+
+  """
+  @spec delete_many([String.t()]) :: {:ok, integer()} | :error
+  def delete_many(ids) do
+    {deleted, nil} = Repo.delete_all(from entity in User, where: entity.id in ^ids)
+
+    if deleted == Enum.count(ids) do
+      notify_subscribers({:ok, deleted}, [:user, :deleted])
+    else
+      notify_subscribers(:error, [:user, :deleted])
     end
   end
 
