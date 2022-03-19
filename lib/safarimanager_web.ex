@@ -62,6 +62,22 @@ defmodule SMWeb do
     end
   end
 
+  def surface_component do
+    quote do
+      use Surface.Component
+
+      import SMWeb.ErrorHelpers
+    end
+  end
+
+  def surface_live_component do
+    quote do
+      use Surface.LiveComponent
+
+      import SMWeb.ErrorHelpers
+    end
+  end
+
   def surface_jury_view do
     quote do
       use Surface.LiveView,

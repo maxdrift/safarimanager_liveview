@@ -2,7 +2,7 @@ defmodule SMWeb.Components.Evaluations.List do
   @moduledoc """
   Evaluations list component
   """
-  use Surface.Component
+  use SMWeb, :surface_component
 
   alias Surface.Components.LivePatch
 

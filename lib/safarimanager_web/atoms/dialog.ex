@@ -2,7 +2,7 @@ defmodule SMWeb.Components.Dialog do
   @moduledoc """
   Dialog component
   """
-  use Surface.Component
+  use SMWeb, :surface_component
 
   prop id, :string, required: true
 

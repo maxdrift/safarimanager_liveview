@@ -15,12 +15,7 @@
           <span class="label-text">Numeric ID</span>
         </Label>
         <NumberInput
-          class={
-            "input",
-            "input-bordered",
-            "input-error": not is_nil(@changeset.action) and not @changeset.valid?,
-            "input-success": @changeset.action == :validate and @changeset.valid?
-          }
+          class={state_class("input input-bordered", @changeset, :numeric_id, [])}
           opts={phx_debounce: "1000"}
         />
         <Label class="label h-7">
@@ -32,12 +27,7 @@
           <span class="label-text">Name</span>
         </Label>
         <TextInput
-          class={
-            "input",
-            "input-bordered",
-            "input-error": not is_nil(@changeset.action) and not @changeset.valid?,
-            "input-success": @changeset.action == :validate and @changeset.valid?
-          }
+          class={state_class("input input-bordered", @changeset, :name, [])}
           opts={phx_debounce: "1000"}
         />
         <Label class="label h-7">
@@ -49,12 +39,7 @@
           <span class="label-text">Scientific Name</span>
         </Label>
         <TextInput
-          class={
-            "input",
-            "input-bordered",
-            "input-error": not is_nil(@changeset.action) and not @changeset.valid?,
-            "input-success": @changeset.action == :validate and @changeset.valid?
-          }
+          class={state_class("input input-bordered", @changeset, :scientific_name, [])}
           opts={phx_debounce: "1000"}
         />
         <Label class="label h-7">
@@ -69,12 +54,7 @@
           options={@coefficients}
           selected={@entity.coefficient}
           prompt="Select a coefficient"
-          class={
-            "input",
-            "input-bordered",
-            "input-error": not is_nil(@changeset.action) and not @changeset.valid?,
-            "input-success": @changeset.action == :validate and @changeset.valid?
-          }
+          class={state_class("input input-bordered", @changeset, :coefficient, [])}
           opts={phx_debounce: "1000"}
         />
         <Label class="label h-7">
@@ -88,12 +68,7 @@
         <Select
           options={@subject_types}
           prompt="Select a type"
-          class={
-            "input",
-            "input-bordered",
-            "input-error": not is_nil(@changeset.action) and not @changeset.valid?,
-            "input-success": @changeset.action == :validate and @changeset.valid?
-          }
+          class={state_class("input input-bordered", @changeset, :type, [])}
           opts={phx_debounce: "1000", selected: @entity.type}
         />
         <Label class="label h-7">

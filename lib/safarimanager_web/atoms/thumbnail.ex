@@ -2,7 +2,7 @@ defmodule SMWeb.Molecules.Thumbnail do
   @moduledoc """
   A single gallery image.
   """
-  use Surface.Component
+  use SMWeb, :surface_component
 
   alias Surface.Components.LiveRedirect
 

@@ -2,7 +2,7 @@ defmodule SMWeb.Atoms.Navbar do
   @moduledoc """
   Navbar component
   """
-  use Surface.Component
+  use SMWeb, :surface_component
 
   prop title, :string
 

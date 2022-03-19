@@ -2,7 +2,7 @@ defmodule SMWeb.Atoms.TableRow do
   @moduledoc """
   Table row component
   """
-  use Surface.Component
+  use SMWeb, :surface_component
 
   prop entity, :struct, required: true
 

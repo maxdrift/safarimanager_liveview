@@ -2,7 +2,7 @@ defmodule SMWeb.Components.ConfirmationDialog do
   @moduledoc """
   Confirmation dialog component.
   """
-  use Surface.LiveComponent
+  use SMWeb, :surface_live_component
 
   alias SMWeb.Components.Dialog
 

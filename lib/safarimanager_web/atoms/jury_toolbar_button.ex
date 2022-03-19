@@ -2,7 +2,7 @@ defmodule SMWeb.Atoms.JuryToolbarButton do
   @moduledoc """
   Jury toolbar button component
   """
-  use Surface.Component
+  use SMWeb, :surface_component
 
   @doc "Button ID"
   prop id, :string

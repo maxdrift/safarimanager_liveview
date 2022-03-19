@@ -2,7 +2,7 @@ defmodule SMWeb.Components.Evaluations.Show do
   @moduledoc """
   Display entity Live Component.
   """
-  use Surface.LiveComponent
+  use SMWeb, :surface_live_component
 
   alias SMWeb.Components.Dialog
 

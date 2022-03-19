@@ -2,7 +2,7 @@ defmodule SMWeb.Components.Competitions.FormActions do
   @moduledoc """
   Competitions form actions component.
   """
-  use Surface.Component
+  use SMWeb, :surface_component
 
   alias Surface.Components.Form.Reset
   alias Surface.Components.Form.Submit

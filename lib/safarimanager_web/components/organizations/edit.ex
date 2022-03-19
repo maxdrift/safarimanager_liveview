@@ -2,7 +2,7 @@ defmodule SMWeb.Components.Organizations.Edit do
   @moduledoc """
   Edit entity Live Component.
   """
-  use Surface.LiveComponent
+  use SMWeb, :surface_live_component
 
   alias SMWeb.Components.Dialog
   alias Surface.Components.Form

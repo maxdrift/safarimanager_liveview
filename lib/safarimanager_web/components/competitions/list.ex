@@ -2,7 +2,7 @@ defmodule SMWeb.Components.Competitions.List do
   @moduledoc """
   Competitions list component
   """
-  use Surface.Component
+  use SMWeb, :surface_component
 
   alias Surface.Components.LivePatch
 

@@ -154,6 +154,7 @@ defmodule SM.Accounts do
     %User{}
     |> User.registration_changeset(attrs)
     |> Repo.insert()
+    |> notify_subscribers([:user, :created])
   end
 
   @doc """
@@ -163,6 +164,7 @@ defmodule SM.Accounts do
     %User{}
     |> User.competition_registration_changeset(attrs)
     |> Repo.insert()
+    |> notify_subscribers([:user, :created])
   end
 
   @doc """
@@ -224,6 +226,27 @@ defmodule SM.Accounts do
     |> User.email_changeset(attrs)
     |> User.validate_current_password(password)
     |> Ecto.Changeset.apply_action(:update)
+  end
+
+  @doc """
+  Updates a user.
+
+  ## Examples
+
+  iex> update(user, %{"field" => "new_value"})
+  {:ok, %User{}}
+
+  iex> update(user, %{"field" => "bad_value"})
+  {:error, %Ecto.Changeset{}}
+
+  """
+  @spec update(User.t(), %{String.t() => any()}) ::
+          {:ok, User.t()} | {:error, any()}
+  def update(%User{} = user, attrs) do
+    user
+    |> User.competition_registration_changeset(attrs)
+    |> Repo.update()
+    |> notify_subscribers([:user, :updated])
   end
 
   @doc """

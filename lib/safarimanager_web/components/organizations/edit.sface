@@ -15,12 +15,7 @@
           <span class="label-text">Name</span>
         </Label>
         <TextInput
-          class={
-            "input",
-            "input-bordered",
-            "input-error": not is_nil(@changeset.action) and not @changeset.valid?,
-            "input-success": @changeset.action == :validate and @changeset.valid?
-          }
+          class={state_class("input input-bordered", @changeset, :name, [])}
           opts={phx_debounce: "1000"}
         />
         <Label class="label h-7">

@@ -2,7 +2,7 @@ defmodule SMWeb.Components.Competitions.Form do
   @moduledoc """
   Competitions form component.
   """
-  use Surface.Component
+  use SMWeb, :surface_component
 
   alias Surface.Components.Form
   alias Surface.Components.Form.DateTimeLocalInput
@@ -21,18 +21,4 @@ defmodule SMWeb.Components.Competitions.Form do
   prop redirect_to, :string
 
   slot default, required: true
-
-  defp state_class(class, changeset, field, opts) do
-    class =
-      cond do
-        # no state checking
-        opts[:no_state] -> class
-        # The form was not yet submitted
-        !changeset.action -> class
-        changeset.errors[field] -> "#{class} input-error"
-        true -> "#{class} input-success"
-      end
-
-    String.trim(class)
-  end
 end

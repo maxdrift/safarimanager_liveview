@@ -2,7 +2,7 @@ defmodule SMWeb.Components.Users.List do
   @moduledoc """
   Users list component
   """
-  use Surface.Component
+  use SMWeb, :surface_component
 
   alias Surface.Components.LivePatch
 

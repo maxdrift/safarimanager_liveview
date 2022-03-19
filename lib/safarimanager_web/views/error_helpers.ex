@@ -43,4 +43,19 @@ defmodule SMWeb.ErrorHelpers do
       Gettext.dgettext(SMWeb.Gettext, "errors", msg, opts)
     end
   end
+
+  @spec state_class(String.t(), Ecto.Changeset.t(), String.t(), Keyword.t()) :: String.t()
+  def state_class(class, changeset, field, opts) do
+    class =
+      cond do
+        # no state checking
+        opts[:no_state] -> class
+        # The form was not yet submitted
+        !changeset.action -> class
+        changeset.errors[field] -> "#{class} input-error"
+        true -> "#{class} input-success"
+      end
+
+    String.trim(class)
+  end
 end

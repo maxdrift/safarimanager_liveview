@@ -126,7 +126,7 @@ defmodule SMWeb.Users do
         %{"entity" => %{"_action" => "create"} = params},
         socket
       ) do
-    case Accounts.create(params) do
+    case Accounts.register_simplified_user(params) do
       {:ok, _entity} ->
         socket =
           socket
@@ -156,7 +156,13 @@ defmodule SMWeb.Users do
 
         Edit.hide("edit-dialog")
 
-        socket = set_alert(socket, "info", ~s(Edited user "#{entity.name}"), @alert_duration)
+        socket =
+          set_alert(
+            socket,
+            "info",
+            ~s(Edited user "#{entity.first_name} #{entity.last_name}"),
+            @alert_duration
+          )
 
         {:noreply, socket}
 

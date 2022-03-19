@@ -2,7 +2,7 @@ defmodule SMWeb.Components.Subjects.List do
   @moduledoc """
   Subjects list component
   """
-  use Surface.Component
+  use SMWeb, :surface_component
 
   alias Surface.Components.LivePatch
 

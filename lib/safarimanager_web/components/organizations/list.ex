@@ -2,7 +2,7 @@ defmodule SMWeb.Components.Organizations.List do
   @moduledoc """
   Organizations list component
   """
-  use Surface.Component
+  use SMWeb, :surface_component
 
   alias Surface.Components.LivePatch
 
