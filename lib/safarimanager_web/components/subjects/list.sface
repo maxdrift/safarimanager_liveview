@@ -35,8 +35,9 @@
           </label>
         </th>
         <th class="truncate">{item.numeric_id}</th>
-        <td class="truncate">
-          {item.name} (<i>{item.scientific_name}</i>)
+        <td class="capitalize truncate">
+          <div>{item.name}</div>
+          <div class="text-sm capitalize opacity-50">{item.scientific_name}</div>
         </td>
         <td class="truncate">{item.coefficient}</td>
         <td class="truncate">{item.type}</td>
