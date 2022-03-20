@@ -5,8 +5,11 @@ defmodule SMWeb.Participants do
   use SMWeb, :surface_view
 
   alias SM.Accounts
+  alias SM.Accounts.User
   alias SM.Competitions
   alias SM.Participants
+  alias SMWeb.Components.FormActions
+  alias SMWeb.Components.Users.Form
   alias Surface.Components.LiveRedirect
 
   require Logger
@@ -15,6 +18,11 @@ defmodule SMWeb.Participants do
 
   @impl Phoenix.LiveView
   def mount(_params, _session, socket) do
+    socket =
+      socket
+      |> assign(:entity, %User{})
+      |> assign(:changeset, Accounts.change_user_name_and_email(%User{}))
+
     {:ok, socket}
   end
 
@@ -32,12 +40,45 @@ defmodule SMWeb.Participants do
     {:noreply, socket}
   end
 
-  # def handle_event(event_name, params, socket) do
-  #   IO.inspect(event_name)
-  #   IO.inspect(params)
+  def handle_event("validate-new-user", %{"entity" => entity}, socket) do
+    changeset =
+      socket.assigns.entity
+      |> Accounts.change_user_name_and_email(entity)
+      |> Map.put(:action, :validate)
 
-  #   {:noreply, socket}
-  # end
+    {:noreply, assign(socket, :changeset, changeset)}
+  end
+
+  def handle_event("submit-new-user", %{"entity" => entity}, socket) do
+    case Accounts.register_simplified_user(entity) do
+      {:ok, _user} ->
+        socket =
+          socket
+          |> assign(:entity, %User{})
+          |> assign(:changeset, Accounts.change_user_name_and_email(socket.assigns.entity))
+
+        {:noreply, socket}
+
+      {:error, changeset} ->
+        {:noreply, assign(socket, :changeset, changeset)}
+    end
+  end
+
+  def handle_event("reset-new-user", %{}, socket) do
+    socket =
+      socket
+      |> assign(:entity, %User{})
+      |> assign(:changeset, Accounts.change_user_name_and_email(socket.assigns.entity))
+
+    {:noreply, socket}
+  end
+
+  def handle_event(event_name, params, socket) do
+    IO.inspect(event_name)
+    IO.inspect(params)
+
+    {:noreply, socket}
+  end
 
   @impl Phoenix.LiveView
   def handle_params(%{"competition_id" => competition_id}, _uri, socket) do

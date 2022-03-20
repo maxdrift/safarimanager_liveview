@@ -1,6 +1,6 @@
-defmodule SMWeb.Components.Competitions.FormActions do
+defmodule SMWeb.Components.FormActions do
   @moduledoc """
-  Competitions form actions component.
+  Form actions component.
   """
   use SMWeb, :surface_component
 

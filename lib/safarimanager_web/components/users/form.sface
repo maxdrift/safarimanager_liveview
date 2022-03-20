@@ -1,0 +1,48 @@
+<Form
+  for={@changeset}
+  change={@validate}
+  submit={@submit}
+  as={:entity}
+  opts={autocomplete: "off"}
+>
+  <div class="flex flex-wrap pt-3">
+    <Field name={:first_name} class="form-control w-1/2 px-3">
+      <Label class="label">
+        <span class="label-text">First Name</span>
+      </Label>
+      <TextInput
+        class={state_class("input input-bordered", @changeset, :first_name, [])}
+        opts={phx_debounce: "1000"}
+      />
+      <Label class="label h-7">
+        <ErrorTag />
+      </Label>
+    </Field>
+    <Field name={:last_name} class="form-control w-1/2   px-3">
+      <Label class="label">
+        <span class="label-text">Last Name</span>
+      </Label>
+      <TextInput
+        class={state_class("input input-bordered", @changeset, :last_name, [])}
+        opts={phx_debounce: "1000"}
+      />
+      <Label class="label h-7">
+        <ErrorTag />
+      </Label>
+    </Field>
+    <Field name={:email} class="form-control w-full px-3">
+      <Label class="label">
+        <span class="label-text">Email</span>
+      </Label>
+      <TextInput
+        class={state_class("input input-bordered", @changeset, :email, [])}
+        opts={phx_debounce: "1000"}
+      />
+      <Label class="label h-7">
+        <ErrorTag />
+      </Label>
+    </Field>
+    <HiddenInput field={:_action} value={@action} />
+  </div>
+  <#slot />
+</Form>

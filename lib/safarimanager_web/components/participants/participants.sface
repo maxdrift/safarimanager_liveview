@@ -2,6 +2,15 @@
   <span class="text-2xl text-center">{@competition.name}</span>
   <div class="flex flex-col w-full lg:flex-row mt-10">
     <div class="flex-grow card max-h-96 overflow-auto flex-grow bg-base-200 p-4 shadow-lg">
+      <div>
+        <Form action={:create} {=@entity} {=@changeset} validate="validate-new-user" submit="submit-new-user">
+          <FormActions
+            container_class="modal-action"
+            submit_enabled?={@changeset.action && @changeset.valid?}
+            reset="reset-new-user"
+          />
+        </Form>
+      </div>
       <div class="text-2xl font-bold text-center">Users</div>
       <table class="table m-2">
         <thead>

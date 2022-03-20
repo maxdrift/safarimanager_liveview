@@ -44,7 +44,7 @@ defmodule SMWeb.ErrorHelpers do
     end
   end
 
-  @spec state_class(String.t(), Ecto.Changeset.t(), String.t(), Keyword.t()) :: String.t()
+  @spec state_class(String.t(), Ecto.Changeset.t(), atom(), Keyword.t()) :: String.t()
   def state_class(class, changeset, field, opts) do
     class =
       cond do

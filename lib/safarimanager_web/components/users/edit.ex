@@ -5,14 +5,8 @@ defmodule SMWeb.Components.Users.Edit do
   use SMWeb, :surface_live_component
 
   alias SMWeb.Components.Dialog
-  alias Surface.Components.Form
-  alias Surface.Components.Form.ErrorTag
-  alias Surface.Components.Form.Field
-  alias Surface.Components.Form.HiddenInput
-  alias Surface.Components.Form.Label
-  alias Surface.Components.Form.Reset
-  alias Surface.Components.Form.Submit
-  alias Surface.Components.Form.TextInput
+  alias SMWeb.Components.FormActions
+  alias SMWeb.Components.Users.Form
 
   require Logger
 

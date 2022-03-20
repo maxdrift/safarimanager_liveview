@@ -131,8 +131,8 @@ defmodule SM.Accounts do
   @spec get_user(String.t()) :: {:ok, User.t()}
   def get_user(id) do
     case Repo.get(User, id) do
-      user -> {:ok, user}
       nil -> {:error, :not_found}
+      user -> {:ok, user}
     end
   end
 
