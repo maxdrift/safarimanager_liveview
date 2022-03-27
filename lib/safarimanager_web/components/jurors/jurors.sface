@@ -1,91 +1,109 @@
-<div class="flex flex-col w-full mt-10">
-  <span class="text-2xl text-center">{@competition.name}</span>
-  <div class="flex flex-col w-full lg:flex-row mt-10">
-    <div class="flex-grow card max-h-96 overflow-auto flex-grow bg-base-200 p-4 shadow-lg">
-      <div class="text-2xl font-bold text-center">Users</div>
-      <table class="table m-2">
-        <thead>
+<div class="pt-5 text-center">
+  <span class="text-2xl">{@competition.name}</span>
+</div>
+<div class="pt-4 text-center">
+  <ul class="steps steps-horizontal">
+    <li class="step step-primary">Participants</li>
+    <li class="step step-primary">Jurors</li>
+    <li class="step">Slides</li>
+    <li class="step">CSV</li>
+    <li class="step">Jury</li>
+    <li class="step">Results</li>
+  </ul>
+</div>
+<div class="flex flex-col lg:flex-row mt-5">
+  <div class="overflow-y-auto rounded-lg lg:w-1/2 bg-base-200 shadow-lg p-4">
+    <div class="text-2xl font-bold text-center py-4">Users</div>
+    <input class="input input-bordered w-full mb-1" placeholder="Search a user...">
+    <table class="table table-zebra table-fixed w-full">
+      <thead>
+        <tr>
+          <th class="w-auto">First Name</th>
+          <th class="w-auto">Last Name</th>
+          <th class="w-auto">Organization</th>
+        </tr>
+      </thead>
+      <tbody>
+        {#for item <- @users}
           <tr>
-            <th class="w-auto">First Name</th>
-            <th class="w-auto">Last Name</th>
-            <th class="w-auto">Email</th>
+            <td class="truncate">{item.first_name}</td>
+            <td class="truncate">{item.last_name}</td>
+            <td class="truncate">{(item.organization && item.organization.name) || "N/A"}</td>
+            <td>
+              <button class="btn btn-xs btn-success" :on-click="enroll" :values={user_id: item.id}>Enroll</button>
+            </td>
           </tr>
-        </thead>
-        <tbody>
-          {#for item <- @users}
-            <tr>
-              <td class="truncate">{item.first_name}</td>
-              <td class="truncate">{item.last_name}</td>
-              <td class="truncate">{item.email}</td>
-              <td>
-                <button class="btn btn-xs btn-success" :on-click="enroll" :values={user_id: item.id}>Enroll</button>
-              </td>
-            </tr>
-          {#else}
-            <tr>
-              <th>No items yet!</th>
-            </tr>
-          {/for}
-        </tbody>
-      </table>
-    </div>
-    <div class="divider lg:divider-horizontal" />
-    <div class="flex-grow card max-h-96 overflow-auto flex-grow bg-base-200 p-4 shadow-lg">
-      <div class="text-2xl font-bold text-center">Jurors (max: {@competition.req_jurors_count})</div>
-      <table class="table m-2">
-        <thead>
+        {#else}
           <tr>
-            <th class="w-auto">First Name</th>
-            <th class="w-auto">Last Name</th>
-            <th class="w-auto">Email</th>
+            <td>No items yet!</td>
+            <td />
+            <td />
+            <td />
           </tr>
-        </thead>
-        <tbody>
-          {#for item <- @competition.jurors}
-            <tr>
-              <td class="truncate">{item.first_name}</td>
-              <td class="truncate">{item.last_name}</td>
-              <td class="truncate">{item.email}</td>
-              <td>
-                <button class="btn btn-xs btn-error" :on-click="remove" :values={user_id: item.id}>Remove</button>
-              </td>
-            </tr>
-          {#else}
-            <tr>
-              <th>No items yet!</th>
-            </tr>
-          {/for}
-        </tbody>
-      </table>
-    </div>
+        {/for}
+      </tbody>
+    </table>
   </div>
-  <div class="flex flex-row my-10 w-full">
-    <LiveRedirect to={"/organize/#{@competition_id}/participants"} class="flex-none btn gap-2">
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        class="h-6 w-6"
-        fill="none"
-        viewBox="0 0 24 24"
-        stroke="currentColor"
-        stroke-width="2"
-      >
-        <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
-      </svg>
-      Participants
-    </LiveRedirect>
-    <div class="grow" />
-    <LiveRedirect to={"/organize/#{@competition_id}/slides"} class="flex-none btn btn-primary gap-2">
-      Slides
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        class="h-6 w-6"
-        fill="none"
-        viewBox="0 0 24 24"
-        stroke="currentColor"
-        stroke-width="2"
-      >
-        <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
-      </svg>
-    </LiveRedirect>
+  <div class="divider lg:divider-horizontal" />
+  <div class="overflow-y-auto rounded-lg lg:w-1/2 bg-base-200 shadow-lg p-4">
+    <div class="text-2xl font-bold text-center py-4">Jurors (max: {@competition.req_jurors_count})</div>
+    <input class="input input-bordered w-full mb-1" placeholder="Search a juror...">
+    <table class="table table-zebra table-fixed w-full">
+      <thead>
+        <tr>
+          <th class="w-auto">First Name</th>
+          <th class="w-auto">Last Name</th>
+          <th class="w-auto">Organization</th>
+        </tr>
+      </thead>
+      <tbody>
+        {#for item <- @competition.jurors}
+          <tr>
+            <td class="truncate">{item.first_name}</td>
+            <td class="truncate">{item.last_name}</td>
+            <td class="truncate">{(item.organization && item.organization.name) || "N/A"}</td>
+            <td>
+              <button class="btn btn-xs btn-error" :on-click="remove" :values={user_id: item.id}>Remove</button>
+            </td>
+          </tr>
+        {#else}
+          <tr>
+            <td>No items yet!</td>
+            <td />
+            <td />
+            <td />
+          </tr>
+        {/for}
+      </tbody>
+    </table>
   </div>
+</div>
+<div class="flex flex-row my-10 w-full">
+  <LiveRedirect to={"/organize/#{@competition_id}/participants"} class="flex-none btn gap-2">
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      class="h-6 w-6"
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke="currentColor"
+      stroke-width="2"
+    >
+      <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+    </svg>
+    Participants
+  </LiveRedirect>
+  <div class="grow" />
+  <LiveRedirect to={"/organize/#{@competition_id}/slides"} class="flex-none btn btn-primary gap-2">
+    Slides
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      class="h-6 w-6"
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke="currentColor"
+      stroke-width="2"
+    >
+      <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+    </svg>
+  </LiveRedirect>
 </div>

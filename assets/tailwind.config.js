@@ -25,6 +25,8 @@ module.exports = {
         themes: [
             'light',
             'dark',
+            'aqua',
+            'night',
         ],
     },
 }

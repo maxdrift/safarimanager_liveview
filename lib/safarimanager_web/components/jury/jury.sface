@@ -5,9 +5,12 @@
   <div class="flex-initial">
     <div class="flex flex-row justify-between">
       <div class="btn-group">
-        <span class="inline-block align-sub p-1 pl-3 font-bold">{String.capitalize(@curr_slide.subject.name)}</span>
+        <span class="inline-block align-sub p-1 pl-3 font-bold">{@curr_slide && String.capitalize(@curr_slide.subject.name)}</span>
         <span class="inline-block align-sub p-1 pl-3 font-bold">{@curr_index + 1} of {@image_count}</span>
-        <span :if={@curr_slide.evaluations != []} class="inline-block align-sub p-1 pl-3 font-bold">Evaluations: {Enum.map_join(@curr_slide.evaluations, " | ", & &1.value)}</span>
+        <span
+          :if={@curr_slide && @curr_slide.evaluations != []}
+          class="inline-block align-sub p-1 pl-3 font-bold"
+        >Evaluations: {Enum.map_join(@curr_slide.evaluations, " | ", & &1.value)}</span>
       </div>
       <div class="flex flex-row justify-between gap-2">
         <div class="btn-group">

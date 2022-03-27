@@ -4,9 +4,11 @@ defmodule SMWeb.Components.Users.Form do
   """
   use SMWeb, :surface_component
 
+  alias SMWeb.Components.SearchSelect
   alias Surface.Components.Form
   alias Surface.Components.Form.ErrorTag
   alias Surface.Components.Form.Field
+  alias Surface.Components.Form.FieldContext
   alias Surface.Components.Form.HiddenInput
   alias Surface.Components.Form.Label
   alias Surface.Components.Form.TextInput
@@ -17,6 +19,7 @@ defmodule SMWeb.Components.Users.Form do
   prop validate, :event, required: true
   prop submit, :event, required: true
   prop redirect_to, :string
+  prop organizations, :list, required: true, default: []
 
   slot default, required: true
 end

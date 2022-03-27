@@ -27,6 +27,7 @@ defmodule SM.Accounts do
     User
     |> order_by(desc: :inserted_at)
     |> Repo.all()
+    |> Repo.preload([:organization])
   end
 
   @doc """
@@ -48,17 +49,22 @@ defmodule SM.Accounts do
   """
   @spec list_enrollable(String.t()) :: [User.t()]
   def list_enrollable(competition_id) do
-    User
-    |> join(:left, [u], p in Participant,
-      on: p.user_id == u.id and p.competition_id == ^competition_id
-    )
-    |> where([_u, p], is_nil(p.user_id))
-    |> join(:left, [u, _p], j in Juror,
-      on: j.user_id == u.id and j.competition_id == ^competition_id
-    )
-    |> where([_u, _p, j], is_nil(j.user_id))
-    |> order_by(desc: :inserted_at)
-    |> Repo.all()
+    query =
+      from(
+        u in User,
+        left_join: p in Participant,
+        on: p.user_id == u.id and p.competition_id == ^competition_id,
+        where: is_nil(p.user_id),
+        left_join: j in Juror,
+        on: j.user_id == u.id and j.competition_id == ^competition_id,
+        where: is_nil(j.user_id),
+        left_join: o in assoc(u, :organization),
+        on: o.id == u.organization_id,
+        order_by: [desc: :inserted_at],
+        preload: [:organization]
+      )
+
+    Repo.all(query)
   end
 
   @doc """
@@ -132,7 +138,7 @@ defmodule SM.Accounts do
   def get_user(id) do
     case Repo.get(User, id) do
       nil -> {:error, :not_found}
-      user -> {:ok, user}
+      user -> {:ok, Repo.preload(user, [:organization])}
     end
   end
 
@@ -200,11 +206,11 @@ defmodule SM.Accounts do
 
   ## Examples
 
-      iex> change_user_name_and_email(user)
+      iex> change_for_competition_registration(user)
       %Ecto.Changeset{data: %User{}}
 
   """
-  def change_user_name_and_email(user, attrs \\ %{}) do
+  def change_for_competition_registration(user, attrs \\ %{}) do
     User.competition_registration_changeset(user, attrs)
   end
 

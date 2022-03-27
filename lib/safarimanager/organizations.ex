@@ -18,7 +18,26 @@ defmodule SM.Organizations do
   @spec list :: [Organization.t()]
   def list do
     Organization
-    |> order_by(asc: :inserted_at)
+    |> order_by(desc: :inserted_at)
+    |> Repo.all()
+  end
+
+  @doc """
+  Returns the list of organizations filtered by name.
+
+  ## Examples
+
+  iex> list_by_name()
+  [%Organization{}, ...]
+
+  """
+  @spec list_by_name(String.t()) :: [Organization.t()]
+  def list_by_name(name) do
+    pattern = "%#{name}%"
+
+    Organization
+    |> where([o], ilike(o.name, ^pattern))
+    |> order_by(desc: :inserted_at)
     |> Repo.all()
   end
 

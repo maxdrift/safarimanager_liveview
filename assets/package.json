@@ -8,6 +8,7 @@
     "license": "MIT",
     "dependencies": {
         "@types/openseadragon": "^2.4.8",
+        "alpinejs": "^3.9.1",
         "openseadragon": "^2.4.2"
     },
     "devDependencies": {

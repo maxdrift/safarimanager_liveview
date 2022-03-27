@@ -6,8 +6,10 @@ defmodule SMWeb.Users do
 
   alias SM.Accounts
   alias SM.Accounts.User
+
   alias SMWeb.Atoms.Alert
   alias SMWeb.Components.ConfirmationDialog
+  alias SMWeb.Components.SearchSelect
   alias SMWeb.Components.Users.Edit
   alias SMWeb.Components.Users.List
   alias SMWeb.Components.Users.Show
@@ -131,6 +133,9 @@ defmodule SMWeb.Users do
         socket =
           socket
           |> reset_current_editing()
+          # Note: remember events pushed from the server via push_event are global
+          # and will be dispatched to all active hooks on the client who are handling that event.
+          |> push_event("reset_entity_organization_id", %{})
           |> push_patch(to: "/admin/users")
 
         Edit.hide("edit-dialog")
@@ -152,6 +157,9 @@ defmodule SMWeb.Users do
         socket =
           socket
           |> reset_current_editing()
+          # Note: remember events pushed from the server via push_event are global
+          # and will be dispatched to all active hooks on the client who are handling that event.
+          |> push_event("reset_entity_organization_id", %{})
           |> push_patch(to: "/admin/users")
 
         Edit.hide("edit-dialog")
@@ -247,7 +255,7 @@ defmodule SMWeb.Users do
   end
 
   defp change(user, params) do
-    Accounts.change_user_name_and_email(user, params)
+    Accounts.change_for_competition_registration(user, params)
   end
 
   defp delete(ids) when is_list(ids) do

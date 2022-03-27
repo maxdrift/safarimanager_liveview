@@ -25,6 +25,8 @@ defmodule SMWeb.Jury do
       |> assign(:image_count, 0)
       |> assign(:flash_eval, nil)
       |> assign(:prizes, @evaluations.prizes)
+      |> assign(:curr_slide, nil)
+      |> assign(:evaluations, [])
 
     {:ok, socket}
   end
@@ -83,7 +85,12 @@ defmodule SMWeb.Jury do
 
     next_slide = Enum.at(slides, 0)
 
-    socket = push_patch(socket, to: "#{full_path(socket)}?slide_id=#{next_slide.id}")
+    socket =
+      if next_slide do
+        push_patch(socket, to: "#{full_path(socket)}?slide_id=#{next_slide.id}")
+      else
+        assign(socket, :curr_slide, nil)
+      end
 
     {:noreply, socket}
   end
@@ -295,6 +302,8 @@ defmodule SMWeb.Jury do
     |> Routes.static_path(uploads_path)
     |> Path.join(slide.file_name)
   end
+
+  defp can_evaluate?(competition, nil), do: false
 
   defp can_evaluate?(competition, slide) do
     Enum.count(slide.evaluations) <

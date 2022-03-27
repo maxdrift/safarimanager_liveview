@@ -8,6 +8,7 @@ defmodule SM.Application do
   @impl Application
   def start(_type, _args) do
     children = [
+      {Task.Supervisor, name: SM.TaskSupervisor},
       # Start the Ecto repository
       SM.Repo,
       # Start the Telemetry supervisor

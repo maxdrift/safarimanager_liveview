@@ -38,8 +38,16 @@ defmodule SM.Competitions do
   @spec get(String.t()) :: {:error, :not_found} | {:ok, Competition.t()}
   def get(id) do
     case Repo.get(Competition, id) do
-      nil -> {:error, :not_found}
-      result -> {:ok, Repo.preload(result, [:participants, :jurors, :allowed_evaluations])}
+      nil ->
+        {:error, :not_found}
+
+      result ->
+        {:ok,
+         Repo.preload(result, [
+           [participants: :organization],
+           [jurors: :organization],
+           :allowed_evaluations
+         ])}
     end
   end
 

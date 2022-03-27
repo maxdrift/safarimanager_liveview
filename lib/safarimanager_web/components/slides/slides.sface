@@ -1,128 +1,198 @@
-<div class="flex flex-col w-full mt-10">
-  <span class="text-2xl text-center">{@competition.name}</span>
-  <div class="flex flex-col w-full lg:flex-row mt-10">
-    <div class="flex-grow card max-h-96 overflow-auto flex-grow bg-base-200 p-4 shadow-lg">
-      <div class="text-2xl font-bold text-center">Participants</div>
-      <table class="table m-2">
-        <thead>
+<div class="pt-5 text-center">
+  <span class="text-2xl">{@competition.name}</span>
+</div>
+<div class="pt-4 text-center hidden lg:block">
+  <ul class="steps steps-horizontal">
+    <li class="step step-primary">Participants</li>
+    <li class="step step-primary">Jurors</li>
+    <li class="step step-primary">Slides</li>
+    <li class="step">CSV</li>
+    <li class="step">Jury</li>
+    <li class="step">Results</li>
+  </ul>
+</div>
+<div class="flex flex-col lg:flex-row mt-5">
+  <div class="overflow-y-auto rounded-lg lg:w-1/2 bg-base-200 shadow-lg p-4">
+    <div class="text-2xl font-bold text-center py-4">Participants</div>
+    <input class="input input-bordered w-full mb-1" placeholder="Search a participant...">
+    <table class="table table-zebra table-fixed w-full">
+      <thead>
+        <tr>
+          <th class="w-auto">First Name</th>
+          <th class="w-auto">Last Name</th>
+          <th class="w-auto">Organization</th>
+        </tr>
+      </thead>
+      <tbody>
+        {#for item <- @competition.participants}
           <tr>
-            <th class="w-auto">First Name</th>
-            <th class="w-auto">Last Name</th>
-            <th class="w-auto">Email</th>
+            <td class="truncate">{item.first_name}</td>
+            <td class="truncate">{item.last_name}</td>
+            <td class="truncate">{(item.organization && item.organization.name) || "N/A"}</td>
+            <td class="truncate">
+              <LivePatch to={"?user_id=#{item.id}"} class="btn btn-xs">
+                Select
+              </LivePatch>
+            </td>
           </tr>
-        </thead>
-        <tbody>
-          {#for item <- @competition.participants}
-            <!-- <tr class="hover" :on-click="select" :values={id: item.id}> -->
-            <tr class="hover">
-              <td class="truncate">{item.first_name}</td>
-              <td class="truncate">{item.last_name}</td>
-              <td class="truncate">{item.email}</td>
-              <td class="truncate">
-                <LivePatch to={"?user_id=#{item.id}"} class="btn btn-xs">
-                  Select
-                </LivePatch>
+        {#else}
+          <tr>
+            <td>No items yet!</td>
+            <td />
+            <td />
+            <td />
+          </tr>
+        {/for}
+      </tbody>
+    </table>
+  </div>
+  <div class="divider lg:divider-horizontal" />
+  <div class="overflow-y-auto rounded-lg lg:w-1/2 bg-base-200 shadow-lg p-4">
+    {#if @user}
+      <div class="text-2xl font-bold text-center py-4">Load {@user.first_name}'s slides</div>
+      <Form for={:slides} change="validate" submit="submit">
+        <div phx-drop-target={@uploads.images.ref} class="flex w-full items-center justify-center">
+          <FieldContext name={:images}>
+            <label class="w-full flex flex-col items-center px-4 py-6 rounded-lg shadow-lg tracking-wide uppercase border border-dashed border-2 cursor-pointer hover:text-info hover:border-info">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-8 w-8"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"
+                />
+              </svg>
+              <span class="mt-2 text-base leading-normal">Select or drop some images in this box</span>
+              <LiveFileInput upload={@uploads.images} class="hidden" />
+            </label>
+          </FieldContext>
+        </div>
+        <table class="table table-zebra table-fixed w-full mt-2">
+          <thead>
+            <tr>
+              <th />
+              <th class="w-auto">Name</th>
+              <th class="w-auto">Size</th>
+              <td>
+                <button
+                  :on-click="delete-all-slides"
+                  class={
+                    "btn",
+                    "btn-xs",
+                    "btn-error": @slides != [],
+                    "btn-disabled": @slides == []
+                  }
+                >
+                  Delete all
+                </button>
               </td>
             </tr>
-          {#else}
-            <tr>
-              <th>No items yet!</th>
-            </tr>
-          {/for}
-        </tbody>
-      </table>
-    </div>
-    <div class="divider lg:divider-horizontal" />
-    <div class="flex-grow lg:w-1/3 max-h-96 overflow-auto card place-items-center p-4">
-      {#if @user}
-        <div class="text-2xl font-bold text-center">Load {@user.first_name}'s slides</div>
-        <Form for={:slides} change="validate" submit="submit" opts={autocomplete: "off"}>
-          <div class="flex flex-wrap pt-3">
-            <div phx-drop-target={@uploads.images.ref} class="w-full h-20 border-dashed border-2 rounded-lg">
-              <Field name={:images} class="form-control w-full px-3">
-                <LiveFileInput upload={@uploads.images} />
-                <Label class="label h-7">
-                  <ErrorTag />
-                </Label>
-              </Field>
-            </div>
-          </div>
-          <div class="mt-2">
+          </thead>
+          <tbody>
             {#for image <- @uploads.images.entries}
-              <div class="h-10">
-                <span>{image.client_name} - {image.client_size} bytes</span>
-                <progress class="progress progress-primary w-56" value={image.progress} max="100" />
-              </div>
+              <tr class="hover">
+                <td class="truncate">
+                  <div class="radial-progress text-primary" style={"--value:#{image.progress}; --size:3.5rem;"}>
+                    {image.progress}%
+                  </div>
+                </td>
+                <td class="truncate">{image.client_name}</td>
+                <td class="truncate">{pretty_size(image.client_size)}</td>
+                <td class="truncate">
+                  <button :on-click="delete-slide" :values={id: "slide.id"} class="btn btn-xs btn-error">
+                    Cancel
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      class="h-4 w-4"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      stroke-width="2"
+                    >
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                  </button>
+                </td>
+              </tr>
             {/for}
-          </div>
-          <div class="mt-5">
-            <Submit class="btn">Load</Submit>
-            <Reset click="reset" class="btn" value="Reset" />
-          </div>
-        </Form>
-        <div class="mt-2">
-          {#for slide <- @slides}
-            <div class="h-10">
-              <div class="avatar">
-                <div class="w-8 rounded">
-                  <!-- <img src={image_path(@socket, slide.competition_id, slide.user_id, slide.file_name)}> -->
-                </div>
-              </div>
-              <span>{slide.file_name} - {slide.file_size} bytes - {slide.file_type}</span>
-              <button
-                class="btn btn-square btn-outline btn-xs ml-2"
-                :on-click="delete-slide"
-                :values={id: slide.id}
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  class="h-4 w-4"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  stroke-width="2"
-                >
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-                </svg>
-              </button>
-            </div>
-          {/for}
-        </div>
-      {#else}
+            {#for slide <- @slides}
+              <tr class="hover">
+                <td class="truncate">
+                  IMG
+                </td>
+                <td class="truncate">{slide.file_name}</td>
+                <td class="truncate">{pretty_size(slide.file_size)}</td>
+                <td class="truncate">
+                  <button :on-click="delete-slide" :values={id: slide.id} class="btn btn-xs btn-error">
+                    Delete
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      class="h-4 w-4"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      stroke-width="2"
+                    >
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                  </button>
+                </td>
+              </tr>
+            {/for}
+            {#if @uploads.images.entries == [] and @slides == []}
+              <tr>
+                <td>No items yet!</td>
+                <td />
+                <td />
+                <td />
+              </tr>
+            {/if}
+          </tbody>
+        </table>
+
+      </Form>
+    {#else}
+      <div class="mt-10 text-center align-middle">
         Select a participant from the left side.
-      {/if}
-    </div>
+      </div>
+    {/if}
   </div>
-  <div class="flex flex-row my-10 w-full">
-    <LiveRedirect to={"/organize/#{@competition_id}/jurors"} class="flex-none btn gap-2">
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        class="h-6 w-6"
-        fill="none"
-        viewBox="0 0 24 24"
-        stroke="currentColor"
-        stroke-width="2"
-      >
-        <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
-      </svg>
-      Jurors
-    </LiveRedirect>
-    <div class="grow" />
-    <LiveRedirect
-      to={"/organize/#{@competition_id}/csv_import"}
-      class="flex-none btn btn-primary gap-2"
+</div>
+<div class="flex flex-row my-10 w-full">
+  <LiveRedirect to={"/organize/#{@competition_id}/jurors"} class="flex-none btn gap-2">
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      class="h-6 w-6"
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke="currentColor"
+      stroke-width="2"
     >
-      CSV Import
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        class="h-6 w-6"
-        fill="none"
-        viewBox="0 0 24 24"
-        stroke="currentColor"
-        stroke-width="2"
-      >
-        <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
-      </svg>
-    </LiveRedirect>
-  </div>
+      <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+    </svg>
+    Jurors
+  </LiveRedirect>
+  <div class="grow" />
+  <LiveRedirect
+    to={"/organize/#{@competition_id}/csv_import"}
+    class="flex-none btn btn-primary gap-2"
+  >
+    CSV Import
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      class="h-6 w-6"
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke="currentColor"
+      stroke-width="2"
+    >
+      <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+    </svg>
+  </LiveRedirect>
 </div>

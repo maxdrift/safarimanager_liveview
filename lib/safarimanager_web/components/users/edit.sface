@@ -2,7 +2,15 @@
   <div class="card-title">
     {String.capitalize(Atom.to_string(@action))} {@entity_name}
   </div>
-  <Form {=@action} {=@entity} {=@changeset} {=@validate} {=@submit} {=@redirect_to}>
+  <Form
+    {=@action}
+    {=@entity}
+    {=@changeset}
+    {=@validate}
+    {=@submit}
+    {=@organizations}
+    {=@redirect_to}
+  >
     <FormActions
       container_class="modal-action"
       submit_enabled?={@changeset.action && @changeset.valid?}

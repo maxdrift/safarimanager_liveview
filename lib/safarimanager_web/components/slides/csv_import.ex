@@ -69,12 +69,10 @@ defmodule SMWeb.CSVImport do
       {:ok, results}
     end)
     |> List.flatten()
-    # |> IO.inspect()
     |> Enum.filter(fn
       %Slides.Slide{} -> false
       {:error, _reason} -> true
     end)
-    |> IO.inspect()
 
     {:noreply, socket}
   end

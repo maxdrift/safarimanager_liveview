@@ -4,6 +4,7 @@ defmodule SMWeb.Components.Users.Edit do
   """
   use SMWeb, :surface_live_component
 
+  alias SM.Organizations
   alias SMWeb.Components.Dialog
   alias SMWeb.Components.FormActions
   alias SMWeb.Components.Users.Form
@@ -12,6 +13,7 @@ defmodule SMWeb.Components.Users.Edit do
 
   data show, :boolean, default: false
   data action, :atom, values!: [:create, :edit]
+  data organizations, :list, default: []
 
   prop entity, :struct, required: true
   prop changeset, :changeset, required: true
@@ -27,6 +29,7 @@ defmodule SMWeb.Components.Users.Edit do
     send_update(__MODULE__,
       id: dialog_id,
       action: action,
+      organizations: Organizations.list(),
       show: true
     )
   end

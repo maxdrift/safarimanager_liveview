@@ -1,40 +1,47 @@
-<div class="flex flex-col w-full mt-10 text-center">
-  <span class="text-2xl text-center">{@competition.name}</span>
-  <div class="mt-20">
-    <!-- <LiveRedirect to={"/organize/#{@competition_id}/jury"} class="btn btn-xl btn-primary">
-      Launch Jury
-    </LiveRedirect> -->
-    <a href={"/organize/#{@competition_id}/jury"} class="btn btn-xl btn-primary">
-      Launch Jury
-    </a>
-  </div>
-  <div class="flex flex-row my-10 w-full">
-    <LiveRedirect to={"/organize/#{@competition_id}/csv_import"} class="flex-none btn gap-2">
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        class="h-6 w-6"
-        fill="none"
-        viewBox="0 0 24 24"
-        stroke="currentColor"
-        stroke-width="2"
-      >
-        <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
-      </svg>
-      CSV Import
-    </LiveRedirect>
-    <div class="grow" />
-    <LiveRedirect to={"/organize/#{@competition_id}/results"} class="flex-none btn btn-primary gap-2">
-      Results
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        class="h-6 w-6"
-        fill="none"
-        viewBox="0 0 24 24"
-        stroke="currentColor"
-        stroke-width="2"
-      >
-        <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
-      </svg>
-    </LiveRedirect>
-  </div>
+<div class="pt-5 text-center">
+  <span class="text-2xl">{@competition.name}</span>
+</div>
+<div class="pt-4 text-center">
+  <ul class="steps steps-horizontal">
+    <li class="step step-primary">Participants</li>
+    <li class="step step-primary">Jurors</li>
+    <li class="step step-primary">Slides</li>
+    <li class="step step-primary">CSV</li>
+    <li class="step step-primary">Jury</li>
+    <li class="step">Results</li>
+  </ul>
+</div>
+<div class="mt-20 text-center">
+  <a href={"/organize/#{@competition_id}/jury"} class="btn btn-xl btn-primary">
+    Launch Jury
+  </a>
+</div>
+<div class="flex flex-row my-10 w-full">
+  <LiveRedirect to={"/organize/#{@competition_id}/csv_import"} class="flex-none btn gap-2">
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      class="h-6 w-6"
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke="currentColor"
+      stroke-width="2"
+    >
+      <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+    </svg>
+    CSV Import
+  </LiveRedirect>
+  <div class="grow" />
+  <LiveRedirect to={"/organize/#{@competition_id}/results"} class="flex-none btn btn-primary gap-2">
+    Results
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      class="h-6 w-6"
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke="currentColor"
+      stroke-width="2"
+    >
+      <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+    </svg>
+  </LiveRedirect>
 </div>

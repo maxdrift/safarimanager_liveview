@@ -1,23 +1,41 @@
-<div class="flex flex-col w-full mt-10">
-  <span class="text-2xl text-center">{@competition.name}</span>
-  <div class="flex flex-col w-full lg:flex-row mt-10">
-    <div class="flex-grow card max-h-96 overflow-auto flex-grow bg-base-200 p-4 shadow-lg">
-      <div>
-        <Form action={:create} {=@entity} {=@changeset} validate="validate-new-user" submit="submit-new-user">
-          <FormActions
-            container_class="modal-action"
-            submit_enabled?={@changeset.action && @changeset.valid?}
-            reset="reset-new-user"
-          />
-        </Form>
-      </div>
-      <div class="text-2xl font-bold text-center">Users</div>
-      <table class="table m-2">
+<div class="pt-5 text-center">
+  <span class="text-2xl">{@competition.name}</span>
+</div>
+<div class="pt-4 text-center">
+  <ul class="steps steps-horizontal">
+    <li class="step step-primary">Participants</li>
+    <li class="step">Jurors</li>
+    <li class="step">Slides</li>
+    <li class="step">CSV</li>
+    <li class="step">Jury</li>
+    <li class="step">Results</li>
+  </ul>
+</div>
+<div class="flex flex-col lg:flex-row mt-5">
+  <div class="overflow-y-auto rounded-lg lg:w-1/2 bg-base-200 shadow-lg">
+    <Form
+      action={:create}
+      {=@entity}
+      {=@changeset}
+      {=@organizations}
+      validate="validate-new-user"
+      submit="submit-new-user"
+    >
+      <FormActions
+        container_class="modal-action"
+        submit_enabled?={@changeset.action && @changeset.valid?}
+        reset="reset-new-user"
+      />
+    </Form>
+    <div class="p-4">
+      <div class="text-2xl font-bold text-center py-4">Users</div>
+      <input class="input input-bordered w-full mb-1" placeholder="Search a user...">
+      <table class="table table-zebra table-fixed w-full">
         <thead>
           <tr>
             <th class="w-auto">First Name</th>
             <th class="w-auto">Last Name</th>
-            <th class="w-auto">Email</th>
+            <th class="w-auto">Organization</th>
           </tr>
         </thead>
         <tbody>
@@ -25,28 +43,34 @@
             <tr>
               <td class="truncate">{item.first_name}</td>
               <td class="truncate">{item.last_name}</td>
-              <td class="truncate">{item.email}</td>
+              <td class="truncate">{(item.organization && item.organization.name) || "N/A"}</td>
               <td>
                 <button class="btn btn-xs btn-success" :on-click="enroll" :values={user_id: item.id}>Enroll</button>
               </td>
             </tr>
           {#else}
             <tr>
-              <th>No items yet!</th>
+              <td>No items yet!</td>
+              <td />
+              <td />
+              <td />
             </tr>
           {/for}
         </tbody>
       </table>
     </div>
-    <div class="divider lg:divider-horizontal" />
-    <div class="flex-grow card max-h-96 overflow-auto flex-grow bg-base-200 p-4 shadow-lg">
-      <div class="text-2xl font-bold text-center">Participants</div>
-      <table class="table m-2">
+  </div>
+  <div class="divider lg:divider-horizontal" />
+  <div class="overflow-y-auto rounded-lg lg:w-1/2 bg-base-200 shadow-lg">
+    <div class="p-4">
+      <div class="text-2xl font-bold text-center py-4">Participants</div>
+      <input class="input input-bordered w-full mb-1" placeholder="Search a participant...">
+      <table class="table table-zebra table-fixed w-full">
         <thead>
           <tr>
             <th class="w-auto">First Name</th>
             <th class="w-auto">Last Name</th>
-            <th class="w-auto">Email</th>
+            <th class="w-auto">Organization</th>
           </tr>
         </thead>
         <tbody>
@@ -54,33 +78,50 @@
             <tr>
               <td class="truncate">{item.first_name}</td>
               <td class="truncate">{item.last_name}</td>
-              <td class="truncate">{item.email}</td>
+              <td class="truncate">{(item.organization && item.organization.name) || "N/A"}</td>
               <td>
                 <button class="btn btn-xs btn-error" :on-click="remove" :values={user_id: item.id}>Remove</button>
               </td>
             </tr>
           {#else}
             <tr>
-              <th>No items yet!</th>
+              <td>No items yet!</td>
+              <td />
+              <td />
+              <td />
             </tr>
           {/for}
         </tbody>
       </table>
     </div>
   </div>
-  <div class="flex flex-row-reverse my-10 w-full">
-    <LiveRedirect to={"/organize/#{@competition_id}/jurors"} class="btn btn-primary gap-2">
-      Jurors
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        class="h-6 w-6"
-        fill="none"
-        viewBox="0 0 24 24"
-        stroke="currentColor"
-        stroke-width="2"
-      >
-        <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
-      </svg>
-    </LiveRedirect>
-  </div>
+</div>
+<div class="flex flex-row my-10 w-full">
+  <LiveRedirect to="/organize/new" class="flex-none btn gap-2">
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      class="h-6 w-6"
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke="currentColor"
+      stroke-width="2"
+    >
+      <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+    </svg>
+    Competition
+  </LiveRedirect>
+  <div class="grow" />
+  <LiveRedirect to={"/organize/#{@competition_id}/jurors"} class="flex-none btn btn-primary gap-2">
+    Jurors
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      class="h-6 w-6"
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke="currentColor"
+      stroke-width="2"
+    >
+      <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+    </svg>
+  </LiveRedirect>
 </div>

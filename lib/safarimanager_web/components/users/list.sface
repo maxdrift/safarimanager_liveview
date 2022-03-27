@@ -15,6 +15,7 @@
       <th class="w-auto">First Name</th>
       <th class="w-auto">Last Name</th>
       <th class="w-auto">Email</th>
+      <th class="w-auto">Organization</th>
       <th class="w-2/12">Actions</th>
     </tr>
   </thead>
@@ -36,6 +37,7 @@
         <td class="truncate">{item.first_name}</td>
         <td class="truncate">{item.last_name}</td>
         <td class="truncate">{item.email}</td>
+        <td class="truncate">{(item.organization && item.organization.name) || "N/A"}</td>
         <td class="overflow-x-auto">
           <LivePatch to={"?action=show&id=#{item.id}"} class="btn btn-xs btn-outline btn-info">Show</LivePatch>
           <LivePatch to={"?action=edit&id=#{item.id}"} class="btn btn-xs btn-warning">Edit</LivePatch>

@@ -92,8 +92,9 @@ defmodule SM.Accounts.User do
           Ecto.Changeset.t()
   def competition_registration_changeset(user, attrs) do
     user
-    |> cast(attrs, [:first_name, :last_name, :email])
+    |> cast(attrs, [:first_name, :last_name, :email, :organization_id])
     |> validate_required([:first_name])
+    |> foreign_key_constraint(:organization_id)
     |> maybe_put_email()
     |> put_default_password()
   end
