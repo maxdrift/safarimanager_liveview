@@ -20,14 +20,15 @@ defmodule SM.Results do
           %{user: participant, slides: slides, total_score: total_score}
         end)
         |> Enum.sort(&(Decimal.compare(&1.total_score, &2.total_score) in [:gt, :eq]))
-        |> Enum.map_reduce({0, Decimal.new("Infinity")}, fn %{total_score: score} = result,
-                                                            {rank, prev_score} ->
-          rank =
-            if Decimal.compare(score, prev_score) == :lt,
-              do: Decimal.add(rank, Decimal.new(1)),
-              else: rank
-
-          {Map.put(result, :rank, rank), {rank, score}}
+        |> Enum.map_reduce({0, 0, Decimal.new("Infinity")}, fn %{total_score: score} = result,
+                                                               {prev_index, prev_rank, prev_score} ->
+          if Decimal.compare(score, prev_score) == :lt do
+            new_index = prev_index + 1
+            new_rank = prev_index + 1
+            {Map.put(result, :rank, new_rank), {new_index, new_rank, score}}
+          else
+            {Map.put(result, :rank, prev_rank), {prev_index + 1, prev_rank, score}}
+          end
         end)
 
       {:ok, results}
