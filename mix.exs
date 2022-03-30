@@ -21,7 +21,7 @@ defmodule SM.MixProject do
   def application do
     [
       mod: {SM.Application, []},
-      extra_applications: [:logger, :runtime_tools]
+      extra_applications: [:logger, :runtime_tools, :mogrify]
     ]
   end
 
@@ -42,6 +42,7 @@ defmodule SM.MixProject do
       {:esbuild, "~> 0.3", runtime: Mix.env() == :dev},
       {:gettext, "~> 0.19"},
       {:jason, "~> 1.2"},
+      {:mogrify, "~> 0.9.1"},
       {:nimble_csv, "~> 1.2"},
       {:phoenix_ecto, "~> 4.4"},
       {:phoenix_html, "~> 3.2"},

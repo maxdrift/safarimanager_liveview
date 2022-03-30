@@ -63,7 +63,7 @@ defmodule SM.Slides do
     Slide
     |> where(user_id: ^user_id)
     |> where(competition_id: ^competition_id)
-    |> order_by(asc: :inserted_at)
+    |> order_by(asc: :file_name)
     |> Repo.all()
     |> Repo.preload([:subject, :evaluations])
   end

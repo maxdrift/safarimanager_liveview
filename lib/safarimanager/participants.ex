@@ -23,6 +23,57 @@ defmodule SM.Participants do
   end
 
   @doc """
+  Returns the list of participants filtered by competition ID and name.
+
+  ## Examples
+
+      iex> list("123")
+      [%Participant{}, ...]
+
+  """
+  @spec list(String.t()) :: [Participant.t()]
+  def list(competition_id) do
+    query =
+      from(
+        p in Participant,
+        where: [competition_id: ^competition_id],
+        inner_join: u in assoc(p, :user),
+        left_join: o in assoc(u, :organization),
+        order_by: [asc: u.last_name],
+        preload: [user: {u, [organization: o]}]
+      )
+
+    Repo.all(query)
+  end
+
+  @doc """
+  Returns the list of participants filtered by competition ID and name.
+
+  ## Examples
+
+      iex> list("123", "foo")
+      [%Participant{}, ...]
+
+  """
+  @spec list(String.t(), String.t()) :: [Participant.t()]
+  def list(competition_id, name) do
+    pattern = "%#{name}%"
+
+    query =
+      from(
+        p in Participant,
+        where: [competition_id: ^competition_id],
+        inner_join: u in assoc(p, :user),
+        left_join: o in assoc(u, :organization),
+        where: ilike(u.first_name, ^pattern) or ilike(u.last_name, ^pattern),
+        order_by: [asc: u.last_name],
+        preload: [user: {u, [organization: o]}]
+      )
+
+    Repo.all(query)
+  end
+
+  @doc """
   Gets a single Participant.
 
   ## Examples

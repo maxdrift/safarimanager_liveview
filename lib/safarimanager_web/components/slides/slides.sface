@@ -11,49 +11,52 @@
     <li class="step">Results</li>
   </ul>
 </div>
-<div class="flex flex-col lg:flex-row mt-5">
-  <div class="overflow-y-auto rounded-lg lg:w-1/2 bg-base-200 shadow-lg p-4">
-    <div class="text-2xl font-bold text-center py-4">Participants</div>
-    <input class="input input-bordered w-full mb-1" placeholder="Search a participant...">
-    <table class="table table-zebra table-fixed w-full">
-      <thead>
-        <tr>
-          <th class="w-auto">First Name</th>
-          <th class="w-auto">Last Name</th>
-          <th class="w-auto">Organization</th>
-        </tr>
-      </thead>
-      <tbody>
-        {#for item <- @competition.participants}
+<div class="flex flex-col mt-5">
+  <div class="rounded-lg bg-base-200 shadow-lg p-4">
+    <div class="text-2xl font-bold text-center pb-4">Participants</div>
+    <input class="input input-bordered w-full mb-1" placeholder="Search a participant..." :on-keyup="filter-participants" phx-debounce="500">
+    <div class="max-h-48 overflow-y-auto">
+      <table class="table table-zebra table-fixed w-full">
+        <thead>
           <tr>
-            <td class="truncate">{item.first_name}</td>
-            <td class="truncate">{item.last_name}</td>
-            <td class="truncate">{(item.organization && item.organization.name) || "N/A"}</td>
-            <td class="truncate">
-              <LivePatch to={"?user_id=#{item.id}"} class="btn btn-xs">
-                Select
-              </LivePatch>
-            </td>
+            <th class="sticky top-0 w-auto">First Name</th>
+            <th class="sticky top-0 w-auto">Last Name</th>
+            <th class="sticky top-0 w-auto">Organization</th>
+            <th class="sticky top-0 w-auto" />
           </tr>
-        {#else}
-          <tr>
-            <td>No items yet!</td>
-            <td />
-            <td />
-            <td />
-          </tr>
-        {/for}
-      </tbody>
-    </table>
+        </thead>
+        <tbody>
+          {#for item <- @participants}
+            <tr>
+              <td class="truncate">{item.user.first_name}</td>
+              <td class="truncate">{item.user.last_name}</td>
+              <td class="truncate">{(item.user.organization && item.user.organization.name) || "N/A"}</td>
+              <td class="truncate">
+                <LivePatch to={"?user_id=#{item.user_id}"} class="btn btn-xs">
+                  Select
+                </LivePatch>
+              </td>
+            </tr>
+          {#else}
+            <tr>
+              <td>No items yet!</td>
+              <td />
+              <td />
+              <td />
+            </tr>
+          {/for}
+        </tbody>
+      </table>
+    </div>
   </div>
-  <div class="divider lg:divider-horizontal" />
-  <div class="overflow-y-auto rounded-lg lg:w-1/2 bg-base-200 shadow-lg p-4">
+  <div class="divider" />
+  <div class="overflow-y-auto rounded-lg bg-base-200 shadow-lg p-4">
     {#if @user}
       <div class="text-2xl font-bold text-center py-4">Load {@user.first_name}'s slides</div>
       <Form for={:slides} change="validate" submit="submit">
         <div phx-drop-target={@uploads.images.ref} class="flex w-full items-center justify-center">
           <FieldContext name={:images}>
-            <label class="w-full flex flex-col items-center px-4 py-6 rounded-lg shadow-lg tracking-wide uppercase border border-dashed border-2 cursor-pointer hover:text-info hover:border-info">
+            <label class="w-full flex flex-col items-center px-4 py-6 rounded-lg shadow-inner tracking-wide uppercase border border-dashed border-2 cursor-pointer hover:text-info hover:border-info">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 class="h-8 w-8"
@@ -122,9 +125,13 @@
               </tr>
             {/for}
             {#for slide <- @slides}
-              <tr class="hover">
+              <tr>
                 <td class="truncate">
-                  IMG
+                  <div class="avatar">
+                    <div class="w-20 mask mask-squircle">
+                      <img src={"/uploads/#{@competition.id}/#{@user.id}/thumbnails/100x100/#{slide.file_name}"}>
+                    </div>
+                  </div>
                 </td>
                 <td class="truncate">{slide.file_name}</td>
                 <td class="truncate">{pretty_size(slide.file_size)}</td>
@@ -155,11 +162,10 @@
             {/if}
           </tbody>
         </table>
-
       </Form>
     {#else}
-      <div class="mt-10 text-center align-middle">
-        Select a participant from the left side.
+      <div class="mt-2 text-center align-middle">
+        Select a participant from the top.
       </div>
     {/if}
   </div>

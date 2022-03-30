@@ -7,6 +7,8 @@ defmodule SMWeb.Slides do
   alias Phoenix.LiveView
   alias SM.Accounts
   alias SM.Competitions
+  alias SM.ImageProcessing
+  alias SM.Participants
   alias SM.Slides
   alias Surface.Components.Form
   # alias Surface.Components.Form.ErrorTag
@@ -28,6 +30,7 @@ defmodule SMWeb.Slides do
     socket =
       socket
       |> assign(:user, nil)
+      |> assign(:participants, [])
       |> assign(:slides, [])
       |> allow_upload(:images,
         accept: ~w(.jpg .jpeg .png),
@@ -84,7 +87,11 @@ defmodule SMWeb.Slides do
 
     ["priv/static", uploads_path, slide.file_name]
     |> Path.join()
-    |> File.rm!()
+    |> File.rm()
+
+    ["priv/static", uploads_path, "thumbnails", "100x100", slide.file_name]
+    |> Path.join()
+    |> File.rm()
 
     {:noreply, socket}
   end
@@ -99,15 +106,29 @@ defmodule SMWeb.Slides do
 
       ["priv/static", uploads_path, slide.file_name]
       |> Path.join()
-      |> File.rm!()
+      |> File.rm()
+
+      ["priv/static", uploads_path, "thumbnails", "100x100", slide.file_name]
+      |> Path.join()
+      |> File.rm()
     end
 
     {:noreply, socket}
   end
 
-  def handle_event(event_name, _params, socket) do
+  def handle_event("filter-participants", %{"value" => ""}, socket) do
+    participants = Participants.list(socket.assigns.competition_id)
+    {:noreply, assign(socket, :participants, participants)}
+  end
+
+  def handle_event("filter-participants", %{"value" => value}, socket) do
+    participants = Participants.list(socket.assigns.competition_id, value)
+    {:noreply, assign(socket, :participants, participants)}
+  end
+
+  def handle_event(event_name, params, socket) do
     IO.inspect(event_name, label: __MODULE__)
-    # IO.inspect(params)
+    IO.inspect(params)
 
     {:noreply, socket}
   end
@@ -126,6 +147,7 @@ defmodule SMWeb.Slides do
       socket
       |> assign(:competition_id, competition_id)
       |> assign(:competition, competition)
+      |> assign(:participants, Participants.list(competition_id))
       # FIXME: this way of selecting the user forces a re-query of Competition
       |> assign(:user, user_id && Accounts.get_user!(user_id))
       |> assign(:slides, user_id && Slides.list(user_id, competition_id))
@@ -145,10 +167,12 @@ defmodule SMWeb.Slides do
 
   def handle_info({_context, [:competition, :updated], _result}, socket) do
     {:ok, competition} = Competitions.get(socket.assigns.competition_id)
+    participants = Participants.list(socket.assigns.competition_id)
 
     socket =
       socket
       |> assign(:competition, competition)
+      |> assign(:participants, participants)
 
     {:noreply, socket}
   end
@@ -194,6 +218,28 @@ defmodule SMWeb.Slides do
           file_size: entry.client_size,
           file_type: entry.client_type
         })
+
+      Task.Supervisor.start_child(SM.TaskSupervisor, fn ->
+        %{height: height, width: width, format: format} = ImageProcessing.get_info(dest)
+        IO.inspect("running task for image #{entry.client_name}:", label: __MODULE__)
+        IO.inspect(%{height: height, width: width, format: format}, label: __MODULE__)
+
+        thumbs_path =
+          dest
+          |> Path.dirname()
+          |> Path.join("thumbnails")
+          |> Path.join("100x100")
+
+        File.mkdir_p!(thumbs_path)
+
+        %{} =
+          ImageProcessing.save_thumbnail(
+            dest,
+            100,
+            100,
+            Path.join(thumbs_path, entry.client_name)
+          )
+      end)
 
       {:ok, Routes.static_path(socket, uploads_path)}
       # Task.Supervisor.start_child(LiveBeats.TaskSupervisor, fn ->
