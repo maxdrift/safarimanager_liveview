@@ -1,0 +1,7 @@
+<div class="pt-4 text-center hidden lg:block">
+  <ul class="steps steps-horizontal">
+    {#for {step, index} <- Enum.with_index(steps(), 1)}
+      <li class={"step", "step-primary": index <= @current_step}>{step.name}</li>
+    {/for}
+  </ul>
+</div>

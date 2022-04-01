@@ -10,6 +10,7 @@ defmodule SMWeb.Slides do
   alias SM.ImageProcessing
   alias SM.Participants
   alias SM.Slides
+  alias SMWeb.Components.StepsHeader
   alias Surface.Components.Form
   # alias Surface.Components.Form.ErrorTag
   # alias Surface.Components.Form.Field

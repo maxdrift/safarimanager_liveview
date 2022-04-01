@@ -7,6 +7,7 @@ defmodule SMWeb.Results do
   alias SM.Competitions
   alias SM.Results
   alias SM.Slides
+  alias SMWeb.Components.StepsHeader
   alias Surface.Components.LiveRedirect
 
   require Logger

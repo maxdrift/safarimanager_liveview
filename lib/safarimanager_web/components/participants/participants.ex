@@ -11,6 +11,7 @@ defmodule SMWeb.Participants do
   alias SM.Participants
   alias SM.Accounts
   alias SMWeb.Components.FormActions
+  alias SMWeb.Components.StepsHeader
   alias SMWeb.Components.Users.Form
   alias Surface.Components.LiveRedirect
 

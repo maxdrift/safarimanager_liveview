@@ -5,6 +5,7 @@ defmodule SMWeb.JuryLauncher do
   use SMWeb, :surface_view
 
   alias SM.Competitions
+  alias SMWeb.Components.StepsHeader
   alias Surface.Components.LiveRedirect
 
   require Logger

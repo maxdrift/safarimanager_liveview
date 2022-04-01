@@ -10,16 +10,16 @@ defmodule SMWeb.CSVImport do
   alias SM.CSVImport
   alias SM.Slides
   alias SM.Subjects
-  alias Surface.Components.LiveFileInput
+  alias SMWeb.Components.StepsHeader
   alias Surface.Components.Form
   alias Surface.Components.Form.ErrorTag
   alias Surface.Components.Form.Field
   alias Surface.Components.Form.Label
   alias Surface.Components.Form.Reset
-  alias Surface.Components.Form.Select
   alias Surface.Components.Form.Submit
-  alias Surface.Components.LiveRedirect
+  alias Surface.Components.LiveFileInput
   alias Surface.Components.LivePatch
+  alias Surface.Components.LiveRedirect
 
   require Logger
 

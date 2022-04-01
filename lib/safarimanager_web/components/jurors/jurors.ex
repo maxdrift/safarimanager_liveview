@@ -7,6 +7,7 @@ defmodule SMWeb.Jurors do
   alias SM.Accounts
   alias SM.Competitions
   alias SM.Jurors
+  alias SMWeb.Components.StepsHeader
   alias Surface.Components.LiveRedirect
 
   require Logger
