@@ -48,7 +48,7 @@
   <div class="divider" />
   <div class="overflow-y-auto rounded-lg bg-base-200 shadow-lg p-4">
     {#if @user}
-      <div class="text-2xl font-bold text-center py-4">Load {@user.first_name}'s slides</div>
+      <div class="text-2xl font-bold text-center py-4">Load slides for {@user.first_name} {@user.last_name}</div>
       <Form for={:slides} change="validate" submit="submit">
         <div phx-drop-target={@uploads.images.ref} class="flex w-full items-center justify-center">
           <FieldContext name={:images}>
@@ -104,7 +104,7 @@
                 <td class="truncate">{image.client_name}</td>
                 <td class="truncate">{pretty_size(image.client_size)}</td>
                 <td class="truncate">
-                  <button :on-click="delete-slide" :values={id: "slide.id"} class="btn btn-xs btn-error">
+                  <button :on-click="cancel-upload" :values={id: image.client_name} class="btn btn-xs btn-disabled">
                     Cancel
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -123,8 +123,8 @@
             {#for slide <- @slides}
               <tr>
                 <td class="truncate">
-                  <div class="avatar">
-                    <div class="w-20 mask mask-squircle">
+                  <div>
+                    <div class="w-20">
                       <img src={"/uploads/#{@competition.id}/#{@user.id}/thumbnails/100x100/#{slide.file_name}"}>
                     </div>
                   </div>

@@ -12,19 +12,12 @@ defmodule SMWeb.Slides do
   alias SM.Slides
   alias SMWeb.Components.StepsHeader
   alias Surface.Components.Form
-  # alias Surface.Components.Form.ErrorTag
-  # alias Surface.Components.Form.Field
   alias Surface.Components.Form.FieldContext
-  # alias Surface.Components.Form.Label
-  # alias Surface.Components.Form.Reset
-  # alias Surface.Components.Form.Submit
   alias Surface.Components.LiveFileInput
   alias Surface.Components.LivePatch
   alias Surface.Components.LiveRedirect
 
   require Logger
-
-  # data user, :struct
 
   @impl Phoenix.LiveView
   def mount(_params, _session, socket) do
@@ -45,41 +38,6 @@ defmodule SMWeb.Slides do
   end
 
   @impl Phoenix.LiveView
-  # def handle_event("submit", %{}, socket) do
-  #   IO.inspect("submit")
-  #   assigns = socket.assigns
-
-  #   uploads_path = Slides.get_uploads_path(assigns.competition_id, assigns.user.id)
-
-  #   :ok =
-  #     "priv/static"
-  #     |> Path.join(uploads_path)
-  #     |> File.mkdir_p!()
-
-  #   # uploaded_files =
-  #   LiveView.consume_uploaded_entries(socket, :images, fn %{path: path}, entry ->
-  #     uploads_path = Path.join(uploads_path, entry.client_name)
-  #     dest = Path.join("priv/static", uploads_path)
-  #     File.cp!(path, dest)
-  #     {:ok, Routes.static_path(socket, uploads_path)}
-  #   end)
-
-  #   # IO.inspect(uploaded_files, label: :uploaded_files)
-
-  #   Enum.each(socket.assigns.uploads.images.entries, fn entry ->
-  #     {:ok, _slide} =
-  #       Slides.create(%{
-  #         user_id: assigns.user.id,
-  #         competition_id: assigns.competition_id,
-  #         file_name: entry.client_name,
-  #         file_size: entry.client_size,
-  #         file_type: entry.client_type
-  #       })
-  #   end)
-
-  #   {:noreply, socket}
-  # end
-
   def handle_event("delete-slide", %{"id" => slide_id}, socket) do
     {:ok, slide} = Slides.get(slide_id)
     {:ok, _slide} = Slides.delete(slide)
@@ -96,6 +54,14 @@ defmodule SMWeb.Slides do
 
     {:noreply, socket}
   end
+
+  # def handle_event("cancel-upload", %{"id" => file_name}, socket) do
+  #   entry = get_entry!(socket, file_name)
+
+  #   socket = LiveView.cancel_upload(socket, :images, entry.ref)
+
+  #   {:noreply, socket}
+  # end
 
   def handle_event("delete-all-slides", %{}, socket) do
     for slide <- socket.assigns.slides do
@@ -135,7 +101,6 @@ defmodule SMWeb.Slides do
   end
 
   @impl Phoenix.LiveView
-
   def handle_params(%{"competition_id" => competition_id} = params, _uri, socket) do
     if connected?(socket),
       do: {Competitions.subscribe(), Accounts.subscribe(), Slides.subscribe()}
@@ -179,6 +144,13 @@ defmodule SMWeb.Slides do
   end
 
   # Internal
+
+  # defp get_entry!(socket, file_name) do
+  #   Enum.find(socket.assigns.uploads.images.entries, fn entry ->
+  #     entry.client_name == file_name
+  #   end) ||
+  #     raise "no entry found for ref #{inspect(file_name)}"
+  # end
 
   defp handle_progress(:images, entry, socket) do
     # IO.inspect(entry, label: __MODULE__)
