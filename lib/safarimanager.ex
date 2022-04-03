@@ -14,8 +14,8 @@ defmodule SM do
       use Ecto.Schema
       import Ecto.Changeset
 
-      @primary_key {:id, :binary_id, autogenerate: true}
-      @foreign_key_type :binary_id
+      @primary_key {:id, Ecto.UUID, autogenerate: true}
+      @foreign_key_type Ecto.UUID
       @timestamps_opts [type: :utc_datetime_usec]
       @type t :: %__MODULE__{}
     end

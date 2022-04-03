@@ -9,8 +9,6 @@ defmodule SM.Accounts.User do
   alias SM.Participants.Participant
   alias SM.Slides.Slide
 
-  @primary_key {:id, :binary_id, autogenerate: true}
-  @foreign_key_type :binary_id
   schema "users" do
     field :email, :string
     field :password, :string, virtual: true, redact: true

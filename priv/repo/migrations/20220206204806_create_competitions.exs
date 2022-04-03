@@ -3,7 +3,7 @@ defmodule SM.Repo.Migrations.CreateCompetitions do
 
   def change do
     create table(:competitions, primary_key: false) do
-      add :id, :uuid, primary_key: true
+      add :id, :binary_id, primary_key: true
       add :name, :text, null: false
       add :start_time, :utc_datetime_usec
       add :end_time, :utc_datetime_usec
@@ -13,7 +13,7 @@ defmodule SM.Repo.Migrations.CreateCompetitions do
       add :city, :string
       add :state, :string
       add :country, :string
-      add :allowed_evaluations, {:array, :uuid}, default: []
+      add :allowed_evaluations, {:array, :binary_id}, default: []
       add :evaluations_per_juror, :integer, default: 0
       add :req_jurors_count, :integer, default: 0
 

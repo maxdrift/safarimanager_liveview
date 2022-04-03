@@ -38,3 +38,5 @@ assets/js/_hooks/
 # User-uploaded pictures
 /priv/static/images/slides/
 /priv/static/uploads
+
+safarimanager.db*

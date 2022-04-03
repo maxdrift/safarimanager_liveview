@@ -3,7 +3,7 @@ defmodule SM.Repo.Migrations.CreateEvaluations do
 
   def change do
     create table(:evaluations, primary_key: false) do
-      add :id, :uuid, primary_key: true
+      add :id, :binary_id, primary_key: true
       add :value, :decimal, null: false
       add :type, :string
       add :description, :text
