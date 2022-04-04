@@ -78,7 +78,7 @@
               <th />
               <th class="w-auto">Name</th>
               <th class="w-auto">Size</th>
-              <td>
+              <th>
                 <button
                   :on-click="delete-all-slides"
                   class={
@@ -90,72 +90,75 @@
                 >
                   Delete all
                 </button>
-              </td>
+              </th>
             </tr>
           </thead>
           <tbody>
-            {#for image <- @uploads.images.entries}
-              <tr class="hover">
-                <td class="truncate">
-                  <div class="radial-progress text-primary" style={"--value:#{image.progress}; --size:3.5rem;"}>
-                    {image.progress}%
-                  </div>
-                </td>
-                <td class="truncate">{image.client_name}</td>
-                <td class="truncate">{pretty_size(image.client_size)}</td>
-                <td class="truncate">
-                  <button :on-click="cancel-upload" :values={id: image.client_name} class="btn btn-xs btn-disabled">
-                    Cancel
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      class="h-4 w-4"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                      stroke-width="2"
-                    >
-                      <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                  </button>
-                </td>
-              </tr>
-            {/for}
-            {#for slide <- @slides}
-              <tr>
-                <td class="truncate">
-                  <div>
-                    <div class="w-20">
-                      <img src={"/uploads/#{@competition.id}/#{@user.id}/thumbnails/100x100/#{slide.file_name}"}>
+            {#for image <- sorted_images(@uploads.images.entries, @slides)}
+              {#if is_slide?(image)}
+                <tr>
+                  <td class="truncate">
+                    <div>
+                      <div class="w-20">
+                        <img
+                          src={"/uploads/#{@competition.id}/#{@user.id}/thumbnails/100x100/#{image.file_name}"}
+                          class="rounded-md border"
+                        />
+                      </div>
                     </div>
-                  </div>
-                </td>
-                <td class="truncate">{slide.file_name}</td>
-                <td class="truncate">{pretty_size(slide.file_size)}</td>
-                <td class="truncate">
-                  <button :on-click="delete-slide" :values={id: slide.id} class="btn btn-xs btn-error">
-                    Delete
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      class="h-4 w-4"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                      stroke-width="2"
-                    >
-                      <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                  </button>
-                </td>
-              </tr>
-            {/for}
-            {#if @uploads.images.entries == [] and @slides == []}
+                  </td>
+                  <td class="truncate">{image.file_name}</td>
+                  <td class="truncate">{pretty_size(image.file_size)}</td>
+                  <td class="truncate">
+                    <button :on-click="delete-slide" :values={id: image.id} class="btn btn-xs btn-error">
+                      Delete
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        class="h-4 w-4"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                        stroke-width="2"
+                      >
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                      </svg>
+                    </button>
+                  </td>
+                </tr>
+              {#else}
+                <tr>
+                  <td class="truncate">
+                    <div class="radial-progress text-primary" style={"--value:#{image.progress}; --size:3.5rem;"}>
+                      {image.progress}%
+                    </div>
+                  </td>
+                  <td class="truncate">{image.client_name}</td>
+                  <td class="truncate">{pretty_size(image.client_size)}</td>
+                  <td class="truncate">
+                    <button :on-click="cancel-upload" :values={id: image.client_name} class="btn btn-xs btn-disabled">
+                      Cancel
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        class="h-4 w-4"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                        stroke-width="2"
+                      >
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                      </svg>
+                    </button>
+                  </td>
+                </tr>
+              {/if}
+            {#else}
               <tr>
                 <td>No items yet!</td>
                 <td />
                 <td />
                 <td />
               </tr>
-            {/if}
+            {/for}
           </tbody>
         </table>
       </Form>

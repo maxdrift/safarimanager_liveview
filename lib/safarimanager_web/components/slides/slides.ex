@@ -28,7 +28,7 @@ defmodule SMWeb.Slides do
       |> assign(:slides, [])
       |> allow_upload(:images,
         accept: ~w(.jpg .jpeg .png),
-        max_entries: 150,
+        max_entries: 500,
         max_file_size: 100_000_000,
         progress: &handle_progress/3,
         auto_upload: true
@@ -265,5 +265,23 @@ defmodule SMWeb.Slides do
         |> Decimal.to_string(:normal)
         |> Kernel.<>("B")
     end
+  end
+
+  defp sorted_images(entries, slides) do
+    Enum.sort(entries ++ slides, fn left, right ->
+      get_file_name(left) <= get_file_name(right)
+    end)
+  end
+
+  defp get_file_name(item) do
+    if is_slide?(item) do
+      item.file_name
+    else
+      item.client_name
+    end
+  end
+
+  defp is_slide?(item) do
+    Map.has_key?(item, :id)
   end
 end
