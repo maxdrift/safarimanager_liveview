@@ -38,6 +38,10 @@ defmodule SMWeb.Slides do
   end
 
   @impl Phoenix.LiveView
+  def handle_event("validate", _params, socket) do
+    {:noreply, socket}
+  end
+
   def handle_event("delete-slide", %{"id" => slide_id}, socket) do
     {:ok, slide} = Slides.get(slide_id)
     {:ok, _slide} = Slides.delete(slide)
@@ -55,13 +59,9 @@ defmodule SMWeb.Slides do
     {:noreply, socket}
   end
 
-  # def handle_event("cancel-upload", %{"id" => file_name}, socket) do
-  #   entry = get_entry!(socket, file_name)
-
-  #   socket = LiveView.cancel_upload(socket, :images, entry.ref)
-
-  #   {:noreply, socket}
-  # end
+  def handle_event("cancel-upload", %{"ref" => ref}, socket) do
+    {:noreply, LiveView.cancel_upload(socket, :images, ref)}
+  end
 
   def handle_event("delete-all-slides", %{}, socket) do
     for slide <- socket.assigns.slides do

@@ -49,6 +49,9 @@
   <div class="overflow-y-auto rounded-lg bg-base-200 shadow-lg p-4">
     {#if @user}
       <div class="text-2xl font-bold text-center py-4">Load slides for {@user.first_name} {@user.last_name}</div>
+      <div class="text-lg text-center pb-4">
+        Currently {Enum.count(@slides || [])} slides - {Enum.count(@uploads.images.entries) || []} uploading
+      </div>
       <Form for={:slides} change="validate" submit="submit">
         <div phx-drop-target={@uploads.images.ref} class="flex w-full items-center justify-center">
           <FieldContext name={:images}>
@@ -128,14 +131,22 @@
               {#else}
                 <tr>
                   <td class="truncate">
-                    <div class="radial-progress text-primary" style={"--value:#{image.progress}; --size:3.5rem;"}>
-                      {image.progress}%
+                    <div>
+                      <div class="relative w-20">
+                        {live_img_preview(image, width: 100, class: "rounded-md border")}
+                        <div class="absolute w-full text-xs text-center">{image.progress}%</div>
+                        <progress
+                          class="absolute bottom-1 px-1 progress progress-secondary w-full"
+                          value={image.progress}
+                          max="100"
+                        />
+                      </div>
                     </div>
                   </td>
                   <td class="truncate">{image.client_name}</td>
                   <td class="truncate">{pretty_size(image.client_size)}</td>
                   <td class="truncate">
-                    <button :on-click="cancel-upload" :values={id: image.client_name} class="btn btn-xs btn-disabled">
+                    <button :on-click="cancel-upload" :values={ref: image.ref} class="btn btn-xs btn-error">
                       Cancel
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
