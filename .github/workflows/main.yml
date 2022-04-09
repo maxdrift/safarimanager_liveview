@@ -38,6 +38,7 @@ jobs:
       - run: mix deps.get
       # - run: MIX_ENV=standalone mix compile
       # - run: mix test
+      - run: MIX_ENV=standalone mix setup
       - run: MIX_ENV=standalone mix release
       - name: Peek at the release results
         run: ls -alh _build/standalone/rel/bakeware
