@@ -6,24 +6,31 @@ env:
 on: [push]
 
 jobs:
-  linux:
-    name: Test on Ubuntu (Elixir ${{ matrix.elixir_version }}, OTP ${{ matrix.otp_version }})
-    # runs-on: ubuntu-latest
+  linux-arm:
+    name: Build on Raspberry Pi (Elixir ${{ matrix.elixir_version }}, OTP ${{ matrix.otp_version }})
     runs-on: self-hosted
 
     strategy:
       matrix:
         elixir_version: ['1.13.4']
-        otp_version: ['24.3.3']
+        otp_version: ['24.3']
 
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-      - name: Setup Elixir
-        uses: erlef/setup-beam@v1
-        with:
-          elixir-version: ${{ matrix.elixir_version }}
-          otp-version: ${{ matrix.otp_version }}
+      - name: Setup Erlang
+        run: |
+          sudo apt update
+          sudo apt install -y wget libssl-dev ncurses-dev
+          wget http://www.erlang.org/download/otp_src_${{ matrix.otp_version }}.tar.gz
+          tar -xzvf otp_src_${{ matrix.otp_version }}.tar.gz
+          cd otp_src_${{ matrix.otp_version }}/
+          ./configure
+          make
+          sudo make install
+          cd ..
+          rm otp_src_${{ matrix.otp_version }}.tar.gz
+          sudo rm -R otp_src_${{ matrix.otp_version }}/
       - name: Restore deps and _build
         uses: actions/cache@v2
         with:
