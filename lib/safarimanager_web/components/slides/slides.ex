@@ -180,6 +180,10 @@ defmodule SMWeb.Slides do
     LiveView.consume_uploaded_entry(socket, entry, fn %{path: path} ->
       # TODO: Move this to Context
       uploads_path = Path.join(uploads_path, entry.client_name)
+      # In a standalone release we can use the User's data directory
+      # i.e. :filename.basedir(:user_data, "safarimanager", %{os: :darwin})
+      # Available types: [:user_cache, :user_config, :user_data, :user_log, :site_config, :site_data]
+      # Docs: https://www.erlang.org/doc/man/filename.html#basedir-2
       dest = Path.join("priv/static", uploads_path)
       File.cp!(path, dest)
 

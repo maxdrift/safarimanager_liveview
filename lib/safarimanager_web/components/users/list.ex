@@ -19,8 +19,4 @@ defmodule SMWeb.Components.Users.List do
     |> Tuple.to_list()
     |> hd()
   end
-
-  defp format_date(datetime) do
-    Calendar.strftime(datetime, "%d/%m/%Y %I:%M:%S %P %Z")
-  end
 end

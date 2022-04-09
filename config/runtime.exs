@@ -12,6 +12,36 @@ if System.get_env("PHX_SERVER") && System.get_env("RELEASE_NAME") do
   config :safarimanager, SMWeb.Endpoint, server: true
 end
 
+priv_dir = :code.priv_dir(:safarimanager)
+
+config :safarimanager, SM.Slides.Slide, uploads_base_path: Path.join(priv_dir, "/uploads")
+
+if config_env() == :standalone do
+  secret_key_base = "MROe0TML1wb/8amRSKJ994MKvIpq3JqLM/FMevNTM2YSEst8NXNkcTSkV/C17DP0"
+
+  config :safarimanager, SMWeb.Endpoint,
+    http: [
+      port: String.to_integer(System.get_env("PORT") || "4000"),
+      transport_options: [socket_opts: [:inet6]]
+    ],
+    secret_key_base: secret_key_base
+
+  config :safarimanager, SM.Repo, database: Path.join(priv_dir, "safarimanager.db")
+
+  # os_name =
+  #   case :os.type() do
+  #     {:unix, :darwin} -> :darwin
+  #     {:unix, :linux} -> :linux
+  #     {:win32, :nt} -> :windows
+  #   end
+
+  # cache_dir = :filename.basedir(:user_cache, "safarimanager")
+  # config_dir = :filename.basedir(:user_data, "safarimanager")
+  data_dir = :filename.basedir(:user_data, "safarimanager")
+
+  IO.puts("User directory: #{data_dir}")
+end
+
 if config_env() == :prod do
   database_url =
     System.get_env("DATABASE_URL") ||

@@ -24,12 +24,12 @@ defmodule SM.Slides do
 
   @spec get_uploads_path(String.t(), String.t()) :: String.t()
   def get_uploads_path(competition_id, user_id) do
-    fun =
+    path =
       :safarimanager
       |> Application.fetch_env!(Slide)
-      |> Keyword.fetch!(:uploads_path)
+      |> Keyword.fetch!(:uploads_base_path)
 
-    fun.(competition_id, user_id)
+    Path.join([path, competition_id, user_id])
   end
 
   @doc """

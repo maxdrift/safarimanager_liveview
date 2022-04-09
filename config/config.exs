@@ -38,7 +38,7 @@ config :safarimanager, SM.Subjects.Subject,
 
 config :safarimanager, SM.Slides.Slide,
   statuses: [:discarded, :submitted_jury, :submitted_fixed],
-  uploads_path: fn competition_id, user_id -> "/uploads/#{competition_id}/#{user_id}" end
+  uploads_base_path: "/uploads"
 
 config :safarimanager, :generators,
   binary_id: true,

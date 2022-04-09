@@ -9,7 +9,6 @@ defmodule SMWeb.Users do
 
   alias SMWeb.Atoms.Alert
   alias SMWeb.Components.ConfirmationDialog
-  alias SMWeb.Components.SearchSelect
   alias SMWeb.Components.Users.Edit
   alias SMWeb.Components.Users.List
   alias SMWeb.Components.Users.Show

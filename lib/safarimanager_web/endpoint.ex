@@ -20,7 +20,14 @@ defmodule SMWeb.Endpoint do
     at: "/",
     from: :safarimanager,
     gzip: false,
-    only: ~w(assets fonts images uploads favicon.ico robots.txt)
+    only: ~w(assets fonts favicon.ico robots.txt)
+
+  plug Plug.Static,
+    at: "/uploads",
+    from: {:safarimanager, "priv/uploads"},
+    gzip: false
+
+  # only: ~w(assets fonts uploads favicon.ico robots.txt)
 
   # Code reloading can be explicitly enabled under the
   # :code_reloader configuration of your endpoint.
@@ -28,7 +35,7 @@ defmodule SMWeb.Endpoint do
     socket "/phoenix/live_reload/socket", Phoenix.LiveReloader.Socket
     plug Phoenix.LiveReloader
     plug Phoenix.CodeReloader
-    plug Phoenix.Ecto.CheckRepoStatus, otp_app: :surface_test
+    plug Phoenix.Ecto.CheckRepoStatus, otp_app: :safarimanager
   end
 
   plug Plug.RequestId

@@ -8,10 +8,12 @@ defmodule SM.MixProject do
       elixir: "~> 1.12",
       elixirc_paths: elixirc_paths(Mix.env()),
       compilers: [:gettext] ++ Mix.compilers() ++ [:surface],
-      start_permanent: Mix.env() == :prod,
+      start_permanent: Mix.env() in [:prod, :standalone],
       aliases: aliases(),
       deps: deps(),
-      dialyzer: dialyzer()
+      dialyzer: dialyzer(),
+      releases: releases(),
+      preferred_cli_env: [release: :standalone]
     ]
   end
 
@@ -36,6 +38,7 @@ defmodule SM.MixProject do
   defp deps do
     [
       {:bcrypt_elixir, "~> 2.0"},
+      {:bakeware, "~> 0.2.3", runtime: false},
       {:credo, "~> 1.6", only: [:dev, :test], runtime: false},
       {:dialyzex, "~> 1.3.0", only: :dev, runtime: false},
       {:ecto_sql, "~> 3.6"},
@@ -59,7 +62,7 @@ defmodule SM.MixProject do
       {:random_password, "~> 1.0"},
       {:rexbug, "~> 1.0"},
       {:surface_catalogue, "~> 0.3.0"},
-      {:surface_formatter, "~> 0.7.4"},
+      {:surface_formatter, "~> 0.7.4", only: :dev},
       {:surface, "~> 0.7.1"},
       {:swoosh, "~> 1.3"},
       {:telemetry_metrics, "~> 0.6"},
@@ -76,13 +79,16 @@ defmodule SM.MixProject do
   defp aliases do
     [
       setup: ["deps.get", "ecto.setup", "cmd --cd assets yarn"],
-      "ecto.setup": ["ecto.create", "ecto.migrate", "run priv/repo/seeds.exs"],
+      # "ecto.setup": ["ecto.create", "ecto.migrate", "run priv/repo/seeds.exs"],
+      "ecto.setup": ["ecto.create", "ecto.migrate"],
       "ecto.reset": ["ecto.drop", "ecto.setup"],
       test: ["ecto.create --quiet", "ecto.migrate --quiet", "test"],
-      "assets.deploy": [
-        "cmd --cd assets yarn run deploy",
-        "esbuild default --minify",
-        "phx.digest"
+      assets: ["cmd --cd assets yarn run deploy", "esbuild default --minify"],
+      release: [
+        "assets",
+        "phx.digest priv/static",
+        "release",
+        "phx.digest.clean --all"
       ]
     ]
   end
@@ -97,6 +103,16 @@ defmodule SM.MixProject do
     [
       flags: [:error_handling, :race_conditions, :underspecs],
       plt_add_apps: [:ex_unit, :mix]
+    ]
+  end
+
+  defp releases do
+    [
+      safarimanager: [
+        steps: [:assemble, &Bakeware.assemble/1],
+        overwrite: true,
+        strip_beams: Mix.env() in [:prod, :standalone]
+      ]
     ]
   end
 end

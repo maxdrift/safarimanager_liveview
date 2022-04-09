@@ -141,12 +141,4 @@ defmodule SMWeb.CSVImport do
   defp get_slide_statuses do
     Slides.list_slide_statuses()
   end
-
-  defp image_path(socket, competition_id, user_id, file_name) do
-    uploads_path = Slides.get_uploads_path(competition_id, user_id)
-
-    socket
-    |> Routes.static_path(uploads_path)
-    |> Path.join(file_name)
-  end
 end
