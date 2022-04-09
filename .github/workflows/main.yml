@@ -18,27 +18,27 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-      - name: APT Update
-        run: sudo apt update
-      - name: APT Install dependencies
-        run: sudo apt install -y wget libssl-dev ncurses-dev
-      - name: Download Erlang source
-        run: wget https://erlang.org/download/otp_src_${{ matrix.otp_version }}.tar.gz
-      - name: Unpack Erlang source
-        run: |
-          tar -xzvf otp_src_${{ matrix.otp_version }}.tar.gz
-          cd otp_src_${{ matrix.otp_version }}/
-      - name: Configure Erlang source
-        run: ./configure
-      - name: Compile Erlang
-        run: make
-      - name: Install Erlang
-        run: sudo make install
-      - name: Clean up Erlang source artifacts
-        run: |
-          cd ..
-          rm otp_src_${{ matrix.otp_version }}.tar.gz
-          sudo rm -R otp_src_${{ matrix.otp_version }}/
+      # - name: APT Update
+      #   run: sudo apt update
+      # - name: APT Install dependencies
+      #   run: sudo apt install -y wget libssl-dev ncurses-dev
+      # - name: Download Erlang source
+      #   run: wget https://erlang.org/download/otp_src_${{ matrix.otp_version }}.tar.gz
+      # - name: Unpack Erlang source
+      #   run: |
+      #     tar -xzvf otp_src_${{ matrix.otp_version }}.tar.gz
+      #     cd otp_src_${{ matrix.otp_version }}/
+      # - name: Configure Erlang source
+      #   run: ./configure
+      # - name: Compile Erlang
+      #   run: make
+      # - name: Install Erlang
+      #   run: sudo make install
+      # - name: Clean up Erlang source artifacts
+      #   run: |
+      #     cd ..
+      #     rm otp_src_${{ matrix.otp_version }}.tar.gz
+      #     sudo rm -R otp_src_${{ matrix.otp_version }}/
       - name: Restore deps and _build
         uses: actions/cache@v2
         with:
