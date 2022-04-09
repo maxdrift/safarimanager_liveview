@@ -57,9 +57,9 @@ jobs:
       # - run: mix test
       # - run: sudo apt install -y yarn
       - uses: actions/setup-node@v3
-        with:
-          cache: yarn
-          cache-dependency-path: assets/yarn.lock
+        # with:
+        #   cache: yarn
+        #   cache-dependency-path: assets/yarn.lock
       - name: Install Yarn
         run: npm install -g yarn
       - run: MIX_ENV=standalone mix setup
