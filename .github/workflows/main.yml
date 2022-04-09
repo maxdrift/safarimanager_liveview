@@ -60,6 +60,8 @@ jobs:
         with:
           cache: yarn
           cache-dependency-path: assets/yarn.lock
+      - name: Install Yarn
+        run: npm install -g yarn
       - run: MIX_ENV=standalone mix setup
       - run: MIX_ENV=standalone mix release
       - name: Peek at the release results
