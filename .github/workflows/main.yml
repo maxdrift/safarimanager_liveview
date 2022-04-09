@@ -49,7 +49,9 @@ jobs:
         with:
           path: priv/plts
           key: ${{ runner.os }}-dialyzer-${{ matrix.elixir_version }}-${{ matrix.otp_version }}-${{ hashFiles(format('{0}{1}', github.workspace, '/mix.lock')) }}
-      - run: mix deps.get
+      - run: |
+          mix local.hex --force
+          mix deps.get
       # - run: MIX_ENV=standalone mix compile
       # - run: mix test
       - run: MIX_ENV=standalone mix setup
