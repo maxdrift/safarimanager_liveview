@@ -55,6 +55,7 @@ jobs:
           mix deps.get
       # - run: MIX_ENV=standalone mix compile
       # - run: mix test
+      - run: sudo apt install -y yarn
       - run: MIX_ENV=standalone mix setup
       - run: MIX_ENV=standalone mix release
       - name: Peek at the release results
