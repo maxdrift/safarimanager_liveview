@@ -57,7 +57,7 @@ jobs:
       # - run: mix test
       # - run: sudo apt install -y yarn
       - name: Install Npm
-        run: sudo apt install npm
+        run: sudo apt install -y npm
       - name: Install Yarn
         run: npm install -g yarn
       - uses: actions/setup-node@v3
