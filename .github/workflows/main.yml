@@ -52,10 +52,14 @@ jobs:
       - run: |
           mix local.hex --force
           mix local.rebar --force
-          mix deps.get
+      # - run: mix deps.get
       # - run: MIX_ENV=standalone mix compile
       # - run: mix test
-      - run: sudo apt install -y yarn
+      # - run: sudo apt install -y yarn
+      - uses: actions/setup-node@v3
+        with:
+          cache: yarn
+          cache-dependency-path: assets/yarn.lock
       - run: MIX_ENV=standalone mix setup
       - run: MIX_ENV=standalone mix release
       - name: Peek at the release results
