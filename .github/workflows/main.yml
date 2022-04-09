@@ -59,7 +59,7 @@ jobs:
       - name: Install Npm
         run: sudo apt install -y npm
       - name: Install Yarn
-        run: npm install -g yarn
+        run: sudo npm install -g yarn
       - uses: actions/setup-node@v3
         with:
           cache: yarn
