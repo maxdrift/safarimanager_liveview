@@ -43,12 +43,12 @@ jobs:
           path: |
             deps
             _build
-          key: ${{ runner.os }}-mix-${{ matrix.elixir_version }}-${{ matrix.otp_version }}-${{ hashFiles(format('{0}{1}', github.workspace, '/mix.lock')) }}
-      - name: Restore plts
-        uses: actions/cache@v2
-        with:
-          path: priv/plts
-          key: ${{ runner.os }}-dialyzer-${{ matrix.elixir_version }}-${{ matrix.otp_version }}-${{ hashFiles(format('{0}{1}', github.workspace, '/mix.lock')) }}
+          key: ${{ runner.os }}-mix-${{ matrix.elixir_version }}-${{ matrix.otp_version }}-${{ hashFiles('mix.lock') }}
+      # - name: Restore plts
+      #   uses: actions/cache@v2
+      #   with:
+      #     path: priv/plts
+      #     key: ${{ runner.os }}-dialyzer-${{ matrix.elixir_version }}-${{ matrix.otp_version }}-${{ hashFiles(format('{0}{1}', github.workspace, '/mix.lock')) }}
       - run: |
           mix local.hex --force
           mix local.rebar --force
@@ -60,6 +60,8 @@ jobs:
         run: sudo apt install -y npm
       - name: Install Yarn
         run: sudo npm install -g yarn
+      - name: Install zstd
+        run: sudo apt install -y zstd
       - uses: actions/setup-node@v3
         with:
           cache: yarn
