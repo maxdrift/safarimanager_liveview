@@ -1,4 +1,4 @@
-<div class="flex flex-col" x-data="{ open: false }">
+<!-- <div class="flex flex-col" x-data="{ open: false }">
   <div class="dropdown">
     <InputContext :let={form: form, field: field}>
       <input
@@ -33,4 +33,4 @@
       {/for}
     </ul>
   </div>
-</div>
+</div> -->

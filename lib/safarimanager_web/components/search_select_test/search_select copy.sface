@@ -1,12 +1,6 @@
-<Context get={form: form, field: field}>
+<!-- <Context get={form: form, field: field}>
   <div class="flex flex-col" x-data="{ open: false }">
     <div class="dropdown">
-      <!-- <TextInput
-      class={@class}
-      opts={phx_debounce: "1000"}
-      :on-keyup="search"
-      x-on:keydown="open = true"
-    /> -->
       <input
         class={@class}
         id={input_id(form, field)}
@@ -38,4 +32,4 @@
       </ul>
     </div>
   </div>
-</Context>
+</Context> -->

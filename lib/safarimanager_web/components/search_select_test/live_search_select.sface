@@ -1,3 +1,3 @@
-<div>
+<!-- <div>
   <SearchSelect items={@items} class={@class} />
-</div>
+</div> -->
