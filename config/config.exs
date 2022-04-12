@@ -38,7 +38,12 @@ config :safarimanager, SM.Subjects.Subject,
 
 config :safarimanager, SM.Slides.Slide,
   statuses: [:discarded, :submitted_jury, :submitted_fixed],
-  uploads_base_path: "/uploads"
+  uploads_base_path: "/uploads",
+  thumbnails: [
+    small: {100, 100},
+    medium: {1280, 1280},
+    large: {2560, 2560}
+  ]
 
 config :safarimanager, :generators,
   binary_id: true,

@@ -17,6 +17,9 @@ defmodule SM.Slides.Slide do
     field :file_size, :integer
     field :file_type, :string
     field :file_hash, :string
+    field :width, :integer
+    field :height, :integer
+    field :metadata, :map
     field :status, Ecto.Enum, values: @statuses
     belongs_to :user, User
     belongs_to :competition, Competition
@@ -35,6 +38,9 @@ defmodule SM.Slides.Slide do
       :file_size,
       :file_type,
       :file_hash,
+      :width,
+      :height,
+      :metadata,
       :status,
       :user_id,
       :competition_id,

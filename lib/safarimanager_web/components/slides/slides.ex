@@ -7,7 +7,6 @@ defmodule SMWeb.Slides do
   alias Phoenix.LiveView
   alias SM.Accounts
   alias SM.Competitions
-  alias SM.ImageProcessing
   alias SM.Participants
   alias SM.Slides
   alias SMWeb.Components.StepsHeader
@@ -31,7 +30,9 @@ defmodule SMWeb.Slides do
         max_entries: 500,
         max_file_size: 100_000_000,
         progress: &handle_progress/3,
-        auto_upload: true
+        auto_upload: true,
+        chunk_size: 1_024_000,
+        chunk_timeout: 3_600_000
       )
 
     {:ok, socket}
@@ -43,18 +44,8 @@ defmodule SMWeb.Slides do
   end
 
   def handle_event("delete-slide", %{"id" => slide_id}, socket) do
-    {:ok, slide} = Slides.get(slide_id)
-    {:ok, _slide} = Slides.delete(slide)
-
-    uploads_path = Slides.get_uploads_path(socket.assigns.competition_id, socket.assigns.user.id)
-
-    ["priv/static", uploads_path, slide.file_name]
-    |> Path.join()
-    |> File.rm()
-
-    ["priv/static", uploads_path, "thumbnails", "100x100", slide.file_name]
-    |> Path.join()
-    |> File.rm()
+    with {:ok, slide} <- Slides.get(slide_id),
+         do: Slides.delete(slide)
 
     {:noreply, socket}
   end
@@ -65,19 +56,7 @@ defmodule SMWeb.Slides do
 
   def handle_event("delete-all-slides", %{}, socket) do
     for slide <- socket.assigns.slides do
-      {:ok, slide} = Slides.get(slide.id)
       {:ok, _slide} = Slides.delete(slide)
-
-      uploads_path =
-        Slides.get_uploads_path(socket.assigns.competition_id, socket.assigns.user.id)
-
-      ["priv/static", uploads_path, slide.file_name]
-      |> Path.join()
-      |> File.rm()
-
-      ["priv/static", uploads_path, "thumbnails", "100x100", slide.file_name]
-      |> Path.join()
-      |> File.rm()
     end
 
     {:noreply, socket}
@@ -168,55 +147,33 @@ defmodule SMWeb.Slides do
 
   defp process_uploaded_image(socket, %Phoenix.LiveView.UploadEntry{} = entry) do
     # lv = self()
-    assigns = socket.assigns
-
-    uploads_path = Slides.get_uploads_path(assigns.competition_id, assigns.user.id)
-
-    :ok =
-      "priv/static"
-      |> Path.join(uploads_path)
-      |> File.mkdir_p!()
+    competition_id = socket.assigns.competition_id
+    user_id = socket.assigns.user.id
+    file_name = entry.client_name
+    uploads_path = Slides.get_uploads_path(competition_id, user_id)
 
     LiveView.consume_uploaded_entry(socket, entry, fn %{path: path} ->
-      # TODO: Move this to Context
-      uploads_path = Path.join(uploads_path, entry.client_name)
-      # In a standalone release we can use the User's data directory
-      # i.e. :filename.basedir(:user_data, "safarimanager", %{os: :darwin})
-      # Available types: [:user_cache, :user_config, :user_data, :user_log, :site_config, :site_data]
-      # Docs: https://www.erlang.org/doc/man/filename.html#basedir-2
-      dest = Path.join("priv/static", uploads_path)
-      File.cp!(path, dest)
+      case Slides.create_and_store_slide_file(
+             competition_id,
+             user_id,
+             file_name,
+             entry.client_size,
+             entry.client_type,
+             path
+           ) do
+        {:ok, _slide} ->
+          :ok
 
-      {:ok, _slide} =
-        Slides.create(%{
-          user_id: assigns.user.id,
-          competition_id: assigns.competition_id,
-          file_name: entry.client_name,
-          file_size: entry.client_size,
-          file_type: entry.client_type
-        })
-
-      Task.Supervisor.start_child(SM.TaskSupervisor, fn ->
-        %{height: height, width: width, format: format} = ImageProcessing.get_info(dest)
-        IO.inspect("running task for image #{entry.client_name}:", label: __MODULE__)
-        IO.inspect(%{height: height, width: width, format: format}, label: __MODULE__)
-
-        thumbs_path =
-          dest
-          |> Path.dirname()
-          |> Path.join("thumbnails")
-          |> Path.join("100x100")
-
-        File.mkdir_p!(thumbs_path)
-
-        %{} =
-          ImageProcessing.save_thumbnail(
-            dest,
-            100,
-            100,
-            Path.join(thumbs_path, entry.client_name)
+        {:error, reason} = error ->
+          Logger.error(
+            "Failed to create Slide and/or store file #{file_name}: #{inspect(reason)}"
           )
-      end)
+
+          error
+      end
+
+      uploads_path = Path.join(uploads_path, file_name)
+      {:ok, :thumbnail_generated} = generate_thumbnails(competition_id, user_id, file_name)
 
       {:ok, Routes.static_path(socket, uploads_path)}
       # Task.Supervisor.start_child(LiveBeats.TaskSupervisor, fn ->
@@ -228,13 +185,35 @@ defmodule SMWeb.Slides do
     end)
   end
 
-  # defp image_path(socket, competition_id, user_id, file_name) do
-  #   uploads_path = Slides.get_uploads_path(competition_id, user_id)
+  defp generate_thumbnails(competition_id, user_id, file_name) do
+    with {:ok, _pid} <-
+           Task.Supervisor.start_child(SM.TaskSupervisor, fn ->
+             generate_thumbnail(competition_id, user_id, file_name, :small)
+           end),
+         #  {:ok, _pid} <-
+         #    Task.Supervisor.start_child(SM.TaskSupervisor, fn ->
+         #      generate_thumbnail(competition_id, user_id, file_name, :medium)
+         #    end),
+         #  {:ok, _pid} <-
+         #    Task.Supervisor.start_child(SM.TaskSupervisor, fn ->
+         #      generate_thumbnail(competition_id, user_id, file_name, :large)
+         #    end),
+         do: {:ok, :thumbnail_generated}
+  end
 
-  #   socket
-  #   |> Routes.static_path(uploads_path)
-  #   |> Path.join(file_name)
-  # end
+  defp generate_thumbnail(competition_id, user_id, file_name, size_type) do
+    case Slides.generate_thumbnail(competition_id, user_id, file_name, size_type) do
+      :ok ->
+        :ok
+
+      {:error, reason} = error ->
+        Logger.error(
+          "Unable to generate #{size_type} thumbnail for image #{file_name}: #{inspect(reason)}"
+        )
+
+        error
+    end
+  end
 
   defp pretty_size(byte_size) do
     cond do

@@ -4,6 +4,8 @@ defmodule SM.Slides do
   """
   use SM, :context
 
+  alias Ecto.Multi
+  alias SM.ImageProcessing
   alias SM.Jurors.Juror
   alias SM.Slides.Slide
   alias SM.Slides.SlideEvaluation
@@ -30,6 +32,48 @@ defmodule SM.Slides do
       |> Keyword.fetch!(:uploads_base_path)
 
     Path.join([path, competition_id, user_id])
+  end
+
+  @spec get_thumbnails_path(String.t(), String.t(), :small | :medium | :large) :: String.t()
+  def get_thumbnails_path(competition_id, user_id, size_type)
+      when size_type in [:small, :medium, :large] do
+    path = get_uploads_path(competition_id, user_id)
+
+    Path.join([path, "thumbnails", Atom.to_string(size_type)])
+  end
+
+  @spec get_thumbnail_size(:small | :medium | :large) :: {non_neg_integer(), non_neg_integer()}
+  def get_thumbnail_size(size_type) do
+    :safarimanager
+    |> Application.fetch_env!(Slide)
+    |> Keyword.fetch!(:thumbnails)
+    |> Keyword.fetch!(size_type)
+  end
+
+  @spec generate_thumbnail(String.t(), String.t(), String.t(), :small | :medium | :large) ::
+          :ok | {:error, any()}
+  def generate_thumbnail(competition_id, user_id, file_name, size_type) do
+    orig_path =
+      competition_id
+      |> get_uploads_path(user_id)
+      |> Path.join(file_name)
+
+    # %{height: height, width: width, format: format} = ImageProcessing.get_info(orig_path)
+    # IO.inspect("running task for image #{file_name}:", label: __MODULE__)
+    # IO.inspect(%{height: height, width: width, format: format}, label: __MODULE__)
+
+    thumbs_path = get_thumbnails_path(competition_id, user_id, size_type)
+    File.mkdir_p!(thumbs_path)
+
+    {width, height} = get_thumbnail_size(size_type)
+
+    {:ok, _path} =
+      ImageProcessing.save_thumbnail(orig_path, width, height, Path.join(thumbs_path, file_name))
+
+    :ok
+  rescue
+    error ->
+      {:error, error}
   end
 
   @doc """
@@ -170,6 +214,67 @@ defmodule SM.Slides do
     |> notify_subscribers([:slide, :created])
   end
 
+  @spec create_and_store_slide_file(
+          String.t(),
+          String.t(),
+          String.t(),
+          non_neg_integer(),
+          String.t(),
+          String.t()
+        ) :: {:error, any()} | {:ok, Slide.t()}
+  def create_and_store_slide_file(
+        competition_id,
+        user_id,
+        file_name,
+        file_size,
+        file_type,
+        tmp_path
+      ) do
+    uploads_path = get_uploads_path(competition_id, user_id)
+
+    Multi.new()
+    |> Multi.run(:copy_file, fn _repo, %{} ->
+      :ok = File.mkdir_p!(uploads_path)
+      file_path = Path.join(uploads_path, file_name)
+
+      with :ok <- File.cp(tmp_path, file_path),
+           do: {:ok, file_path}
+    end)
+    |> Multi.insert(
+      :slide,
+      fn %{copy_file: file_path} ->
+        {:ok, metadata} = ImageProcessing.get_metadata(file_path)
+        metadata = %{metadata | gps: Map.from_struct(metadata.gps)}
+
+        Slide.changeset(%Slide{}, %{
+          user_id: user_id,
+          competition_id: competition_id,
+          file_name: file_name,
+          file_size: file_size,
+          file_type: file_type,
+          width: metadata.exif.exif_image_width,
+          height: metadata.exif.exif_image_height,
+          metadata: metadata
+        })
+      end
+    )
+    |> Repo.transaction()
+    |> case do
+      {:ok, %{slide: slide}} ->
+        notify_subscribers({:ok, slide}, [:slide, :created])
+
+      {:error, :slide, failed_value, _changes_so_far} ->
+        [uploads_path, file_name]
+        |> Path.join()
+        |> File.rm()
+
+        {:error, {:slide, failed_value}}
+
+      {:error, failed_operation, failed_value, _changes_so_far} ->
+        {:error, {failed_operation, failed_value}}
+    end
+  end
+
   @doc """
   Updates a slide.
 
@@ -269,9 +374,21 @@ defmodule SM.Slides do
   """
   @spec delete(Slide.t()) :: {:ok, Slide.t()} | {:error, any()}
   def delete(%Slide{} = slide) do
-    slide
-    |> Repo.delete()
-    |> notify_subscribers([:slide, :deleted])
+    Multi.new()
+    |> Multi.delete(:delete, slide)
+    |> Multi.run(:delete_files, fn _repo, %{delete: slide} ->
+      :ok = delete_files(slide.competition_id, slide.user_id, slide.file_name)
+
+      {:ok, :deleted}
+    end)
+    |> Repo.transaction()
+    |> case do
+      {:ok, %{delete: slide}} ->
+        notify_subscribers({:ok, slide}, [:slide, :deleted])
+
+      {:error, failed_operation, failed_value, _changes_so_far} ->
+        {:error, {failed_operation, failed_value}}
+    end
   end
 
   @doc """
@@ -288,12 +405,31 @@ defmodule SM.Slides do
   """
   @spec delete_many([String.t()]) :: {:ok, integer()} | :error
   def delete_many(ids) do
-    {deleted, nil} = Repo.delete_all(from entity in Slide, where: entity.id in ^ids)
+    Multi.new()
+    |> Multi.run(:slides, fn _repo, %{} ->
+      {:ok, Repo.all(from s in Slide, where: s.id in ^ids)}
+    end)
+    |> Multi.delete_all(:delete_many, from(entity in Slide, where: entity.id in ^ids))
+    |> Multi.run(:delete_files, fn _repo, %{slides: slides} ->
+      Enum.each(slides, &delete_files(&1.competition_id, &1.user_id, &1.file_name))
 
-    if deleted == Enum.count(ids) do
-      notify_subscribers({:ok, deleted}, [:slide, :deleted])
-    else
-      notify_subscribers(:error, [:slide, :deleted])
+      {:ok, :deleted}
+    end)
+    |> Repo.transaction()
+    |> case do
+      {:ok, %{delete_many: deleted}} ->
+        if deleted == Enum.count(ids) do
+          notify_subscribers({:ok, deleted}, [:slide, :deleted])
+        else
+          notify_subscribers(:error, [:slide, :deleted])
+        end
+
+      {:error, failed_operation, failed_value, _changes_so_far} ->
+        Logger.error(
+          "Failed to delete multiple slides. #{failed_operation}: #{inspect(failed_value)}"
+        )
+
+        notify_subscribers(:error, [:slide, :deleted])
     end
   end
 
@@ -309,5 +445,27 @@ defmodule SM.Slides do
   @spec change(Slide.t(), %{String.t() => any()}) :: Ecto.Changeset.t()
   def change(%Slide{} = slide, params \\ %{}) do
     Slide.changeset(slide, params)
+  end
+
+  # Internal
+
+  defp delete_files(competition_id, user_id, file_name) do
+    uploads_path = get_uploads_path(competition_id, user_id)
+    thumbnails_path = Path.join(uploads_path, "thumbnails")
+
+    [uploads_path, file_name]
+    |> Path.join()
+    |> File.rm()
+
+    for size_type <- [:small, :medium, :large] do
+      [thumbnails_path, Atom.to_string(size_type), file_name]
+      |> Path.join()
+      |> File.rm()
+    end
+
+    # Remove the entire participant directory if empty
+    if Path.wildcard(Path.join(uploads_path, "/*.*")) == [], do: File.rm_rf(uploads_path)
+
+    :ok
   end
 end

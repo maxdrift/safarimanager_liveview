@@ -44,6 +44,7 @@ defmodule SM.MixProject do
       {:ecto_sql, "~> 3.6"},
       {:ecto_sqlite3, "~> 0.7.4"},
       {:esbuild, "~> 0.3", runtime: Mix.env() == :dev},
+      {:exexif, "~> 0.0.5"},
       {:gettext, "~> 0.19"},
       {:jason, "~> 1.2"},
       {:mogrify, "~> 0.9.1"},

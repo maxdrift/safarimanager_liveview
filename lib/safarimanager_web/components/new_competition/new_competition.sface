@@ -18,7 +18,9 @@
           </tr>
         {#else}
           <tr>
-            <th>No items yet!</th>
+            <td>No items yet!</td>
+            <td />
+            <td />
           </tr>
         {/for}
       </tbody>

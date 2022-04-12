@@ -104,7 +104,7 @@
                     <div>
                       <div class="w-20">
                         <img
-                          src={"/uploads/#{@competition.id}/#{@user.id}/thumbnails/100x100/#{image.file_name}"}
+                          src={"/uploads/#{@competition.id}/#{@user.id}/thumbnails/small/#{image.file_name}"}
                           class="rounded-md border"
                         />
                       </div>
