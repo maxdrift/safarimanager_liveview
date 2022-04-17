@@ -12,6 +12,7 @@ defmodule SMWeb.Slides do
   alias SMWeb.Components.StepsHeader
   alias Surface.Components.Form
   alias Surface.Components.Form.FieldContext
+  alias Surface.Components.Form.TextInput
   alias Surface.Components.LiveFileInput
   alias Surface.Components.LivePatch
   alias Surface.Components.LiveRedirect
@@ -266,5 +267,18 @@ defmodule SMWeb.Slides do
 
   defp is_slide?(item) do
     Map.has_key?(item, :id)
+  end
+
+  defp thumbnail_path(socket, slide) do
+    path =
+      Path.join([
+        "/uploads",
+        slide.competition_id,
+        slide.user_id,
+        "/thumbnails/small",
+        slide.file_name
+      ])
+
+    Routes.static_path(socket, path)
   end
 end

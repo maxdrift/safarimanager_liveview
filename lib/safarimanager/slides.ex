@@ -5,6 +5,7 @@ defmodule SM.Slides do
   use SM, :context
 
   alias Ecto.Multi
+  alias Ecto.Query.API, as: QueryAPI
   alias SM.ImageProcessing
   alias SM.Jurors.Juror
   alias SM.Slides.Slide
@@ -74,6 +75,11 @@ defmodule SM.Slides do
   rescue
     error ->
       {:error, error}
+  end
+
+  @spec jury_bool_to_status(boolean()) :: :submitted_fixed | :submitted_jury
+  def jury_bool_to_status(jury?) when is_boolean(jury?) do
+    if jury?, do: :submitted_jury, else: :submitted_fixed
   end
 
   @doc """
@@ -188,7 +194,18 @@ defmodule SM.Slides do
   """
   @spec get(String.t(), String.t(), String.t()) :: {:error, :not_found} | {:ok, Slide.t()}
   def get(competition_id, user_id, file_name) do
-    case Repo.get_by(Slide, competition_id: competition_id, user_id: user_id, file_name: file_name) do
+    file_name_match = "#{file_name}%"
+
+    base_query = from(s in Slide, where: [competition_id: ^competition_id, user_id: ^user_id])
+
+    query =
+      if SM.Repo.__adapter__() == Ecto.Adapters.SQLite3 do
+        from(s in base_query, where: like(s.file_name, ^file_name_match))
+      else
+        from(s in base_query, where: ilike(s.file_name, ^file_name_match))
+      end
+
+    case Repo.one(query) do
       nil -> {:error, :not_found}
       result -> {:ok, result}
     end
@@ -244,7 +261,8 @@ defmodule SM.Slides do
       :slide,
       fn %{copy_file: file_path} ->
         {:ok, metadata} = ImageProcessing.get_metadata(file_path)
-        metadata = %{metadata | gps: Map.from_struct(metadata.gps)}
+        gps = Map.get(metadata, :gps)
+        metadata = Map.put(metadata, :gps, (gps && Map.from_struct(gps)) || %{})
 
         Slide.changeset(%Slide{}, %{
           user_id: user_id,

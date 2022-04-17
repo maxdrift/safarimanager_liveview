@@ -4,19 +4,18 @@ defmodule SMWeb.CSVImport do
   """
   use SMWeb, :surface_view
 
+  import Phoenix.HTML.Form, only: [humanize: 1]
   alias Phoenix.LiveView
   alias SM.Accounts
   alias SM.Competitions
   alias SM.CSVImport
+  alias SM.Participants
   alias SM.Slides
   alias SM.Subjects
   alias SMWeb.Components.StepsHeader
   alias Surface.Components.Form
-  alias Surface.Components.Form.ErrorTag
-  alias Surface.Components.Form.Field
-  alias Surface.Components.Form.Label
-  alias Surface.Components.Form.Reset
-  alias Surface.Components.Form.Submit
+  alias Surface.Components.Form.FieldContext
+  alias Surface.Components.Form.TextInput
   alias Surface.Components.LiveFileInput
   alias Surface.Components.LivePatch
   alias Surface.Components.LiveRedirect
@@ -28,14 +27,13 @@ defmodule SMWeb.CSVImport do
     socket =
       socket
       |> assign(:user, nil)
+      |> assign(:participants, [])
       |> assign(:slides, [])
-      |> assign(:slide, nil)
-      |> assign(:edit_mode, false)
-      |> assign(:slide_id, nil)
       |> assign(:slide_statuses, get_slide_statuses())
       |> allow_upload(:csv,
         accept: ~w(.csv),
         max_entries: 1,
+        progress: &handle_progress/3,
         auto_upload: true
       )
 
@@ -43,6 +41,20 @@ defmodule SMWeb.CSVImport do
   end
 
   @impl Phoenix.LiveView
+  def handle_event("validate", _params, socket) do
+    {:noreply, socket}
+  end
+
+  def handle_event("filter-participants", %{"value" => ""}, socket) do
+    participants = Participants.list(socket.assigns.competition_id)
+    {:noreply, assign(socket, :participants, participants)}
+  end
+
+  def handle_event("filter-participants", %{"value" => value}, socket) do
+    participants = Participants.list(socket.assigns.competition_id, value)
+    {:noreply, assign(socket, :participants, participants)}
+  end
+
   def handle_event("submit", %{}, socket) do
     LiveView.consume_uploaded_entries(socket, :csv, fn %{path: path}, _entry ->
       csv_results = CSVImport.parse(path)
@@ -119,8 +131,10 @@ defmodule SMWeb.CSVImport do
   end
 
   @impl Phoenix.LiveView
-
   def handle_params(%{"competition_id" => competition_id} = params, _uri, socket) do
+    if connected?(socket),
+      do: {Competitions.subscribe(), Accounts.subscribe(), Slides.subscribe()}
+
     user_id = params["user_id"]
 
     {:ok, competition} = Competitions.get(competition_id)
@@ -129,6 +143,7 @@ defmodule SMWeb.CSVImport do
       socket
       |> assign(:competition_id, competition_id)
       |> assign(:competition, competition)
+      |> assign(:participants, Participants.list(competition_id))
       # FIXME: this way of selecting the user forces a re-query of Competition
       |> assign(:user, user_id && Accounts.get_user!(user_id))
       |> assign(:slides, user_id && Slides.list(user_id, competition_id))
@@ -136,9 +151,111 @@ defmodule SMWeb.CSVImport do
     {:noreply, socket}
   end
 
+  @impl Phoenix.LiveView
+  def handle_info({Slides, [:slide, _], _result}, socket) do
+    user_id = socket.assigns.user.id
+    competition_id = socket.assigns.competition_id
+
+    socket = assign(socket, :slides, user_id && Slides.list(user_id, competition_id))
+
+    {:noreply, socket}
+  end
+
+  def handle_info({_context, [:competition, :updated], _result}, socket) do
+    {:ok, competition} = Competitions.get(socket.assigns.competition_id)
+    participants = Participants.list(socket.assigns.competition_id)
+
+    socket =
+      socket
+      |> assign(:competition, competition)
+      |> assign(:participants, participants)
+
+    {:noreply, socket}
+  end
+
   # Internal
+
+  defp handle_progress(:csv, entry, socket) do
+    if entry.done? do
+      process_uploaded_csv(socket, entry)
+    end
+
+    {:noreply, socket}
+  end
+
+  defp process_uploaded_csv(socket, %Phoenix.LiveView.UploadEntry{} = entry) do
+    # lv = self()
+    competition_id = socket.assigns.competition_id
+    user_id = socket.assigns.user.id
+
+    LiveView.consume_uploaded_entry(socket, entry, fn %{path: path} ->
+      path
+      |> CSVImport.parse()
+      |> Stream.each(fn row ->
+        with {:ok, subject} <- Subjects.get_by_numeric_id(row.subject_num),
+             {:ok, slide} <- Slides.get(competition_id, user_id, row.file_name),
+             {:ok, _slide} <-
+               Slides.update(slide, %{
+                 subject_id: subject.id,
+                 status: Slides.jury_bool_to_status(row.jury?)
+               }),
+             do: :ok
+      end)
+      |> Stream.run()
+
+      {:ok, :updated}
+    end)
+  end
 
   defp get_slide_statuses do
     Slides.list_slide_statuses()
+  end
+
+  defp pretty_size(byte_size) do
+    cond do
+      byte_size >= 1_000_000_000 ->
+        byte_size
+        |> Decimal.new()
+        |> Decimal.div(1_000_000_000)
+        |> Decimal.round(2)
+        |> Decimal.to_string(:normal)
+        |> Kernel.<>("GB")
+
+      byte_size >= 1_000_000 ->
+        byte_size
+        |> Decimal.new()
+        |> Decimal.div(1_000_000)
+        |> Decimal.round(2)
+        |> Decimal.to_string(:normal)
+        |> Kernel.<>("MB")
+
+      byte_size >= 1000 ->
+        byte_size
+        |> Decimal.new()
+        |> Decimal.div(1000)
+        |> Decimal.round(2)
+        |> Decimal.to_string(:normal)
+        |> Kernel.<>("KB")
+
+      true ->
+        byte_size
+        |> Decimal.new()
+        |> Decimal.round(2)
+        |> Decimal.to_string(:normal)
+        |> Kernel.<>("B")
+    end
+  end
+
+  defp thumbnail_path(socket, slide) do
+    path =
+      Path.join([
+        "/uploads",
+        slide.competition_id,
+        slide.user_id,
+        "/thumbnails/small",
+        slide.file_name
+      ])
+
+    Routes.static_path(socket, path)
   end
 end

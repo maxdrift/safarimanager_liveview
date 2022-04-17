@@ -35,10 +35,26 @@ defmodule SM.Organizations do
   def list_by_name(name) do
     pattern = "%#{name}%"
 
-    Organization
-    |> where([o], ilike(o.name, ^pattern))
-    |> order_by(desc: :inserted_at)
-    |> Repo.all()
+    base_query =
+      from(
+        o in Organization,
+        order_by: [desc: :inserted_at]
+      )
+
+    query =
+      if SM.Repo.__adapter__() == Ecto.Adapters.SQLite3 do
+        from(
+          o in base_query,
+          where: like(o.name, ^pattern)
+        )
+      else
+        from(
+          o in base_query,
+          where: ilike(o.name, ^pattern)
+        )
+      end
+
+    Repo.all(query)
   end
 
   @doc """

@@ -11,7 +11,7 @@
       </thead>
       <tbody>
         {#for item <- @competitions}
-          <tr class="hover" :on-click="open" :values={id: item.id}>
+          <tr class="hover cursor-pointer" :on-click="open" :values={id: item.id}>
             <td class="truncate">{item.name}</td>
             <td class="truncate">{"#{value_or_na(item.city)} (#{value_or_na(item.country)})"}</td>
             <td class="truncate">{format_date(item.start_time)}</td>

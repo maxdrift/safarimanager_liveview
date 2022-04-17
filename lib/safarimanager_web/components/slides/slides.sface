@@ -5,12 +5,13 @@
 <div class="flex flex-col mt-5">
   <div class="rounded-lg bg-base-200 shadow-lg p-4">
     <div class="text-2xl font-bold text-center pb-4">Participants</div>
-    <input
-      class="input input-bordered w-full mb-1"
-      placeholder="Search a participant..."
-      :on-keyup="filter-participants"
-      phx-debounce="500"
-    />
+    <Form for={:participants_filter} change="filter-participants" opts={autocomplete: "off"}>
+      <TextInput
+        name={:value}
+        class="input input-bordered w-full mb-1"
+        opts={placeholder: "Search for a participant...", phx_debounce: "500", autocomplete: "nope"}
+      />
+    </Form>
     <div class="max-h-48 overflow-y-auto">
       <table class="table table-zebra table-fixed w-full">
         <thead>
@@ -75,13 +76,16 @@
             </label>
           </FieldContext>
         </div>
-        <table class="table table-zebra table-fixed w-full mt-2">
+      </Form>
+      <div class="max-h-96 overflow-y-auto mt-2">
+        <table class="table table-zebra table-fixed w-full">
           <thead>
             <tr>
-              <th />
-              <th class="w-auto">Name</th>
-              <th class="w-auto">Size</th>
-              <th>
+              <th class="sticky top-0 w-1/12" />
+              <th class="sticky top-0 w-auto">Name</th>
+              <th class="sticky top-0 w-auto">Size</th>
+              <th class="sticky top-0 w-auto">Dimensions</th>
+              <th class="sticky top-0 w-auto">
                 <button
                   :on-click="delete-all-slides"
                   class={
@@ -103,15 +107,13 @@
                   <td class="truncate">
                     <div>
                       <div class="w-20">
-                        <img
-                          src={"/uploads/#{@competition.id}/#{@user.id}/thumbnails/small/#{image.file_name}"}
-                          class="rounded-md border"
-                        />
+                        <img src={thumbnail_path(@socket, image)} class="rounded-md border">
                       </div>
                     </div>
                   </td>
                   <td class="truncate">{image.file_name}</td>
                   <td class="truncate">{pretty_size(image.file_size)}</td>
+                  <td class="truncate">{(image.width && "#{image.width}x#{image.height}") || "N/A"}</td>
                   <td class="truncate">
                     <button :on-click="delete-slide" :values={id: image.id} class="btn btn-xs btn-error">
                       Delete
@@ -145,6 +147,7 @@
                   </td>
                   <td class="truncate">{image.client_name}</td>
                   <td class="truncate">{pretty_size(image.client_size)}</td>
+                  <td class="truncate">N/A</td>
                   <td class="truncate">
                     <button :on-click="cancel-upload" :values={ref: image.ref} class="btn btn-xs btn-error">
                       Cancel
@@ -172,7 +175,7 @@
             {/for}
           </tbody>
         </table>
-      </Form>
+      </div>
     {#else}
       <div class="mt-2 text-center align-middle">
         Select a participant from the top.

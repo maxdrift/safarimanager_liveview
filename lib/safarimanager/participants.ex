@@ -59,16 +59,28 @@ defmodule SM.Participants do
   def list(competition_id, name) do
     pattern = "%#{name}%"
 
-    query =
+    base_query =
       from(
         p in Participant,
         where: [competition_id: ^competition_id],
         inner_join: u in assoc(p, :user),
         left_join: o in assoc(u, :organization),
-        where: ilike(u.first_name, ^pattern) or ilike(u.last_name, ^pattern),
         order_by: [asc: u.last_name],
         preload: [user: {u, [organization: o]}]
       )
+
+    query =
+      if SM.Repo.__adapter__() == Ecto.Adapters.SQLite3 do
+        from(
+          [_p, u, _o] in base_query,
+          where: like(u.first_name, ^pattern) or like(u.last_name, ^pattern)
+        )
+      else
+        from(
+          [_p, u, _o] in base_query,
+          where: ilike(u.first_name, ^pattern) or ilike(u.last_name, ^pattern)
+        )
+      end
 
     Repo.all(query)
   end

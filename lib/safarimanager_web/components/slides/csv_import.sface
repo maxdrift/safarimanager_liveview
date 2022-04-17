@@ -2,131 +2,132 @@
   <span class="text-2xl">{@competition.name}</span>
 </div>
 <StepsHeader current_step={4} />
-<div class="flex flex-col lg:flex-row mt-5">
-  <div class="overflow-y-auto rounded-lg lg:w-1/2 bg-base-200 shadow-lg p-4">
+<div class="flex flex-col mt-5">
+  <div class="rounded-lgbg-base-200 shadow-lg p-4">
     <div class="text-2xl font-bold text-center py-4">Participants</div>
-    <input class="input input-bordered w-full mb-1" placeholder="Search a participant...">
-    <table class="table table-zebra table-fixed w-full">
-      <thead>
-        <tr>
-          <th class="w-auto">First Name</th>
-          <th class="w-auto">Last Name</th>
-          <th class="w-auto">Organization</th>
-        </tr>
-      </thead>
-      <tbody>
-        {#for item <- @competition.participants}
-          <tr class="hover">
-            <td class="truncate">{item.first_name}</td>
-            <td class="truncate">{item.last_name}</td>
-            <td class="truncate">{(item.organization && item.organization.name) || "N/A"}</td>
-            <td class="truncate">
-              <LivePatch to={"?user_id=#{item.id}"} class="btn btn-xs">
-                Select
-              </LivePatch>
-            </td>
-          </tr>
-        {#else}
+    <Form for={:participants_filter} change="filter-participants" opts={autocomplete: "off"}>
+      <TextInput
+        name={:value}
+        class="input input-bordered w-full mb-1"
+        opts={placeholder: "Search for a participant...", phx_debounce: "500", autocomplete: "nope"}
+      />
+    </Form>
+    <div class="max-h-48 overflow-y-auto">
+      <table class="table table-zebra table-fixed w-full">
+        <thead>
           <tr>
-            <td>No items yet!</td>
-            <td />
-            <td />
-            <td />
+            <th class="sticky top-0 w-auto">First Name</th>
+            <th class="sticky top-0 w-auto">Last Name</th>
+            <th class="sticky top-0 w-auto">Organization</th>
+            <th class="sticky top-0 w-auto" />
           </tr>
-        {/for}
-      </tbody>
-    </table>
+        </thead>
+        <tbody>
+          {#for item <- @participants}
+            <tr>
+              <td class="truncate">{item.user.first_name}</td>
+              <td class="truncate">{item.user.last_name}</td>
+              <td class="truncate">{(item.user.organization && item.user.organization.name) || "N/A"}</td>
+              <td class="truncate">
+                <LivePatch to={"?user_id=#{item.user_id}"} class="btn btn-xs">
+                  Select
+                </LivePatch>
+              </td>
+            </tr>
+          {#else}
+            <tr>
+              <td>No items yet!</td>
+              <td />
+              <td />
+              <td />
+            </tr>
+          {/for}
+        </tbody>
+      </table>
+    </div>
   </div>
-  <div class="divider lg:divider-horizontal" />
-  <div class="overflow-y-auto rounded-lg lg:w-1/2 bg-base-200 shadow-lg">
+  <div class="divider" />
+  <div class="overflow-y-auto rounded-lg bg-base-200 shadow-lg p-4">
     {#if @user}
-      <div class="text-2xl font-bold text-center">Load {@user.first_name}'s CSV</div>
-      <Form for={:slides} change="validate" submit="submit" opts={autocomplete: "off"}>
-        <div class="flex flex-wrap pt-3">
-          <div phx-drop-target={@uploads.csv.ref} class="w-full h-20 border-dashed border-2 rounded-lg">
-            <Field name={:csv} class="form-control w-full px-3">
-              <LiveFileInput upload={@uploads.csv} />
-              <Label class="label h-7">
-                <ErrorTag />
-              </Label>
-            </Field>
-          </div>
-        </div>
-        <!-- <div class="mt-2">
-            {#for image <- @uploads.images.entries}
-              <div class="h-10">
-                <span>{image.client_name} - {image.client_size} bytes</span>
-                <progress class="progress progress-primary w-56" value={image.progress} max="100" />
-              </div>
-            {/for}
-          </div> -->
-        <div class="mt-5">
-          <Submit class="btn">Load</Submit>
-          <Reset click="reset" class="btn" value="Reset" />
+      <div class="text-2xl font-bold text-center py-4">Load CSV for {@user.first_name} {@user.last_name}</div>
+      <Form for={:slides} change="validate" submit="submit">
+        <div phx-drop-target={@uploads.csv.ref} class="flex w-full items-center justify-center">
+          <FieldContext name={:csv}>
+            <label class="w-full flex flex-col items-center px-4 py-6 rounded-lg shadow-inner tracking-wide uppercase border border-dashed border-2 cursor-pointer hover:text-info hover:border-info">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-8 w-8"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"
+                />
+              </svg>
+              <span class="mt-2 text-base leading-normal">Select or drop CSV files in this box</span>
+              <LiveFileInput upload={@uploads.csv} class="hidden" />
+            </label>
+          </FieldContext>
         </div>
       </Form>
+      <div class="max-h-96 overflow-y-auto mt-2">
+        <table class="table table-zebra table-fixed w-full">
+          <!-- head -->
+          <thead>
+            <tr>
+              <th class="sticky top-0 w-1/12" />
+              <th class="sticky top-0 w-auto">File name</th>
+              <th class="sticky top-0 w-auto">Size</th>
+              <th class="sticky top-0 w-auto">Subject</th>
+              <th class="sticky top-0 w-auto">Selection</th>
+              <th class="sticky top-0 w-auto" />
+            </tr>
+          </thead>
+          <tbody>
+            {#for slide <- @slides}
+              <tr>
+                <td class="truncate">
+                  <div>
+                    <div class="w-20">
+                      <img src={thumbnail_path(@socket, slide)} class="rounded-md border">
+                    </div>
+                  </div>
+                </td>
+                <td class="truncate">{slide.file_name}</td>
+                <td class="truncate">{pretty_size(slide.file_size)}</td>
+                <td>
+                  <span class="capitalize">{(slide.subject && slide.subject.name) || "N/A"}</span>
+                  <br>
+                  <span class="text-xs italic">{(slide.subject && slide.subject.scientific_name) || "N/A"}</span>
+                </td>
+                <td>
+                  {humanize(slide.status || "discarded")}
+                </td>
+                <td>
+                  <button class="btn btn-secondary btn-xs">Edit</button>
+                </td>
+              </tr>
+            {#else}
+              <tr>
+                <td>No slides added for this participant.</td>
+                <td />
+                <td />
+              </tr>
+            {/for}
+          </tbody>
+        </table>
+      </div>
     {#else}
-      <div class="mt-10 text-center align-middle">
-        Select a participant from the left side.
+      <div class="mt-2 text-center align-middle">
+        Select a participant from the top.
       </div>
     {/if}
   </div>
 </div>
-
-<!-- Table -->
-<div :if={@user} class="max-h-96 overflow-y-auto overflow-x-auto mt-5 w-full">
-  <table class="table w-full">
-    <!-- head -->
-    <thead>
-      <tr>
-        <th>File name</th>
-        <th>Subject</th>
-        <th>Selection</th>
-        <th />
-      </tr>
-    </thead>
-    <tbody>
-      {#for slide <- @slides || []}
-        <tr>
-          <td>
-            <div class="flex items-center space-x-3">
-              <div class="avatar">
-                <div class="mask mask-squircle w-12 h-12">
-                  <!-- <img
-                      src={image_path(@socket, slide.competition_id, slide.user_id, slide.file_name)}
-                      alt={slide.file_name}
-                    /> -->
-                </div>
-              </div>
-              <div>
-                <div class="font-bold">{slide.file_name}</div>
-                <div class="text-sm opacity-50">{slide.file_size} bytes</div>
-              </div>
-            </div>
-          </td>
-          <td>
-            <span class="capitalize">{(slide.subject && slide.subject.name) || "N/A"}</span>
-            <br>
-            <span class="text-xs italic">{(slide.subject && slide.subject.scientific_name) || "N/A"}</span>
-          </td>
-          <td>
-            {slide.status || "discarded"}
-          </td>
-          <td>
-            <button class="btn btn-secondary btn-xs">Edit</button>
-          </td>
-        </tr>
-      {#else}
-        <tr>
-          <td>No slides added for this participant.</td>
-          <td />
-          <td />
-        </tr>
-      {/for}
-    </tbody>
-  </table>
-</div>
-<!-- End Table -->
 <div class="flex flex-row my-10 w-full">
   <LiveRedirect to={"/organize/#{@competition_id}/slides"} class="flex-none btn gap-2">
     <svg

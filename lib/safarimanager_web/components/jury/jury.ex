@@ -295,8 +295,11 @@ defmodule SMWeb.Jury do
     "/organize/#{socket.assigns.competition.id}/jury"
   end
 
-  defp image_path(_socket, slide) do
-    Path.join(["/uploads", slide.competition_id, slide.user_id, slide.file_name])
+  defp image_path(socket, slide) do
+    Routes.static_path(
+      socket,
+      Path.join(["/uploads", slide.competition_id, slide.user_id, slide.file_name])
+    )
   end
 
   defp can_evaluate?(_competition, nil), do: false
