@@ -12,14 +12,19 @@ defmodule SM.CSVImport do
     path
     |> File.stream!(read_ahead: 100_000)
     |> CSV.parse_stream(skip_headers: false)
-    |> Stream.map(fn [file_name, jury?, subject_num, subject_name, coefficient | _] ->
-      %{
-        file_name: file_name,
-        jury?: String.downcase(jury?) == "x",
-        subject_num: subject_num,
-        subject_name: subject_name,
-        coefficient: coefficient
-      }
+    |> Stream.reject(fn
+      [""] -> true
+      _any -> false
+    end)
+    |> Stream.map(fn
+      [file_name, jury?, subject_num, subject_name, coefficient | _] ->
+        %{
+          file_name: file_name,
+          jury?: String.downcase(jury?) == "x",
+          subject_num: subject_num,
+          subject_name: subject_name,
+          coefficient: coefficient
+        }
     end)
   end
 end

@@ -140,6 +140,8 @@ defmodule SMWeb.CSVImport do
 
     {:ok, competition} = Competitions.get(competition_id)
 
+    grouped_slides = get_slides_by_status(user_id, competition_id)
+
     socket =
       socket
       |> assign(:competition_id, competition_id)
@@ -147,7 +149,9 @@ defmodule SMWeb.CSVImport do
       |> assign(:participants, Participants.list(competition_id))
       # FIXME: this way of selecting the user forces a re-query of Competition
       |> assign(:user, user_id && Accounts.get_user!(user_id))
-      |> assign(:slides, user_id && Slides.list(user_id, competition_id))
+      |> assign(:discarded_slides, user_id && Map.get(grouped_slides, nil, []))
+      |> assign(:jury_slides, user_id && Map.get(grouped_slides, :submitted_jury, []))
+      |> assign(:fixed_slides, user_id && Map.get(grouped_slides, :submitted_fixed, []))
 
     {:noreply, socket}
   end
@@ -157,7 +161,13 @@ defmodule SMWeb.CSVImport do
     user_id = socket.assigns.user.id
     competition_id = socket.assigns.competition_id
 
-    socket = assign(socket, :slides, user_id && Slides.list(user_id, competition_id))
+    grouped_slides = get_slides_by_status(user_id, competition_id)
+
+    socket =
+      socket
+      |> assign(:discarded_slides, user_id && Map.get(grouped_slides, nil, []))
+      |> assign(:jury_slides, user_id && Map.get(grouped_slides, :submitted_jury, []))
+      |> assign(:fixed_slides, user_id && Map.get(grouped_slides, :submitted_fixed, []))
 
     {:noreply, socket}
   end
@@ -175,6 +185,14 @@ defmodule SMWeb.CSVImport do
   end
 
   # Internal
+
+  defp get_slides_by_status(nil, _competition_id), do: %{}
+
+  defp get_slides_by_status(user_id, competition_id) do
+    user_id
+    |> Slides.list(competition_id)
+    |> Enum.group_by(& &1.status)
+  end
 
   defp handle_progress(:csv, entry, socket) do
     if entry.done? do
