@@ -9,6 +9,7 @@ defmodule SMWeb.Slides do
   alias SM.Competitions
   alias SM.Participants
   alias SM.Slides
+  alias SMWeb.Components.CompetitionHeader
   alias SMWeb.Components.StepsHeader
   alias Surface.Components.Form
   alias Surface.Components.Form.FieldContext

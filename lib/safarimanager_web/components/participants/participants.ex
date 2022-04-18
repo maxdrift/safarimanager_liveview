@@ -9,7 +9,7 @@ defmodule SMWeb.Participants do
   alias SM.Competitions
   alias SM.Organizations
   alias SM.Participants
-  alias SM.Accounts
+  alias SMWeb.Components.CompetitionHeader
   alias SMWeb.Components.FormActions
   alias SMWeb.Components.StepsHeader
   alias SMWeb.Components.Users.Form
