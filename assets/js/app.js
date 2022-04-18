@@ -21,6 +21,7 @@ import Alpine from "alpinejs"
 // Establish Phoenix Socket and LiveView configuration.
 import { Socket } from "phoenix"
 import { LiveSocket } from "phoenix_live_view"
+import { themeChange } from 'theme-change'
 import topbar from "../vendor/topbar"
 import Hooks from "./_hooks"
 // import OpenSeadragon from "openseadragon";
@@ -28,10 +29,12 @@ import Hooks from "./_hooks"
 window.Alpine = Alpine
 Alpine.start()
 
+themeChange()
+
 let csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute("content")
 let liveSocket = new LiveSocket("/live", Socket, {
   dom: {
-  // make LiveView work nicely with alpinejs
+    // make LiveView work nicely with alpinejs
     onBeforeElUpdated(from, to) {
       if (from.__x) {
         window.Alpine.clone(from.__x, to);
@@ -40,7 +43,7 @@ let liveSocket = new LiveSocket("/live", Socket, {
   },
   params: { _csrf_token: csrfToken },
   hooks: Hooks
- })
+})
 
 
 // Show progress bar on live navigation and form submits
