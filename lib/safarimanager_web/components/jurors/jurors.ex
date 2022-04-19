@@ -23,11 +23,13 @@ defmodule SMWeb.Jurors do
     competition_id = socket.assigns.competition_id
     max_jurors_count = socket.assigns.competition.req_jurors_count
 
-    if Enum.count(socket.assigns.competition.jurors) < max_jurors_count do
-      {:ok, _juror} = Jurors.create(%{user_id: user_id, competition_id: competition_id})
-    else
-      Logger.warn("Reached max of #{max_jurors_count} for Competition #{competition_id}")
-    end
+    :ok =
+      if Enum.count(socket.assigns.competition.jurors) < max_jurors_count do
+        {:ok, _juror} = Jurors.create(%{user_id: user_id, competition_id: competition_id})
+        :ok
+      else
+        Logger.warn("Reached max of #{max_jurors_count} Jurors for Competition #{competition_id}")
+      end
 
     {:noreply, socket}
   end

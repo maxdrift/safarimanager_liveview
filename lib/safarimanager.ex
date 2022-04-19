@@ -13,6 +13,7 @@ defmodule SM do
     quote do
       use Ecto.Schema
       import Ecto.Changeset
+      alias __MODULE__
 
       @primary_key {:id, Ecto.UUID, autogenerate: true}
       @foreign_key_type Ecto.UUID
@@ -24,6 +25,10 @@ defmodule SM do
   def context do
     quote do
       import Ecto.Query
+
+      @like_fragment if SM.Repo.__adapter__() == Ecto.Adapters.Postgres,
+                       do: "? ILIKE ?",
+                       else: "? LIKE ?"
 
       alias Ecto.Multi
       alias SM.Repo

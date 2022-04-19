@@ -125,7 +125,8 @@ defmodule SM.Accounts.User do
 
   It requires the email to change otherwise an error is added.
   """
-  @spec email_changeset(User.t(), %{(String.t() | atom()) => any()}) :: Ecto.Changeset.t()
+  @spec email_changeset(User.t() | Ecto.Changeset.t(), %{(String.t() | atom()) => any()}) ::
+          Ecto.Changeset.t()
   def email_changeset(user, attrs) do
     user
     |> cast(attrs, [:email])
@@ -160,7 +161,7 @@ defmodule SM.Accounts.User do
   @doc """
   Confirms the account by setting `confirmed_at`.
   """
-  @spec confirm_changeset(User.t()) :: Ecto.Changeset.t()
+  @spec confirm_changeset(User.t() | Ecto.Changeset.t()) :: Ecto.Changeset.t()
   def confirm_changeset(user) do
     now = NaiveDateTime.truncate(NaiveDateTime.utc_now(), :second)
     change(user, confirmed_at: now)

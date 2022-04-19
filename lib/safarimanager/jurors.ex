@@ -123,11 +123,13 @@ defmodule SM.Jurors do
     {deleted, nil} = Repo.delete_all(from entity in Juror, where: entity.id in ^ids)
 
     if deleted == Enum.count(ids) do
-      notify_subscribers({:ok, deleted}, [:competition, :updated], id_key: :competition_id)
-      notify_subscribers({:ok, deleted}, [:user, :updated], id_key: :user_id)
+      with {:ok, _result} <-
+             notify_subscribers({:ok, deleted}, [:competition, :updated], id_key: :competition_id),
+           do: notify_subscribers({:ok, deleted}, [:user, :updated], id_key: :user_id)
     else
-      notify_subscribers(:error, [:competition, :updated], id_key: :competition_id)
-      notify_subscribers(:error, [:user, :updated], id_key: :user_id)
+      with {:ok, _result} <-
+             notify_subscribers(:error, [:competition, :updated], id_key: :competition_id),
+           do: notify_subscribers(:error, [:user, :updated], id_key: :user_id)
     end
   end
 

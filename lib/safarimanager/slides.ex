@@ -5,7 +5,6 @@ defmodule SM.Slides do
   use SM, :context
 
   alias Ecto.Multi
-  alias Ecto.Query.API, as: QueryAPI
   alias SM.ImageProcessing
   alias SM.Jurors.Juror
   alias SM.Slides.Slide
@@ -196,14 +195,12 @@ defmodule SM.Slides do
   def get(competition_id, user_id, file_name) do
     file_name_match = "#{file_name}%"
 
-    base_query = from(s in Slide, where: [competition_id: ^competition_id, user_id: ^user_id])
-
     query =
-      if SM.Repo.__adapter__() == Ecto.Adapters.SQLite3 do
-        from(s in base_query, where: like(s.file_name, ^file_name_match))
-      else
-        from(s in base_query, where: ilike(s.file_name, ^file_name_match))
-      end
+      from(
+        s in Slide,
+        where: [competition_id: ^competition_id, user_id: ^user_id],
+        where: fragment(@like_fragment, s.file_name, ^file_name_match)
+      )
 
     case Repo.one(query) do
       nil -> {:error, :not_found}
@@ -282,9 +279,10 @@ defmodule SM.Slides do
         notify_subscribers({:ok, slide}, [:slide, :created])
 
       {:error, :slide, failed_value, _changes_so_far} ->
-        [uploads_path, file_name]
-        |> Path.join()
-        |> File.rm()
+        :ok =
+          [uploads_path, file_name]
+          |> Path.join()
+          |> File.rm()
 
         {:error, {:slide, failed_value}}
 
@@ -471,19 +469,25 @@ defmodule SM.Slides do
     uploads_path = get_uploads_path(competition_id, user_id)
     thumbnails_path = Path.join(uploads_path, "thumbnails")
 
-    [uploads_path, file_name]
-    |> Path.join()
-    |> File.rm()
-
-    for size_type <- [:small, :medium, :large] do
-      [thumbnails_path, Atom.to_string(size_type), file_name]
+    :ok =
+      [uploads_path, file_name]
       |> Path.join()
       |> File.rm()
+
+    for size_type <- [:small, :medium, :large] do
+      :ok =
+        [thumbnails_path, Atom.to_string(size_type), file_name]
+        |> Path.join()
+        |> File.rm()
     end
 
     # Remove the entire participant directory if empty
-    if Path.wildcard(Path.join(uploads_path, "/*.*")) == [], do: File.rm_rf(uploads_path)
-
-    :ok
+    :ok =
+      if Path.wildcard(Path.join(uploads_path, "/*.*")) == [] do
+        {:ok, _result} = File.rm_rf(uploads_path)
+        :ok
+      else
+        :ok
+      end
   end
 end

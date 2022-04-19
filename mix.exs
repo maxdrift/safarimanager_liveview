@@ -13,7 +13,8 @@ defmodule SM.MixProject do
       deps: deps(),
       dialyzer: dialyzer(),
       releases: releases(),
-      preferred_cli_env: [release: :standalone]
+      preferred_cli_env: [release: :standalone],
+      dialyzer_ignored_warnings: dialyzer_ignored_warnings()
     ]
   end
 
@@ -109,6 +110,13 @@ defmodule SM.MixProject do
         overwrite: true,
         strip_beams: Mix.env() in [:prod, :standalone]
       ]
+    ]
+  end
+
+  defp dialyzer_ignored_warnings do
+    [
+      {:_, {'deps/nimble_csv/lib/nimble_csv.ex', 523}, {:_, :_}},
+      {:_, {'lib/safarimanager/default_password.ex', 5}, {:_, :_}}
     ]
   end
 end

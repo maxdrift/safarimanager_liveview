@@ -35,24 +35,12 @@ defmodule SM.Organizations do
   def list_by_name(name) do
     pattern = "%#{name}%"
 
-    base_query =
+    query =
       from(
         o in Organization,
-        order_by: [desc: :inserted_at]
+        order_by: [desc: :inserted_at],
+        where: fragment(@like_fragment, o.name, ^pattern)
       )
-
-    query =
-      if SM.Repo.__adapter__() == Ecto.Adapters.SQLite3 do
-        from(
-          o in base_query,
-          where: like(o.name, ^pattern)
-        )
-      else
-        from(
-          o in base_query,
-          where: ilike(o.name, ^pattern)
-        )
-      end
 
     Repo.all(query)
   end

@@ -59,28 +59,18 @@ defmodule SM.Participants do
   def list(competition_id, name) do
     pattern = "%#{name}%"
 
-    base_query =
+    query =
       from(
         p in Participant,
         where: [competition_id: ^competition_id],
         inner_join: u in assoc(p, :user),
+        where:
+          fragment(@like_fragment, u.first_name, ^pattern) or
+            fragment(@like_fragment, u.last_name, ^pattern),
         left_join: o in assoc(u, :organization),
         order_by: [asc: u.last_name],
         preload: [user: {u, [organization: o]}]
       )
-
-    query =
-      if SM.Repo.__adapter__() == Ecto.Adapters.SQLite3 do
-        from(
-          [_p, u, _o] in base_query,
-          where: like(u.first_name, ^pattern) or like(u.last_name, ^pattern)
-        )
-      else
-        from(
-          [_p, u, _o] in base_query,
-          where: ilike(u.first_name, ^pattern) or ilike(u.last_name, ^pattern)
-        )
-      end
 
     Repo.all(query)
   end
@@ -186,11 +176,13 @@ defmodule SM.Participants do
     {deleted, nil} = Repo.delete_all(from entity in Participant, where: entity.id in ^ids)
 
     if deleted == Enum.count(ids) do
-      notify_subscribers({:ok, deleted}, [:competition, :updated], id_key: :competition_id)
-      notify_subscribers({:ok, deleted}, [:user, :updated], id_key: :user_id)
+      with {:ok, _result} <-
+             notify_subscribers({:ok, deleted}, [:competition, :updated], id_key: :competition_id),
+           do: notify_subscribers({:ok, deleted}, [:user, :updated], id_key: :user_id)
     else
-      notify_subscribers(:error, [:competition, :updated], id_key: :competition_id)
-      notify_subscribers(:error, [:user, :updated], id_key: :user_id)
+      with {:ok, _result} <-
+             notify_subscribers(:error, [:competition, :updated], id_key: :competition_id),
+           do: notify_subscribers(:error, [:user, :updated], id_key: :user_id)
     end
   end
 
