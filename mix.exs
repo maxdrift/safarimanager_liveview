@@ -59,7 +59,6 @@ defmodule SM.MixProject do
       {:random_password, "~> 1.0"},
       {:rexbug, "~> 1.0"},
       {:surface_catalogue, "~> 0.3.0"},
-      {:surface_formatter, "~> 0.7.4", only: :dev},
       {:surface, "~> 0.7.1"},
       {:swoosh, "~> 1.3"},
       {:telemetry_metrics, "~> 0.6"},

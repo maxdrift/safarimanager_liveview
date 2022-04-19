@@ -1,4 +1,7 @@
 defmodule SMWeb.UserAuth do
+  @moduledoc """
+  User Auth controller
+  """
   import Plug.Conn
   import Phoenix.Controller
 

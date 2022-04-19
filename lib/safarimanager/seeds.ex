@@ -1,6 +1,9 @@
 NimbleCSV.define(SM.CSV, separator: ";")
 
 defmodule SM.Seeds do
+  @moduledoc """
+  Seeds helper
+  """
   alias SM.CSV, as: CSV
   alias SM.Evaluations
   alias SM.Subjects

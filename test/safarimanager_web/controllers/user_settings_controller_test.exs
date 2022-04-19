@@ -1,8 +1,10 @@
 defmodule SMWeb.UserSettingsControllerTest do
+  @moduledoc false
   use SMWeb.ConnCase, async: true
 
-  alias SM.Accounts
   import SM.AccountsFixtures
+
+  alias SM.Accounts
 
   setup :register_and_log_in_user
 

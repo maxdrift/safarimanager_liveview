@@ -97,8 +97,7 @@ defmodule SMWeb.CSVImport do
           |> assign(:editing_changeset, nil)
 
         {:error, changeset} ->
-          socket
-          |> assign(:editing_changeset, changeset)
+          assign(socket, :editing_changeset, changeset)
       end
 
     {:noreply, socket}

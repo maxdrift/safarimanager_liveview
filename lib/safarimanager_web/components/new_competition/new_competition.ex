@@ -68,9 +68,7 @@ defmodule SMWeb.NewCompetition do
   end
 
   def handle_event("open", %{"id" => competition_id}, socket) do
-    socket =
-      socket
-      |> push_redirect(to: "/organize/#{competition_id}/participants")
+    socket = push_redirect(socket, to: "/organize/#{competition_id}/participants")
 
     {:noreply, socket}
   end
