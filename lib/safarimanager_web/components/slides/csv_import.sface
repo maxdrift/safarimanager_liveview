@@ -72,6 +72,58 @@
           </FieldContext>
         </div>
       </Form>
+      <!-- Edit dialog start -->
+      <input type="checkbox" id="edit-selection" class="modal-toggle" checked={@editing?}>
+      <div class="modal">
+        <div :if={@editing?} class="modal-box">
+          <h3 class="font-bold text-lg">Edit slide selection</h3>
+          <Form
+            for={@editing_changeset}
+            change="validate-editing"
+            submit="submit-editing"
+            as={:slide}
+            opts={autocomplete: "off"}
+          >
+            <div class="card-body">
+              <Field name={:subject_id} class="form-control">
+                <Label class="label">
+                  <span class="label-text">Subject</span>
+                </Label>
+                <Select
+                  options={Enum.map(@subjects, fn s -> {String.capitalize(s.name), s.id} end)}
+                  class={state_class("input input-bordered", @editing_changeset, :subject_id, [])}
+                  opts={selected: @editing_slide.subject_id}
+                />
+                <Label class="label h-7">
+                  <ErrorTag />
+                </Label>
+              </Field>
+              <Field name={:status} class="form-control">
+                <Label class="label">
+                  <span class="label-text">Status</span>
+                </Label>
+                <Select
+                  options={"Submitted Jury": "submitted_jury", "Submitted Fixed": "submitted_fixed", Discarded: "discarded"}
+                  class={state_class("input input-bordered", @editing_changeset, :status, [])}
+                  opts={selected: @editing_slide.status}
+                />
+                <Label class="label h-7">
+                  <ErrorTag />
+                </Label>
+              </Field>
+            </div>
+            <div class="modal-action">
+              <Submit class={
+                "btn btn-md",
+                "btn-success": @editing_changeset.action && @editing_changeset.valid?,
+                "btn-disabled": !(@editing_changeset.action && @editing_changeset.valid?)
+              }>Save</Submit>
+              <Reset click="stop-editing" class="btn btn-md btn-ghost" value="Close" />
+            </div>
+          </Form>
+        </div>
+      </div>
+      <!-- Edit dialog end -->
       <div>
         <div class="alert alert-success alert-sm my-2">
           <div class="text-xl mx-auto">
@@ -108,7 +160,7 @@
                     <span class="text-xs italic">{(slide.subject && slide.subject.scientific_name) || "N/A"}</span>
                   </td>
                   <td>
-                    <button class="btn btn-secondary btn-xs">Edit</button>
+                    <button class="btn btn-secondary btn-xs" :on-click="start-editing" :values={id: slide.id}>Edit</button>
                   </td>
                 </tr>
               {#else}
@@ -158,7 +210,7 @@
                     <span class="text-xs italic">{(slide.subject && slide.subject.scientific_name) || "N/A"}</span>
                   </td>
                   <td>
-                    <button class="btn btn-secondary btn-xs">Edit</button>
+                    <button class="btn btn-secondary btn-xs" :on-click="start-editing" :values={id: slide.id}>Edit</button>
                   </td>
                 </tr>
               {#else}
@@ -210,7 +262,7 @@
                       <span class="text-xs italic">{(slide.subject && slide.subject.scientific_name) || "N/A"}</span>
                     </td>
                     <td>
-                      <button class="btn btn-secondary btn-xs">Edit</button>
+                      <button class="btn btn-secondary btn-xs" :on-click="start-editing" :values={id: slide.id}>Edit</button>
                     </td>
                   </tr>
                 {#else}

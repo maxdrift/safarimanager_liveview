@@ -4,7 +4,6 @@ defmodule SMWeb.CSVImport do
   """
   use SMWeb, :surface_view
 
-  import Phoenix.HTML.Form, only: [humanize: 1]
   alias Phoenix.LiveView
   alias SM.Accounts
   alias SM.Competitions
@@ -15,7 +14,13 @@ defmodule SMWeb.CSVImport do
   alias SMWeb.Components.CompetitionHeader
   alias SMWeb.Components.StepsHeader
   alias Surface.Components.Form
+  alias Surface.Components.Form.ErrorTag
+  alias Surface.Components.Form.Field
   alias Surface.Components.Form.FieldContext
+  alias Surface.Components.Form.Label
+  alias Surface.Components.Form.Reset
+  alias Surface.Components.Form.Select
+  alias Surface.Components.Form.Submit
   alias Surface.Components.Form.TextInput
   alias Surface.Components.LiveFileInput
   alias Surface.Components.LivePatch
@@ -31,6 +36,10 @@ defmodule SMWeb.CSVImport do
       |> assign(:participants, [])
       |> assign(:slides, [])
       |> assign(:slide_statuses, get_slide_statuses())
+      |> assign(:editing?, false)
+      |> assign(:editing_slide, nil)
+      |> assign(:editing_changeset, nil)
+      |> assign(:subjects, Subjects.list())
       |> allow_upload(:csv,
         accept: ~w(.csv),
         max_entries: 1,
@@ -56,70 +65,51 @@ defmodule SMWeb.CSVImport do
     {:noreply, assign(socket, :participants, participants)}
   end
 
-  def handle_event("submit", %{}, socket) do
-    LiveView.consume_uploaded_entries(socket, :csv, fn %{path: path}, _entry ->
-      csv_results = CSVImport.parse(path)
-      # TODO: Stream here
-      results =
-        Enum.map(csv_results, fn %{
-                                   file_name: file_name,
-                                   jury?: jury?,
-                                   subject_num: subject_num
-                                 } ->
-          jury? = if String.downcase(jury?) == "x", do: :submitted_jury, else: :submitted_fixed
-
-          with {:ok, subject} <- Subjects.get_by_numeric_id(subject_num),
-               {:ok, slide} <-
-                 Slides.get(
-                   socket.assigns.competition_id,
-                   socket.assigns.user.id,
-                   file_name <> ".JPG"
-                 ),
-               {:ok, slide} <- Slides.update(slide, %{subject_id: subject.id, status: jury?}),
-               do: slide
-        end)
-
-      {:ok, results}
-    end)
-    |> List.flatten()
-    |> Enum.filter(fn
-      %Slides.Slide{} -> false
-      {:error, _reason} -> true
-    end)
-
-    {:noreply, socket}
-  end
-
-  def handle_event("edit-mode", %{"id" => slide_id}, socket) do
+  def handle_event("start-editing", %{"id" => slide_id}, socket) do
     {:ok, slide} = Slides.get(slide_id)
 
     socket =
       socket
-      |> assign(:edit_mode, true)
-      |> assign(:slide_id, slide_id)
-      |> assign(:slide, slide)
+      |> assign(:editing?, true)
+      |> assign(:editing_slide, slide)
+      |> assign(:editing_changeset, Slides.change(slide))
 
     {:noreply, socket}
   end
 
-  def handle_event("save-edits", %{} = params, socket) do
-    IO.inspect(params)
-    # {:ok, slide} = Slides.get(slide_id)
-    # {:ok, _slide} =Slides.update(slide, )
+  def handle_event("validate-editing", %{"slide" => params}, socket) do
+    changeset =
+      socket.assigns.editing_slide
+      |> Slides.change(params)
+      |> Map.put(:action, :validate)
 
-    # socket =
-    #   socket
-    #   |> assign(:edit_mode, false)
-    #   |> assign(:slide_id, nil)
+    socket = assign(socket, :editing_changeset, changeset)
+    {:noreply, socket}
+  end
+
+  def handle_event("submit-editing", %{"slide" => params}, socket) do
+    socket =
+      case Slides.update(socket.assigns.editing_slide, params) do
+        {:ok, _entity} ->
+          socket
+          |> assign(:editing?, false)
+          |> assign(:editing_slide, nil)
+          |> assign(:editing_changeset, nil)
+
+        {:error, changeset} ->
+          socket
+          |> assign(:editing_changeset, changeset)
+      end
 
     {:noreply, socket}
   end
 
-  def handle_event("clear-edit-mode", %{}, socket) do
+  def handle_event("stop-editing", %{}, socket) do
     socket =
       socket
-      |> assign(:edit_mode, false)
-      |> assign(:slide_id, nil)
+      |> assign(:editing?, false)
+      |> assign(:editing_slide, nil)
+      |> assign(:editing_changeset, nil)
 
     {:noreply, socket}
   end
