@@ -4,14 +4,24 @@ defmodule SM.Seeds do
   @moduledoc """
   Seeds helper
   """
+  alias SM.Categories
   alias SM.CSV, as: CSV
   alias SM.Evaluations
   alias SM.Subjects
+
+  @default_categories [
+    "Apnea Master",
+    "ARA Master",
+    "Apnea Compatte",
+    "ARA Compatte",
+    "Esordienti"
+  ]
 
   @spec run :: :ok
   def run do
     insert_subjects()
     insert_evaluations()
+    insert_categories()
   end
 
   # Internal
@@ -44,6 +54,14 @@ defmodule SM.Seeds do
           value: Decimal.new(e),
           type: "numeric"
         })
+    end)
+    |> Stream.run()
+  end
+
+  defp insert_categories do
+    @default_categories
+    |> Stream.map(fn name ->
+      {:ok, _result} = Categories.create(%{name: name})
     end)
     |> Stream.run()
   end

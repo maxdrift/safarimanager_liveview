@@ -1,0 +1,39 @@
+<Dialog {=@id} {=@show}>
+  <div class="card-title">
+    {String.capitalize(Atom.to_string(@action))} {@entity_name}
+  </div>
+  <Form
+    for={@changeset}
+    change={@validate}
+    submit={@submit}
+    as={:entity}
+    opts={autocomplete: "off"}
+  >
+    <div class="card-body">
+      <Field name={:name} class="form-control">
+        <Label class="label">
+          <span class="label-text">Name</span>
+        </Label>
+        <TextInput
+          class={state_class("input input-bordered", @changeset, :name, [])}
+          opts={phx_debounce: "1000"}
+        />
+        <Label class="label h-7">
+          <ErrorTag />
+        </Label>
+      </Field>
+      <HiddenInput field={:_action} value={@action} />
+    </div>
+    <div class="modal-action">
+      <Submit
+        values={[action: @action]}
+        class={
+          "btn btn-md",
+          "btn-success": @changeset.action && @changeset.valid?,
+          "btn-disabled": !(@changeset.action && @changeset.valid?)
+        }
+      >Save</Submit>
+      <Reset click="hide" class="btn btn-md btn-ghost" value="Close" />
+    </div>
+  </Form>
+</Dialog>
