@@ -14,6 +14,7 @@
       <table class="table table-zebra table-fixed w-full">
         <thead>
           <tr>
+            <th class="sticky top-0 w-1/12">#</th>
             <th class="sticky top-0 w-auto">First Name</th>
             <th class="sticky top-0 w-auto">Last Name</th>
             <th class="sticky top-0 w-auto">Organization</th>
@@ -23,6 +24,7 @@
         <tbody>
           {#for item <- @participants}
             <tr>
+              <td class="truncate">{item.number}</td>
               <td class="truncate">{item.user.first_name}</td>
               <td class="truncate">{item.user.last_name}</td>
               <td class="truncate">{(item.user.organization && item.user.organization.name) || "N/A"}</td>

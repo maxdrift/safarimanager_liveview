@@ -57,19 +57,22 @@
       <table class="table table-zebra table-fixed w-full">
         <thead>
           <tr>
+            <th class="w-1/12">#</th>
             <th class="w-auto">First Name</th>
             <th class="w-auto">Last Name</th>
             <th class="w-auto">Organization</th>
+            <th class="w-2/12"></th>
           </tr>
         </thead>
         <tbody>
-          {#for item <- @competition.participants}
+          {#for item <- @participants}
             <tr>
-              <td class="truncate">{item.first_name}</td>
-              <td class="truncate">{item.last_name}</td>
-              <td class="truncate">{(item.organization && item.organization.name) || "N/A"}</td>
+              <td class="truncate">{item.number}</td>
+              <td class="truncate">{item.user.first_name}</td>
+              <td class="truncate">{item.user.last_name}</td>
+              <td class="truncate">{(item.user.organization && item.user.organization.name) || "N/A"}</td>
               <td>
-                <button class="btn btn-xs btn-error" :on-click="remove" :values={user_id: item.id}>Remove</button>
+                <button class="btn btn-xs btn-error" :on-click="remove" :values={user_id: item.user.id}>Remove</button>
               </td>
             </tr>
           {#else}

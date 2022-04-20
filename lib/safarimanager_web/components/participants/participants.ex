@@ -17,15 +17,12 @@ defmodule SMWeb.Participants do
 
   require Logger
 
-  # data competition, :struct
-
   @impl Phoenix.LiveView
   def mount(_params, _session, socket) do
     socket =
       socket
-      |> assign(:selected_items, [])
       |> assign(:organizations, Organizations.list())
-      |> assign(:selected_organization, %{name: "Hooo"})
+      |> assign(:participants, [])
       |> assign(:entity, %User{})
       |> assign(:changeset, Accounts.change_for_competition_registration(%User{}))
 
@@ -34,8 +31,11 @@ defmodule SMWeb.Participants do
 
   @impl Phoenix.LiveView
   def handle_event("enroll", %{"user-id" => user_id}, socket) do
+    competition_id = socket.assigns.competition_id
+    number = Participants.get_next_participant_number(competition_id)
+
     {:ok, _participant} =
-      Participants.create(%{user_id: user_id, competition_id: socket.assigns.competition_id})
+      Participants.create(%{user_id: user_id, competition_id: competition_id, number: number})
 
     {:noreply, socket}
   end
@@ -85,40 +85,6 @@ defmodule SMWeb.Participants do
     {:noreply, socket}
   end
 
-  # def handle_event("search-organization", %{"value" => value}, socket) do
-  #   organizations = Organizations.list_by_name(value)
-
-  #   socket = assign(socket, :organizations, organizations)
-
-  #   {:noreply, socket}
-  # end
-
-  # def handle_event("select-organization", %{"id" => organization_id}, socket) do
-  #   IO.inspect("Selected #{organization_id}")
-
-  #   {:ok, selected_organization} = Organizations.get(organization_id)
-
-  #   socket =
-  #     socket
-  #     |> assign(
-  #       :changeset,
-  #       Accounts.change_for_competition_registration(socket.assigns.entity, %{
-  #         organization_id: organization_id
-  #       })
-  #       |> Map.put(:action, :validate)
-  #     )
-  #     |> assign(:selected_organization, selected_organization)
-  #   {:noreply, socket}
-  # end
-
-  # def handle_event(event_name, params, socket) do
-  #   IO.inspect(__MODULE__)
-  #   IO.inspect(event_name)
-  #   IO.inspect(params)
-
-  #   {:noreply, socket}
-  # end
-
   @impl Phoenix.LiveView
   def handle_params(%{"competition_id" => competition_id}, _uri, socket) do
     if connected?(socket) do
@@ -133,6 +99,7 @@ defmodule SMWeb.Participants do
       socket
       |> assign(:competition_id, competition_id)
       |> assign(:competition, competition)
+      |> assign(:participants, Participants.list(competition_id))
       |> assign(:users, users)
 
     {:noreply, socket}
@@ -140,9 +107,13 @@ defmodule SMWeb.Participants do
 
   @impl Phoenix.LiveView
   def handle_info({Participants, [:competition, :updated], _result}, socket) do
-    {:ok, competition} = Competitions.get(socket.assigns.competition_id)
+    competition_id = socket.assigns.competition_id
+    {:ok, competition} = Competitions.get(competition_id)
 
-    socket = assign(socket, :competition, competition)
+    socket =
+      socket
+      |> assign(:competition, competition)
+      |> assign(:participants, Participants.list(competition_id))
 
     {:noreply, socket}
   end

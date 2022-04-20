@@ -18,12 +18,12 @@ defmodule SM.Participants do
   @spec list :: [Participant.t()]
   def list do
     Participant
-    |> order_by(desc: :inserted_at)
+    |> order_by(asc: :number)
     |> Repo.all()
   end
 
   @doc """
-  Returns the list of participants filtered by competition ID and name.
+  Returns the list of participants filtered by competition ID.
 
   ## Examples
 
@@ -39,7 +39,7 @@ defmodule SM.Participants do
         where: [competition_id: ^competition_id],
         inner_join: u in assoc(p, :user),
         left_join: o in assoc(u, :organization),
-        order_by: [asc: u.last_name],
+        order_by: [asc: :number],
         preload: [user: {u, [organization: o]}]
       )
 
@@ -68,11 +68,27 @@ defmodule SM.Participants do
           fragment(@like_fragment, u.first_name, ^pattern) or
             fragment(@like_fragment, u.last_name, ^pattern),
         left_join: o in assoc(u, :organization),
-        order_by: [asc: u.last_name],
+        order_by: [asc: :number],
         preload: [user: {u, [organization: o]}]
       )
 
     Repo.all(query)
+  end
+
+  @spec get_next_participant_number(String.t()) :: integer()
+  def get_next_participant_number(competition_id) do
+    query =
+      from(Participant,
+        where: [competition_id: ^competition_id],
+        order_by: [desc: :number],
+        limit: 1,
+        select: [:number]
+      )
+
+    case Repo.one(query) do
+      %SM.Participants.Participant{number: number} -> number + 1
+      nil -> 1
+    end
   end
 
   @doc """
@@ -109,9 +125,26 @@ defmodule SM.Participants do
   """
   @spec create(%{(String.t() | atom()) => any()}) :: {:error, any()} | {:ok, Participant.t()}
   def create(attrs \\ %{}) do
+    attrs = Map.put(attrs, :number, Map.get(attrs, :number, 1))
+
     %Participant{}
     |> Participant.changeset(attrs)
     |> Repo.insert()
+    |> case do
+      {:ok, _participant} = result ->
+        result
+
+      {:error,
+       %Ecto.Changeset{
+         errors: [
+           number: {"has already been taken", [constraint: :unique, constraint_name: _name]}
+         ],
+         valid?: false
+       }} ->
+        new_number = Map.get(attrs, :number, 0) + 1
+        attrs = Map.put(attrs, :number, new_number)
+        create(attrs)
+    end
     |> notify_subscribers([:competition, :updated], id_key: :competition_id)
     |> notify_subscribers([:user, :updated], id_key: :user_id)
   end

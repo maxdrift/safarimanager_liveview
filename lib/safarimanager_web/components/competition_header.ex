@@ -33,4 +33,11 @@ defmodule SMWeb.Components.CompetitionHeader do
        ) do
     Calendar.strftime(start_time, "%d %b %Y → ") <> Calendar.strftime(end_time, "%d %b %Y")
   end
+
+  defp pretty_dates(
+         %DateTime{} = start_time,
+         nil
+       ) do
+    Calendar.strftime(start_time, "%d %b %Y")
+  end
 end
