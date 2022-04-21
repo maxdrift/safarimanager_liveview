@@ -6,13 +6,14 @@ defmodule SMWeb.Participants do
 
   alias SM.Accounts
   alias SM.Accounts.User
+  alias SM.Categories
   alias SM.Competitions
   alias SM.Organizations
   alias SM.Participants
   alias SMWeb.Components.CompetitionHeader
   alias SMWeb.Components.FormActions
   alias SMWeb.Components.StepsHeader
-  alias SMWeb.Components.Users.Form
+  alias SMWeb.Components.Admin.Users.Form
   alias Surface.Components.LiveRedirect
 
   require Logger
@@ -22,6 +23,7 @@ defmodule SMWeb.Participants do
     socket =
       socket
       |> assign(:organizations, Organizations.list())
+      |> assign(:categories, Categories.list())
       |> assign(:participants, [])
       |> assign(:entity, %User{})
       |> assign(:changeset, Accounts.change_for_competition_registration(%User{}))
@@ -33,9 +35,16 @@ defmodule SMWeb.Participants do
   def handle_event("enroll", %{"user-id" => user_id}, socket) do
     competition_id = socket.assigns.competition_id
     number = Participants.get_next_participant_number(competition_id)
+    user = Accounts.get_user!(user_id)
+    category_id = user.category_id
 
     {:ok, _participant} =
-      Participants.create(%{user_id: user_id, competition_id: competition_id, number: number})
+      Participants.create(%{
+        user_id: user_id,
+        competition_id: competition_id,
+        category_id: category_id,
+        number: number
+      })
 
     {:noreply, socket}
   end

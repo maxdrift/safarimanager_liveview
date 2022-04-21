@@ -7,6 +7,7 @@
       {=@entity}
       {=@changeset}
       {=@organizations}
+      {=@categories}
       validate="validate-new-user"
       submit="submit-new-user"
     >
@@ -25,6 +26,8 @@
             <th class="w-auto">First Name</th>
             <th class="w-auto">Last Name</th>
             <th class="w-auto">Organization</th>
+            <th class="w-auto">Category</th>
+            <th class="w-auto" />
           </tr>
         </thead>
         <tbody>
@@ -33,6 +36,7 @@
               <td class="truncate">{item.first_name}</td>
               <td class="truncate">{item.last_name}</td>
               <td class="truncate">{(item.organization && item.organization.name) || "N/A"}</td>
+              <td class="truncate">{(item.category && item.category.name) || "N/A"}</td>
               <td>
                 <button class="btn btn-xs btn-success" :on-click="enroll" :values={user_id: item.id}>Enroll</button>
               </td>
@@ -61,7 +65,8 @@
             <th class="w-auto">First Name</th>
             <th class="w-auto">Last Name</th>
             <th class="w-auto">Organization</th>
-            <th class="w-2/12"></th>
+            <th class="w-auto">Category</th>
+            <th class="w-2/12" />
           </tr>
         </thead>
         <tbody>
@@ -71,6 +76,7 @@
               <td class="truncate">{item.user.first_name}</td>
               <td class="truncate">{item.user.last_name}</td>
               <td class="truncate">{(item.user.organization && item.user.organization.name) || "N/A"}</td>
+              <td class="truncate">{(item.category && item.category.name) || "N/A"}</td>
               <td>
                 <button class="btn btn-xs btn-error" :on-click="remove" :values={user_id: item.user.id}>Remove</button>
               </td>

@@ -44,7 +44,7 @@ defmodule SM.Competitions do
       result ->
         {:ok,
          Repo.preload(result, [
-           [participants: :organization],
+           [participants: [:organization, :category]],
            [jurors: :organization],
            :allowed_evaluations
          ])}

@@ -18,7 +18,7 @@
           <td class="truncate">{result.rank}</td>
           <td class="truncate">{result.user.last_name} {result.user.first_name}</td>
           <td class="truncate">{(result.user.organization && result.user.organization.name) || "N/A"}</td>
-          <td class="truncate">N/A</td>
+          <td class="truncate">{(result.participant.category && result.participant.category.name) || "N/A"}</td>
           <td class="truncate">{result.total_score}</td>
           <td class="truncate">{Enum.count(result.slides)}</td>
         </tr>

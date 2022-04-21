@@ -7,7 +7,7 @@ defmodule SMWeb.NewCompetition do
   alias SM.Competitions
   alias SM.Competitions.Competition
 
-  alias SMWeb.Components.Competitions.Form
+  alias SMWeb.Components.Admin.Competitions.Form
   alias SMWeb.Components.FormActions
 
   require Logger

@@ -18,6 +18,7 @@
             <th class="sticky top-0 w-auto">First Name</th>
             <th class="sticky top-0 w-auto">Last Name</th>
             <th class="sticky top-0 w-auto">Organization</th>
+            <th class="sticky top-0 w-auto">Category</th>
             <th class="sticky top-0 w-auto" />
           </tr>
         </thead>
@@ -28,6 +29,7 @@
               <td class="truncate">{item.user.first_name}</td>
               <td class="truncate">{item.user.last_name}</td>
               <td class="truncate">{(item.user.organization && item.user.organization.name) || "N/A"}</td>
+              <td class="truncate">{(item.category && item.category.name) || "N/A"}</td>
               <td class="truncate">
                 <LivePatch to={"?user_id=#{item.user_id}"} class="btn btn-xs">
                   Select

@@ -27,7 +27,7 @@ defmodule SM.Accounts do
     User
     |> order_by(desc: :inserted_at)
     |> Repo.all()
-    |> Repo.preload([:organization])
+    |> Repo.preload([:organization, :category])
   end
 
   @doc """
@@ -61,7 +61,7 @@ defmodule SM.Accounts do
         left_join: o in assoc(u, :organization),
         on: o.id == u.organization_id,
         order_by: [desc: :inserted_at],
-        preload: [:organization]
+        preload: [:organization, :category]
       )
 
     Repo.all(query)
@@ -118,7 +118,11 @@ defmodule SM.Accounts do
 
   """
   @spec get_user!(String.t()) :: User.t()
-  def get_user!(id), do: Repo.get!(User, id)
+  def get_user!(id) do
+    User
+    |> Repo.get!(id)
+    |> Repo.preload([:category])
+  end
 
   @doc """
   Gets a single user.
@@ -138,7 +142,7 @@ defmodule SM.Accounts do
   def get_user(id) do
     case Repo.get(User, id) do
       nil -> {:error, :not_found}
-      user -> {:ok, Repo.preload(user, [:organization])}
+      user -> {:ok, Repo.preload(user, [:organization, :category])}
     end
   end
 

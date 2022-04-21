@@ -4,7 +4,7 @@ defmodule SM.Results do
   """
   use SM, :context
 
-  alias SM.Competitions
+  alias SM.Participants
   alias SM.Slides
   alias SM.Slides.Slide
 
@@ -12,27 +12,31 @@ defmodule SM.Results do
 
   @spec list(String.t()) :: {:ok, [%{atom() => any()}]} | {:error, :not_found}
   def list(competition_id) do
-    with {:ok, competition} <- Competitions.get(competition_id) do
-      {results, _acc} =
-        competition.participants
-        |> Enum.map(fn participant ->
-          {slides, total_score} = list_by_participant(competition_id, participant.id)
-          %{user: participant, slides: slides, total_score: total_score}
-        end)
-        |> Enum.sort(&(Decimal.compare(&1.total_score, &2.total_score) in [:gt, :eq]))
-        |> Enum.map_reduce({0, 0, Decimal.new("Infinity")}, fn %{total_score: score} = result,
-                                                               {prev_index, prev_rank, prev_score} ->
-          if Decimal.compare(score, prev_score) == :lt do
-            new_index = prev_index + 1
-            new_rank = prev_index + 1
-            {Map.put(result, :rank, new_rank), {new_index, new_rank, score}}
-          else
-            {Map.put(result, :rank, prev_rank), {prev_index + 1, prev_rank, score}}
-          end
-        end)
+    {results, _acc} =
+      Participants.list(competition_id)
+      |> Enum.map(fn participant ->
+        {slides, total_score} = list_by_participant(competition_id, participant.user.id)
 
-      {:ok, results}
-    end
+        %{
+          participant: participant,
+          user: participant.user,
+          slides: slides,
+          total_score: total_score
+        }
+      end)
+      |> Enum.sort(&(Decimal.compare(&1.total_score, &2.total_score) in [:gt, :eq]))
+      |> Enum.map_reduce({0, 0, Decimal.new("Infinity")}, fn %{total_score: score} = result,
+                                                             {prev_index, prev_rank, prev_score} ->
+        if Decimal.compare(score, prev_score) == :lt do
+          new_index = prev_index + 1
+          new_rank = prev_index + 1
+          {Map.put(result, :rank, new_rank), {new_index, new_rank, score}}
+        else
+          {Map.put(result, :rank, prev_rank), {prev_index + 1, prev_rank, score}}
+        end
+      end)
+
+    {:ok, results}
   end
 
   @spec list_by_participant(String.t(), String.t()) :: {[%{atom() => any()}], Decimal.t()}

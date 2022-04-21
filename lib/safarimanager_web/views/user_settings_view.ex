@@ -1,3 +1,3 @@
-defmodule SMWeb.UserSettingsView do
+defmodule SMWebUserSettingsView do
   use SMWeb, :view
 end

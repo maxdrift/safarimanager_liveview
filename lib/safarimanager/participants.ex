@@ -39,8 +39,9 @@ defmodule SM.Participants do
         where: [competition_id: ^competition_id],
         inner_join: u in assoc(p, :user),
         left_join: o in assoc(u, :organization),
+        left_join: c in assoc(p, :category),
         order_by: [asc: :number],
-        preload: [user: {u, [organization: o]}]
+        preload: [category: c, user: {u, [organization: o]}]
       )
 
     Repo.all(query)
@@ -125,8 +126,6 @@ defmodule SM.Participants do
   """
   @spec create(%{(String.t() | atom()) => any()}) :: {:error, any()} | {:ok, Participant.t()}
   def create(attrs \\ %{}) do
-    attrs = Map.put(attrs, :number, Map.get(attrs, :number, 1))
-
     %Participant{}
     |> Participant.changeset(attrs)
     |> Repo.insert()

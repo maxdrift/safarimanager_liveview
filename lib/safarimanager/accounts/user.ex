@@ -4,6 +4,7 @@ defmodule SM.Accounts.User do
   """
   use SM, :schema
 
+  alias SM.Categories.Category
   alias SM.Competitions.Competition
   alias SM.Organizations.Organization
   alias SM.Participants.Participant
@@ -17,6 +18,7 @@ defmodule SM.Accounts.User do
     field :first_name, :string
     field :last_name, :string
     belongs_to :organization, Organization
+    belongs_to :category, Category
     many_to_many :competitions, Competition, join_through: Participant
     has_many :slides, Slide
 
@@ -90,9 +92,10 @@ defmodule SM.Accounts.User do
           Ecto.Changeset.t()
   def competition_registration_changeset(user, attrs) do
     user
-    |> cast(attrs, [:first_name, :last_name, :email, :organization_id])
-    |> validate_required([:first_name])
+    |> cast(attrs, [:first_name, :last_name, :email, :organization_id, :category_id])
+    |> validate_required([:first_name, :category_id])
     |> foreign_key_constraint(:organization_id)
+    |> foreign_key_constraint(:category_id)
     |> maybe_put_email()
     |> put_default_password()
   end
