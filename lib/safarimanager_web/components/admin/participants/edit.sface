@@ -50,7 +50,7 @@
           <ErrorTag />
         </Label>
       </Field>
-      <Field name={:category_id} class="form-control w-1/2 px-3">
+      <Field name={:category_id} class="form-control w-full">
         <Label class="label">
           <span class="label-text">Category</span>
         </Label>

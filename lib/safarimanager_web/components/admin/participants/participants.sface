@@ -21,6 +21,9 @@
     submit="submit"
     redirect_to="/admin/participants"
     entity_name="participant"
+    {=@users}
+    {=@categories}
+    {=@competitions}
   />
   <Alert level={@error_level} message={@error_message} show={not is_nil(@error_message)} />
   <div class="flex flex-row-reverse my-2">

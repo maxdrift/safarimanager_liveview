@@ -4,9 +4,6 @@ defmodule SMWeb.Components.Admin.Participants.Edit do
   """
   use SMWeb, :surface_live_component
 
-  alias SM.Accounts
-  alias SM.Categories
-  alias SM.Competitions
   alias SMWeb.Components.Dialog
   alias Surface.Components.Form
   alias Surface.Components.Form.ErrorTag
@@ -17,7 +14,6 @@ defmodule SMWeb.Components.Admin.Participants.Edit do
   alias Surface.Components.Form.Reset
   alias Surface.Components.Form.Select
   alias Surface.Components.Form.Submit
-  alias Surface.Components.Form.TextInput
 
   require Logger
 
@@ -30,6 +26,9 @@ defmodule SMWeb.Components.Admin.Participants.Edit do
   prop submit, :event, required: true
   prop redirect_to, :string, required: true
   prop entity_name, :string, required: true
+  prop competitions, :list, required: true
+  prop users, :list, required: true
+  prop categories, :list, required: true
 
   # Public API
 
@@ -38,10 +37,7 @@ defmodule SMWeb.Components.Admin.Participants.Edit do
     send_update(__MODULE__,
       id: dialog_id,
       action: action,
-      show: true,
-      competitions: Competitions.list(),
-      users: Accounts.list(),
-      categories: Categories.list()
+      show: true
     )
   end
 

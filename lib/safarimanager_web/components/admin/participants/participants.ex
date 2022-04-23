@@ -4,6 +4,9 @@ defmodule SMWeb.Components.Admin.Participants do
   """
   use SMWeb, :surface_view
 
+  alias SM.Accounts
+  alias SM.Categories
+  alias SM.Competitions
   alias SM.Participants
   alias SM.Participants.Participant
   alias SMWeb.Atoms.Alert
@@ -28,6 +31,9 @@ defmodule SMWeb.Components.Admin.Participants do
       |> reset_alert()
       |> reset_current_editing()
       |> reset_selection()
+      |> assign(:users, Accounts.list())
+      |> assign(:categories, Categories.list())
+      |> assign(:competitions, Competitions.list())
 
     {:ok, socket}
   end
