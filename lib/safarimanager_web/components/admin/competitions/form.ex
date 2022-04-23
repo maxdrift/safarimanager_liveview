@@ -11,6 +11,7 @@ defmodule SMWeb.Components.Admin.Competitions.Form do
   alias Surface.Components.Form.HiddenInput
   alias Surface.Components.Form.Label
   alias Surface.Components.Form.NumberInput
+  alias Surface.Components.Form.Select
   alias Surface.Components.Form.TextInput
 
   prop action, :atom, values!: [:create, :edit]
@@ -19,6 +20,7 @@ defmodule SMWeb.Components.Admin.Competitions.Form do
   prop validate, :event, required: true
   prop submit, :event, required: true
   prop redirect_to, :string
+  prop organizations, :list, required: true
 
   slot default, required: true
 end

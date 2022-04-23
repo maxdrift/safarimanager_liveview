@@ -37,13 +37,23 @@
         <th class="truncate">{item.number}</th>
         <th class="truncate">{item.competition.name}</th>
         <th class="truncate">{item.user.first_name} {item.user.last_name}</th>
-        <td class="truncate">{item.category && item.category.name || "N/A"}</td>
+        <td class="truncate">{(item.category && item.category.name) || "N/A"}</td>
         <td class="truncate">{format_date(item.inserted_at)}</td>
         <td class="truncate">{format_date(item.updated_at)}</td>
         <td class="overflow-x-auto">
-          <LivePatch to={"?action=show&user_id=#{item.user_id}&competition_id=#{item.competition_id}"} class="btn btn-xs btn-outline btn-info">Show</LivePatch>
-          <LivePatch to={"?action=edit&user_id=#{item.user_id}&competition_id=#{item.competition_id}"} class="btn btn-xs btn-warning">Edit</LivePatch>
-          <button class="btn btn-xs btn-error" :on-click={@delete_one} :values={user_id: item.user_id, competition_id: item.competition_id}>Delete</button>
+          <LivePatch
+            to={"?action=show&user_id=#{item.user_id}&competition_id=#{item.competition_id}"}
+            class="btn btn-xs btn-outline btn-info"
+          >Show</LivePatch>
+          <LivePatch
+            to={"?action=edit&user_id=#{item.user_id}&competition_id=#{item.competition_id}"}
+            class="btn btn-xs btn-warning"
+          >Edit</LivePatch>
+          <button
+            class="btn btn-xs btn-error"
+            :on-click={@delete_one}
+            :values={user_id: item.user_id, competition_id: item.competition_id}
+          >Delete</button>
         </td>
       </tr>
     {#else}

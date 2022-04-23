@@ -21,6 +21,7 @@ defmodule SM.Competitions do
     Competition
     |> order_by(desc: :inserted_at)
     |> Repo.all()
+    |> Repo.preload([:organization])
   end
 
   @doc """
@@ -46,7 +47,8 @@ defmodule SM.Competitions do
          Repo.preload(result, [
            [participants: [:organization, :category]],
            [jurors: :organization],
-           :allowed_evaluations
+           :allowed_evaluations,
+           :organization
          ])}
     end
   end

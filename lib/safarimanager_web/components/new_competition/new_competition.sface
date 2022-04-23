@@ -29,7 +29,7 @@
   <div class="divider lg:divider-horizontal">OR</div>
   <div class="overflow-y-auto rounded-lg lg:w-1/2 bg-base-200 shadow-lg">
     <div class="text-2xl font-bold text-center py-4">Create a new one</div>
-    <Form {=@action} {=@entity} {=@changeset} {=@validate} {=@submit}>
+    <Form {=@action} {=@entity} {=@changeset} {=@validate} {=@submit} {=@organizations}>
       <FormActions
         container_class="justify-end mb-1 card-actions"
         submit_enabled?={@changeset.action && @changeset.valid?}

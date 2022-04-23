@@ -6,6 +6,7 @@ defmodule SMWeb.NewCompetition do
 
   alias SM.Competitions
   alias SM.Competitions.Competition
+  alias SM.Organizations
 
   alias SMWeb.Components.Admin.Competitions.Form
   alias SMWeb.Components.FormActions
@@ -28,6 +29,7 @@ defmodule SMWeb.NewCompetition do
       socket
       |> assign(:changeset, Competitions.change(%Competition{}))
       |> assign(:competitions, Competitions.list())
+      |> assign(:organizations, Organizations.list())
 
     {:ok, socket}
   end

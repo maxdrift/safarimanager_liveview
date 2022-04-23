@@ -6,6 +6,7 @@ defmodule SMWeb.Components.Admin.Competitions do
 
   alias SM.Competitions
   alias SM.Competitions.Competition
+  alias SM.Organizations
   alias SMWeb.Atoms.Alert
   alias SMWeb.Components.Admin.Competitions.Edit
   alias SMWeb.Components.Admin.Competitions.List
@@ -28,6 +29,7 @@ defmodule SMWeb.Components.Admin.Competitions do
       |> reset_alert()
       |> reset_current_editing()
       |> reset_selection()
+      |> assign(:organizations, Organizations.list())
 
     {:ok, socket}
   end

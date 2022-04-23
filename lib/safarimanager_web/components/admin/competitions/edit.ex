@@ -17,6 +17,7 @@ defmodule SMWeb.Components.Admin.Competitions.Edit do
   prop submit, :event, required: true
   prop redirect_to, :string, required: true
   prop entity_name, :string, required: true
+  prop organizations, :list, required: true
 
   # Public API
 
