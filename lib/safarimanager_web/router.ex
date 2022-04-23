@@ -56,7 +56,7 @@ defmodule SMWeb.Router do
     live "/organize/:competition_id/jury", Jury
   end
 
-  scope "/admin", SMWeb do
+  scope "/admin", SMWeb.Components.Admin do
     pipe_through :browser
 
     live "/organizations", Organizations
@@ -65,6 +65,7 @@ defmodule SMWeb.Router do
     live "/evaluations", Evaluations
     live "/users", Users
     live "/categories", Categories
+    live "/participants", Participants
   end
 
   # Enables the Swoosh mailbox preview in development.

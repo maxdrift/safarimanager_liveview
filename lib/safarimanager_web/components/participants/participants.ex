@@ -10,10 +10,10 @@ defmodule SMWeb.Participants do
   alias SM.Competitions
   alias SM.Organizations
   alias SM.Participants
+  alias SMWeb.Components.Admin.Users.Form
   alias SMWeb.Components.CompetitionHeader
   alias SMWeb.Components.FormActions
   alias SMWeb.Components.StepsHeader
-  alias SMWeb.Components.Admin.Users.Form
   alias Surface.Components.LiveRedirect
 
   require Logger

@@ -18,8 +18,9 @@ defmodule SM.Participants do
   @spec list :: [Participant.t()]
   def list do
     Participant
-    |> order_by(asc: :number)
+    |> order_by(asc: :competition_id, asc: :number)
     |> Repo.all()
+    |> Repo.preload([:user, :competition, :category])
   end
 
   @doc """
@@ -104,11 +105,11 @@ defmodule SM.Participants do
   {:error, :not_found}
 
   """
-  @spec get(String.t()) :: {:error, :not_found} | {:ok, Participant.t()}
-  def get(id) do
-    case Repo.get(Participant, id) do
+  @spec get(String.t(), String.t()) :: {:error, :not_found} | {:ok, Participant.t()}
+  def get(user_id, competition_id) do
+    case Repo.get_by(Participant, user_id: user_id, competition_id: competition_id) do
       nil -> {:error, :not_found}
-      result -> {:ok, result}
+      result -> {:ok, Repo.preload(result, [:user, :competition, :category])}
     end
   end
 
@@ -172,6 +173,26 @@ defmodule SM.Participants do
 
   @doc """
   Deletes a Participant.
+
+  ## Examples
+
+      iex> delete(participant)
+      {:ok, %Participant{}}
+
+      iex> delete(participant)
+      {:error, %Ecto.Changeset{}}
+
+  """
+  @spec delete(Participant.t()) :: {:ok, Participant.t()} | {:error, any()}
+  def delete(participant) do
+    participant
+    |> Repo.delete()
+    |> notify_subscribers([:competition, :updated], id_key: :competition_id)
+    |> notify_subscribers([:user, :updated], id_key: :user_id)
+  end
+
+  @doc """
+  Deletes a Participant by User ID and Competition ID.
 
   ## Examples
 

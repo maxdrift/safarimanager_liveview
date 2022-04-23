@@ -93,7 +93,7 @@ defmodule SM.Accounts.User do
   def competition_registration_changeset(user, attrs) do
     user
     |> cast(attrs, [:first_name, :last_name, :email, :organization_id, :category_id])
-    |> validate_required([:first_name, :category_id])
+    |> validate_required([:first_name])
     |> foreign_key_constraint(:organization_id)
     |> foreign_key_constraint(:category_id)
     |> maybe_put_email()
