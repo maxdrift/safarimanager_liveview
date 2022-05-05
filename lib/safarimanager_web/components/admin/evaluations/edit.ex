@@ -4,6 +4,7 @@ defmodule SMWeb.Components.Admin.Evaluations.Edit do
   """
   use SMWeb, :surface_live_component
 
+  alias SM.Evaluations
   alias SMWeb.Components.Dialog
   alias Surface.Components.Form
   alias Surface.Components.Form.ErrorTag
@@ -12,6 +13,7 @@ defmodule SMWeb.Components.Admin.Evaluations.Edit do
   alias Surface.Components.Form.Label
   alias Surface.Components.Form.NumberInput
   alias Surface.Components.Form.Reset
+  alias Surface.Components.Form.Select
   alias Surface.Components.Form.Submit
   alias Surface.Components.Form.TextInput
 
@@ -19,6 +21,7 @@ defmodule SMWeb.Components.Admin.Evaluations.Edit do
 
   data show, :boolean, default: false
   data action, :atom, values!: [:create, :edit]
+  data evaluation_types, :list, default: Evaluations.list_evaluation_types()
 
   prop entity, :struct, required: true
   prop changeset, :changeset, required: true

@@ -5,6 +5,7 @@ defmodule SM.Competitions.Competition do
   use SM, :schema
 
   alias SM.Accounts.User
+  alias SM.Competitions.CompetitionSettings
   alias SM.Evaluations.Evaluation
   alias SM.Jurors.Juror
   alias SM.Organizations.Organization
@@ -21,9 +22,10 @@ defmodule SM.Competitions.Competition do
     field :city, :string
     field :state, :string
     field :country, :string
-    field :req_jurors_count, :integer, default: 0
-    field :evaluations_per_juror, :integer, default: 0
+
     belongs_to :organization, Organization
+
+    has_one :settings, CompetitionSettings, on_replace: :delete
     many_to_many :allowed_evaluations, Evaluation, join_through: "competitions_evaluations"
     many_to_many :participants, User, join_through: Participant
     many_to_many :jurors, User, join_through: Juror
@@ -45,14 +47,13 @@ defmodule SM.Competitions.Competition do
       :city,
       :state,
       :country,
-      :req_jurors_count,
-      :evaluations_per_juror,
       :organization_id
     ])
     |> validate_required([
       :name,
       :organization_id
     ])
+    |> cast_assoc(:settings, required: false)
     |> put_assoc(:allowed_evaluations, Map.get(attrs, "allowed_evaluations", []))
   end
 
@@ -69,13 +70,12 @@ defmodule SM.Competitions.Competition do
       :city,
       :state,
       :country,
-      :req_jurors_count,
-      :evaluations_per_juror,
       :organization_id
     ])
     |> validate_required([
       :name,
       :organization_id
     ])
+    |> cast_assoc(:settings, required: true)
   end
 end

@@ -5,10 +5,12 @@ defmodule SMWeb.Components.Admin.Competitions.Form do
   use SMWeb, :surface_component
 
   alias Surface.Components.Form
+  alias Surface.Components.Form.Checkbox
   alias Surface.Components.Form.DateTimeLocalInput
   alias Surface.Components.Form.ErrorTag
   alias Surface.Components.Form.Field
   alias Surface.Components.Form.HiddenInput
+  alias Surface.Components.Form.Inputs
   alias Surface.Components.Form.Label
   alias Surface.Components.Form.NumberInput
   alias Surface.Components.Form.Select

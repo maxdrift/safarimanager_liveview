@@ -7,6 +7,20 @@ defmodule SM.Evaluations do
   alias SM.Evaluations.Evaluation
 
   @doc """
+  Returns the list of evaluation types.
+
+  ## Examples
+
+  iex> list_evaluation_types()
+  [:numeric]
+
+  """
+  @spec list_evaluation_types :: [:numeric, ...]
+  def list_evaluation_types do
+    Evaluation.get_types()
+  end
+
+  @doc """
   Returns the list of evaluations.
 
   ## Examples
@@ -18,7 +32,7 @@ defmodule SM.Evaluations do
   @spec list :: [Evaluation.t()]
   def list do
     Evaluation
-    |> order_by(desc: :inserted_at)
+    |> order_by(desc: :value)
     |> Repo.all()
   end
 

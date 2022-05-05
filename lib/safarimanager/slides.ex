@@ -9,6 +9,7 @@ defmodule SM.Slides do
   alias SM.Jurors.Juror
   alias SM.Slides.Slide
   alias SM.Slides.SlideEvaluation
+  alias SM.Subjects.Subject
 
   @doc """
   Returns the list of slide statuses.
@@ -154,6 +155,55 @@ defmodule SM.Slides do
         order_by: [asc: su.numeric_id, asc: sl.id],
         preload: [:subject, :evaluations],
         select: sl
+      )
+
+    Repo.all(query)
+  end
+
+  @doc """
+  Returns a count of slides grouped by subject for a competition
+  """
+  @spec count_by_subject(String.t()) :: %{String.t() => any()}
+  def count_by_subject(competition_id) do
+    query =
+      from(sl in Slide,
+        where: [competition_id: ^competition_id],
+        join: su in assoc(sl, :subject),
+        group_by: [:subject_id],
+        order_by: [asc: :subject_id],
+        select: %{subject_id: su.id, count: count(su.id)}
+      )
+
+    Repo.all(query)
+  end
+
+  @doc """
+  Returns a count of all participants that submitted slides
+  """
+  @spec count_submitting_participants(String.t()) :: Decimal.t()
+  def count_submitting_participants(competition_id) do
+    query =
+      from(sl in Slide,
+        where: [competition_id: ^competition_id],
+        where: not is_nil(sl.status),
+        select: count(sl.user_id, :distinct)
+      )
+
+    Repo.one(query)
+  end
+
+  @spec subjects_distribution(String.t()) :: [Subject.t()]
+  def subjects_distribution(competition_id) do
+    p_count = count_submitting_participants(competition_id)
+
+    query =
+      from(sl in Slide,
+        where: [competition_id: ^competition_id],
+        join: su in assoc(sl, :subject),
+        group_by: [:subject_id],
+        order_by: [asc: :subject_id],
+        # preload: [subject: su],
+        select: %Subject{su | distribution: type(count(su.id) / type(^p_count, :float), :decimal)}
       )
 
     Repo.all(query)

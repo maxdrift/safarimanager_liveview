@@ -306,6 +306,6 @@ defmodule SMWeb.Jury do
 
   defp can_evaluate?(competition, slide) do
     Enum.count(slide.evaluations) <
-      Enum.count(competition.jurors) * competition.evaluations_per_juror
+      Enum.count(competition.jurors) * competition.settings.evaluations_per_juror
   end
 end

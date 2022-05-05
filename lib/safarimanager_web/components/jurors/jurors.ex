@@ -21,7 +21,7 @@ defmodule SMWeb.Jurors do
   @impl Phoenix.LiveView
   def handle_event("enroll", %{"user-id" => user_id}, socket) do
     competition_id = socket.assigns.competition_id
-    max_jurors_count = socket.assigns.competition.req_jurors_count
+    max_jurors_count = socket.assigns.competition.settings.number_of_jurors
 
     :ok =
       if Enum.count(socket.assigns.competition.jurors) < max_jurors_count do

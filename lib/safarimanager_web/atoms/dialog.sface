@@ -5,7 +5,7 @@
   phx-key="Escape"
   phx-target={"#" <> @id}
 >
-  <div :if={@show} class="modal-box card card-compact">
+  <div :if={@show} class="modal-box">
     <#slot />
   </div>
 </div>

@@ -4,9 +4,11 @@ defmodule SM.Evaluations.Evaluation do
   """
   use SM, :schema
 
+  @types Application.compile_env!(:safarimanager, [__MODULE__, :types])
+
   schema "evaluations" do
     field :description, :string
-    field :type, :string
+    field :type, Ecto.Enum, values: @types, default: :numeric
     field :value, :decimal
 
     timestamps()
@@ -17,5 +19,10 @@ defmodule SM.Evaluations.Evaluation do
     evaluation
     |> cast(attrs, [:value, :type, :description])
     |> validate_required([:value])
+  end
+
+  @spec get_types :: [:numeric, ...]
+  def get_types do
+    @types
   end
 end

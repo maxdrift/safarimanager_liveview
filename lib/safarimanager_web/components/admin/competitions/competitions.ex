@@ -317,7 +317,6 @@ defmodule SMWeb.Components.Admin.Competitions do
 
   defp reset_current_editing(socket) do
     entity = new()
-
     changeset = change(entity, %{})
 
     socket

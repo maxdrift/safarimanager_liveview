@@ -1,5 +1,5 @@
 <Dialog {=@id} {=@show}>
-  <div class="card-title">
+  <div class="text-xl">
     {String.capitalize(Atom.to_string(@action))} {@entity_name}
   </div>
   <Form

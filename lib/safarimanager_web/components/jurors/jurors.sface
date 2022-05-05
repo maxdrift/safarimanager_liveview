@@ -36,7 +36,7 @@
   </div>
   <div class="divider lg:divider-horizontal" />
   <div class="overflow-y-auto rounded-lg lg:w-1/2 bg-base-200 shadow-lg p-4">
-    <div class="text-2xl font-bold text-center py-4">Jurors (max: {@competition.req_jurors_count})</div>
+    <div class="text-2xl font-bold text-center py-4">Jurors (max: {@competition.settings.number_of_jurors})</div>
     <input class="input input-bordered w-full mb-1" placeholder="Search for a juror...">
     <table class="table table-zebra table-fixed w-full">
       <thead>

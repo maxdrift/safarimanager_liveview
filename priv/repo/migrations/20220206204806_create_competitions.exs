@@ -13,9 +13,6 @@ defmodule SM.Repo.Migrations.CreateCompetitions do
       add :city, :string
       add :state, :string
       add :country, :string
-      add :allowed_evaluations, {:array, :binary_id}, default: []
-      add :evaluations_per_juror, :integer, default: 0
-      add :req_jurors_count, :integer, default: 0
 
       timestamps()
     end

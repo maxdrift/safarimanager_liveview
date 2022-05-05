@@ -36,6 +36,8 @@ config :safarimanager, SM.Subjects.Subject,
   types: [:fish, :macro, :fish_macro, :ambient],
   coefficients: [2, 4, 6]
 
+config :safarimanager, SM.Evaluations.Evaluation, types: [:numeric]
+
 config :safarimanager, SM.Slides.Slide,
   statuses: [:discarded, :submitted_jury, :submitted_fixed],
   uploads_base_path: "/uploads",
@@ -43,6 +45,23 @@ config :safarimanager, SM.Slides.Slide,
     small: {100, 100},
     medium: {1280, 1280},
     large: {2560, 2560}
+  ]
+
+config :safarimanager, SM.Competitions.CompetitionSettings,
+  defaults: [
+    evaluations_per_juror: 1,
+    number_of_jurors: 3,
+    max_jury_slides: 15,
+    max_submitted_slides: 99,
+    proportional_submission: true,
+    submission_ratio: "0.25",
+    fixed_points_multiplier: "5.0",
+    penalty_amount: "-100",
+    dynamic_coefficients: [
+      %{name: "max", from: "0", to: "0.33", value: "1"},
+      %{name: "mid", from: "0.33", to: "0.66", value: "1"},
+      %{name: "min", from: "0.66", to: "1.0", value: "1"}
+    ]
   ]
 
 config :safarimanager, :generators,

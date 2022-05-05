@@ -26,7 +26,10 @@
         <Label class="label">
           <span class="label-text">Type</span>
         </Label>
-        <TextInput
+        <Select
+          options={@evaluation_types}
+          selected={@entity.type}
+          prompt="Select a type"
           class={state_class("input input-bordered", @changeset, :type, [])}
           opts={phx_debounce: "1000"}
         />

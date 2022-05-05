@@ -127,26 +127,134 @@
       />
       <Label class="label h-7"><ErrorTag /></Label>
     </Field>
-    <Field name={:req_jurors_count} class="form-control w-1/2 px-3">
-      <Label class="label">
-        <span class="label-text">Num. of jurors</span>
-      </Label>
-      <NumberInput
-        class={state_class("input input-bordered", @changeset, :req_jurors_count, [])}
-        opts={phx_debounce: "1000"}
-      />
-      <Label class="label h-7"><ErrorTag /></Label>
-    </Field>
-    <Field name={:evaluations_per_juror} class="form-control w-1/2 px-3">
-      <Label class="label">
-        <span class="label-text">Evaluations per juror</span>
-      </Label>
-      <NumberInput
-        class={state_class("input input-bordered", @changeset, :evaluations_per_juror, [])}
-        opts={phx_debounce: "1000"}
-      />
-      <Label class="label h-7"><ErrorTag /></Label>
-    </Field>
+    <Inputs for={:settings}>
+      <Field name={:number_of_jurors} class="form-control w-1/2 px-3">
+        <Label class="label">
+          <span class="label-text">Number of jurors</span>
+        </Label>
+        <NumberInput
+          class={state_class("input input-bordered", @changeset, :number_of_jurors, [])}
+          opts={phx_debounce: "1000"}
+        />
+        <Label class="label h-7"><ErrorTag /></Label>
+      </Field>
+      <Field name={:evaluations_per_juror} class="form-control w-1/2 px-3">
+        <Label class="label">
+          <span class="label-text">Evaluations per juror</span>
+        </Label>
+        <NumberInput
+          class={state_class("input input-bordered", @changeset, :evaluations_per_juror, [])}
+          opts={phx_debounce: "1000"}
+        />
+        <Label class="label h-7"><ErrorTag /></Label>
+      </Field>
+      <Field name={:max_jury_slides} class="form-control w-1/2 px-3">
+        <Label class="label">
+          <span class="label-text">Max slides for jury</span>
+        </Label>
+        <NumberInput
+          class={state_class("input input-bordered", @changeset, :max_jury_slides, [])}
+          opts={phx_debounce: "1000"}
+        />
+        <Label class="label h-7"><ErrorTag /></Label>
+      </Field>
+      <Field name={:max_submitted_slides} class="form-control w-1/2 px-3">
+        <Label class="label">
+          <span class="label-text">Max submitted slides</span>
+        </Label>
+        <NumberInput
+          class={state_class("input input-bordered", @changeset, :max_submitted_slides, [])}
+          opts={phx_debounce: "1000"}
+        />
+        <Label class="label h-7"><ErrorTag /></Label>
+      </Field>
+      <Field name={:proportional_submission} class="form-control w-1/2 px-3">
+        <Label class="label cursor-pointer">
+          <span class="label-text">Proportional submission</span>
+        <Checkbox
+          class={state_class("checkbox", @changeset, :proportional_submission, [])}
+          opts={phx_debounce: "1000"}
+        />
+        </Label>
+        <Label class="label h-7"><ErrorTag /></Label>
+      </Field>
+      <Field name={:submission_ratio} class="form-control w-1/2 px-3">
+        <Label class="label">
+          <span class="label-text">Submission ratio</span>
+        </Label>
+        <NumberInput
+          class={state_class("input input-bordered", @changeset, :submission_ratio, [])}
+          opts={phx_debounce: "1000"}
+        />
+        <Label class="label h-7"><ErrorTag /></Label>
+      </Field>
+      <Field name={:fixed_points_multiplier} class="form-control w-1/2 px-3">
+        <Label class="label">
+          <span class="label-text">Fixed points multiplier</span>
+        </Label>
+        <NumberInput
+          class={state_class("input input-bordered", @changeset, :fixed_points_multiplier, [])}
+          opts={phx_debounce: "1000"}
+        />
+        <Label class="label h-7"><ErrorTag /></Label>
+      </Field>
+      <Field name={:penalty_amount} class="form-control w-1/2 px-3">
+        <Label class="label">
+          <span class="label-text">Penalty amount</span>
+        </Label>
+        <NumberInput
+          class={state_class("input input-bordered", @changeset, :penalty_amount, [])}
+          opts={phx_debounce: "1000"}
+        />
+        <Label class="label h-7"><ErrorTag /></Label>
+      </Field>
+      <div class="text-lg w-full px-3">Dynamic coefficients:</div>
+      <Inputs for={:dynamic_coefficients}>
+        <Field name={:name} class="form-control w-1/2 px-3">
+          <Label class="label">
+            <span class="label-text">Name</span>
+          </Label>
+          <TextInput
+            class={state_class("input input-sm input-bordered", @changeset, :name, [])}
+            opts={phx_debounce: "1000"}
+          />
+          <Label class="label h-7"><ErrorTag /></Label>
+        </Field>
+        <Field name={:value} class="form-control w-1/2 px-3">
+          <Label class="label">
+            <span class="label-text">Value</span>
+          </Label>
+          <NumberInput
+            class={state_class("input input-sm input-bordered", @changeset, :value, [])}
+            opts={phx_debounce: "1000"}
+          />
+          <Label class="label h-7"><ErrorTag /></Label>
+        </Field>
+        <Field name={:from} class="form-control w-1/2 px-3">
+          <Label class="label">
+            <span class="label-text">From</span>
+          </Label>
+          <NumberInput
+            class={state_class("input input-sm input-bordered", @changeset, :from, [])}
+            opts={phx_debounce: "1000"}
+          />
+          <Label class="label h-7"><ErrorTag /></Label>
+        </Field>
+        <Field name={:to} class="form-control w-1/2 px-3">
+          <Label class="label">
+            <span class="label-text">To</span>
+          </Label>
+          <NumberInput
+            class={state_class("input input-sm input-bordered", @changeset, :to, [])}
+            opts={phx_debounce: "1000"}
+          />
+          <Label class="label h-7"><ErrorTag /></Label>
+        </Field>
+      </Inputs>
+      <!-- <button class="btn btn-xs btn-ghost ml-3 mt-2" :on-click="add-coefficient">
+        Add coefficient
+      </button> -->
+    </Inputs>
     <HiddenInput field={:_action} value={@action} />
   </div>
   <#slot />

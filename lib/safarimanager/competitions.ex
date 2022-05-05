@@ -5,6 +5,7 @@ defmodule SM.Competitions do
   use SM, :context
 
   alias SM.Competitions.Competition
+  alias SM.Competitions.CompetitionSettings
   alias SM.Evaluations
 
   @doc """
@@ -48,7 +49,8 @@ defmodule SM.Competitions do
            [participants: [:organization, :category]],
            [jurors: :organization],
            :allowed_evaluations,
-           :organization
+           :organization,
+           :settings
          ])}
     end
   end
@@ -68,10 +70,10 @@ defmodule SM.Competitions do
   @spec create(%{String.t() => any()}) :: {:error, any()} | {:ok, Competition.t()}
   def create(attrs \\ %{}) do
     # TODO: Perform evaluations selection in the UI
-    attrs = Map.put(attrs, "allowed_evaluations", Evaluations.list())
+    # attrs = Map.put(attrs, "allowed_evaluations", Evaluations.list())
 
     %Competition{}
-    |> Competition.changeset(attrs)
+    |> change(attrs)
     |> Repo.insert()
     |> notify_subscribers([:competition, :created])
   end
@@ -150,8 +152,43 @@ defmodule SM.Competitions do
   """
   @spec change(Competition.t(), %{String.t() => any()}) :: Ecto.Changeset.t()
   def change(%Competition{} = competition, attrs \\ %{}) do
-    competition
-    |> Repo.preload([:allowed_evaluations])
-    |> Competition.update_changeset(attrs)
+    attrs =
+      if Map.has_key?(attrs, "settings") or not is_nil(competition.id) do
+        attrs
+      else
+        Map.put(attrs, "settings", fetch_default_settings())
+      end
+
+    Competition.update_changeset(competition, attrs)
+    # |> IO.inspect(label: :changeset)
+  end
+
+  @spec change_settings(CompetitionSettings.t(), %{String.t() => any()}) :: Ecto.Changeset.t()
+  def change_settings(%CompetitionSettings{} = settings, attrs \\ %{}) do
+    CompetitionSettings.changeset(settings, attrs)
+  end
+
+  @spec fetch_default_settings :: %{String.t() => any()}
+  def fetch_default_settings do
+    %{
+      "evaluations_per_juror" => fetch_config!(:evaluations_per_juror),
+      "number_of_jurors" => fetch_config!(:number_of_jurors),
+      "max_jury_slides" => fetch_config!(:max_jury_slides),
+      "max_submitted_slides" => fetch_config!(:max_submitted_slides),
+      "proportional_submission" => fetch_config!(:proportional_submission),
+      "submission_ratio" => fetch_config!(:submission_ratio),
+      "fixed_points_multiplier" => fetch_config!(:fixed_points_multiplier),
+      "penalty_amount" => fetch_config!(:penalty_amount),
+      "dynamic_coefficients" => fetch_config!(:dynamic_coefficients)
+    }
+  end
+
+  # Internal
+
+  defp fetch_config!(key) do
+    config = Application.fetch_env!(:safarimanager, CompetitionSettings)
+    defaults = Keyword.fetch!(config, :defaults)
+
+    Keyword.fetch!(defaults, key)
   end
 end

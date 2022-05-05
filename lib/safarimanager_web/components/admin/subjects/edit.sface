@@ -67,9 +67,10 @@
         </Label>
         <Select
           options={@subject_types}
+          selected={@entity.type}
           prompt="Select a type"
           class={state_class("input input-bordered", @changeset, :type, [])}
-          opts={phx_debounce: "1000", selected: @entity.type}
+          opts={phx_debounce: "1000"}
         />
         <Label class="label h-7">
           <ErrorTag />

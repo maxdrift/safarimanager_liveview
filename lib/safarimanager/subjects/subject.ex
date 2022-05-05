@@ -13,6 +13,8 @@ defmodule SM.Subjects.Subject do
     field :numeric_id, :integer
     field :scientific_name, :string
     field :type, Ecto.Enum, values: @types
+    field :distribution, :decimal, virtual: true
+    field :dynamic_coefficient, :decimal, default: 1, virtual: true
 
     timestamps()
   end

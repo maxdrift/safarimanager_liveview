@@ -47,7 +47,7 @@ defmodule SM.Seeds do
   end
 
   defp insert_evaluations do
-    0..10
+    [-100 | Enum.to_list(0..10)]
     |> Stream.map(fn e ->
       {:ok, _result} =
         Evaluations.create(%{
@@ -59,10 +59,11 @@ defmodule SM.Seeds do
   end
 
   defp insert_categories do
-    @default_categories
-    |> Stream.map(fn name ->
-      {:ok, _result} = Categories.create(%{name: name})
-    end)
-    |> Stream.run()
+    :ok =
+      @default_categories
+      |> Stream.map(fn name ->
+        {:ok, _result} = Categories.create(%{name: name})
+      end)
+      |> Stream.run()
   end
 end
