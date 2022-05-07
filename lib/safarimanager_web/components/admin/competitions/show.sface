@@ -28,9 +28,9 @@
             <li><b>Penalty amount:</b> {@entity.settings.penalty_amount}</li>
             <li><b>Dynamic coefficients:</b>
               <ul class="list-disc list-inside pl-6">
-              {#for dc <- @entity.settings.dynamic_coefficients}
-                <li><b>{dc.name}:</b> {dc.value} (from {dc.from} to {dc.to})</li>
-              {/for}
+                {#for dc <- @entity.settings.dynamic_coefficients}
+                  <li><b>{dc.name}:</b> {dc.value} (from {dc.from} to {dc.to})</li>
+                {/for}
               </ul>
             </li>
           {#else}
