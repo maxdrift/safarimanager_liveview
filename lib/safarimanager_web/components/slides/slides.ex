@@ -9,9 +9,11 @@ defmodule SMWeb.Slides do
   alias SM.Competitions
   alias SM.Participants
   alias SM.Slides
+  alias SM.USBWatcherSupervisor
   alias SMWeb.Components.CompetitionHeader
   alias SMWeb.Components.StepsHeader
   alias Surface.Components.Form
+  alias Surface.Components.Form.Checkbox
   alias Surface.Components.Form.FieldContext
   alias Surface.Components.Form.TextInput
   alias Surface.Components.LiveFileInput
@@ -27,6 +29,7 @@ defmodule SMWeb.Slides do
       |> assign(:user, nil)
       |> assign(:participants, [])
       |> assign(:slides, [])
+      |> assign(:discovery_mode, USBWatcherSupervisor.active?())
       |> allow_upload(:images,
         accept: ~w(.jpg .jpeg .png),
         max_entries: 500,
@@ -41,7 +44,21 @@ defmodule SMWeb.Slides do
   end
 
   @impl Phoenix.LiveView
-  def handle_event("validate", _params, socket) do
+  def handle_event(
+        "validate",
+        %{"_target" => ["discovery_mode"], "discovery_mode" => values},
+        socket
+      ) do
+    if "true" in values do
+      :ok = USBWatcherSupervisor.start_poller()
+    else
+      :ok = USBWatcherSupervisor.stop_poller()
+    end
+
+    {:noreply, socket}
+  end
+
+  def handle_event("validate", params, socket) do
     {:noreply, socket}
   end
 

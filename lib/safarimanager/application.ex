@@ -16,9 +16,10 @@ defmodule SM.Application do
       # Start the PubSub system
       {Phoenix.PubSub, name: SM.PubSub},
       # Start the Endpoint (http/https)
-      SMWeb.Endpoint
+      SMWeb.Endpoint,
       # Start a worker by calling: SM.Worker.start_link(arg)
       # {SM.Worker, arg}
+      {SM.USBWatcherSupervisor, []}
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
