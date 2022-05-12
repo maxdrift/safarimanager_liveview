@@ -1,19 +1,18 @@
-defmodule SMWeb.Jury do
+defmodule SMWeb.Validation do
   @moduledoc """
-  Live view to handle Jury operations i.e. evaluation of Slides
+  Live view to handle Validation operations
   """
   use SMWeb, :surface_jury_view
 
   alias SM.Competitions
   alias SM.Slides
-
+  alias SM.Subjects
   alias SMWeb.Atoms.JuryToolbarButton
+  alias Surface.Components.Form
+  alias Surface.Components.Form.Select
+  alias Surface.Components.Form.TextInput
 
   require Logger
-
-  @evaluations %{
-    prizes: ["distinguish"]
-  }
 
   @impl Phoenix.LiveView
   def mount(_params, _session, socket) do
@@ -23,10 +22,8 @@ defmodule SMWeb.Jury do
       socket
       |> assign(:curr_index, 0)
       |> assign(:image_count, 0)
-      |> assign(:flash_eval, nil)
-      |> assign(:prizes, @evaluations.prizes)
       |> assign(:curr_slide, nil)
-      |> assign(:evaluations, [])
+      |> assign(:subjects, Subjects.list())
 
     {:ok, socket}
   end
@@ -46,7 +43,7 @@ defmodule SMWeb.Jury do
       if Map.has_key?(socket.assigns, :slides) do
         socket
       else
-        slides = Slides.list(competition_id)
+        slides = Slides.list_for_validation(competition_id)
 
         assign(socket, :slides, slides)
       end
@@ -62,8 +59,6 @@ defmodule SMWeb.Jury do
       |> assign(:image_count, Enum.count(slides))
       |> assign(:curr_index, current_index)
       |> assign(:curr_slide, slide)
-      |> assign(:evaluations, socket.assigns.competition.allowed_evaluations)
-      |> assign(:jurors, socket.assigns.competition.jurors)
       # Note: remember events pushed from the server via push_event are global
       # and will be dispatched to all active hooks on the client who are handling that event.
       |> push_event("new-image", %{options: %{image_url: file_path}})
@@ -104,24 +99,86 @@ defmodule SMWeb.Jury do
     {:noreply, to_prev_image(socket)}
   end
 
-  def handle_event("evaluate", %{"evaluation-id" => evaluation_id}, socket) do
-    socket = evaluate(socket, evaluation_id)
-
-    {:noreply, socket}
-  end
-
-  def handle_event("prize", %{"prize" => prize}, socket) do
-    IO.inspect(prize, label: :prize)
-    {:noreply, socket}
-  end
-
-  def handle_event("penalty", _params, socket) do
+  def handle_event("flag", %{"reason" => "wrong-subject"}, socket) do
     slide_id = socket.assigns.curr_slide.id
+    {:ok, slide} = Slides.get(slide_id)
 
-    if Slides.has_penalty?(slide_id) do
-      Slides.clear_penalty(slide_id)
-    else
-      Slides.apply_penalty(slide_id)
+    flags =
+      if (slide.flags && slide.flags.wrong_subject) || false do
+        %{"wrong_subject" => false, "wrong_subject_ctx" => nil}
+      else
+        %{"wrong_subject" => true}
+      end
+
+    case Slides.update(slide, %{"flags" => flags}) do
+      {:ok, _slide} ->
+        :ok
+
+      {:error, reason} = error ->
+        Logger.error("Unable to update Slide: #{inspect(reason)}")
+        error
+    end
+
+    {:noreply, socket}
+  end
+
+  def handle_event("flag", %{"reason" => "other"}, socket) do
+    slide_id = socket.assigns.curr_slide.id
+    {:ok, slide} = Slides.get(slide_id)
+
+    flags =
+      if (slide.flags && slide.flags.other_reason) || false do
+        %{"other_reason" => false, "other_reason_ctx" => nil}
+      else
+        %{"other_reason" => true}
+      end
+
+    case Slides.update(slide, %{"flags" => flags}) do
+      {:ok, _slide} ->
+        :ok
+
+      {:error, reason} = error ->
+        Logger.error("Unable to update Slide: #{inspect(reason)}")
+        error
+    end
+
+    {:noreply, socket}
+  end
+
+  # TODO: improve form reset when changing slide
+  def handle_event("validate", %{"wrong_subject_flag" => %{"subject" => subject_id}}, socket) do
+    slide_id = socket.assigns.curr_slide.id
+    {:ok, slide} = Slides.get(slide_id)
+
+    case Slides.update(slide, %{
+           "flags" => %{"wrong_subject_ctx" => %{"from" => slide.subject_id, "to" => subject_id}}
+         }) do
+      {:ok, slide} ->
+        :ok
+        # IO.inspect(slide)
+
+        {:noreply, assign(socket, :curr_slide, slide)}
+
+      {:error, reason} ->
+        Logger.error("Unable to update Slide: #{inspect(reason)}")
+        {:noreply, socket}
+    end
+  end
+
+  # TODO: improve form reset when changing slide
+  def handle_event("validate", %{"other_reason_flag" => %{"reason" => reason}}, socket) do
+    slide_id = socket.assigns.curr_slide.id
+    {:ok, slide} = Slides.get(slide_id)
+
+    case Slides.update(slide, %{
+           "flags" => %{"other_reason_ctx" => reason}
+         }) do
+      {:ok, _slide} ->
+        :ok
+
+      {:error, reason} = error ->
+        Logger.error("Unable to update Slide: #{inspect(reason)}")
+        error
     end
 
     {:noreply, socket}
@@ -152,36 +209,8 @@ defmodule SMWeb.Jury do
   end
 
   def handle_event("evaluation-key", %{"key" => "Escape"}, socket) do
-    {:noreply, redirect(socket, to: "/organize/#{socket.assigns.competition.id}/jury_launcher")}
-  end
-
-  def handle_event("evaluation-key", %{"key" => evaluation}, socket) do
-    with {int_evaluation, ""} <- Integer.parse(evaluation),
-         %_evaluation{} = match <-
-           Enum.find(
-             socket.assigns.evaluations,
-             &Decimal.equal?(&1.value, Decimal.new(int_evaluation))
-           ) do
-      socket = evaluate(socket, match.id)
-      Logger.debug("Evaluation value #{match.value} with ID #{match.id}")
-      {:noreply, socket}
-    else
-      :error ->
-        Logger.info("Invalid key: #{evaluation}")
-        {:noreply, socket}
-
-      nil ->
-        Logger.info("Invalid key: #{evaluation}")
-        {:noreply, socket}
-
-      {:error, _reason} ->
-        {:noreply, socket}
-    end
-  end
-
-  def handle_event("clear-evaluations", %{}, socket) do
-    Slides.clear_evaluations(socket.assigns.curr_slide.id)
-    {:noreply, socket}
+    {:noreply,
+     redirect(socket, to: "/organize/#{socket.assigns.competition.id}/validation_launcher")}
   end
 
   def handle_event(event, data, socket) do
@@ -203,38 +232,7 @@ defmodule SMWeb.Jury do
     {:noreply, socket}
   end
 
-  def handle_info(:unset_flash_eval, socket) do
-    socket = assign(socket, :flash_eval, nil)
-
-    {:noreply, socket}
-  end
-
   # Internal
-
-  defp set_flash_evaluation(socket, value) do
-    socket = assign(socket, :flash_eval, value)
-    {:ok, _tref} = :timer.send_after(5000, :unset_flash_eval)
-
-    socket
-  end
-
-  defp evaluate(socket, evaluation_id) do
-    case Slides.evaluate(
-           socket.assigns.competition.id,
-           socket.assigns.curr_slide.id,
-           evaluation_id
-         ) do
-      {:ok, slide_evaluation} ->
-        set_flash_evaluation(socket, slide_evaluation.evaluation.value)
-
-      {:error, :already_evaluated} ->
-        socket
-
-      {:error, reason} ->
-        Logger.error("Error storing evaluation: #{inspect(reason)}")
-        socket
-    end
-  end
 
   defp to_prev_image(socket) do
     next_index = rem(socket.assigns.curr_index - 1, socket.assigns.image_count)
@@ -312,7 +310,7 @@ defmodule SMWeb.Jury do
   end
 
   defp full_path(socket) do
-    "/organize/#{socket.assigns.competition.id}/jury"
+    "/organize/#{socket.assigns.competition.id}/validation"
   end
 
   defp image_path(socket, slide) do
@@ -322,10 +320,6 @@ defmodule SMWeb.Jury do
     )
   end
 
-  defp can_evaluate?(_competition, nil), do: false
-
-  defp can_evaluate?(competition, slide) do
-    Enum.count(slide.evaluations) <
-      Enum.count(competition.jurors) * competition.settings.evaluations_per_juror
-  end
+  defp status_to_label(:submitted_fixed), do: "Fixed points"
+  defp status_to_label(:submitted_jury), do: "Jury"
 end

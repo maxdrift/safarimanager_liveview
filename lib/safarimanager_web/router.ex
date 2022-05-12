@@ -42,6 +42,7 @@ defmodule SMWeb.Router do
     live "/organize/:competition_id/jurors", Jurors
     live "/organize/:competition_id/slides", Slides
     live "/organize/:competition_id/csv_import", CSVImport
+    live "/organize/:competition_id/validation_launcher", ValidationLauncher
     live "/organize/:competition_id/jury_launcher", JuryLauncher
     live "/organize/:competition_id/results", Results
 
@@ -54,6 +55,7 @@ defmodule SMWeb.Router do
     pipe_through :jury_browser
 
     live "/organize/:competition_id/jury", Jury
+    live "/organize/:competition_id/validation", Validation
   end
 
   scope "/admin", SMWeb.Components.Admin do

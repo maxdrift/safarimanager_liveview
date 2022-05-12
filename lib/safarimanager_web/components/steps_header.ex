@@ -12,6 +12,7 @@ defmodule SMWeb.Components.StepsHeader do
       %{name: "Jurors"},
       %{name: "Slides"},
       %{name: "CSV"},
+      %{name: "Validation"},
       %{name: "Jury"},
       %{name: "Results"}
     ]

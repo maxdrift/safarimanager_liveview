@@ -1,0 +1,90 @@
+<CompetitionHeader {=@competition} />
+<StepsHeader current_step={5} />
+<div class="mt-20 text-center">
+  <Link to={"/organize/#{@competition_id}/validation"} class="btn btn-xl btn-primary">
+    Start Validation
+  </Link>
+</div>
+<div class="mt-20">
+  <table class="table table-compact w-full">
+    <thead>
+      <tr>
+        <th>Participant</th>
+        <th>Subject</th>
+        <th>Status</th>
+        <th>Wrong subject</th>
+        <th>Other reason</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      {#for {slide, participant} <- @flagged_slides}
+        <tr>
+          <th>{participant.number}</th>
+          <td>{slide.subject.name}</td>
+          <td>
+            <div class={
+              "my-auto",
+              "badge",
+              "badge-success": slide.status == :submitted_jury,
+              "badge-warning": slide.status == :submitted_fixed
+            }>
+              {status_to_label(slide.status)}
+            </div>
+          </td>
+          <td>{(slide.flags.wrong_subject_ctx &&
+               "#{subject_name(@subjects, slide.flags.wrong_subject_ctx.from)} → #{subject_name(@subjects, slide.flags.wrong_subject_ctx.to)}") ||
+              "-"}</td>
+          <td>{slide.flags.other_reason_ctx || "-"}</td>
+          <td>
+          <Link to={"/organize/#{@competition_id}/validation?slide_id=#{slide.id}"} class="btn btn-xs">
+          Open
+          </Link>
+          </td>
+        </tr>
+      {#else}
+        <tr>
+          <th>There are no flagged slides yet</th>
+          <td />
+          <td />
+          <td />
+          <td />
+          <td />
+          <td />
+        </tr>
+      {/for}
+    </tbody>
+  </table>
+</div>
+<div class="flex flex-row my-10 w-full">
+  <LiveRedirect to={"/organize/#{@competition_id}/csv_import"} class="flex-none btn gap-2">
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      class="h-6 w-6"
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke="currentColor"
+      stroke-width="2"
+    >
+      <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+    </svg>
+    CSV Import
+  </LiveRedirect>
+  <div class="grow" />
+  <LiveRedirect
+    to={"/organize/#{@competition_id}/jury_launcher"}
+    class="flex-none btn btn-primary gap-2"
+  >
+    Jury
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      class="h-6 w-6"
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke="currentColor"
+      stroke-width="2"
+    >
+      <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+    </svg>
+  </LiveRedirect>
+</div>

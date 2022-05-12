@@ -1,5 +1,5 @@
 <CompetitionHeader {=@competition} />
-<StepsHeader current_step={6} />
+<StepsHeader current_step={7} />
 <div class="pt-10 overflow-y-auto">
   <table class="table table-zebra table-fixed w-full">
     <thead>

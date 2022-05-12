@@ -45,6 +45,14 @@
         <JuryToolbarButton click="clear-evaluations">Clear</JuryToolbarButton>
       </div>
       <div class="btn-group">
+        <JuryToolbarButton
+          click="penalty"
+          click_key="penalty"
+          click_value="penalty"
+          class={"btn", "btn-sm", "btn-success": @curr_slide.penalty}
+        >Penalty</JuryToolbarButton>
+      </div>
+      <div class="btn-group">
         {#for prize <- @prizes}
           <JuryToolbarButton click="prize" click_key="prize" click_value={prize}>{prize}</JuryToolbarButton>
         {#else}

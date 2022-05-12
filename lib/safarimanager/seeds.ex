@@ -47,7 +47,7 @@ defmodule SM.Seeds do
   end
 
   defp insert_evaluations do
-    [-100 | Enum.to_list(0..10)]
+    0..10
     |> Stream.map(fn e ->
       {:ok, _result} =
         Evaluations.create(%{

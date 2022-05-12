@@ -50,7 +50,10 @@ defmodule SM.Results do
     user_id
     |> Slides.list(competition_id)
     |> Enum.flat_map_reduce(Decimal.new(0), fn
-      # TODO: Detect penalty and skip sum of evaluations
+      %Slide{penalty: true} = slide, total_score ->
+        slide_score = competition.settings.penalty_amount
+        {[%{slide: slide, slide_score: slide_score}], Decimal.add(total_score, slide_score)}
+
       %Slide{status: :submitted_jury} = slide, total_score ->
         subject = Enum.find(subjects, &(&1.id == slide.subject_id))
 

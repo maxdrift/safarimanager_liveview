@@ -7,6 +7,7 @@ defmodule SM.Slides do
   alias Ecto.Multi
   alias SM.ImageProcessing
   alias SM.Jurors.Juror
+  alias SM.Participants.Participant
   alias SM.Slides.Slide
   alias SM.Slides.SlideEvaluation
   alias SM.Subjects.Subject
@@ -155,6 +156,43 @@ defmodule SM.Slides do
         order_by: [asc: su.numeric_id, asc: sl.id],
         preload: [:subject, :evaluations],
         select: sl
+      )
+
+    Repo.all(query)
+  end
+
+  @spec list_for_validation(String.t()) :: [Slide.t()]
+  def list_for_validation(competition_id) do
+    query =
+      from(sl in Slide,
+        join: su in assoc(sl, :subject),
+        where: [competition_id: ^competition_id],
+        where: sl.status in [:submitted_fixed, :submitted_jury],
+        group_by: [sl.id, sl.subject_id, su.numeric_id],
+        order_by: [desc: sl.status, asc: su.numeric_id, asc: sl.id],
+        preload: [:subject, :evaluations],
+        select: sl
+      )
+
+    Repo.all(query)
+  end
+
+  @spec list_flagged(String.t()) :: [{Slide.t(), Participant.t()}]
+  def list_flagged(competition_id) do
+    query =
+      from(sl in Slide,
+        join: su in assoc(sl, :subject),
+        join: u in assoc(sl, :user),
+        join: p in Participant,
+        on: p.user_id == u.id and p.competition_id == ^competition_id,
+        where: [competition_id: ^competition_id],
+        where: sl.status in [:submitted_fixed, :submitted_jury],
+        where: not is_nil(sl.flags),
+        where: sl.flags["wrong_subject"] or sl.flags["other_reason"],
+        group_by: [sl.id, sl.subject_id, su.numeric_id],
+        order_by: [desc: sl.status, asc: su.numeric_id, asc: sl.id],
+        preload: [:evaluations, subject: su, user: u],
+        select: {sl, p}
       )
 
     Repo.all(query)
@@ -376,29 +414,27 @@ defmodule SM.Slides do
   @spec evaluate(String.t(), String.t(), String.t()) ::
           {:ok, SlideEvaluation.t()} | {:error, any()}
   def evaluate(competition_id, slide_id, evaluation_id) do
-    free_jurors =
-      Repo.all(
-        from(
-          j in Juror,
-          left_join: se in SlideEvaluation,
-          on: se.user_id == j.user_id and se.slide_id == ^slide_id,
-          where: is_nil(se.user_id),
-          where: [competition_id: ^competition_id],
-          order_by: [asc: :inserted_at],
-          limit: 1
-        )
-      )
-
-    case free_jurors do
-      [juror] ->
-        create_slide_evaluation(%{
-          slide_id: slide_id,
-          user_id: juror.user_id,
-          evaluation_id: evaluation_id
-        })
-
-      [] ->
-        {:error, :already_evaluated}
+    with false <- has_penalty?(slide_id),
+         [juror] <-
+           Repo.all(
+             from(
+               j in Juror,
+               left_join: se in SlideEvaluation,
+               on: se.user_id == j.user_id and se.slide_id == ^slide_id,
+               where: is_nil(se.user_id),
+               where: [competition_id: ^competition_id],
+               order_by: [asc: :inserted_at],
+               limit: 1
+             )
+           ) do
+      create_slide_evaluation(%{
+        slide_id: slide_id,
+        user_id: juror.user_id,
+        evaluation_id: evaluation_id
+      })
+    else
+      true -> {:error, :has_penalty}
+      [] -> {:error, :already_evaluated}
     end
   end
 
@@ -420,10 +456,44 @@ defmodule SM.Slides do
     end
   end
 
+  @spec has_penalty?(String.t()) :: boolean()
+  def has_penalty?(slide_id) do
+    Repo.one(from(s in Slide, where: [id: ^slide_id], select: s.penalty))
+  end
+
   @spec clear_evaluations(String.t()) :: {:ok, integer()} | {:error, any()}
   def clear_evaluations(slide_id) do
     {deleted, nil} = Repo.delete_all(from(SlideEvaluation, where: [slide_id: ^slide_id]))
     notify_subscribers({:ok, deleted}, [:slide, :updated])
+  end
+
+  @spec apply_penalty(String.t()) :: :ok | {:error, any()}
+  def apply_penalty(slide_id) do
+    Multi.new()
+    |> Multi.delete_all(:delete_evaluations, from(SlideEvaluation, where: [slide_id: ^slide_id]))
+    |> Multi.update_all(:apply_penalty, from(Slide, where: [id: ^slide_id]), set: [penalty: true])
+    |> Repo.transaction()
+    |> case do
+      {:ok, _result} ->
+        notify_subscribers({:ok, :updated}, [:slide, :updated])
+
+      {:error, failed_operation, failed_value, _changes_so_far} ->
+        {:error, {failed_operation, failed_value}}
+    end
+  end
+
+  @spec clear_penalty(String.t()) :: :ok | {:error, any()}
+  def clear_penalty(slide_id) do
+    Multi.new()
+    |> Multi.update_all(:clear_penalty, from(Slide, where: [id: ^slide_id]), set: [penalty: false])
+    |> Repo.transaction()
+    |> case do
+      {:ok, _result} ->
+        notify_subscribers({:ok, :updated}, [:slide, :updated])
+
+      {:error, failed_operation, failed_value, _changes_so_far} ->
+        {:error, {failed_operation, failed_value}}
+    end
   end
 
   @doc """
@@ -511,6 +581,20 @@ defmodule SM.Slides do
   @spec change(Slide.t(), %{String.t() => any()}) :: Ecto.Changeset.t()
   def change(%Slide{} = slide, params \\ %{}) do
     Slide.changeset(slide, params)
+  end
+
+  @doc """
+  Returns an `%Ecto.Changeset{}` for tracking slide flags changes.
+
+  ## Examples
+
+  iex> change_flags(slide)
+  %Ecto.Changeset{source: %Slide.Flags{}}
+
+  """
+  @spec change_flags(Slide.Flags.t(), %{String.t() => any()}) :: Ecto.Changeset.t()
+  def change_flags(%Slide.Flags{} = slide_flags \\ %Slide.Flags{}, params \\ %{}) do
+    Slide.Flags.changeset(slide_flags, params)
   end
 
   # Internal
