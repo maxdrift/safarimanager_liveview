@@ -12,8 +12,6 @@ defmodule SMWeb.JuryLauncher do
 
   require Logger
 
-  # data user, :struct
-
   @impl Phoenix.LiveView
   def mount(_params, _session, socket) do
     {:ok, socket}

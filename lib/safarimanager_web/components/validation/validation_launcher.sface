@@ -1,50 +1,230 @@
 <CompetitionHeader {=@competition} />
 <StepsHeader current_step={5} />
-<div class="mt-20 text-center">
+<div class="mt-10 text-center">
   <Link to={"/organize/#{@competition_id}/validation"} class="btn btn-xl btn-primary">
     Start Validation
   </Link>
 </div>
-<div class="mt-20">
-  <table class="table table-compact w-full">
+<div class="mt-10">
+  <table class="table table-compact w-full text-center">
+    <colgroup span="4" />
+    <colgroup span="4" />
     <thead>
       <tr>
-        <th>Participant</th>
-        <th>Subject</th>
-        <th>Status</th>
-        <th>Wrong subject</th>
-        <th>Other reason</th>
-        <th></th>
+        <th scope="colgroup" colspan="4" class="bg-transparent" />
+        <th scope="colgroup" colspan="4">Checks</th>
+      </tr>
+      <tr>
+        <th scope="col">Participant #</th>
+        <th scope="col">Jury</th>
+        <th scope="col">Fixed points</th>
+        <th scope="col">Total</th>
+        <th scope="col">Submitted Count</th>
+        <th scope="col">Jury Count</th>
+        <th scope="col">Dup. Subjects</th>
+        <th scope="col">Flags</th>
       </tr>
     </thead>
     <tbody>
-      {#for {slide, participant} <- @flagged_slides}
+      {#for {participant_number, stats} <- @stats}
         <tr>
-          <th>{participant.number}</th>
-          <td>{slide.subject.name}</td>
+          <th>{participant_number}</th>
+          <td>{stats.submitted_jury}</td>
+          <td>{stats.submitted_fixed}</td>
+          <td>{stats.submitted_jury + stats.submitted_fixed}</td>
           <td>
-            <div class={
-              "my-auto",
-              "badge",
-              "badge-success": slide.status == :submitted_jury,
-              "badge-warning": slide.status == :submitted_fixed
-            }>
-              {status_to_label(slide.status)}
+            {#if list_to_boolean(stats.over_submitted_threshold)}
+              <!-- TODO: Move to component -->
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-5 w-5 mx-auto text-error"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
+                  clip-rule="evenodd"
+                />
+              </svg>
+            {#else}
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-5 w-5 mx-auto text-success"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                  clip-rule="evenodd"
+                />
+              </svg>
+            {/if}
+          </td>
+          <td>
+            <div class="tooltip" data-tip={over_jury_th_tooltip(stats, @competition)}>
+              {#if list_to_boolean(stats.over_jury_threshold)}
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="h-5 w-5 mx-auto text-error"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
+                    clip-rule="evenodd"
+                  />
+                </svg>
+              {#else}
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="h-5 w-5 mx-auto text-success"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                    clip-rule="evenodd"
+                  />
+                </svg>
+              {/if}
             </div>
           </td>
-          <td>{(slide.flags.wrong_subject_ctx &&
-               "#{subject_name(@subjects, slide.flags.wrong_subject_ctx.from)} → #{subject_name(@subjects, slide.flags.wrong_subject_ctx.to)}") ||
-              "-"}</td>
-          <td>{slide.flags.other_reason_ctx || "-"}</td>
           <td>
-          <Link to={"/organize/#{@competition_id}/validation?slide_id=#{slide.id}"} class="btn btn-xs">
-          Open
-          </Link>
+            {#if list_to_boolean(stats.duplicate_subjects)}
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-5 w-5 mx-auto text-error"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
+                  clip-rule="evenodd"
+                />
+              </svg>
+            {#else}
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-5 w-5 mx-auto text-success"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                  clip-rule="evenodd"
+                />
+              </svg>
+            {/if}
+          </td>
+          <td>
+            {#if list_to_boolean(stats.flagged_slides)}
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-5 w-5 mx-auto text-error"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
+                  clip-rule="evenodd"
+                />
+              </svg>
+            {#else}
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-5 w-5 mx-auto text-success"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                  clip-rule="evenodd"
+                />
+              </svg>
+            {/if}
+          </td>
+        </tr>
+        <tr :if={list_to_boolean(stats.flagged_slides ++ stats.duplicate_subjects)}>
+          <td />
+          <td colspan="7">
+            <table class="table table-compact w-full">
+              <thead>
+                <tr>
+                  <th class="bg-base-200">File name</th>
+                  <th class="bg-base-200">Subject</th>
+                  <th class="bg-base-200">Status</th>
+                  <th class="bg-base-200">Wrong subject</th>
+                  <th class="bg-base-200">Other reason</th>
+                  <th class="bg-base-200" />
+                </tr>
+              </thead>
+              <tbody>
+                {#for slide <- stats.flagged_slides}
+                  <tr>
+                    <td>{slide.file_name}</td>
+                    <td>{slide.subject.name}</td>
+                    <td>
+                      <div class={
+                        "my-auto",
+                        "badge",
+                        "badge-success": slide.status == :submitted_jury,
+                        "badge-warning": slide.status == :submitted_fixed
+                      }>
+                        {status_to_label(slide.status)}
+                      </div>
+                    </td>
+                    <td>{(slide.flags.wrong_subject_ctx &&
+                         "#{subject_name(@subjects, slide.flags.wrong_subject_ctx.from)} → #{subject_name(@subjects, slide.flags.wrong_subject_ctx.to)}") ||
+                        "-"}</td>
+                    <td>{slide.flags.other_reason_ctx || "-"}</td>
+                    <td>
+                      <Link to={"/organize/#{@competition_id}/validation?slide_id=#{slide.id}"} class="btn btn-xs">
+                        Open
+                      </Link>
+                    </td>
+                  </tr>
+                {/for}
+                {#for {slide, count} <- stats.duplicate_subjects}
+                  <tr>
+                    <td>-</td>
+                    <td>{slide.subject.name}</td>
+                    <td>
+                      <div class={
+                        "my-auto",
+                        "badge",
+                        "badge-success": slide.status == :submitted_jury,
+                        "badge-warning": slide.status == :submitted_fixed
+                      }>
+                        {status_to_label(slide.status)}
+                      </div>
+                    </td>
+                    <td>
+                      Duplicate: {count} occurrences
+                    </td>
+                    <td>-</td>
+                    <td>
+                      <Link to={"/organize/#{@competition_id}/validation?slide_id=#{slide.id}"} class="btn btn-xs">
+                        Open
+                      </Link>
+                    </td>
+                  </tr>
+                {/for}
+              </tbody>
+            </table>
           </td>
         </tr>
       {#else}
         <tr>
-          <th>There are no flagged slides yet</th>
+          <td>There are no slides yet</td>
+          <td />
           <td />
           <td />
           <td />
