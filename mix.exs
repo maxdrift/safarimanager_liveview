@@ -80,13 +80,15 @@ defmodule SM.MixProject do
       "ecto.setup": ["ecto.create", "ecto.migrate"],
       "ecto.reset": ["ecto.drop", "ecto.setup"],
       test: ["ecto.create --quiet", "ecto.migrate --quiet", "test"],
-      assets: ["cmd --cd assets yarn run deploy", "esbuild default --minify"],
+      "assets.deploy": ["cmd --cd assets yarn run deploy"],
+      "assets.esbuild": ["esbuild default --minify"],
       release: [
-        "assets",
+        "assets.esbuild",
         "phx.digest priv/static",
         "release",
         "phx.digest.clean --all"
-      ]
+      ],
+      "release.standalone": ["assets.deploy", "release"]
     ]
   end
 
@@ -104,13 +106,33 @@ defmodule SM.MixProject do
   end
 
   defp releases do
-    [
-      safarimanager: [
-        steps: [:assemble, &Bakeware.assemble/1],
-        overwrite: true,
-        strip_beams: Mix.env() in [:prod, :standalone]
-      ]
-    ]
+    case Mix.env() do
+      :standalone ->
+        [
+          safarimanager: [
+            steps: [:assemble, &Bakeware.assemble/1],
+            overwrite: true,
+            strip_beams: true
+          ]
+        ]
+
+      :prod ->
+        [
+          safarimanager: [
+            include_executables_for: [:unix],
+            applications: [safarimanager: :permanent],
+            strip_beams: true,
+            include_erts: true
+          ]
+        ]
+
+      _other_env ->
+        [
+          safarimanager: [
+            strip_beams: false
+          ]
+        ]
+    end
   end
 
   defp dialyzer_ignored_warnings do

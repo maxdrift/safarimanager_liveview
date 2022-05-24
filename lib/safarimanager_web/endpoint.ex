@@ -24,7 +24,7 @@ defmodule SMWeb.Endpoint do
 
   plug Plug.Static,
     at: "/uploads",
-    from: {:safarimanager, "priv/uploads"},
+    from: {SM.Slides, :get_uploads_path, []},
     gzip: false
 
   # only: ~w(assets fonts uploads favicon.ico robots.txt)

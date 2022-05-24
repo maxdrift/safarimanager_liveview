@@ -6,7 +6,6 @@ defmodule SM.Competitions do
 
   alias SM.Competitions.Competition
   alias SM.Competitions.CompetitionSettings
-  alias SM.Evaluations
 
   @doc """
   Returns the list of competitions.
@@ -160,7 +159,6 @@ defmodule SM.Competitions do
       end
 
     Competition.update_changeset(competition, attrs)
-    # |> IO.inspect(label: :changeset)
   end
 
   @spec change_settings(CompetitionSettings.t(), %{String.t() => any()}) :: Ecto.Changeset.t()

@@ -12,9 +12,17 @@ if System.get_env("PHX_SERVER") && System.get_env("RELEASE_NAME") do
   config :safarimanager, SMWeb.Endpoint, server: true
 end
 
-priv_dir = :code.priv_dir(:safarimanager)
+priv_dir = :code.priv_dir(:safarimanager) |> to_string()
 
-config :safarimanager, SM.Slides.Slide, uploads_base_path: Path.join(priv_dir, "/uploads")
+priv_dir_uploads = Path.join(priv_dir, "/uploads")
+
+uploads_path = System.get_env("UPLOADS_PATH", priv_dir_uploads)
+
+unless File.exists?(uploads_path) do
+  File.mkdir_p!(uploads_path)
+end
+
+config :safarimanager, SM.Slides.Slide, uploads_base_path: uploads_path
 
 if config_env() == :standalone do
   secret_key_base = "MROe0TML1wb/8amRSKJ994MKvIpq3JqLM/FMevNTM2YSEst8NXNkcTSkV/C17DP0"
@@ -43,20 +51,32 @@ if config_env() == :standalone do
 end
 
 if config_env() == :prod do
-  database_url =
-    System.get_env("DATABASE_URL") ||
-      raise """
-      environment variable DATABASE_URL is missing.
-      For example: ecto://USER:PASS@HOST/DATABASE
-      """
+  db_path =
+    "DATABASE_PATH"
+    |> System.get_env(priv_dir)
+    |> Path.join("safarimanager.db")
 
-  maybe_ipv6 = if System.get_env("ECTO_IPV6"), do: [:inet6], else: []
+  unless File.exists?(db_path) do
+    File.mkdir_p!(db_path)
+    File.touch!(Path.join(db_path))
+  end
 
-  config :safarimanager, SM.Repo,
-    # ssl: true,
-    url: database_url,
-    pool_size: String.to_integer(System.get_env("POOL_SIZE") || "10"),
-    socket_options: maybe_ipv6
+  config :safarimanager, SM.Repo, database: db_path
+
+  # database_url =
+  #   System.get_env("DATABASE_URL") ||
+  #     raise """
+  #     environment variable DATABASE_URL is missing.
+  #     For example: ecto://USER:PASS@HOST/DATABASE
+  #     """
+
+  # maybe_ipv6 = if System.get_env("ECTO_IPV6"), do: [:inet6], else: []
+
+  # config :safarimanager, SM.Repo,
+  #   # ssl: true,
+  #   url: database_url,
+  #   pool_size: String.to_integer(System.get_env("POOL_SIZE") || "10"),
+  #   socket_options: maybe_ipv6
 
   # The secret key base is used to sign/encrypt cookies and other secrets.
   # A default value is used in config/dev.exs and config/test.exs but you
@@ -73,6 +93,11 @@ if config_env() == :prod do
   host = System.get_env("PHX_HOST") || "example.com"
   port = String.to_integer(System.get_env("PORT") || "4000")
 
+  allowed_origins =
+    "ALLOWED_ORIGINS"
+    |> System.get_env("")
+    |> String.split(",", trim: true)
+
   config :safarimanager, SMWeb.Endpoint,
     url: [host: host, port: 443],
     http: [
@@ -83,6 +108,7 @@ if config_env() == :prod do
       ip: {0, 0, 0, 0, 0, 0, 0, 0},
       port: port
     ],
+    check_origin: ["http://localhost:4000" | allowed_origins],
     secret_key_base: secret_key_base
 
   # ## Using releases

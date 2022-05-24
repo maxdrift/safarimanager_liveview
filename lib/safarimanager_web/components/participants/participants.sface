@@ -47,6 +47,7 @@
               <td />
               <td />
               <td />
+              <td />
             </tr>
           {/for}
         </tbody>
@@ -84,6 +85,8 @@
           {#else}
             <tr>
               <td>No items yet!</td>
+              <td />
+              <td />
               <td />
               <td />
               <td />

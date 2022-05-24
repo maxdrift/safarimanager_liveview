@@ -1,0 +1,1 @@
+call "%~dp0\safarimanager" eval SM.Release.migrate

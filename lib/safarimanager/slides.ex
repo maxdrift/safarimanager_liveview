@@ -26,14 +26,17 @@ defmodule SM.Slides do
     Slide.get_statuses()
   end
 
+  @spec get_uploads_path :: String.t()
+  def get_uploads_path do
+    :safarimanager
+    |> Application.fetch_env!(Slide)
+    |> Keyword.fetch!(:uploads_base_path)
+    |> IO.inspect(label: :get_uploads_path)
+  end
+
   @spec get_uploads_path(String.t(), String.t()) :: String.t()
   def get_uploads_path(competition_id, user_id) do
-    path =
-      :safarimanager
-      |> Application.fetch_env!(Slide)
-      |> Keyword.fetch!(:uploads_base_path)
-
-    Path.join([path, competition_id, user_id])
+    Path.join([get_uploads_path(), competition_id, user_id])
   end
 
   @spec get_thumbnails_path(String.t(), String.t(), :small | :medium | :large) :: String.t()

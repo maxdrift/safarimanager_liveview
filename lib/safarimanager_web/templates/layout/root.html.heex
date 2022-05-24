@@ -19,7 +19,7 @@
   <body class="bg-base-200">
     <section class="flex flex-col flex-nowrap h-screen">
       <!-- begin navbar -->
-      <div class="navbar my-1 shadow-lg bg-neutral-focus text-neutral-content rounded-box">
+      <div class="navbar my-1 shadow-lg bg-base-300 rounded-box">
         <div class="flex-none">
           <label for="sm-drawer" class="btn btn-square btn-ghost drawer-button lg:hidden">
             <svg
@@ -854,8 +854,8 @@
               </ul>
             </div>
           <% else %>
-            <%= link("Register", to: Routes.user_registration_path(@conn, :new), class: "btn mr-2") %>
-            <%= link("Log in", to: Routes.user_session_path(@conn, :new), class: "btn mr-2") %>
+            <%= link("Register", to: Routes.user_registration_path(@conn, :new), class: "btn btn-ghost mr-2") %>
+            <%= link("Log in", to: Routes.user_session_path(@conn, :new), class: "btn btn-ghost mr-2") %>
           <% end %>
         </div>
       </div>

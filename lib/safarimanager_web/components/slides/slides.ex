@@ -58,7 +58,7 @@ defmodule SMWeb.Slides do
     {:noreply, socket}
   end
 
-  def handle_event("validate", params, socket) do
+  def handle_event("validate", _params, socket) do
     {:noreply, socket}
   end
 

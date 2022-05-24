@@ -1,0 +1,11 @@
+## Customize flags given to the VM: http://erlang.org/doc/man/erl.html
+## -mode/-name/-sname/-setcookie are configured via env vars, do not set them here
+
+## Disable busy-wait on containerized apps
++sbwt none
++sbwtdcpu none
++sbwtdio none
+
+## Enable time warp mode
++c true
++C multi_time_warp

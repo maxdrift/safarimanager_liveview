@@ -14,7 +14,8 @@ config :safarimanager,
 config :safarimanager, SM.Repo,
   migration_primary_key: [name: :id, type: :binary_id],
   migration_foreign_key: [column: :id, type: :binary_id],
-  migration_timestamps: [type: :utc_datetime_usec]
+  migration_timestamps: [type: :utc_datetime_usec],
+  show_sensitive_data_on_connection_error: true
 
 # Configures the endpoint
 config :safarimanager, SMWeb.Endpoint,
