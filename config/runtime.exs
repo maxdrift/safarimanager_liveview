@@ -24,6 +24,18 @@ end
 
 config :safarimanager, SM.Slides.Slide, uploads_base_path: uploads_path
 
+db_path =
+  "DATABASE_PATH"
+  |> System.get_env(priv_dir)
+  |> Path.join("safarimanager.db")
+
+unless File.exists?(db_path) do
+  File.mkdir_p!(db_path)
+  File.touch!(Path.join(db_path))
+end
+
+config :safarimanager, SM.Repo, database: db_path
+
 if config_env() == :standalone do
   secret_key_base = "MROe0TML1wb/8amRSKJ994MKvIpq3JqLM/FMevNTM2YSEst8NXNkcTSkV/C17DP0"
 
@@ -33,8 +45,6 @@ if config_env() == :standalone do
       transport_options: [socket_opts: [:inet6]]
     ],
     secret_key_base: secret_key_base
-
-  config :safarimanager, SM.Repo, database: Path.join(priv_dir, "safarimanager.db")
 
   # os_name =
   #   case :os.type() do
@@ -51,18 +61,6 @@ if config_env() == :standalone do
 end
 
 if config_env() == :prod do
-  db_path =
-    "DATABASE_PATH"
-    |> System.get_env(priv_dir)
-    |> Path.join("safarimanager.db")
-
-  unless File.exists?(db_path) do
-    File.mkdir_p!(db_path)
-    File.touch!(Path.join(db_path))
-  end
-
-  config :safarimanager, SM.Repo, database: db_path
-
   # database_url =
   #   System.get_env("DATABASE_URL") ||
   #     raise """

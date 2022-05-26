@@ -47,6 +47,8 @@ defmodule SMWeb.ValidationLauncher do
           acc
           |> Map.get(participant_number, %{})
           |> Map.merge(p_stats)
+          |> Map.put_new(:submitted_jury, 0)
+          |> Map.put_new(:submitted_fixed, 0)
 
         Map.put(acc, participant_number, new_stats)
       end)

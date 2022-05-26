@@ -6,7 +6,7 @@
   </Link>
 </div>
 <div class="mt-10">
-  <table class="table table-compact w-full text-center">
+  <table class="table table-compact table-zebra w-full text-center">
     <colgroup span="4" />
     <colgroup span="4" />
     <thead>

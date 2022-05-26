@@ -70,8 +70,9 @@ defmodule SM.Participants do
           fragment(@like_fragment, u.first_name, ^pattern) or
             fragment(@like_fragment, u.last_name, ^pattern),
         left_join: o in assoc(u, :organization),
+        left_join: c in assoc(p, :category),
         order_by: [asc: :number],
-        preload: [user: {u, [organization: o]}]
+        preload: [category: c, user: {u, [organization: o]}]
       )
 
     Repo.all(query)

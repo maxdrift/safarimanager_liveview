@@ -31,7 +31,6 @@ defmodule SM.Slides do
     :safarimanager
     |> Application.fetch_env!(Slide)
     |> Keyword.fetch!(:uploads_base_path)
-    |> IO.inspect(label: :get_uploads_path)
   end
 
   @spec get_uploads_path(String.t(), String.t()) :: String.t()
