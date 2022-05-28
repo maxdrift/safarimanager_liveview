@@ -170,7 +170,7 @@
                 {#for slide <- stats.flagged_slides}
                   <tr>
                     <td>{slide.file_name}</td>
-                    <td>{slide.subject.name}</td>
+                    <td><span class="capitalize">{slide.subject.name}</span></td>
                     <td>
                       <div class={
                         "my-auto",
@@ -195,7 +195,7 @@
                 {#for {slide, count} <- stats.duplicate_subjects}
                   <tr>
                     <td>-</td>
-                    <td>{slide.subject.name}</td>
+                    <td><span class="capitalize">{slide.subject.name}</span></td>
                     <td>
                       <div class={
                         "my-auto",

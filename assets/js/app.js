@@ -18,6 +18,8 @@
 // Include phoenix_html to handle method=PUT/DELETE in forms and buttons.
 import "phoenix_html"
 import Alpine from "alpinejs"
+import collapse from '@alpinejs/collapse'
+
 // Establish Phoenix Socket and LiveView configuration.
 import { Socket } from "phoenix"
 import { LiveSocket } from "phoenix_live_view"
@@ -27,6 +29,8 @@ import Hooks from "./_hooks"
 // import OpenSeadragon from "openseadragon";
 
 window.Alpine = Alpine
+
+Alpine.plugin(collapse)
 Alpine.start()
 
 themeChange()
@@ -36,8 +40,11 @@ let liveSocket = new LiveSocket("/live", Socket, {
   dom: {
     // make LiveView work nicely with alpinejs
     onBeforeElUpdated(from, to) {
-      if (from.__x) {
-        window.Alpine.clone(from.__x, to);
+      // if (from.__x) {
+      //   window.Alpine.clone(from.__x, to);
+      // }
+      if (from._x_dataStack) {
+        window.Alpine.clone(from, to);
       }
     },
   },

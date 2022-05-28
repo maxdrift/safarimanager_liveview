@@ -1,6 +1,6 @@
-defmodule SMWeb.Results do
+defmodule SMWeb.ParticipantResults do
   @moduledoc """
-  Results live view
+  ParticipantResults live view
   """
   use SMWeb, :surface_view
 
@@ -51,7 +51,4 @@ defmodule SMWeb.Results do
 
     {:noreply, socket}
   end
-
-  defp status_to_label(:submitted_fixed), do: "Fixed points"
-  defp status_to_label(:submitted_jury), do: "Jury"
 end

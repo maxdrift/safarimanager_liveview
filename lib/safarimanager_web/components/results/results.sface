@@ -1,7 +1,7 @@
 <CompetitionHeader {=@competition} />
 <StepsHeader current_step={7} />
 <div class="pt-10 overflow-y-auto">
-  <table class="table table-zebra table-fixed w-full">
+  <table class="table table-fixed w-full">
     <thead>
       <tr>
         <th class="w-1/12">Rank</th>
@@ -10,18 +10,72 @@
         <th class="w-auto">Category</th>
         <th class="w-1/12">Score</th>
         <th class="w-1/12">Species</th>
+        <th class="w-2/12" />
       </tr>
     </thead>
     <tbody>
       {#for result <- @results}
-        <tr>
-          <td class="truncate">{result.rank}</td>
-          <td class="truncate">{result.user.last_name} {result.user.first_name}</td>
-          <td class="truncate">{(result.user.organization && result.user.organization.name) || "N/A"}</td>
-          <td class="truncate">{(result.participant.category && result.participant.category.name) || "N/A"}</td>
-          <td class="truncate">{result.total_score}</td>
-          <td class="truncate">{Enum.count(result.slides)}</td>
-        </tr>
+        <tbody x-data="{ expanded: false }">
+          <tr>
+            <td class="truncate">{result.rank}</td>
+            <td class="truncate">{result.user.last_name} {result.user.first_name}</td>
+            <td class="truncate">{(result.user.organization && result.user.organization.name) || "N/A"}</td>
+            <td class="truncate">{(result.participant.category && result.participant.category.name) || "N/A"}</td>
+            <td class="truncate">{result.total_score}</td>
+            <td class="truncate">{Enum.count(result.slides)}</td>
+            <td>
+              <button @click="expanded = ! expanded" class="btn btn-xs btn-outline">Show details</button>
+            </td>
+          </tr>
+          <tr x-show="expanded">
+            <td />
+            <td colspan="5">
+              <table class="table table-compact w-full">
+                <thead>
+                  <tr>
+                    <th class="bg-base-200">File name</th>
+                    <th class="bg-base-200">Subject #</th>
+                    <th class="bg-base-200">Subject name</th>
+                    <th class="bg-base-200">Coeff.</th>
+                    <th class="bg-base-200">Votes</th>
+                    <th class="bg-base-200">Pen.</th>
+                    <th class="bg-base-200">Status</th>
+                    <th class="bg-base-200">Score</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {#for %{slide: slide, slide_score: score} <- Enum.sort(result.slides, &(&1.slide.file_name <= &2.slide.file_name))}
+                  <tr>
+                    <td>{slide.file_name}</td>
+                    <td>{slide.subject.numeric_id}</td>
+                    <td><span class="capitalize">{slide.subject.name}</span></td>
+                    <td>{slide.subject.coefficient}</td>
+                    <td>
+                    {#for evaluation <- slide.evaluations}
+                      <span class="badge badge-outline badge-sm">{evaluation.value}</span>
+                    {/for}
+                    </td>
+                    <td>{slide.penalty && "x" || "-"}</td>
+                    <td>
+                    <div class={
+                        "my-auto",
+                        "badge",
+                        "badge-success": slide.status == :submitted_jury,
+                        "badge-warning": slide.status == :submitted_fixed
+                      }>
+                        {status_to_label(slide.status)}
+                      </div>
+                    </td>
+                    <td>{score}</td>
+                  </tr>
+                  {/for}
+                </tbody>
+              </table>
+            </td>
+                        <td />
+
+          </tr>
+        </tbody>
       {#else}
         <td>No results available yet</td>
       {/for}

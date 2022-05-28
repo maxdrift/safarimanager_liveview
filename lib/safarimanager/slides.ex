@@ -348,7 +348,6 @@ defmodule SM.Slides do
         join: su in assoc(sl, :subject),
         group_by: [:subject_id],
         order_by: [asc: :subject_id],
-        # preload: [subject: su],
         select: %Subject{su | distribution: type(count(su.id) / type(^p_count, :float), :decimal)}
       )
 
