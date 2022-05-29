@@ -102,8 +102,13 @@ defmodule SMWeb.Components.Admin.Participants do
       ) do
     socket =
       case delete(user_id, competition_id) do
-        :ok -> set_alert(socket, "info", "Participant deleted successfully", @alert_duration)
-        :error -> set_alert(socket, "error", "Unable to delete Participant", @alert_duration)
+        {:ok, _result} ->
+          set_alert(socket, "info", "Participant deleted successfully", @alert_duration)
+
+        {:error, reason} ->
+          Logger.error("Error deleting Participant: #{inspect(reason)}")
+
+          set_alert(socket, "error", "Unable to delete Participant", @alert_duration)
       end
 
     ConfirmationDialog.hide("delete-confirmation")
@@ -113,8 +118,18 @@ defmodule SMWeb.Components.Admin.Participants do
   def handle_event("confirm", %{}, %{assigns: %{to_be_deleted: [_ | _] = ids}} = socket) do
     socket =
       case delete(ids) do
-        :ok -> set_alert(socket, "info", "Participants deleted successfully", @alert_duration)
-        :error -> set_alert(socket, "error", "Unable to delete Participants", @alert_duration)
+        {:ok, count} ->
+          set_alert(
+            socket,
+            "info",
+            "#{count} participant(s) deleted successfully",
+            @alert_duration
+          )
+
+        {:error, reason} ->
+          Logger.error("Error deleting Participants: #{inspect(reason)}")
+
+          set_alert(socket, "error", "Unable to delete Participants", @alert_duration)
       end
 
     ConfirmationDialog.hide("delete-confirmation")
@@ -289,24 +304,16 @@ defmodule SMWeb.Components.Admin.Participants do
   end
 
   defp delete(ids) when is_list(ids) do
-    deleted =
-      ids
-      |> Enum.map(fn {user_id, competition_id} -> delete(user_id, competition_id) end)
-      |> Enum.count()
-
-    IO.puts("Deleted #{deleted} entities")
-    :ok
+    Enum.reduce_while(ids, {:ok, 0}, fn {user_id, competition_id}, acc ->
+      case delete(user_id, competition_id) do
+        {:ok, _result} -> {:cont, acc + 1}
+        {:error, _reason} = error -> {:halt, error}
+      end
+    end)
   end
 
   defp delete(user_id, competition_id) do
-    case Participants.delete(user_id, competition_id) do
-      {:ok, _result} ->
-        :ok
-
-      {:error, reason} ->
-        Logger.error("Error deleting Participant: #{inspect(reason)}")
-        :error
-    end
+    Participants.delete(user_id, competition_id)
   end
 
   defp subscribe(socket) do

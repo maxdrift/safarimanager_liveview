@@ -77,7 +77,7 @@ defmodule SM.Categories do
   {:error, %Ecto.Changeset{}}
 
   """
-  @spec create(%{String.t() => any()}) :: {:error, any()} | {:ok, Category.t()}
+  @spec create(%{(String.t() | atom()) => any()}) :: {:error, any()} | {:ok, Category.t()}
   def create(attrs \\ %{}) do
     %Category{}
     |> Category.changeset(attrs)

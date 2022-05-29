@@ -30,8 +30,8 @@ db_path =
   |> Path.join("safarimanager.db")
 
 unless File.exists?(db_path) do
-  File.mkdir_p!(db_path)
-  File.touch!(Path.join(db_path))
+  File.mkdir_p!(Path.dirname(db_path))
+  File.touch!(db_path)
 end
 
 config :safarimanager, SM.Repo, database: db_path
