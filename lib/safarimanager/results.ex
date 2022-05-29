@@ -48,7 +48,7 @@ defmodule SM.Results do
           {[%{atom() => any()}], Decimal.t()}
   def list_by_participant(competition_id, competition, user_id, subjects) do
     user_id
-    |> Slides.list(competition_id)
+    |> Slides.list_for_results(competition_id)
     |> Enum.flat_map_reduce(Decimal.new(0), fn
       %Slide{penalty: true} = slide, total_score ->
         slide_score = competition.settings.penalty_amount

@@ -121,6 +121,16 @@ defmodule SM.Slides do
     |> Repo.preload([:subject, :evaluations])
   end
 
+  @spec list_for_results(String.t(), String.t()) :: [Slide.t()]
+  def list_for_results(user_id, competition_id) do
+    Slide
+    |> where(user_id: ^user_id)
+    |> where(competition_id: ^competition_id)
+    |> order_by(desc: :status, asc: :file_name)
+    |> Repo.all()
+    |> Repo.preload([:subject, :evaluations])
+  end
+
   @doc """
   Returns the list of slides grouped by subject, in random order (by slide ID).
 

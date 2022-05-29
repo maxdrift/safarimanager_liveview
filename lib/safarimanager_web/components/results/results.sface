@@ -44,7 +44,7 @@
                   </tr>
                 </thead>
                 <tbody>
-                  {#for %{slide: slide, slide_score: score} <- Enum.sort(result.slides, &(&1.slide.file_name <= &2.slide.file_name))}
+                  {#for %{slide: slide, slide_score: score} <- result.slides}
                   <tr>
                     <td>{slide.file_name}</td>
                     <td>{slide.subject.numeric_id}</td>
