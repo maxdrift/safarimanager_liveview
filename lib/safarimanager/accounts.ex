@@ -254,6 +254,8 @@ defmodule SM.Accounts do
   def register_simplified_user(attrs) do
     %User{}
     |> User.competition_registration_changeset(attrs)
+    # TODO: Remove in Production!
+    |> User.maybe_put_email()
     |> Repo.insert()
     |> notify_subscribers([:user, :created])
   end
@@ -336,6 +338,7 @@ defmodule SM.Accounts do
   def update(%User{} = user, attrs) do
     user
     |> User.competition_registration_changeset(attrs)
+    |> User.maybe_put_email()
     |> Repo.update()
     |> notify_subscribers([:user, :updated])
   end

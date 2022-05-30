@@ -96,12 +96,11 @@ defmodule SM.Accounts.User do
     |> validate_required([:first_name])
     |> foreign_key_constraint(:organization_id)
     |> foreign_key_constraint(:category_id)
-    |> maybe_put_email()
     |> put_default_password()
   end
 
   # TODO: Remove in Production!
-  defp maybe_put_email(changeset) do
+  def maybe_put_email(changeset) do
     if is_nil(get_field(changeset, :email)) do
       first_name = get_field(changeset, :first_name)
       last_name = get_field(changeset, :last_name)
