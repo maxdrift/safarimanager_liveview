@@ -58,6 +58,27 @@ defmodule SMWeb.Slides do
     {:noreply, socket}
   end
 
+  def handle_event("validate", %{"_target" => ["images"]}, socket) do
+    socket =
+      Enum.reduce(socket.assigns.uploads.images.entries, socket, fn entry, socket_acc ->
+        assigns = socket_acc.assigns
+
+        case Slides.get(assigns.competition_id, assigns.user.id, entry.client_name) do
+          {:ok, result} ->
+            Logger.info(
+              "Cancelling upload of #{entry.client_name}: duplicate of Slide #{result.id}"
+            )
+
+            LiveView.cancel_upload(socket_acc, :images, entry.ref)
+
+          {:error, :not_found} ->
+            socket_acc
+        end
+      end)
+
+    {:noreply, socket}
+  end
+
   def handle_event("validate", _params, socket) do
     {:noreply, socket}
   end
@@ -155,7 +176,7 @@ defmodule SMWeb.Slides do
     # SongEntryComponent.send_progress(entry)
 
     if entry.done? do
-      IO.inspect("#{entry.ref} complete!", label: __MODULE__)
+      Logger.info("File with ref.#{entry.ref} successfully uploaded")
       process_uploaded_image(socket, entry)
       # async_calculate_duration(socket, entry)
     end

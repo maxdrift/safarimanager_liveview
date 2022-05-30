@@ -457,28 +457,46 @@ defmodule SM.Slides do
       :ok = File.mkdir_p!(uploads_path)
       file_path = Path.join(uploads_path, file_name)
 
-      with :ok <- File.cp(tmp_path, file_path),
-           do: {:ok, file_path}
-    end)
-    |> Multi.insert(
-      :slide,
-      fn %{copy_file: file_path} ->
-        {:ok, metadata} = ImageProcessing.get_metadata(file_path)
-        gps = Map.get(metadata, :gps)
-        metadata = Map.put(metadata, :gps, (gps && Map.from_struct(gps)) || %{})
+      if File.exists?(file_path) do
+        Logger.info(
+          "File #{file_name} from User #{user_id} in Competition #{competition_id} already exists."
+        )
 
-        Slide.changeset(%Slide{}, %{
-          user_id: user_id,
-          competition_id: competition_id,
-          file_name: file_name,
-          file_size: file_size,
-          file_type: file_type,
-          width: metadata.exif.exif_image_width,
-          height: metadata.exif.exif_image_height,
-          metadata: metadata
-        })
+        {:ok, file_path}
+      else
+        with :ok <- File.cp(tmp_path, file_path),
+             do: {:ok, file_path}
       end
-    )
+    end)
+    |> Multi.run(:verify_duplicate, fn _repo, %{} ->
+      case get(competition_id, user_id, file_name) do
+        {:ok, result} ->
+          Logger.info(
+            "Slide #{result.id} from User #{user_id} in Competition #{competition_id} already exists."
+          )
+
+          {:error, {:duplicate, result}}
+
+        {:error, :not_found} ->
+          {:ok, nil}
+      end
+    end)
+    |> Multi.insert(:slide, fn %{copy_file: file_path} ->
+      {:ok, metadata} = ImageProcessing.get_metadata(file_path)
+      gps = Map.get(metadata, :gps)
+      metadata = Map.put(metadata, :gps, (gps && Map.from_struct(gps)) || %{})
+
+      Slide.changeset(%Slide{}, %{
+        user_id: user_id,
+        competition_id: competition_id,
+        file_name: file_name,
+        file_size: file_size,
+        file_type: file_type,
+        width: metadata.exif.exif_image_width,
+        height: metadata.exif.exif_image_height,
+        metadata: metadata
+      })
+    end)
     |> Repo.transaction()
     |> case do
       {:ok, %{slide: slide}} ->
@@ -491,6 +509,9 @@ defmodule SM.Slides do
           |> File.rm()
 
         {:error, {:slide, failed_value}}
+
+      {:error, :verify_duplicate, {:duplicate, existing_slide}, _changes_so_far} ->
+        {:ok, existing_slide}
 
       {:error, failed_operation, failed_value, _changes_so_far} ->
         {:error, {failed_operation, failed_value}}
@@ -756,13 +777,13 @@ defmodule SM.Slides do
     uploads_path = get_uploads_path(competition_id, user_id)
     thumbnails_path = Path.join(uploads_path, "thumbnails")
 
-    :ok =
+    _result =
       [uploads_path, file_name]
       |> Path.join()
       |> File.rm()
 
     for size_type <- [:small, :medium, :large] do
-      :ok =
+      _result =
         [thumbnails_path, Atom.to_string(size_type), file_name]
         |> Path.join()
         |> File.rm()
@@ -771,7 +792,7 @@ defmodule SM.Slides do
     # Remove the entire participant directory if empty
     :ok =
       if Path.wildcard(Path.join(uploads_path, "/*.*")) == [] do
-        {:ok, _result} = File.rm_rf(uploads_path)
+        _result = File.rm_rf(uploads_path)
         :ok
       else
         :ok

@@ -183,6 +183,7 @@
                 <td />
                 <td />
                 <td />
+                <td />
               </tr>
             {/for}
           </tbody>
