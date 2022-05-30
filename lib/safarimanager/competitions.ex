@@ -6,6 +6,7 @@ defmodule SM.Competitions do
 
   alias SM.Competitions.Competition
   alias SM.Competitions.CompetitionSettings
+  alias SM.Evaluations
 
   @doc """
   Returns the list of competitions.
@@ -68,9 +69,6 @@ defmodule SM.Competitions do
   """
   @spec create(%{String.t() => any()}) :: {:error, any()} | {:ok, Competition.t()}
   def create(attrs \\ %{}) do
-    # TODO: Perform evaluations selection in the UI
-    # attrs = Map.put(attrs, "allowed_evaluations", Evaluations.list())
-
     %Competition{}
     |> change(attrs)
     |> Repo.insert()
@@ -93,7 +91,7 @@ defmodule SM.Competitions do
           {:ok, Competition.t()} | {:error, any()}
   def update(%Competition{} = competition, attrs) do
     competition
-    |> Competition.update_changeset(attrs)
+    |> change(attrs)
     |> Repo.update()
     |> notify_subscribers([:competition, :updated])
   end
@@ -158,7 +156,7 @@ defmodule SM.Competitions do
         Map.put(attrs, "settings", fetch_default_settings())
       end
 
-    Competition.update_changeset(competition, attrs)
+    Competition.changeset(competition, attrs)
   end
 
   @spec change_settings(CompetitionSettings.t(), %{String.t() => any()}) :: Ecto.Changeset.t()
@@ -179,6 +177,19 @@ defmodule SM.Competitions do
       "penalty_amount" => fetch_config!(:penalty_amount),
       "dynamic_coefficients" => fetch_config!(:dynamic_coefficients)
     }
+  end
+
+  @spec update_allowed_evaluations(String.t(), [String.t()]) ::
+          {:ok, Competition.t()} | {:error, any()}
+  def update_allowed_evaluations(competition_id, evaluation_ids) do
+    evaluations = Evaluations.list_by_ids(evaluation_ids)
+
+    {:ok, competition} = get(competition_id)
+
+    competition
+    |> Competition.put_allowed_evaluations(evaluations)
+    |> Repo.update()
+    |> notify_subscribers([:competition, :updated])
   end
 
   # Internal

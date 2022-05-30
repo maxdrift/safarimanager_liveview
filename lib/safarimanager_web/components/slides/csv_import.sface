@@ -130,13 +130,13 @@
         </div>
       </div>
       <!-- Edit dialog end -->
-      <div>
-        <div class="alert alert-success alert-sm my-2">
+      <div x-data="{ expanded: true }">
+        <div class="alert alert-success alert-sm my-2" @click="expanded = ! expanded">
           <div class="text-xl mx-auto">
             Selected for Jury ({Enum.count(@jury_slides)})
           </div>
         </div>
-        <div class="max-h-96 overflow-y-auto mt-2">
+        <div class="max-h-96 overflow-y-auto mt-2" x-show="expanded" x-collapse>
           <table class="table table-zebra table-fixed w-full">
             <!-- head -->
             <thead>
@@ -174,19 +174,21 @@
                   <td>No slides selected for Jury.</td>
                   <td />
                   <td />
+                  <td />
+                  <td />
                 </tr>
               {/for}
             </tbody>
           </table>
         </div>
       </div>
-      <div>
-        <div class="alert alert-warning alert-sm my-2">
+      <div x-data="{ expanded: false }">
+        <div class="alert alert-warning alert-sm my-2" @click="expanded = ! expanded">
           <div class="text-xl mx-auto">
             Fixed points ({Enum.count(@fixed_slides)})
           </div>
         </div>
-        <div class="max-h-96 overflow-y-auto mt-2">
+        <div class="max-h-96 overflow-y-auto mt-2" x-show="expanded" x-collapse>
           <table class="table table-zebra table-fixed w-full">
             <!-- head -->
             <thead>
@@ -224,63 +226,64 @@
                   <td>No slides selected for fixed points.</td>
                   <td />
                   <td />
+                  <td />
+                  <td />
                 </tr>
               {/for}
             </tbody>
           </table>
         </div>
       </div>
-      <div class="collapse collapse-arrow" tabindex="0">
-        <input type="checkbox">
-        <div class="alert alert-error alert-sm my-2 collapse-title">
+      <div x-data="{ expanded: false }">
+        <div class="alert alert-error alert-sm my-2" @click="expanded = ! expanded">
           <div class="text-xl mx-auto">
             Discarded ({Enum.count(@discarded_slides)})
           </div>
         </div>
-        <div class="collapse-content">
-          <div class="max-h-96 overflow-y-auto mt-2">
-            <table class="table table-zebra table-fixed w-full">
-              <!-- head -->
-              <thead>
+        <div class="max-h-96 overflow-y-auto mt-2" x-show="expanded" x-collapse>
+          <table class="table table-zebra table-fixed w-full">
+            <!-- head -->
+            <thead>
+              <tr>
+                <th class="sticky top-0 w-1/12" />
+                <th class="sticky top-0 w-auto">File name</th>
+                <th class="sticky top-0 w-auto">Size</th>
+                <th class="sticky top-0 w-auto">Subject</th>
+                <th class="sticky top-0 w-auto" />
+              </tr>
+            </thead>
+            <tbody>
+              {#for slide <- @discarded_slides}
                 <tr>
-                  <th class="sticky top-0 w-1/12" />
-                  <th class="sticky top-0 w-auto">File name</th>
-                  <th class="sticky top-0 w-auto">Size</th>
-                  <th class="sticky top-0 w-auto">Subject</th>
-                  <th class="sticky top-0 w-auto" />
-                </tr>
-              </thead>
-              <tbody>
-                {#for slide <- @discarded_slides}
-                  <tr>
-                    <td class="truncate">
-                      <div>
-                        <div class="w-20">
-                          <img src={thumbnail_path(@socket, slide)} class="rounded-md border">
-                        </div>
+                  <td class="truncate">
+                    <div>
+                      <div class="w-20">
+                        <img src={thumbnail_path(@socket, slide)} class="rounded-md border">
                       </div>
-                    </td>
-                    <td class="truncate">{slide.file_name}</td>
-                    <td class="truncate">{pretty_size(slide.file_size)}</td>
-                    <td>
-                      <span class="capitalize">{(slide.subject && slide.subject.name) || "N/A"}</span>
-                      <br>
-                      <span class="text-xs italic">{(slide.subject && slide.subject.scientific_name) || "N/A"}</span>
-                    </td>
-                    <td>
-                      <button class="btn btn-secondary btn-xs" :on-click="start-editing" :values={id: slide.id}>Edit</button>
-                    </td>
-                  </tr>
-                {#else}
-                  <tr>
-                    <td>No slides selected to be discarded.</td>
-                    <td />
-                    <td />
-                  </tr>
-                {/for}
-              </tbody>
-            </table>
-          </div>
+                    </div>
+                  </td>
+                  <td class="truncate">{slide.file_name}</td>
+                  <td class="truncate">{pretty_size(slide.file_size)}</td>
+                  <td>
+                    <span class="capitalize">{(slide.subject && slide.subject.name) || "N/A"}</span>
+                    <br>
+                    <span class="text-xs italic">{(slide.subject && slide.subject.scientific_name) || "N/A"}</span>
+                  </td>
+                  <td>
+                    <button class="btn btn-secondary btn-xs" :on-click="start-editing" :values={id: slide.id}>Edit</button>
+                  </td>
+                </tr>
+              {#else}
+                <tr>
+                  <td>No slides selected to be discarded.</td>
+                  <td />
+                  <td />
+                  <td />
+                  <td />
+                </tr>
+              {/for}
+            </tbody>
+          </table>
         </div>
       </div>
     {#else}

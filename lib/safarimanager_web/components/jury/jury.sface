@@ -49,15 +49,15 @@
           click="penalty"
           click_key="penalty"
           click_value="penalty"
-          class={"btn", "btn-sm", "btn-success": @curr_slide.penalty}
+          class={"btn", "btn-sm", "btn-error": @curr_slide && @curr_slide.penalty}
         >Penalty</JuryToolbarButton>
       </div>
       <div class="btn-group">
-        {#for prize <- @prizes}
+        <!-- {#for prize <- @prizes}
           <JuryToolbarButton click="prize" click_key="prize" click_value={prize}>{prize}</JuryToolbarButton>
         {#else}
           No prizes available
-        {/for}
+        {/for} -->
       </div>
     </div>
   </div>

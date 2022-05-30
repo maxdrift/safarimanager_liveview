@@ -40,4 +40,8 @@ defmodule SMWeb.Components.CompetitionHeader do
        ) do
     Calendar.strftime(start_time, "%d %b %Y")
   end
+
+  defp pretty_dates(nil, _nil) do
+    "Sometime..."
+  end
 end

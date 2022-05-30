@@ -45,35 +45,34 @@
                 </thead>
                 <tbody>
                   {#for %{slide: slide, slide_score: score} <- result.slides}
-                  <tr>
-                    <td>{slide.file_name}</td>
-                    <td>{slide.subject.numeric_id}</td>
-                    <td><span class="capitalize">{slide.subject.name}</span></td>
-                    <td>{slide.subject.coefficient}</td>
-                    <td>
-                    {#for evaluation <- slide.evaluations}
-                      <span class="badge badge-outline badge-sm">{evaluation.value}</span>
-                    {/for}
-                    </td>
-                    <td>{slide.penalty && "x" || "-"}</td>
-                    <td>
-                    <div class={
-                        "my-auto",
-                        "badge",
-                        "badge-success": slide.status == :submitted_jury,
-                        "badge-warning": slide.status == :submitted_fixed
-                      }>
-                        {status_to_label(slide.status)}
-                      </div>
-                    </td>
-                    <td>{score}</td>
-                  </tr>
+                    <tr>
+                      <td>{slide.file_name}</td>
+                      <td>{slide.subject.numeric_id}</td>
+                      <td><span class="capitalize">{slide.subject.name}</span></td>
+                      <td>{slide.subject.coefficient}</td>
+                      <td>
+                        {#for evaluation <- slide.evaluations}
+                          <span class="badge badge-outline badge-sm">{evaluation.value}</span>
+                        {/for}
+                      </td>
+                      <td>{(slide.penalty && "x") || "-"}</td>
+                      <td>
+                        <div class={
+                          "my-auto",
+                          "badge",
+                          "badge-success": slide.status == :submitted_jury,
+                          "badge-warning": slide.status == :submitted_fixed
+                        }>
+                          {status_to_label(slide.status)}
+                        </div>
+                      </td>
+                      <td>{score}</td>
+                    </tr>
                   {/for}
                 </tbody>
               </table>
             </td>
-                        <td />
-
+            <td />
           </tr>
         </tbody>
       {#else}

@@ -53,6 +53,18 @@ defmodule SM.Evaluations do
     |> Repo.all()
   end
 
+  @spec list_by_ids([String.t()]) :: [Evaluation.t()]
+  def list_by_ids(ids) do
+    query =
+      from(
+        e in Evaluation,
+        where: e.id in ^ids,
+        order_by: [asc: :value]
+      )
+
+    Repo.all(query)
+  end
+
   @doc """
   Gets a single Evaluation.
 

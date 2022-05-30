@@ -71,7 +71,7 @@ defmodule SMWeb.Validation do
   """
   def handle_params(%{"competition_id" => competition_id}, _url, socket) do
     {:ok, competition} = Competitions.get(competition_id)
-    slides = Slides.list(competition_id)
+    slides = Slides.list_for_validation(competition_id)
 
     socket =
       socket
@@ -222,7 +222,7 @@ defmodule SMWeb.Validation do
   def handle_info({Slides, [:slide, _action], _result}, socket) do
     curr_slide_id = socket.assigns.curr_slide.id
     {:ok, updated_slide} = Slides.get(curr_slide_id)
-    slides = Slides.list(socket.assigns.competition.id)
+    slides = Slides.list_for_validation(socket.assigns.competition.id)
 
     socket =
       socket

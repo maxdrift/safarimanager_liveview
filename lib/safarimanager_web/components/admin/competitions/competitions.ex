@@ -6,6 +6,7 @@ defmodule SMWeb.Components.Admin.Competitions do
 
   alias SM.Competitions
   alias SM.Competitions.Competition
+  alias SM.Evaluations
   alias SM.Organizations
   alias SMWeb.Atoms.Alert
   alias SMWeb.Components.Admin.Competitions.Edit
@@ -129,7 +130,13 @@ defmodule SMWeb.Components.Admin.Competitions do
         socket
       ) do
     case Competitions.create(params) do
-      {:ok, _entity} ->
+      {:ok, %Competition{id: competition_id}} ->
+        # TODO: Perform evaluations selection in the UI
+        all_evaluations = Evaluations.list() |> Enum.map(& &1.id)
+
+        {:ok, _competition} =
+          Competitions.update_allowed_evaluations(competition_id, all_evaluations)
+
         socket =
           socket
           |> reset_current_editing()
@@ -179,6 +186,7 @@ defmodule SMWeb.Components.Admin.Competitions do
     case get(id) do
       {:ok, competition} ->
         changeset = change(competition, %{})
+
         Edit.show("edit-dialog", :edit)
 
         socket =

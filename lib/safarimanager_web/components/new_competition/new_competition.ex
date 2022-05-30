@@ -6,6 +6,7 @@ defmodule SMWeb.NewCompetition do
 
   alias SM.Competitions
   alias SM.Competitions.Competition
+  alias SM.Evaluations
   alias SM.Organizations
 
   alias SMWeb.Components.Admin.Competitions.Form
@@ -47,6 +48,12 @@ defmodule SMWeb.NewCompetition do
   def handle_event("submit", %{"entity" => entity}, socket) do
     case Competitions.create(entity) do
       {:ok, %Competition{id: competition_id}} ->
+        # TODO: Perform evaluations selection in the UI
+        all_evaluations = Evaluations.list() |> Enum.map(& &1.id)
+
+        {:ok, _competition} =
+          Competitions.update_allowed_evaluations(competition_id, all_evaluations)
+
         socket =
           socket
           |> assign(:entity, %Competition{})

@@ -54,28 +54,12 @@ defmodule SM.Competitions.Competition do
       :organization_id
     ])
     |> cast_assoc(:settings, required: false)
-    |> put_assoc(:allowed_evaluations, Map.get(attrs, "allowed_evaluations", []))
   end
 
-  @spec update_changeset(Competition.t(), %{String.t() => any()}) :: Ecto.Changeset.t()
-  def update_changeset(competition, attrs) do
+  @spec put_allowed_evaluations(Competition.t(), [%Evaluation{}]) :: Ecto.Changeset.t()
+  def put_allowed_evaluations(competition, evaluations) do
     competition
-    |> cast(attrs, [
-      :name,
-      :start_time,
-      :end_time,
-      :street_name,
-      :street_number,
-      :postal_code,
-      :city,
-      :state,
-      :country,
-      :organization_id
-    ])
-    |> validate_required([
-      :name,
-      :organization_id
-    ])
-    |> cast_assoc(:settings, required: true)
+    |> change()
+    |> put_assoc(:allowed_evaluations, evaluations)
   end
 end

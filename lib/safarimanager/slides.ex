@@ -5,6 +5,7 @@ defmodule SM.Slides do
   use SM, :context
 
   alias Ecto.Multi
+  alias SM.Competitions
   alias SM.ImageProcessing
   alias SM.Jurors.Juror
   alias SM.Participants.Participant
@@ -158,8 +159,8 @@ defmodule SM.Slides do
       [%Slide{}, ...]
 
   """
-  @spec list(String.t()) :: [Slide.t()]
-  def list(competition_id) do
+  @spec list_for_jury(String.t()) :: [Slide.t()]
+  def list_for_jury(competition_id) do
     query =
       from(sl in Slide,
         join: su in assoc(sl, :subject),
@@ -555,6 +556,25 @@ defmodule SM.Slides do
     end
   end
 
+  @spec assign_random_evaluations(String.t()) :: :ok | {:error, any()}
+  def assign_random_evaluations(competition_id) do
+    {:ok, competition} = Competitions.get(competition_id)
+    allowed_evaluations = Map.get(competition, :allowed_evaluations)
+    num_of_jurors = Enum.count(competition.jurors)
+    evaluations_per_juror = competition.settings.evaluations_per_juror
+
+    competition_id
+    |> list_for_jury()
+    |> Enum.each(fn slide ->
+      Enum.each(0..num_of_jurors, fn _juror ->
+        Enum.each(0..evaluations_per_juror, fn _evaluation ->
+          random_evaluation = Enum.random(allowed_evaluations)
+          evaluate(competition_id, slide.id, random_evaluation.id)
+        end)
+      end)
+    end)
+  end
+
   @spec create_slide_evaluation(%{(String.t() | atom()) => any()}) ::
           {:error, any()} | {:ok, SlideEvaluation.t()}
   def create_slide_evaluation(attrs \\ %{}) do
@@ -563,10 +583,13 @@ defmodule SM.Slides do
     |> Repo.insert()
     |> case do
       {:ok, slide_evaluation} ->
-        notify_subscribers({:ok, Repo.preload(slide_evaluation, [:evaluation])}, [
-          :slide,
-          :updated
-        ])
+        notify_subscribers(
+          {:ok, Repo.preload(slide_evaluation, [:evaluation, [slide: :evaluations]])},
+          [
+            :slide,
+            :updated
+          ]
+        )
 
       {:error, _reason} = error ->
         error
@@ -581,6 +604,19 @@ defmodule SM.Slides do
   @spec clear_evaluations(String.t()) :: {:ok, integer()} | {:error, any()}
   def clear_evaluations(slide_id) do
     {deleted, nil} = Repo.delete_all(from(SlideEvaluation, where: [slide_id: ^slide_id]))
+    notify_subscribers({:ok, deleted}, [:slide, :updated])
+  end
+
+  @spec clear_competition_evaluations(String.t()) :: {:ok, integer()} | {:error, any()}
+  def clear_competition_evaluations(competition_id) do
+    all_slide_ids =
+      competition_id
+      |> list_for_jury()
+      |> Enum.map(& &1.id)
+
+    query = from(se in SlideEvaluation, where: se.slide_id in ^all_slide_ids)
+
+    {deleted, nil} = Repo.delete_all(query)
     notify_subscribers({:ok, deleted}, [:slide, :updated])
   end
 

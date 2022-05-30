@@ -8,10 +8,10 @@
       <div class={
         "my-auto",
         "badge",
-        "badge-success": @curr_slide.status == :submitted_jury,
-        "badge-warning": @curr_slide.status == :submitted_fixed
+        "badge-success": @curr_slide && @curr_slide.status == :submitted_jury,
+        "badge-warning": @curr_slide && @curr_slide.status == :submitted_fixed
       }>
-        {status_to_label(@curr_slide.status)}
+        {@curr_slide && status_to_label(@curr_slide.status)}
       </div>
       <div class="flex flex-row justify-between gap-2">
         <div class="btn-group">
@@ -35,39 +35,46 @@
   <div id="openseadragon-viewer" class="flex-1" :hook="Lightbox" phx-update="ignore"> </div>
   <div class="flex-initial">
     <div class="flex flex-row">
-      <JuryToolbarButton
-        click="flag"
-        click_key="reason"
-        click_value="wrong-subject"
-        class={"btn", "btn-sm", "ml-2", "btn-error": @curr_slide.flags && @curr_slide.flags.wrong_subject}
-      >Wrong subject</JuryToolbarButton>
-      <Form for={:wrong_subject_flag} change="validate" class="mx-2">
-        <Select
-          field="subject"
-          options={Enum.map(@subjects, &{&1.name, &1.id})}
-          selected={(@curr_slide.flags && @curr_slide.flags.wrong_subject_ctx &&
-             @curr_slide.flags.wrong_subject_ctx.to) || @curr_slide.subject_id}
-          class="select select-bordered select-sm text-xs w-full max-w-xs"
-          opts={disabled: !(@curr_slide.flags && @curr_slide.flags.wrong_subject)}
-        />
-      </Form>
-      <JuryToolbarButton
-        click="flag"
-        click_key="reason"
-        click_value="other"
-        class={"btn", "btn-sm", "btn-error": @curr_slide.flags && @curr_slide.flags.other_reason}
-      >Other reason</JuryToolbarButton>
-      <Form for={:other_reason_flag} change="validate" class="mx-2 w-60">
-        <TextInput
-          field="reason"
-          class="input input-bordered input-sm text-xs w-full max-w-xs"
-          value={@curr_slide.flags && @curr_slide.flags.other_reason_ctx}
-          opts={
-            placeholder: "Insert a reason here...",
-            disabled: !(@curr_slide.flags && @curr_slide.flags.other_reason)
+      {#if @curr_slide}
+        <JuryToolbarButton
+          click="flag"
+          click_key="reason"
+          click_value="wrong-subject"
+          class={
+            "btn",
+            "btn-sm",
+            "ml-2",
+            "btn-error": @curr_slide && @curr_slide.flags && @curr_slide.flags.wrong_subject
           }
-        />
-      </Form>
+        >Wrong subject</JuryToolbarButton>
+        <Form for={:wrong_subject_flag} change="validate" class="mx-2">
+          <Select
+            field="subject"
+            options={Enum.map(@subjects, &{&1.name, &1.id})}
+            selected={(@curr_slide.flags && @curr_slide.flags.wrong_subject_ctx &&
+               @curr_slide.flags.wrong_subject_ctx.to) || @curr_slide.subject_id}
+            class="select select-bordered select-sm text-xs w-full max-w-xs"
+            opts={disabled: !(@curr_slide.flags && @curr_slide.flags.wrong_subject)}
+          />
+        </Form>
+        <JuryToolbarButton
+          click="flag"
+          click_key="reason"
+          click_value="other"
+          class={"btn", "btn-sm", "btn-error": @curr_slide && @curr_slide.flags && @curr_slide.flags.other_reason}
+        >Other reason</JuryToolbarButton>
+        <Form for={:other_reason_flag} change="validate" class="mx-2 w-60">
+          <TextInput
+            field="reason"
+            class="input input-bordered input-sm text-xs w-full max-w-xs"
+            value={@curr_slide.flags && @curr_slide.flags.other_reason_ctx}
+            opts={
+              placeholder: "Insert a reason here...",
+              disabled: !(@curr_slide.flags && @curr_slide.flags.other_reason)
+            }
+          />
+        </Form>
+      {/if}
     </div>
   </div>
 </div>

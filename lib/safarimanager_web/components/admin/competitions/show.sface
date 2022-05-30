@@ -15,6 +15,15 @@
       <li><b>City:</b> {@entity.city}</li>
       <li><b>State:</b> {@entity.state}</li>
       <li><b>Country:</b> {@entity.country}</li>
+      <li><b>Allowed evaluations:</b>
+        <ul class="list-disc list-inside">
+          {#for e <- Enum.sort(@entity.allowed_evaluations, &(&1.value <= &2.value))}
+            <li>{e.value}</li>
+          {#else}
+            <li>N/A</li>
+          {/for}
+        </ul>
+      </li>
       <li><b>Settings:</b>
         <ul class="list-disc list-inside">
           {#if not is_nil(@entity.settings)}

@@ -46,7 +46,7 @@ defmodule SMWeb.Jury do
       if Map.has_key?(socket.assigns, :slides) do
         socket
       else
-        slides = Slides.list(competition_id)
+        slides = Slides.list_for_jury(competition_id)
 
         assign(socket, :slides, slides)
       end
@@ -62,7 +62,10 @@ defmodule SMWeb.Jury do
       |> assign(:image_count, Enum.count(slides))
       |> assign(:curr_index, current_index)
       |> assign(:curr_slide, slide)
-      |> assign(:evaluations, socket.assigns.competition.allowed_evaluations)
+      |> assign(
+        :evaluations,
+        Enum.sort(socket.assigns.competition.allowed_evaluations, &(&1.value <= &2.value))
+      )
       |> assign(:jurors, socket.assigns.competition.jurors)
       # Note: remember events pushed from the server via push_event are global
       # and will be dispatched to all active hooks on the client who are handling that event.
@@ -76,7 +79,7 @@ defmodule SMWeb.Jury do
   """
   def handle_params(%{"competition_id" => competition_id}, _url, socket) do
     {:ok, competition} = Competitions.get(competition_id)
-    slides = Slides.list(competition_id)
+    slides = Slides.list_for_jury(competition_id)
 
     socket =
       socket
@@ -193,7 +196,7 @@ defmodule SMWeb.Jury do
   def handle_info({Slides, [:slide, _action], _result}, socket) do
     curr_slide_id = socket.assigns.curr_slide.id
     {:ok, updated_slide} = Slides.get(curr_slide_id)
-    slides = Slides.list(socket.assigns.competition.id)
+    slides = Slides.list_for_jury(socket.assigns.competition.id)
 
     socket =
       socket
@@ -225,7 +228,12 @@ defmodule SMWeb.Jury do
            evaluation_id
          ) do
       {:ok, slide_evaluation} ->
-        set_flash_evaluation(socket, slide_evaluation.evaluation.value)
+        evaluations_str =
+          slide_evaluation.slide.evaluations
+          |> Enum.map(& &1.value)
+          |> Enum.join("-")
+
+        set_flash_evaluation(socket, evaluations_str)
 
       {:error, :already_evaluated} ->
         socket
