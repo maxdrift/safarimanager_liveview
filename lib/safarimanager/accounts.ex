@@ -52,6 +52,7 @@ defmodule SM.Accounts do
     query =
       from(
         u in User,
+        where: not is_nil(u.category_id),
         left_join: p in Participant,
         on: p.user_id == u.id and p.competition_id == ^competition_id,
         where: is_nil(p.user_id),
@@ -60,6 +61,86 @@ defmodule SM.Accounts do
         where: is_nil(j.user_id),
         left_join: o in assoc(u, :organization),
         on: o.id == u.organization_id,
+        order_by: [desc: :inserted_at],
+        preload: [:organization, :category]
+      )
+
+    Repo.all(query)
+  end
+
+  @doc """
+  Filter enrollable by name
+  """
+  @spec list_enrollable(String.t(), String.t()) :: [User.t()]
+  def list_enrollable(competition_id, name) do
+    pattern = "%#{name}%"
+
+    query =
+      from(
+        u in User,
+        where: not is_nil(u.category_id),
+        left_join: p in Participant,
+        on: p.user_id == u.id and p.competition_id == ^competition_id,
+        where: is_nil(p.user_id),
+        left_join: j in Juror,
+        on: j.user_id == u.id and j.competition_id == ^competition_id,
+        where: is_nil(j.user_id),
+        left_join: o in assoc(u, :organization),
+        on: o.id == u.organization_id,
+        where:
+          fragment(@like_fragment, u.first_name, ^pattern) or
+            fragment(@like_fragment, u.last_name, ^pattern),
+        order_by: [desc: :inserted_at],
+        preload: [:organization, :category]
+      )
+
+    Repo.all(query)
+  end
+
+  @doc """
+  Filter enrollable Jurors by name
+  """
+  @spec list_enrollable_jurors(String.t()) :: [User.t()]
+  def list_enrollable_jurors(competition_id) do
+    query =
+      from(
+        u in User,
+        left_join: p in Participant,
+        on: p.user_id == u.id and p.competition_id == ^competition_id,
+        where: is_nil(p.user_id),
+        left_join: j in Juror,
+        on: j.user_id == u.id and j.competition_id == ^competition_id,
+        where: is_nil(j.user_id),
+        left_join: o in assoc(u, :organization),
+        on: o.id == u.organization_id,
+        order_by: [desc: :inserted_at],
+        preload: [:organization, :category]
+      )
+
+    Repo.all(query)
+  end
+
+  @doc """
+  Filter enrollable Jurors by name
+  """
+  @spec list_enrollable_jurors(String.t(), String.t()) :: [User.t()]
+  def list_enrollable_jurors(competition_id, name) do
+    pattern = "%#{name}%"
+
+    query =
+      from(
+        u in User,
+        left_join: p in Participant,
+        on: p.user_id == u.id and p.competition_id == ^competition_id,
+        where: is_nil(p.user_id),
+        left_join: j in Juror,
+        on: j.user_id == u.id and j.competition_id == ^competition_id,
+        where: is_nil(j.user_id),
+        left_join: o in assoc(u, :organization),
+        on: o.id == u.organization_id,
+        where:
+          fragment(@like_fragment, u.first_name, ^pattern) or
+            fragment(@like_fragment, u.last_name, ^pattern),
         order_by: [desc: :inserted_at],
         preload: [:organization, :category]
       )

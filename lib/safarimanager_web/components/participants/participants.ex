@@ -10,10 +10,12 @@ defmodule SMWeb.Participants do
   alias SM.Competitions
   alias SM.Organizations
   alias SM.Participants
-  alias SMWeb.Components.Admin.Users.Form
+  alias SMWeb.Components.Admin.Users.Form, as: UsersForm
   alias SMWeb.Components.CompetitionHeader
   alias SMWeb.Components.FormActions
   alias SMWeb.Components.StepsHeader
+  alias Surface.Components.Form
+  alias Surface.Components.Form.TextInput
   alias Surface.Components.LiveRedirect
 
   require Logger
@@ -92,6 +94,26 @@ defmodule SMWeb.Participants do
       |> assign(:changeset, Accounts.change_for_competition_registration(socket.assigns.entity))
 
     {:noreply, socket}
+  end
+
+  def handle_event("filter-users", %{"value" => ""}, socket) do
+    users = Accounts.list_enrollable(socket.assigns.competition_id)
+    {:noreply, assign(socket, :users, users)}
+  end
+
+  def handle_event("filter-users", %{"value" => value}, socket) do
+    users = Accounts.list_enrollable(socket.assigns.competition_id, value)
+    {:noreply, assign(socket, :users, users)}
+  end
+
+  def handle_event("filter-participants", %{"value" => ""}, socket) do
+    participants = Participants.list(socket.assigns.competition_id)
+    {:noreply, assign(socket, :participants, participants)}
+  end
+
+  def handle_event("filter-participants", %{"value" => value}, socket) do
+    participants = Participants.list(socket.assigns.competition_id, value)
+    {:noreply, assign(socket, :participants, participants)}
   end
 
   @impl Phoenix.LiveView

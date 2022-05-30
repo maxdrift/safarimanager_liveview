@@ -10,6 +10,8 @@ defmodule SMWeb.Jurors do
   alias SMWeb.Components.CompetitionHeader
   alias SMWeb.Components.StepsHeader
   alias Surface.Components.LiveRedirect
+  alias Surface.Components.Form
+  alias Surface.Components.Form.TextInput
 
   require Logger
 
@@ -40,12 +42,22 @@ defmodule SMWeb.Jurors do
     {:noreply, socket}
   end
 
+  def handle_event("filter-users", %{"value" => ""}, socket) do
+    users = Accounts.list_enrollable(socket.assigns.competition_id)
+    {:noreply, assign(socket, :users, users)}
+  end
+
+  def handle_event("filter-users", %{"value" => value}, socket) do
+    users = Accounts.list_enrollable(socket.assigns.competition_id, value)
+    {:noreply, assign(socket, :users, users)}
+  end
+
   @impl Phoenix.LiveView
   def handle_params(%{"competition_id" => competition_id}, _uri, socket) do
     if connected?(socket), do: Jurors.subscribe()
 
     {:ok, competition} = Competitions.get(competition_id)
-    users = Accounts.list_enrollable(competition_id)
+    users = Accounts.list_enrollable_jurors(competition_id)
 
     socket =
       socket
@@ -66,7 +78,7 @@ defmodule SMWeb.Jurors do
   end
 
   def handle_info({Jurors, [:user, :updated], _result}, socket) do
-    users = Accounts.list_enrollable(socket.assigns.competition_id)
+    users = Accounts.list_enrollable_jurors(socket.assigns.competition_id)
 
     socket = assign(socket, :users, users)
 
