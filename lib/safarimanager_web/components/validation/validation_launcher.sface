@@ -1,5 +1,5 @@
 <CompetitionHeader {=@competition} />
-<StepsHeader current_step={5} />
+<StepsHeader current_step={5} competition_id={@competition.id} />
 <div class="mt-10 text-center">
   <Link to={"/organize/#{@competition_id}/validation"} class="btn btn-xl btn-primary">
     Start Validation

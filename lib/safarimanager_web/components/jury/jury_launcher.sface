@@ -1,5 +1,5 @@
 <CompetitionHeader {=@competition} />
-<StepsHeader current_step={6} />
+<StepsHeader current_step={6} competition_id={@competition.id} />
 <div class="mt-20 text-center">
   <Link to={"/organize/#{@competition_id}/jury"} class="btn btn-xl btn-primary">
     Start Jury

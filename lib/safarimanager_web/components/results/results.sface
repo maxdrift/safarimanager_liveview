@@ -1,5 +1,5 @@
 <CompetitionHeader {=@competition} />
-<StepsHeader current_step={7} />
+<StepsHeader current_step={7} competition_id={@competition.id} />
 <div class="pt-10 overflow-y-auto">
   <table class="table table-fixed w-full">
     <thead>
