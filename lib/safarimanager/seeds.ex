@@ -24,9 +24,7 @@ defmodule SM.Seeds do
     insert_categories()
   end
 
-  # Internal
-
-  defp insert_subjects do
+  def insert_subjects do
     priv_dir = :code.priv_dir(:safarimanager)
 
     [priv_dir, "/repo/elenco_pesci_2019.csv"]
@@ -46,7 +44,35 @@ defmodule SM.Seeds do
     |> Stream.run()
   end
 
-  defp insert_evaluations do
+  @spec upsert_subjects :: :ok
+  def upsert_subjects do
+    priv_dir = :code.priv_dir(:safarimanager)
+
+    [priv_dir, "/repo/elenco_pesci_2019.csv"]
+    |> Path.join()
+    |> File.stream!()
+    |> CSV.parse_stream(skip_headers: false)
+    |> Stream.map(fn [numeric_id, name, scientific_name, coefficient] ->
+      data = %{
+        name: String.downcase(name),
+        coefficient: String.to_integer(coefficient),
+        numeric_id: String.to_integer(numeric_id),
+        scientific_name: String.downcase(scientific_name),
+        type: :fish
+      }
+
+      case Subjects.get_by_numeric_id(numeric_id) do
+        {:ok, subject} ->
+          {:ok, _result} = Subjects.update(subject, data)
+
+        {:error, :not_found} ->
+          {:ok, _result} = Subjects.create(data)
+      end
+    end)
+    |> Stream.run()
+  end
+
+  def insert_evaluations do
     0..10
     |> Stream.map(fn e ->
       {:ok, _result} =
@@ -58,7 +84,7 @@ defmodule SM.Seeds do
     |> Stream.run()
   end
 
-  defp insert_categories do
+  def insert_categories do
     :ok =
       @default_categories
       |> Stream.map(fn name ->
