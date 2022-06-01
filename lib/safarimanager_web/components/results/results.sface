@@ -44,12 +44,12 @@
                   </tr>
                 </thead>
                 <tbody>
-                  {#for %{slide: slide, slide_score: score} <- result.slides}
+                  {#for %{slide: slide, slide_score: score, coefficient: coefficient} <- result.slides}
                     <tr>
                       <td>{slide.file_name}</td>
                       <td>{slide.subject.numeric_id}</td>
                       <td><span class="capitalize">{slide.subject.name}</span></td>
-                      <td>{slide.subject.coefficient}</td>
+                      <td>{coefficient} <span :if={@competition.settings.dynamic_coefficients_enabled}>(d)</span></td>
                       <td>
                         {#for evaluation <- slide.evaluations}
                           <span class="badge badge-outline badge-sm">{evaluation.value}</span>

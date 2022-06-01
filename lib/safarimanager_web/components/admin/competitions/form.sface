@@ -208,6 +208,16 @@
         />
         <Label class="label h-7"><ErrorTag /></Label>
       </Field>
+      <Field name={:dynamic_coefficients_enabled} class="form-control w-1/2 px-3">
+        <Label class="label cursor-pointer">
+          <span class="label-text">Dynamic coefficients</span>
+          <Checkbox
+            class={state_class("checkbox", @changeset, :dynamic_coefficients_enabled, [])}
+            opts={phx_debounce: "1000"}
+          />
+        </Label>
+        <Label class="label h-7"><ErrorTag /></Label>
+      </Field>
       <div class="text-lg w-full px-3">Dynamic coefficients:</div>
       <Inputs for={:dynamic_coefficients}>
         <Field name={:name} class="form-control w-1/2 px-3">

@@ -37,6 +37,7 @@ defmodule SM.Competitions.CompetitionSettings do
     field :submission_ratio, :decimal
     field :fixed_points_multiplier, :decimal
     field :penalty_amount, :decimal
+    field :dynamic_coefficients_enabled, :boolean
 
     embeds_many :dynamic_coefficients, DynamicCoefficient, on_replace: :delete
 
@@ -57,7 +58,8 @@ defmodule SM.Competitions.CompetitionSettings do
       :proportional_submission,
       :submission_ratio,
       :fixed_points_multiplier,
-      :penalty_amount
+      :penalty_amount,
+      :dynamic_coefficients_enabled
     ])
     |> validate_required([
       :evaluations_per_juror,
@@ -67,7 +69,8 @@ defmodule SM.Competitions.CompetitionSettings do
       :proportional_submission,
       :submission_ratio,
       :fixed_points_multiplier,
-      :penalty_amount
+      :penalty_amount,
+      :dynamic_coefficients_enabled
     ])
     |> cast_embed(:dynamic_coefficients)
   end

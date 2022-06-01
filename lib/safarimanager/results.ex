@@ -9,18 +9,18 @@ defmodule SM.Results do
   alias SM.Participants
   alias SM.Slides
   alias SM.Slides.Slide
-  alias SM.Subjects.Subject
+  alias SM.Subjects
 
   @spec list(String.t()) :: {:ok, [%{atom() => any()}]} | {:error, :not_found}
   def list(competition_id) do
     {:ok, competition} = Competitions.get(competition_id)
-    subjects = get_all_dynamic_coefficients(competition_id, competition)
+    coefficients = get_all_coefficients(competition)
 
     {results, _acc} =
       Participants.list(competition_id)
       |> Enum.map(fn participant ->
         {slides, total_score} =
-          list_by_participant(competition_id, competition, participant.user.id, subjects)
+          list_by_participant(competition_id, competition, participant.user.id, coefficients)
 
         %{
           participant: participant,
@@ -44,43 +44,64 @@ defmodule SM.Results do
     {:ok, results}
   end
 
-  @spec list_by_participant(String.t(), Competition.t(), String.t(), [Subject.t()]) ::
+  @spec list_by_participant(String.t(), Competition.t(), String.t(), %{
+          Ecto.UUID.t() => Decimal.t()
+        }) ::
           {[%{atom() => any()}], Decimal.t()}
-  def list_by_participant(competition_id, competition, user_id, subjects) do
+  def list_by_participant(competition_id, competition, user_id, coefficients) do
     user_id
     |> Slides.list_for_results(competition_id)
     |> Enum.flat_map_reduce(Decimal.new(0), fn
       %Slide{penalty: true} = slide, total_score ->
+        coefficient = Map.fetch!(coefficients, slide.subject_id)
+
         slide_score = competition.settings.penalty_amount
-        {[%{slide: slide, slide_score: slide_score}], Decimal.add(total_score, slide_score)}
+
+        {[%{slide: slide, slide_score: slide_score, coefficient: coefficient}],
+         Decimal.add(total_score, slide_score)}
 
       %Slide{status: :submitted_jury} = slide, total_score ->
-        subject = Enum.find(subjects, &(&1.id == slide.subject_id))
+        coefficient = Map.fetch!(coefficients, slide.subject_id)
 
         slide_score =
           Decimal.mult(
             Enum.reduce(slide.evaluations, Decimal.new(0), &Decimal.add(&2, &1.value)),
-            Decimal.mult(subject.coefficient, subject.dynamic_coefficient)
+            coefficient
           )
 
-        {[%{slide: slide, slide_score: slide_score}], Decimal.add(total_score, slide_score)}
+        {[%{slide: slide, slide_score: slide_score, coefficient: coefficient}],
+         Decimal.add(total_score, slide_score)}
 
       %Slide{status: :submitted_fixed} = slide, total_score ->
-        slide_score =
-          Decimal.mult(
-            competition.settings.fixed_points_multiplier,
-            Decimal.new(slide.subject.coefficient)
-          )
+        coefficient = Map.fetch!(coefficients, slide.subject_id)
 
-        {[%{slide: slide, slide_score: slide_score}], Decimal.add(total_score, slide_score)}
+        slide_score = Decimal.mult(competition.settings.fixed_points_multiplier, coefficient)
+
+        {[%{slide: slide, slide_score: slide_score, coefficient: coefficient}],
+         Decimal.add(total_score, slide_score)}
 
       %Slide{}, total_score ->
         {[], total_score}
     end)
   end
 
-  @spec get_all_dynamic_coefficients(String.t(), Competition.t()) :: [Subject.t()]
-  def get_all_dynamic_coefficients(competition_id, competition) do
+  @spec get_all_coefficients(Competition.t()) :: %{Ecto.UUID.t() => Decimal.t()}
+  def get_all_coefficients(competition) do
+    competition
+    |> Map.fetch!(:settings)
+    |> Map.fetch!(:dynamic_coefficients_enabled)
+    |> if do
+      get_all_dynamic_coefficients(competition)
+    else
+      Subjects.list()
+      |> Enum.into(%{}, fn s ->
+        {s.id, s.coefficient}
+      end)
+    end
+  end
+
+  @spec get_all_dynamic_coefficients(Competition.t()) :: %{Ecto.UUID.t() => Decimal.t()}
+  def get_all_dynamic_coefficients(competition) do
     coefficients =
       competition
       |> Map.fetch!(:settings)
@@ -90,7 +111,7 @@ defmodule SM.Results do
           Decimal.compare(left.to, right.to) in [:lt]
       end)
 
-    competition_id
+    competition.id
     |> Slides.subjects_distribution()
     |> Enum.map(fn subject ->
       matches =
@@ -121,8 +142,9 @@ defmodule SM.Results do
             match
         end
 
-      Map.put(subject, :dynamic_coefficient, coeff)
+      {subject.id, coeff}
     end)
+    |> Enum.into(%{})
   end
 
   defp between(%Decimal{} = left, %Decimal{} = center, %Decimal{} = right) do

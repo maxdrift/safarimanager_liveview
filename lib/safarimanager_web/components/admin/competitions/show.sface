@@ -35,6 +35,7 @@
             <li><b>Submission ratio:</b> {@entity.settings.submission_ratio}</li>
             <li><b>Fixed points multiplier:</b> {@entity.settings.fixed_points_multiplier}</li>
             <li><b>Penalty amount:</b> {@entity.settings.penalty_amount}</li>
+            <li><b>Dynamic coefficients:</b> {@entity.settings.dynamic_coefficients_enabled}</li>
             <li><b>Dynamic coefficients:</b>
               <ul class="list-disc list-inside pl-6">
                 {#for dc <- @entity.settings.dynamic_coefficients}

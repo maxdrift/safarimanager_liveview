@@ -126,7 +126,8 @@ defmodule SM.Subjects do
       {:error, %Ecto.Changeset{}}
 
   """
-  @spec update(Subject.t(), %{String.t() => any()}) :: {:ok, Subject.t()} | {:error, any()}
+  @spec update(Subject.t(), %{(String.t() | atom()) => any()}) ::
+          {:ok, Subject.t()} | {:error, any()}
   def update(%Subject{} = subject, attrs) do
     subject
     |> Subject.changeset(attrs)
