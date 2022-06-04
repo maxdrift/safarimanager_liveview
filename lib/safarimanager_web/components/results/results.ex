@@ -31,23 +31,29 @@ defmodule SMWeb.Results do
 
   @impl Phoenix.LiveView
   def handle_params(%{"competition_id" => competition_id}, _uri, socket) do
-    {:ok, results} = Results.list(competition_id)
+    {:ok, {results, coefficients}} = Results.list(competition_id)
     {:ok, competition} = Competitions.get(competition_id)
+    slides_count = Slides.count_by_status(competition_id)
 
     socket =
       socket
       |> assign(:competition_id, competition_id)
       |> assign(:competition, competition)
       |> assign(:results, results)
+      |> assign(:coefficients, coefficients)
+      |> assign(:slides_count, slides_count)
 
     {:noreply, socket}
   end
 
   @impl Phoenix.LiveView
   def handle_info({Slides, [:slide, _action], _result}, socket) do
-    {:ok, results} = Results.list(socket.assigns.competition_id)
+    {:ok, {results, coefficients}} = Results.list(socket.assigns.competition_id)
 
-    socket = assign(socket, :results, results)
+    socket =
+      socket
+      |> assign(:results, results)
+      |> assign(:coefficients, coefficients)
 
     {:noreply, socket}
   end

@@ -4,6 +4,8 @@ defmodule SM.Subjects do
   """
   use SM, :context
 
+  alias SM.Competitions
+  alias SM.Slides
   alias SM.Subjects.Subject
 
   @doc """
@@ -189,5 +191,75 @@ defmodule SM.Subjects do
   @spec change(Subject.t(), %{String.t() => any()}) :: Ecto.Changeset.t()
   def change(%Subject{} = subject, params \\ %{}) do
     Subject.changeset(subject, params)
+  end
+
+  @spec get_all_coefficients(Ecto.UUID.t()) :: %{Ecto.UUID.t() => Decimal.t()}
+  def get_all_coefficients(competition_id) do
+    {:ok, competition} = Competitions.get(competition_id)
+
+    competition
+    |> Map.fetch!(:settings)
+    |> Map.fetch!(:dynamic_coefficients_enabled)
+    |> if do
+      get_all_dynamic_coefficients(competition)
+    else
+      list()
+      |> Enum.into(%{}, fn s ->
+        {s.id, {s.coefficient, s}}
+      end)
+    end
+  end
+
+  @spec get_all_dynamic_coefficients(Competition.t()) :: %{Ecto.UUID.t() => Decimal.t()}
+  def get_all_dynamic_coefficients(competition) do
+    coefficients =
+      competition
+      |> Map.fetch!(:settings)
+      |> Map.fetch!(:dynamic_coefficients)
+      |> Enum.sort(fn left, right ->
+        Decimal.compare(left.from, right.from) in [:lt, :eq] and
+          Decimal.compare(left.to, right.to) in [:lt]
+      end)
+
+    competition.id
+    |> Slides.subjects_distribution()
+    |> Enum.map(fn subject ->
+      matches =
+        Enum.flat_map(coefficients, fn coeff ->
+          if between(coeff.from, subject.distribution, coeff.to) do
+            [coeff.value]
+          else
+            []
+          end
+        end)
+
+      # TODO: Handle error with `with/do`
+      {:ok, coeff} =
+        case matches do
+          [] ->
+            Logger.error(
+              "Dynamic coefficients enabled but invalid intervals for #{inspect(subject.distribution)}"
+            )
+
+            {:error, :invalid_intervals}
+
+          [match] ->
+            {:ok, match}
+
+          [_match | _tail] = matches ->
+            Logger.warning(
+              "Dynamic coefficients config has overlapping intervals for coefficients: #{inspect(matches)}"
+            )
+
+            {:error, :overlapping_intervals}
+        end
+
+      {subject.id, {coeff, subject}}
+    end)
+    |> Enum.into(%{})
+  end
+
+  defp between(%Decimal{} = left, %Decimal{} = center, %Decimal{} = right) do
+    Decimal.compare(center, left) == :gt and Decimal.compare(center, right) in [:lt, :eq]
   end
 end

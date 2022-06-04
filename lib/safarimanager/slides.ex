@@ -349,6 +349,36 @@ defmodule SM.Slides do
     Repo.one(query)
   end
 
+  @doc """
+  Return a count of the Slides by status for a competition
+  """
+  @spec count_by_status(Ecto.UUID.t()) :: %{
+          submitted_jury: non_neg_integer(),
+          submitted_fixed: non_neg_integer(),
+          total: non_neg_integer()
+        }
+
+  def count_by_status(competition_id) do
+    query =
+      from(sl in Slide,
+        where: [competition_id: ^competition_id],
+        where: not is_nil(sl.status),
+        group_by: [:status],
+        select: {sl.status, count()}
+      )
+
+    result =
+      query
+      |> Repo.all()
+      |> Enum.into(%{})
+
+    submitted_jury = Map.get(result, :submitted_jury, 0)
+    submitted_fixed = Map.get(result, :submitted_fixed, 0)
+    total = submitted_jury + submitted_fixed
+
+    %{submitted_jury: submitted_jury, submitted_fixed: submitted_fixed, total: total}
+  end
+
   @spec subjects_distribution(String.t()) :: [Subject.t()]
   def subjects_distribution(competition_id) do
     p_count = count_submitting_participants(competition_id)

@@ -11,7 +11,8 @@ defmodule SM.Results do
   alias SM.Slides.Slide
   alias SM.Subjects
 
-  @spec list(String.t()) :: {:ok, [%{atom() => any()}]} | {:error, :not_found}
+  @spec list(String.t()) ::
+          {:ok, {[%{atom() => any()}], %{atom() => any()}}} | {:error, :not_found}
   def list(competition_id) do
     {:ok, competition} = Competitions.get(competition_id)
     coefficients = get_all_coefficients(competition)
@@ -41,7 +42,7 @@ defmodule SM.Results do
         end
       end)
 
-    {:ok, results}
+    {:ok, {results, coefficients}}
   end
 
   @spec list_by_participant(String.t(), Competition.t(), String.t(), %{
@@ -53,7 +54,7 @@ defmodule SM.Results do
     |> Slides.list_for_results(competition_id)
     |> Enum.flat_map_reduce(Decimal.new(0), fn
       %Slide{penalty: true} = slide, total_score ->
-        coefficient = Map.fetch!(coefficients, slide.subject_id)
+        {coefficient, _subject} = Map.fetch!(coefficients, slide.subject_id)
 
         slide_score = competition.settings.penalty_amount
 
@@ -61,7 +62,7 @@ defmodule SM.Results do
          Decimal.add(total_score, slide_score)}
 
       %Slide{status: :submitted_jury} = slide, total_score ->
-        coefficient = Map.fetch!(coefficients, slide.subject_id)
+        {coefficient, _subject} = Map.fetch!(coefficients, slide.subject_id)
 
         slide_score =
           Decimal.mult(
@@ -73,7 +74,7 @@ defmodule SM.Results do
          Decimal.add(total_score, slide_score)}
 
       %Slide{status: :submitted_fixed} = slide, total_score ->
-        coefficient = Map.fetch!(coefficients, slide.subject_id)
+        {coefficient, _subject} = Map.fetch!(coefficients, slide.subject_id)
 
         slide_score = Decimal.mult(competition.settings.fixed_points_multiplier, coefficient)
 
@@ -95,7 +96,7 @@ defmodule SM.Results do
     else
       Subjects.list()
       |> Enum.into(%{}, fn s ->
-        {s.id, s.coefficient}
+        {s.id, {s.coefficient, s}}
       end)
     end
   end
@@ -142,7 +143,7 @@ defmodule SM.Results do
             match
         end
 
-      {subject.id, coeff}
+      {subject.id, {coeff, subject}}
     end)
     |> Enum.into(%{})
   end
