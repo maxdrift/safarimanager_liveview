@@ -222,9 +222,20 @@ defmodule SM.Subjects do
 
     slides_subjects
     |> Enum.map(fn subject ->
+      distribution =
+        if Decimal.compare(subject.distribution, 1) in [:lt, :eq] do
+          subject.distribution
+        else
+          Logger.error(
+            "Subject distribution over 100% for subject #{subject.id} (#{subject.numeric_id} - #{subject.name})"
+          )
+
+          Decimal.new(1)
+        end
+
       matches =
         Enum.flat_map(coefficients, fn coeff ->
-          if between(coeff.from, subject.distribution, coeff.to) do
+          if between(coeff.from, distribution, coeff.to) do
             [coeff.value]
           else
             []
@@ -236,7 +247,7 @@ defmodule SM.Subjects do
         case matches do
           [] ->
             Logger.error(
-              "Dynamic coefficients enabled but invalid intervals for #{inspect(subject.distribution)}"
+              "Dynamic coefficients enabled but invalid intervals for subject #{subject.id} with distribution #{distribution}"
             )
 
             {:error, :invalid_intervals}

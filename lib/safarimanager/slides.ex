@@ -402,7 +402,10 @@ defmodule SM.Slides do
         join: su in assoc(sl, :subject),
         group_by: [:subject_id],
         order_by: [asc: su.numeric_id],
-        select: %Subject{su | distribution: type(count(su.id) / type(^p_count, :float), :decimal)}
+        select: %Subject{
+          su
+          | distribution: type(count(su.id) / type(^p_count, :float), :decimal)
+        }
       )
 
     Repo.all(query)
