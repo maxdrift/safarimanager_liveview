@@ -193,25 +193,24 @@ defmodule SM.Subjects do
     Subject.changeset(subject, params)
   end
 
-  @spec get_all_coefficients(Ecto.UUID.t()) :: %{Ecto.UUID.t() => Decimal.t()}
-  def get_all_coefficients(competition_id) do
+  @spec list_with_coefficients(Ecto.UUID.t()) :: [Subject.t()]
+  def list_with_coefficients(competition_id) do
     {:ok, competition} = Competitions.get(competition_id)
+    slides_subjects = Slides.subjects_distribution(competition_id)
 
     competition
     |> Map.fetch!(:settings)
     |> Map.fetch!(:dynamic_coefficients_enabled)
     |> if do
-      get_all_dynamic_coefficients(competition)
+      list_with_dynamic_coefficients(competition, slides_subjects)
     else
-      list()
-      |> Enum.into(%{}, fn s ->
-        {s.id, {s.coefficient, s}}
-      end)
+      slides_subjects
     end
   end
 
-  @spec get_all_dynamic_coefficients(Competition.t()) :: %{Ecto.UUID.t() => Decimal.t()}
-  def get_all_dynamic_coefficients(competition) do
+  # Internal
+
+  defp list_with_dynamic_coefficients(competition, slides_subjects) do
     coefficients =
       competition
       |> Map.fetch!(:settings)
@@ -221,8 +220,7 @@ defmodule SM.Subjects do
           Decimal.compare(left.to, right.to) in [:lt]
       end)
 
-    competition.id
-    |> Slides.subjects_distribution()
+    slides_subjects
     |> Enum.map(fn subject ->
       matches =
         Enum.flat_map(coefficients, fn coeff ->
@@ -254,9 +252,10 @@ defmodule SM.Subjects do
             {:error, :overlapping_intervals}
         end
 
-      {subject.id, {coeff, subject}}
+      subject
+      |> Map.put(:coefficient, coeff)
+      |> Map.put(:dynamic_coefficient, true)
     end)
-    |> Enum.into(%{})
   end
 
   defp between(%Decimal{} = left, %Decimal{} = center, %Decimal{} = right) do

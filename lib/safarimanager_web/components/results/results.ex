@@ -7,6 +7,7 @@ defmodule SMWeb.Results do
   alias SM.Competitions
   alias SM.Results
   alias SM.Slides
+  alias SM.Subjects
   alias SMWeb.Components.CompetitionHeader
   alias SMWeb.Components.StepsHeader
   alias Surface.Components.LiveRedirect
@@ -31,7 +32,7 @@ defmodule SMWeb.Results do
 
   @impl Phoenix.LiveView
   def handle_params(%{"competition_id" => competition_id}, _uri, socket) do
-    {:ok, {results, coefficients}} = Results.list(competition_id)
+    {:ok, results} = Results.list(competition_id)
     {:ok, competition} = Competitions.get(competition_id)
     slides_count = Slides.count_by_status(competition_id)
 
@@ -40,7 +41,7 @@ defmodule SMWeb.Results do
       |> assign(:competition_id, competition_id)
       |> assign(:competition, competition)
       |> assign(:results, results)
-      |> assign(:coefficients, coefficients)
+      |> assign(:subjects, Subjects.list_with_coefficients(competition_id))
       |> assign(:slides_count, slides_count)
 
     {:noreply, socket}
@@ -48,12 +49,11 @@ defmodule SMWeb.Results do
 
   @impl Phoenix.LiveView
   def handle_info({Slides, [:slide, _action], _result}, socket) do
-    {:ok, {results, coefficients}} = Results.list(socket.assigns.competition_id)
+    {:ok, results} = Results.list(socket.assigns.competition_id)
 
     socket =
       socket
       |> assign(:results, results)
-      |> assign(:coefficients, coefficients)
 
     {:noreply, socket}
   end

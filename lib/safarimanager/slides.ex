@@ -388,7 +388,7 @@ defmodule SM.Slides do
         where: [competition_id: ^competition_id],
         join: su in assoc(sl, :subject),
         group_by: [:subject_id],
-        order_by: [asc: :subject_id],
+        order_by: [asc: su.numeric_id],
         select: %Subject{su | distribution: type(count(su.id) / type(^p_count, :float), :decimal)}
       )
 

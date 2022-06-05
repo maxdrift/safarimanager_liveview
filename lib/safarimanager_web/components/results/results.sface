@@ -65,15 +65,11 @@
           <th class="bg-base-200 w-4/12">Mentions</th>
           <td class="truncate">N/A</td>
         </tr>
-        <tr>
-          <th class="bg-base-200 w-4/12">Average evaluation</th>
-          <td class="truncate">N/A</td>
-        </tr>
       </table>
     </div>
     <div class="divider lg:divider-horizontal" />
     <div class="max-h-96 overflow-y-auto lg:w-1/2">
-      <div class="text-lg text-center pb-4">Subjects distribution</div>
+      <div class="text-lg text-center pb-4">Subjects</div>
       <table class="table table-zebra table-compact w-full">
         <thead>
           <tr>
@@ -84,13 +80,14 @@
           </tr>
         </thead>
         <tbody>
-          {#for {_subject_id, {coefficient, subject}} <- @coefficients}
+          {#for subject <- @subjects}
             <tr>
               <td>{subject.numeric_id}</td>
-              <td>{subject.name}</td>
+              <td class="capitalize">{subject.name}</td>
               <td>{(subject.distribution && "#{Decimal.mult(subject.distribution, 100) |> Decimal.round(2)}%") ||
                   "N/A"}</td>
-              <td>{coefficient}</td>
+              <td :if={subject.dynamic_coefficient}>{subject.coefficient} (d)</td>
+              <td :if={not subject.dynamic_coefficient}>{subject.coefficient}</td>
             </tr>
           {/for}
         </tbody>
