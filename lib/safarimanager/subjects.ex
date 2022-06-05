@@ -264,6 +264,7 @@ defmodule SM.Subjects do
         end
 
       subject
+      |> Map.put(:distribution, distribution)
       |> Map.put(:coefficient, coeff)
       |> Map.put(:dynamic_coefficient, true)
     end)
