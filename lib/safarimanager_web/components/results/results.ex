@@ -43,6 +43,7 @@ defmodule SMWeb.Results do
       |> assign(:results, results)
       |> assign(:subjects, Subjects.list_with_coefficients(competition_id))
       |> assign(:slides_count, slides_count)
+      |> assign(:penalties_count, Slides.count_penalties(competition_id))
 
     {:noreply, socket}
   end

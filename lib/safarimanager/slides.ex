@@ -379,6 +379,19 @@ defmodule SM.Slides do
     %{submitted_jury: submitted_jury, submitted_fixed: submitted_fixed, total: total}
   end
 
+  @spec count_penalties(Ecto.UUID.t()) :: non_neg_integer()
+  def count_penalties(competition_id) do
+    query =
+      from(sl in Slide,
+        where: [competition_id: ^competition_id],
+        where: [status: :submitted_jury],
+        where: [penalty: true],
+        select: count()
+      )
+
+    Repo.one(query)
+  end
+
   @spec subjects_distribution(String.t()) :: [Subject.t()]
   def subjects_distribution(competition_id) do
     p_count = count_submitting_participants(competition_id)

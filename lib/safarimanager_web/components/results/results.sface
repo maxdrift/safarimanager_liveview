@@ -59,12 +59,12 @@
         </tr>
         <tr>
           <th class="bg-base-200 w-4/12">Penalties</th>
-          <td class="truncate">N/A</td>
+          <td class="truncate">{@penalties_count}</td>
         </tr>
-        <tr>
+        <!-- <tr>
           <th class="bg-base-200 w-4/12">Mentions</th>
           <td class="truncate">N/A</td>
-        </tr>
+        </tr> -->
       </table>
     </div>
     <div class="divider lg:divider-horizontal" />
