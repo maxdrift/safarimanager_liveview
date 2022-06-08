@@ -45,3 +45,6 @@ safarimanager-prod.db*
 **/uploads/
 
 TODO
+
+# Direnv private file
+.envrc.custom

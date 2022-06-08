@@ -95,6 +95,13 @@ config :surface, :components, [
    default_translator: {SMWeb.ErrorHelpers, :translate_error}, default_class: "label-text-al"}
 ]
 
+config :prometheus,
+  pushgateway: [
+    address: System.get_env("PROMETHEUS_PUSH_GW_HOST"),
+    auth_username: System.get_env("PROMETHEUS_PUSH_GW_USER"),
+    auth_password: System.get_env("PROMETHEUS_PUSH_GW_PASSWORD")
+  ]
+
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
 import_config "#{config_env()}.exs"

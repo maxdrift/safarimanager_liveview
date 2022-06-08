@@ -137,3 +137,10 @@ if config_env() == :prod do
   #
   # See https://hexdocs.pm/swoosh/Swoosh.html#module-installation for details.
 end
+
+config :prometheus,
+  pushgateway: [
+    address: System.get_env("PROMETHEUS_PUSH_GW_HOST", "https://prometheus.maxdrift.org"),
+    auth_username: System.get_env("PROMETHEUS_PUSH_GW_USER", "safarimanager"),
+    auth_password: System.get_env("PROMETHEUS_PUSH_GW_PASSWORD")
+  ]

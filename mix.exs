@@ -57,11 +57,15 @@ defmodule SM.MixProject do
       {:phoenix, "~> 1.6.5"},
       {:plug_cowboy, "~> 2.5"},
       {:postgrex, ">= 0.0.0"},
+      {:prometheus_ex, "~> 3.0", override: true},
+      {:prometheus_phoenix, "~> 1.3"},
+      {:prometheus_push, "~> 0.0.1"},
       {:random_password, "~> 1.0"},
       {:rexbug, "~> 1.0"},
       {:surface_catalogue, "~> 0.3.0"},
       {:surface, "~> 0.7.1"},
       {:swoosh, "~> 1.3"},
+      {:telemetry, "~> 1.1"},
       {:telemetry_metrics, "~> 0.6"},
       {:telemetry_poller, "~> 1.0"}
     ]

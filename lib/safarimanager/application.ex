@@ -13,6 +13,9 @@ defmodule SM.Application do
       SM.Repo,
       # Start the Telemetry supervisor
       SMWeb.Telemetry,
+      # Start the supervisor for the GenServer pushing metrics
+      # to Prometheus
+      SMWeb.TelemetryPusherSupervisor,
       # Start the PubSub system
       {Phoenix.PubSub, name: SM.PubSub},
       # Start the Endpoint (http/https)
