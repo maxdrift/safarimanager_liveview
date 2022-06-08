@@ -8,13 +8,14 @@ services:
     image: maxdrift/safarimanager:local
     environment:
       SECRET_KEY_BASE: MROe0TML1wb/8amRSKJ994MKvIpq3JqLM/FMevNTM2YSEst8NXNkcTSkV/C17DP0
+    user: "${UID}:${GID}"
     ports:
       - "4000"
     volumes:
-      - ~/.safarimanager/safarimanager.db:/app/lib/safarimanager-0.1.0/priv/safarimanager.db
-      - ~/.safarimanager/safarimanager.db-shm:/app/lib/safarimanager-0.1.0/priv/safarimanager.db-shm
-      - ~/.safarimanager/safarimanager.db-wal:/app/lib/safarimanager-0.1.0/priv/safarimanager.db-wal
-      - ~/.safarimanager/uploads:/app/lib/safarimanager-0.1.0/priv/uploads
+      - ~/.safarimanager:/var/safarimanager
+  environment:
+    UPLOADS_PATH: /var/safarimanager/uploads
+    DATABASE_PATH: /var/safarimanager/db
   nginx:
     image: nginx:latest
     volumes:
