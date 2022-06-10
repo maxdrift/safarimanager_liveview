@@ -1,6 +1,8 @@
 defmodule SMWeb.TelemetryPusher do
   use GenServer
 
+  alias SMWeb.PrometheusPush
+
   require Logger
 
   def start_link(state) do
@@ -21,21 +23,15 @@ defmodule SMWeb.TelemetryPusher do
   end
 
   defp do_recurrent_thing() do
-    case Prometheus.Push.push(%{job: "push-metrics", instance: "some-instance"}) do
-      {:ok, {{_protocol, 200, 'OK'}, _headers, _body}} ->
+    {:ok, hostname} = :inet.gethostname()
+
+    case PrometheusPush.push(%{job: "push-metrics", grouping_key: [{"instance", hostname}]}) do
+      :ok ->
         :ok
 
-      {:ok, {{_protocol, 401, 'Unauthorized'}, _headers, _body}} ->
-        Logger.warning("Unable to push metrics to server: unauthorized")
-        {:error, :unauthorized}
-
-      {:ok, {{_protocol, status_code, status_str}, _headers, _body}} ->
-        Logger.warning("Unable to push metrics to server: #{status_str}")
-        {:error, {status_code, to_string(status_str)}}
-
-      {:error, reason} ->
+      {:error, reason} = error ->
         Logger.warning("Unable to push metrics to server: #{inspect(reason)}")
-        {:error, {:unexpected, reason}}
+        error
     end
   end
 

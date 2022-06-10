@@ -67,7 +67,8 @@ defmodule SM.MixProject do
       {:swoosh, "~> 1.3"},
       {:telemetry, "~> 1.1"},
       {:telemetry_metrics, "~> 0.6"},
-      {:telemetry_poller, "~> 1.0"}
+      {:telemetry_poller, "~> 1.0"},
+      {:tesla, "~> 1.4"}
     ]
   end
 
