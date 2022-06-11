@@ -23,7 +23,7 @@ defmodule SMWeb.TelemetryPusher do
   end
 
   defp do_recurrent_thing() do
-    {:ok, hostname} = :inet.gethostname()
+    hostname = get_config!(:instance_id)
 
     case PrometheusPush.push(%{job: "push-metrics", grouping_key: [{"instance", hostname}]}) do
       :ok ->
@@ -37,5 +37,11 @@ defmodule SMWeb.TelemetryPusher do
 
   defp schedule_work(delay_sec \\ 10) do
     Process.send_after(self(), :push, :timer.seconds(delay_sec))
+  end
+
+  defp get_config!(key) do
+    :safarimanager
+    |> Application.fetch_env!(__MODULE__)
+    |> Keyword.fetch!(key)
   end
 end

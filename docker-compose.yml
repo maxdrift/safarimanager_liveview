@@ -2,21 +2,26 @@ version: "3"
 services:
 
   safarimanager:
+    container_name: safarimanager
     build:
       context: .
       dockerfile: Dockerfile
     image: maxdrift/safarimanager:latest
     environment:
       SECRET_KEY_BASE: MROe0TML1wb/8amRSKJ994MKvIpq3JqLM/FMevNTM2YSEst8NXNkcTSkV/C17DP0
+      UPLOADS_PATH: /var/safarimanager/uploads
+      DATABASE_PATH: /var/safarimanager/db
+      INSTANCE_ID: maxdrift-macbook-docker
+      PROMETHEUS_PUSH_GW_HOST: "${PROMETHEUS_PUSH_GW_HOST-https://prometheus.maxdrift.org}"
+      PROMETHEUS_PUSH_GW_USER: "${PROMETHEUS_PUSH_GW_USER-safarimanager}"
+      PROMETHEUS_PUSH_GW_PASSWORD: "${PROMETHEUS_PUSH_GW_PASSWORD}"
     user: "${UID}:${GID}"
     ports:
       - "4000"
     volumes:
       - ~/.safarimanager:/var/safarimanager
-  environment:
-    UPLOADS_PATH: /var/safarimanager/uploads
-    DATABASE_PATH: /var/safarimanager/db
   nginx:
+    container_name: nginx
     image: nginx:latest
     volumes:
       - ./support/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
