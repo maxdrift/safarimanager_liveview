@@ -5,7 +5,9 @@ defmodule SMWeb.PrometheusPush do
 
   use Tesla
 
-  @content_type :prometheus_text_format.content_type()
+  require Logger
+
+  @content_type "text/plain; version=0.0.4"
 
   plug Tesla.Middleware.BaseUrl, get_config(:url)
   plug Tesla.Middleware.JSON
@@ -66,17 +68,17 @@ defmodule SMWeb.PrometheusPush do
   # Internal
 
   defp do_request(method, request) do
-    {job, registry, grouping_key} = prepare_request_params(request)
+    {job, grouping_key} = prepare_request_params(request)
 
     url = build_url(job, grouping_key)
 
-    body =
+    {:ok, body} =
       case method do
         :delete ->
-          nil
+          {:ok, nil}
 
         _method ->
-          :prometheus_text_format.format(registry)
+          get_txt_metrics(SM.PromEx)
       end
 
     case request(method: method, url: url, body: body) do
@@ -96,19 +98,9 @@ defmodule SMWeb.PrometheusPush do
   defp prepare_request_params(config) do
     job = Map.get(config, :job)
 
-    registry = Map.get(config, :registry, :default)
-
-    case :prometheus_registry.exists(registry) do
-      true ->
-        :ok
-
-      false ->
-        raise "{:unknown_registry, registry}"
-    end
-
     grouping_key = Map.get(config, :grouping_key, %{})
 
-    {job, registry, grouping_key}
+    {job, grouping_key}
   end
 
   # encode_grouping_key(GK) when is_map(GK) ->
@@ -182,6 +174,22 @@ defmodule SMWeb.PrometheusPush do
     case env.status do
       200 -> :debug
       _ -> :default
+    end
+  end
+
+  defp get_txt_metrics(prom_ex_module) do
+    case PromEx.get_metrics(prom_ex_module) do
+      :prom_ex_down ->
+        Logger.warn(
+          "Attempted to fetch metrics from #{prom_ex_module}, but the module has not been initialized"
+        )
+
+        {:error, :prom_ex_down}
+
+      metrics ->
+        PromEx.ETSCronFlusher.defer_ets_flush(prom_ex_module.__ets_cron_flusher_name__())
+
+        {:ok, metrics}
     end
   end
 end

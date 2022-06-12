@@ -8,11 +8,10 @@ defmodule SM.Application do
   @impl Application
   def start(_type, _args) do
     children = [
+      SM.PromEx,
       {Task.Supervisor, name: SM.TaskSupervisor},
       # Start the Ecto repository
       SM.Repo,
-      # Start the Telemetry supervisor
-      SMWeb.Telemetry,
       # Start the supervisor for the GenServer pushing metrics
       # to Prometheus
       SMWeb.TelemetryPusherSupervisor,

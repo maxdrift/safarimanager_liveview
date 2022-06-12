@@ -95,6 +95,13 @@ config :surface, :components, [
    default_translator: {SMWeb.ErrorHelpers, :translate_error}, default_class: "label-text-al"}
 ]
 
+config :safarimanager, SM.PromEx,
+  disabled: false,
+  manual_metrics_start_delay: :no_delay,
+  drop_metrics_groups: [],
+  grafana: :disabled,
+  metrics_server: :disabled
+
 config :prometheus,
   pushgateway: [
     address: System.get_env("PROMETHEUS_PUSH_GW_HOST"),
