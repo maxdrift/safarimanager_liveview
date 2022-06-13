@@ -17,12 +17,6 @@ defmodule SMWeb.PrometheusPush do
   plug Tesla.Middleware.PathParams
   plug Tesla.Middleware.Telemetry
 
-  # def push do
-  #   path = "/metrics/job/some_job"
-  #   body = "some_metric 3.14\n"
-  #   put(path, body)
-  # end
-
   def push do
     do_request(:put, %{})
   end

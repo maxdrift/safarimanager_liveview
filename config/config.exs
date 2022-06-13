@@ -102,13 +102,6 @@ config :safarimanager, SM.PromEx,
   grafana: :disabled,
   metrics_server: :disabled
 
-config :prometheus,
-  pushgateway: [
-    address: System.get_env("PROMETHEUS_PUSH_GW_HOST"),
-    auth_username: System.get_env("PROMETHEUS_PUSH_GW_USER"),
-    auth_password: System.get_env("PROMETHEUS_PUSH_GW_PASSWORD")
-  ]
-
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
 import_config "#{config_env()}.exs"
