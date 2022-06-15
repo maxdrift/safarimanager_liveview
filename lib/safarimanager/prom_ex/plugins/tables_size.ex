@@ -25,7 +25,7 @@ defmodule SM.PromEx.Plugins.TablesSize do
       [
         # Capture the total number of rows in a DB table
         last_value(
-          [:db, :table, :size],
+          [:safarimanager, :prom_ex, :db, :table, :size],
           event_name: @event_prefix,
           description: "The number of rows in a table.",
           tags: [:table_name],
