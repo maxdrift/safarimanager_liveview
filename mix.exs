@@ -38,7 +38,7 @@ defmodule SM.MixProject do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
-      {:bcrypt_elixir, "~> 2.0"},
+      {:bcrypt_elixir, "~> 3.0"},
       {:bakeware, "~> 0.2.3", runtime: false},
       {:credo, "~> 1.6", only: [:dev, :test], runtime: false},
       {:dialyzex, "~> 1.3.0", only: :dev, runtime: false},
@@ -60,7 +60,7 @@ defmodule SM.MixProject do
       {:prom_ex, "~> 1.7"},
       {:random_password, "~> 1.0"},
       {:rexbug, "~> 1.0"},
-      {:surface_catalogue, "~> 0.3.0"},
+      {:surface_catalogue, "~> 0.4"},
       {:surface, "~> 0.7.1"},
       {:swoosh, "~> 1.3"},
       {:telemetry, "~> 1.1", override: true},
