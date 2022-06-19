@@ -642,6 +642,23 @@ defmodule SM.Slides do
     end)
   end
 
+  @spec assign_fixed_evaluations(String.t(), String.t()) :: :ok | {:error, any()}
+  def assign_fixed_evaluations(competition_id, evaluation_id) do
+    {:ok, competition} = Competitions.get(competition_id)
+    num_of_jurors = Enum.count(competition.jurors)
+    evaluations_per_juror = competition.settings.evaluations_per_juror
+
+    competition_id
+    |> list_for_jury()
+    |> Enum.each(fn slide ->
+      Enum.each(0..num_of_jurors, fn _juror ->
+        Enum.each(0..evaluations_per_juror, fn _evaluation ->
+          evaluate(competition_id, slide.id, evaluation_id)
+        end)
+      end)
+    end)
+  end
+
   @spec create_slide_evaluation(%{(String.t() | atom()) => any()}) ::
           {:error, any()} | {:ok, SlideEvaluation.t()}
   def create_slide_evaluation(attrs \\ %{}) do
