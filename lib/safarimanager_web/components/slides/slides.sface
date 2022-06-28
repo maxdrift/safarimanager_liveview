@@ -51,6 +51,7 @@
     </div>
   </div>
   <div class="divider" />
+  <AutoUploadDialog id="auto-upload-dialog" />
   <div class="form-control w-44">
     <Form for={:discovery_mode} change="validate">
       <label class="label cursor-pointer">

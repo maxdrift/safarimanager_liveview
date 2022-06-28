@@ -10,6 +10,7 @@ defmodule SMWeb.Slides do
   alias SM.Participants
   alias SM.Slides
   alias SM.USBWatcherSupervisor
+  alias SMWeb.Components.AutoUploadDialog
   alias SMWeb.Components.CompetitionHeader
   alias SMWeb.Components.StepsHeader
   alias Surface.Components.Form
@@ -50,7 +51,7 @@ defmodule SMWeb.Slides do
         socket
       ) do
     if "true" in values do
-      :ok = USBWatcherSupervisor.start_poller()
+      :ok = USBWatcherSupervisor.start_poller(self())
     else
       :ok = USBWatcherSupervisor.stop_poller()
     end
@@ -127,12 +128,13 @@ defmodule SMWeb.Slides do
     user_id = params["user_id"]
 
     {:ok, competition} = Competitions.get(competition_id)
+    participants = Participants.list(competition_id)
 
     socket =
       socket
       |> assign(:competition_id, competition_id)
       |> assign(:competition, competition)
-      |> assign(:participants, Participants.list(competition_id))
+      |> assign(:participants, participants)
       # FIXME: this way of selecting the user forces a re-query of Competition
       |> assign(:user, user_id && Accounts.get_user!(user_id))
       |> assign(:slides, user_id && Slides.list(user_id, competition_id))
@@ -142,7 +144,7 @@ defmodule SMWeb.Slides do
 
   @impl Phoenix.LiveView
   def handle_info({Slides, [:slide, _], _result}, socket) do
-    user_id = socket.assigns.user.id
+    user_id = (socket.assigns.user && socket.assigns.user.id) || nil
     competition_id = socket.assigns.competition_id
 
     socket = assign(socket, :slides, user_id && Slides.list(user_id, competition_id))
@@ -158,6 +160,22 @@ defmodule SMWeb.Slides do
       socket
       |> assign(:competition, competition)
       |> assign(:participants, participants)
+
+    {:noreply, socket}
+  end
+
+  def handle_info({:new_volumes, new_volumes}, socket) do
+    IO.inspect("new volume mounted from Component!!")
+    competition_id = socket.assigns.competition_id
+    participants = socket.assigns.participants
+    AutoUploadDialog.show("auto-upload-dialog", new_volumes, competition_id, participants)
+
+    {:noreply, socket}
+  end
+
+  def handle_info(:volumes_removed, socket) do
+    IO.inspect("volume removed from Component!!")
+    AutoUploadDialog.hide("auto-upload-dialog")
 
     {:noreply, socket}
   end

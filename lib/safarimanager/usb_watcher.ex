@@ -9,25 +9,26 @@ defmodule SM.USBWatcher do
   @poll_interval :timer.seconds(5)
 
   @spec start_link(any()) :: GenServer.on_start()
-  def start_link(_args) do
-    GenServer.start_link(__MODULE__, [])
+  def start_link(args) do
+    GenServer.start_link(__MODULE__, args)
   end
 
-  @spec ls(String.t()) :: [String.t()]
-  def ls(path) do
-    GenServer.call(__MODULE__, {:ls, path})
+  @spec ls(pid(), String.t()) :: [String.t()]
+  def ls(pid, path) do
+    GenServer.call(pid, {:ls, path})
   end
 
   @impl GenServer
-  def init(_state) do
+  def init([caller_pid]) do
+    volumes = get_volumes()
     # Schedule work to be performed on start
-    schedule_work()
+    schedule_work(caller_pid)
 
-    {:ok, get_volumes()}
+    {:ok, volumes}
   end
 
   @impl GenServer
-  def handle_info(:poll, state) do
+  def handle_info({:poll, caller_pid}, state) do
     new_state = get_volumes()
 
     added_items = new_state -- state
@@ -40,18 +41,22 @@ defmodule SM.USBWatcher do
           - #{Enum.join(added_items, "\n  - ")}
         """)
 
+        {:new_volumes, ^added_items} = send(caller_pid, {:new_volumes, added_items})
+
       Enum.count(removed_items) > 0 ->
         Logger.info("""
         Some volumes were unmounted:
           - #{Enum.join(removed_items, "\n  - ")}
         """)
 
+        :volumes_removed = send(caller_pid, :volumes_removed)
+
       true ->
         Logger.debug("No volumes added/removed...")
     end
 
     # Reschedule once more
-    schedule_work()
+    schedule_work(caller_pid)
 
     {:noreply, new_state}
   end
@@ -68,8 +73,8 @@ defmodule SM.USBWatcher do
 
   # Internal
 
-  defp schedule_work do
-    Process.send_after(self(), :poll, @poll_interval)
+  defp schedule_work(caller_pid) do
+    Process.send_after(self(), {:poll, caller_pid}, @poll_interval)
   end
 
   defp get_volumes do

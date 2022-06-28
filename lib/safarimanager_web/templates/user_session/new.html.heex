@@ -70,8 +70,7 @@
             <%= link("Register",
               to: Routes.user_registration_path(@conn, :new),
               class: "link link-secondary"
-            ) %> |
-            <%= link("Forgot your password?",
+            ) %> | <%= link("Forgot your password?",
               to: Routes.user_reset_password_path(@conn, :new),
               class: "link link-secondary"
             ) %>

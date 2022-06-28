@@ -77,6 +77,7 @@ config :safarimanager, SMWeb.Endpoint,
   ]
 
 # Do not include metadata nor timestamps in development logs
+config :logger, level: String.to_atom(System.get_env("LOG_LEVEL", "debug"))
 config :logger, :console, format: "[$level] $message\n"
 
 # Set a higher stacktrace during development. Avoid configuring such
