@@ -3,9 +3,9 @@ services:
 
   safarimanager:
     container_name: safarimanager
-    build:
-      context: .
-      dockerfile: Dockerfile
+    # build:
+    #   context: .
+    #   dockerfile: Dockerfile
     image: maxdrift/safarimanager:latest
     environment:
       SECRET_KEY_BASE: MROe0TML1wb/8amRSKJ994MKvIpq3JqLM/FMevNTM2YSEst8NXNkcTSkV/C17DP0

@@ -3,7 +3,11 @@
     Image import
   </div>
   <div class="my-2">
-    <progress class={"progress", "progress-secondary", invisible: Decimal.equal?(@progress, 0)} value={Decimal.mult(@progress, 100) |> Decimal.round()} max="100"></progress>
+    <progress
+      class={"progress", "progress-secondary", invisible: Decimal.equal?(@progress, 0)}
+      value={Decimal.mult(@progress, 100) |> Decimal.round()}
+      max="100"
+    />
   </div>
   <div class="mb-4">
     <Form for={:slide_import} change="validate">
@@ -85,7 +89,8 @@
   <div class="flex flex-row w-full">
     <button
       class={"flex-none", "btn", "btn-primary", "btn-disabled": not can_import?(@user_id, @items)}
-      :on-click="import">
+      :on-click="import"
+    >
       Import<span :if={can_import?(@user_id, @items)}>&nbsp;{count_image_type(@items)} images</span>
     </button>
     <div class="grow" />
