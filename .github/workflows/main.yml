@@ -18,25 +18,26 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-      - name: Setup Erlang
-        run: |
-          sudo apt update
-          sudo apt install -y wget libssl-dev ncurses-dev
-          wget http://www.erlang.org/download/otp_src_${{ matrix.otp_version }}.tar.gz
-          tar -xzvf otp_src_${{ matrix.otp_version }}.tar.gz
-          cd otp_src_${{ matrix.otp_version }}/
-          ./configure
-          make
-          sudo make install
-          cd ..
-          rm otp_src_${{ matrix.otp_version }}.tar.gz
-          sudo rm -R otp_src_${{ matrix.otp_version }}/
-      - name: Setup Elixir
-        run: |
-          wget https://github.com/elixir-lang/elixir/archive/refs/tags/v${{ matrix.elixir_version }}.tar.gz
-          tar -xzvf v${{ matrix.elixir_version }}.tar.gz
-          cd elixir-${{ matrix.elixir_version }}
-          make
+      # - name: Setup Erlang
+      #   run: |
+      #     sudo apt update
+      #     sudo apt install -y wget libssl-dev ncurses-dev
+      #     wget http://www.erlang.org/download/otp_src_${{ matrix.otp_version }}.tar.gz
+      #     tar -xzvf otp_src_${{ matrix.otp_version }}.tar.gz
+      #     cd otp_src_${{ matrix.otp_version }}/
+      #     ./configure
+      #     make
+      #     sudo make install
+      #     cd ..
+      #     rm otp_src_${{ matrix.otp_version }}.tar.gz
+      #     sudo rm -R otp_src_${{ matrix.otp_version }}/
+      # - name: Setup Elixir
+      #   run: |
+      #     wget https://github.com/elixir-lang/elixir/archive/refs/tags/v${{ matrix.elixir_version }}.tar.gz
+      #     tar -xzvf v${{ matrix.elixir_version }}.tar.gz
+      #     cd elixir-${{ matrix.elixir_version }}
+      #     make
+      #     sudo make install
       - name: Restore deps and _build
         uses: actions/cache@v2
         with:
