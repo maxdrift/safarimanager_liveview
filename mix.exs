@@ -7,7 +7,7 @@ defmodule SM.MixProject do
       version: "0.1.2",
       elixir: "~> 1.12",
       elixirc_paths: elixirc_paths(Mix.env()),
-      compilers: [:gettext] ++ Mix.compilers() ++ [:surface],
+      compilers: Mix.compilers() ++ [:surface],
       start_permanent: Mix.env() in [:prod, :standalone],
       aliases: aliases(),
       deps: deps(),
