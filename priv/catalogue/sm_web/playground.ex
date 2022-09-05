@@ -4,10 +4,10 @@ defmodule SMWeb.Components.Hero.Playground do
     height: "250px",
     body: [style: "padding: 1.5rem;"]
 
-  data props, :map, default: %{
+  @props [
     subtitle: "Welcome to Surface!",
     color: "info"
-  }
+  ]
 
   def render(assigns) do
     ~F"""

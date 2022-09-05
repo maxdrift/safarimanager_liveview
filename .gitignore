@@ -35,6 +35,9 @@ npm-debug.log
 # Ignore generated js hook files for components
 assets/js/_hooks/
 
+# Ignore generated CSS files
+assets/css/_components.css
+
 # User-uploaded pictures
 /priv/static/images/slides/
 /priv/static/uploads
