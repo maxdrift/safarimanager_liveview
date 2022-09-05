@@ -44,8 +44,7 @@ defmodule SM.PromEx.Plugins.TablesSize do
       })
     end)
   rescue
-    e in ArgumentError ->
-      Logger.warn(e.message)
+    _e in ArgumentError ->
       :ok
   end
 
