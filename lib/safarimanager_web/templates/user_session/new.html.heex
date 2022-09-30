@@ -17,7 +17,7 @@
       </svg>
     </div>
     <h3 class="text-2xl font-bold text-center">Login to your account</h3>
-    <.form let={f} for={@conn} action={Routes.user_session_path(@conn, :create)} as={:user}>
+    <.form :let={f} for={@conn} action={Routes.user_session_path(@conn, :create)} as={:user}>
       <%= if @error_message do %>
         <div class="alert alert-error h-10 mt-10 shadow-lg">
           <div>

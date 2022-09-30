@@ -17,7 +17,7 @@
       </svg>
     </div>
     <h3 class="text-2xl font-bold text-center">Register</h3>
-    <.form let={f} for={@changeset} action={Routes.user_registration_path(@conn, :create)}>
+    <.form :let={f} for={@changeset} action={Routes.user_registration_path(@conn, :create)}>
       <%= if @changeset.action do %>
         <div class="alert alert-error h-10 mt-10 shadow-lg">
           <p>Oops, something went wrong! Please check the errors below.</p>
