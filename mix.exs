@@ -5,7 +5,7 @@ defmodule SM.MixProject do
     [
       app: :safarimanager,
       version: "0.1.2",
-      elixir: "~> 1.13",
+      elixir: "~> 1.14",
       elixirc_paths: elixirc_paths(Mix.env()),
       compilers: Mix.compilers() ++ [:surface],
       start_permanent: Mix.env() in [:prod, :standalone],
