@@ -39,7 +39,6 @@ defmodule SM.MixProject do
   defp deps do
     [
       {:bcrypt_elixir, "~> 3.0"},
-      {:bakeware, "~> 0.2.3", runtime: false},
       {:credo, "~> 1.6", only: [:dev, :test], runtime: false},
       {:dialyzex, "~> 1.3.0", only: :dev, runtime: false},
       {:ecto_sql, "~> 3.6"},
@@ -91,8 +90,7 @@ defmodule SM.MixProject do
         "phx.digest priv/static",
         "release",
         "phx.digest.clean --all"
-      ],
-      "release.standalone": ["assets.deploy", "release"]
+      ]
     ]
   end
 
@@ -110,33 +108,14 @@ defmodule SM.MixProject do
   end
 
   defp releases do
-    case Mix.env() do
-      :standalone ->
-        [
-          safarimanager: [
-            steps: [:assemble, &Bakeware.assemble/1],
-            overwrite: true,
-            strip_beams: true
-          ]
-        ]
-
-      :prod ->
-        [
-          safarimanager: [
-            include_executables_for: [:unix],
-            applications: [safarimanager: :permanent],
-            strip_beams: true,
-            include_erts: true
-          ]
-        ]
-
-      _other_env ->
-        [
-          safarimanager: [
-            strip_beams: false
-          ]
-        ]
-    end
+    [
+      safarimanager: [
+        include_executables_for: [:unix],
+        applications: [safarimanager: :permanent],
+        strip_beams: true,
+        include_erts: true
+      ]
+    ]
   end
 
   defp dialyzer_ignored_warnings do
