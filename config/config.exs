@@ -22,7 +22,7 @@ config :safarimanager, SMWeb.Endpoint,
   url: [host: "localhost"],
   render_errors: [view: SMWeb.ErrorView, accepts: ~w(json), layout: false],
   pubsub_server: SM.PubSub,
-  live_view: [signing_salt: "pCkmwrnY"]
+  server: true
 
 # Configures the mailer
 #

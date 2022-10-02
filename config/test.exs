@@ -4,15 +4,11 @@ import Config
 config :bcrypt_elixir, :log_rounds, 1
 
 # Configure your database
-#
-# The MIX_TEST_PARTITION environment variable can be used
-# to provide built-in test partitioning in CI environment.
-# Run `mix help test` for more information.
 config :safarimanager, SM.Repo,
   username: "postgres",
   password: "postgres",
   hostname: "localhost",
-  database: "safarimanager_test#{System.get_env("MIX_TEST_PARTITION")}",
+  database: "safarimanager_test",
   pool: Ecto.Adapters.SQL.Sandbox,
   pool_size: 10
 
