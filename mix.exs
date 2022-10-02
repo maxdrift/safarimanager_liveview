@@ -46,6 +46,7 @@ defmodule SM.MixProject do
       {:ecto_sqlite3, "~> 0.8.1"},
       {:esbuild, "~> 0.3", runtime: Mix.env() == :dev},
       {:exexif, "~> 0.0.5"},
+      {:finch, "~> 0.13.0", override: true},
       {:gettext, "~> 0.19"},
       {:jason, "~> 1.2"},
       {:mogrify, "~> 0.9.1"},

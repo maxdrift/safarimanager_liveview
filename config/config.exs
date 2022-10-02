@@ -90,6 +90,8 @@ config :logger, :console,
 # Use Jason for JSON parsing in Phoenix
 config :phoenix, :json_library, Jason
 
+config :tesla, :adapter, {Tesla.Adapter.Finch, name: SMFinch}
+
 config :surface, :components, [
   {Surface.Components.Form.ErrorTag,
    default_translator: {SMWeb.ErrorHelpers, :translate_error}, default_class: "label-text-al"},
