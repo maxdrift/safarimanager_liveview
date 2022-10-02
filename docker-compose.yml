@@ -9,6 +9,7 @@ services:
     image: maxdrift/safarimanager:latest
     environment:
       SECRET_KEY_BASE: MROe0TML1wb/8amRSKJ994MKvIpq3JqLM/FMevNTM2YSEst8NXNkcTSkV/C17DP0
+      LV_SIGNING_SALT: TNyxrwvV1ifPU5Nn/lSYp+gY1EVtKDIr
       UPLOADS_PATH: /var/safarimanager/uploads
       DATABASE_PATH: /var/safarimanager/db
       INSTANCE_ID: maxdrift-macbook-docker
