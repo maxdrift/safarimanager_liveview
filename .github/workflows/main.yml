@@ -54,7 +54,7 @@ jobs:
           mix local.hex --force
           mix local.rebar --force
       # - run: mix deps.get
-      # - run: MIX_ENV=standalone mix compile
+      # - run: MIX_ENV=prod mix compile
       # - run: mix test
       # - run: sudo apt install -y yarn
       - name: Install Npm
@@ -67,12 +67,10 @@ jobs:
         with:
           cache: yarn
           cache-dependency-path: assets/yarn.lock
-      - run: MIX_ENV=standalone mix setup
-      - run: MIX_ENV=standalone mix release
-      - name: Peek at the release results
-        run: ls -alh _build/standalone/rel/bakeware
+      - run: MIX_ENV=prod mix setup
+      - run: MIX_ENV=prod mix release
       - name: Upload release artifacts
         uses: actions/upload-artifact@v3
         with:
           name: linux-binary
-          path: _build/standalone/rel/bakeware/safarimanager
+          path: _build/prod/rel/safarimanager
