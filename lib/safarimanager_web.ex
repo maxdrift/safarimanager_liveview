@@ -47,7 +47,7 @@ defmodule SMWeb do
   def live_view do
     quote do
       use Phoenix.LiveView,
-        layout: {SMWeb.LayoutView, "live.html"}
+        layout: {SMWeb.LayoutView, :live}
 
       unquote(view_helpers())
     end
@@ -56,7 +56,7 @@ defmodule SMWeb do
   def surface_view do
     quote do
       use Surface.LiveView,
-        layout: {SMWeb.LayoutView, "live.html"}
+        layout: {SMWeb.LayoutView, :live}
 
       unquote(view_helpers())
     end
@@ -81,7 +81,7 @@ defmodule SMWeb do
   def surface_jury_view do
     quote do
       use Surface.LiveView,
-        layout: {SMWeb.LayoutView, "live_jury.html"}
+        layout: {SMWeb.LayoutView, :live_jury}
 
       unquote(view_helpers())
     end
