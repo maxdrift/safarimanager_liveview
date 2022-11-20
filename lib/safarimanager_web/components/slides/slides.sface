@@ -56,7 +56,7 @@
     <Form for={:discovery_mode} change="validate">
       <label class="label cursor-pointer">
         <span class="label-text">Auto discovery</span>
-        <Checkbox class="toggle" value={@discovery_mode} />
+        <Checkbox class="toggle toggle-primary" value={@discovery_mode} />
       </label>
     </Form>
   </div>
@@ -148,7 +148,7 @@
                   <td class="truncate">
                     <div>
                       <div class="relative w-20">
-                        {live_img_preview(image, width: 100, class: "rounded-md border")}
+                        <.live_img_preview entry={image} width="100" class="rounded-md border" />
                         <div class="absolute w-full text-xs text-center">{image.progress}%</div>
                         <progress
                           class="absolute bottom-1 px-1 progress progress-secondary w-full"
