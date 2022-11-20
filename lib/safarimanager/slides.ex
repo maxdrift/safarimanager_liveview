@@ -443,7 +443,10 @@ defmodule SM.Slides do
   {:error, :not_found}
 
   """
-  @spec get(String.t(), String.t(), String.t()) :: {:error, :not_found} | {:ok, Slide.t()}
+  @spec get(String.t(), String.t() | nil, String.t()) ::
+          {:error, :not_found} | {:ok, Slide.t()}
+  def get(_competition_id, nil, _file_name), do: {:error, :not_found}
+
   def get(competition_id, user_id, file_name) do
     file_name_match = "#{file_name}%"
 
