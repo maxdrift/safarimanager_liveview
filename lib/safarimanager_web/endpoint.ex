@@ -50,4 +50,26 @@ defmodule SMWeb.Endpoint do
   plug Plug.Head
   plug Plug.Session, @session_options
   plug SMWeb.Router
+
+  @spec access_struct_url :: map()
+  def access_struct_url do
+    base =
+      case struct_url() do
+        %URI{scheme: "https", port: 0} = uri ->
+          %{uri | port: SM.Utils.get_port(__MODULE__.HTTPS, 433)}
+
+        %URI{scheme: "http", port: 0} = uri ->
+          %{uri | port: SM.Utils.get_port(__MODULE__.HTTP, 80)}
+
+        %URI{} = uri ->
+          uri
+      end
+
+    update_in(base.path, &(&1 || "/"))
+  end
+
+  @spec access_url :: String.t()
+  def access_url do
+    URI.to_string(access_struct_url())
+  end
 end

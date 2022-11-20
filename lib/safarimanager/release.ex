@@ -5,8 +5,16 @@ defmodule SM.Release do
   """
   @app :safarimanager
 
+  def create do
+    ensure_app_loaded()
+
+    Enum.each(repos(), fn repo ->
+      :ok = ensure_repo_created(repo)
+    end)
+  end
+
   def migrate do
-    load_app()
+    ensure_app_loaded()
 
     for repo <- repos() do
       {:ok, _, _} = Ecto.Migrator.with_repo(repo, &Ecto.Migrator.run(&1, :up, all: true))
@@ -14,7 +22,8 @@ defmodule SM.Release do
   end
 
   def rollback(repo, version) do
-    load_app()
+    ensure_app_loaded()
+
     {:ok, _, _} = Ecto.Migrator.with_repo(repo, &Ecto.Migrator.run(&1, :down, to: version))
   end
 
@@ -22,7 +31,23 @@ defmodule SM.Release do
     Application.fetch_env!(@app, :ecto_repos)
   end
 
-  defp load_app do
-    Application.load(@app)
+  defp ensure_app_loaded do
+    :ok = Application.ensure_loaded(:safarimanager)
+  end
+
+  defp ensure_repo_created(repo) do
+    case repo.__adapter__.storage_up(repo.config) do
+      :ok ->
+        IO.puts("Created #{inspect(repo)} database.")
+        :ok
+
+      {:error, :already_up} ->
+        IO.puts("Failed to create #{inspect(repo)} database: already exists.")
+        :ok
+
+      {:error, reason} = error ->
+        IO.puts("Failed to create #{inspect(repo)} database: #{inspect(reason)}")
+        error
+    end
   end
 end
