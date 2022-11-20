@@ -219,7 +219,7 @@ defmodule SM.Accounts do
   ** (Ecto.NoResultsError)
 
   """
-  @spec get_user(String.t()) :: {:ok, User.t()}
+  @spec get_user(String.t()) :: {:ok, User.t()} | {:error, :not_found}
   def get_user(id) do
     case Repo.get(User, id) do
       nil -> {:error, :not_found}

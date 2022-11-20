@@ -10,7 +10,8 @@ defmodule SMWeb.UserResetPasswordController do
   end
 
   def create(conn, %{"user" => %{"email" => email}}) do
-    if user = Accounts.get_user_by_email(email) do
+    with email when not is_nil(email) <- email,
+         user <- Accounts.get_user_by_email(email) do
       Accounts.deliver_user_reset_password_instructions(
         user,
         &Routes.user_reset_password_url(conn, :edit, &1)
