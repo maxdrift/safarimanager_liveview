@@ -51,3 +51,6 @@ TODO
 
 # Direnv private file
 .envrc.custom
+
+# The directory used by ExUnit :tmp_dir
+/tmp/

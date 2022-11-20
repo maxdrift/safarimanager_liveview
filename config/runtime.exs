@@ -47,11 +47,11 @@ lv_signing_salt =
     You can generate one by calling: mix phx.gen.secret 32
     """
 
-url_host = System.get_env("URL_HOST", "localhost")
-url_port = "URL_PORT" |> System.get_env("443") |> String.to_integer()
-
 http_ip = {0, 0, 0, 0, 0, 0, 0, 0}
 http_port = "HTTP_PORT" |> System.get_env("4000") |> String.to_integer()
+
+url_host = System.get_env("URL_HOST", "localhost")
+# url_port = "URL_PORT" |> System.get_env(http_port) |> String.to_integer()
 
 allowed_origins =
   "ALLOWED_ORIGINS"
@@ -59,7 +59,7 @@ allowed_origins =
   |> String.split(",", trim: true)
 
 config :safarimanager, SMWeb.Endpoint,
-  url: [host: url_host, port: 443],
+  url: [host: url_host],
   http: [
     # Enable IPv6 and bind on all interfaces.
     # Set it to  {0, 0, 0, 0, 0, 0, 0, 1} for local network only access.
@@ -68,12 +68,16 @@ config :safarimanager, SMWeb.Endpoint,
     ip: http_ip,
     port: http_port
   ],
-  check_origin: [
-    "http://#{url_host}:#{url_port}",
-    "http://#{url_host}:#{http_port}" | allowed_origins
-  ],
+  check_origin: false,
   secret_key_base: secret_key_base,
   live_view: [signing_salt: lv_signing_salt]
+
+# if Mix.target() == :app do
+#   config :safarimanager, SMWeb.Endpoint, check_origin: false
+# else
+#   config :safarimanager, SMWeb.Endpoint,
+#     check_origin: ["http://#{url_host}:#{url_port}" | allowed_origins]
+# end
 
 # ## Configuring the mailer
 #
