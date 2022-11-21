@@ -118,10 +118,7 @@ defmodule SMWeb.Participants do
 
   @impl Phoenix.LiveView
   def handle_params(%{"competition_id" => competition_id}, _uri, socket) do
-    if connected?(socket) do
-      Participants.subscribe()
-      Accounts.subscribe()
-    end
+    _result = if connected?(socket), do: {Participants.subscribe(), Accounts.subscribe()}
 
     {:ok, competition} = Competitions.get(competition_id)
     users = Accounts.list_enrollable(competition_id)

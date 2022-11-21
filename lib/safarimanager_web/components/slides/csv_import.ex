@@ -122,8 +122,9 @@ defmodule SMWeb.CSVImport do
 
   @impl Phoenix.LiveView
   def handle_params(%{"competition_id" => competition_id} = params, _uri, socket) do
-    if connected?(socket),
-      do: {Competitions.subscribe(), Accounts.subscribe(), Slides.subscribe()}
+    _result =
+      if connected?(socket),
+        do: {Competitions.subscribe(), Accounts.subscribe(), Slides.subscribe()}
 
     user_id = params["user_id"]
 

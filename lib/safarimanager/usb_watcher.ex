@@ -34,26 +34,29 @@ defmodule SM.USBWatcher do
     added_items = new_state -- state
     removed_items = state -- new_state
 
-    cond do
-      Enum.count(added_items) > 0 ->
-        Logger.info("""
-        New volumes were mounted:
-          - #{Enum.join(added_items, "\n  - ")}
-        """)
+    :ok =
+      cond do
+        Enum.count(added_items) > 0 ->
+          Logger.info("""
+          New volumes were mounted:
+            - #{Enum.join(added_items, "\n  - ")}
+          """)
 
-        {:new_volumes, ^added_items} = send(caller_pid, {:new_volumes, added_items})
+          {:new_volumes, ^added_items} = send(caller_pid, {:new_volumes, added_items})
+          :ok
 
-      Enum.count(removed_items) > 0 ->
-        Logger.info("""
-        Some volumes were unmounted:
-          - #{Enum.join(removed_items, "\n  - ")}
-        """)
+        Enum.count(removed_items) > 0 ->
+          Logger.info("""
+          Some volumes were unmounted:
+            - #{Enum.join(removed_items, "\n  - ")}
+          """)
 
-        :volumes_removed = send(caller_pid, :volumes_removed)
+          :volumes_removed = send(caller_pid, :volumes_removed)
+          :ok
 
-      true ->
-        Logger.debug("No volumes added/removed...")
-    end
+        true ->
+          Logger.debug("No volumes added/removed...")
+      end
 
     # Reschedule once more
     schedule_work(caller_pid)

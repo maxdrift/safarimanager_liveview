@@ -17,7 +17,7 @@ defmodule SMWeb.Jury do
 
   @impl Phoenix.LiveView
   def mount(_params, _session, socket) do
-    if connected?(socket), do: Slides.subscribe()
+    _result = if connected?(socket), do: Slides.subscribe()
 
     socket =
       socket
@@ -121,11 +121,12 @@ defmodule SMWeb.Jury do
   def handle_event("penalty", _params, socket) do
     slide_id = socket.assigns.curr_slide.id
 
-    if Slides.has_penalty?(slide_id) do
-      Slides.clear_penalty(slide_id)
-    else
-      Slides.apply_penalty(slide_id)
-    end
+    {:ok, _slide} =
+      if Slides.has_penalty?(slide_id) do
+        {:ok, _slide} = Slides.clear_penalty(slide_id)
+      else
+        {:ok, _slide} = Slides.apply_penalty(slide_id)
+      end
 
     {:noreply, socket}
   end
@@ -183,7 +184,7 @@ defmodule SMWeb.Jury do
   end
 
   def handle_event("clear-evaluations", %{}, socket) do
-    Slides.clear_evaluations(socket.assigns.curr_slide.id)
+    {:ok, _cleared} = Slides.clear_evaluations(socket.assigns.curr_slide.id)
     {:noreply, socket}
   end
 

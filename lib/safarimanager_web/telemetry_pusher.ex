@@ -17,8 +17,8 @@ defmodule SMWeb.TelemetryPusher do
 
   @impl GenServer
   def handle_info(:push, state) do
-    do_recurrent_thing()
-    schedule_work()
+    :ok = do_recurrent_thing()
+    :ok = schedule_work()
     {:noreply, state}
   end
 
@@ -36,7 +36,8 @@ defmodule SMWeb.TelemetryPusher do
   end
 
   defp schedule_work(delay_sec \\ 10) do
-    Process.send_after(self(), :push, :timer.seconds(delay_sec))
+    _ref = Process.send_after(self(), :push, :timer.seconds(delay_sec))
+    :ok
   end
 
   defp get_config!(key) do

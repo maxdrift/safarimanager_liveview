@@ -16,7 +16,7 @@ defmodule SMWeb.Validation do
 
   @impl Phoenix.LiveView
   def mount(_params, _session, socket) do
-    if connected?(socket), do: Slides.subscribe()
+    _result = if connected?(socket), do: Slides.subscribe()
 
     socket =
       socket
@@ -110,14 +110,15 @@ defmodule SMWeb.Validation do
         %{"wrong_subject" => true}
       end
 
-    case Slides.update(slide, %{"flags" => flags}) do
-      {:ok, _slide} ->
-        :ok
+    :ok =
+      case Slides.update(slide, %{"flags" => flags}) do
+        {:ok, _slide} ->
+          :ok
 
-      {:error, reason} = error ->
-        Logger.error("Unable to update Slide: #{inspect(reason)}")
-        error
-    end
+        {:error, reason} = error ->
+          Logger.error("Unable to update Slide: #{inspect(reason)}")
+          error
+      end
 
     {:noreply, socket}
   end
@@ -133,14 +134,15 @@ defmodule SMWeb.Validation do
         %{"other_reason" => true}
       end
 
-    case Slides.update(slide, %{"flags" => flags}) do
-      {:ok, _slide} ->
-        :ok
+    :ok =
+      case Slides.update(slide, %{"flags" => flags}) do
+        {:ok, _slide} ->
+          :ok
 
-      {:error, reason} = error ->
-        Logger.error("Unable to update Slide: #{inspect(reason)}")
-        error
-    end
+        {:error, reason} = error ->
+          Logger.error("Unable to update Slide: #{inspect(reason)}")
+          error
+      end
 
     {:noreply, socket}
   end
@@ -170,16 +172,17 @@ defmodule SMWeb.Validation do
     slide_id = socket.assigns.curr_slide.id
     {:ok, slide} = Slides.get(slide_id)
 
-    case Slides.update(slide, %{
-           "flags" => %{"other_reason_ctx" => reason}
-         }) do
-      {:ok, _slide} ->
-        :ok
+    :ok =
+      case Slides.update(slide, %{
+             "flags" => %{"other_reason_ctx" => reason}
+           }) do
+        {:ok, _slide} ->
+          :ok
 
-      {:error, reason} = error ->
-        Logger.error("Unable to update Slide: #{inspect(reason)}")
-        error
-    end
+        {:error, reason} = error ->
+          Logger.error("Unable to update Slide: #{inspect(reason)}")
+          error
+      end
 
     {:noreply, socket}
   end

@@ -96,9 +96,10 @@ defmodule SMWeb.Slides do
   end
 
   def handle_event("delete-all-slides", %{}, socket) do
-    for slide <- socket.assigns.slides do
-      {:ok, _slide} = Slides.delete(slide)
-    end
+    [_head | _tail] =
+      for slide <- socket.assigns.slides do
+        {:ok, _slide} = Slides.delete(slide)
+      end
 
     {:noreply, socket}
   end
@@ -122,8 +123,9 @@ defmodule SMWeb.Slides do
 
   @impl Phoenix.LiveView
   def handle_params(%{"competition_id" => competition_id} = params, _uri, socket) do
-    if connected?(socket),
-      do: {Competitions.subscribe(), Accounts.subscribe(), Slides.subscribe()}
+    _result =
+      if connected?(socket),
+        do: {Competitions.subscribe(), Accounts.subscribe(), Slides.subscribe()}
 
     user_id = params["user_id"]
 
@@ -211,24 +213,25 @@ defmodule SMWeb.Slides do
     uploads_path = Slides.get_uploads_path(competition_id, user_id)
 
     LiveView.consume_uploaded_entry(socket, entry, fn %{path: path} ->
-      case Slides.create_and_store_slide_file(
-             competition_id,
-             user_id,
-             file_name,
-             entry.client_size,
-             entry.client_type,
-             path
-           ) do
-        {:ok, _slide} ->
-          :ok
+      :ok =
+        case Slides.create_and_store_slide_file(
+               competition_id,
+               user_id,
+               file_name,
+               entry.client_size,
+               entry.client_type,
+               path
+             ) do
+          {:ok, _slide} ->
+            :ok
 
-        {:error, reason} = error ->
-          Logger.error(
-            "Failed to create Slide and/or store file #{file_name}: #{inspect(reason)}"
-          )
+          {:error, reason} = error ->
+            Logger.error(
+              "Failed to create Slide and/or store file #{file_name}: #{inspect(reason)}"
+            )
 
-          error
-      end
+            error
+        end
 
       uploads_path = Path.join(uploads_path, file_name)
       {:ok, :thumbnail_generated} = generate_thumbnails(competition_id, user_id, file_name)
