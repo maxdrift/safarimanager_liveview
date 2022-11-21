@@ -22,6 +22,10 @@ defmodule SM.MixProject do
       deps: with_lock(target_deps(Mix.target()) ++ deps()),
       dialyzer: dialyzer(),
       releases: releases(),
+      default_release: :safarimanager,
+      # Adding this explicit list to account for the `race_conditions` warning being removed in OTP 25
+      # https://www.erlang.org/patches/otp-25.0#dialyzer-5.0
+      dialyzer_warnings: [:unmatched_returns, :error_handling, :underspecs, :unknown],
       dialyzer_ignored_warnings: dialyzer_ignored_warnings()
     ]
   end
@@ -32,7 +36,7 @@ defmodule SM.MixProject do
   def application do
     [
       mod: {SM.Application, []},
-      extra_applications: [:logger, :runtime_tools, :mogrify] ++ extra_applications(Mix.target()),
+      extra_applications: [:logger, :runtime_tools] ++ extra_applications(Mix.target()),
       env: Application.get_all_env(:safarimanager)
     ]
   end
@@ -59,8 +63,8 @@ defmodule SM.MixProject do
       {:exexif, "~> 0.0.5"},
       {:finch, "~> 0.13.0", override: true},
       {:gettext, "~> 0.19"},
+      {:image, "~> 0.14"},
       {:jason, "~> 1.2"},
-      {:mogrify, "~> 0.9.1"},
       {:nimble_csv, "~> 1.2"},
       {:phoenix_ecto, "~> 4.4"},
       {:phoenix_html, "~> 3.2"},

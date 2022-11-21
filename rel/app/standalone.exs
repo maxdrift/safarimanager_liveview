@@ -83,28 +83,6 @@ defmodule Standalone do
     release
   end
 
-  @doc """
-  Copies ImageMagick into the release.
-  """
-  @spec copy_imagemagick(Mix.Release.t(), version :: String.t()) :: Mix.Release.t()
-  def copy_imagemagick(release, version) do
-    standalone_destination = Path.join(release.path, "vendor/imagemagick")
-    download_elixir_at_destination(standalone_destination, elixir_version)
-
-    filenames =
-      case AppBundler.os() do
-        :macos ->
-          ["elixir", "elixirc", "mix", "iex"]
-
-        :windows ->
-          ["elixir.bat", "elixirc.bat", "mix.bat", "iex.bat"]
-      end
-
-    Enum.map(filenames, &make_executable(Path.join(standalone_destination, "bin/#{&1}")))
-
-    release
-  end
-
   defp download_elixir_at_destination(destination, version) do
     url = "https://repo.hex.pm/builds/elixir/v#{version}-otp-#{System.otp_release()}.zip"
     path = Path.join(System.tmp_dir!(), "elixir_#{version}.zip")

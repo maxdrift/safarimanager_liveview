@@ -1,6 +1,6 @@
 ARG ASSETS_BUILDER_IMAGE="node:18.1.0-alpine"
-ARG BUILDER_IMAGE="hexpm/elixir:1.13.4-erlang-24.3.4-alpine-3.15.3"
-ARG RUNNER_IMAGE="alpine:3.15"
+ARG BUILDER_IMAGE="hexpm/elixir:1.14.2-erlang-25.1.2-alpine-3.16.2"
+ARG RUNNER_IMAGE="alpine:3.16.2"
 
 FROM ${ASSETS_BUILDER_IMAGE} as assets-builder
 
@@ -22,7 +22,9 @@ RUN yarn --cwd ./assets deploy
 FROM ${BUILDER_IMAGE} AS builder
 
 RUN apk add --no-cache \
-  build-base
+  build-base \
+  vips-dev
+
 
 # prepare build dir
 WORKDIR /opt/build
@@ -108,7 +110,7 @@ RUN apk add --no-cache \
   libstdc++ \
   ncurses-libs \
   openssl \
-  imagemagick
+  vips-dev
 
 # # Set the locale
 # RUN sed -i '/en_US.UTF-8/s/^# //g' /etc/locale.gen && locale-gen
@@ -128,7 +130,7 @@ RUN chown nobody /var/safarimanager
 
 USER nobody
 
-CMD ["/app/bin/server"]
+CMD ["/app/bin/safarimanager", "start"]
 
 # WORKDIR /opt/app
 
