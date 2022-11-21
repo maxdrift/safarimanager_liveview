@@ -54,7 +54,7 @@ defmodule SMWeb.Jurors do
 
   @impl Phoenix.LiveView
   def handle_params(%{"competition_id" => competition_id}, _uri, socket) do
-    if connected?(socket), do: Jurors.subscribe()
+    _result = if connected?(socket), do: Jurors.subscribe()
 
     {:ok, competition} = Competitions.get(competition_id)
     users = Accounts.list_enrollable_jurors(competition_id)

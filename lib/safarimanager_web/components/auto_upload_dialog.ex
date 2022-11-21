@@ -111,49 +111,56 @@ defmodule SMWeb.Components.AutoUploadDialog do
     to_be_imported = Path.wildcard("#{assigns.cwd}/*.{jpg,JPG,jpeg,JPEG}")
     to_be_imported_cnt = Enum.count(to_be_imported)
 
-    Task.Supervisor.start_child(SM.TaskSupervisor, fn ->
-      import_result =
-        Enum.reduce(to_be_imported, 0, fn source_path, acc ->
-          file_name = Path.basename(source_path)
-          %File.Stat{size: file_size} = File.stat!(source_path)
+    _result =
+      Task.Supervisor.start_child(SM.TaskSupervisor, fn ->
+        import_result =
+          Enum.reduce(to_be_imported, 0, fn source_path, acc ->
+            file_name = Path.basename(source_path)
+            %File.Stat{size: file_size} = File.stat!(source_path)
 
-          {:ok, _slide} =
-            Slides.create_and_store_slide_file(
-              assigns.competition_id,
-              assigns.user_id,
-              file_name,
-              file_size,
-              "image/jpeg",
-              source_path
+            {:ok, _slide} =
+              Slides.create_and_store_slide_file(
+                assigns.competition_id,
+                assigns.user_id,
+                file_name,
+                file_size,
+                "image/jpeg",
+                source_path
+              )
+
+            :ok =
+              Slides.generate_thumbnail(
+                assigns.competition_id,
+                assigns.user_id,
+                file_name,
+                :small
+              )
+
+            progress = Decimal.div(acc + 1, to_be_imported_cnt)
+
+            send_update(pid, AutoUploadDialog,
+              id: "auto-upload-dialog",
+              progress: progress
             )
 
-          :ok =
-            Slides.generate_thumbnail(assigns.competition_id, assigns.user_id, file_name, :small)
+            # If importing is complete, close the dialog after 1 second
+            _ref =
+              if Decimal.equal?(progress, 1) do
+                send_update_after(
+                  pid,
+                  AutoUploadDialog,
+                  [id: "auto-upload-dialog", show: false],
+                  1000
+                )
+              end
 
-          progress = Decimal.div(acc + 1, to_be_imported_cnt)
+            acc + 1
+          end)
 
-          send_update(pid, AutoUploadDialog,
-            id: "auto-upload-dialog",
-            progress: progress
-          )
-
-          # If importing is complete, close the dialog after 1 second
-          if Decimal.equal?(progress, 1) do
-            send_update_after(
-              pid,
-              AutoUploadDialog,
-              [id: "auto-upload-dialog", show: false],
-              1000
-            )
-          end
-
-          acc + 1
-        end)
-
-      Logger.info(
-        "Imported #{import_result}/#{to_be_imported_cnt} Slides for User #{assigns.user_id} in Competition #{assigns.competition_id}"
-      )
-    end)
+        Logger.info(
+          "Imported #{import_result}/#{to_be_imported_cnt} Slides for User #{assigns.user_id} in Competition #{assigns.competition_id}"
+        )
+      end)
 
     {:noreply, socket}
   end

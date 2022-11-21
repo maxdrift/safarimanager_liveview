@@ -10,44 +10,45 @@ defmodule SM.Results do
   alias SM.Slides
   alias SM.Slides.Slide
   alias SM.Subjects
+  alias SM.Subjects.Subject
 
   @spec list(String.t()) :: {:ok, [Subject.t()]} | {:error, :not_found}
   def list(competition_id) do
-    {:ok, competition} = Competitions.get(competition_id)
+    with {:ok, competition} <- Competitions.get(competition_id) do
+      subjects_map =
+        competition_id
+        |> Subjects.list_with_coefficients()
+        |> Enum.into(%{}, fn subject ->
+          {subject.id, subject}
+        end)
 
-    subjects_map =
-      competition_id
-      |> Subjects.list_with_coefficients()
-      |> Enum.into(%{}, fn subject ->
-        {subject.id, subject}
-      end)
+      {results, _acc} =
+        Participants.list(competition_id)
+        |> Enum.map(fn participant ->
+          {slides, total_score} =
+            list_by_participant(competition_id, competition, participant.user.id, subjects_map)
 
-    {results, _acc} =
-      Participants.list(competition_id)
-      |> Enum.map(fn participant ->
-        {slides, total_score} =
-          list_by_participant(competition_id, competition, participant.user.id, subjects_map)
+          %{
+            participant: participant,
+            user: participant.user,
+            slides: slides,
+            total_score: total_score
+          }
+        end)
+        |> Enum.sort(&(Decimal.compare(&1.total_score, &2.total_score) in [:gt, :eq]))
+        |> Enum.map_reduce({0, 0, Decimal.new("Infinity")}, fn %{total_score: score} = result,
+                                                               {prev_index, prev_rank, prev_score} ->
+          if Decimal.compare(score, prev_score) == :lt do
+            new_index = prev_index + 1
+            new_rank = prev_index + 1
+            {Map.put(result, :rank, new_rank), {new_index, new_rank, score}}
+          else
+            {Map.put(result, :rank, prev_rank), {prev_index + 1, prev_rank, score}}
+          end
+        end)
 
-        %{
-          participant: participant,
-          user: participant.user,
-          slides: slides,
-          total_score: total_score
-        }
-      end)
-      |> Enum.sort(&(Decimal.compare(&1.total_score, &2.total_score) in [:gt, :eq]))
-      |> Enum.map_reduce({0, 0, Decimal.new("Infinity")}, fn %{total_score: score} = result,
-                                                             {prev_index, prev_rank, prev_score} ->
-        if Decimal.compare(score, prev_score) == :lt do
-          new_index = prev_index + 1
-          new_rank = prev_index + 1
-          {Map.put(result, :rank, new_rank), {new_index, new_rank, score}}
-        else
-          {Map.put(result, :rank, prev_rank), {prev_index + 1, prev_rank, score}}
-        end
-      end)
-
-    {:ok, results}
+      {:ok, results}
+    end
   end
 
   @spec list_by_participant(String.t(), Competition.t(), String.t(), %{

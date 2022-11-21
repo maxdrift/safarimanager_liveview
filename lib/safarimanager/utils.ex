@@ -193,7 +193,7 @@ defmodule SM.Utils do
   @spec valid_cli_flags?(String.t()) :: boolean()
   def valid_cli_flags?(flags) do
     try do
-      OptionParser.split(flags)
+      _result = OptionParser.split(flags)
       true
     rescue
       _ -> false
@@ -306,7 +306,7 @@ defmodule SM.Utils do
   @doc """
   Reads file contents and encodes it into a data URL.
   """
-  @spec read_as_data_url!(Path.t()) :: binary()
+  @spec read_as_data_url!(Path.t()) :: String.t()
   def read_as_data_url!(path) do
     content = File.read!(path)
     mime = MIME.from_path(path)
@@ -337,10 +337,15 @@ defmodule SM.Utils do
           end
       end
 
-    case cmd_args do
-      {cmd, args} -> System.cmd(cmd, args)
-      nil -> Logger.warning("could not open the browser, no open command found in the system")
-    end
+    :ok =
+      case cmd_args do
+        {cmd, args} ->
+          {_result, _exit_status} = System.cmd(cmd, args)
+          :ok
+
+        nil ->
+          Logger.warning("could not open the browser, no open command found in the system")
+      end
 
     :ok
   end

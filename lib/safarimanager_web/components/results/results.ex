@@ -18,7 +18,7 @@ defmodule SMWeb.Results do
 
   @impl Phoenix.LiveView
   def mount(_params, _session, socket) do
-    if connected?(socket), do: Slides.subscribe()
+    _result = if connected?(socket), do: Slides.subscribe()
     {:ok, socket}
   end
 

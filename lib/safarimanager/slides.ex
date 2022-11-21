@@ -72,10 +72,7 @@ defmodule SM.Slides do
 
     {width, height} = get_thumbnail_size(size_type)
 
-    {:ok, _path} =
-      ImageProcessing.save_thumbnail(orig_path, width, height, Path.join(thumbs_path, file_name))
-
-    :ok
+    ImageProcessing.save_thumbnail(orig_path, width, height, Path.join(thumbs_path, file_name))
   rescue
     error ->
       {:error, error}
@@ -626,7 +623,7 @@ defmodule SM.Slides do
     end
   end
 
-  @spec assign_random_evaluations(String.t()) :: :ok | {:error, any()}
+  @spec assign_random_evaluations(String.t()) :: :ok
   def assign_random_evaluations(competition_id) do
     {:ok, competition} = Competitions.get(competition_id)
     allowed_evaluations = Map.get(competition, :allowed_evaluations)
@@ -645,7 +642,7 @@ defmodule SM.Slides do
     end)
   end
 
-  @spec assign_fixed_evaluations(String.t(), String.t()) :: :ok | {:error, any()}
+  @spec assign_fixed_evaluations(String.t(), String.t()) :: :ok
   def assign_fixed_evaluations(competition_id, evaluation_id) do
     {:ok, competition} = Competitions.get(competition_id)
     num_of_jurors = Enum.count(competition.jurors)
@@ -707,7 +704,7 @@ defmodule SM.Slides do
     notify_subscribers({:ok, deleted}, [:slide, :updated])
   end
 
-  @spec apply_penalty(String.t()) :: :ok | {:error, any()}
+  @spec apply_penalty(String.t()) :: {:ok, Slide.t()} | {:error, any()}
   def apply_penalty(slide_id) do
     Multi.new()
     |> Multi.delete_all(:delete_evaluations, from(SlideEvaluation, where: [slide_id: ^slide_id]))
@@ -722,7 +719,7 @@ defmodule SM.Slides do
     end
   end
 
-  @spec clear_penalty(String.t()) :: :ok | {:error, any()}
+  @spec clear_penalty(String.t()) :: {:ok, Slide.t()} | {:error, any()}
   def clear_penalty(slide_id) do
     Multi.new()
     |> Multi.update_all(:clear_penalty, from(Slide, where: [id: ^slide_id]), set: [penalty: false])
@@ -848,12 +845,13 @@ defmodule SM.Slides do
       |> Path.join()
       |> File.rm()
 
-    for size_type <- [:small, :medium, :large] do
-      _result =
-        [thumbnails_path, Atom.to_string(size_type), file_name]
-        |> Path.join()
-        |> File.rm()
-    end
+    [_head | _tail] =
+      for size_type <- [:small, :medium, :large] do
+        _result =
+          [thumbnails_path, Atom.to_string(size_type), file_name]
+          |> Path.join()
+          |> File.rm()
+      end
 
     # Remove the entire participant directory if empty
     :ok =
