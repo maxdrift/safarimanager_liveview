@@ -17,22 +17,23 @@ defmodule SMWeb.TelemetryPusher do
 
   @impl GenServer
   def handle_info(:push, state) do
-    :ok = do_recurrent_thing()
+    :ok =
+      case do_recurrent_thing() do
+        :ok ->
+          :ok
+
+        {:error, reason} ->
+          Logger.warning("Unable to push metrics to server: #{inspect(reason)}")
+          :ok
+      end
+
     :ok = schedule_work()
     {:noreply, state}
   end
 
   defp do_recurrent_thing() do
     hostname = get_config!(:instance_id)
-
-    case PrometheusPush.push(%{job: "push-metrics", grouping_key: [{"instance", hostname}]}) do
-      :ok ->
-        :ok
-
-      {:error, reason} = error ->
-        Logger.warning("Unable to push metrics to server: #{inspect(reason)}")
-        error
-    end
+    PrometheusPush.push(%{job: "push-metrics", grouping_key: [{"instance", hostname}]})
   end
 
   defp schedule_work(delay_sec \\ 10) do
