@@ -134,7 +134,8 @@ defmodule Standalone do
   defp fetch_body!(url) do
     Logger.debug("Downloading #{url}")
 
-    Tesla.client([])
+    [Tesla.Middleware.FollowRedirects]
+    |> Tesla.client()
     |> Tesla.get(url)
     |> case do
       {:ok, %Tesla.Env{status: 200, body: body}} ->

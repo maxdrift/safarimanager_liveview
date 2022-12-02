@@ -90,7 +90,7 @@ config :logger, :console,
 # Use Jason for JSON parsing in Phoenix
 config :phoenix, :json_library, Jason
 
-config :tesla, :adapter, {Tesla.Adapter.Finch, name: SMFinch}
+# config :tesla, :adapter, {Tesla.Adapter.Finch, name: SMFinch}
 
 config :surface, :components, [
   {Surface.Components.Form.ErrorTag,
