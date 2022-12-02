@@ -12,6 +12,7 @@ priv_dir = :code.priv_dir(:safarimanager) |> to_string()
 priv_dir_uploads = Path.join(priv_dir, "/uploads")
 
 uploads_path = System.get_env("UPLOADS_PATH", priv_dir_uploads)
+IO.puts("Uploads path set to: #{uploads_path}")
 
 unless File.exists?(uploads_path) do
   File.mkdir_p!(uploads_path)
@@ -23,6 +24,8 @@ db_path =
   "DATABASE_PATH"
   |> System.get_env(priv_dir)
   |> Path.join("safarimanager.db")
+
+IO.puts("Database path set to: #{db_path}")
 
 unless File.exists?(db_path) do
   File.mkdir_p!(Path.dirname(db_path))
