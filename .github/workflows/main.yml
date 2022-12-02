@@ -14,18 +14,25 @@ jobs:
       - name: Update Homebrew
         run: |
           brew update --preinstall
-          cat "$(brew --repository)/Library/Taps/homebrew/homebrew-core/Formula/vips.rb" > .github/brew-formulae
+          cat /dev/null > .github/brew-formulae
+          cat "$(brew --repository)/Library/Taps/homebrew/homebrew-core/Formula/vips.rb" >> .github/brew-formulae
+          cat "$(brew --repository)/Library/Taps/homebrew/homebrew-core/Formula/yarn.rb" >> .github/brew-formulae
+          cat "$(brew --repository)/Library/Taps/homebrew/homebrew-core/Formula/dylibbundler.rb" >> .github/brew-formulae
       - name: Configure Homebrew cache
         uses: actions/cache@v2
         with:
           path: |
             ~/Library/Caches/Homebrew/vips--*
             ~/Library/Caches/Homebrew/downloads/*--vips-*
+            ~/Library/Caches/Homebrew/yarn--*
+            ~/Library/Caches/Homebrew/downloads/*--yarn-*
+            ~/Library/Caches/Homebrew/dylibbundler--*
+            ~/Library/Caches/Homebrew/downloads/*--dylibbundler-*
           key: brew-${{ hashFiles('.github/brew-formulae') }}
           restore-keys: brew-
       - name: Install Homebrew dependencies
         run: |
-          env HOMEBREW_NO_AUTO_UPDATE=1 brew install vips
+          env HOMEBREW_NO_AUTO_UPDATE=1 brew install vips yarn dylibbundler
       - name: Cache Mix Deps
         uses: actions/cache@v2
         with:
