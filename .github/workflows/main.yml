@@ -13,6 +13,7 @@ jobs:
       - name: Update Homebrew
         run: |
           brew update --preinstall
+          touch .github/brew-formulae
           cat "$(brew --repository)/Library/Taps/homebrew/homebrew-core/Formula/vips.rb" > .github/brew-formulae
       - name: Configure Homebrew cache
         uses: actions/cache@v2
