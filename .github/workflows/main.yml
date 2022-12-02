@@ -45,8 +45,8 @@ jobs:
           key: ${{ runner.os }}-app-${{ hashFiles('.github/scripts/app/bootstrap_mac.sh') }}
       - name: Bootstrap
         run: bash .github/scripts/app/bootstrap_mac.sh
-      - name: Build the app
-        run: bash .github/scripts/app/build_mac.sh
+      # - name: Build the app
+      #   run: bash .github/scripts/app/build_mac.sh
 
   # linux-arm:
   #   name: Build on Raspberry Pi (Elixir ${{ matrix.elixir_version }}, OTP ${{ matrix.otp_version }})
