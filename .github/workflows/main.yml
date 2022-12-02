@@ -10,7 +10,7 @@ jobs:
     runs-on: macos-latest
     if: github.ref == 'refs/heads/main'
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Update Homebrew
         run: |
           brew update --preinstall
@@ -19,7 +19,7 @@ jobs:
           cat "$(brew --repository)/Library/Taps/homebrew/homebrew-core/Formula/yarn.rb" >> .github/brew-formulae
           cat "$(brew --repository)/Library/Taps/homebrew/homebrew-core/Formula/dylibbundler.rb" >> .github/brew-formulae
       - name: Configure Homebrew cache
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: |
             ~/Library/Caches/Homebrew/vips--*
@@ -34,12 +34,12 @@ jobs:
         run: |
           env HOMEBREW_NO_AUTO_UPDATE=1 brew install vips yarn dylibbundler
       - name: Cache Mix Deps
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: deps
           key: ${{ runner.os }}-mix-${{ hashFiles('**/mix.lock') }}
       - name: Cache Bootstrap
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: tmp
           key: ${{ runner.os }}-app-${{ hashFiles('.github/scripts/app/bootstrap_mac.sh') }}
