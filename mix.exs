@@ -86,7 +86,7 @@ defmodule SM.MixProject do
     ]
   end
 
-  defp target_deps(:app), do: [{:app_bundler, path: "../app_bundler"}]
+  defp target_deps(:app), do: [{:app_bundler, path: "./app_bundler"}]
   defp target_deps(_), do: []
 
   @lock (with {:ok, contents} <- File.read("mix.lock"),
