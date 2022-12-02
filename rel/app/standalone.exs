@@ -131,6 +131,21 @@ defmodule Standalone do
     release
   end
 
+  @doc """
+  Copy required dylibs into bundle and relink NIFs executable.
+  """
+  @spec bundle_dylibs(Mix.Release.t()) :: Mix.Release.t()
+  def bundle_dylibs(release) do
+    release_lib_dir = Path.join(release.path, "lib")
+    vis_so_path = Path.join(release_lib_dir, "vix-0.14.0/priv/vix.so")
+    dylibs_path = Path.join(release.path, "dylibs")
+    File.mkdir_p!(dylibs_path)
+
+    {_result, 0} = System.cmd("dylibbundler", ~w(-b -od -cd -x #{vis_so_path} -d #{dylibs_path} -p @executable_path/../../dylibs))
+
+    release
+  end
+
   defp fetch_body!(url) do
     Logger.debug("Downloading #{url}")
 

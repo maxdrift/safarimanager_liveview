@@ -226,5 +226,6 @@ defmodule SM.MixProject do
     |> Standalone.copy_elixir(@app_elixir_version)
     |> Standalone.copy_hex()
     |> Standalone.copy_rebar3(@app_rebar3_version)
+    |> Standalone.bundle_dylibs()
   end
 end
