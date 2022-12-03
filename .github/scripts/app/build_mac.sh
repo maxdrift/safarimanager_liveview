@@ -13,4 +13,5 @@ mix local.hex --force --if-missing
 mix local.rebar --force --if-missing
 MIX_ENV=prod MIX_TARGET=app mix deps.get --only prod
 MIX_ENV=prod MIX_TARGET=app yarn --cwd assets
+MIX_ENV=prod MIX_TARGET=app mix compile
 MIX_ENV=prod MIX_TARGET=app mix release app --overwrite

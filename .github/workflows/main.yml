@@ -7,7 +7,8 @@ on: [push]
 
 jobs:
   macos:
-    runs-on: macos-latest
+    # runs-on: macos-latest
+    runs-on: self-hosted
     if: github.ref == 'refs/heads/main'
     steps:
       - uses: actions/checkout@v3
@@ -16,6 +17,7 @@ jobs:
           brew update --preinstall
           cat /dev/null > .github/brew-formulae
           cat "$(brew --repository)/Library/Taps/homebrew/homebrew-core/Formula/vips.rb" >> .github/brew-formulae
+          cat "$(brew --repository)/Library/Taps/homebrew/homebrew-core/Formula/node.rb" >> .github/brew-formulae
           cat "$(brew --repository)/Library/Taps/homebrew/homebrew-core/Formula/yarn.rb" >> .github/brew-formulae
           cat "$(brew --repository)/Library/Taps/homebrew/homebrew-core/Formula/dylibbundler.rb" >> .github/brew-formulae
       - name: Configure Homebrew cache
@@ -24,6 +26,8 @@ jobs:
           path: |
             ~/Library/Caches/Homebrew/vips--*
             ~/Library/Caches/Homebrew/downloads/*--vips-*
+            ~/Library/Caches/Homebrew/node--*
+            ~/Library/Caches/Homebrew/downloads/*--node-*
             ~/Library/Caches/Homebrew/yarn--*
             ~/Library/Caches/Homebrew/downloads/*--yarn-*
             ~/Library/Caches/Homebrew/dylibbundler--*
@@ -32,7 +36,7 @@ jobs:
           restore-keys: brew-
       - name: Install Homebrew dependencies
         run: |
-          env HOMEBREW_NO_AUTO_UPDATE=1 brew install vips yarn dylibbundler
+          env HOMEBREW_NO_AUTO_UPDATE=1 brew install vips node yarn dylibbundler
       - name: Cache Mix Deps
         uses: actions/cache@v3
         with:
@@ -45,8 +49,8 @@ jobs:
           key: ${{ runner.os }}-app-${{ hashFiles('.github/scripts/app/bootstrap_mac.sh') }}
       - name: Bootstrap
         run: bash .github/scripts/app/bootstrap_mac.sh
-      - name: Build the app
-        run: bash .github/scripts/app/build_mac.sh
+      # - name: Build the app
+      #   run: bash .github/scripts/app/build_mac.sh
 
   # linux-arm:
   #   name: Build on Raspberry Pi (Elixir ${{ matrix.elixir_version }}, OTP ${{ matrix.otp_version }})
