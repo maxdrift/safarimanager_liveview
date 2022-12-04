@@ -10,6 +10,11 @@ jobs:
     # runs-on: macos-latest
     runs-on: self-hosted
     if: github.ref == 'refs/heads/main'
+    env:
+      SECRET_KEY_BASE: ${{ secrets.SECRET_KEY_BASE }}
+      LV_SIGNING_SALT: ${{ secrets.LV_SIGNING_SALT }}
+      PROMETHEUS_PUSH_GW_USER: ${{ secrets.PROMETHEUS_PUSH_GW_USER }}
+      PROMETHEUS_PUSH_GW_PASSWORD: ${{ secrets.PROMETHEUS_PUSH_GW_PASSWORD }}
     steps:
       - uses: actions/checkout@v3
       - name: Update Homebrew
