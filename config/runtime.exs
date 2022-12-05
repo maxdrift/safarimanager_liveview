@@ -27,6 +27,7 @@ db_path =
 
 IO.puts("Database path set to: #{db_path}")
 
+IO.inspect(Application.app_dir(:safarimanager), label: "APP DIR")
 IO.inspect(priv_dir, label: "PRIV DIR")
 IO.inspect(File.ls!(priv_dir), label: "PRIV DIR CONTENT")
 IO.inspect(File.ls!(Path.join(priv_dir, "static")), label: "PRIV/STATIC DIR CONTENT")
