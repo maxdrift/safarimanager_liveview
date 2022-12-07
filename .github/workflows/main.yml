@@ -74,20 +74,24 @@ jobs:
       - name: Install Homebrew dependencies
         run: |
           env HOMEBREW_NO_AUTO_UPDATE=1 brew install asdf vips node yarn dylibbundler
-      # - name: Cache asdf Erlang and Elixir
-      #   uses: actions/cache@v3
-      #   with:
-      #     path: |
-      #       ~/.asdf
-      #     key: asdf-${{ hashFiles('.tool-versions') }}
-      # - name: Install Erlang OTP (version from .tool-versions)
-      #   run: |
-      #     asdf plugin add erlang
-      #     asdf install erlang
-      # - name: Install Elixir (version from .tool-versions)
-      #   run: |
-      #     asdf plugin add elixir
-      #     asdf install elixir
+      - name: Setup asdf
+        run: |
+          echo -e "\n. $(brew --prefix asdf)/libexec/asdf.sh" >> ~/.bash_profile
+          mkdir ~/.asdf
+      - name: Cache asdf Erlang and Elixir
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.asdf
+          key: asdf-${{ hashFiles('.tool-versions') }}
+      - name: Install Erlang OTP (version from .tool-versions)
+        run: |
+          asdf plugin add erlang
+          asdf install erlang
+      - name: Install Elixir (version from .tool-versions)
+        run: |
+          asdf plugin add elixir
+          asdf install elixir
       # - name: Cache Mix Deps
       #   uses: actions/cache@v3
       #   with:
