@@ -103,8 +103,7 @@ jobs:
           key: ${{ runner.os }}-mix-${{ hashFiles('**/mix.lock') }}
       - name: Build the app
         run: |
-          pwd
-          asdf current
+          export PATH=~/.asdf/shims:$PATH
           .github/scripts/app/build_mac.sh
       - name: Clean up keychain and provisioning profile
         if: ${{ always() }}
