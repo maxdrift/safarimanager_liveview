@@ -34,6 +34,10 @@ defmodule Standalone do
     export ROOTDIR
     export BINDIR
     export PROGNAME
+
+    # Start Erlang Port Mapper Daemon
+    "$BINDIR"/epmd -daemon
+
     exec ${RELEASE_ERLEXEC:-"$BINDIR/erlexec"} ${1+"$@"}
     """)
 
