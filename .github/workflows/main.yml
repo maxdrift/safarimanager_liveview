@@ -95,6 +95,7 @@ jobs:
         run: |
           asdf plugin add elixir || true
           asdf install elixir
+          asdf reshim elixir
       - name: Cache Mix Deps
         uses: actions/cache@v3
         with:
