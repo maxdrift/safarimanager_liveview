@@ -50,6 +50,7 @@ jobs:
         run: |
           brew update --preinstall
           cat /dev/null > .github/brew-formulae
+          cat "$(brew --repository)/Library/Taps/homebrew/homebrew-core/Formula/asdf.rb" >> .github/brew-formulae
           cat "$(brew --repository)/Library/Taps/homebrew/homebrew-core/Formula/vips.rb" >> .github/brew-formulae
           cat "$(brew --repository)/Library/Taps/homebrew/homebrew-core/Formula/node.rb" >> .github/brew-formulae
           cat "$(brew --repository)/Library/Taps/homebrew/homebrew-core/Formula/yarn.rb" >> .github/brew-formulae
@@ -58,6 +59,8 @@ jobs:
         uses: actions/cache@v3
         with:
           path: |
+            ~/Library/Caches/Homebrew/asdf--*
+            ~/Library/Caches/Homebrew/downloads/*--asdf-*
             ~/Library/Caches/Homebrew/vips--*
             ~/Library/Caches/Homebrew/downloads/*--vips-*
             ~/Library/Caches/Homebrew/node--*
@@ -70,14 +73,28 @@ jobs:
           restore-keys: brew-
       - name: Install Homebrew dependencies
         run: |
-          env HOMEBREW_NO_AUTO_UPDATE=1 brew install vips node yarn dylibbundler
-      - name: Cache Mix Deps
-        uses: actions/cache@v3
-        with:
-          path: deps
-          key: ${{ runner.os }}-mix-${{ hashFiles('**/mix.lock') }}
-      - name: Build the app
-        run: bash .github/scripts/app/build_mac.sh
+          env HOMEBREW_NO_AUTO_UPDATE=1 brew install asdf@0.10.2 vips@8.13.3 node@19.2.0 yarn@1.22.19 dylibbundler@1.0.5
+      # - name: Cache asdf Erlang and Elixir
+      #   uses: actions/cache@v3
+      #   with:
+      #     path: |
+      #       ~/.asdf
+      #     key: asdf-${{ hashFiles('.tool-versions') }}
+      # - name: Install Erlang OTP (version from .tool-versions)
+      #   run: |
+      #     asdf plugin add erlang
+      #     asdf install erlang
+      # - name: Install Elixir (version from .tool-versions)
+      #   run: |
+      #     asdf plugin add elixir
+      #     asdf install elixir
+      # - name: Cache Mix Deps
+      #   uses: actions/cache@v3
+      #   with:
+      #     path: deps
+      #     key: ${{ runner.os }}-mix-${{ hashFiles('**/mix.lock') }}
+      # - name: Build the app
+      #   run: bash .github/scripts/app/build_mac.sh
       - name: Clean up keychain and provisioning profile
         if: ${{ always() }}
         run: |
