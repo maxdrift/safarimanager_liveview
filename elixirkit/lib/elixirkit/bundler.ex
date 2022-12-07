@@ -171,8 +171,8 @@ defmodule ElixirKit.Bundler do
     )
   end
 
-  defp cc_target("macos-aarch64"), do: "arm64-apple-macos10.0"
-  defp cc_target("macos-x86_64"), do: "x86_64-apple-macos10.0"
+  defp cc_target("macos-aarch64"), do: "arm64-apple-macos11.0"
+  defp cc_target("macos-x86_64"), do: "x86_64-apple-macos11.0"
 
   @doc false
   def open_release_app do
