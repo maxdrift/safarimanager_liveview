@@ -73,7 +73,7 @@ jobs:
           restore-keys: brew-
       - name: Install Homebrew dependencies
         run: |
-          env HOMEBREW_NO_AUTO_UPDATE=1 brew install asdf@0.10.2 vips@8.13.3 node@19.2.0 yarn@1.22.19 dylibbundler@1.0.5
+          env HOMEBREW_NO_AUTO_UPDATE=1 brew install asdf vips node yarn dylibbundler
       # - name: Cache asdf Erlang and Elixir
       #   uses: actions/cache@v3
       #   with:
