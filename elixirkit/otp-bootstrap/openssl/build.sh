@@ -17,7 +17,7 @@ rel_dir=$dir/openssl-$version-$target
 case "$target" in
 macos-aarch64)
   openssl_target="darwin64-arm64-cc"
-  cc_target="arm64-apple-macos10.0"
+  cc_target="arm64-apple-macos11.0"
   ;;
 macos-x86_64)
   openssl_target="darwin64-x86_64-cc"

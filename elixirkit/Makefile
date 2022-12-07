@@ -1,4 +1,4 @@
-default: $(shell echo priv/{arm64,x86_64}-apple-macos10.0/elixirkit_nif.so)
+default: $(shell echo priv/x86_64-apple-macos10.0/elixirkit_nif.so)
 
 priv/%/elixirkit_nif.so: c_src/elixirkit_nif.m
 	mkdir -p `dirname $@`
