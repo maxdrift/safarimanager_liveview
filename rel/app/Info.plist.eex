@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>CFBundleIdentifier</key>
+  <string>org.maxdrift.safarimanager</string>
+  <key>CFBundleName</key>
+  <string>Safarimanager</string>
+  <key>CFBundleVersion</key>
+  <string><%= @release.version %></string>
+  <key>CFBundleShortVersionString</key>
+  <string><%= @release.version %></string>
+  <key>CFBundleIconFile</key>
+  <string>AppIcon</string>
+  <key>CFBundleURLTypes</key>
+  <array>
+    <dict>
+      <key>CFBundleURLName</key>
+      <string>Safarimanager</string>
+      <key>CFBundleURLSchemes</key>
+      <array>
+        <string>smgr</string>
+      </array>
+    </dict>
+  </array>
+  <key>CFBundleDocumentTypes</key>
+  <array>
+    <dict>
+      <key>CFBundleTypeName</key>
+      <string>SMBundle</string>
+      <key>CFBundleTypeRole</key>
+      <string>Editor</string>
+      <key>CFBundleTypeExtensions</key>
+      <array>
+        <string>smgr</string>
+      </array>
+    </dict>
+  </array>
+  <key>LSUIElement</key>
+  <true/>
+  <key>LSRequiresNativeExecution</key>
+  <true/>
+  <key>CFBundleExecutable</key>
+  <string>SafarimanagerRunner</string>
+</dict>
+</plist>

@@ -30,7 +30,14 @@ defmodule SM.Application do
     # See https://hexdocs.pm/elixir/Supervisor.html
     # for other strategies and supported options
     opts = [strategy: :one_for_one, name: SM.Supervisor]
-    Supervisor.start_link(children, opts)
+
+    case Supervisor.start_link(children, opts) do
+      {:ok, _} = result ->
+        result
+
+      {:error, error} ->
+        abort!(Application.format_error(error))
+    end
   end
 
   # Tell Phoenix to update the endpoint configuration
@@ -45,5 +52,22 @@ defmodule SM.Application do
     defp app_specs, do: [SMApp]
   else
     defp app_specs, do: []
+  end
+
+  # TODO: Move this to shared module and use it to present startup config errors to the user.
+  # Aborts booting due to a configuration error.
+  @spec abort!(String.t()) :: no_return()
+  defp abort!(message)
+
+  if Mix.target() == :app do
+    defp abort!(message) do
+      ElixirKit.publish(:abort, message)
+      Process.sleep(:infinity)
+    end
+  else
+    defp abort!(message) do
+      IO.puts("\nERROR!!! [SafariManager] " <> message)
+      System.halt(1)
+    end
   end
 end

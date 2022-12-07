@@ -3,9 +3,9 @@ defmodule SM.MixProject do
 
   @elixir_requirement "~> 1.14"
   @version "0.1.2"
-  @description "Application to manage photographic 'Safari' competitions"
+  @description ~s(Application to manage "Underwater Photo Safari" competitions)
 
-  @app_elixir_version "1.14.0"
+  @app_elixir_version "1.14.2"
   @app_rebar3_version "3.19.0"
 
   def project do
@@ -13,7 +13,7 @@ defmodule SM.MixProject do
       app: :safarimanager,
       version: @version,
       elixir: @elixir_requirement,
-      name: "Safari Manager",
+      name: "SafariManager",
       description: @description,
       elixirc_paths: elixirc_paths(Mix.env()),
       compilers: Mix.compilers() ++ [:surface],
@@ -22,6 +22,8 @@ defmodule SM.MixProject do
       deps: with_lock(target_deps(Mix.target()) ++ deps()),
       dialyzer: dialyzer(),
       releases: releases(),
+      preferred_cli_env: preferred_cli_env(),
+      preferred_cli_target: preferred_cli_target(),
       default_release: :safarimanager,
       # Adding this explicit list to account for the `race_conditions` warning being removed in OTP 25
       # https://www.erlang.org/patches/otp-25.0#dialyzer-5.0
@@ -36,13 +38,10 @@ defmodule SM.MixProject do
   def application do
     [
       mod: {SM.Application, []},
-      extra_applications: [:logger, :runtime_tools] ++ extra_applications(Mix.target()),
+      extra_applications: [:logger, :runtime_tools, :os_mon, :inets, :ssl, :xmerl],
       env: Application.get_all_env(:safarimanager)
     ]
   end
-
-  defp extra_applications(:app), do: [:wx]
-  defp extra_applications(_), do: []
 
   # Specifies which paths to compile per environment.
   defp elixirc_paths(:test), do: ["lib", "test/support"]
@@ -86,7 +85,7 @@ defmodule SM.MixProject do
     ]
   end
 
-  defp target_deps(:app), do: [{:app_bundler, path: "./app_bundler"}]
+  defp target_deps(:app), do: [{:elixirkit, path: "elixirkit"}]
   defp target_deps(_), do: []
 
   @lock (with {:ok, contents} <- File.read("mix.lock"),
@@ -144,6 +143,14 @@ defmodule SM.MixProject do
   end
 
   defp releases do
+    macos_notarization = macos_notarization()
+
+    additional_paths = [
+      "vendor/otp/erts-#{:erlang.system_info(:version)}/bin",
+      "vendor/otp/bin",
+      "vendor/elixir/bin"
+    ]
+
     [
       safarimanager: [
         include_executables_for: [:unix],
@@ -158,38 +165,19 @@ defmodule SM.MixProject do
           :assemble,
           &remove_cookie/1,
           &standalone_erlang_elixir/1,
-          &AppBundler.bundle/1
+          &ElixirKit.bundle/1
         ],
         app: [
-          name: "SafariManager",
-          url_schemes: ["safarimanager"],
-          document_types: [
-            [
-              name: "SafariManagerData",
-              extensions: ["smgr"],
-              macos: [
-                icon_path: "rel/app/icon.png",
-                role: "Editor"
-              ],
-              windows: [
-                icon_path: "rel/app/icon.ico"
-              ]
-            ]
-          ],
-          additional_paths: [
-            "rel/erts-#{:erlang.system_info(:version)}/bin",
-            "rel/vendor/elixir/bin"
-          ],
-          macos: [
-            app_type: :agent,
-            icon_path: "rel/app/icon-macos.png",
-            build_dmg: macos_notarization() != nil,
-            notarization: macos_notarization()
-          ],
-          windows: [
-            icon_path: "rel/app/icon.ico",
-            build_installer: true
-          ]
+          launcher_path: "rel/app/Launcher.swift",
+          info_plist_path: "rel/app/Info.plist.eex",
+          resources: %{
+            "AppIcon.icns" => "rel/app/icon-macos.icns",
+            "Icon.png" => "rel/app/icon.png"
+          },
+          root_dir: "vendor/otp",
+          additional_paths: additional_paths ++ ["/usr/local/bin"],
+          build_dmg: macos_notarization != nil,
+          notarization: macos_notarization
         ]
       ]
     ]
@@ -208,8 +196,14 @@ defmodule SM.MixProject do
     apple_id = System.get_env("NOTARIZE_APPLE_ID")
     password = System.get_env("NOTARIZE_PASSWORD")
 
-    if identity && team_id && apple_id && password do
-      [identity: identity, team_id: team_id, apple_id: apple_id, password: password]
+    if identity do
+      [
+        identity: identity,
+        team_id: team_id,
+        apple_id: apple_id,
+        password: password,
+        entitlements_plist_path: "rel/app/Entitlements.plist"
+      ]
     end
   end
 
@@ -227,5 +221,19 @@ defmodule SM.MixProject do
     |> Standalone.copy_hex()
     |> Standalone.copy_rebar3(@app_rebar3_version)
     |> Standalone.bundle_dylibs()
+  end
+
+  defp preferred_cli_env do
+    [
+      app: :prod,
+      "app.build": :prod
+    ]
+  end
+
+  defp preferred_cli_target do
+    [
+      app: :app,
+      "app.build": :app
+    ]
   end
 end
