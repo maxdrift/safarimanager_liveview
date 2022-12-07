@@ -18,9 +18,6 @@ jobs:
       NOTARIZE_IDENTITY: ${{ secrets.NOTARIZE_IDENTITY }}
     steps:
       - uses: actions/checkout@v3
-      - uses: erlef/setup-beam@v1
-        with:
-          version-file: .tool-versions
       - name: Install the Apple certificate and provisioning profile
         env:
           BUILD_CERTIFICATE_BASE64: ${{ secrets.BUILD_CERTIFICATE_BASE64 }}
@@ -73,14 +70,14 @@ jobs:
           restore-keys: brew-
       - name: Install Homebrew dependencies
         run: |
-          env HOMEBREW_NO_AUTO_UPDATE=1 brew install vips@8.13.3 node@19.2.0 yarn@1.22.19 dylibbundler@1.0.5
-      # - name: Cache Mix Deps
-      #   uses: actions/cache@v3
-      #   with:
-      #     path: deps
-      #     key: ${{ runner.os }}-mix-${{ hashFiles('**/mix.lock') }}
-      # - name: Build the app
-      #   run: bash .github/scripts/app/build_mac.sh
+          env HOMEBREW_NO_AUTO_UPDATE=1 brew install vips node yarn dylibbundler
+      - name: Cache Mix Deps
+        uses: actions/cache@v3
+        with:
+          path: deps
+          key: ${{ runner.os }}-mix-${{ hashFiles('**/mix.lock') }}
+      - name: Build the app
+        run: bash .github/scripts/app/build_mac.sh
       - name: Clean up keychain and provisioning profile
         if: ${{ always() }}
         run: |
