@@ -5,7 +5,7 @@ defmodule ElixirKit.NIF do
   def __init__ do
     cc_target =
       case :erlang.system_info(:system_architecture) do
-        ~c"aarch64-apple-darwin" ++ _ -> "arm64-apple-macos11.0"
+        ~c"aarch64-apple-darwin" ++ _ -> "arm64-apple-macos10.0"
         ~c"x86_64-apple-darwin" ++ _ -> "x86_64-apple-macos10.0"
       end
 

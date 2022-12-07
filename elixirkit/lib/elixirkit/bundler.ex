@@ -4,10 +4,6 @@ defmodule ElixirKit.Bundler do
   @openssl_version "1.1.1s"
   @otp_version "25.1.2"
   @elixirkit_dir Path.expand("../..", __DIR__)
-  # TODO: @supported_targets ~w(macos-aarch64 macos-x86_64)
-  @supported_targets ~w(macos-x86_64)
-  # TODO: @target "macos-universal"
-  @target "macos-x86_64"
 
   def bundle_release(release) do
     if otp_version() != @otp_version do
@@ -54,19 +50,19 @@ defmodule ElixirKit.Bundler do
     File.mkdir_p!(cache_dir)
     dir = "#{@elixirkit_dir}/otp-bootstrap"
 
-    for target <- @supported_targets do
+    for target <- ~w(macos-aarch64 macos-x86_64) do
       cmd("sh", ~w(#{dir}/openssl/build.sh #{cache_dir} #{@openssl_version} #{target}))
     end
 
     cmd(
       "sh",
-      ~w(#{dir}/otp/build.sh #{cache_dir} #{@otp_version} #{@target} #{@openssl_version})
+      ~w(#{dir}/otp/build.sh #{cache_dir} #{@otp_version} macos-universal #{@openssl_version})
     )
   end
 
   @doc false
   def otp_dir do
-    "#{cache_dir()}/otp-#{@otp_version}-#{@target}"
+    "#{cache_dir()}/otp-#{@otp_version}-macos-universal"
   end
 
   defp build_launcher(release, app_dir, app_name, launcher) do
@@ -81,7 +77,10 @@ defmodule ElixirKit.Bundler do
     File.mkdir_p!(launcher_dir)
     cache_dir = cache_dir()
 
-    targets = @supported_targets
+    targets = [
+      "macos-aarch64",
+      "macos-x86_64"
+    ]
 
     for target <- targets do
       otp_dir = "#{cache_dir}/otp-#{@otp_version}-#{target}"
@@ -172,7 +171,7 @@ defmodule ElixirKit.Bundler do
     )
   end
 
-  defp cc_target("macos-aarch64"), do: "arm64-apple-macos11.0"
+  defp cc_target("macos-aarch64"), do: "arm64-apple-macos10.0"
   defp cc_target("macos-x86_64"), do: "x86_64-apple-macos10.0"
 
   @doc false
