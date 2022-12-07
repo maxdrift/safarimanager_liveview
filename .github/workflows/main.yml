@@ -76,8 +76,11 @@ jobs:
           env HOMEBREW_NO_AUTO_UPDATE=1 brew install asdf vips node yarn dylibbundler
       - name: Setup asdf
         run: |
-          echo -e "\n. $(brew --prefix asdf)/libexec/asdf.sh" >> ~/.bash_profile
           mkdir -p ~/.asdf
+          if [ $(grep -c "asdf.sh" ~/.bash_profile) -eq 0 ]
+          then
+            echo -e "\n. $(brew --prefix asdf)/libexec/asdf.sh" >> ~/.bash_profile
+          fi
       - name: Cache asdf Erlang and Elixir
         uses: actions/cache@v3
         with:
@@ -86,11 +89,11 @@ jobs:
           key: asdf-${{ hashFiles('.tool-versions') }}
       - name: Install Erlang OTP (version from .tool-versions)
         run: |
-          asdf plugin add erlang
+          asdf plugin add erlang || true
           asdf install erlang
       - name: Install Elixir (version from .tool-versions)
         run: |
-          asdf plugin add elixir
+          asdf plugin add elixir || true
           asdf install elixir
       - name: Cache Mix Deps
         uses: actions/cache@v3
