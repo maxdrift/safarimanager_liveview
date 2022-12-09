@@ -528,9 +528,7 @@ defmodule SM.Slides do
       end
     end)
     |> Multi.insert(:slide, fn %{copy_file: file_path} ->
-      {:ok, metadata} = ImageProcessing.get_metadata(file_path)
-      gps = Map.get(metadata, :gps)
-      metadata = Map.put(metadata, :gps, (gps && Map.from_struct(gps)) || %{})
+      {:ok, width, height, metadata} = ImageProcessing.get_metadata(file_path)
 
       Slide.changeset(%Slide{}, %{
         user_id: user_id,
@@ -538,8 +536,8 @@ defmodule SM.Slides do
         file_name: file_name,
         file_size: file_size,
         file_type: file_type,
-        width: metadata.exif.exif_image_width,
-        height: metadata.exif.exif_image_height,
+        width: width,
+        height: height,
         metadata: metadata
       })
     end)
