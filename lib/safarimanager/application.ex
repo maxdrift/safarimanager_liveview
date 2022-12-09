@@ -4,9 +4,12 @@ defmodule SM.Application do
   @moduledoc false
 
   use Application
+  require Logger
 
   @impl Application
   def start(_type, _args) do
+    :ok = set_libvips_concurrency()
+
     children =
       [
         SM.PromEx,
@@ -46,6 +49,30 @@ defmodule SM.Application do
   def config_change(changed, _new, removed) do
     SMWeb.Endpoint.config_change(changed, removed)
     :ok
+  end
+
+  defp set_libvips_concurrency do
+    concurrency =
+      System.schedulers_online()
+      |> determine_concurrency()
+      |> Image.put_concurrency()
+
+    Logger.info("VIPS concurrency set to #{concurrency}")
+
+    :ok
+  end
+
+  defp determine_concurrency(1) do
+    1
+  end
+
+  defp determine_concurrency(number_of_schedulers)
+       when number_of_schedulers > 0 and rem(number_of_schedulers, 2) == 0 do
+    div(number_of_schedulers, 2)
+  end
+
+  defp determine_concurrency(number_of_schedulers) when number_of_schedulers > 0 do
+    determine_concurrency(number_of_schedulers - 1)
   end
 
   if Mix.target() == :app do
