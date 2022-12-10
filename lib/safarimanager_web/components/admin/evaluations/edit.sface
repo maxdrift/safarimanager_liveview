@@ -16,7 +16,7 @@
         </Label>
         <NumberInput
           class={state_class("input input-bordered", @changeset, :value, [])}
-          opts={phx_debounce: "1000"}
+          opts={phx_debounce: "1000", step: "0.01"}
         />
         <Label class="label h-7">
           <ErrorTag />

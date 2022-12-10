@@ -184,7 +184,7 @@
         </Label>
         <NumberInput
           class={state_class("input input-bordered", @changeset, :submission_ratio, [])}
-          opts={phx_debounce: "1000"}
+          opts={phx_debounce: "1000", step: "0.01"}
         />
         <Label class="label h-7"><ErrorTag /></Label>
       </Field>
@@ -194,7 +194,7 @@
         </Label>
         <NumberInput
           class={state_class("input input-bordered", @changeset, :fixed_points_multiplier, [])}
-          opts={phx_debounce: "1000"}
+          opts={phx_debounce: "1000", step: "0.01"}
         />
         <Label class="label h-7"><ErrorTag /></Label>
       </Field>
@@ -204,7 +204,7 @@
         </Label>
         <NumberInput
           class={state_class("input input-bordered", @changeset, :penalty_amount, [])}
-          opts={phx_debounce: "1000"}
+          opts={phx_debounce: "1000", step: "0.01"}
         />
         <Label class="label h-7"><ErrorTag /></Label>
       </Field>
@@ -236,7 +236,7 @@
           </Label>
           <NumberInput
             class={state_class("input input-sm input-bordered", @changeset, :value, [])}
-            opts={phx_debounce: "1000"}
+            opts={phx_debounce: "1000", step: "0.01"}
           />
           <Label class="label h-7"><ErrorTag /></Label>
         </Field>
@@ -246,7 +246,7 @@
           </Label>
           <NumberInput
             class={state_class("input input-sm input-bordered", @changeset, :from, [])}
-            opts={phx_debounce: "1000"}
+            opts={phx_debounce: "1000", step: "0.01"}
           />
           <Label class="label h-7"><ErrorTag /></Label>
         </Field>
@@ -256,14 +256,11 @@
           </Label>
           <NumberInput
             class={state_class("input input-sm input-bordered", @changeset, :to, [])}
-            opts={phx_debounce: "1000"}
+            opts={phx_debounce: "1000", step: "0.01"}
           />
           <Label class="label h-7"><ErrorTag /></Label>
         </Field>
       </Inputs>
-      <!-- <button class="btn btn-xs btn-ghost ml-3 mt-2" :on-click="add-coefficient">
-        Add coefficient
-      </button> -->
     </Inputs>
     <HiddenInput field={:_action} value={@action} />
   </div>
