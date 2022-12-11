@@ -27,6 +27,13 @@ defmodule SM.Slides do
     Slide.get_statuses()
   end
 
+  @spec direct_file_upload? :: boolean()
+  def direct_file_upload? do
+    :safarimanager
+    |> Application.fetch_env!(Slide)
+    |> Keyword.fetch!(:direct_file_upload)
+  end
+
   @spec get_uploads_path :: String.t()
   def get_uploads_path do
     :safarimanager

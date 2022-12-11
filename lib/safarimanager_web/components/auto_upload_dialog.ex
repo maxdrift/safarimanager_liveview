@@ -37,13 +37,13 @@ defmodule SMWeb.Components.AutoUploadDialog do
           nil
       end
 
-    {:ok, volume_path} = FileBrowser.cd(new_volume)
+    {:ok, cwd} = FileBrowser.cd(new_volume)
 
     send_update(__MODULE__,
       id: dialog_id,
       show: true,
-      cwd: volume_path,
-      items: FileBrowser.ls!(),
+      cwd: cwd,
+      items: FileBrowser.ls!(cwd),
       watcher_pid: pid,
       competition_id: competition_id,
       participants: participants,
@@ -76,8 +76,8 @@ defmodule SMWeb.Components.AutoUploadDialog do
   end
 
   def handle_event("level-down", %{"item" => item}, socket) do
-    {:ok, cwd} = FileBrowser.cd(item)
-    dir_items = FileBrowser.ls!()
+    {:ok, cwd} = FileBrowser.cd(socket.assigns.cwd, item)
+    dir_items = FileBrowser.ls!(cwd)
 
     socket =
       socket
@@ -88,8 +88,8 @@ defmodule SMWeb.Components.AutoUploadDialog do
   end
 
   def handle_event("level-up", _params, socket) do
-    {:ok, cwd} = FileBrowser.cd("..")
-    dir_items = FileBrowser.ls!()
+    {:ok, cwd} = FileBrowser.cd(socket.assigns.cwd, "..")
+    dir_items = FileBrowser.ls!(cwd)
 
     socket =
       socket

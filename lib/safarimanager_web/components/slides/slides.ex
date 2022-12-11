@@ -27,10 +27,13 @@ defmodule SMWeb.Slides do
   def mount(_params, _session, socket) do
     socket =
       socket
-      |> assign(:user, nil)
-      |> assign(:participants, [])
-      |> assign(:slides, [])
-      |> assign(:discovery_mode, USBWatcherSupervisor.active?())
+      |> assign(
+        user: nil,
+        participants: [],
+        slides: [],
+        direct_file_upload: Slides.direct_file_upload?(),
+        discovery_mode: USBWatcherSupervisor.active?()
+      )
       |> allow_upload(:images,
         accept: ~w(.jpg .jpeg .png),
         max_entries: 500,
@@ -145,12 +148,14 @@ defmodule SMWeb.Slides do
 
     socket =
       socket
-      |> assign(:competition_id, competition_id)
-      |> assign(:competition, competition)
-      |> assign(:participants, participants)
-      # FIXME: this way of selecting the user forces a re-query of Competition
-      |> assign(:user, user_id && Accounts.get_user!(user_id))
-      |> assign(:slides, user_id && Slides.list(user_id, competition_id))
+      |> assign(
+        competition_id: competition_id,
+        competition: competition,
+        participants: participants,
+        # FIXME: this way of selecting the user forces a re-query of Competition
+        user: user_id && Accounts.get_user!(user_id),
+        slides: user_id && Slides.list(user_id, competition_id)
+      )
 
     {:noreply, socket}
   end

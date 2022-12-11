@@ -18,7 +18,9 @@ unless File.exists?(uploads_path) do
   File.mkdir_p!(uploads_path)
 end
 
-config :safarimanager, SM.Slides.Slide, uploads_base_path: uploads_path
+config :safarimanager, SM.Slides.Slide,
+  direct_file_upload: System.get_env("DIRECT_FILE_UPLOAD", "true") == "true",
+  uploads_base_path: uploads_path
 
 db_path =
   "DATABASE_PATH"
