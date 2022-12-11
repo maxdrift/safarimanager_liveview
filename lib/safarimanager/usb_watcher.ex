@@ -13,11 +13,6 @@ defmodule SM.USBWatcher do
     GenServer.start_link(__MODULE__, args)
   end
 
-  @spec ls(pid(), String.t()) :: [String.t()]
-  def ls(pid, path) do
-    GenServer.call(pid, {:ls, path})
-  end
-
   @impl GenServer
   def init([caller_pid]) do
     volumes = get_volumes()
@@ -65,11 +60,6 @@ defmodule SM.USBWatcher do
   end
 
   @impl GenServer
-  def handle_call({:ls, path}, _from, state) do
-    {:reply, ls_volume(path), state}
-  end
-
-  @impl GenServer
   def terminate(:normal, _state) do
     :stop
   end
@@ -90,15 +80,5 @@ defmodule SM.USBWatcher do
       Map.get(mount, "mountpoint")
     end)
     |> Enum.sort()
-  end
-
-  defp ls_volume(path) do
-    [_head | tail] =
-      "ls"
-      |> System.cmd(["-lh", path])
-      |> elem(0)
-      |> String.split("\n", trim: true)
-
-    tail
   end
 end

@@ -114,6 +114,17 @@ defmodule SMWeb.Slides do
     {:noreply, assign(socket, :participants, participants)}
   end
 
+  def handle_event("show-upload-dialog", _params, socket) do
+    AutoUploadDialog.show(
+      "auto-upload-dialog",
+      "~/",
+      socket.assigns.competition_id,
+      socket.assigns.participants
+    )
+
+    {:noreply, socket}
+  end
+
   def handle_event(event_name, params, socket) do
     IO.inspect(event_name, label: __MODULE__)
     IO.inspect(params)
@@ -168,9 +179,10 @@ defmodule SMWeb.Slides do
 
   def handle_info({:new_volumes, new_volumes}, socket) do
     IO.inspect("new volume mounted from Component!!")
+    [first_volume | _tail] = new_volumes
     competition_id = socket.assigns.competition_id
     participants = socket.assigns.participants
-    AutoUploadDialog.show("auto-upload-dialog", new_volumes, competition_id, participants)
+    AutoUploadDialog.show("auto-upload-dialog", first_volume, competition_id, participants)
 
     {:noreply, socket}
   end

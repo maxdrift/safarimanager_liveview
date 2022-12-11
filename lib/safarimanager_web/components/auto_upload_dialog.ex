@@ -4,6 +4,7 @@ defmodule SMWeb.Components.AutoUploadDialog do
   """
   use SMWeb, :surface_live_component
 
+  alias SM.FileBrowser
   alias SM.Participants.Participant
   alias SM.Slides
   alias SM.USBWatcherSupervisor
@@ -18,15 +19,15 @@ defmodule SMWeb.Components.AutoUploadDialog do
   require Logger
 
   data show, :boolean, default: false
-  data cwd, :string, default: "/"
+  data cwd, :string, default: "~/"
   data items, :list, default: []
   data user_id, :string, default: nil
   data progress, :decimal, default: Decimal.new(0)
 
   # Public API
 
-  @spec show(String.t(), [String.t()], String.t(), [Participant.t()]) :: any()
-  def show(dialog_id, new_volumes, competition_id, participants) do
+  @spec show(String.t(), String.t(), String.t(), [Participant.t()]) :: any()
+  def show(dialog_id, new_volume, competition_id, participants) do
     pid =
       case USBWatcherSupervisor.get_poller_pid() do
         {:ok, pid} ->
@@ -36,15 +37,13 @@ defmodule SMWeb.Components.AutoUploadDialog do
           nil
       end
 
-    new_volumes =
-      Enum.map(new_volumes, fn volume ->
-        %{type: :dir, name: volume}
-      end)
+    {:ok, volume_path} = FileBrowser.cd(new_volume)
 
     send_update(__MODULE__,
       id: dialog_id,
       show: true,
-      items: new_volumes,
+      cwd: volume_path,
+      items: FileBrowser.ls!(),
       watcher_pid: pid,
       competition_id: competition_id,
       participants: participants,
@@ -77,10 +76,8 @@ defmodule SMWeb.Components.AutoUploadDialog do
   end
 
   def handle_event("level-down", %{"item" => item}, socket) do
-    cwd = Path.join([socket.assigns.cwd, item])
-    {:ok, items} = File.ls(cwd)
-
-    dir_items = filter_visible_directories(cwd, items)
+    {:ok, cwd} = FileBrowser.cd(item)
+    dir_items = FileBrowser.ls!()
 
     socket =
       socket
@@ -91,10 +88,8 @@ defmodule SMWeb.Components.AutoUploadDialog do
   end
 
   def handle_event("level-up", _params, socket) do
-    cwd = Path.dirname(socket.assigns.cwd)
-    {:ok, items} = File.ls(cwd)
-
-    dir_items = filter_visible_directories(cwd, items)
+    {:ok, cwd} = FileBrowser.cd("..")
+    dir_items = FileBrowser.ls!()
 
     socket =
       socket
@@ -177,29 +172,6 @@ defmodule SMWeb.Components.AutoUploadDialog do
 
   def handle_event(_event, _params, socket) do
     {:noreply, socket}
-  end
-
-  defp filter_visible_directories(cwd, items) do
-    items
-    |> Enum.flat_map(fn item ->
-      full_path = Path.join([cwd, item])
-      extension = full_path |> Path.extname() |> String.downcase()
-
-      cond do
-        String.starts_with?(item, ".") ->
-          []
-
-        File.dir?(full_path) ->
-          [%{type: :dir, name: item}]
-
-        extension in ~w(.jpg .jpeg) ->
-          [%{type: :jpg, name: item}]
-
-        true ->
-          []
-      end
-    end)
-    |> Enum.sort(&(&1.name <= &2.name))
   end
 
   defp count_image_type(items) do
