@@ -1,4 +1,4 @@
-defmodule SMWeb.Components.AutoUploadDialog do
+defmodule SMWeb.Components.DirectUploadDialog do
   @moduledoc """
   Auto upload dialog component.
   """
@@ -8,8 +8,8 @@ defmodule SMWeb.Components.AutoUploadDialog do
   alias SM.Participants.Participant
   alias SM.Slides
   alias SM.USBWatcherSupervisor
-  alias SMWeb.Components.AutoUploadDialog
   alias SMWeb.Components.Dialog
+  alias SMWeb.Components.DirectUploadDialog
   alias Surface.Components.Form
   alias Surface.Components.Form.ErrorTag
   alias Surface.Components.Form.Field
@@ -133,7 +133,7 @@ defmodule SMWeb.Components.AutoUploadDialog do
 
             progress = Decimal.div(acc + 1, to_be_imported_cnt)
 
-            send_update(pid, AutoUploadDialog,
+            send_update(pid, DirectUploadDialog,
               id: "auto-upload-dialog",
               progress: progress
             )
@@ -143,7 +143,7 @@ defmodule SMWeb.Components.AutoUploadDialog do
               if Decimal.equal?(progress, 1) do
                 send_update_after(
                   pid,
-                  AutoUploadDialog,
+                  DirectUploadDialog,
                   [id: "auto-upload-dialog", show: false],
                   1000
                 )

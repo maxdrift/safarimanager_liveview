@@ -10,7 +10,7 @@ defmodule SMWeb.Slides do
   alias SM.Participants
   alias SM.Slides
   alias SM.USBWatcherSupervisor
-  alias SMWeb.Components.AutoUploadDialog
+  alias SMWeb.Components.DirectUploadDialog
   alias SMWeb.Components.CompetitionHeader
   alias SMWeb.Components.StepsHeader
   alias Surface.Components.Form
@@ -118,7 +118,7 @@ defmodule SMWeb.Slides do
   end
 
   def handle_event("show-upload-dialog", _params, socket) do
-    AutoUploadDialog.show(
+    DirectUploadDialog.show(
       "auto-upload-dialog",
       "~/",
       socket.assigns.competition_id,
@@ -187,14 +187,14 @@ defmodule SMWeb.Slides do
     [first_volume | _tail] = new_volumes
     competition_id = socket.assigns.competition_id
     participants = socket.assigns.participants
-    AutoUploadDialog.show("auto-upload-dialog", first_volume, competition_id, participants)
+    DirectUploadDialog.show("auto-upload-dialog", first_volume, competition_id, participants)
 
     {:noreply, socket}
   end
 
   def handle_info(:volumes_removed, socket) do
     IO.inspect("volume removed from Component!!")
-    AutoUploadDialog.hide("auto-upload-dialog")
+    DirectUploadDialog.hide("auto-upload-dialog")
 
     {:noreply, socket}
   end

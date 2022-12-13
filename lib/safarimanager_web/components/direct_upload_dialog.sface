@@ -40,7 +40,7 @@
         Level up
       </button>
     </div>
-    <div class="flex flex-col mt-4 max-h-60 overflow-y-auto">
+    <div class="flex flex-col mt-4 max-h-60 overflow-y-auto tiny-scrollbar">
       {#for %{type: type, name: item} <- @items}
         <div>
           <button
