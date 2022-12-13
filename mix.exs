@@ -58,7 +58,7 @@ defmodule SM.MixProject do
       {:dialyzex, "~> 1.3.0", only: :dev, runtime: false},
       {:ecto_sql, "~> 3.9"},
       {:ecto_sqlite3, "~> 0.9.0"},
-      {:esbuild, "~> 0.3", runtime: Mix.env() == :dev},
+      {:esbuild, "~> 0.6", runtime: Mix.env() == :dev},
       {:exexif, "~> 0.0.5"},
       {:finch, "~> 0.14.0", override: true},
       {:gettext, "~> 0.19"},
