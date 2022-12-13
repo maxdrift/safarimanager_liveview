@@ -57,7 +57,7 @@
       <Form for={:slides} change="validate" submit="submit">
         <div phx-drop-target={@uploads.csv.ref} class="flex w-full items-center justify-center">
           <FieldContext name={:csv}>
-            <label class="w-full flex flex-col items-center px-4 py-6 rounded-lg shadow-inner tracking-wide uppercase border border-dashed border-2 cursor-pointer hover:text-info hover:border-info">
+            <label class="w-full flex flex-col items-center px-4 py-6 rounded-lg shadow-inner tracking-wide uppercase border-dashed border-2 cursor-pointer hover:text-info hover:border-info">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 class="h-8 w-8"
