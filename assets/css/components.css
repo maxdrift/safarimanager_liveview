@@ -1,0 +1,17 @@
+@layer components {
+  /* Custom scrollbars */
+
+  .tiny-scrollbar::-webkit-scrollbar {
+    width: 0.4rem;
+    height: 0.4rem;
+  }
+
+  .tiny-scrollbar::-webkit-scrollbar-thumb {
+    border-radius: 0.25rem;
+    @apply bg-base-300;
+  }
+
+  .tiny-scrollbar::-webkit-scrollbar-track {
+    @apply bg-base-100;
+  }
+}
