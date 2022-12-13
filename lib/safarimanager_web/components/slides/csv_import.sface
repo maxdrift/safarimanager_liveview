@@ -10,7 +10,7 @@
         opts={placeholder: "Search for a participant...", phx_debounce: "500", autocomplete: "nope"}
       />
     </Form>
-    <div class="max-h-48 overflow-y-auto">
+    <div class="max-h-48 overflow-y-auto tiny-scrollbar">
       <table class="table table-zebra table-fixed w-full">
         <thead>
           <tr>
@@ -160,7 +160,7 @@
             </svg>
           </span>
         </div>
-        <div class="max-h-96 overflow-y-auto mt-2" x-show="expanded" x-collapse>
+        <div class="max-h-96 overflow-y-auto mt-2 tiny-scrollbar" x-show="expanded" x-collapse>
           <table class="table table-zebra table-fixed w-full">
             <!-- head -->
             <thead>
@@ -236,7 +236,7 @@
             </svg>
           </span>
         </div>
-        <div class="max-h-96 overflow-y-auto mt-2" x-show="expanded" x-collapse>
+        <div class="max-h-96 overflow-y-auto mt-2 tiny-scrollbar" x-show="expanded" x-collapse>
           <table class="table table-zebra table-fixed w-full">
             <!-- head -->
             <thead>
@@ -312,7 +312,7 @@
             </svg>
           </span>
         </div>
-        <div class="max-h-96 overflow-y-auto mt-2" x-show="expanded" x-collapse>
+        <div class="max-h-96 overflow-y-auto mt-2 tiny-scrollbar" x-show="expanded" x-collapse>
           <table class="table table-zebra table-fixed w-full">
             <!-- head -->
             <thead>

@@ -68,7 +68,7 @@
       </table>
     </div>
     <div class="divider lg:divider-horizontal" />
-    <div class="max-h-96 overflow-y-auto lg:w-1/2">
+    <div class="max-h-96 overflow-y-auto lg:w-1/2 tiny-scrollbar">
       <div class="text-lg text-center pb-4">Subjects</div>
       <table class="table table-zebra table-compact w-full">
         <thead>

@@ -11,7 +11,7 @@
           opts={placeholder: "Search for a user...", phx_debounce: "500", autocomplete: "nope"}
         />
       </Form>
-      <div class="max-h-48 overflow-y-auto">
+      <div class="max-h-48 overflow-y-auto tiny-scrollbar">
         <table class="table table-zebra table-fixed w-full">
           <thead>
             <tr>
@@ -74,7 +74,7 @@
           opts={placeholder: "Search for a participant...", phx_debounce: "500", autocomplete: "nope"}
         />
       </Form>
-      <div class="max-h-96 overflow-y-auto">
+      <div class="max-h-96 overflow-y-auto tiny-scrollbar">
         <table class="table table-zebra table-fixed w-full">
           <thead>
             <tr>

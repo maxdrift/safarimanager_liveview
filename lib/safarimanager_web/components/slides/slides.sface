@@ -10,7 +10,7 @@
         opts={placeholder: "Search for a participant...", phx_debounce: "500", autocomplete: "nope"}
       />
     </Form>
-    <div class="max-h-48 overflow-y-auto">
+    <div class="max-h-48 overflow-y-auto tiny-scrollbar">
       <table class="table table-zebra table-fixed w-full">
         <thead>
           <tr>
@@ -51,7 +51,7 @@
     </div>
   </div>
   <div class="divider" />
-  <AutoUploadDialog id="auto-upload-dialog" />
+  <DirectUploadDialog id="auto-upload-dialog" />
   <div class="form-control w-44">
     <Form for={:discovery_mode} change="validate">
       <label class="label cursor-pointer">
@@ -94,7 +94,7 @@
           </div>
         </Form>
       {/if}
-      <div class="max-h-96 overflow-y-auto mt-2">
+      <div class="max-h-96 overflow-y-auto mt-2 tiny-scrollbar">
         <table class="table table-zebra table-fixed w-full">
           <thead>
             <tr>
