@@ -65,7 +65,7 @@
             </svg>
             {Path.basename(item)}
           </button>
-          <button :if={type == :jpg} class="btn btn-link btn-xs btn-disabled gap-1">
+          <button :if={type == :img} class="btn btn-link btn-xs btn-disabled gap-1">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               class="h-4 w-4"

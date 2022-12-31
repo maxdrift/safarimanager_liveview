@@ -4,11 +4,15 @@ defmodule SM.Application do
   @moduledoc false
 
   use Application
+
+  alias SMWeb.Components.FileBrowser
+
   require Logger
 
   @impl Application
   def start(_type, _args) do
     :ok = set_libvips_concurrency()
+    FileBrowser.create_cache_table()
 
     children =
       [

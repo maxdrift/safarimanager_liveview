@@ -12,6 +12,7 @@ defmodule SMWeb.Slides do
   alias SM.USBWatcherSupervisor
   alias SMWeb.Components.DirectUploadDialog
   alias SMWeb.Components.CompetitionHeader
+  alias SMWeb.Components.FileBrowser
   alias SMWeb.Components.StepsHeader
   alias Surface.Components.Form
   alias Surface.Components.Form.Checkbox
@@ -124,6 +125,56 @@ defmodule SMWeb.Slides do
       socket.assigns.competition_id,
       socket.assigns.participants
     )
+
+    {:noreply, socket}
+  end
+
+  def handle_event("direct-import", %{"cwd" => cwd, "items" => items}, socket) do
+    pid = self()
+    assigns = socket.assigns
+
+    to_be_imported =
+      items
+      |> String.split(",")
+      |> Enum.map(&Path.join(cwd, &1))
+
+    to_be_imported_cnt = Enum.count(to_be_imported)
+
+    _result =
+      Task.Supervisor.start_child(SM.TaskSupervisor, fn ->
+        import_result =
+          Enum.reduce(to_be_imported, 0, fn source_path, acc ->
+            file_name = Path.basename(source_path)
+            %File.Stat{size: file_size} = File.stat!(source_path)
+
+            {:ok, _slide} =
+              Slides.create_and_store_slide_file(
+                assigns.competition_id,
+                assigns.user.id,
+                file_name,
+                file_size,
+                "image/jpeg",
+                source_path
+              )
+
+            :ok =
+              Slides.generate_thumbnail(
+                assigns.competition_id,
+                assigns.user.id,
+                file_name,
+                :small
+              )
+
+            progress = Decimal.div(acc + 1, to_be_imported_cnt)
+            send_update(pid, FileBrowser, id: "file-browser", upload_progress: progress)
+
+            acc + 1
+          end)
+
+        Logger.info(
+          "Imported #{import_result}/#{to_be_imported_cnt} Slides for User #{assigns.user.id} in Competition #{assigns.competition_id}"
+        )
+      end)
 
     {:noreply, socket}
   end

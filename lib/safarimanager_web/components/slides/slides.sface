@@ -19,6 +19,7 @@
             <th class="sticky top-0 w-auto">Last Name</th>
             <th class="sticky top-0 w-auto">Organization</th>
             <th class="sticky top-0 w-auto">Category</th>
+            <th class="sticky top-0 w-auto">Slides</th>
             <th class="sticky top-0 w-auto" />
           </tr>
         </thead>
@@ -30,6 +31,7 @@
               <td class="truncate">{item.user.last_name}</td>
               <td class="truncate">{(item.user.organization && item.user.organization.name) || "N/A"}</td>
               <td class="truncate">{(item.category && item.category.name) || "N/A"}</td>
+              <td class="truncate">{"N/A"}</td>
               <td class="truncate">
                 <LivePatch to={"?user_id=#{item.user_id}"} class="btn btn-xs">
                   Select
@@ -66,8 +68,14 @@
       <div class="text-lg text-center pb-4">
         Currently {Enum.count(@slides || [])} slides - {Enum.count(@uploads.images.entries || [])} uploading
       </div>
+
       {#if @direct_file_upload}
-        <button class="btn btn-block btn-outline" :on-click="show-upload-dialog">Upload from local folder</button>
+        <FileBrowser
+          id="file-browser"
+          file_filter={[:jpg]}
+          import_click="direct-import"
+          user_id={@user.id}
+        />
       {#else}
         <Form for={:slides} change="validate" submit="submit">
           <div phx-drop-target={@uploads.images.ref} class="flex w-full items-center justify-center">

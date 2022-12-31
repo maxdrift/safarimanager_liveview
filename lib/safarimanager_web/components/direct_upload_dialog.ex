@@ -23,6 +23,7 @@ defmodule SMWeb.Components.DirectUploadDialog do
   data items, :list, default: []
   data user_id, :string, default: nil
   data progress, :decimal, default: Decimal.new(0)
+  prop file_filter, :list, default: []
 
   # Public API
 
@@ -77,7 +78,7 @@ defmodule SMWeb.Components.DirectUploadDialog do
 
   def handle_event("level-down", %{"item" => item}, socket) do
     {:ok, cwd} = FileBrowser.cd(socket.assigns.cwd, item)
-    dir_items = FileBrowser.ls!(cwd)
+    dir_items = FileBrowser.ls!(cwd, filter: socket.assigns.file_filter)
 
     socket =
       socket
@@ -89,7 +90,7 @@ defmodule SMWeb.Components.DirectUploadDialog do
 
   def handle_event("level-up", _params, socket) do
     {:ok, cwd} = FileBrowser.cd(socket.assigns.cwd, "..")
-    dir_items = FileBrowser.ls!(cwd)
+    dir_items = FileBrowser.ls!(cwd, filter: socket.assigns.file_filter)
 
     socket =
       socket
@@ -175,7 +176,7 @@ defmodule SMWeb.Components.DirectUploadDialog do
   end
 
   defp count_image_type(items) do
-    Enum.count(items, &(&1.type == :jpg))
+    Enum.count(items, &(&1.type == :img))
   end
 
   defp participant_select_option_txt(participant) do
