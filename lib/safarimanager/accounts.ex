@@ -495,7 +495,7 @@ defmodule SM.Accounts do
   @doc """
   Deletes the signed token with the given context.
   """
-  def delete_session_token(token) do
+  def delete_user_session_token(token) do
     Repo.delete_all(UserToken.token_and_context_query(token, "session"))
     :ok
   end

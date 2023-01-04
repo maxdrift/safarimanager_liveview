@@ -24,7 +24,9 @@ defmodule SMWeb do
   def controller do
     quote do
       use Phoenix.Controller,
-        namespace: SMWeb
+        namespace: SMWeb,
+        formats: [:html, :json],
+        layouts: [html: SMWeb.Layouts]
 
       import Plug.Conn
       import SMWeb.Gettext
@@ -50,7 +52,7 @@ defmodule SMWeb do
   def live_view do
     quote do
       use Phoenix.LiveView,
-        layout: {SMWeb.LayoutHTML, :live}
+        layout: {SMWeb.Layouts, :live}
 
       unquote(view_helpers())
     end
@@ -59,7 +61,7 @@ defmodule SMWeb do
   def surface_view do
     quote do
       use Surface.LiveView,
-        layout: {SMWeb.LayoutHTML, :live}
+        layout: {SMWeb.Layouts, :live}
 
       unquote(view_helpers())
     end
@@ -84,7 +86,7 @@ defmodule SMWeb do
   def surface_jury_view do
     quote do
       use Surface.LiveView,
-        layout: {SMWeb.LayoutHTML, :live_jury}
+        layout: {SMWeb.Layouts, :live_jury}
 
       unquote(view_helpers())
     end
