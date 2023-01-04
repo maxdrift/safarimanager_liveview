@@ -1,0 +1,20 @@
+<h1>Forgot your password?</h1>
+
+<.form :let={f} for={:user} action={~p"/users/reset_password"}>
+  <%= label(f, :email) %>
+  <%= email_input(f, :email, required: true) %>
+
+  <div>
+    <%= submit("Send instructions to reset password") %>
+  </div>
+</.form>
+
+<p>
+  <.link href={~p"/users/register"}>
+    Register
+  </.link>
+  |
+  <.link href={~p"/users/log_in"}>
+    Log in
+  </.link>
+</p>

@@ -55,7 +55,7 @@ defmodule SMWeb.Jury do
 
     slide = Enum.find(slides, &(&1.id == slide_id))
     current_index = Enum.find_index(slides, &(&1.id == slide_id))
-    file_path = image_path(socket, slide)
+    file_path = image_path(slide)
 
     socket =
       socket
@@ -324,11 +324,8 @@ defmodule SMWeb.Jury do
     "/organize/#{socket.assigns.competition.id}/jury"
   end
 
-  defp image_path(socket, slide) do
-    Routes.static_path(
-      socket,
-      Path.join(["/uploads", slide.competition_id, slide.user_id, slide.file_name])
-    )
+  defp image_path(slide) do
+    ~p"/uploads/#{slide.competition_id}/#{slide.user_id}/#{slide.file_name}"
   end
 
   defp can_evaluate?(_competition, nil), do: false

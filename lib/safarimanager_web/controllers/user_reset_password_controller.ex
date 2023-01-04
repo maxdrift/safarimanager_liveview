@@ -14,7 +14,7 @@ defmodule SMWeb.UserResetPasswordController do
          user <- Accounts.get_user_by_email(email) do
       Accounts.deliver_user_reset_password_instructions(
         user,
-        &Routes.user_reset_password_url(conn, :edit, &1)
+        fn token -> url(~p"/users/reset_password/#{token}") end
       )
     end
 
@@ -37,7 +37,7 @@ defmodule SMWeb.UserResetPasswordController do
       {:ok, _} ->
         conn
         |> put_flash(:info, "Password reset successfully.")
-        |> redirect(to: Routes.user_session_path(conn, :new))
+        |> redirect(to: ~p"/users/log_in")
 
       {:error, changeset} ->
         render(conn, "edit.html", changeset: changeset)

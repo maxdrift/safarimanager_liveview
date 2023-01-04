@@ -52,7 +52,7 @@ defmodule SMWeb.Validation do
 
     slide = Enum.find(slides, &(&1.id == slide_id))
     current_index = Enum.find_index(slides, &(&1.id == slide_id))
-    file_path = image_path(socket, slide)
+    file_path = image_path(slide)
 
     socket =
       socket
@@ -316,11 +316,8 @@ defmodule SMWeb.Validation do
     "/organize/#{socket.assigns.competition.id}/validation"
   end
 
-  defp image_path(socket, slide) do
-    Routes.static_path(
-      socket,
-      Path.join(["/uploads", slide.competition_id, slide.user_id, slide.file_name])
-    )
+  defp image_path(slide) do
+    ~p"/uploads/#{slide.competition_id}/#{slide.user_id}/#{slide.file_name}"
   end
 
   defp status_to_label(:submitted_fixed), do: "Fixed points"

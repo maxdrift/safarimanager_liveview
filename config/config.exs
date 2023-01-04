@@ -20,7 +20,13 @@ config :safarimanager, SM.Repo,
 # Configures the endpoint
 config :safarimanager, SMWeb.Endpoint,
   url: [host: "localhost"],
-  render_errors: [view: SMWeb.ErrorView, accepts: ~w(json), layout: false],
+  render_errors: [
+    formats: [
+      html: SMWeb.ErrorHTML
+    ],
+    layout: false,
+    log: :debug
+  ],
   pubsub_server: SM.PubSub,
   server: true
 

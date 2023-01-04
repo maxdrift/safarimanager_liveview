@@ -132,7 +132,7 @@
                   <td class="truncate">
                     <div>
                       <div class="w-20">
-                        <img src={thumbnail_path(@socket, image)} class="rounded-md border">
+                        <img src={thumbnail_path(image)} class="rounded-md border">
                       </div>
                     </div>
                   </td>

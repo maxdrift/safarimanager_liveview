@@ -16,7 +16,7 @@ defmodule SMWeb.UserRegistrationController do
         {:ok, _} =
           Accounts.deliver_user_confirmation_instructions(
             user,
-            &Routes.user_confirmation_url(conn, :edit, &1)
+            fn token -> url(~p"/users/confirm/#{token}") end
           )
 
         conn

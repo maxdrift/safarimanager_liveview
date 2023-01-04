@@ -9,7 +9,7 @@ defmodule SMWeb.UserSessionControllerTest do
 
   describe "GET /users/log_in" do
     test "renders log in page", %{conn: conn} do
-      conn = get(conn, Routes.user_session_path(conn, :new))
+      conn = get(conn, ~p"/users/log_in")
       response = html_response(conn, 200)
       assert response =~ "<h1>Log in</h1>"
       assert response =~ "Register</a>"
@@ -17,7 +17,7 @@ defmodule SMWeb.UserSessionControllerTest do
     end
 
     test "redirects if already logged in", %{conn: conn, user: user} do
-      conn = conn |> log_in_user(user) |> get(Routes.user_session_path(conn, :new))
+      conn = conn |> log_in_user(user) |> get(~p"/users/log_in")
       assert redirected_to(conn) == "/"
     end
   end
@@ -25,7 +25,7 @@ defmodule SMWeb.UserSessionControllerTest do
   describe "POST /users/log_in" do
     test "logs the user in", %{conn: conn, user: user} do
       conn =
-        post(conn, Routes.user_session_path(conn, :create), %{
+        post(conn, ~p"/users/log_in", %{
           "user" => %{"email" => user.email, "password" => valid_user_password()}
         })
 
@@ -42,7 +42,7 @@ defmodule SMWeb.UserSessionControllerTest do
 
     test "logs the user in with remember me", %{conn: conn, user: user} do
       conn =
-        post(conn, Routes.user_session_path(conn, :create), %{
+        post(conn, ~p"/users/log_in", %{
           "user" => %{
             "email" => user.email,
             "password" => valid_user_password(),
@@ -58,7 +58,7 @@ defmodule SMWeb.UserSessionControllerTest do
       conn =
         conn
         |> init_test_session(user_return_to: "/foo/bar")
-        |> post(Routes.user_session_path(conn, :create), %{
+        |> post(~p"/users/log_in", %{
           "user" => %{
             "email" => user.email,
             "password" => valid_user_password()
@@ -70,7 +70,7 @@ defmodule SMWeb.UserSessionControllerTest do
 
     test "emits error message with invalid credentials", %{conn: conn, user: user} do
       conn =
-        post(conn, Routes.user_session_path(conn, :create), %{
+        post(conn, ~p"/users/log_in", %{
           "user" => %{"email" => user.email, "password" => "invalid_password"}
         })
 
@@ -82,17 +82,17 @@ defmodule SMWeb.UserSessionControllerTest do
 
   describe "DELETE /users/log_out" do
     test "logs the user out", %{conn: conn, user: user} do
-      conn = conn |> log_in_user(user) |> delete(Routes.user_session_path(conn, :delete))
+      conn = conn |> log_in_user(user) |> delete(~p"/users/log_out")
       assert redirected_to(conn) == "/"
       refute get_session(conn, :user_token)
-      assert get_flash(conn, :info) =~ "Logged out successfully"
+      assert Flash.get(conn.assigns.flash, :info) =~ "Logged out successfully"
     end
 
     test "succeeds even if the user is not logged in", %{conn: conn} do
-      conn = delete(conn, Routes.user_session_path(conn, :delete))
+      conn = delete(conn, ~p"/users/log_out")
       assert redirected_to(conn) == "/"
       refute get_session(conn, :user_token)
-      assert get_flash(conn, :info) =~ "Logged out successfully"
+      assert Flash.get(conn.assigns.flash, :info) =~ "Logged out successfully"
     end
   end
 end

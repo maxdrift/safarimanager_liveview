@@ -20,7 +20,7 @@ defmodule SMWeb.Endpoint do
     at: "/",
     from: :safarimanager,
     gzip: false,
-    only: ~w(assets fonts favicon.ico robots.txt)
+    only: SMWeb.static_paths()
 
   plug Plug.Static,
     at: "/uploads",

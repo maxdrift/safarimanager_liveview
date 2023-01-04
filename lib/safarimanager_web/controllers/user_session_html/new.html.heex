@@ -17,7 +17,7 @@
       </svg>
     </div>
     <h3 class="text-2xl font-bold text-center">Login to your account</h3>
-    <.form :let={f} for={@conn} action={Routes.user_session_path(@conn, :create)} as={:user}>
+    <.form :let={f} for={@conn} action={~p"/users/log_in"} as={:user}>
       <%= if @error_message do %>
         <div class="alert alert-error h-10 mt-10 shadow-lg">
           <div>
@@ -67,13 +67,13 @@
           ) %>
 
           <div class="ml-10">
-            <%= link("Register",
-              to: Routes.user_registration_path(@conn, :new),
-              class: "link link-secondary"
-            ) %> | <%= link("Forgot your password?",
-              to: Routes.user_reset_password_path(@conn, :new),
-              class: "link link-secondary"
-            ) %>
+            <.link href={~p"/users/register"} class="link link-secondary">
+              Register
+            </.link>
+            |
+            <.link href={~p"/users/reset_password"} class="link link-secondary">
+              Forgot your password?
+            </.link>
           </div>
         </div>
       </div>

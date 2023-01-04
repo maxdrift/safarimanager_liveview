@@ -1,7 +1,7 @@
 [
   import_deps: [:ecto, :phoenix, :surface],
   inputs: [
-    "*.{ex,exs,heex}",
+    "*.{ex,exs,sface,heex}",
     "priv/*/seeds.exs",
     "{config,lib,test}/**/*.{ex,exs,sface,heex}"
   ],

@@ -21,15 +21,17 @@ defmodule SMWeb.ConnCase do
 
   using do
     quote do
+      # The default endpoint for testing
+      @endpoint SMWeb.Endpoint
+
+      use SMWeb, :verified_routes
+
       # Import conveniences for testing with connections
       import Plug.Conn
       import Phoenix.ConnTest
       import SMWeb.ConnCase
 
-      alias SMWeb.Router.Helpers, as: Routes
-
-      # The default endpoint for testing
-      @endpoint SMWeb.Endpoint
+      alias Phoenix.Flash
     end
   end
 

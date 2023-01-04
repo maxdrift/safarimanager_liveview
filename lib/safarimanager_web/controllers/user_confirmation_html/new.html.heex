@@ -1,0 +1,20 @@
+<h1>Resend confirmation instructions</h1>
+
+<.form :let={f} for={:user} action={~p"/users/confirm/#{@token}"}>
+  <%= label(f, :email) %>
+  <%= email_input(f, :email, required: true) %>
+
+  <div>
+    <%= submit("Resend confirmation instructions") %>
+  </div>
+</.form>
+
+<p>
+  <.link href={~p"/users/register"}>
+    Register
+  </.link>
+  |
+  <.link href={~p"/users/log_in"}>
+    Log in
+  </.link>
+</p>

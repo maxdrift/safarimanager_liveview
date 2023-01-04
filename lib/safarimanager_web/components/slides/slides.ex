@@ -304,7 +304,8 @@ defmodule SMWeb.Slides do
       uploads_path = Path.join(uploads_path, file_name)
       {:ok, :thumbnail_generated} = generate_thumbnails(competition_id, user_id, file_name)
 
-      {:ok, Routes.static_path(socket, uploads_path)}
+      # TODO: verify correctness according to verified routes
+      {:ok, uploads_path}
       # Task.Supervisor.start_child(LiveBeats.TaskSupervisor, fn ->
       #   send_update(lv, __MODULE__,
       #     id: socket.assigns.id,
@@ -397,16 +398,7 @@ defmodule SMWeb.Slides do
     Map.has_key?(item, :id)
   end
 
-  defp thumbnail_path(socket, slide) do
-    path =
-      Path.join([
-        "/uploads",
-        slide.competition_id,
-        slide.user_id,
-        "/thumbnails/small",
-        slide.file_name
-      ])
-
-    Routes.static_path(socket, path)
+  defp thumbnail_path(slide) do
+    ~p"/uploads/#{slide.competition_id}/#{slide.user_id}/thumbnails/small/#{slide.file_name}"
   end
 end

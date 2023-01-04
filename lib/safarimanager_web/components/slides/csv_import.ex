@@ -255,16 +255,7 @@ defmodule SMWeb.CSVImport do
     end
   end
 
-  defp thumbnail_path(socket, slide) do
-    path =
-      Path.join([
-        "/uploads",
-        slide.competition_id,
-        slide.user_id,
-        "/thumbnails/small",
-        slide.file_name
-      ])
-
-    Routes.static_path(socket, path)
+  defp thumbnail_path(slide) do
+    ~p"/uploads/#{slide.competition_id}/#{slide.user_id}/thumbnails/small/#{slide.file_name}"
   end
 end

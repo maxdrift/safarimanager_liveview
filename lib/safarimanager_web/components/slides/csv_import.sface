@@ -178,7 +178,7 @@
                   <td class="truncate">
                     <div>
                       <div class="w-20">
-                        <img src={thumbnail_path(@socket, slide)} class="rounded-md border">
+                        <img src={thumbnail_path(slide)} class="rounded-md border">
                       </div>
                     </div>
                   </td>
@@ -254,7 +254,7 @@
                   <td class="truncate">
                     <div>
                       <div class="w-20">
-                        <img src={thumbnail_path(@socket, slide)} class="rounded-md border">
+                        <img src={thumbnail_path(slide)} class="rounded-md border">
                       </div>
                     </div>
                   </td>
@@ -330,7 +330,7 @@
                   <td class="truncate">
                     <div>
                       <div class="w-20">
-                        <img src={thumbnail_path(@socket, slide)} class="rounded-md border">
+                        <img src={thumbnail_path(slide)} class="rounded-md border">
                       </div>
                     </div>
                   </td>

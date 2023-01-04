@@ -12,7 +12,7 @@ defmodule SMWeb.UserConfirmationController do
          user <- Accounts.get_user_by_email(email) do
       Accounts.deliver_user_confirmation_instructions(
         user,
-        &Routes.user_confirmation_url(conn, :edit, &1)
+        fn token -> url(~p"/users/confirm/#{token}") end
       )
     end
 

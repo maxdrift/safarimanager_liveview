@@ -8,13 +8,8 @@
     <.live_title suffix=" · Phoenix Framework">
       <%= assigns[:page_title] || "Safari Manager" %>
     </.live_title>
-    <link phx-track-static rel="stylesheet" href={Routes.static_path(@conn, "/assets/app.css")} />
-    <script
-      defer
-      phx-track-static
-      type="text/javascript"
-      src={Routes.static_path(@conn, "/assets/app.js")}
-    >
+    <link phx-track-static rel="stylesheet" href={~p"/assets/app.css"} />
+    <script defer phx-track-static type="text/javascript" src={~p"/assets/app.js"}>
     </script>
   </head>
 
@@ -846,24 +841,23 @@
                 class="p-2 shadow menu dropdown-content bg-neutral text-neutral-content rounded-box w-52"
               >
                 <li class="disabled"><a><%= @current_user.email %></a></li>
-                <li><%= link("Settings", to: Routes.user_settings_path(@conn, :edit)) %></li>
                 <li>
-                  <%= link("Log out",
-                    to: Routes.user_session_path(@conn, :delete),
-                    method: :delete
-                  ) %>
+                  <.link href={~p"/users/settings"}>Settings</.link>
+                </li>
+                <li>
+                  <.link href={~p"/users/log_out"} method="delete">
+                    Log out
+                  </.link>
                 </li>
               </ul>
             </div>
           <% else %>
-            <%= link("Register",
-              to: Routes.user_registration_path(@conn, :new),
-              class: "btn btn-ghost mr-2"
-            ) %>
-            <%= link("Log in",
-              to: Routes.user_session_path(@conn, :new),
-              class: "btn btn-ghost mr-2"
-            ) %>
+            <.link href={~p"/users/register"} class="btn btn-ghost mr-2">
+              Register
+            </.link>
+            <.link href={~p"/users/log_in"} class="btn btn-ghost mr-2">
+              Log in
+            </.link>
           <% end %>
         </div>
       </div>
