@@ -40,12 +40,12 @@ defmodule SMWeb do
       use Phoenix.Component
 
       # Import convenience functions from controllers
-      import Phoenix.Controller, only: [view_module: 1, view_template: 1]
+      import Phoenix.Controller, only: [get_csrf_token: 0, view_module: 1, view_template: 1]
 
       import Phoenix.Flash, only: [get: 2]
 
       # Include shared imports and aliases for views
-      unquote(view_helpers())
+      unquote(html_helpers())
     end
   end
 
@@ -54,7 +54,7 @@ defmodule SMWeb do
       use Phoenix.LiveView,
         layout: {SMWeb.Layouts, :live}
 
-      unquote(view_helpers())
+      unquote(html_helpers())
     end
   end
 
@@ -63,7 +63,7 @@ defmodule SMWeb do
       use Surface.LiveView,
         layout: {SMWeb.Layouts, :live}
 
-      unquote(view_helpers())
+      unquote(html_helpers())
     end
   end
 
@@ -88,7 +88,7 @@ defmodule SMWeb do
       use Surface.LiveView,
         layout: {SMWeb.Layouts, :live_jury}
 
-      unquote(view_helpers())
+      unquote(html_helpers())
     end
   end
 
@@ -96,7 +96,7 @@ defmodule SMWeb do
     quote do
       use Phoenix.LiveComponent
 
-      unquote(view_helpers())
+      unquote(html_helpers())
     end
   end
 
@@ -126,16 +126,20 @@ defmodule SMWeb do
     end
   end
 
-  defp view_helpers do
+  defp html_helpers do
     quote do
-      # Use all HTML functionality (forms, tags, etc)
-      use Phoenix.HTML
-
-      import Phoenix.Component
+      # HTML escaping functionality
+      import Phoenix.HTML
+      # Core UI components and translation
+      import SMWeb.CoreComponents
 
       import SMWeb.ErrorHelpers
       import SMWeb.Gettext
 
+      # Shortcut for generating JS commands
+      alias Phoenix.LiveView.JS
+
+      # Routes generation with the ~p sigil
       unquote(verified_routes())
     end
   end

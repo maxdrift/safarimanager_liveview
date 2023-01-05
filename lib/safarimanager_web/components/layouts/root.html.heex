@@ -4,7 +4,7 @@
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <%= csrf_meta_tag() %>
+    <meta name="csrf-token" content={get_csrf_token()} />
     <.live_title suffix=" · Phoenix Framework">
       <%= assigns[:page_title] || "Safari Manager" %>
     </.live_title>
@@ -833,7 +833,10 @@
             <div class="dropdown dropdown-end">
               <div tabindex="0" class="btn btn-circle btn-ghost avatar placeholder">
                 <div class="bg-neutral text-neutral-content rounded-full w-10 h-10">
-                  <span>RM</span>
+                  <span>
+                    <%= @current_user.first_name && @current_user.last_name &&
+                      "#{String.at(@current_user.first_name, 0)}#{String.at(@current_user.last_name, 0)}" %>
+                  </span>
                 </div>
               </div>
               <ul
@@ -845,19 +848,13 @@
                   <.link href={~p"/users/settings"}>Settings</.link>
                 </li>
                 <li>
-                  <.link href={~p"/users/log_out"} method="delete">
-                    Log out
-                  </.link>
+                  <.link href={~p"/users/log_out"} method="delete">Log out</.link>
                 </li>
               </ul>
             </div>
           <% else %>
-            <.link href={~p"/users/register"} class="btn btn-ghost mr-2">
-              Register
-            </.link>
-            <.link href={~p"/users/log_in"} class="btn btn-ghost mr-2">
-              Log in
-            </.link>
+            <.link href={~p"/users/register"} class="btn btn-ghost mr-2">Register</.link>
+            <.link href={~p"/users/log_in"} class="btn btn-ghost mr-2">Log in</.link>
           <% end %>
         </div>
       </div>

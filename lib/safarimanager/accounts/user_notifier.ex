@@ -68,9 +68,9 @@ defmodule SM.Accounts.UserNotifier do
   @doc """
   Deliver instructions to update a user email.
   """
-  @spec deliver_update_email_instructions(User.t(), String.t()) ::
+  @spec deliver_user_update_email_instructions(User.t(), String.t()) ::
           {:error, any()} | {:ok, Swoosh.Email.t()}
-  def deliver_update_email_instructions(user, url) do
+  def deliver_user_update_email_instructions(user, url) do
     deliver(user.email, "Update email instructions", """
 
     ==============================

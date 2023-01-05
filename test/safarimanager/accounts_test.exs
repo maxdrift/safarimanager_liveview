@@ -1,11 +1,10 @@
 defmodule SM.AccountsTest do
   use SM.DataCase
 
-  import SM.AccountsFixtures
-
   alias SM.Accounts
-  alias SM.Accounts.User
-  alias SM.Accounts.UserToken
+
+  import SM.AccountsFixtures
+  alias SM.Accounts.{User, UserToken}
 
   describe "get_user_by_email/1" do
     test "does not return the user if the email does not exist" do
@@ -153,9 +152,9 @@ defmodule SM.AccountsTest do
 
     test "validates email uniqueness", %{user: user} do
       %{email: email} = user_fixture()
+      password = valid_user_password()
 
-      {:error, changeset} =
-        Accounts.apply_user_email(user, valid_user_password(), %{email: email})
+      {:error, changeset} = Accounts.apply_user_email(user, password, %{email: email})
 
       assert "has already been taken" in errors_on(changeset).email
     end
@@ -175,7 +174,7 @@ defmodule SM.AccountsTest do
     end
   end
 
-  describe "deliver_update_email_instructions/3" do
+  describe "deliver_user_update_email_instructions/3" do
     setup do
       %{user: user_fixture()}
     end
@@ -183,7 +182,7 @@ defmodule SM.AccountsTest do
     test "sends token through notification", %{user: user} do
       token =
         extract_user_token(fn url ->
-          Accounts.deliver_update_email_instructions(user, "current@example.com", url)
+          Accounts.deliver_user_update_email_instructions(user, "current@example.com", url)
         end)
 
       {:ok, token} = Base.url_decode64(token, padding: false)
@@ -201,7 +200,7 @@ defmodule SM.AccountsTest do
 
       token =
         extract_user_token(fn url ->
-          Accounts.deliver_update_email_instructions(%{user | email: email}, user.email, url)
+          Accounts.deliver_user_update_email_instructions(%{user | email: email}, user.email, url)
         end)
 
       %{user: user, token: token, email: email}
@@ -501,7 +500,7 @@ defmodule SM.AccountsTest do
     end
   end
 
-  describe "inspect/2" do
+  describe "inspect/2 for the User module" do
     test "does not include password" do
       refute inspect(%User{password: "123456"}) =~ "password: \"123456\""
     end
