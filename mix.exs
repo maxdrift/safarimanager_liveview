@@ -174,7 +174,7 @@ defmodule SM.MixProject do
           info_plist_path: "rel/app/Info.plist.eex",
           resources: %{
             "AppIcon.icns" => "rel/app/icon-macos.icns",
-            "Icon.png" => "rel/app/icon.png"
+            "Icon.svg" => "rel/app/icon.svg"
           },
           root_dir: "vendor/otp",
           additional_paths: additional_paths ++ ["/usr/local/bin"],

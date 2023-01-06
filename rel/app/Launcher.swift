@@ -11,6 +11,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             image.draw(in: dstRect)
             return true
         }
+        resized.isTemplate = true
         statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
         statusItem.button!.image = resized
 
