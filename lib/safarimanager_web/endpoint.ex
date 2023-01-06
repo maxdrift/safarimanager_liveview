@@ -27,8 +27,6 @@ defmodule SMWeb.Endpoint do
     from: {SM.Slides, :get_uploads_path, []},
     gzip: false
 
-  # only: ~w(assets fonts uploads favicon.ico robots.txt)
-
   # Code reloading can be explicitly enabled under the
   # :code_reloader configuration of your endpoint.
   if code_reloading? do
