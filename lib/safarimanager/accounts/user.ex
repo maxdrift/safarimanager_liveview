@@ -96,7 +96,7 @@ defmodule SM.Accounts.User do
     |> validate_required([:first_name])
     |> foreign_key_constraint(:organization_id)
     |> foreign_key_constraint(:category_id)
-    |> put_default_password()
+    |> maybe_put_default_password()
   end
 
   # TODO: Remove in Production!
@@ -116,10 +116,14 @@ defmodule SM.Accounts.User do
     end
   end
 
-  defp put_default_password(changeset) do
-    changeset
-    |> cast(%{password: SM.DefaultPassword.generate()}, [:password])
-    |> validate_password([])
+  defp maybe_put_default_password(changeset) do
+    if is_nil(get_field(changeset, :hashed_password)) do
+      changeset
+      |> cast(%{password: SM.DefaultPassword.generate()}, [:password])
+      |> validate_password([])
+    else
+      changeset
+    end
   end
 
   @doc """

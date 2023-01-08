@@ -1,72 +1,119 @@
 defmodule SMWeb.UserSettingsLive do
-  use SMWeb, :live_view
+  use SMWeb, :surface_view
 
   alias SM.Accounts
+  alias SMWeb.Components.Layout
+  alias Surface.Components.Form
+  alias Surface.Components.Form.EmailInput
+  alias Surface.Components.Form.ErrorTag
+  alias Surface.Components.Form.Field
+  alias Surface.Components.Form.Label
+  alias Surface.Components.Form.PasswordInput
+  alias Surface.Components.Form.Submit
 
   def render(assigns) do
-    ~H"""
-    <.header>Change Email</.header>
+    ~F"""
+    <Layout current_user={@current_user} current_page={~p"/users/settings"}>
+      <header>
+        <h1 class="text-lg font-semibold leading-8">
+          Change Email
+        </h1>
+      </header>
 
-    <.simple_form
-      :let={f}
-      id="email_form"
-      for={@email_changeset}
-      phx-submit="update_email"
-      phx-change="validate_email"
-    >
-      <.error :if={@email_changeset.action == :insert}>
-        Oops, something went wrong! Please check the errors below.
-      </.error>
+      <Form id="email_form" for={@email_changeset} submit="update_email" change="validate_email">
+        <div
+          :if={@email_changeset.action == :insert}
+          class="phx-no-feedback:hidden alert alert-error shadow-lg"
+        >
+          <div>
+            <Heroicons.Surface.Icon name="exclamation-circle" type="outline" class="h-6 w-6" />
+            <span>Oops, something went wrong! Please check the errors below.</span>
+          </div>
+        </div>
+        <Field name={:email} class="form-control">
+          <Label class="label">Email</Label>
+          <EmailInput opts={required: true} class="input input-bordered" />
+          <Label class="label h-7">
+            <ErrorTag />
+          </Label>
+        </Field>
 
-      <.input field={{f, :email}} type="email" label="Email" required />
+        <Field name={:current_password} class="form-control">
+          <Label class="label">Current password</Label>
+          <PasswordInput
+            name="current_password"
+            id="current_password_for_email"
+            value={@email_form_current_password}
+            opts={required: true}
+            class="input input-bordered"
+          />
+          <Label class="label h-7">
+            <ErrorTag />
+          </Label>
+        </Field>
 
-      <.input
-        field={{f, :current_password}}
-        name="current_password"
-        id="current_password_for_email"
-        type="password"
-        label="Current password"
-        value={@email_form_current_password}
-        required
-      />
-      <:actions>
-        <.button phx-disable-with="Changing...">Change Email</.button>
-      </:actions>
-    </.simple_form>
+        <Submit opts={"phx-disable-with": "Changing..."} class="btn btn-outline">Change Email</Submit>
+      </Form>
 
-    <.header>Change Password</.header>
+      <header>
+        <h1 class="text-lg font-semibold leading-8">
+          Change Password
+        </h1>
+      </header>
 
-    <.simple_form
-      :let={f}
-      id="password_form"
-      for={@password_changeset}
-      action={~p"/users/log_in?_action=password_updated"}
-      method="post"
-      phx-change="validate_password"
-      phx-submit="update_password"
-      phx-trigger-action={@trigger_submit}
-    >
-      <.error :if={@password_changeset.action == :insert}>
-        Oops, something went wrong! Please check the errors below.
-      </.error>
+      <Form
+        id="password_form"
+        for={@password_changeset}
+        action={~p"/users/log_in?_action=password_updated"}
+        method="post"
+        change="validate_password"
+        submit="update_password"
+        trigger_action={@trigger_submit}
+      >
+        <div
+          :if={@password_changeset.action == :insert}
+          class="phx-no-feedback:hidden alert alert-error shadow-lg"
+        >
+          <div>
+            <Heroicons.Surface.Icon name="exclamation-circle" type="outline" class="h-6 w-6" />
+            <span>Oops, something went wrong! Please check the errors below.</span>
+          </div>
+        </div>
 
-      <.input field={{f, :email}} type="hidden" value={@current_email} />
+        <Field name={:email} class="form-control">
+          <EmailInput value={@current_email} opts={hidden: true} />
+        </Field>
 
-      <.input field={{f, :password}} type="password" label="New password" required />
-      <.input field={{f, :password_confirmation}} type="password" label="Confirm new password" />
-      <.input
-        field={{f, :current_password}}
-        name="current_password"
-        type="password"
-        label="Current password"
-        id="current_password_for_password"
-        value={@current_password}
-        required
-      />
-      <:actions>
-        <.button phx-disable-with="Changing...">Change Password</.button>
-      </:actions>
-    </.simple_form>
+        <Field name={:password} class="form-control">
+          <Label class="label">New password</Label>
+          <PasswordInput opts={required: true} class="input input-bordered" />
+          <Label class="label h-7">
+            <ErrorTag />
+          </Label>
+        </Field>
+        <Field name={:password_confirmation} class="form-control">
+          <Label class="label">Confirm new password</Label>
+          <PasswordInput class="input input-bordered" />
+          <Label class="label h-7">
+            <ErrorTag />
+          </Label>
+        </Field>
+        <Field name={:current_password} class="form-control">
+          <Label class="label">Current password</Label>
+          <PasswordInput
+            id="current_password_for_password"
+            value={@current_password}
+            opts={required: true}
+            class="input input-bordered"
+          />
+          <Label class="label h-7">
+            <ErrorTag />
+          </Label>
+        </Field>
+
+        <Submit opts={"phx-disable-with": "Changing..."} class="btn btn-outline">Change Password</Submit>
+      </Form>
+    </Layout>
     """
   end
 
@@ -132,7 +179,7 @@ defmodule SMWeb.UserSettingsLive do
   end
 
   def handle_event("validate_password", params, socket) do
-    %{"current_password" => password, "user" => user_params} = params
+    %{"user" => %{"current_password" => password} = user_params} = params
     password_changeset = Accounts.change_user_password(socket.assigns.current_user, user_params)
 
     {:noreply,

@@ -1,0 +1,36 @@
+defmodule SMWeb.Components.ThemeChangeDropdownItem do
+  @moduledoc """
+  Theme change dropdown item component.
+  """
+  use SMWeb, :surface_component
+
+  prop theme, :string, required: true
+
+  def render(assigns) do
+    ~F"""
+    <div
+      class="outline-base-content overflow-hidden rounded outline-2 outline-offset-2"
+      data-set-theme={@theme}
+      data-act-class="outline"
+    >
+      <div data-theme={@theme} class="bg-base-100 text-base-content w-full cursor-pointer font-sans">
+        <div class="grid grid-cols-5 grid-rows-3">
+          <div class="col-span-5 row-span-3 row-start-1 flex gap-1 py-3 px-4">
+            <div class="flex-grow text-sm font-bold">{@theme}</div>
+
+            <div class="flex flex-shrink-0 flex-wrap gap-1">
+              <div class="bg-primary w-2 rounded" />
+
+              <div class="bg-secondary w-2 rounded" />
+
+              <div class="bg-accent w-2 rounded" />
+
+              <div class="bg-neutral w-2 rounded" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    """
+  end
+end

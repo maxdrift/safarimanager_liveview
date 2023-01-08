@@ -14,6 +14,7 @@ defmodule SMWeb.Components.Admin.Participants do
   alias SMWeb.Components.Admin.Participants.List
   alias SMWeb.Components.Admin.Participants.Show
   alias SMWeb.Components.ConfirmationDialog
+  alias SMWeb.Components.Layout
   alias Surface.Components.LivePatch
 
   require Logger

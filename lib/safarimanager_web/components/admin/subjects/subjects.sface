@@ -1,4 +1,4 @@
-<div>
+<Layout current_page={~p"/admin/subjects"} current_user={@current_user}>
   <ConfirmationDialog id="delete-confirmation">
     <div class="card-title">
       Confirmation
@@ -37,4 +37,4 @@
     select_all="toggle-select-all"
     delete_one="delete-one"
   />
-</div>
+</Layout>

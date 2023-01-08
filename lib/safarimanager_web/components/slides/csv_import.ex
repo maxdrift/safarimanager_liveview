@@ -12,6 +12,7 @@ defmodule SMWeb.CSVImport do
   alias SM.Slides
   alias SM.Subjects
   alias SMWeb.Components.CompetitionHeader
+  alias SMWeb.Components.Layout
   alias SMWeb.Components.StepsHeader
   alias Surface.Components.Form
   alias Surface.Components.Form.ErrorTag

@@ -1,40 +1,42 @@
-<div class="flex flex-col lg:flex-row mt-10">
-  <div class="overflow-y-auto rounded-lg lg:w-1/2 bg-base-200 shadow-lg">
-    <div class="text-2xl font-bold text-center py-4">Select an existing competition</div>
-    <table class="table table-zebra table-fixed w-full">
-      <thead>
-        <tr>
-          <th class="w-auto">Name</th>
-          <th class="w-3/12">Location</th>
-          <th class="w-4/12">Date</th>
-        </tr>
-      </thead>
-      <tbody>
-        {#for item <- @competitions}
-          <tr class="hover cursor-pointer" :on-click="open" :values={id: item.id}>
-            <td class="truncate">{item.name}</td>
-            <td class="truncate">{"#{value_or_na(item.city)} (#{value_or_na(item.country)})"}</td>
-            <td class="truncate">{format_date(item.start_time)}</td>
-          </tr>
-        {#else}
+<Layout current_page={~p"/organize/new"} current_user={@current_user}>
+  <div class="flex flex-col lg:flex-row mt-10">
+    <div class="overflow-y-auto rounded-lg lg:w-1/2 bg-base-200 shadow-lg">
+      <div class="text-2xl font-bold text-center py-4">Select an existing competition</div>
+      <table class="table table-zebra table-fixed w-full">
+        <thead>
           <tr>
-            <td>No items yet!</td>
-            <td />
-            <td />
+            <th class="w-auto">Name</th>
+            <th class="w-3/12">Location</th>
+            <th class="w-4/12">Date</th>
           </tr>
-        {/for}
-      </tbody>
-    </table>
+        </thead>
+        <tbody>
+          {#for item <- @competitions}
+            <tr class="hover cursor-pointer" :on-click="open" :values={id: item.id}>
+              <td class="truncate">{item.name}</td>
+              <td class="truncate">{"#{value_or_na(item.city)} (#{value_or_na(item.country)})"}</td>
+              <td class="truncate">{format_date(item.start_time)}</td>
+            </tr>
+          {#else}
+            <tr>
+              <td>No items yet!</td>
+              <td />
+              <td />
+            </tr>
+          {/for}
+        </tbody>
+      </table>
+    </div>
+    <div class="divider lg:divider-horizontal">OR</div>
+    <div class="overflow-y-auto rounded-lg lg:w-1/2 bg-base-200 shadow-lg">
+      <div class="text-2xl font-bold text-center py-4">Create a new one</div>
+      <Form {=@action} {=@entity} {=@changeset} {=@validate} {=@submit} {=@organizations}>
+        <FormActions
+          container_class="justify-end mb-1 card-actions"
+          submit_enabled?={@changeset.action && @changeset.valid?}
+          reset="reset"
+        />
+      </Form>
+    </div>
   </div>
-  <div class="divider lg:divider-horizontal">OR</div>
-  <div class="overflow-y-auto rounded-lg lg:w-1/2 bg-base-200 shadow-lg">
-    <div class="text-2xl font-bold text-center py-4">Create a new one</div>
-    <Form {=@action} {=@entity} {=@changeset} {=@validate} {=@submit} {=@organizations}>
-      <FormActions
-        container_class="justify-end mb-1 card-actions"
-        submit_enabled?={@changeset.action && @changeset.valid?}
-        reset="reset"
-      />
-    </Form>
-  </div>
-</div>
+</Layout>

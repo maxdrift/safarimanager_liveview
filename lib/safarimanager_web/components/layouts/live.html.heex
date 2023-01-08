@@ -1,49 +1,9 @@
-<!-- begin drawer -->
-<div class="rounded-2xl shadow bg-base-400 drawer drawer-mobile h-full">
-  <input id="sm-drawer" type="checkbox" class="drawer-toggle" />
-  <div class="flex flex-col px-4 bg-base-100 drawer-content h-max rounded-box m-1 pb-40">
-    <div class="flex flex-col items-center justify-center">
-      <div class="container w-11/12">
-        <.flash flash={@flash} kind={:info} />
-        <.flash flash={@flash} kind={:warning} />
-        <.flash flash={@flash} kind={:error} />
-        <%= @inner_content %>
-      </div>
-    </div>
-  </div>
-  <div class="drawer-side">
-    <label for="sm-drawer" class="drawer-overlay" />
-    <ul class="menu py-3 bg-base-100 rounded-box shadow-xl overflow-y-auto m-1">
-      <li>
-        <a href="/organize/new">Organize competition</a>
-      </li>
-      <li class="menu-title">
-        <span>
-          Admin
-        </span>
-      </li>
-      <li>
-        <a href="/admin/organizations">Organizations</a>
-      </li>
-      <li>
-        <a href="/admin/subjects">Subjects</a>
-      </li>
-      <li>
-        <a href="/admin/competitions">Competitions</a>
-      </li>
-      <li>
-        <a href="/admin/evaluations">Evaluations</a>
-      </li>
-      <li>
-        <a href="/admin/users">Users</a>
-      </li>
-      <li>
-        <a href="/admin/categories">Categories</a>
-      </li>
-      <li>
-        <a href="/admin/participants">Participants</a>
-      </li>
-    </ul>
-  </div>
-</div>
-<!-- end drawer -->
+<main role="main" class="grow flex flex-col h-screen">
+  <.flash flash={@flash} kind={:info} />
+  <.flash flash={@flash} kind={:warning} />
+  <.flash flash={@flash} kind={:error} />
+
+  <%= @inner_content %>
+</main>
+
+<%!-- <.confirm_modal /> --%>

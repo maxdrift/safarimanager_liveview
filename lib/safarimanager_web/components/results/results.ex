@@ -9,6 +9,7 @@ defmodule SMWeb.Results do
   alias SM.Slides
   alias SM.Subjects
   alias SMWeb.Components.CompetitionHeader
+  alias SMWeb.Components.Layout
   alias SMWeb.Components.StepsHeader
   alias Surface.Components.LiveRedirect
 

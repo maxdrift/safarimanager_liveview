@@ -11,6 +11,7 @@ defmodule SMWeb.Components.Admin.Organizations do
   alias SMWeb.Components.Admin.Organizations.List
   alias SMWeb.Components.Admin.Organizations.Show
   alias SMWeb.Components.ConfirmationDialog
+  alias SMWeb.Components.Layout
   alias Surface.Components.LivePatch
 
   require Logger

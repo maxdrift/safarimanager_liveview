@@ -8,6 +8,7 @@ defmodule SMWeb.Jurors do
   alias SM.Competitions
   alias SM.Jurors
   alias SMWeb.Components.CompetitionHeader
+  alias SMWeb.Components.Layout
   alias SMWeb.Components.StepsHeader
   alias Surface.Components.LiveRedirect
   alias Surface.Components.Form

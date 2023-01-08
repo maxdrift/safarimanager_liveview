@@ -13,6 +13,7 @@ defmodule SMWeb.Participants do
   alias SMWeb.Components.Admin.Users.Form, as: UsersForm
   alias SMWeb.Components.CompetitionHeader
   alias SMWeb.Components.FormActions
+  alias SMWeb.Components.Layout
   alias SMWeb.Components.StepsHeader
   alias Surface.Components.Form
   alias Surface.Components.Form.TextInput

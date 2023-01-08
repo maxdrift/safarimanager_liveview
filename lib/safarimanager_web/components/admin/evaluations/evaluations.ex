@@ -11,6 +11,7 @@ defmodule SMWeb.Components.Admin.Evaluations do
   alias SMWeb.Components.Admin.Evaluations.List
   alias SMWeb.Components.Admin.Evaluations.Show
   alias SMWeb.Components.ConfirmationDialog
+  alias SMWeb.Components.Layout
   alias Surface.Components.LivePatch
 
   require Logger

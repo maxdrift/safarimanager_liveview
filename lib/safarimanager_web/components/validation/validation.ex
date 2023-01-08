@@ -2,7 +2,7 @@ defmodule SMWeb.Validation do
   @moduledoc """
   Live view to handle Validation operations
   """
-  use SMWeb, :surface_jury_view
+  use SMWeb, :surface_view
 
   alias SM.Competitions
   alias SM.Slides

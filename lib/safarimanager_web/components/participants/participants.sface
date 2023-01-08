@@ -1,145 +1,147 @@
-<CompetitionHeader {=@competition} />
-<StepsHeader current_step={1} competition_id={@competition.id} />
-<div class="flex flex-col lg:flex-row mt-5">
-  <div class="overflow-y-auto rounded-lg lg:w-1/2 bg-base-200 shadow-lg">
-    <div class="p-4">
-      <div class="text-2xl font-bold text-center py-4">Users</div>
-      <Form for={:users_filter} change="filter-users" opts={autocomplete: "off"}>
-        <TextInput
-          name={:value}
-          class="input input-bordered w-full mb-1"
-          opts={placeholder: "Search for a user...", phx_debounce: "500", autocomplete: "nope"}
+<Layout current_page={~p"/organize/#{@competition.id}/participants"} current_user={@current_user}>
+  <CompetitionHeader {=@competition} />
+  <StepsHeader current_step={1} competition_id={@competition.id} />
+  <div class="flex flex-col lg:flex-row mt-5">
+    <div class="overflow-y-auto rounded-lg lg:w-1/2 bg-base-200 shadow-lg">
+      <div class="p-4">
+        <div class="text-2xl font-bold text-center py-4">Users</div>
+        <Form for={:users_filter} change="filter-users" opts={autocomplete: "off"}>
+          <TextInput
+            name={:value}
+            class="input input-bordered w-full mb-1"
+            opts={placeholder: "Search for a user...", phx_debounce: "500", autocomplete: "nope"}
+          />
+        </Form>
+        <div class="max-h-48 overflow-y-auto tiny-scrollbar">
+          <table class="table table-zebra table-fixed w-full">
+            <thead>
+              <tr>
+                <th class="sticky top-0 w-auto">First Name</th>
+                <th class="sticky top-0 w-auto">Last Name</th>
+                <th class="sticky top-0 w-auto">Organization</th>
+                <th class="sticky top-0 w-auto">Category</th>
+                <th class="sticky top-0 w-auto" />
+              </tr>
+            </thead>
+            <tbody>
+              {#for item <- @users}
+                <tr>
+                  <td class="truncate">{item.first_name}</td>
+                  <td class="truncate">{item.last_name}</td>
+                  <td class="truncate">{(item.organization && item.organization.name) || "N/A"}</td>
+                  <td class="truncate">{(item.category && item.category.name) || "N/A"}</td>
+                  <td>
+                    <button class="btn btn-xs btn-success" :on-click="enroll" :values={user_id: item.id}>Enroll</button>
+                  </td>
+                </tr>
+              {#else}
+                <tr>
+                  <td>No results</td>
+                  <td />
+                  <td />
+                  <td />
+                  <td />
+                </tr>
+              {/for}
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="text-2xl font-bold text-center py-4">New User</div>
+      <UsersForm
+        action={:create}
+        {=@entity}
+        {=@changeset}
+        {=@organizations}
+        {=@categories}
+        validate="validate-new-user"
+        submit="submit-new-user"
+      >
+        <FormActions
+          container_class="modal-action"
+          submit_enabled?={@changeset.action && @changeset.valid?}
+          reset="reset-new-user"
         />
-      </Form>
-      <div class="max-h-48 overflow-y-auto tiny-scrollbar">
-        <table class="table table-zebra table-fixed w-full">
-          <thead>
-            <tr>
-              <th class="sticky top-0 w-auto">First Name</th>
-              <th class="sticky top-0 w-auto">Last Name</th>
-              <th class="sticky top-0 w-auto">Organization</th>
-              <th class="sticky top-0 w-auto">Category</th>
-              <th class="sticky top-0 w-auto" />
-            </tr>
-          </thead>
-          <tbody>
-            {#for item <- @users}
+      </UsersForm>
+    </div>
+    <div class="divider lg:divider-horizontal" />
+    <div class="overflow-y-auto rounded-lg lg:w-1/2 bg-base-200 shadow-lg">
+      <div class="p-4">
+        <div class="text-2xl font-bold text-center py-4">Participants</div>
+        <Form for={:participants_filter} change="filter-participants" opts={autocomplete: "off"}>
+          <TextInput
+            name={:value}
+            class="input input-bordered w-full mb-1"
+            opts={placeholder: "Search for a participant...", phx_debounce: "500", autocomplete: "nope"}
+          />
+        </Form>
+        <div class="max-h-96 overflow-y-auto tiny-scrollbar">
+          <table class="table table-zebra table-fixed w-full">
+            <thead>
               <tr>
-                <td class="truncate">{item.first_name}</td>
-                <td class="truncate">{item.last_name}</td>
-                <td class="truncate">{(item.organization && item.organization.name) || "N/A"}</td>
-                <td class="truncate">{(item.category && item.category.name) || "N/A"}</td>
-                <td>
-                  <button class="btn btn-xs btn-success" :on-click="enroll" :values={user_id: item.id}>Enroll</button>
-                </td>
+                <th class="sticky top-0 w-1/12">#</th>
+                <th class="sticky top-0 w-auto">First Name</th>
+                <th class="sticky top-0 w-auto">Last Name</th>
+                <th class="sticky top-0 w-auto">Organization</th>
+                <th class="sticky top-0 w-auto">Category</th>
+                <th class="sticky top-0 w-2/12" />
               </tr>
-            {#else}
-              <tr>
-                <td>No results</td>
-                <td />
-                <td />
-                <td />
-                <td />
-              </tr>
-            {/for}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {#for item <- @participants}
+                <tr>
+                  <td class="truncate">{item.number}</td>
+                  <td class="truncate">{item.user.first_name}</td>
+                  <td class="truncate">{item.user.last_name}</td>
+                  <td class="truncate">{(item.user.organization && item.user.organization.name) || "N/A"}</td>
+                  <td class="truncate">{(item.category && item.category.name) || "N/A"}</td>
+                  <td>
+                    <button class="btn btn-xs btn-error" :on-click="remove" :values={user_id: item.user.id}>Remove</button>
+                  </td>
+                </tr>
+              {#else}
+                <tr>
+                  <td>No items yet!</td>
+                  <td />
+                  <td />
+                  <td />
+                  <td />
+                  <td />
+                </tr>
+              {/for}
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
-    <div class="text-2xl font-bold text-center py-4">New User</div>
-    <UsersForm
-      action={:create}
-      {=@entity}
-      {=@changeset}
-      {=@organizations}
-      {=@categories}
-      validate="validate-new-user"
-      submit="submit-new-user"
-    >
-      <FormActions
-        container_class="modal-action"
-        submit_enabled?={@changeset.action && @changeset.valid?}
-        reset="reset-new-user"
-      />
-    </UsersForm>
   </div>
-  <div class="divider lg:divider-horizontal" />
-  <div class="overflow-y-auto rounded-lg lg:w-1/2 bg-base-200 shadow-lg">
-    <div class="p-4">
-      <div class="text-2xl font-bold text-center py-4">Participants</div>
-      <Form for={:participants_filter} change="filter-participants" opts={autocomplete: "off"}>
-        <TextInput
-          name={:value}
-          class="input input-bordered w-full mb-1"
-          opts={placeholder: "Search for a participant...", phx_debounce: "500", autocomplete: "nope"}
-        />
-      </Form>
-      <div class="max-h-96 overflow-y-auto tiny-scrollbar">
-        <table class="table table-zebra table-fixed w-full">
-          <thead>
-            <tr>
-              <th class="sticky top-0 w-1/12">#</th>
-              <th class="sticky top-0 w-auto">First Name</th>
-              <th class="sticky top-0 w-auto">Last Name</th>
-              <th class="sticky top-0 w-auto">Organization</th>
-              <th class="sticky top-0 w-auto">Category</th>
-              <th class="sticky top-0 w-2/12" />
-            </tr>
-          </thead>
-          <tbody>
-            {#for item <- @participants}
-              <tr>
-                <td class="truncate">{item.number}</td>
-                <td class="truncate">{item.user.first_name}</td>
-                <td class="truncate">{item.user.last_name}</td>
-                <td class="truncate">{(item.user.organization && item.user.organization.name) || "N/A"}</td>
-                <td class="truncate">{(item.category && item.category.name) || "N/A"}</td>
-                <td>
-                  <button class="btn btn-xs btn-error" :on-click="remove" :values={user_id: item.user.id}>Remove</button>
-                </td>
-              </tr>
-            {#else}
-              <tr>
-                <td>No items yet!</td>
-                <td />
-                <td />
-                <td />
-                <td />
-                <td />
-              </tr>
-            {/for}
-          </tbody>
-        </table>
-      </div>
-    </div>
+  <div class="flex flex-row my-10 w-full">
+    <LiveRedirect to="/organize/new" class="flex-none btn gap-2">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        class="h-6 w-6"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+        stroke-width="2"
+      >
+        <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+      </svg>
+      Competition
+    </LiveRedirect>
+    <div class="grow" />
+    <LiveRedirect to={"/organize/#{@competition_id}/jurors"} class="flex-none btn btn-primary gap-2">
+      Jurors
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        class="h-6 w-6"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+        stroke-width="2"
+      >
+        <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+      </svg>
+    </LiveRedirect>
   </div>
-</div>
-<div class="flex flex-row my-10 w-full">
-  <LiveRedirect to="/organize/new" class="flex-none btn gap-2">
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      class="h-6 w-6"
-      fill="none"
-      viewBox="0 0 24 24"
-      stroke="currentColor"
-      stroke-width="2"
-    >
-      <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
-    </svg>
-    Competition
-  </LiveRedirect>
-  <div class="grow" />
-  <LiveRedirect to={"/organize/#{@competition_id}/jurors"} class="flex-none btn btn-primary gap-2">
-    Jurors
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      class="h-6 w-6"
-      fill="none"
-      viewBox="0 0 24 24"
-      stroke="currentColor"
-      stroke-width="2"
-    >
-      <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
-    </svg>
-  </LiveRedirect>
-</div>
+</Layout>

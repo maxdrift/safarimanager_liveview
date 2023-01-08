@@ -13,6 +13,7 @@ defmodule SMWeb.Slides do
   alias SMWeb.Components.DirectUploadDialog
   alias SMWeb.Components.CompetitionHeader
   alias SMWeb.Components.FileBrowser
+  alias SMWeb.Components.Layout
   alias SMWeb.Components.StepsHeader
   alias Surface.Components.Form
   alias Surface.Components.Form.Checkbox

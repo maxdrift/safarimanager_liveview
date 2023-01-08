@@ -19,7 +19,7 @@ defmodule SMWeb do
 
   # credo:disable-for-this-file Credo.Check.Readability.Specs
 
-  def static_paths, do: ~w(assets fonts images favicon.ico robots.txt)
+  def static_paths, do: ~w(assets fonts images favicon.ico logo.png robots.txt)
 
   def controller do
     quote do
@@ -58,6 +58,14 @@ defmodule SMWeb do
     end
   end
 
+  def live_component do
+    quote do
+      use Phoenix.LiveComponent
+
+      unquote(html_helpers())
+    end
+  end
+
   def surface_view do
     quote do
       use Surface.LiveView,
@@ -72,6 +80,9 @@ defmodule SMWeb do
       use Surface.Component
 
       import SMWeb.ErrorHelpers
+
+      # Routes generation with the ~p sigil
+      unquote(verified_routes())
     end
   end
 
@@ -80,23 +91,9 @@ defmodule SMWeb do
       use Surface.LiveComponent
 
       import SMWeb.ErrorHelpers
-    end
-  end
 
-  def surface_jury_view do
-    quote do
-      use Surface.LiveView,
-        layout: {SMWeb.Layouts, :live_jury}
-
-      unquote(html_helpers())
-    end
-  end
-
-  def live_component do
-    quote do
-      use Phoenix.LiveComponent
-
-      unquote(html_helpers())
+      # Routes generation with the ~p sigil
+      unquote(verified_routes())
     end
   end
 

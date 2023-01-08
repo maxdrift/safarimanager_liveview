@@ -2,7 +2,7 @@ defmodule SMWeb.Jury do
   @moduledoc """
   Live view to handle Jury operations i.e. evaluation of Slides
   """
-  use SMWeb, :surface_jury_view
+  use SMWeb, :surface_view
 
   alias SM.Competitions
   alias SM.Slides

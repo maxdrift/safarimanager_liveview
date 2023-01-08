@@ -7,7 +7,7 @@ defmodule SMWeb.CoreComponents do
   customize the generated components in this module.
 
   Icons are provided by [heroicons](https://heroicons.com), using the
-  [heroicons_elixir](https://github.com/mveytsman/heroicons_elixir) project.
+  [ex_heroicons](https://github.com/miguel-s/ex_heroicons) project.
   """
   use Phoenix.Component
 
@@ -74,7 +74,7 @@ defmodule SMWeb.CoreComponents do
                   class="-m-3 flex-none p-3 opacity-20 hover:opacity-40"
                   aria-label={gettext("close")}
                 >
-                  <Heroicons.x_mark solid class="h-5 w-5 stroke-current" />
+                  <Heroicons.LiveView.icon name="x-mark" type="solid" class="h-5 w-5 stroke-current" />
                 </button>
               </div>
               <div id={"#{@id}-content"}>
@@ -149,19 +149,22 @@ defmodule SMWeb.CoreComponents do
       {@rest}
     >
       <div>
-        <Heroicons.information_circle
+        <Heroicons.LiveView.icon
           :if={@kind == :info}
-          outline
+          name="information-circle"
+          type="outline"
           class="stroke-current flex-shrink-0 h-6 w-6"
         />
-        <Heroicons.exclamation_triangle
+        <Heroicons.LiveView.icon
           :if={@kind == :warning}
-          outline
+          name="exclamation-triangle"
+          type="outline"
           class="stroke-current flex-shrink-0 h-6 w-6"
         />
-        <Heroicons.x_circle
+        <Heroicons.LiveView.icon
           :if={@kind == :error}
-          outline
+          name="x-circle"
+          type="outline"
           class="stroke-current flex-shrink-0 h-6 w-6"
         />
         <div>
@@ -176,7 +179,11 @@ defmodule SMWeb.CoreComponents do
           class="group absolute top-2 right-1 p-2"
           aria-label={gettext("close")}
         >
-          <Heroicons.x_mark solid class="h-5 w-5 stroke-current opacity-40 group-hover:opacity-70" />
+          <Heroicons.LiveView.icon
+            name="x-mark"
+            type="solid"
+            class="h-5 w-5 stroke-current opacity-40 group-hover:opacity-70"
+          />
         </button>
       </div>
     </div>
@@ -405,7 +412,11 @@ defmodule SMWeb.CoreComponents do
   def error(assigns) do
     ~H"""
     <p class="phx-no-feedback:hidden mt-3 flex gap-3 text-sm leading-6 text-rose-600">
-      <Heroicons.exclamation_circle mini class="mt-0.5 h-5 w-5 flex-none fill-rose-500" />
+      <Heroicons.LiveView.icon
+        name="exclamation-circle"
+        type="mini"
+        class="mt-0.5 h-5 w-5 flex-none fill-rose-500"
+      />
       <%= render_slot(@inner_block) %>
     </p>
     """
@@ -548,7 +559,7 @@ defmodule SMWeb.CoreComponents do
         navigate={@navigate}
         class="text-sm font-semibold leading-6 text-zinc-900 hover:text-zinc-700"
       >
-        <Heroicons.arrow_left solid class="w-3 h-3 stroke-current inline" />
+        <Heroicons.LiveView.icon name="arrow-left" type="solid" class="w-3 h-3 stroke-current inline" />
         <%= render_slot(@inner_block) %>
       </.link>
     </div>

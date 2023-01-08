@@ -34,40 +34,47 @@ defmodule SMWeb.Router do
   # end
 
   scope "/", SMWeb do
-    pipe_through :browser
+    pipe_through [:browser]
 
     get "/", HomeController, :new
-    live "/organize/new", NewCompetition
-    live "/organize/:competition_id/participants", Participants
-    live "/organize/:competition_id/jurors", Jurors
-    live "/organize/:competition_id/slides", Slides
-    live "/organize/:competition_id/csv_import", CSVImport
-    live "/organize/:competition_id/validation_launcher", ValidationLauncher
-    live "/organize/:competition_id/jury_launcher", JuryLauncher
-    live "/organize/:competition_id/results", Results
-
-    # live "/", Main
-    live "/gallery", Gallery
-    live "/jury_viewer", JuryViewer
   end
 
   scope "/", SMWeb do
-    pipe_through :jury_browser
+    pipe_through [:browser, :require_authenticated_user]
 
-    live "/organize/:competition_id/jury", Jury
-    live "/organize/:competition_id/validation", Validation
-  end
+    live_session :require_authenticated_user,
+      on_mount: [{SMWeb.UserAuth, :ensure_authenticated}] do
+      scope "/organize" do
+        live "/new", NewCompetition
+        live "/:competition_id/participants", Participants
+        live "/:competition_id/jurors", Jurors
+        live "/:competition_id/slides", Slides
+        live "/:competition_id/csv_import", CSVImport
+        live "/:competition_id/validation_launcher", ValidationLauncher
+        live "/:competition_id/validation", Validation
+        live "/:competition_id/jury_launcher", JuryLauncher
+        live "/:competition_id/jury", Jury
+        live "/:competition_id/results", Results
+      end
 
-  scope "/admin", SMWeb.Components.Admin do
-    pipe_through :browser
+      scope "/admin", Components.Admin do
+        live "/organizations", Organizations
+        live "/subjects", Subjects
+        live "/competitions", Competitions
+        live "/evaluations", Evaluations
+        live "/users", Users
+        live "/categories", Categories
+        live "/participants", Participants
+      end
 
-    live "/organizations", Organizations
-    live "/subjects", Subjects
-    live "/competitions", Competitions
-    live "/evaluations", Evaluations
-    live "/users", Users
-    live "/categories", Categories
-    live "/participants", Participants
+      live "/gallery", Gallery
+      live "/jury_viewer", JuryViewer
+
+      scope "/users" do
+        live "/settings", UserSettingsLive, :edit
+        live "/settings/confirm_email/:token", UserSettingsLive, :confirm_email
+      end
+    end
   end
 
   # Enables the Swoosh mailbox preview in development.
@@ -105,16 +112,6 @@ defmodule SMWeb.Router do
     end
 
     post "/users/log_in", UserSessionController, :create
-  end
-
-  scope "/", SMWeb do
-    pipe_through [:browser, :require_authenticated_user]
-
-    live_session :require_authenticated_user,
-      on_mount: [{SMWeb.UserAuth, :ensure_authenticated}] do
-      live "/users/settings", UserSettingsLive, :edit
-      live "/users/settings/confirm_email/:token", UserSettingsLive, :confirm_email
-    end
   end
 
   scope "/", SMWeb do

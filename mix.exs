@@ -62,7 +62,7 @@ defmodule SM.MixProject do
       {:finch, "~> 0.14.0", override: true},
       {:floki, ">= 0.30.0", only: :test},
       {:gettext, "~> 0.19"},
-      {:heroicons, "~> 0.5"},
+      {:ex_heroicons, "~> 2.0"},
       {:image, "~> 0.15"},
       {:jason, "~> 1.2"},
       {:nimble_csv, "~> 1.2"},

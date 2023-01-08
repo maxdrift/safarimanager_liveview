@@ -11,6 +11,7 @@ defmodule SMWeb.Components.Admin.Categories do
   alias SMWeb.Components.Admin.Categories.List
   alias SMWeb.Components.Admin.Categories.Show
   alias SMWeb.Components.ConfirmationDialog
+  alias SMWeb.Components.Layout
   alias Surface.Components.LivePatch
 
   require Logger
