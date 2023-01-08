@@ -1,4 +1,4 @@
-<Layout current_page={~p"/organize/results"} current_user={@current_user}>
+<Layout current_page={~p"/organize/#{@competition.id}/results"} current_user={@current_user}>
   <CompetitionHeader {=@competition} />
   <StepsHeader current_step={7} competition_id={@competition.id} />
   <div class="pt-10 cursor-pointer" x-data="{ expanded: false }">

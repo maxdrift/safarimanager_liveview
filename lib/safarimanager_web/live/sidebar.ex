@@ -7,7 +7,6 @@ defmodule SMWeb.Components.Sidebar do
   alias Phoenix.LiveView.JS
   alias SMWeb.Components.SidebarLink
   alias SMWeb.Components.ThemeChangeDropdown
-  alias SMWeb.Components.UserAvatar
   alias SMWeb.Components.UserDropdown
   alias Surface.Components.LiveRedirect
 
