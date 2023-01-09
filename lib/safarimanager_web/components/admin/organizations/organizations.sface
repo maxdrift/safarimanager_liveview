@@ -22,7 +22,6 @@
     redirect_to="/admin/organizations"
     entity_name="organization"
   />
-  <Alert level={@error_level} message={@error_message} show={not is_nil(@error_message)} />
   <div class="flex flex-row-reverse my-2">
     <div>
       <LivePatch to="?action=new" class="btn btn-sm btn-success">Create</LivePatch>

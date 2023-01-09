@@ -6,7 +6,6 @@ defmodule SMWeb.Components.Admin.Subjects do
 
   alias SM.Subjects
   alias SM.Subjects.Subject
-  alias SMWeb.Atoms.Alert
   alias SMWeb.Components.Admin.Subjects.Edit
   alias SMWeb.Components.Admin.Subjects.List
   alias SMWeb.Components.Admin.Subjects.Show
@@ -16,9 +15,6 @@ defmodule SMWeb.Components.Admin.Subjects do
 
   require Logger
 
-  # Alert duration in milliseconds
-  @alert_duration 15_000
-
   @impl Phoenix.LiveView
   def mount(_params, _session, socket) do
     _result = subscribe(socket)
@@ -26,7 +22,6 @@ defmodule SMWeb.Components.Admin.Subjects do
     socket =
       socket
       |> load_entities()
-      |> reset_alert()
       |> reset_current_editing()
       |> reset_selection()
 
@@ -85,8 +80,8 @@ defmodule SMWeb.Components.Admin.Subjects do
   def handle_event("confirm", %{}, %{assigns: %{to_be_deleted: [id]}} = socket) do
     socket =
       case delete(id) do
-        :ok -> set_alert(socket, "info", "Subject deleted successfully", @alert_duration)
-        :error -> set_alert(socket, "error", "Unable to delete Subject", @alert_duration)
+        :ok -> put_flash(socket, :info, "Subject deleted successfully")
+        :error -> put_flash(socket, :error, "Unable to delete Subject")
       end
 
     ConfirmationDialog.hide("delete-confirmation")
@@ -96,8 +91,8 @@ defmodule SMWeb.Components.Admin.Subjects do
   def handle_event("confirm", %{}, %{assigns: %{to_be_deleted: [_ | _] = ids}} = socket) do
     socket =
       case delete(ids) do
-        :ok -> set_alert(socket, "info", "Subjects deleted successfully", @alert_duration)
-        :error -> set_alert(socket, "error", "Unable to delete Subjects", @alert_duration)
+        :ok -> put_flash(socket, :info, "Subjects deleted successfully")
+        :error -> put_flash(socket, :error, "Unable to delete Subjects")
       end
 
     ConfirmationDialog.hide("delete-confirmation")
@@ -135,7 +130,7 @@ defmodule SMWeb.Components.Admin.Subjects do
           |> push_patch(to: "/admin/subjects")
 
         Edit.hide("edit-dialog")
-        socket = set_alert(socket, "info", "Subject created successfully", @alert_duration)
+        socket = put_flash(socket, :info, "Subject created successfully")
         {:noreply, socket}
 
       {:error, changeset} ->
@@ -157,7 +152,7 @@ defmodule SMWeb.Components.Admin.Subjects do
 
         Edit.hide("edit-dialog")
 
-        socket = set_alert(socket, "info", ~s(Edited subject "#{entity.name}"), @alert_duration)
+        socket = put_flash(socket, :info, ~s(Edited subject "#{entity.name}"))
 
         {:noreply, socket}
 
@@ -188,7 +183,7 @@ defmodule SMWeb.Components.Admin.Subjects do
 
       {:error, reason} ->
         Logger.error("Error showing Edit modal: #{inspect(reason)}")
-        socket = set_alert(socket, "error", "Unable to edit this Subject", @alert_duration)
+        socket = put_flash(socket, :error, "Unable to edit this Subject")
         {:noreply, socket}
     end
   end
@@ -201,7 +196,7 @@ defmodule SMWeb.Components.Admin.Subjects do
         {:noreply, socket}
 
       {:error, reason} ->
-        socket = set_alert(socket, "error", "Unable to show this Subject", @alert_duration)
+        socket = put_flash(socket, :error, "Unable to show this Subject")
         Logger.error("Error showing Subject: #{inspect(reason)}")
         {:noreply, socket}
     end
@@ -217,12 +212,6 @@ defmodule SMWeb.Components.Admin.Subjects do
       socket
       |> load_entities()
       |> reset_selection()
-
-    {:noreply, socket}
-  end
-
-  def handle_info(:remove_alert, socket) do
-    socket = reset_alert(socket)
 
     {:noreply, socket}
   end
@@ -292,25 +281,6 @@ defmodule SMWeb.Components.Admin.Subjects do
       end)
 
     assign(socket, :items, items)
-  end
-
-  defp set_alert(socket, level, message) do
-    socket
-    |> assign(:error_level, level)
-    |> assign(:error_message, message)
-  end
-
-  defp set_alert(socket, level, message, remove_after) when is_integer(remove_after) do
-    socket = set_alert(socket, level, message)
-    {:ok, _tref} = :timer.send_after(remove_after, :remove_alert)
-
-    socket
-  end
-
-  defp reset_alert(socket) do
-    socket
-    |> assign(:error_level, "info")
-    |> assign(:error_message, nil)
   end
 
   defp reset_current_editing(socket) do
