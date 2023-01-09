@@ -141,7 +141,7 @@ defmodule SMWeb.CoreComponents do
       phx-click={JS.push("lv:clear-flash", value: %{key: @kind}) |> hide("#flash")}
       role="alert"
       class={[
-        "fixed hidden top-20 right-2 w-80 sm:w-96 z-50 alert shadow-lg",
+        "fixed hidden top-10 right-2 w-80 sm:w-96 z-50 alert shadow-lg",
         @kind == :info && "alert-info",
         @kind == :warning && "alert-warning",
         @kind == :error && "alert-error"
@@ -167,7 +167,7 @@ defmodule SMWeb.CoreComponents do
           type="outline"
           class="stroke-current flex-shrink-0 h-6 w-6"
         />
-        <div>
+        <div class="pr-4">
           <h3 :if={@title} class="font-bold"><%= @title %></h3>
           <div class="text-xs"><%= msg %></div>
         </div>
