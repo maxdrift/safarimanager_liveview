@@ -4,6 +4,7 @@ defmodule SMWeb.Components.Admin.Competitions.Form do
   """
   use SMWeb, :surface_component
 
+  alias Surface.Components.Context
   alias Surface.Components.Form
   alias Surface.Components.Form.Checkbox
   alias Surface.Components.Form.DateTimeLocalInput
