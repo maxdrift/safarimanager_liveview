@@ -16,8 +16,8 @@
           <thead>
             <tr>
               <th class="sticky top-0 w-1/12">#</th>
-              <th class="sticky top-0 w-auto">First Name</th>
               <th class="sticky top-0 w-auto">Last Name</th>
+              <th class="sticky top-0 w-auto">First Name</th>
               <th class="sticky top-0 w-auto">Organization</th>
               <th class="sticky top-0 w-auto">Category</th>
               <th class="sticky top-0 w-auto">Slides</th>
@@ -28,8 +28,8 @@
             {#for item <- @participants}
               <tr>
                 <td class="truncate">{item.number}</td>
-                <td class="truncate">{item.user.first_name}</td>
                 <td class="truncate">{item.user.last_name}</td>
+                <td class="truncate">{item.user.first_name}</td>
                 <td class="truncate">{(item.user.organization && item.user.organization.name) || "N/A"}</td>
                 <td class="truncate">{(item.category && item.category.name) || "N/A"}</td>
                 <td class="truncate">{"N/A"}</td>
@@ -65,7 +65,7 @@
     </div>
     <div class="overflow-y-auto rounded-lg bg-base-200 shadow-lg p-4">
       {#if @user}
-        <div class="text-2xl font-bold text-center py-4">Load slides for {@user.first_name} {@user.last_name}</div>
+        <div class="text-2xl font-bold text-center py-4">Load slides for {@user.last_name} {@user.first_name}</div>
         <div class="text-lg text-center pb-4">
           Currently {Enum.count(@slides || [])} slides - {Enum.count(@uploads.images.entries || [])} uploading
         </div>

@@ -12,8 +12,8 @@
         </label>
       </th>
       <th class="w-1/12">ID</th>
-      <th class="w-auto">First Name</th>
       <th class="w-auto">Last Name</th>
+      <th class="w-auto">First Name</th>
       <th class="w-auto">Email</th>
       <th class="w-auto">Organization</th>
       <th class="w-auto">Category</th>
@@ -35,8 +35,8 @@
           </label>
         </th>
         <th class="truncate">{format_id(item.id)}</th>
-        <td class="truncate">{item.first_name}</td>
         <td class="truncate">{item.last_name}</td>
+        <td class="truncate">{item.first_name}</td>
         <td class="truncate">{item.email}</td>
         <td class="truncate">{(item.organization && item.organization.name) || "N/A"}</td>
         <td class="truncate">{(item.category && item.category.name) || "N/A"}</td>
