@@ -1,0 +1,126 @@
+## "msgid"s in this file come from POT (.pot) files.
+###
+### Do not add, change, or remove "msgid"s manually here as
+### they're tied to the ones in the corresponding POT file
+### (with the same domain).
+###
+### Use "mix gettext.extract --merge" or "mix gettext.merge"
+### to merge POT files into PO files.
+msgid ""
+msgstr ""
+"Language: it\n"
+"Plural-Forms: nplurals=2\n"
+
+#: lib/safarimanager_web/components/core_components.ex:477
+#, elixir-autogen, elixir-format
+msgid "Actions"
+msgstr "Azioni"
+
+#: lib/safarimanager_web/live/sidebar.ex:55
+#, elixir-autogen, elixir-format
+msgid "Admin"
+msgstr "Amministrazione"
+
+#: lib/safarimanager_web/live/sidebar.ex:105
+#, elixir-autogen, elixir-format
+msgid "Are you sure you want to shut down Safari Manager now?"
+msgstr "Sei sicuro di voler arrestare Safari Manager ora?"
+
+#: lib/safarimanager_web/live/sidebar.ex:84
+#, elixir-autogen, elixir-format
+msgid "Categories"
+msgstr "Categorie"
+
+#: lib/safarimanager_web/components/theme_change_dropdown.ex:15
+#, elixir-autogen, elixir-format
+msgid "Change theme"
+msgstr "Cambia tema"
+
+#: lib/safarimanager_web/live/sidebar.ex:71
+#, elixir-autogen, elixir-format
+msgid "Competitions"
+msgstr "Competizioni"
+
+#: lib/safarimanager_web/live/sidebar.ex:77
+#, elixir-autogen, elixir-format
+msgid "Evaluations"
+msgstr "Valutazioni"
+
+#: lib/safarimanager_web/components/hero.ex:20
+#, elixir-autogen, elixir-format
+msgid "Hi, %{name}!"
+msgstr "Ciao, %{name}!"
+
+#: lib/safarimanager_web/live/sidebar.ex:47
+#, elixir-autogen, elixir-format
+msgid "Home"
+msgstr "Home"
+
+#: lib/safarimanager_web/live/sidebar.ex:59
+#, elixir-autogen, elixir-format
+msgid "Organizations"
+msgstr "Società"
+
+#: lib/safarimanager_web/live/sidebar.ex:90
+#, elixir-autogen, elixir-format
+msgid "Participants"
+msgstr "Partecipanti"
+
+#: lib/safarimanager_web/live/sidebar.ex:104
+#: lib/safarimanager_web/live/sidebar.ex:106
+#: lib/safarimanager_web/live/sidebar.ex:116
+#, elixir-autogen, elixir-format
+msgid "Shut Down"
+msgstr "Arresta"
+
+#: lib/safarimanager_web/live/sidebar.ex:65
+#, elixir-autogen, elixir-format
+msgid "Subjects"
+msgstr "Soggetti"
+
+#: lib/safarimanager_web/components/theme_change_dropdown.ex:27
+#, elixir-autogen, elixir-format
+msgid "Theme"
+msgstr "Tema"
+
+#: lib/safarimanager_web/components/core_components.ex:75
+#: lib/safarimanager_web/components/core_components.ex:180
+#: lib/safarimanager_web/components/flash.ex:76
+#, elixir-autogen, elixir-format
+msgid "close"
+msgstr "chiudi"
+
+#: lib/safarimanager/accounts/user.ex:146
+#, elixir-autogen, elixir-format
+msgid "did not change"
+msgstr "non è cambiato"
+
+#: lib/safarimanager/accounts/user.ex:167
+#, elixir-autogen, elixir-format
+msgid "does not match password"
+msgstr "non coincide con la password"
+
+#: lib/safarimanager/accounts/user.ex:205
+#, elixir-autogen, elixir-format
+msgid "is not valid"
+msgstr "non è valido"
+
+#: lib/safarimanager/accounts/user.ex:60
+#, elixir-autogen, elixir-format
+msgid "must have the @ sign and no spaces"
+msgstr "deve contenere il simbolo @ e nessuno spazio"
+
+#: lib/safarimanager_web/components/user_dropdown.ex:41
+#, elixir-autogen, elixir-format
+msgid "Log out"
+msgstr "Logout"
+
+#: lib/safarimanager_web/components/user_dropdown.ex:36
+#, elixir-autogen, elixir-format
+msgid "Settings"
+msgstr "Impostazioni"
+
+#: lib/safarimanager_web/components/user_dropdown.ex:15
+#, elixir-autogen, elixir-format
+msgid "User options"
+msgstr "Opzioni utente"

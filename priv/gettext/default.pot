@@ -1,0 +1,125 @@
+## This file is a PO Template file.
+##
+## "msgid"s here are often extracted from source code.
+## Add new message manually only if they're dynamic
+## message that can't be statically extracted.
+##
+## Run "mix gettext.extract" to bring this file up to
+## date. Leave "msgstr"s empty as changing them here has no
+## effect: edit them in PO (.po) files instead.
+msgid ""
+msgstr ""
+
+#: lib/safarimanager_web/components/core_components.ex:477
+#, elixir-autogen, elixir-format
+msgid "Actions"
+msgstr ""
+
+#: lib/safarimanager_web/live/sidebar.ex:55
+#, elixir-autogen, elixir-format
+msgid "Admin"
+msgstr ""
+
+#: lib/safarimanager_web/live/sidebar.ex:105
+#, elixir-autogen, elixir-format
+msgid "Are you sure you want to shut down Safari Manager now?"
+msgstr ""
+
+#: lib/safarimanager_web/live/sidebar.ex:84
+#, elixir-autogen, elixir-format
+msgid "Categories"
+msgstr ""
+
+#: lib/safarimanager_web/components/theme_change_dropdown.ex:15
+#, elixir-autogen, elixir-format
+msgid "Change theme"
+msgstr ""
+
+#: lib/safarimanager_web/live/sidebar.ex:71
+#, elixir-autogen, elixir-format
+msgid "Competitions"
+msgstr ""
+
+#: lib/safarimanager_web/live/sidebar.ex:77
+#, elixir-autogen, elixir-format
+msgid "Evaluations"
+msgstr ""
+
+#: lib/safarimanager_web/components/hero.ex:20
+#, elixir-autogen, elixir-format
+msgid "Hi, %{name}!"
+msgstr ""
+
+#: lib/safarimanager_web/live/sidebar.ex:47
+#, elixir-autogen, elixir-format
+msgid "Home"
+msgstr ""
+
+#: lib/safarimanager_web/live/sidebar.ex:59
+#, elixir-autogen, elixir-format
+msgid "Organizations"
+msgstr ""
+
+#: lib/safarimanager_web/live/sidebar.ex:90
+#, elixir-autogen, elixir-format
+msgid "Participants"
+msgstr ""
+
+#: lib/safarimanager_web/live/sidebar.ex:104
+#: lib/safarimanager_web/live/sidebar.ex:106
+#: lib/safarimanager_web/live/sidebar.ex:116
+#, elixir-autogen, elixir-format
+msgid "Shut Down"
+msgstr ""
+
+#: lib/safarimanager_web/live/sidebar.ex:65
+#, elixir-autogen, elixir-format
+msgid "Subjects"
+msgstr ""
+
+#: lib/safarimanager_web/components/theme_change_dropdown.ex:27
+#, elixir-autogen, elixir-format
+msgid "Theme"
+msgstr ""
+
+#: lib/safarimanager_web/components/core_components.ex:75
+#: lib/safarimanager_web/components/core_components.ex:180
+#: lib/safarimanager_web/components/flash.ex:76
+#, elixir-autogen, elixir-format
+msgid "close"
+msgstr ""
+
+#: lib/safarimanager/accounts/user.ex:146
+#, elixir-autogen, elixir-format
+msgid "did not change"
+msgstr ""
+
+#: lib/safarimanager/accounts/user.ex:167
+#, elixir-autogen, elixir-format
+msgid "does not match password"
+msgstr ""
+
+#: lib/safarimanager/accounts/user.ex:205
+#, elixir-autogen, elixir-format
+msgid "is not valid"
+msgstr ""
+
+#: lib/safarimanager/accounts/user.ex:60
+#, elixir-autogen, elixir-format
+msgid "must have the @ sign and no spaces"
+msgstr ""
+
+#: lib/safarimanager_web/components/user_dropdown.ex:41
+#, elixir-autogen, elixir-format
+msgid "Log out"
+msgstr ""
+
+#: lib/safarimanager_web/components/user_dropdown.ex:36
+#, elixir-autogen, elixir-format
+msgid "Settings"
+msgstr ""
+
+#: lib/safarimanager_web/components/user_dropdown.ex:15
+#, elixir-autogen, elixir-format
+msgid "User options"
+msgstr ""

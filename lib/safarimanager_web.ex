@@ -78,6 +78,10 @@ defmodule SMWeb do
       use Surface.Component
 
       import SMWeb.ErrorHelpers
+      import SMWeb.Gettext
+
+      # Shortcut for generating JS commands
+      alias Phoenix.LiveView.JS
 
       # Routes generation with the ~p sigil
       unquote(verified_routes())
@@ -90,8 +94,7 @@ defmodule SMWeb do
 
       import SMWeb.ErrorHelpers
 
-      # Routes generation with the ~p sigil
-      unquote(verified_routes())
+      unquote(html_helpers())
     end
   end
 

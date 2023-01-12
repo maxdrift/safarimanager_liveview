@@ -4,7 +4,6 @@ defmodule SMWeb.Components.Layout do
   """
   use SMWeb, :surface_component
 
-  alias Phoenix.LiveView.JS
   alias SMWeb.Components.Sidebar
   alias Surface.Components.LiveRedirect
 

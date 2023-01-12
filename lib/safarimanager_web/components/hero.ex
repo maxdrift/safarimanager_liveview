@@ -4,8 +4,6 @@ defmodule SMWeb.Components.Hero do
   """
   use SMWeb, :surface_component
 
-  import SMWeb.Gettext
-
   @doc "The name"
   prop name, :string, default: "Guest"
 

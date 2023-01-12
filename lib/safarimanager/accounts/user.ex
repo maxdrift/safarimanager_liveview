@@ -10,6 +10,8 @@ defmodule SM.Accounts.User do
   alias SM.Participants.Participant
   alias SM.Slides.Slide
 
+  import SMWeb.Gettext
+
   schema "users" do
     field :email, :string
     field :password, :string, virtual: true, redact: true
@@ -54,7 +56,9 @@ defmodule SM.Accounts.User do
   defp validate_email(changeset) do
     changeset
     |> validate_required([:email])
-    |> validate_format(:email, ~r/^[^\s]+@[^\s]+$/, message: "must have the @ sign and no spaces")
+    |> validate_format(:email, ~r/^[^\s]+@[^\s]+$/,
+      message: gettext("must have the @ sign and no spaces")
+    )
     |> validate_length(:email, max: 160)
     |> unsafe_validate_unique(:email, SM.Repo)
     |> unique_constraint(:email)
@@ -66,7 +70,7 @@ defmodule SM.Accounts.User do
     |> validate_length(:password, min: 12, max: 72)
     # |> validate_format(:password, ~r/[a-z]/, message: "at least one lower case character")
     # |> validate_format(:password, ~r/[A-Z]/, message: "at least one upper case character")
-    # |> validate_format(:password, ~r/[!?@#$%^&*_0-9]/, message: "at least one digit or punctuation character")
+    # |> validate_format(:password, ~r/[!?@#$%^&*_0-9]/, message: gettext("at least one digit or punctuation character"))
     |> maybe_hash_password(opts)
   end
 
@@ -139,7 +143,7 @@ defmodule SM.Accounts.User do
     |> validate_email()
     |> case do
       %{changes: %{email: _}} = changeset -> changeset
-      %{} = changeset -> add_error(changeset, :email, "did not change")
+      %{} = changeset -> add_error(changeset, :email, gettext("did not change"))
     end
   end
 
@@ -160,7 +164,7 @@ defmodule SM.Accounts.User do
   def password_changeset(user, attrs, opts \\ []) do
     user
     |> cast(attrs, [:password])
-    |> validate_confirmation(:password, message: "does not match password")
+    |> validate_confirmation(:password, message: gettext("does not match password"))
     |> validate_password(opts)
   end
 
@@ -198,7 +202,7 @@ defmodule SM.Accounts.User do
     if valid_password?(changeset.data, password) do
       changeset
     else
-      add_error(changeset, :current_password, "is not valid")
+      add_error(changeset, :current_password, gettext("is not valid"))
     end
   end
 end

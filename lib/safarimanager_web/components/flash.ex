@@ -4,10 +4,7 @@ defmodule SMWeb.Components.Flash do
   """
   use SMWeb, :surface_component
 
-  alias Phoenix.LiveView.JS
-
   import SMWeb.CoreComponents, only: [show: 1, hide: 2]
-  import SMWeb.Gettext, only: [gettext: 1]
 
   data msg, :string
 

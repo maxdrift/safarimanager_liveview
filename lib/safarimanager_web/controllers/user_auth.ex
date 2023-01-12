@@ -65,9 +65,12 @@ defmodule SMWeb.UserAuth do
   #     end
   #
   defp renew_session(conn) do
+    locale = get_session(conn, :locale)
+
     conn
     |> configure_session(renew: true)
     |> clear_session()
+    |> put_session(:locale, locale)
   end
 
   @doc """

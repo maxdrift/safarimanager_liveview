@@ -12,7 +12,7 @@ defmodule SMWeb.Components.UserDropdown do
 
   def render(assigns) do
     ~F"""
-    <div title="User options" class="dropdown dropdown-right dropdown-end">
+    <div title={gettext("User options")} class="dropdown dropdown-right dropdown-end">
       <label
         tabindex="0"
         class="mt-6 flex items-center group border-l-4 border-transparent"
@@ -33,12 +33,12 @@ defmodule SMWeb.Components.UserDropdown do
       <ul class="menu dropdown-content bg-base-200 text-base-content rounded-t rounded-b top-px w-52 overflow-y-auto shadow-2xl ml-[-3em]">
         <li>
           <LiveRedirect to={~p"/users/settings"}>
-            Settings
+            {gettext("Settings")}
           </LiveRedirect>
         </li>
         <li>
           <Link to={~p"/users/log_out"} method={:delete}>
-            Log out
+            {gettext("Log out")}
           </Link>
         </li>
       </ul>

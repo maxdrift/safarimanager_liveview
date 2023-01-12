@@ -4,7 +4,6 @@ defmodule SMWeb.Components.Sidebar do
   """
   use SMWeb, :surface_component
 
-  alias Phoenix.LiveView.JS
   alias SMWeb.Components.SidebarLink
   alias SMWeb.Components.ThemeChangeDropdown
   alias SMWeb.Components.UserDropdown
@@ -44,44 +43,51 @@ defmodule SMWeb.Components.Sidebar do
                 v{Application.spec(:safarimanager, :vsn)}
               </span>
             </div>
-            <SidebarLink label="Home" hero_icon="home" to={~p"/organize/new"} current={@current_page} />
+            <SidebarLink
+              label={gettext("Home")}
+              hero_icon="home"
+              to={~p"/organize/new"}
+              current={@current_page}
+            />
             <div class="ml-4 border-t border-gray-600" />
             <div class="ml-6 h-7 flex items-center">
-              <span class="text-gray-300 text-md font-semibold">Admin</span>
+              <span class="text-gray-300 text-md font-semibold">
+                {gettext("Admin")}
+              </span>
             </div>
             <SidebarLink
-              label="Organizations"
+              label={gettext("Organizations")}
               hero_icon="user-group"
               to={~p"/admin/organizations"}
               current={@current_page}
             />
             <SidebarLink
-              label="Subjects"
+              label={gettext("Subjects")}
               hero_icon="viewfinder-circle"
               to={~p"/admin/subjects"}
               current={@current_page}
             />
             <SidebarLink
-              label="Competitions"
+              label={gettext("Competitions")}
               hero_icon="trophy"
               to={~p"/admin/competitions"}
               current={@current_page}
             />
             <SidebarLink
-              label="Evaluations"
+              label={gettext("Evaluations")}
               hero_icon="hand-thumb-up"
               to={~p"/admin/evaluations"}
               current={@current_page}
             />
             <SidebarLink label="Users" hero_icon="user" to={~p"/admin/users"} current={@current_page} />
             <SidebarLink
-              label="Categories"
+              label={gettext("Categories")}
               hero_icon="tag"
               to={~p"/admin/categories"}
               current={@current_page}
             />
             <SidebarLink
-              label="Participants"
+              label={gettext("Participants")}
               hero_icon="users"
               to={~p"/admin/participants"}
               current={@current_page}
@@ -95,9 +101,9 @@ defmodule SMWeb.Components.Sidebar do
             aria-label="shutdown"
             phx-click={with_confirm(
               JS.push("shutdown"),
-              title: "Shut Down",
-              description: "Are you sure you want to shut down Safari Manager now?",
-              confirm_text: "Shut Down",
+              title: gettext("Shut Down"),
+              description: gettext("Are you sure you want to shut down Safari Manager now?"),
+              confirm_text: gettext("Shut Down"),
               confirm_icon: "shut-down-line"
             )}
           >
@@ -107,7 +113,7 @@ defmodule SMWeb.Components.Sidebar do
               class="h-6 text-md leading-6 w-[56px] flex justify-center"
             />
             <span class="text-sm font-medium">
-              Shut Down
+              {gettext("Shut Down")}
             </span>
           </button>
           <ThemeChangeDropdown />
@@ -118,7 +124,7 @@ defmodule SMWeb.Components.Sidebar do
     """
   end
 
-  defp with_confirm(_action, _opts) do
-    ""
+  defp with_confirm(action, _opts) do
+    action
   end
 end

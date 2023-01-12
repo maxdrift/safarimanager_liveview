@@ -12,7 +12,7 @@ defmodule SMWeb.Components.ThemeChangeDropdown do
 
   def render(assigns) do
     ~F"""
-    <div title="Change theme" class="dropdown dropdown-right dropdown-end">
+    <div title={gettext("Change theme")} class="dropdown dropdown-right dropdown-end">
       <label
         tabindex="0"
         aria-label="change theme"
@@ -24,7 +24,7 @@ defmodule SMWeb.Components.ThemeChangeDropdown do
           class="h-6 text-md leading-6 w-[56px] flex justify-center"
         />
         <span class="text-sm font-medium">
-          Theme
+          {gettext("Theme")}
         </span>
         <Heroicons.Surface.Icon
           name="chevron-down"
