@@ -30,7 +30,8 @@
       </div>
     </div>
   </div>
-  <!-- phx-update="ignore" is VERY VERY important! -->
+  <!-- phx-update="ignore" is VERY VERY important!
+  It prevents the viewer from being replaced during LV updates. -->
   <div id="openseadragon-viewer" class="flex-1" :hook="Lightbox" phx-update="ignore"> </div>
   <div class="flex-initial">
     <div class="flex flex-row justify-between">

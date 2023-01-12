@@ -4,7 +4,6 @@ defmodule SMWeb.NewCompetition do
   """
   use SMWeb, :surface_view
 
-  alias SM.Accounts
   alias SM.Competitions
   alias SM.Competitions.Competition
   alias SM.Evaluations
