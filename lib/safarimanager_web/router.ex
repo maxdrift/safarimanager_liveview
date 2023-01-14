@@ -37,6 +37,7 @@ defmodule SMWeb.Router do
     pipe_through [:browser]
 
     get "/", HomeController, :new
+    post "/export", CSVExportController, :create
   end
 
   scope "/", SMWeb do

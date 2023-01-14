@@ -17,6 +17,7 @@ defmodule SM.Slides.Slide do
     use SM, :schema
 
     @primary_key false
+    @derive {Jason.Encoder, except: [:__struct__]}
     embedded_schema do
       field :from, Ecto.UUID
       field :to, Ecto.UUID
@@ -36,6 +37,7 @@ defmodule SM.Slides.Slide do
     alias SM.Slides.Slide.WrongSubjectContext
 
     @primary_key false
+    @derive {Jason.Encoder, except: [:__struct__]}
     embedded_schema do
       field :wrong_subject, :boolean, default: false
       embeds_one :wrong_subject_ctx, WrongSubjectContext, on_replace: :update

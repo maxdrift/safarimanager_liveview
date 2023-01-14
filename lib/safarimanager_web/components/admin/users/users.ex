@@ -12,6 +12,7 @@ defmodule SMWeb.Components.Admin.Users do
   alias SMWeb.Components.Admin.Users.Show
   alias SMWeb.Components.ConfirmationDialog
   alias SMWeb.Components.Layout
+  alias Surface.Components.Link
   alias Surface.Components.LivePatch
 
   require Logger

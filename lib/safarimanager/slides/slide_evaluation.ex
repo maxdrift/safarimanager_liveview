@@ -8,6 +8,7 @@ defmodule SM.Slides.SlideEvaluation do
   alias SM.Evaluations.Evaluation
   alias SM.Slides.Slide
 
+  @derive {Jason.Encoder, only: [:user_id, :evaluation_id]}
   @primary_key false
   schema "slides_evaluations" do
     belongs_to :slide, Slide, primary_key: true

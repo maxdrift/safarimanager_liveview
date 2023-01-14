@@ -19,6 +19,7 @@ defmodule SMWeb.Slides do
   alias Surface.Components.Form.Checkbox
   alias Surface.Components.Form.FieldContext
   alias Surface.Components.Form.TextInput
+  alias Surface.Components.Link
   alias Surface.Components.LiveFileInput
   alias Surface.Components.LivePatch
   alias Surface.Components.LiveRedirect

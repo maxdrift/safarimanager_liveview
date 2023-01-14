@@ -1,17 +1,17 @@
-NimbleCSV.define(CSV, separator: ";", escape: "\"")
+NimbleCSV.define(SM.SelectionCSV, separator: ";", escape: "\"")
 
 defmodule SM.CSVImport do
   @moduledoc """
   Import to parse participants CSVs with Slides selections
   """
 
-  # alias NimbleCSV.RFC4180, as: CSV
+  alias SM.SelectionCSV
+  alias SM.Utils.CSVHelper
 
   @spec parse(String.t()) :: Enumerable.t()
   def parse(path) do
-    path
-    |> File.stream!(read_ahead: 100_000)
-    |> CSV.parse_stream(skip_headers: false)
+    SelectionCSV
+    |> CSVHelper.csv_to_stream(path, skip_headers: false)
     |> Stream.reject(fn
       [""] -> true
       _any -> false

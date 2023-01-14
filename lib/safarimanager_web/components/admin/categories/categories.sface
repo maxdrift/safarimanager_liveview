@@ -25,6 +25,9 @@
   <div class="flex flex-row-reverse my-2">
     <div>
       <LivePatch to="?action=new" class="btn btn-sm btn-success">Create</LivePatch>
+      <Link to={~p"/export?entity=categories"} method={:post} class="btn btn-sm btn-outline">
+        Export to CSV
+      </Link>
       <button :if={@any_selected?} class="btn btn-sm btn-error" :on-click="delete-many">Delete selected ({length(@selected)})</button>
     </div>
   </div>

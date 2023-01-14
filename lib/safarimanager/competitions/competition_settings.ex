@@ -12,6 +12,13 @@ defmodule SM.Competitions.CompetitionSettings do
     """
     use SM, :schema
 
+    @derive {Jason.Encoder,
+             only: [
+               :name,
+               :from,
+               :to,
+               :value
+             ]}
     @primary_key false
     embedded_schema do
       field :name, :string, primary_key: true
@@ -27,6 +34,22 @@ defmodule SM.Competitions.CompetitionSettings do
     end
   end
 
+  @derive {Jason.Encoder,
+           only: [
+             :evaluations_per_juror,
+             :number_of_jurors,
+             :max_jury_slides,
+             :max_submitted_slides,
+             :proportional_submission,
+             :submission_ratio,
+             :fixed_points_multiplier,
+             :penalty_amount,
+             :dynamic_coefficients_enabled,
+             :dynamic_coefficients,
+             :competition_id,
+             :inserted_at,
+             :updated_at
+           ]}
   @primary_key false
   schema "competition_settings" do
     field :evaluations_per_juror, :integer

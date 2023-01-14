@@ -13,6 +13,7 @@ defmodule SMWeb.Components.Admin.Competitions do
   alias SMWeb.Components.Admin.Competitions.Show
   alias SMWeb.Components.ConfirmationDialog
   alias SMWeb.Components.Layout
+  alias Surface.Components.Link
   alias Surface.Components.LivePatch
 
   require Logger

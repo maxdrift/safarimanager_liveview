@@ -1,11 +1,11 @@
-NimbleCSV.define(SM.CSV, separator: ";")
+NimbleCSV.define(SM.SeedsCSV, separator: ";")
 
 defmodule SM.Seeds do
   @moduledoc """
   Seeds helper
   """
   alias SM.Categories
-  alias SM.CSV, as: CSV
+  alias SM.SeedsCSV, as: SeedsCSV
   alias SM.Evaluations
   alias SM.Subjects
 
@@ -30,7 +30,7 @@ defmodule SM.Seeds do
     [priv_dir, "/repo/elenco_pesci_2019.csv"]
     |> Path.join()
     |> File.stream!()
-    |> CSV.parse_stream(skip_headers: false)
+    |> SeedsCSV.parse_stream(skip_headers: false)
     |> Stream.map(fn [numeric_id, name, scientific_name, coefficient] ->
       {:ok, _result} =
         Subjects.create(%{
@@ -51,7 +51,7 @@ defmodule SM.Seeds do
     [priv_dir, "/repo/elenco_pesci_2019.csv"]
     |> Path.join()
     |> File.stream!()
-    |> CSV.parse_stream(skip_headers: false)
+    |> SeedsCSV.parse_stream(skip_headers: false)
     |> Stream.map(fn [numeric_id, name, scientific_name, coefficient] ->
       data = %{
         name: String.downcase(name),
