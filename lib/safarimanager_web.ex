@@ -120,7 +120,7 @@ defmodule SMWeb do
       use Phoenix.VerifiedRoutes,
         endpoint: SMWeb.Endpoint,
         router: SMWeb.Router,
-        statics: SMWeb.static_paths()
+        statics: SMWeb.static_paths() ++ ["uploads"]
     end
   end
 
