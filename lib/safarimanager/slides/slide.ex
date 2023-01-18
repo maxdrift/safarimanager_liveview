@@ -65,7 +65,7 @@ defmodule SM.Slides.Slide do
     field :width, :integer
     field :height, :integer
     field :metadata, :map
-    field :status, Ecto.Enum, values: @statuses
+    field :status, Ecto.Enum, values: @statuses, default: :discarded
     field :penalty, :boolean
     embeds_one :flags, Flags, on_replace: :update
     belongs_to :user, User
@@ -96,6 +96,7 @@ defmodule SM.Slides.Slide do
     ])
     |> validate_required([:file_name, :file_size, :user_id, :competition_id])
     |> cast_embed(:flags)
+    |> maybe_require_subject()
     |> foreign_key_constraint(:user_id)
     |> foreign_key_constraint(:competition_id)
     |> foreign_key_constraint(:subject_id)
@@ -104,5 +105,15 @@ defmodule SM.Slides.Slide do
   @spec get_statuses :: [:discarded | :submitted_jury | :submitted_fixed, ...]
   def get_statuses do
     @statuses
+  end
+
+  # Internal
+
+  defp maybe_require_subject(changeset) do
+    if get_field(changeset, :status) != :discarded do
+      validate_required(changeset, [:subject_id])
+    else
+      changeset
+    end
   end
 end

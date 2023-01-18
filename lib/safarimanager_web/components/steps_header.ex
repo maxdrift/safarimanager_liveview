@@ -11,13 +11,22 @@ defmodule SMWeb.Components.StepsHeader do
 
   defp steps(competition_id) do
     [
-      %{name: "Participants", url: Path.join([@root_url, competition_id, "/participants"])},
-      %{name: "Jurors", url: Path.join([@root_url, competition_id, "/jurors"])},
-      %{name: "Slides", url: Path.join([@root_url, competition_id, "/slides"])},
-      %{name: "CSV", url: Path.join([@root_url, competition_id, "/csv_import"])},
-      %{name: "Validation", url: Path.join([@root_url, competition_id, "/validation_launcher"])},
-      %{name: "Jury", url: Path.join([@root_url, competition_id, "/jury_launcher"])},
-      %{name: "Results", url: Path.join([@root_url, competition_id, "/results"])}
+      %{
+        name: gettext("Participants"),
+        url: Path.join([@root_url, competition_id, "/participants"])
+      },
+      %{name: gettext("Jurors"), url: Path.join([@root_url, competition_id, "/jurors"])},
+      %{name: gettext("Slides"), url: Path.join([@root_url, competition_id, "/slides"])},
+      %{
+        name: gettext("Selection"),
+        url: Path.join([@root_url, competition_id, "/slide_selection"])
+      },
+      %{
+        name: gettext("Validation"),
+        url: Path.join([@root_url, competition_id, "/validation_launcher"])
+      },
+      %{name: gettext("Jury"), url: Path.join([@root_url, competition_id, "/jury_launcher"])},
+      %{name: gettext("Results"), url: Path.join([@root_url, competition_id, "/results"])}
     ]
   end
 end

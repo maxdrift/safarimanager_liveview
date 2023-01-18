@@ -1,13 +1,13 @@
-defmodule SMWeb.CSVImport do
+defmodule SMWeb.SlideSelection do
   @moduledoc """
-  Slides CSV import view
+  Slide selection view
   """
   use SMWeb, :surface_view
 
   alias Phoenix.LiveView
   alias SM.Accounts
   alias SM.Competitions
-  alias SM.CSVImport
+  alias SM.Slides.SelectionImport
   alias SM.Participants
   alias SM.Slides
   alias SM.Subjects
@@ -140,7 +140,7 @@ defmodule SMWeb.CSVImport do
       |> assign(:participants, Participants.list(competition_id))
       # FIXME: this way of selecting the user forces a re-query of Competition
       |> assign(:user, user_id && Accounts.get_user!(user_id))
-      |> assign(:discarded_slides, user_id && Map.get(grouped_slides, nil, []))
+      |> assign(:discarded_slides, user_id && Map.get(grouped_slides, :discarded, []))
       |> assign(:jury_slides, user_id && Map.get(grouped_slides, :submitted_jury, []))
       |> assign(:fixed_slides, user_id && Map.get(grouped_slides, :submitted_fixed, []))
 
@@ -156,7 +156,7 @@ defmodule SMWeb.CSVImport do
 
     socket =
       socket
-      |> assign(:discarded_slides, user_id && Map.get(grouped_slides, nil, []))
+      |> assign(:discarded_slides, user_id && Map.get(grouped_slides, :discarded, []))
       |> assign(:jury_slides, user_id && Map.get(grouped_slides, :submitted_jury, []))
       |> assign(:fixed_slides, user_id && Map.get(grouped_slides, :submitted_fixed, []))
 
@@ -200,7 +200,7 @@ defmodule SMWeb.CSVImport do
 
     LiveView.consume_uploaded_entry(socket, entry, fn %{path: path} ->
       path
-      |> CSVImport.parse()
+      |> SelectionImport.parse()
       |> Stream.each(fn row ->
         with {:ok, subject} <- Subjects.get_by_numeric_id(row.subject_num),
              {:ok, slide} <- Slides.get(competition_id, user_id, row.file_name),

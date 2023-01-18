@@ -50,7 +50,7 @@ defmodule SMWeb.Router do
         live "/:competition_id/participants", Participants
         live "/:competition_id/jurors", Jurors
         live "/:competition_id/slides", Slides
-        live "/:competition_id/csv_import", CSVImport
+        live "/:competition_id/slide_selection", SlideSelection
         live "/:competition_id/validation_launcher", ValidationLauncher
         live "/:competition_id/validation", Validation
         live "/:competition_id/jury_launcher", JuryLauncher

@@ -1,8 +1,8 @@
 NimbleCSV.define(SM.SelectionCSV, separator: ";", escape: "\"")
 
-defmodule SM.CSVImport do
+defmodule SM.Slides.SelectionImport do
   @moduledoc """
-  Import to parse participants CSVs with Slides selections
+  Import participants' Slides selection from CSVs
   """
 
   alias SM.SelectionCSV

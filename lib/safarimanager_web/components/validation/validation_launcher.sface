@@ -241,7 +241,7 @@
     </table>
   </div>
   <div class="flex flex-row my-10 w-full">
-    <LiveRedirect to={"/organize/#{@competition_id}/csv_import"} class="flex-none btn gap-2">
+    <LiveRedirect to={"/organize/#{@competition_id}/slide_selection"} class="flex-none btn gap-2">
       <svg
         xmlns="http://www.w3.org/2000/svg"
         class="h-6 w-6"
@@ -252,7 +252,7 @@
       >
         <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
       </svg>
-      CSV Import
+      Selection
     </LiveRedirect>
     <div class="grow" />
     <LiveRedirect
