@@ -15,4 +15,12 @@ defmodule SMWeb.Atoms.JuryToolbarButton do
 
   @doc "The content of the button"
   slot default, required: true
+
+  def render(assigns) do
+    ~F"""
+    <button id={@id} :on-click={@click} :values={%{@click_key => @click_value}} class={@class}>
+      <#slot />
+    </button>
+    """
+  end
 end

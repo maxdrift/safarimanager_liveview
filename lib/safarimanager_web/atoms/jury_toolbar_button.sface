@@ -1,3 +1,0 @@
-<button id={@id} :on-click={@click} :values={%{@click_key => @click_value}} class={@class}>
-  <#slot />
-</button>
