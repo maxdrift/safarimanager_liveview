@@ -66,7 +66,7 @@ defmodule SM.Organizations do
   end
 
   @doc """
-  Creates a organization.
+  Creates an organization.
 
   ## Examples
 
@@ -86,7 +86,27 @@ defmodule SM.Organizations do
   end
 
   @doc """
-  Updates a organization.
+  Import an organization.
+
+  ## Examples
+
+  iex> import(%{field: value})
+  {:ok, %Organization{}}
+
+  iex> import(%{"field" => "bad_value"})
+  {:error, %Ecto.Changeset{}}
+
+  """
+  @spec import(%{String.t() => any()}) :: {:error, any()} | {:ok, Organization.t()}
+  def import(attrs \\ %{}) do
+    %Organization{}
+    |> Organization.import_changeset(attrs)
+    |> Repo.insert()
+    |> notify_subscribers([:organization, :created])
+  end
+
+  @doc """
+  Updates an organization.
 
   ## Examples
 
@@ -107,7 +127,7 @@ defmodule SM.Organizations do
   end
 
   @doc """
-  Deletes a Organization.
+  Deletes an organization.
 
   ## Examples
 

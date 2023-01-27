@@ -227,6 +227,35 @@ defmodule SM.Accounts do
     end
   end
 
+  @doc """
+  Import a user.
+
+  ## Examples
+
+  iex> import(%{field: value})
+  {:ok, %User{}}
+
+  iex> import(%{"field" => "bad_value"})
+  {:error, %Ecto.Changeset{}}
+
+  """
+  @spec import(%{(String.t() | atom()) => any()}) :: {:error, any()} | {:ok, User.t()}
+  def import(attrs \\ %{}) do
+    new_password = SM.DefaultPassword.generate()
+
+    %User{}
+    |> User.import_changeset(attrs)
+    |> Repo.insert()
+    |> case do
+      {:ok, user} ->
+        reset_user_password(user, %{password: new_password, password_confirmation: new_password})
+
+      {:error, _reason} = error ->
+        error
+    end
+    |> notify_subscribers([:user, :created])
+  end
+
   ## User registration
 
   @doc """
@@ -468,7 +497,7 @@ defmodule SM.Accounts do
   """
   @spec delete_many([String.t()]) :: {:ok, integer()} | :error
   def delete_many(ids) do
-    {deleted, nil} = Repo.delete_all(from entity in User, where: entity.id in ^ids)
+    {deleted, nil} = Repo.delete_all(from(entity in User, where: entity.id in ^ids))
 
     if deleted == Enum.count(ids) do
       notify_subscribers({:ok, deleted}, [:user, :deleted])

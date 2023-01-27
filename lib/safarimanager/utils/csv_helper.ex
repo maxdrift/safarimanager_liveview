@@ -1,6 +1,6 @@
 defmodule SM.Utils.CSVHelper do
   @moduledoc """
-  Helper module to handle CSV import/export
+  Helper module to handle CSV import
   """
 
   alias NimbleCSV.RFC4180, as: CSV
@@ -8,8 +8,13 @@ defmodule SM.Utils.CSVHelper do
   @doc """
   Converts a CSV file to a stream
   """
+  @spec csv_to_stream(String.t(), Keyword.t()) :: Enumerable.t()
+  def csv_to_stream(filename, opts \\ []) do
+    csv_to_stream(CSV, filename, opts)
+  end
+
   @spec csv_to_stream(atom(), String.t(), Keyword.t()) :: Enumerable.t()
-  def csv_to_stream(parser \\ CSV, filename, opts \\ []) do
+  def csv_to_stream(parser, filename, opts) do
     skip_headers = Keyword.get(opts, :skip_headers, true)
     read_ahead = Keyword.get(opts, :read_ahead, 100_000)
 

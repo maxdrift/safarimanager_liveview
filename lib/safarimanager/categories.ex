@@ -86,6 +86,26 @@ defmodule SM.Categories do
   end
 
   @doc """
+  Import a category.
+
+  ## Examples
+
+  iex> import(%{field: value})
+  {:ok, %Category{}}
+
+  iex> import(%{"field" => "bad_value"})
+  {:error, %Ecto.Changeset{}}
+
+  """
+  @spec import(%{(String.t() | atom()) => any()}) :: {:error, any()} | {:ok, Category.t()}
+  def import(attrs \\ %{}) do
+    %Category{}
+    |> Category.import_changeset(attrs)
+    |> Repo.insert()
+    |> notify_subscribers([:category, :created])
+  end
+
+  @doc """
   Updates a category.
 
   ## Examples

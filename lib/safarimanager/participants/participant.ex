@@ -18,11 +18,24 @@ defmodule SM.Participants.Participant do
     timestamps()
   end
 
-  @spec changeset(Participant.t(), %{(String.t() | atom()) => any()}) :: Ecto.Changeset.t()
-  def changeset(participant, attrs) do
-    participant
+  @spec changeset(t(), map()) :: Ecto.Changeset.t()
+  def changeset(struct, attrs) do
+    struct
     |> cast(attrs, [:user_id, :competition_id, :category_id, :number])
     |> validate_required([:user_id, :competition_id, :category_id, :number])
+    |> foreign_key_constraint(:user_id)
+    |> foreign_key_constraint(:competition_id)
+    |> foreign_key_constraint(:category_id)
+    |> unique_constraint(:number, name: :participants_competition_id_number_index)
+  end
+
+  @doc false
+  @spec import_changeset(t(), map()) :: Ecto.Changeset.t()
+  def import_changeset(struct, attrs) do
+    struct
+    |> cast(attrs, __MODULE__.__schema__(:fields))
+    |> validate_required(__MODULE__.__schema__(:fields))
+    |> unique_constraint(:id)
     |> foreign_key_constraint(:user_id)
     |> foreign_key_constraint(:competition_id)
     |> foreign_key_constraint(:category_id)

@@ -20,12 +20,13 @@ msgstr ""
 msgid "Admin"
 msgstr ""
 
-#: lib/safarimanager_web/live/sidebar.ex:105
+#: lib/safarimanager_web/live/sidebar.ex:116
 #, elixir-autogen, elixir-format
 msgid "Are you sure you want to shut down Safari Manager now?"
 msgstr ""
 
-#: lib/safarimanager_web/live/sidebar.ex:84
+#: lib/safarimanager_web/components/admin/import.ex:42
+#: lib/safarimanager_web/live/sidebar.ex:89
 #, elixir-autogen, elixir-format
 msgid "Categories"
 msgstr ""
@@ -35,11 +36,13 @@ msgstr ""
 msgid "Change theme"
 msgstr ""
 
+#: lib/safarimanager_web/components/admin/import.ex:43
 #: lib/safarimanager_web/live/sidebar.ex:71
 #, elixir-autogen, elixir-format
 msgid "Competitions"
 msgstr ""
 
+#: lib/safarimanager_web/components/admin/import.ex:44
 #: lib/safarimanager_web/live/sidebar.ex:77
 #, elixir-autogen, elixir-format
 msgid "Evaluations"
@@ -55,23 +58,27 @@ msgstr ""
 msgid "Home"
 msgstr ""
 
+#: lib/safarimanager_web/components/admin/import.ex:46
 #: lib/safarimanager_web/live/sidebar.ex:59
 #, elixir-autogen, elixir-format
 msgid "Organizations"
 msgstr ""
 
-#: lib/safarimanager_web/live/sidebar.ex:90
+#: lib/safarimanager_web/components/admin/import.ex:47
+#: lib/safarimanager_web/components/steps_header.ex:15
+#: lib/safarimanager_web/live/sidebar.ex:95
 #, elixir-autogen, elixir-format
 msgid "Participants"
 msgstr ""
 
-#: lib/safarimanager_web/live/sidebar.ex:104
-#: lib/safarimanager_web/live/sidebar.ex:106
-#: lib/safarimanager_web/live/sidebar.ex:116
+#: lib/safarimanager_web/live/sidebar.ex:115
+#: lib/safarimanager_web/live/sidebar.ex:117
+#: lib/safarimanager_web/live/sidebar.ex:127
 #, elixir-autogen, elixir-format
 msgid "Shut Down"
 msgstr ""
 
+#: lib/safarimanager_web/components/admin/import.ex:49
 #: lib/safarimanager_web/live/sidebar.ex:65
 #, elixir-autogen, elixir-format
 msgid "Subjects"
@@ -122,4 +129,130 @@ msgstr ""
 #: lib/safarimanager_web/components/user_dropdown.ex:15
 #, elixir-autogen, elixir-format
 msgid "User options"
+msgstr ""
+
+#: lib/safarimanager_web/components/admin/import.ex:45
+#: lib/safarimanager_web/components/steps_header.ex:18
+#, elixir-autogen, elixir-format
+msgid "Jurors"
+msgstr ""
+
+#: lib/safarimanager_web/components/steps_header.ex:28
+#, elixir-autogen, elixir-format
+msgid "Jury"
+msgstr ""
+
+#: lib/safarimanager_web/components/steps_header.ex:29
+#, elixir-autogen, elixir-format
+msgid "Results"
+msgstr ""
+
+#: lib/safarimanager_web/components/steps_header.ex:21
+#, elixir-autogen, elixir-format
+msgid "Selection"
+msgstr ""
+
+#: lib/safarimanager_web/components/admin/import.ex:48
+#: lib/safarimanager_web/components/steps_header.ex:19
+#, elixir-autogen, elixir-format
+msgid "Slides"
+msgstr ""
+
+#: lib/safarimanager_web/components/steps_header.ex:25
+#, elixir-autogen, elixir-format
+msgid "Validation"
+msgstr ""
+
+#: lib/safarimanager_web/components/admin/import.ex:50
+#: lib/safarimanager_web/live/sidebar.ex:83
+#, elixir-autogen, elixir-format
+msgid "Users"
+msgstr ""
+
+#: lib/safarimanager_web/components/admin/import.sface:26
+#, elixir-autogen, elixir-format
+msgid "Click or drop a CSV file in this box"
+msgstr ""
+
+#: lib/safarimanager_web/components/upload_drop_area.ex:27
+#, elixir-autogen, elixir-format
+msgid "Click or drop files in this box"
+msgstr ""
+
+#: lib/safarimanager_web/components/admin/import.sface:16
+#, elixir-autogen, elixir-format
+msgid "Select a table"
+msgstr ""
+
+#: lib/safarimanager_web/components/admin/import.sface:65
+#: lib/safarimanager_web/live/sidebar.ex:101
+#, elixir-autogen, elixir-format
+msgid "Import"
+msgstr ""
+
+#: lib/safarimanager_web/components/admin/import.sface:3
+#, elixir-autogen, elixir-format
+msgid "Import from CSV"
+msgstr ""
+
+#: lib/safarimanager_web/components/admin/import.sface:69
+#, elixir-autogen, elixir-format
+msgid "Reset"
+msgstr ""
+
+## Manual entries
+#, elixir-format
+msgid "categories"
+msgstr ""
+
+#, elixir-format
+msgid "competitions"
+msgstr ""
+
+#, elixir-format
+msgid "evaluations"
+msgstr ""
+
+#, elixir-format
+msgid "jurors"
+msgstr ""
+
+#, elixir-format
+msgid "organizations"
+msgstr ""
+
+#, elixir-format
+msgid "participants"
+msgstr ""
+
+#, elixir-format
+msgid "slides"
+msgstr ""
+
+#, elixir-format
+msgid "subjects"
+msgstr ""
+
+#, elixir-format
+msgid "users"
+msgstr ""
+
+#: lib/safarimanager_web/components/admin/import.ex:92
+#, elixir-autogen, elixir-format
+msgid "Imported %{success} of %{total} entries in %{table}"
+msgstr ""
+
+#: lib/safarimanager_web/components/admin/import.ex:112
+#, elixir-autogen, elixir-format
+msgid "Too large"
+msgstr ""
+
+#: lib/safarimanager_web/components/admin/import.ex:114
+#, elixir-autogen, elixir-format
+msgid "You have selected an unacceptable file type"
+msgstr ""
+
+#: lib/safarimanager_web/components/admin/import.ex:113
+#, elixir-autogen, elixir-format
+msgid "You have selected too many files"
 msgstr ""

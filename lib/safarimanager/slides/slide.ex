@@ -77,9 +77,9 @@ defmodule SM.Slides.Slide do
   end
 
   @doc false
-  @spec changeset(t(), %{(String.t() | atom()) => any()}) :: Ecto.Changeset.t()
-  def changeset(slide, attrs) do
-    slide
+  @spec changeset(t(), map()) :: Ecto.Changeset.t()
+  def changeset(struct, attrs) do
+    struct
     |> cast(attrs, [
       :file_name,
       :file_size,
@@ -97,6 +97,20 @@ defmodule SM.Slides.Slide do
     |> validate_required([:file_name, :file_size, :user_id, :competition_id])
     |> cast_embed(:flags)
     |> maybe_require_subject()
+    |> foreign_key_constraint(:user_id)
+    |> foreign_key_constraint(:competition_id)
+    |> foreign_key_constraint(:subject_id)
+  end
+
+  @doc false
+  @spec import_changeset(t(), map()) :: Ecto.Changeset.t()
+  def import_changeset(struct, attrs) do
+    struct
+    |> cast(attrs, __MODULE__.__schema__(:fields) -- [:flags])
+    |> cast_embed(:flags)
+    |> validate_required([:id, :file_name, :file_size, :user_id, :competition_id])
+    |> maybe_require_subject()
+    |> unique_constraint(:id)
     |> foreign_key_constraint(:user_id)
     |> foreign_key_constraint(:competition_id)
     |> foreign_key_constraint(:subject_id)

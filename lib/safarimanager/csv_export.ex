@@ -19,7 +19,9 @@ defmodule SM.CSVExport do
   alias SM.Utils.CSVHelper
 
   def export("users", callback) when is_function(callback) do
-    do_export(User, callback)
+    extra_fields = %{hashed_password: fn _row -> nil end}
+
+    do_export(User, callback, extra_fields: extra_fields)
   end
 
   def export("organizations", callback) when is_function(callback) do
@@ -44,7 +46,7 @@ defmodule SM.CSVExport do
 
   def export("competitions", callback) when is_function(callback) do
     extra_fields = %{
-      competition_settings: fn row ->
+      settings: fn row ->
         CompetitionSettings
         |> Repo.get_by(competition_id: row.id)
         |> Jason.encode!()
@@ -65,7 +67,7 @@ defmodule SM.CSVExport do
   def export("slides", callback) when is_function(callback) do
     extra_fields = %{
       metadata: fn row -> Jason.encode!(row.metadata) end,
-      slides_evaluations: fn row ->
+      evaluations: fn row ->
         query =
           from(se in SlideEvaluation,
             where: [slide_id: ^row.id],

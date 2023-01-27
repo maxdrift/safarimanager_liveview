@@ -64,6 +64,27 @@ defmodule SM.Jurors do
   end
 
   @doc """
+  Import a juror.
+
+  ## Examples
+
+  iex> import(%{field: value})
+  {:ok, %Juror{}}
+
+  iex> import(%{"field" => "bad_value"})
+  {:error, %Ecto.Changeset{}}
+
+  """
+  @spec import(%{(String.t() | atom()) => any()}) :: {:error, any()} | {:ok, Juror.t()}
+  def import(attrs \\ %{}) do
+    %Juror{}
+    |> Juror.import_changeset(attrs)
+    |> Repo.insert()
+    |> notify_subscribers([:competition, :updated], id_key: :competition_id)
+    |> notify_subscribers([:user, :updated], id_key: :user_id)
+  end
+
+  @doc """
   Updates a juror.
 
   ## Examples
@@ -120,7 +141,7 @@ defmodule SM.Jurors do
   """
   @spec delete_many([String.t()]) :: {:ok, integer()} | :error
   def delete_many(ids) do
-    {deleted, nil} = Repo.delete_all(from entity in Juror, where: entity.id in ^ids)
+    {deleted, nil} = Repo.delete_all(from(entity in Juror, where: entity.id in ^ids))
 
     if deleted == Enum.count(ids) do
       with {:ok, _result} <-

@@ -570,6 +570,70 @@ defmodule SM.Slides do
   end
 
   @doc """
+  Import a slide.
+
+  ## Examples
+
+  iex> import(%{field: value})
+  {:ok, %Slide{}}
+
+  iex> import(%{"field" => "bad_value"})
+  {:error, %Ecto.Changeset{}}
+
+  """
+  @spec import(%{(String.t() | atom()) => any()}) :: {:error, any()} | {:ok, Slide.t()}
+  def import(attrs \\ %{}) do
+    metadata =
+      attrs
+      |> Map.get("metadata")
+      |> then(&(&1 || "{}"))
+      |> Jason.decode!()
+
+    flags =
+      attrs
+      |> Map.get("flags")
+      |> case do
+        nil -> []
+        "" -> []
+        value -> Jason.decode!(value)
+      end
+
+    attrs =
+      attrs
+      |> Map.put("metadata", metadata)
+      |> Map.put("flags", flags)
+
+    evaluations =
+      attrs
+      |> Map.get("evaluations", "[]")
+      |> Jason.decode!()
+      |> Enum.map(fn [user_id, evaluation_id] ->
+        %{
+          slide_id: Map.fetch!(attrs, "id"),
+          user_id: user_id,
+          evaluation_id: evaluation_id,
+          inserted_at: DateTime.utc_now(),
+          updated_at: DateTime.utc_now()
+        }
+      end)
+
+    slide_changeset = Slide.import_changeset(%Slide{}, attrs)
+
+    Multi.new()
+    |> Multi.insert(:slide, slide_changeset)
+    |> Multi.insert_all(:slide_evaluations, SlideEvaluation, evaluations)
+    |> Repo.transaction()
+    |> case do
+      {:ok, %{slide: slide}} ->
+        {:ok, slide}
+
+      {:error, _failed_operation, failed_value, _changes_so_far} ->
+        {:error, failed_value}
+    end
+    |> notify_subscribers([:slide, :created])
+  end
+
+  @doc """
   Updates a slide.
 
   ## Examples

@@ -7,6 +7,7 @@ defmodule SM.Competitions do
   alias SM.Competitions.Competition
   alias SM.Competitions.CompetitionSettings
   alias SM.Evaluations
+  alias SM.Evaluations.Evaluation
 
   @doc """
   Returns the list of competitions.
@@ -71,6 +72,40 @@ defmodule SM.Competitions do
   def create(attrs \\ %{}) do
     %Competition{}
     |> change(attrs)
+    |> Repo.insert()
+    |> notify_subscribers([:competition, :created])
+  end
+
+  @doc """
+  Import a competition.
+
+  ## Examples
+
+  iex> import(%{field: value})
+  {:ok, %Competition{}}
+
+  iex> import(%{"field" => "bad_value"})
+  {:error, %Ecto.Changeset{}}
+
+  """
+  @spec import(%{(String.t() | atom()) => any()}) :: {:error, any()} | {:ok, Competition.t()}
+  def import(attrs \\ %{}) do
+    settings_changeset =
+      CompetitionSettings.changeset(%CompetitionSettings{}, Jason.decode!(attrs["settings"]))
+
+    allowed_evaluations =
+      attrs
+      |> Map.get("allowed_evaluations", "[]")
+      |> Jason.decode!()
+      |> Enum.flat_map(fn e ->
+        case Repo.get(Evaluation, e) do
+          nil -> []
+          result -> [result]
+        end
+      end)
+
+    %Competition{}
+    |> Competition.import_changeset(attrs, settings_changeset, allowed_evaluations)
     |> Repo.insert()
     |> notify_subscribers([:competition, :created])
   end

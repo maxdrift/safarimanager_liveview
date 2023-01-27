@@ -10,17 +10,16 @@ defmodule SMWeb.Slides do
   alias SM.Participants
   alias SM.Slides
   alias SM.USBWatcherSupervisor
-  alias SMWeb.Components.DirectUploadDialog
   alias SMWeb.Components.CompetitionHeader
+  alias SMWeb.Components.DirectUploadDialog
   alias SMWeb.Components.FileBrowser
   alias SMWeb.Components.Layout
   alias SMWeb.Components.StepsHeader
+  alias SMWeb.Components.UploadDropArea
   alias Surface.Components.Form
   alias Surface.Components.Form.Checkbox
-  alias Surface.Components.Form.FieldContext
   alias Surface.Components.Form.TextInput
   alias Surface.Components.Link
-  alias Surface.Components.LiveFileInput
   alias Surface.Components.LivePatch
   alias Surface.Components.LiveRedirect
 

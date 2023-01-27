@@ -66,6 +66,7 @@ defmodule SMWeb.Router do
         live "/users", Users
         live "/categories", Categories
         live "/participants", Participants
+        live "/import", Import
       end
 
       live "/gallery", Gallery

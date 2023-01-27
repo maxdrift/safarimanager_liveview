@@ -106,6 +106,26 @@ defmodule SM.Evaluations do
   end
 
   @doc """
+  Import a evaluation.
+
+  ## Examples
+
+  iex> import(%{field: value})
+  {:ok, %Evaluation{}}
+
+  iex> import(%{"field" => "bad_value"})
+  {:error, %Ecto.Changeset{}}
+
+  """
+  @spec import(%{(String.t() | atom()) => any()}) :: {:error, any()} | {:ok, Evaluation.t()}
+  def import(attrs \\ %{}) do
+    %Evaluation{}
+    |> Evaluation.import_changeset(attrs)
+    |> Repo.insert()
+    |> notify_subscribers([:evaluation, :created])
+  end
+
+  @doc """
   Updates a evaluation.
 
   ## Examples
@@ -159,7 +179,7 @@ defmodule SM.Evaluations do
   """
   @spec delete_many([String.t()]) :: {:ok, integer()} | :error
   def delete_many(ids) do
-    {deleted, nil} = Repo.delete_all(from entity in Evaluation, where: entity.id in ^ids)
+    {deleted, nil} = Repo.delete_all(from(entity in Evaluation, where: entity.id in ^ids))
 
     if deleted == Enum.count(ids) do
       notify_subscribers({:ok, deleted}, [:evaluation, :deleted])

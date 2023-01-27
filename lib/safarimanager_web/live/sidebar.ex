@@ -79,7 +79,12 @@ defmodule SMWeb.Components.Sidebar do
               to={~p"/admin/evaluations"}
               current={@current_page}
             />
-            <SidebarLink label="Users" hero_icon="user" to={~p"/admin/users"} current={@current_page} />
+            <SidebarLink
+              label={gettext("Users")}
+              hero_icon="user"
+              to={~p"/admin/users"}
+              current={@current_page}
+            />
             <SidebarLink
               label={gettext("Categories")}
               hero_icon="tag"
@@ -90,6 +95,12 @@ defmodule SMWeb.Components.Sidebar do
               label={gettext("Participants")}
               hero_icon="users"
               to={~p"/admin/participants"}
+              current={@current_page}
+            />
+            <SidebarLink
+              label={gettext("Import")}
+              hero_icon="arrows-up-down"
+              to={~p"/admin/import"}
               current={@current_page}
             />
           </div>

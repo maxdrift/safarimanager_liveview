@@ -194,15 +194,26 @@ defmodule SM.Accounts.User do
     false
   end
 
-  @spec validate_current_password(Ecto.Changeset.t(), String.t()) :: Ecto.Changeset.t()
   @doc """
   Validates the current password otherwise adds an error to the changeset.
   """
+  @spec validate_current_password(Ecto.Changeset.t(), String.t()) :: Ecto.Changeset.t()
   def validate_current_password(changeset, password) do
     if valid_password?(changeset.data, password) do
       changeset
     else
       add_error(changeset, :current_password, gettext("is not valid"))
     end
+  end
+
+  @doc false
+  @spec import_changeset(t(), map()) :: Ecto.Changeset.t()
+  def import_changeset(struct, attrs) do
+    struct
+    |> cast(attrs, __MODULE__.__schema__(:fields) -- [:hashed_password])
+    |> validate_required([:id, :email])
+    |> unique_constraint(:id)
+    |> foreign_key_constraint(:organization_id)
+    |> foreign_key_constraint(:category_id)
   end
 end

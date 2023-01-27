@@ -151,6 +151,27 @@ defmodule SM.Participants do
   end
 
   @doc """
+  Import a participant.
+
+  ## Examples
+
+  iex> import(%{field: value})
+  {:ok, %Participant{}}
+
+  iex> import(%{"field" => "bad_value"})
+  {:error, %Ecto.Changeset{}}
+
+  """
+  @spec import(%{(String.t() | atom()) => any()}) :: {:error, any()} | {:ok, Participant.t()}
+  def import(attrs \\ %{}) do
+    %Participant{}
+    |> Participant.import_changeset(attrs)
+    |> Repo.insert()
+    |> notify_subscribers([:competition, :updated], id_key: :competition_id)
+    |> notify_subscribers([:user, :updated], id_key: :user_id)
+  end
+
+  @doc """
   Updates a participant.
 
   ## Examples

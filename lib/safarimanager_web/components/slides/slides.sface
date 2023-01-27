@@ -83,29 +83,10 @@
             user_id={@user.id}
           />
         {#else}
-          <Form for={:slides} change="validate" submit="submit">
-            <div phx-drop-target={@uploads.images.ref} class="flex w-full items-center justify-center">
-              <FieldContext name={:images}>
-                <label class="w-full flex flex-col items-center px-4 py-6 rounded-lg shadow-inner tracking-wide uppercase border-dashed border-2 cursor-pointer hover:text-info hover:border-info">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    class="h-8 w-8"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    stroke-width="2"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"
-                    />
-                  </svg>
-                  <span class="mt-2 text-base leading-normal">Select or drop some images in this box</span>
-                  <LiveFileInput upload={@uploads.images} class="hidden" />
-                </label>
-              </FieldContext>
-            </div>
+          <Form id="upload-drop-area-form" for={:slides} change="validate" submit="submit">
+            <UploadDropArea field={:images} uploads={@uploads}>
+              Click or drop some images in this box
+            </UploadDropArea>
           </Form>
         {/if}
         <div class="max-h-96 overflow-y-auto mt-2 tiny-scrollbar">

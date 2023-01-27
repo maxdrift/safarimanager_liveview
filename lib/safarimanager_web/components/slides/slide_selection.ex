@@ -14,16 +14,15 @@ defmodule SMWeb.SlideSelection do
   alias SMWeb.Components.CompetitionHeader
   alias SMWeb.Components.Layout
   alias SMWeb.Components.StepsHeader
+  alias SMWeb.Components.UploadDropArea
   alias Surface.Components.Form
   alias Surface.Components.Form.ErrorTag
   alias Surface.Components.Form.Field
-  alias Surface.Components.Form.FieldContext
   alias Surface.Components.Form.Label
   alias Surface.Components.Form.Reset
   alias Surface.Components.Form.Select
   alias Surface.Components.Form.Submit
   alias Surface.Components.Form.TextInput
-  alias Surface.Components.LiveFileInput
   alias Surface.Components.LivePatch
   alias Surface.Components.LiveRedirect
 

@@ -7,7 +7,8 @@ defmodule SMWeb.CSVExportController do
 
   @spec create(Plug.Conn.t(), any()) :: Plug.Conn.t()
   def create(conn, %{"entity" => entity}) do
-    filename = "#{entity}-export-#{DateTime.to_iso8601(DateTime.utc_now())}.csv"
+    filename =
+      "#{Gettext.gettext(SMWeb.Gettext, entity)}-export-#{DateTime.to_iso8601(DateTime.utc_now())}.csv"
 
     conn =
       conn

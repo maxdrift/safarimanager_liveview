@@ -21,11 +21,22 @@ defmodule SM.Subjects.Subject do
 
   @doc false
   @spec changeset(t(), %{(String.t() | atom()) => any()}) :: Ecto.Changeset.t()
-  def changeset(subject, attrs) do
-    subject
+  def changeset(struct, attrs) do
+    struct
     |> cast(attrs, [:name, :coefficient, :numeric_id, :scientific_name, :type])
     |> validate_required([:name, :numeric_id, :type])
     |> validate_inclusion(:coefficient, @coefficients)
+    |> unique_constraint(:numeric_id)
+  end
+
+  @doc false
+  @spec import_changeset(t(), map()) :: Ecto.Changeset.t()
+  def import_changeset(struct, attrs) do
+    struct
+    |> cast(attrs, __MODULE__.__schema__(:fields))
+    |> validate_required(__MODULE__.__schema__(:fields))
+    |> validate_inclusion(:coefficient, @coefficients)
+    |> unique_constraint(:id)
     |> unique_constraint(:numeric_id)
   end
 

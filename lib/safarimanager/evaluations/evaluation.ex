@@ -14,11 +14,20 @@ defmodule SM.Evaluations.Evaluation do
     timestamps()
   end
 
-  @spec changeset(Evaluation.t(), %{(String.t() | atom()) => any()}) :: Ecto.Changeset.t()
-  def changeset(evaluation, attrs) do
-    evaluation
+  @spec changeset(t(), map()) :: Ecto.Changeset.t()
+  def changeset(struct, attrs) do
+    struct
     |> cast(attrs, [:value, :type, :description])
     |> validate_required([:value])
+  end
+
+  @doc false
+  @spec import_changeset(t(), map()) :: Ecto.Changeset.t()
+  def import_changeset(struct, attrs) do
+    struct
+    |> cast(attrs, __MODULE__.__schema__(:fields))
+    |> validate_required(__MODULE__.__schema__(:fields))
+    |> unique_constraint(:id)
   end
 
   @spec get_types :: [:numeric, ...]

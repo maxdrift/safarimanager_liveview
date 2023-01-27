@@ -34,9 +34,9 @@ defmodule SM.Competitions.Competition do
     timestamps()
   end
 
-  @spec changeset(Competition.t(), %{String.t() => any()}) :: Ecto.Changeset.t()
-  def changeset(competition, attrs) do
-    competition
+  @spec changeset(t(), %{String.t() => any()}) :: Ecto.Changeset.t()
+  def changeset(struct, attrs) do
+    struct
     |> cast(attrs, [
       :name,
       :start_time,
@@ -56,9 +56,21 @@ defmodule SM.Competitions.Competition do
     |> cast_assoc(:settings, required: false)
   end
 
-  @spec put_allowed_evaluations(Competition.t(), [%Evaluation{}]) :: Ecto.Changeset.t()
-  def put_allowed_evaluations(competition, evaluations) do
-    competition
+  @doc false
+  @spec import_changeset(t(), map(), Ecto.Changeset.t(), [Evaluation.t()]) :: Ecto.Changeset.t()
+  def import_changeset(struct, attrs, settings_changeset, allowed_evaluations) do
+    struct
+    |> cast(attrs, __MODULE__.__schema__(:fields))
+    |> validate_required([:id, :name, :organization_id])
+    |> unique_constraint(:id)
+    |> foreign_key_constraint(:organization_id)
+    |> put_assoc(:settings, settings_changeset)
+    |> put_assoc(:allowed_evaluations, allowed_evaluations)
+  end
+
+  @spec put_allowed_evaluations(t(), [%Evaluation{}]) :: Ecto.Changeset.t()
+  def put_allowed_evaluations(struct, evaluations) do
+    struct
     |> change()
     |> put_assoc(:allowed_evaluations, evaluations)
   end
