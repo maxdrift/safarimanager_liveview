@@ -1,6 +1,10 @@
 <Dialog {=@id} {=@show}>
   <div class="card-title">
-    {String.capitalize(Atom.to_string(@action))} {@entity_name}
+    {#if @action == :create}
+      {gettext("Create %{entity_name}", entity_name: Gettext.gettext(SMWeb.Gettext, @entity_name))}
+    {#else}
+      {gettext("Edit %{entity_name}", entity_name: Gettext.gettext(SMWeb.Gettext, @entity_name))}
+    {/if}
   </div>
   <Form
     for={@changeset}

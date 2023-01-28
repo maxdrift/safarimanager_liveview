@@ -16,7 +16,7 @@ defmodule SMWeb.UserSettingsLive do
     <Layout current_user={@current_user} current_page={~p"/users/settings"}>
       <header>
         <h1 class="text-lg font-semibold leading-8">
-          Change Email
+          {gettext("Change Email")}
         </h1>
       </header>
 
@@ -27,11 +27,11 @@ defmodule SMWeb.UserSettingsLive do
         >
           <div>
             <Heroicons.Surface.Icon name="exclamation-circle" type="outline" class="h-6 w-6" />
-            <span>Oops, something went wrong! Please check the errors below.</span>
+            <span>{gettext("Oops, something went wrong! Please check the errors below.")}</span>
           </div>
         </div>
         <Field name={:email} class="form-control">
-          <Label class="label">Email</Label>
+          <Label class="label">{gettext("Email")}</Label>
           <EmailInput opts={required: true} class="input input-bordered" />
           <Label class="label h-7">
             <ErrorTag />
@@ -39,7 +39,7 @@ defmodule SMWeb.UserSettingsLive do
         </Field>
 
         <Field name={:current_password} class="form-control">
-          <Label class="label">Current password</Label>
+          <Label class="label">{gettext("Current password")}</Label>
           <PasswordInput
             name="current_password"
             id="current_password_for_email"
@@ -52,12 +52,14 @@ defmodule SMWeb.UserSettingsLive do
           </Label>
         </Field>
 
-        <Submit opts={"phx-disable-with": "Changing..."} class="btn btn-outline">Change Email</Submit>
+        <Submit opts={"phx-disable-with": gettext("Changing...")} class="btn btn-outline">
+          {gettext("Change Email")}
+        </Submit>
       </Form>
 
-      <header>
+      <header class="mt-6">
         <h1 class="text-lg font-semibold leading-8">
-          Change Password
+          {gettext("Change Password")}
         </h1>
       </header>
 
@@ -76,7 +78,7 @@ defmodule SMWeb.UserSettingsLive do
         >
           <div>
             <Heroicons.Surface.Icon name="exclamation-circle" type="outline" class="h-6 w-6" />
-            <span>Oops, something went wrong! Please check the errors below.</span>
+            <span>{gettext("Oops, something went wrong! Please check the errors below.")}</span>
           </div>
         </div>
 
@@ -85,21 +87,21 @@ defmodule SMWeb.UserSettingsLive do
         </Field>
 
         <Field name={:password} class="form-control">
-          <Label class="label">New password</Label>
+          <Label class="label">{gettext("New password")}</Label>
           <PasswordInput opts={required: true} class="input input-bordered" />
           <Label class="label h-7">
             <ErrorTag />
           </Label>
         </Field>
         <Field name={:password_confirmation} class="form-control">
-          <Label class="label">Confirm new password</Label>
+          <Label class="label">{gettext("Confirm new password")}</Label>
           <PasswordInput class="input input-bordered" />
           <Label class="label h-7">
             <ErrorTag />
           </Label>
         </Field>
         <Field name={:current_password} class="form-control">
-          <Label class="label">Current password</Label>
+          <Label class="label">{gettext("Current password")}</Label>
           <PasswordInput
             id="current_password_for_password"
             value={@current_password}
@@ -111,7 +113,9 @@ defmodule SMWeb.UserSettingsLive do
           </Label>
         </Field>
 
-        <Submit opts={"phx-disable-with": "Changing..."} class="btn btn-outline">Change Password</Submit>
+        <Submit opts={"phx-disable-with": gettext("Changing...")} class="btn btn-outline">
+          {gettext("Change Password")}
+        </Submit>
       </Form>
     </Layout>
     """

@@ -42,33 +42,20 @@
         <ErrorTag />
       </Label>
     </Field>
-    <div class="form-control w-1/2 px-3" id="select-search" :hook="SelectSearch" phx-update="ignore">
-      <FieldContext name={:organization_id}>
-        <Label class="label">
-          <span class="label-text">Organization</span>
-        </Label>
-        <TextInput
-          id="entity_organization_id_select"
-          name="organization-select"
-          class={state_class("input input-bordered", @changeset, :organization_id, [])}
-          opts={
-            phx_debounce: "1000",
-            placeholder: "Select an organization...",
-            list: "organizations",
-            autocomplete: "nope"
-          }
-        />
-        <datalist id="organizations">
-          {#for organization <- @organizations}
-            <option value={organization.name} data-value={organization.id} />
-          {/for}
-        </datalist>
-        <HiddenInput />
-        <Label class="label h-7">
-          <ErrorTag />
-        </Label>
-      </FieldContext>
-    </div>
+    <Field name={:organization_id} class="form-control w-1/2 px-3">
+      <Label class="label">
+        <span class="label-text">Organization</span>
+      </Label>
+      <Select
+        options={Enum.map(@organizations, &{&1.name, &1.id})}
+        prompt={[key: "Select an organization..."]}
+        selected={@entity.organization_id}
+        class={state_class("input input-bordered", @changeset, :organization_id, [])}
+      />
+      <Label class="label h-7">
+        <ErrorTag />
+      </Label>
+    </Field>
     <Field name={:category_id} class="form-control w-1/2 px-3">
       <Label class="label">
         <span class="label-text">Category</span>

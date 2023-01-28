@@ -16,18 +16,18 @@ msgstr ""
 msgid "Actions"
 msgstr "Azioni"
 
-#: lib/safarimanager_web/live/sidebar.ex:55
+#: lib/safarimanager_web/components/sidebar.ex:55
 #, elixir-autogen, elixir-format
 msgid "Admin"
 msgstr "Amministrazione"
 
-#: lib/safarimanager_web/live/sidebar.ex:116
+#: lib/safarimanager_web/components/sidebar.ex:116
 #, elixir-autogen, elixir-format
 msgid "Are you sure you want to shut down Safari Manager now?"
 msgstr "Sei sicuro di voler arrestare Safari Manager ora?"
 
 #: lib/safarimanager_web/components/admin/import.ex:42
-#: lib/safarimanager_web/live/sidebar.ex:89
+#: lib/safarimanager_web/components/sidebar.ex:89
 #, elixir-autogen, elixir-format
 msgid "Categories"
 msgstr "Categorie"
@@ -38,13 +38,13 @@ msgid "Change theme"
 msgstr "Cambia tema"
 
 #: lib/safarimanager_web/components/admin/import.ex:43
-#: lib/safarimanager_web/live/sidebar.ex:71
+#: lib/safarimanager_web/components/sidebar.ex:71
 #, elixir-autogen, elixir-format
 msgid "Competitions"
 msgstr "Competizioni"
 
 #: lib/safarimanager_web/components/admin/import.ex:44
-#: lib/safarimanager_web/live/sidebar.ex:77
+#: lib/safarimanager_web/components/sidebar.ex:77
 #, elixir-autogen, elixir-format
 msgid "Evaluations"
 msgstr "Valutazioni"
@@ -54,33 +54,33 @@ msgstr "Valutazioni"
 msgid "Hi, %{name}!"
 msgstr "Ciao, %{name}!"
 
-#: lib/safarimanager_web/live/sidebar.ex:47
+#: lib/safarimanager_web/components/sidebar.ex:47
 #, elixir-autogen, elixir-format
 msgid "Home"
 msgstr "Home"
 
 #: lib/safarimanager_web/components/admin/import.ex:46
-#: lib/safarimanager_web/live/sidebar.ex:59
+#: lib/safarimanager_web/components/sidebar.ex:59
 #, elixir-autogen, elixir-format
 msgid "Organizations"
 msgstr "Società"
 
 #: lib/safarimanager_web/components/admin/import.ex:47
+#: lib/safarimanager_web/components/sidebar.ex:95
 #: lib/safarimanager_web/components/steps_header.ex:15
-#: lib/safarimanager_web/live/sidebar.ex:95
 #, elixir-autogen, elixir-format
 msgid "Participants"
 msgstr "Partecipanti"
 
-#: lib/safarimanager_web/live/sidebar.ex:115
-#: lib/safarimanager_web/live/sidebar.ex:117
-#: lib/safarimanager_web/live/sidebar.ex:127
+#: lib/safarimanager_web/components/sidebar.ex:115
+#: lib/safarimanager_web/components/sidebar.ex:117
+#: lib/safarimanager_web/components/sidebar.ex:127
 #, elixir-autogen, elixir-format
 msgid "Shut Down"
 msgstr "Arresta"
 
 #: lib/safarimanager_web/components/admin/import.ex:49
-#: lib/safarimanager_web/live/sidebar.ex:65
+#: lib/safarimanager_web/components/sidebar.ex:65
 #, elixir-autogen, elixir-format
 msgid "Subjects"
 msgstr "Soggetti"
@@ -120,7 +120,7 @@ msgstr "deve contenere il simbolo @ e nessuno spazio"
 #: lib/safarimanager_web/components/user_dropdown.ex:41
 #, elixir-autogen, elixir-format
 msgid "Log out"
-msgstr "Logout"
+msgstr "Esci"
 
 #: lib/safarimanager_web/components/user_dropdown.ex:36
 #, elixir-autogen, elixir-format
@@ -165,7 +165,7 @@ msgid "Validation"
 msgstr "Convalida"
 
 #: lib/safarimanager_web/components/admin/import.ex:50
-#: lib/safarimanager_web/live/sidebar.ex:83
+#: lib/safarimanager_web/components/sidebar.ex:83
 #, elixir-autogen, elixir-format
 msgid "Users"
 msgstr "Utenti"
@@ -186,7 +186,7 @@ msgid "Select a table"
 msgstr "Seleziona una tabella"
 
 #: lib/safarimanager_web/components/admin/import.sface:65
-#: lib/safarimanager_web/live/sidebar.ex:101
+#: lib/safarimanager_web/components/sidebar.ex:101
 #, elixir-autogen, elixir-format
 msgid "Import"
 msgstr "Importa"
@@ -256,3 +256,214 @@ msgstr "Hai selezionato un tipo di file incompatibile"
 #, elixir-autogen, elixir-format
 msgid "You have selected too many files"
 msgstr "Hai selezionato troppi file"
+
+#: lib/safarimanager_web/live/user_registration_live.ex:13
+#, elixir-autogen, elixir-format
+msgid "Already registered?"
+msgstr "Già iscritto?"
+
+#: lib/safarimanager_web/live/user_settings_live.ex:19
+#: lib/safarimanager_web/live/user_settings_live.ex:56
+#, elixir-autogen, elixir-format
+msgid "Change Email"
+msgstr "Modifica Email"
+
+#: lib/safarimanager_web/live/user_settings_live.ex:62
+#: lib/safarimanager_web/live/user_settings_live.ex:117
+#, elixir-autogen, elixir-format
+msgid "Change Password"
+msgstr "Modifica Password"
+
+#: lib/safarimanager_web/live/user_settings_live.ex:55
+#: lib/safarimanager_web/live/user_settings_live.ex:116
+#, elixir-autogen, elixir-format
+msgid "Changing..."
+msgstr "Modifica in corso..."
+
+#: lib/safarimanager_web/live/user_confirmation_live.ex:8
+#, elixir-autogen, elixir-format
+msgid "Confirm Account"
+msgstr "Conferma Account"
+
+#: lib/safarimanager_web/live/user_confirmation_live.ex:13
+#, elixir-autogen, elixir-format
+msgid "Confirm my account"
+msgstr "Conferma il mio account"
+
+#: lib/safarimanager_web/live/user_reset_password_live.ex:25
+#: lib/safarimanager_web/live/user_settings_live.ex:97
+#, elixir-autogen, elixir-format
+msgid "Confirm new password"
+msgstr "Conferma la nuova password"
+
+#: lib/safarimanager_web/live/user_registration_live.ex:41
+#, elixir-autogen, elixir-format
+msgid "Create an account"
+msgstr "Crea un account"
+
+#: lib/safarimanager_web/live/user_registration_live.ex:40
+#, elixir-autogen, elixir-format
+msgid "Creating account..."
+msgstr "Creazione account in corso..."
+
+#: lib/safarimanager_web/live/user_settings_live.ex:42
+#: lib/safarimanager_web/live/user_settings_live.ex:104
+#, elixir-autogen, elixir-format
+msgid "Current password"
+msgstr "Password attuale"
+
+#: lib/safarimanager_web/live/user_login_live.ex:10
+#, elixir-autogen, elixir-format
+msgid "Don't have an account?"
+msgstr "Non hai un account?"
+
+#: lib/safarimanager_web/live/user_login_live.ex:26
+#: lib/safarimanager_web/live/user_registration_live.ex:36
+#: lib/safarimanager_web/live/user_settings_live.ex:34
+#, elixir-autogen, elixir-format
+msgid "Email"
+msgstr "Email"
+
+#: lib/safarimanager_web/live/user_forgot_password_live.ex:10
+#: lib/safarimanager_web/live/user_login_live.ex:32
+#, elixir-autogen, elixir-format
+msgid "Forgot your password?"
+msgstr "Dimenticato la password?"
+
+#: lib/safarimanager_web/live/user_confirmation_instructions_live.ex:40
+#, elixir-autogen, elixir-format
+msgid "If your email is in our system and it has not been confirmed yet, you will receive an email with instructions shortly."
+msgstr "Se il tuo indirizzo email è nel nostro sistema ma non è stato ancora confermato, riceverai a breve un'email con delle istruzioni."
+
+#: lib/safarimanager_web/live/user_forgot_password_live.ex:39
+#, elixir-autogen, elixir-format
+msgid "If your email is in our system, you will receive instructions to reset your password shortly."
+msgstr "Se il tuo indirizzo email è nel nostro sistema, riceverai a breve le istruzioni per reimpostare la password."
+
+#: lib/safarimanager_web/live/user_login_live.ex:30
+#, elixir-autogen, elixir-format
+msgid "Keep me logged in"
+msgstr "Ricordami"
+
+#: lib/safarimanager_web/live/user_confirmation_instructions_live.ex:22
+#: lib/safarimanager_web/live/user_confirmation_live.ex:20
+#: lib/safarimanager_web/live/user_reset_password_live.ex:38
+#, elixir-autogen, elixir-format
+msgid "Log in"
+msgstr "Accedi"
+
+#: lib/safarimanager_web/live/user_reset_password_live.ex:21
+#: lib/safarimanager_web/live/user_settings_live.ex:90
+#, elixir-autogen, elixir-format
+msgid "New password"
+msgstr "Nuova password"
+
+#: lib/safarimanager_web/live/user_registration_live.ex:33
+#: lib/safarimanager_web/live/user_reset_password_live.ex:18
+#: lib/safarimanager_web/live/user_settings_live.ex:30
+#: lib/safarimanager_web/live/user_settings_live.ex:81
+#, elixir-autogen, elixir-format
+msgid "Oops, something went wrong! Please check the errors below."
+msgstr "Ops, si è verificato un problema! Controlla gli errori riportati."
+
+#: lib/safarimanager_web/live/user_login_live.ex:27
+#: lib/safarimanager_web/live/user_registration_live.ex:37
+#, elixir-autogen, elixir-format
+msgid "Password"
+msgstr "Password"
+
+#: lib/safarimanager_web/live/user_reset_password_live.ex:65
+#, elixir-autogen, elixir-format
+msgid "Password reset successfully."
+msgstr "Password reimpostata con successo."
+
+#: lib/safarimanager_web/live/user_confirmation_instructions_live.ex:20
+#: lib/safarimanager_web/live/user_confirmation_live.ex:18
+#: lib/safarimanager_web/live/user_reset_password_live.ex:36
+#, elixir-autogen, elixir-format
+msgid "Register"
+msgstr "Registra"
+
+#: lib/safarimanager_web/live/user_registration_live.ex:11
+#, elixir-autogen, elixir-format
+msgid "Register for an account"
+msgstr "Registra un account"
+
+#: lib/safarimanager_web/live/user_confirmation_instructions_live.ex:8
+#: lib/safarimanager_web/live/user_confirmation_instructions_live.ex:14
+#, elixir-autogen, elixir-format
+msgid "Resend confirmation instructions"
+msgstr "Re-invia le istruzioni per confermare l'account"
+
+#: lib/safarimanager_web/live/user_reset_password_live.ex:8
+#: lib/safarimanager_web/live/user_reset_password_live.ex:30
+#, elixir-autogen, elixir-format
+msgid "Reset Password"
+msgstr "Reimposta la password"
+
+#: lib/safarimanager_web/live/user_reset_password_live.ex:83
+#, elixir-autogen, elixir-format
+msgid "Reset password link is invalid or it has expired."
+msgstr "Il link per reimpostare la password non è valido o è scaduto."
+
+#: lib/safarimanager_web/live/user_reset_password_live.ex:29
+#, elixir-autogen, elixir-format
+msgid "Resetting..."
+msgstr "Reimpostando..."
+
+#: lib/safarimanager_web/live/user_forgot_password_live.ex:18
+#, elixir-autogen, elixir-format
+msgid "Send password reset instructions"
+msgstr "Invia le istruzioni per reimpostare la password"
+
+#: lib/safarimanager_web/live/user_confirmation_instructions_live.ex:13
+#: lib/safarimanager_web/live/user_forgot_password_live.ex:17
+#, elixir-autogen, elixir-format
+msgid "Sending..."
+msgstr "Invio in corso..."
+
+#: lib/safarimanager_web/live/user_login_live.ex:36
+#, elixir-autogen, elixir-format
+msgid "Sigining in..."
+msgstr "Accesso in corso..."
+
+#: lib/safarimanager_web/live/user_login_live.ex:37
+#: lib/safarimanager_web/live/user_registration_live.ex:15
+#, elixir-autogen, elixir-format
+msgid "Sign in"
+msgstr "Accedi"
+
+#: lib/safarimanager_web/live/user_login_live.ex:8
+#, elixir-autogen, elixir-format
+msgid "Sign in to account"
+msgstr "Accedi all'account"
+
+#: lib/safarimanager_web/live/user_login_live.ex:12
+#, elixir-autogen, elixir-format
+msgid "Sign up"
+msgstr "Iscriviti"
+
+#: lib/safarimanager_web/live/user_confirmation_live.ex:51
+#, elixir-autogen, elixir-format
+msgid "User confirmation link is invalid or it has expired."
+msgstr "Il link di conferma dell'utente non è valido o è scaduto."
+
+#: lib/safarimanager_web/live/user_confirmation_live.ex:36
+#, elixir-autogen, elixir-format
+msgid "User confirmed successfully."
+msgstr "Utente confermato con successo."
+
+#: lib/safarimanager_web/live/user_forgot_password_live.ex:11
+#, elixir-autogen, elixir-format
+msgid "We'll send a password reset link to your inbox"
+msgstr "Invieremo un link per reimpostare la password al tuo indirizzo email"
+
+#: lib/safarimanager_web/live/user_login_live.ex:14
+#, elixir-autogen, elixir-format
+msgid "for an account now."
+msgstr "un account ora."
+
+#: lib/safarimanager_web/live/user_registration_live.ex:17
+#, elixir-autogen, elixir-format
+msgid "to your account now."
+msgstr "al tuo account ora."

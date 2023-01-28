@@ -121,6 +121,8 @@ defmodule SMWeb do
         endpoint: SMWeb.Endpoint,
         router: SMWeb.Router,
         statics: SMWeb.static_paths() ++ ["uploads"]
+
+      import SMWeb.Gettext
     end
   end
 
@@ -132,7 +134,6 @@ defmodule SMWeb do
       import SMWeb.CoreComponents
 
       import SMWeb.ErrorHelpers
-      import SMWeb.Gettext
 
       # Shortcut for generating JS commands
       alias Phoenix.LiveView.JS

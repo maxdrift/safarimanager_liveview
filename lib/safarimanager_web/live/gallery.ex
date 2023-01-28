@@ -4,7 +4,7 @@ defmodule SMWeb.Gallery do
   """
   use SMWeb, :surface_view
 
-  alias SMWeb.Molecules.Thumbnail
+  alias SMWeb.Atoms.Thumbnail
 
   @lorempicsum_url "https://picsum.photos"
 

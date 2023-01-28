@@ -5,19 +5,21 @@ defmodule SMWeb.UserConfirmationInstructionsLive do
 
   def render(assigns) do
     ~H"""
-    <.header>Resend confirmation instructions</.header>
+    <.header><%= gettext("Resend confirmation instructions") %></.header>
 
     <.simple_form :let={f} for={:user} id="resend_confirmation_form" phx-submit="send_instructions">
       <.input field={{f, :email}} type="email" label="Email" required />
       <:actions>
-        <.button phx-disable-with="Sending...">Resend confirmation instructions</.button>
+        <.button phx-disable-with={gettext("Sending...")}>
+          <%= gettext("Resend confirmation instructions") %>
+        </.button>
       </:actions>
     </.simple_form>
 
     <p>
-      <.link href={~p"/users/register"}>Register</.link>
+      <.link href={~p"/users/register"}><%= gettext("Register") %></.link>
       |
-      <.link href={~p"/users/log_in"}>Log in</.link>
+      <.link href={~p"/users/log_in"}><%= gettext("Log in") %></.link>
     </p>
     """
   end
@@ -35,7 +37,9 @@ defmodule SMWeb.UserConfirmationInstructionsLive do
     end
 
     info =
-      "If your email is in our system and it has not been confirmed yet, you will receive an email with instructions shortly."
+      gettext(
+        "If your email is in our system and it has not been confirmed yet, you will receive an email with instructions shortly."
+      )
 
     {:noreply,
      socket

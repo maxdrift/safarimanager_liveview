@@ -1,4 +1,4 @@
-defmodule SMWeb.Molecules.Thumbnail do
+defmodule SMWeb.Atoms.Thumbnail do
   @moduledoc """
   A single gallery image.
   """
