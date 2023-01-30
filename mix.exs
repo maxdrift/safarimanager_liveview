@@ -69,7 +69,7 @@ defmodule SM.MixProject do
       {:phoenix_ecto, "~> 4.4"},
       {:phoenix_html, "~> 3.2"},
       {:phoenix_live_reload, "~> 1.4.1", only: :dev},
-      {:phoenix_live_view, "~> 0.18.11"},
+      {:phoenix_live_view, "<= 0.18.4"},
       {:phoenix_view, "~> 2.0"},
       {:phoenix, "~> 1.7.0-rc.2", override: true},
       {:plug_cowboy, "~> 2.6", override: true},
