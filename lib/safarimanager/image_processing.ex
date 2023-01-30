@@ -29,7 +29,6 @@ defmodule SM.ImageProcessing do
         gps = Map.get(metadata, :gps)
         Map.put(metadata, :gps, (gps && Map.from_struct(gps)) || %{})
 
-      # TODO: Make PR in Image library to fix specs
       {:error, _reason} ->
         Logger.warning("Image missing metadata")
         %{}
