@@ -19,7 +19,7 @@ defmodule SMWeb.Endpoint do
   plug Plug.Static,
     at: "/",
     from: :safarimanager,
-    gzip: false,
+    gzip: true,
     only: SMWeb.static_paths()
 
   plug Plug.Static,

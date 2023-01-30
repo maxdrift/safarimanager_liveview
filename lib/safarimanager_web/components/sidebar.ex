@@ -34,7 +34,7 @@ defmodule SMWeb.Components.Sidebar do
           <div class="space-y-3">
             <div class="flex items-center mb-5">
               <LiveRedirect to={~p"/"} class="flex items-center border-l-4 border-gray-900 group">
-                <img src={~p"/logo.png"} class="mx-2" height="40" width="40" alt="logo livebook">
+                <img src={~p"/images/logo.png"} class="mx-2" height="40" width="40" alt="logo safari manager">
                 <span class="text-gray-300 text-xl font-logo ml-[-1px] group-hover:text-white pt-1">
                   Safari Manager
                 </span>

@@ -19,7 +19,7 @@ defmodule SMWeb do
 
   # credo:disable-for-this-file Credo.Check.Readability.Specs
 
-  def static_paths, do: ~w(assets fonts images favicon.ico logo.png robots.txt)
+  def static_paths, do: ~w(assets fonts images robots.txt)
 
   def controller do
     quote do
