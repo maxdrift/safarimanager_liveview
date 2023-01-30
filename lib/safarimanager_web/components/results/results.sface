@@ -84,8 +84,16 @@
                 <td class="capitalize">{subject.name}</td>
                 <td>{(subject.distribution && "#{Decimal.mult(subject.distribution, 100) |> Decimal.round(2)}%") ||
                     "N/A"}</td>
-                <td :if={subject.dynamic_coefficient}>{subject.coefficient} (d)</td>
-                <td :if={not subject.dynamic_coefficient}>{subject.coefficient}</td>
+                <td>
+                  <span class="font-mono" title="dynamic coefficient">{subject.coefficient}</span>
+                  <span :if={subject.dynamic_coefficient} title="dynamic coefficient">
+                    <Heroicons.Surface.Icon
+                      name="scale"
+                      type="solid"
+                      class="h-4 w-4 inline-block py-auto align-middle"
+                    />
+                  </span>
+                </td>
               </tr>
             {/for}
           </tbody>
@@ -148,20 +156,11 @@
                         <td>
                           <span class="font-mono" title="dynamic coefficient">{coefficient}</span>
                           <span :if={@competition.settings.dynamic_coefficients_enabled} title="dynamic coefficient">
-                            <svg
-                              xmlns="http://www.w3.org/2000/svg"
+                            <Heroicons.Surface.Icon
+                              name="scale"
+                              type="solid"
                               class="h-4 w-4 inline-block py-auto align-middle"
-                              fill="none"
-                              viewBox="0 0 24 24"
-                              stroke="currentColor"
-                              stroke-width="2"
-                            >
-                              <path
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                d="M3 6l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 006.001 0M18 7l3 9m-3-9l-6-2m0-2v2m0 16V5m0 16H9m3 0h3"
-                              />
-                            </svg>
+                            />
                           </span>
                         </td>
                         <td class="text-center">
