@@ -9,7 +9,7 @@
 msgid ""
 msgstr ""
 "Language: it\n"
-"Plural-Forms: nplurals=2\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: lib/safarimanager_web/components/core_components.ex:477
 #, elixir-autogen, elixir-format
@@ -467,3 +467,13 @@ msgstr "un account ora."
 #, elixir-autogen, elixir-format
 msgid "to your account now."
 msgstr "al tuo account ora."
+
+#: lib/safarimanager_web/components/admin/participants/edit.sface:4
+#, elixir-autogen, elixir-format
+msgid "Create %{entity_name}"
+msgstr "Crea %{entity_name}"
+
+#: lib/safarimanager_web/components/admin/participants/edit.sface:6
+#, elixir-autogen, elixir-format
+msgid "Edit %{entity_name}"
+msgstr "Modifica %{entity_name}"

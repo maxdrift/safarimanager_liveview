@@ -467,3 +467,13 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "to your account now."
 msgstr ""
+
+#: lib/safarimanager_web/components/admin/participants/edit.sface:4
+#, elixir-autogen, elixir-format
+msgid "Create %{entity_name}"
+msgstr ""
+
+#: lib/safarimanager_web/components/admin/participants/edit.sface:6
+#, elixir-autogen, elixir-format
+msgid "Edit %{entity_name}"
+msgstr ""
