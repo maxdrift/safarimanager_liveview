@@ -210,9 +210,13 @@ defmodule SM.Accounts.User do
   @spec import_changeset(t(), map()) :: Ecto.Changeset.t()
   def import_changeset(struct, attrs) do
     struct
-    |> cast(attrs, __MODULE__.__schema__(:fields) -- [:hashed_password])
+    |> cast(attrs, __MODULE__.__schema__(:fields))
+    |> put_change(:hashed_password, nil)
+    |> maybe_put_default_password()
+    |> IO.inspect()
     |> validate_required([:id, :email])
     |> unique_constraint(:id)
+    |> unique_constraint(:email)
     |> foreign_key_constraint(:organization_id)
     |> foreign_key_constraint(:category_id)
   end
