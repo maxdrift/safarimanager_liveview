@@ -14,6 +14,7 @@ defmodule SM.Participants.Participant do
     belongs_to :competition, Competition, primary_key: true
     belongs_to :category, Category
     field :number, :integer
+    field :slides_count, :integer, virtual: true
 
     timestamps()
   end

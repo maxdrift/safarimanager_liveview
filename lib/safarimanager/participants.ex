@@ -41,8 +41,12 @@ defmodule SM.Participants do
         inner_join: u in assoc(p, :user),
         left_join: o in assoc(u, :organization),
         left_join: c in assoc(p, :category),
+        left_join: s in assoc(u, :slides),
+        on: s.competition_id == ^competition_id,
+        group_by: [p.user_id],
         order_by: [asc: :number],
-        preload: [category: c, user: {u, [organization: o]}]
+        preload: [category: c, user: {u, [organization: o]}],
+        select: %Participant{p | slides_count: count(s.id)}
       )
 
     Repo.all(query)
@@ -71,8 +75,12 @@ defmodule SM.Participants do
             fragment(@like_fragment, u.last_name, ^pattern),
         left_join: o in assoc(u, :organization),
         left_join: c in assoc(p, :category),
+        left_join: s in assoc(u, :slides),
+        on: s.competition_id == ^competition_id,
+        group_by: [p.user_id],
         order_by: [asc: :number],
-        preload: [category: c, user: {u, [organization: o]}]
+        preload: [category: c, user: {u, [organization: o]}],
+        select: %Participant{p | slides_count: count(s.id)}
       )
 
     Repo.all(query)

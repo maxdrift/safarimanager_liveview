@@ -37,7 +37,7 @@
                 <td class="truncate">{item.user.first_name}</td>
                 <td class="truncate">{(item.user.organization && item.user.organization.name) || "N/A"}</td>
                 <td class="truncate">{(item.category && item.category.name) || "N/A"}</td>
-                <td class="truncate">{"N/A"}</td>
+                <td class="truncate">{item.slides_count}</td>
                 <td class="truncate">
                   <LivePatch to={"?user_id=#{item.user_id}"} class="btn btn-xs">
                     Select
