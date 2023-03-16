@@ -1,0 +1,70 @@
+<div class="container mx-auto font-sans">
+  <header class="relative mb-6">
+    <img class="absolute top-10 right-6 w-24" src={~p"/images/fipsas-logo.png"} />
+    <h4 class="text-center text-md font-semibold uppercase">
+      Federazione italiana persca sportiva e attività subacquee
+    </h4>
+    <h5 class="text-center text-sm">Viale Tiziano, 70 - 00196 Roma - Tel (06) 36858220</h5>
+    <div class="my-3">
+      <span class="text-sm">Denominazione: </span><span class="text-md font-bold uppercase"><%= @competition.name %></span>
+    </div>
+    <div class="my-3">
+      <span class="text-sm">Società organizzatrice: </span><span class="text-md font-bold uppercase"><%= @competition.organization.name %></span>
+    </div>
+    <div class="flex flex-row">
+      <div class="mr-10">
+        <span class="text-sm">Data: </span><span class="text-sm font-bold">06/10/2021</span>
+      </div>
+      <div class="mr-10">
+        <span class="text-sm">Località: </span><span class="text-sm font-bold"><%= @competition.city || "N/A" %></span>
+      </div>
+      <div>
+        <span class="text-sm">Tipo: </span><span class="text-sm font-bold">Campionato Italiano</span>
+      </div>
+    </div>
+    <h1 class="mt-4 text-center text-2xl font-bold uppercase tracking-widest">
+      Classifica Generale
+    </h1>
+  </header>
+  <table class="w-full table-fixed border-collapse text-sm">
+    <thead>
+      <tr class="uppercase">
+        <th class="w-14 border text-center">Class.</th>
+        <th class="w-auto border text-center">Cognome e nome</th>
+        <th class="w-auto border text-center">Società</th>
+        <th class="w-28 border text-center">Categoria</th>
+        <th class="w-20 border text-center">Punti</th>
+        <th class="w-14 border text-center">Specie</th>
+      </tr>
+    </thead>
+    <tbody>
+      <%= for result <- @results do %>
+        <tr class="border">
+          <td class="border pr-1 text-right font-semibold"><%= result.rank %>º</td>
+          <td class="border font-bold uppercase truncate">
+            <%= "#{result.user.last_name} #{result.user.first_name}" %>
+          </td>
+          <td class="border font-bold capitalize truncate">
+            <%= (result.user.organization && result.user.organization.name) || "N/A" %>
+          </td>
+          <td class="border capitalize truncate">
+            <%= (result.participant.category && result.participant.category.name) || "N/A" %>
+          </td>
+          <td class="border pr-1 text-right font-bold"><%= result.total_score %></td>
+          <td class="border pr-1 text-right"><%= Enum.count(result.slides) %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+  <div class="mt-5 mb-10 flex flex-row text-sm">
+    <div class="mx-10 border-2 border-x-0 border-t-0 border-solid border-gray-400 pb-12 text-center basis-1/3">
+      <span class="uppercase">Il giudice di gara</span>
+    </div>
+    <div class="mx-10 border-2 border-x-0 border-t-0 border-solid border-gray-400 text-center basis-1/3">
+      <span class="uppercase">Ora di esposizione</span>
+    </div>
+    <div class="mx-10 border-2 border-x-0 border-t-0 border-solid border-gray-400 text-center basis-1/3">
+      <span class="uppercase">Il direttore di gara</span>
+    </div>
+  </div>
+</div>

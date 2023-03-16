@@ -37,7 +37,9 @@ defmodule SMWeb.Router do
     pipe_through [:browser]
 
     get "/", HomeController, :new
+    # TODO: Move under authenticated routes
     post "/export", CSVExportController, :create
+    get "/:competition_id/print_results", PrintResultsController, :show
   end
 
   scope "/", SMWeb do

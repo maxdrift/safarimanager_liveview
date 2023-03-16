@@ -213,7 +213,6 @@ defmodule SM.Accounts.User do
     |> cast(attrs, __MODULE__.__schema__(:fields))
     |> put_change(:hashed_password, nil)
     |> maybe_put_default_password()
-    |> IO.inspect()
     |> validate_required([:id, :email])
     |> unique_constraint(:id)
     |> unique_constraint(:email)

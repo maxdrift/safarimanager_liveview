@@ -477,3 +477,13 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "Edit %{entity_name}"
 msgstr ""
+
+#: lib/safarimanager_web/components/results/results.sface:9
+#, elixir-autogen, elixir-format
+msgid "Print"
+msgstr ""
+
+#: lib/safarimanager_web/controllers/print_results_controller.ex:21
+#, elixir-autogen, elixir-format
+msgid "General Classification"
+msgstr ""
