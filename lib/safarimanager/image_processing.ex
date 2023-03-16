@@ -14,7 +14,11 @@ defmodule SM.ImageProcessing do
 
   @spec get_metadata(String.t()) :: {:ok, pos_integer(), pos_integer(), map()} | {:error, any()}
   def get_metadata(path) do
-    with {:ok, image} <- Image.open(path),
+    # When :sequential, Image (via Vix) is able to support streaming transformations
+    # and optimise memory usage more effectively. However :sequential also means that
+    # some operations cannot be completed because they would require non-sequential
+    # access to the image. In these cases, :random access is required.
+    with {:ok, image} <- Image.open(path, access: :sequential),
          width <- Image.width(image),
          height <- Image.height(image),
          metadata <- maybe_get_exif(image),
