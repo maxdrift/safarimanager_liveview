@@ -7,6 +7,7 @@
       <li><b>ID:</b> {@entity.id}</li>
       <li><b>Name:</b> {@entity.name}</li>
       <li><b>Organizer:</b> {(@entity.organization && @entity.organization.name) || "N/A"}</li>
+      <li><b>Type:</b> {@entity.type}</li>
       <li><b>Start:</b> {format_date(@entity.start_time)}</li>
       <li><b>End:</b> {format_date(@entity.end_time)}</li>
       <li><b>Street name:</b> {@entity.street_name}</li>

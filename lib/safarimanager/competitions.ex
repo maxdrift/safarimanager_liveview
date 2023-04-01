@@ -4,10 +4,12 @@ defmodule SM.Competitions do
   """
   use SM, :context
 
+  alias Ecto.Multi
   alias SM.Competitions.Competition
   alias SM.Competitions.CompetitionSettings
   alias SM.Evaluations
   alias SM.Evaluations.Evaluation
+  alias SM.Slides
 
   @doc """
   Returns the list of competition types.
@@ -192,9 +194,25 @@ defmodule SM.Competitions do
   """
   @spec delete(Competition.t()) :: {:ok, Competition.t()} | {:error, any()}
   def delete(%Competition{} = competition) do
-    competition
-    |> Repo.delete()
-    |> notify_subscribers([:competition, :deleted])
+    Multi.new()
+    |> Multi.delete(:delete_competition, competition)
+    |> Multi.run(:delete_files, fn _repo, %{} ->
+      Slides.delete_files(competition.id)
+
+      {:ok, :deleted}
+    end)
+    |> Repo.transaction()
+    |> case do
+      {:ok, %{delete_competition: result}} ->
+        notify_subscribers(result, [:competition, :deleted])
+
+      {:error, failed_operation, failed_value, _changes_so_far} ->
+        Logger.error(
+          "Failed to delete competition. #{failed_operation}: #{inspect(failed_value)}"
+        )
+
+        notify_subscribers(:error, [:competition, :deleted])
+    end
   end
 
   @doc """

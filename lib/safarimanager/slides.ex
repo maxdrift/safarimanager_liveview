@@ -904,9 +904,15 @@ defmodule SM.Slides do
     Slide.Flags.changeset(slide_flags, params)
   end
 
-  # Internal
+  @spec delete_files(String.t()) :: :ok | {:error, any()}
+  def delete_files(competition_id) do
+    uploads_path = Path.join(get_uploads_path(), competition_id)
 
-  defp delete_files(competition_id, user_id, file_name) do
+    File.rm(uploads_path)
+  end
+
+  @spec delete_files(String.t(), String.t(), String.t()) :: :ok
+  def delete_files(competition_id, user_id, file_name) do
     uploads_path = get_uploads_path(competition_id, user_id)
     thumbnails_path = Path.join(uploads_path, "thumbnails")
 
