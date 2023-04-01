@@ -408,7 +408,8 @@ defmodule SM.Slides do
         order_by: [asc: su.numeric_id],
         select: %Subject{
           su
-          | distribution: type(count(su.id) / type(^p_count, :float), :decimal)
+          | distribution: type(count(su.id) / type(^p_count, :float), :decimal),
+            count: count(su.id)
         }
       )
 

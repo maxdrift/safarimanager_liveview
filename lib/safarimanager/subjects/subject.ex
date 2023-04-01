@@ -15,6 +15,7 @@ defmodule SM.Subjects.Subject do
     field :type, Ecto.Enum, values: @types
     field :distribution, :decimal, virtual: true
     field :dynamic_coefficient, :boolean, default: false, virtual: true
+    field :count, :integer, virtual: true
 
     timestamps()
   end

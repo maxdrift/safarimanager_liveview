@@ -36,14 +36,17 @@ defmodule SMWeb.Results do
   def handle_params(%{"competition_id" => competition_id}, _uri, socket) do
     {:ok, results} = Results.list(competition_id)
     {:ok, competition} = Competitions.get(competition_id)
+    subjects = Subjects.list_with_coefficients(competition_id)
     slides_count = Slides.count_by_status(competition_id)
+    subjects_count = Enum.count(subjects)
 
     socket =
       socket
       |> assign(:competition_id, competition_id)
       |> assign(:competition, competition)
       |> assign(:results, results)
-      |> assign(:subjects, Subjects.list_with_coefficients(competition_id))
+      |> assign(:subjects, subjects)
+      |> assign(:subjects_count, subjects_count)
       |> assign(:slides_count, slides_count)
       |> assign(:penalties_count, Slides.count_penalties(competition_id))
 

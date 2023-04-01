@@ -64,6 +64,10 @@
             <th class="bg-base-200 w-4/12">Penalties</th>
             <td class="truncate">{@penalties_count}</td>
           </tr>
+          <tr>
+            <th class="bg-base-200 w-4/12">Subjects</th>
+            <td class="truncate">{@subjects_count}</td>
+          </tr>
           <!-- <tr>
           <th class="bg-base-200 w-4/12">Mentions</th>
           <td class="truncate">N/A</td>
@@ -78,6 +82,7 @@
             <tr>
               <th class="sticky top-0 w-auto">#</th>
               <th class="sticky top-0 w-auto">Name</th>
+              <th class="sticky top-0 w-auto">Count</th>
               <th class="sticky top-0 w-auto">Distribution</th>
               <th class="sticky top-0 w-auto">Coefficient</th>
             </tr>
@@ -87,6 +92,7 @@
               <tr>
                 <td>{subject.numeric_id}</td>
                 <td class="capitalize">{subject.name}</td>
+                <td>{subject.count}</td>
                 <td>{(subject.distribution && "#{Decimal.mult(subject.distribution, 100) |> Decimal.round(2)}%") ||
                     "N/A"}</td>
                 <td>

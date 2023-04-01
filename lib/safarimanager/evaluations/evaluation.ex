@@ -26,7 +26,7 @@ defmodule SM.Evaluations.Evaluation do
   def import_changeset(struct, attrs) do
     struct
     |> cast(attrs, __MODULE__.__schema__(:fields))
-    |> validate_required(__MODULE__.__schema__(:fields))
+    |> validate_required(__MODULE__.__schema__(:fields) -- [:description])
     |> unique_constraint(:id)
   end
 
