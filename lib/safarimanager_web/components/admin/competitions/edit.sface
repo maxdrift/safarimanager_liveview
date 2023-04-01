@@ -4,6 +4,7 @@
   </div>
   <Form
     {=@action}
+    {=@competition_types}
     {=@entity}
     {=@changeset}
     {=@validate}

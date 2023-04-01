@@ -32,6 +32,20 @@
         <ErrorTag />
       </Label>
     </Field>
+    <Field name={:type} class="form-control w-full px-3">
+      <Label class="label">
+        <span class="label-text">Type</span>
+      </Label>
+      <Select
+        options={@competition_types}
+        selected={@entity.type}
+        prompt={[key: "Select an type"]}
+        class={state_class("input input-bordered", @changeset, :type, [])}
+      />
+      <Label class="label h-7">
+        <ErrorTag />
+      </Label>
+    </Field>
 
     <Field name={:start_time} class="form-control w-1/2 px-3">
       <Label class="label">

@@ -4,12 +4,14 @@ defmodule SMWeb.Components.Admin.Competitions.Edit do
   """
   use SMWeb, :surface_live_component
 
+  alias SM.Competitions
   alias SMWeb.Components.Admin.Competitions.Form
   alias SMWeb.Components.Dialog
   alias SMWeb.Components.FormActions
 
   data show, :boolean, default: false
   data action, :atom, values!: [:create, :edit]
+  data competition_types, :list, default: Competitions.list_competition_types()
 
   prop entity, :struct, required: true
   prop changeset, :changeset, required: true

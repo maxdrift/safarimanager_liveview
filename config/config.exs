@@ -45,6 +45,16 @@ config :safarimanager, SM.Subjects.Subject,
 
 config :safarimanager, SM.Evaluations.Evaluation, types: [:numeric]
 
+config :safarimanager, SM.Competitions.Competition,
+  types: [
+    :qualification,
+    :national_championship,
+    :international_championship,
+    :local_event,
+    :national_event,
+    :international_event
+  ]
+
 config :safarimanager, SM.Slides.Slide,
   statuses: [:discarded, :submitted_jury, :submitted_fixed],
   uploads_base_path: "/uploads",

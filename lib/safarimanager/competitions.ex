@@ -5,10 +5,31 @@ defmodule SM.Competitions do
   use SM, :context
 
   alias SM.Competitions.Competition
-  alias SM.Competitions.CompetitionSearch
   alias SM.Competitions.CompetitionSettings
   alias SM.Evaluations
   alias SM.Evaluations.Evaluation
+
+  @doc """
+  Returns the list of competition types.
+
+  ## Examples
+
+  iex> list_competition_types()
+  [:qualification, :national_championship, :international_championship, :local_event, :national_event, :international_event]
+
+  """
+  @spec list_competition_types :: [
+          :qualification
+          | :national_championship
+          | :international_championship
+          | :local_event
+          | :national_event
+          | :international_event,
+          ...
+        ]
+  def list_competition_types do
+    Competition.get_types()
+  end
 
   @doc """
   Returns the list of competitions.
@@ -50,24 +71,6 @@ defmodule SM.Competitions do
     query
     |> Repo.all()
     |> Repo.preload([:organization])
-  end
-
-  @doc """
-  Search our competitions with a simple query.
-
-  ## Examples
-
-      iex> search("foobar")
-      [%Competition{}, ...]
-
-  """
-  def search(term) do
-    from(d in CompetitionSearch,
-      select: [:name, :rank, :id],
-      where: fragment("competitions_search MATCH ?", ^term),
-      order_by: [asc: :rank]
-    )
-    |> Repo.all()
   end
 
   @doc """

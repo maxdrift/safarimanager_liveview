@@ -16,7 +16,7 @@ defmodule SMWeb.NewCompetition do
   require Logger
 
   data action, :atom, values!: [:create, :edit], default: :create
-
+  data competition_types, :list, default: Competitions.list_competition_types()
   data entity, :struct, default: %Competition{}
   data changeset, :changeset
   data validate, :event, default: "validate"

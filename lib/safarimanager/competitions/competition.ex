@@ -12,6 +12,8 @@ defmodule SM.Competitions.Competition do
   alias SM.Participants.Participant
   alias SM.Slides.Slide
 
+  @types Application.compile_env!(:safarimanager, [__MODULE__, :types])
+
   schema "competitions" do
     field :name, :string
     field :start_time, :utc_datetime_usec
@@ -22,6 +24,7 @@ defmodule SM.Competitions.Competition do
     field :city, :string
     field :state, :string
     field :country, :string
+    field :type, Ecto.Enum, values: @types
 
     belongs_to :organization, Organization
 
@@ -47,6 +50,7 @@ defmodule SM.Competitions.Competition do
       :city,
       :state,
       :country,
+      :type,
       :organization_id
     ])
     |> validate_required([
@@ -73,5 +77,18 @@ defmodule SM.Competitions.Competition do
     struct
     |> change()
     |> put_assoc(:allowed_evaluations, evaluations)
+  end
+
+  @spec get_types :: [
+          :qualification
+          | :national_championship
+          | :international_championship
+          | :local_event
+          | :national_event
+          | :international_event,
+          ...
+        ]
+  def get_types do
+    @types
   end
 end

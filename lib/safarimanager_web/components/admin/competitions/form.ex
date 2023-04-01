@@ -18,6 +18,7 @@ defmodule SMWeb.Components.Admin.Competitions.Form do
   alias Surface.Components.Form.TextInput
 
   prop action, :atom, values!: [:create, :edit]
+  prop competition_types, :list, required: true
   prop entity, :struct, required: true
   prop changeset, :changeset, required: true
   prop validate, :event, required: true
