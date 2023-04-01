@@ -97,9 +97,10 @@ defmodule SM.Accounts.User do
   def competition_registration_changeset(user, attrs) do
     user
     |> cast(attrs, [:first_name, :last_name, :email, :organization_id, :category_id])
-    |> validate_required([:first_name])
+    |> validate_required([:first_name, :last_name])
     |> foreign_key_constraint(:organization_id)
     |> foreign_key_constraint(:category_id)
+    |> unique_constraint(:email)
     |> maybe_put_default_password()
   end
 
@@ -111,10 +112,13 @@ defmodule SM.Accounts.User do
 
       full_name =
         [first_name, last_name]
-        |> Enum.reject(&(&1 in [nil, ""]))
+        |> Enum.join(" ")
+        |> String.split(~r{\s}, trim: true)
         |> Enum.map_join(".", &String.downcase/1)
 
-      put_change(changeset, :email, "#{full_name}@maxdrift.org")
+      changeset
+      |> put_change(:email, "#{full_name}@maxdrift.org")
+      |> unique_constraint(:email)
     else
       changeset
     end

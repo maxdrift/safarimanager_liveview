@@ -53,6 +53,29 @@ defmodule SM.Subjects do
   end
 
   @doc """
+  Returns the list of subjects filtered by name.
+
+  ## Examples
+
+      iex> list_by_name()
+      [%Subject{}, ...]
+
+  """
+  @spec list_by_name(String.t()) :: [Subject.t()]
+  def list_by_name(name) do
+    pattern = "%#{name}%"
+
+    query =
+      from(
+        s in Subject,
+        order_by: [asc: :inserted_at],
+        where: fragment(@like_fragment, s.name, ^pattern)
+      )
+
+    Repo.all(query)
+  end
+
+  @doc """
   Gets a single Subject.
 
   ## Examples

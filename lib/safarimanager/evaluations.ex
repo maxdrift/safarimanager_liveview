@@ -37,22 +37,31 @@ defmodule SM.Evaluations do
   end
 
   @doc """
-  Returns the list of evaluations by slide ID.
+  Returns the list of evaluations by value.
 
   ## Examples
 
-      iex> list(123)
+      iex> list_by_value("10")
       [%Evaluation{}, ...]
 
   """
-  @spec list(String.t()) :: [Evaluation.t()]
-  def list(slide_id) do
+  @spec list_by_value(Decimal.t()) :: [Evaluation.t()]
+  def list_by_value(value) do
     Evaluation
-    |> where(slide_id: ^slide_id)
+    |> where(value: ^value)
     |> order_by(asc: :inserted_at)
     |> Repo.all()
   end
 
+  @doc """
+  Returns the list of evaluations by list of IDs.
+
+  ## Examples
+
+      iex> list_by_ids(["foo", "bar", "baz"])
+      [%Evaluation{}, ...]
+
+  """
   @spec list_by_ids([String.t()]) :: [Evaluation.t()]
   def list_by_ids(ids) do
     query =

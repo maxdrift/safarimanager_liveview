@@ -5,6 +5,7 @@ defmodule SM.Competitions do
   use SM, :context
 
   alias SM.Competitions.Competition
+  alias SM.Competitions.CompetitionSearch
   alias SM.Competitions.CompetitionSettings
   alias SM.Evaluations
   alias SM.Evaluations.Evaluation
@@ -24,6 +25,49 @@ defmodule SM.Competitions do
     |> order_by(desc: :inserted_at)
     |> Repo.all()
     |> Repo.preload([:organization])
+  end
+
+  @doc """
+  Returns the list of competitions filtered by name.
+
+  ## Examples
+
+      iex> list_by_name()
+      [%Competition{}, ...]
+
+  """
+  @spec list_by_name(String.t()) :: [Competition.t()]
+  def list_by_name(name) do
+    pattern = "%#{name}%"
+
+    query =
+      from(
+        c in Competition,
+        order_by: [desc: :inserted_at],
+        where: fragment(@like_fragment, c.name, ^pattern)
+      )
+
+    query
+    |> Repo.all()
+    |> Repo.preload([:organization])
+  end
+
+  @doc """
+  Search our competitions with a simple query.
+
+  ## Examples
+
+      iex> search("foobar")
+      [%Competition{}, ...]
+
+  """
+  def search(term) do
+    from(d in CompetitionSearch,
+      select: [:name, :rank, :id],
+      where: fragment("competitions_search MATCH ?", ^term),
+      order_by: [asc: :rank]
+    )
+    |> Repo.all()
   end
 
   @doc """
@@ -185,10 +229,15 @@ defmodule SM.Competitions do
   @spec change(Competition.t(), %{String.t() => any()}) :: Ecto.Changeset.t()
   def change(%Competition{} = competition, attrs \\ %{}) do
     attrs =
-      if Map.has_key?(attrs, "settings") or not is_nil(competition.id) do
-        attrs
-      else
-        Map.put(attrs, "settings", fetch_default_settings())
+      cond do
+        Map.has_key?(attrs, "settings") or not is_nil(competition.id) ->
+          attrs
+
+        Map.has_key?(attrs, :settings) or not is_nil(competition.id) ->
+          attrs
+
+        true ->
+          Map.put(attrs, "settings", fetch_default_settings())
       end
 
     Competition.changeset(competition, attrs)
