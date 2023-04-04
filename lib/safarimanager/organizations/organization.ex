@@ -6,6 +6,7 @@ defmodule SM.Organizations.Organization do
 
   schema "organizations" do
     field :name, :string
+    field :location, :string
 
     timestamps()
   end
@@ -14,7 +15,7 @@ defmodule SM.Organizations.Organization do
   @spec changeset(t(), map()) :: Ecto.Changeset.t()
   def changeset(struct, attrs) do
     struct
-    |> cast(attrs, [:name])
+    |> cast(attrs, [:name, :location])
     |> validate_required([:name])
   end
 

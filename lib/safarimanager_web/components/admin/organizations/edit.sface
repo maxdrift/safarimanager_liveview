@@ -22,6 +22,18 @@
           <ErrorTag />
         </Label>
       </Field>
+      <Field name={:location} class="form-control">
+        <Label class="label">
+          <span class="label-text">Location</span>
+        </Label>
+        <TextInput
+          class={state_class("input input-bordered", @changeset, :location, [])}
+          opts={phx_debounce: "1000"}
+        />
+        <Label class="label h-7">
+          <ErrorTag />
+        </Label>
+      </Field>
       <HiddenInput field={:_action} value={@action} />
     </div>
     <div class="modal-action">

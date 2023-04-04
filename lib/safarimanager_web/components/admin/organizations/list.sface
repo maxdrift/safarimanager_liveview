@@ -13,6 +13,7 @@
       </th>
       <th class="w-1/12">ID</th>
       <th class="w-auto">Name</th>
+      <th class="w-auto">Location</th>
       <th class="w-2/12">Created</th>
       <th class="w-2/12">Modified</th>
       <th class="w-2/12">Actions</th>
@@ -34,6 +35,7 @@
         </th>
         <th class="truncate">{format_id(item.id)}</th>
         <td class="truncate">{item.name}</td>
+        <td class="truncate">{item.location}</td>
         <td class="truncate">{format_date(item.inserted_at)}</td>
         <td class="truncate">{format_date(item.updated_at)}</td>
         <td class="overflow-x-auto">
