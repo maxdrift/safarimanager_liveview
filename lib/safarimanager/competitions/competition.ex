@@ -58,6 +58,7 @@ defmodule SM.Competitions.Competition do
       :organization_id
     ])
     |> cast_assoc(:settings, required: false)
+    |> validate_dates()
   end
 
   @doc false
@@ -90,5 +91,17 @@ defmodule SM.Competitions.Competition do
         ]
   def get_types do
     @types
+  end
+
+  # Internal
+
+  defp validate_dates(changeset) do
+    with start_time when not is_nil(start_time) <- get_field(changeset, :start_time),
+         end_time when not is_nil(end_time) <- get_field(changeset, :end_time),
+         :gt <- Date.compare(start_time, end_time) do
+      add_error(changeset, :starts_on, "cannot be later than 'end_time'")
+    else
+      _ -> changeset
+    end
   end
 end

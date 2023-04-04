@@ -27,6 +27,7 @@ defmodule SM.Participants.Participant do
     |> foreign_key_constraint(:user_id)
     |> foreign_key_constraint(:competition_id)
     |> foreign_key_constraint(:category_id)
+    |> unique_constraint(:number, name: :participants_user_id_competition_id_index)
     |> unique_constraint(:number, name: :participants_competition_id_number_index)
   end
 
@@ -40,6 +41,7 @@ defmodule SM.Participants.Participant do
     |> foreign_key_constraint(:user_id)
     |> foreign_key_constraint(:competition_id)
     |> foreign_key_constraint(:category_id)
+    |> unique_constraint(:number, name: :participants_user_id_competition_id_index)
     |> unique_constraint(:number, name: :participants_competition_id_number_index)
   end
 end

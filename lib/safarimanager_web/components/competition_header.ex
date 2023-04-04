@@ -28,8 +28,8 @@ defmodule SMWeb.Components.CompetitionHeader do
   end
 
   defp pretty_dates(
-         %DateTime{year: year} = start_time,
-         %DateTime{year: year} = end_time
+         %DateTime{year: _year1} = start_time,
+         %DateTime{year: _year2} = end_time
        ) do
     Calendar.strftime(start_time, "%d %b %Y → ") <> Calendar.strftime(end_time, "%d %b %Y")
   end

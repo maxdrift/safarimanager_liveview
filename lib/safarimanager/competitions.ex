@@ -203,8 +203,8 @@ defmodule SM.Competitions do
     end)
     |> Repo.transaction()
     |> case do
-      {:ok, %{delete_competition: result}} ->
-        notify_subscribers(result, [:competition, :deleted])
+      {:ok, %{delete_competition: competition}} ->
+        notify_subscribers({:ok, competition}, [:competition, :deleted])
 
       {:error, failed_operation, failed_value, _changes_so_far} ->
         Logger.error(
@@ -229,12 +229,28 @@ defmodule SM.Competitions do
   """
   @spec delete_many([String.t()]) :: {:ok, integer()} | :error
   def delete_many(ids) do
-    {deleted, nil} = Repo.delete_all(from entity in Competition, where: entity.id in ^ids)
+    query = from entity in Competition, where: entity.id in ^ids
 
-    if deleted == Enum.count(ids) do
-      notify_subscribers({:ok, deleted}, [:competition, :deleted])
-    else
-      notify_subscribers(:error, [:competition, :deleted])
+    Multi.new()
+    |> Multi.delete_all(:delete_competitions, query)
+    |> Multi.run(:delete_files, fn _repo, %{} ->
+      for competition_id <- ids do
+        Slides.delete_files(competition_id)
+      end
+
+      {:ok, :deleted}
+    end)
+    |> Repo.transaction()
+    |> case do
+      {:ok, %{delete_competitions: {deleted, nil}}} ->
+        notify_subscribers({:ok, deleted}, [:competition, :deleted])
+
+      {:error, failed_operation, failed_value, _changes_so_far} ->
+        Logger.error(
+          "Failed to delete competitions. #{failed_operation}: #{inspect(failed_value)}"
+        )
+
+        notify_subscribers(:error, [:competition, :deleted])
     end
   end
 
