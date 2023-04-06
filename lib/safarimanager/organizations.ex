@@ -4,6 +4,8 @@ defmodule SM.Organizations do
   """
   use SM, :context
 
+  alias SM.Accounts.User
+  alias SM.Competitions.Competition
   alias SM.Organizations.Organization
 
   @doc """
@@ -180,5 +182,31 @@ defmodule SM.Organizations do
   @spec change(Organization.t(), %{String.t() => any()}) :: Ecto.Changeset.t()
   def change(%Organization{} = organization, params \\ %{}) do
     Organization.changeset(organization, params)
+  end
+
+  @spec merge([String.t()], String.t()) :: {:ok, Organization.t()} | {:error, any()}
+  def merge(ids, dest_id) when is_list(ids) do
+    user_query = from(u in User, where: u.organization_id in ^ids)
+    competition_query = from(c in Competition, where: c.organization_id in ^ids)
+    organization_query = from(o in Organization, where: o.id in ^ids)
+
+    Multi.new()
+    |> Multi.one(:organization, from(Organization, where: [id: ^dest_id]))
+    |> Multi.update_all(:update_users, user_query, set: [organization_id: dest_id])
+    |> Multi.update_all(:update_competitions, competition_query, set: [organization_id: dest_id])
+    |> Multi.delete_all(:delete_organizations, organization_query)
+    |> Repo.transaction()
+    |> case do
+      {:ok, %{organization: organization}} ->
+        notify_subscribers({:ok, organization}, [:organization, :deleted])
+
+      {:error, failed_operation, failed_value, _changes_so_far} ->
+        notify_subscribers({:error, {failed_operation, failed_value}}, [:organization, :deleted])
+    end
+  end
+
+  @spec merge(String.t(), String.t()) :: {:ok, Organization.t()} | {:error, any()}
+  def merge(id, dest_id) do
+    merge([id], dest_id)
   end
 end
