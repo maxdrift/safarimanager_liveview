@@ -37,7 +37,7 @@ defmodule SM.Competitions.Competition do
     timestamps()
   end
 
-  @spec changeset(t(), %{String.t() => any()}) :: Ecto.Changeset.t()
+  @spec changeset(t(), map()) :: Ecto.Changeset.t()
   def changeset(struct, attrs) do
     struct
     |> cast(attrs, [

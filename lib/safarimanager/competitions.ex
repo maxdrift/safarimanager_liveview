@@ -117,7 +117,7 @@ defmodule SM.Competitions do
       {:error, %Ecto.Changeset{}}
 
   """
-  @spec create(%{String.t() => any()}) :: {:error, any()} | {:ok, Competition.t()}
+  @spec create(map()) :: {:error, any()} | {:ok, Competition.t()}
   def create(attrs \\ %{}) do
     %Competition{}
     |> change(attrs)
@@ -197,9 +197,10 @@ defmodule SM.Competitions do
     Multi.new()
     |> Multi.delete(:delete_competition, competition)
     |> Multi.run(:delete_files, fn _repo, %{} ->
-      Slides.delete_files(competition.id)
-
-      {:ok, :deleted}
+      case Slides.delete_files(competition.id) do
+        :ok -> {:ok, :deleted}
+        {:error, _reason} = error -> error
+      end
     end)
     |> Repo.transaction()
     |> case do
@@ -211,7 +212,7 @@ defmodule SM.Competitions do
           "Failed to delete competition. #{failed_operation}: #{inspect(failed_value)}"
         )
 
-        notify_subscribers(:error, [:competition, :deleted])
+        notify_subscribers({:error, {failed_operation, failed_value}}, [:competition, :deleted])
     end
   end
 
@@ -234,11 +235,12 @@ defmodule SM.Competitions do
     Multi.new()
     |> Multi.delete_all(:delete_competitions, query)
     |> Multi.run(:delete_files, fn _repo, %{} ->
-      for competition_id <- ids do
-        Slides.delete_files(competition_id)
-      end
-
-      {:ok, :deleted}
+      Enum.reduce_while(ids, {:ok, :deleted}, fn id, acc ->
+        case Slides.delete_files(id) do
+          :ok -> {:cont, acc}
+          {:error, _reason} = error -> {:halt, error}
+        end
+      end)
     end)
     |> Repo.transaction()
     |> case do
@@ -250,7 +252,7 @@ defmodule SM.Competitions do
           "Failed to delete competitions. #{failed_operation}: #{inspect(failed_value)}"
         )
 
-        notify_subscribers(:error, [:competition, :deleted])
+        notify_subscribers({:error, {failed_operation, failed_value}}, [:competition, :deleted])
     end
   end
 
@@ -263,7 +265,7 @@ defmodule SM.Competitions do
   %Ecto.Changeset{source: %Competition{}}
 
   """
-  @spec change(Competition.t(), %{String.t() => any()}) :: Ecto.Changeset.t()
+  @spec change(Competition.t(), map()) :: Ecto.Changeset.t()
   def change(%Competition{} = competition, attrs \\ %{}) do
     attrs =
       cond do

@@ -77,7 +77,7 @@ defmodule SM.Organizations do
   {:error, %Ecto.Changeset{}}
 
   """
-  @spec create(%{String.t() => any()}) :: {:error, any()} | {:ok, Organization.t()}
+  @spec create(map()) :: {:error, any()} | {:ok, Organization.t()}
   def create(attrs \\ %{}) do
     %Organization{}
     |> Organization.changeset(attrs)

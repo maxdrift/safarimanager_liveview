@@ -538,16 +538,29 @@ defmodule SM.Slides do
     |> Multi.insert(:slide, fn %{copy_file: file_path} ->
       {:ok, width, height, metadata} = ImageProcessing.get_metadata(file_path)
 
-      Slide.changeset(%Slide{}, %{
-        user_id: user_id,
-        competition_id: competition_id,
-        file_name: file_name,
-        file_size: file_size,
-        file_type: file_type,
-        width: width,
-        height: height,
-        metadata: metadata
-      })
+      metadata =
+        case Jason.encode(metadata) do
+          {:ok, _encoded} ->
+            metadata
+
+          {:error, reason} ->
+            Logger.error("Unable to JSON-encode #{file_path} metadata: #{inspect(reason)}")
+            %{}
+        end
+
+      Slide.changeset(
+        %Slide{},
+        %{
+          user_id: user_id,
+          competition_id: competition_id,
+          file_name: file_name,
+          file_size: file_size,
+          file_type: file_type,
+          width: width,
+          height: height,
+          metadata: metadata
+        }
+      )
     end)
     |> Repo.transaction()
     |> case do
@@ -782,7 +795,8 @@ defmodule SM.Slides do
     |> Repo.transaction()
     |> case do
       {:ok, _result} ->
-        notify_subscribers({:ok, :updated}, [:slide, :updated])
+        {:ok, slide} = get(slide_id)
+        notify_subscribers({:ok, slide}, [:slide, :updated])
 
       {:error, failed_operation, failed_value, _changes_so_far} ->
         {:error, {failed_operation, failed_value}}
@@ -796,7 +810,8 @@ defmodule SM.Slides do
     |> Repo.transaction()
     |> case do
       {:ok, _result} ->
-        notify_subscribers({:ok, :updated}, [:slide, :updated])
+        {:ok, slide} = get(slide_id)
+        notify_subscribers({:ok, slide}, [:slide, :updated])
 
       {:error, failed_operation, failed_value, _changes_so_far} ->
         {:error, {failed_operation, failed_value}}
@@ -908,7 +923,10 @@ defmodule SM.Slides do
   def delete_files(competition_id) do
     uploads_path = Path.join(get_uploads_path(), competition_id)
 
-    File.rm(uploads_path)
+    case File.rm_rf(uploads_path) do
+      {:ok, _deleted} -> :ok
+      {:error, reason, file} -> {:error, {reason, file}}
+    end
   end
 
   @spec delete_files(String.t(), String.t(), String.t()) :: :ok

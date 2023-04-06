@@ -37,5 +37,9 @@ defmodule SM.ImageProcessing do
         Logger.warning("Image missing metadata")
         %{}
     end
+  rescue
+    e in ArgumentError ->
+      Logger.error("Unable to process EXIF metadata: #{inspect(e)}")
+      %{}
   end
 end
