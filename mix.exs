@@ -74,6 +74,7 @@ defmodule SM.MixProject do
       {:phoenix, "~> 1.7.1", override: true},
       {:plug_cowboy, "~> 2.6", override: true},
       {:postgrex, ">= 0.0.0"},
+      {:progress_bar, "~> 2.0"},
       {:prom_ex, "~> 1.7"},
       {:random_password, "~> 1.0"},
       {:rexbug, "~> 1.0"},
