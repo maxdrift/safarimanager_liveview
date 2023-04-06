@@ -15,7 +15,7 @@ defmodule SMWeb.Components.Admin.Categories.List do
 
   defp format_id(id) do
     id
-    |> String.split_at(7)
+    |> String.split_at(8)
     |> Tuple.to_list()
     |> hd()
   end
