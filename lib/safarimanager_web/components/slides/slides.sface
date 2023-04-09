@@ -9,7 +9,7 @@
           Export Slides to CSV
         </Link>
       </div>
-      <Form for={:participants_filter} change="filter-participants" opts={autocomplete: "off"}>
+      <Form for={%{}} as={:participants_filter} change="filter-participants" opts={autocomplete: "off"}>
         <TextInput
           name={:value}
           class="input input-bordered w-full mb-1"
@@ -61,7 +61,7 @@
     <div class="divider" />
     <DirectUploadDialog id="auto-upload-dialog" />
     <div class="form-control w-44">
-      <Form for={:discovery_mode} change="validate">
+      <Form for={%{}} as={:discovery_mode} change="validate">
         <label class="label cursor-pointer">
           <span class="label-text">Auto discovery</span>
           <Checkbox class="toggle toggle-primary" value={@discovery_mode} />
@@ -83,7 +83,7 @@
             user_id={@user.id}
           />
         {#else}
-          <Form id="upload-drop-area-form" for={:slides} change="validate" submit="submit">
+          <Form id="upload-drop-area-form" for={%{}} as={:slides} change="validate" submit="submit">
             <UploadDropArea field={:images} uploads={@uploads}>
               Click or drop some images in this box
             </UploadDropArea>

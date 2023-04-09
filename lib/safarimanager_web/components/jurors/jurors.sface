@@ -5,7 +5,7 @@
   <div class="flex flex-col lg:flex-row mt-5">
     <div class="overflow-y-auto rounded-lg lg:w-1/2 bg-base-200 shadow-lg p-4">
       <div class="text-2xl font-bold text-center py-4">Users</div>
-      <Form for={:users_filter} change="filter-users" opts={autocomplete: "off"}>
+      <Form for={%{}} as={:users_filter} change="filter-users" opts={autocomplete: "off"}>
         <TextInput
           name={:value}
           class="input input-bordered w-full mb-1"

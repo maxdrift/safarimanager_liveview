@@ -7,7 +7,7 @@
   <div class="flex flex-col mt-5">
     <div class="rounded-lg bg-base-200 shadow-lg p-4">
       <div class="text-2xl font-bold text-center pb-4">Participants</div>
-      <Form for={:participants_filter} change="filter-participants" opts={autocomplete: "off"}>
+      <Form for={%{}} as={:participants_filter} change="filter-participants" opts={autocomplete: "off"}>
         <TextInput
           name={:value}
           class="input input-bordered w-full mb-1"
@@ -60,7 +60,7 @@
     <div class="overflow-y-auto rounded-lg bg-base-200 shadow-lg p-4">
       {#if @user}
         <div class="text-2xl font-bold text-center py-4">Load CSV for {@user.last_name} {@user.first_name}</div>
-        <Form id="upload-drop-area-form" for={:slides} change="validate" submit="submit">
+        <Form id="upload-drop-area-form" for={%{}} as={:slides} change="validate" submit="submit">
           <UploadDropArea field={:csv} uploads={@uploads}>
             Click or drop CSV files in this box
           </UploadDropArea>
