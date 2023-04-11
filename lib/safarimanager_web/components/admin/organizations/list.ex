@@ -6,7 +6,8 @@ defmodule SMWeb.Components.Admin.Organizations.List do
 
   alias Surface.Components.LivePatch
 
-  prop items, :list, required: true
+  prop ordered_ids, :list, required: true
+  prop items, :map, required: true
   prop all_selected?, :boolean, required: true
   prop any_selected?, :boolean, required: true
   prop select_one, :event, required: true

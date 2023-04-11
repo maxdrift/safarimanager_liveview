@@ -28,13 +28,15 @@
       <Link to={~p"/export?entity=organizations"} method={:post} class="btn btn-sm btn-outline">
         Export to CSV
       </Link>
-      <button :if={@any_selected?} class="btn btn-sm btn-error" :on-click="delete-many">Delete selected ({length(@selected)})</button>
+      <button :if={@any_selected?} class="btn btn-sm btn-secondary" :on-click="merge-many">Merge into</button>
+      <button :if={@any_selected?} class="btn btn-sm btn-error" :on-click="delete-many">Delete selected ({MapSet.size(@selected)})</button>
     </div>
   </div>
   <List
-    items={@items}
-    all_selected?={@all_selected?}
-    any_selected?={@any_selected?}
+    {=@ordered_ids}
+    {=@items}
+    {=@all_selected?}
+    {=@any_selected?}
     select_one="toggle-select-item"
     select_all="toggle-select-all"
     delete_one="delete-one"

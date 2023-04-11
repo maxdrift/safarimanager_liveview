@@ -31,39 +31,73 @@ defmodule SMWeb.Components.Admin.Organizations do
 
   @impl Phoenix.LiveView
   def handle_event("toggle-select-item", %{"id" => id, "selected" => selected?}, socket) do
-    items =
-      Enum.map(socket.assigns.items, fn
-        %_struct{id: ^id} = item ->
-          Map.put(item, :selected?, String.to_existing_atom(selected?))
+    selected? = String.to_existing_atom(selected?)
+    all_items = socket.assigns.items
+    selected_items = socket.assigns.selected
 
-        item ->
-          item
+    items =
+      all_items
+      |> Map.update!(id, fn item ->
+        Map.put(item, :selected, selected?)
       end)
 
+    selected_items =
+      if selected? do
+        MapSet.put(selected_items, id)
+      else
+        MapSet.delete(selected_items, id)
+      end
+
+    selected_count = MapSet.size(selected_items)
+
     socket =
-      socket
-      |> assign(:items, items)
-      |> update_selection(items)
+      assign(
+        socket,
+        items: items,
+        selected: selected_items,
+        all_selected?: selected_count == Enum.count(all_items),
+        any_selected?: selected_count > 0
+      )
 
     {:noreply, socket}
   end
 
-  def handle_event("toggle-select-all", _value, socket) do
+  def handle_event("toggle-select-all", _value, %{assigns: %{all_selected?: true}} = socket) do
     items =
-      if socket.assigns.all_selected? do
-        Enum.map(socket.assigns.items, fn item ->
-          Map.put(item, :selected?, false)
-        end)
-      else
-        Enum.map(socket.assigns.items, fn item ->
-          Map.put(item, :selected?, true)
-        end)
-      end
+      socket.assigns.items
+      |> Enum.map(fn {id, value} ->
+        {id, %{value | selected: false}}
+      end)
+      |> Enum.into(%{})
 
     socket =
       socket
-      |> assign(:items, items)
-      |> update_selection(items)
+      |> assign(
+        items: items,
+        selected: MapSet.new(),
+        all_selected?: false,
+        any_selected?: false
+      )
+
+    {:noreply, socket}
+  end
+
+  def handle_event("toggle-select-all", _value, %{assigns: %{all_selected?: false}} = socket) do
+    items =
+      socket.assigns.items
+      |> Enum.map(fn {id, value} ->
+        {id, %{value | selected: true}}
+      end)
+      |> Enum.into(%{})
+
+    socket =
+      socket
+      |> assign(
+        items: items,
+        selected: MapSet.new(socket.assigns.ordered_ids),
+        all_selected?: true,
+        any_selected?: true
+      )
 
     {:noreply, socket}
   end
@@ -75,6 +109,7 @@ defmodule SMWeb.Components.Admin.Organizations do
 
   def handle_event("delete-many", %{}, socket) do
     ConfirmationDialog.show("delete-confirmation")
+    {:noreply, assign(socket, :to_be_deleted, MapSet.to_list(socket.assigns.selected))}
     {:noreply, assign(socket, :to_be_deleted, socket.assigns.selected)}
   end
 
@@ -276,12 +311,21 @@ defmodule SMWeb.Components.Admin.Organizations do
   end
 
   defp load_entities(socket) do
-    items =
-      Enum.map(list(), fn item ->
-        Map.put(item, :selected?, false)
-      end)
+    ordered_entities = list()
+    ordered_ids = Enum.map(ordered_entities, & &1.id)
 
-    assign(socket, :items, items)
+    items =
+      ordered_entities
+      |> Enum.map(fn item ->
+        {item.id, %{data: item, selected: false}}
+      end)
+      |> Enum.into(%{})
+
+    assign(socket,
+      ordered_ids: ordered_ids,
+      items: items,
+      selected: MapSet.new()
+    )
   end
 
   defp reset_current_editing(socket) do
@@ -294,21 +338,9 @@ defmodule SMWeb.Components.Admin.Organizations do
     |> assign(:editing_changeset, changeset)
   end
 
-  defp update_selection(socket, items) do
-    selected =
-      items
-      |> Enum.filter(& &1.selected?)
-      |> Enum.map(& &1.id)
-
-    socket
-    |> assign(:selected, selected)
-    |> assign(:all_selected?, Enum.all?(items, & &1.selected?))
-    |> assign(:any_selected?, Enum.any?(items, & &1.selected?))
-  end
-
   defp reset_selection(socket) do
     socket
-    |> assign(:selected, [])
+    |> assign(:selected, MapSet.new())
     |> assign(:to_be_deleted, [])
     |> assign(:all_selected?, false)
     |> assign(:any_selected?, false)
