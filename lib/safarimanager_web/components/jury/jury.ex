@@ -189,7 +189,7 @@ defmodule SMWeb.Jury do
   end
 
   def handle_event(event, data, socket) do
-    IO.puts("Received event '#{event}' with data '#{inspect(data)}'")
+    Logger.debug("Received event '#{event}' with data '#{inspect(data)}'")
     {:noreply, socket}
   end
 

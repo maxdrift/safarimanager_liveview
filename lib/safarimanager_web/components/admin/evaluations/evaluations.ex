@@ -238,7 +238,7 @@ defmodule SMWeb.Components.Admin.Evaluations do
   defp delete(ids) when is_list(ids) do
     case Evaluations.delete_many(ids) do
       {:ok, deleted} ->
-        IO.puts("Deleted #{deleted} entities")
+        Logger.debug("Deleted #{deleted} entities")
         :ok
 
       :error ->

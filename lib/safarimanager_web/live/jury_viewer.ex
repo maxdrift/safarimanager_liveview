@@ -6,6 +6,8 @@ defmodule SMWeb.JuryViewer do
 
   alias SMWeb.Atoms.JuryToolbarButton
 
+  require Logger
+
   @votes %{
     votes: [-100, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
     prizes: ["distinguish"]
@@ -126,7 +128,7 @@ defmodule SMWeb.JuryViewer do
         {:noreply, add_vote(socket, int_vote)}
 
       :error ->
-        IO.puts("Invalid key: #{vote}")
+        Logger.debug("Invalid key: #{vote}")
         {:noreply, socket}
     end
   end
@@ -136,7 +138,7 @@ defmodule SMWeb.JuryViewer do
   end
 
   def handle_event(event, data, socket) do
-    IO.puts("Received event '#{event}' with data '#{inspect(data)}'")
+    Logger.debug("Received event '#{event}' with data '#{inspect(data)}'")
     {:noreply, socket}
   end
 

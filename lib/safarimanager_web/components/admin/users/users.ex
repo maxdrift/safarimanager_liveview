@@ -246,7 +246,7 @@ defmodule SMWeb.Components.Admin.Users do
   defp delete(ids) when is_list(ids) do
     case Accounts.delete_many(ids) do
       {:ok, deleted} ->
-        IO.puts("Deleted #{deleted} entities")
+        Logger.debug("Deleted #{deleted} entities")
         :ok
 
       :error ->

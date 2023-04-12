@@ -329,7 +329,7 @@ defmodule SMWeb.Components.Admin.Organizations do
   defp delete(ids) when is_list(ids) do
     case Organizations.delete_many(ids) do
       {:ok, deleted} ->
-        IO.puts("Deleted #{deleted} entities")
+        Logger.debug("Deleted #{deleted} entities")
         :ok
 
       :error ->

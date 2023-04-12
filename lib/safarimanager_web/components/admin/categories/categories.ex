@@ -238,7 +238,7 @@ defmodule SMWeb.Components.Admin.Categories do
   defp delete(ids) when is_list(ids) do
     case Categories.delete_many(ids) do
       {:ok, deleted} ->
-        IO.puts("Deleted #{deleted} entities")
+        Logger.debug("Deleted #{deleted} entities")
         :ok
 
       :error ->
