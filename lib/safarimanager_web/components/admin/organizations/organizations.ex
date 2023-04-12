@@ -8,6 +8,7 @@ defmodule SMWeb.Components.Admin.Organizations do
   alias SM.Organizations.Organization
   alias SMWeb.Components.Admin.Organizations.Edit
   alias SMWeb.Components.Admin.Organizations.List
+  alias SMWeb.Components.Admin.Organizations.Merge
   alias SMWeb.Components.Admin.Organizations.Show
   alias SMWeb.Components.ConfirmationDialog
   alias SMWeb.Components.Layout
@@ -110,7 +111,11 @@ defmodule SMWeb.Components.Admin.Organizations do
   def handle_event("delete-many", %{}, socket) do
     ConfirmationDialog.show("delete-confirmation")
     {:noreply, assign(socket, :to_be_deleted, MapSet.to_list(socket.assigns.selected))}
-    {:noreply, assign(socket, :to_be_deleted, socket.assigns.selected)}
+  end
+
+  def handle_event("merge-many", %{}, socket) do
+    Merge.show("merge-dialog")
+    {:noreply, socket}
   end
 
   def handle_event("confirm", %{}, %{assigns: %{to_be_deleted: [id]}} = socket) do
@@ -146,6 +151,17 @@ defmodule SMWeb.Components.Admin.Organizations do
     changeset =
       socket.assigns.editing_entity
       |> change(params)
+      |> Map.put(:action, :validate)
+
+    socket = assign(socket, :editing_changeset, changeset)
+    {:noreply, socket}
+  end
+
+  def handle_event("validate", %{"merge" => %{"dest_id" => dest_id}}, socket) do
+    changeset =
+      socket.assigns.selected
+      |> MapSet.to_list()
+      |> Organizations.merge_changeset(dest_id)
       |> Map.put(:action, :validate)
 
     socket = assign(socket, :editing_changeset, changeset)
@@ -195,6 +211,46 @@ defmodule SMWeb.Components.Admin.Organizations do
       {:error, changeset} ->
         {:noreply, assign(socket, :changeset, changeset)}
     end
+  end
+
+  def handle_event("merge", %{"merge" => %{"dest_id" => dest_id}}, socket) do
+    selected_ids = MapSet.to_list(socket.assigns.selected) -- [dest_id]
+
+    socket =
+      case Organizations.merge(selected_ids, dest_id) do
+        {:ok, _organization} ->
+          put_flash(socket, :info, "Successfully merged organizations")
+
+        {:error,
+         %Ecto.Changeset{
+           valid?: false,
+           errors: [dest_id: {"can't be blank", [validation: :required]}]
+         }} ->
+          Logger.error(
+            "Unable to merge organizations #{inspect(selected_ids)}: a destination must be specified"
+          )
+
+          put_flash(
+            socket,
+            :error,
+            "Error merging organizations: a destination must be specified"
+          )
+
+        {:error, reason} ->
+          Logger.error(
+            "Unable to merge organizations #{inspect(selected_ids)} into #{dest_id}: #{inspect(reason)}"
+          )
+
+          put_flash(socket, :error, "Error merging organizations")
+      end
+
+    socket =
+      socket
+      |> reset_current_editing()
+      |> push_patch(to: "/admin/organizations")
+
+    Merge.hide("merge-dialog")
+    {:noreply, socket}
   end
 
   @impl Phoenix.LiveView

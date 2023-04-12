@@ -22,6 +22,16 @@
     redirect_to="/admin/organizations"
     entity_name="organization"
   />
+  <Merge
+    id="merge-dialog"
+    source_entities={@selected}
+    {=@items}
+    changeset={@editing_changeset}
+    validate="validate"
+    submit="merge"
+    redirect_to="/admin/organizations"
+    entity_name="organization"
+  />
   <div class="flex flex-row-reverse my-2">
     <div>
       <LivePatch to="?action=new" class="btn btn-sm btn-success">Create</LivePatch>
