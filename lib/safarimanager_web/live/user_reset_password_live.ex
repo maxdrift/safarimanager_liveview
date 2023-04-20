@@ -3,6 +3,8 @@ defmodule SMWeb.UserResetPasswordLive do
 
   alias SM.Accounts
 
+  on_mount SMWeb.SidebarHook
+
   def render(assigns) do
     ~H"""
     <.header><%= gettext("Reset Password") %></.header>

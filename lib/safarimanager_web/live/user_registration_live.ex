@@ -4,6 +4,8 @@ defmodule SMWeb.UserRegistrationLive do
   alias SM.Accounts
   alias SM.Accounts.User
 
+  on_mount SMWeb.SidebarHook
+
   def render(assigns) do
     ~H"""
     <div class="mx-auto max-w-sm">

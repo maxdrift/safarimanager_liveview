@@ -21,6 +21,8 @@ defmodule SMWeb.Participants do
 
   require Logger
 
+  on_mount SMWeb.SidebarHook
+
   @impl Phoenix.LiveView
   def mount(_params, _session, socket) do
     socket =

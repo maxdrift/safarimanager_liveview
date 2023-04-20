@@ -3,6 +3,8 @@ defmodule SMWeb.UserConfirmationLive do
 
   alias SM.Accounts
 
+  on_mount SMWeb.SidebarHook
+
   def render(%{live_action: :edit} = assigns) do
     ~H"""
     <.header><%= gettext("Confirm Account") %></.header>

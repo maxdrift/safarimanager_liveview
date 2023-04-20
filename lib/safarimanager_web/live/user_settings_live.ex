@@ -11,6 +11,8 @@ defmodule SMWeb.UserSettingsLive do
   alias Surface.Components.Form.PasswordInput
   alias Surface.Components.Form.Submit
 
+  on_mount SMWeb.SidebarHook
+
   def render(assigns) do
     ~F"""
     <Layout current_user={@current_user} current_page={~p"/users/settings"}>

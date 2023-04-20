@@ -25,6 +25,8 @@ defmodule SMWeb.NewCompetition do
   data entity_name, :string
   data competitions, :list, default: []
 
+  on_mount SMWeb.SidebarHook
+
   @impl Phoenix.LiveView
   def mount(_params, _session, socket) do
     socket =

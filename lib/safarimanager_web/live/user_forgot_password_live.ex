@@ -3,6 +3,8 @@ defmodule SMWeb.UserForgotPasswordLive do
 
   alias SM.Accounts
 
+  on_mount SMWeb.SidebarHook
+
   def render(assigns) do
     ~H"""
     <div class="mx-auto max-w-sm">

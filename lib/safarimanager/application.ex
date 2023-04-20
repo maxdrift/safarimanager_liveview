@@ -40,10 +40,12 @@ defmodule SM.Application do
 
     case Supervisor.start_link(children, opts) do
       {:ok, _} = result ->
+        display_startup_info()
+
         result
 
       {:error, error} ->
-        abort!(Application.format_error(error))
+        SM.Config.abort!(Application.format_error(error))
     end
   end
 
@@ -53,6 +55,14 @@ defmodule SM.Application do
   def config_change(changed, _new, removed) do
     SMWeb.Endpoint.config_change(changed, removed)
     :ok
+  end
+
+  # Internal
+
+  defp display_startup_info() do
+    if Phoenix.Endpoint.server?(:safarimanager, SMWeb.Endpoint) do
+      IO.puts("[Safari Manager] Application running at #{SMWeb.Endpoint.access_url()}")
+    end
   end
 
   defp set_libvips_concurrency do
@@ -83,22 +93,5 @@ defmodule SM.Application do
     defp app_specs, do: [SMApp]
   else
     defp app_specs, do: []
-  end
-
-  # TODO: Move this to shared module and use it to present startup config errors to the user.
-  # Aborts booting due to a configuration error.
-  @spec abort!(String.t()) :: no_return()
-  defp abort!(message)
-
-  if Mix.target() == :app do
-    defp abort!(message) do
-      ElixirKit.publish(:abort, message)
-      Process.sleep(:infinity)
-    end
-  else
-    defp abort!(message) do
-      IO.puts("\nERROR!!! [SafariManager] " <> message)
-      System.halt(1)
-    end
   end
 end

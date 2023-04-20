@@ -18,6 +18,8 @@ defmodule SMWeb.Components.Admin.Competitions do
 
   require Logger
 
+  on_mount SMWeb.SidebarHook
+
   @impl Phoenix.LiveView
   def mount(_params, _session, socket) do
     _result = subscribe(socket)

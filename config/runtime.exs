@@ -7,6 +7,9 @@ import Config
 # any compile-time configuration in here, as it won't be applied.
 # The block below contains prod specific runtime configuration.
 
+config :safarimanager,
+  shutdown_callback: {System, :stop, []}
+
 priv_dir = :code.priv_dir(:safarimanager) |> to_string()
 
 priv_dir_uploads = Path.join(priv_dir, "/uploads")
@@ -58,10 +61,9 @@ lv_signing_salt =
     """
 
 http_ip = {0, 0, 0, 0, 0, 0, 0, 0}
-http_port = "HTTP_PORT" |> System.get_env("4000") |> String.to_integer()
+http_port = "SAFARIMANAGER_PORT" |> System.get_env("4000") |> String.to_integer()
 
-url_host = System.get_env("URL_HOST", "localhost")
-# url_port = "URL_PORT" |> System.get_env(http_port) |> String.to_integer()
+url_host = System.get_env("SAFARIMANAGER_HOST", "localhost")
 
 allowed_origins =
   "ALLOWED_ORIGINS"

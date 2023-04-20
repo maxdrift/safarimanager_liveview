@@ -146,14 +146,6 @@ defmodule SM.MixProject do
   end
 
   defp releases do
-    macos_notarization = macos_notarization()
-
-    additional_paths = [
-      "vendor/otp/erts-#{:erlang.system_info(:version)}/bin",
-      "vendor/otp/bin",
-      "vendor/elixir/bin"
-    ]
-
     [
       safarimanager: [
         include_executables_for: [:unix],
@@ -167,20 +159,7 @@ defmodule SM.MixProject do
         steps: [
           :assemble,
           &remove_cookie/1,
-          &standalone_erlang_elixir/1,
-          &ElixirKit.bundle/1
-        ],
-        app: [
-          launcher_path: "rel/app/Launcher.swift",
-          info_plist_path: "rel/app/Info.plist.eex",
-          resources: %{
-            "AppIcon.icns" => "rel/app/icon-macos.icns",
-            "Icon.svg" => "rel/app/icon.svg"
-          },
-          root_dir: "vendor/otp",
-          additional_paths: additional_paths ++ ["/usr/local/bin"],
-          build_dmg: macos_notarization != nil,
-          notarization: macos_notarization
+          &standalone_erlang_elixir/1
         ]
       ]
     ]
@@ -191,23 +170,6 @@ defmodule SM.MixProject do
       {:_, {'deps/nimble_csv/lib/nimble_csv.ex', 523}, {:_, :_}},
       {:_, {'lib/safarimanager/default_password.ex', 5}, {:_, :_}}
     ]
-  end
-
-  defp macos_notarization do
-    identity = System.get_env("NOTARIZE_IDENTITY")
-    team_id = System.get_env("NOTARIZE_TEAM_ID")
-    apple_id = System.get_env("NOTARIZE_APPLE_ID")
-    password = System.get_env("NOTARIZE_PASSWORD")
-
-    if identity do
-      [
-        identity: identity,
-        team_id: team_id,
-        apple_id: apple_id,
-        password: password,
-        entitlements_plist_path: "rel/app/Entitlements.plist"
-      ]
-    end
   end
 
   defp remove_cookie(release) do

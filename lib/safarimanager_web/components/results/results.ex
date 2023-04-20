@@ -16,7 +16,7 @@ defmodule SMWeb.Results do
 
   require Logger
 
-  # data competition, :struct
+  on_mount SMWeb.SidebarHook
 
   @impl Phoenix.LiveView
   def mount(_params, _session, socket) do

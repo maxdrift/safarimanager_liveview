@@ -38,7 +38,7 @@ defmodule Standalone do
     # Start Erlang Port Mapper Daemon
     "$BINDIR"/epmd -daemon
 
-    exec ${RELEASE_ERLEXEC:-"$BINDIR/erlexec"} ${1+"$@"}
+    exec "$BINDIR/erlexec" ${1+"$@"}
     """)
 
     make_executable(Path.join(release_erts_bin_dir, "erl"))
@@ -73,7 +73,6 @@ defmodule Standalone do
 
     release
   end
-
 
   @doc """
   Copies Elixir into the release.
@@ -155,7 +154,11 @@ defmodule Standalone do
     dylibs_path = Path.join(release.path, "dylibs")
     File.mkdir_p!(dylibs_path)
 
-    {_result, 0} = System.cmd("dylibbundler", ~w(-b -od -cd -x #{vis_so_path} -d #{dylibs_path} -p @executable_path/../Resources/rel/dylibs))
+    {_result, 0} =
+      System.cmd(
+        "dylibbundler",
+        ~w(-b -od -cd -x #{vis_so_path} -d #{dylibs_path} -p @executable_path/../Resources/rel/dylibs)
+      )
 
     release
   end

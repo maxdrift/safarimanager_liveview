@@ -15,6 +15,8 @@ defmodule SMWeb.Jury do
     prizes: ["distinguish"]
   }
 
+  on_mount SMWeb.SidebarHook
+
   @impl Phoenix.LiveView
   def mount(_params, _session, socket) do
     _result = if connected?(socket), do: Slides.subscribe()

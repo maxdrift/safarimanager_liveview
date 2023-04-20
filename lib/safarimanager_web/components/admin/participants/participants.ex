@@ -19,6 +19,8 @@ defmodule SMWeb.Components.Admin.Participants do
 
   require Logger
 
+  on_mount SMWeb.SidebarHook
+
   @impl Phoenix.LiveView
   def mount(_params, _session, socket) do
     _result = subscribe(socket)
@@ -38,7 +40,11 @@ defmodule SMWeb.Components.Admin.Participants do
   @impl Phoenix.LiveView
   def handle_event(
         "toggle-select-item",
-        %{"user-id" => user_id, "competition-id" => competition_id, "selected" => selected?},
+        %{
+          "user-id" => user_id,
+          "competition-id" => competition_id,
+          "selected" => selected?
+        },
         socket
       ) do
     items =
