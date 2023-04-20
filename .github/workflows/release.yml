@@ -39,6 +39,9 @@ jobs:
             ${{ runner.os }}-mix-${{ env.elixir }}-${{ env.otp }}-
       - name: Install mix dependencies
         run: mix deps.get
+      - name: Add Msys64 to PATH
+        run: echo "::add-path::/c/msys64/mingw64/bin:/c/msys64/usr/bin"
+        shell: bash
       - name: Build the app
         run: bash .github/scripts/app/build_windows.sh
 
