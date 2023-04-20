@@ -7,21 +7,33 @@ defmodule ElixirKit.MixProject do
       version: "0.1.0",
       elixir: "~> 1.14",
       start_permanent: Mix.env() == :prod,
-      compilers: [:elixir_make] ++ Mix.compilers(),
+      package: package(),
       deps: deps()
     ]
   end
 
   def application do
     [
-      extra_applications: [:logger, :eex],
+      extra_applications: [:logger],
       mod: {ElixirKit.Application, []}
     ]
   end
 
-  defp deps do
+  def package do
     [
-      {:elixir_make, "~> 0.6"}
+      files: [
+        "lib",
+        "elixirkit_swift/Package.swift",
+        "elixirkit_swift/Sources",
+        "elixirkit_dotnet/ElixirKit.csproj",
+        "elixirkit_dotnet/ElixirKit.cs",
+        "mix.exs",
+        "README.md"
+      ]
     ]
+  end
+
+  defp deps do
+    []
   end
 end

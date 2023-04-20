@@ -1,13 +1,9 @@
 defmodule ElixirKit do
-  def publish(name, data) when is_atom(name) and is_binary(data) do
-    ElixirKit.NIF.publish(name, data)
+  def start do
+    Supervisor.start_child(ElixirKit.Supervisor, {ElixirKit.Server, self()})
   end
 
-  def subscribe do
-    {:ok, _} = Registry.register(ElixirKit.Registry, "subscribers", [])
-  end
-
-  def bundle(release) do
-    ElixirKit.Bundler.bundle_release(release)
+  def publish(name, data) do
+    GenServer.call(ElixirKit.Server, {:send_event, name, data})
   end
 end

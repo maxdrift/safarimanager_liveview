@@ -1,5 +1,6 @@
 defmodule ElixirKit.Server do
   @moduledoc false
+
   use GenServer
 
   def start_link(arg) do
@@ -7,18 +8,28 @@ defmodule ElixirKit.Server do
   end
 
   @impl true
-  def init(_) do
-    {:ok, nil}
+  def init(pid) do
+    port = System.fetch_env!("ELIXIRKIT_PORT") |> String.to_integer()
+    {:ok, socket} = :gen_tcp.connect('localhost', port, mode: :binary, packet: 4)
+    {:ok, %{pid: pid, socket: socket}}
   end
 
   @impl true
-  def handle_info({:publish, name, data}, state) do
-    data = List.to_string(data)
+  def handle_call({:send_event, name, data}, _from, state) do
+    payload = [name, ?:, data]
+    :ok = :gen_tcp.send(state.socket, payload)
+    {:reply, :ok, state}
+  end
 
-    Registry.dispatch(ElixirKit.Registry, "subscribers", fn entries ->
-      for {pid, _} <- entries, do: send(pid, {name, data})
-    end)
-
+  @impl true
+  def handle_info({:tcp, socket, payload}, state) when socket == state.socket do
+    [name, data] = :binary.split(payload, ":")
+    send(state.pid, {:event, name, data})
     {:noreply, state}
+  end
+
+  @impl true
+  def handle_info({:tcp_closed, socket}, state) when socket == state.socket do
+    {:stop, :shutdown, state}
   end
 end
