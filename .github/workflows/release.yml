@@ -1,6 +1,8 @@
 name: Release
 on:
   push:
+    branches:
+      - main
     tags:
       - "v*.*.*"
 env:
@@ -19,6 +21,7 @@ jobs:
         uses: msys2/setup-msys2@v2
         with:
           update: true
+          path-type: inherit
           install: >-
             base-devel
             git
@@ -49,8 +52,8 @@ jobs:
             ${{ runner.os }}-mix-${{ env.elixir }}-${{ env.otp }}-
       - name: Install mix dependencies
         run: mix deps.get
-      - name: Build the app
-        run: .github/scripts/app/build_windows.sh
+      # - name: Build the app
+      #   run: .github/scripts/app/build_windows.sh
 
   # macos:
   #   runs-on: macos-latest
