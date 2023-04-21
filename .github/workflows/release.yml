@@ -49,9 +49,9 @@ jobs:
             ${{ runner.os }}-mix-${{ env.elixir }}-${{ env.otp }}-
       - name: Install mix dependencies
         run: mix deps.get
-      # - name: Build the app
-      #   run: .github/scripts/app/build_windows.sh
-      #   shell: msys2 {0}
+      - name: Build the app
+        run: .github/scripts/app/build_windows.sh
+        shell: msys2 {0}
 
   # macos:
   #   runs-on: macos-latest
