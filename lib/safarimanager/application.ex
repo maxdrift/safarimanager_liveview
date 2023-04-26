@@ -40,6 +40,8 @@ defmodule SM.Application do
 
     case Supervisor.start_link(children, opts) do
       {:ok, _} = result ->
+        # TODO: Move migrations execution to ElixirKit pre-start action
+        _repos = SM.Release.migrate()
         display_startup_info()
 
         result

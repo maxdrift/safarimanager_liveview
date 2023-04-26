@@ -17,6 +17,7 @@ defmodule SM.Release do
     ensure_app_loaded()
 
     for repo <- repos() do
+      IO.puts("Migrating #{inspect(repo)}...")
       {:ok, _, _} = Ecto.Migrator.with_repo(repo, &Ecto.Migrator.run(&1, :up, all: true))
     end
   end
