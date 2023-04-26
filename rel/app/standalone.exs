@@ -149,6 +149,7 @@ defmodule Standalone do
   """
   @spec bundle_dylibs(Mix.Release.t()) :: Mix.Release.t()
   def bundle_dylibs(release) do
+    Logger.info("Bundling Dylibs...")
     release_lib_dir = Path.join(release.path, "lib")
     vis_so_path = Path.join(release_lib_dir, "vix-0.16.2/priv/vix.so")
     dylibs_path = Path.join(release.path, "dylibs")
@@ -157,7 +158,7 @@ defmodule Standalone do
     {_result, 0} =
       System.cmd(
         "dylibbundler",
-        ~w(-b -od -cd -x #{vis_so_path} -d #{dylibs_path} -p @executable_path/../Resources/rel/dylibs)
+        ~w(-b -od -cd -x #{vis_so_path} -d #{dylibs_path} -p @executable_path/../../../../../../Resources/rel/dylibs)
       )
 
     release
