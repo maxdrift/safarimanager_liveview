@@ -9,6 +9,9 @@ defmodule SMWeb.UserAuth do
   import Phoenix.Controller
 
   alias SM.Accounts
+  alias SM.Accounts.User
+
+  require Logger
 
   # Make the remember me cookie valid for 60 days.
   # If you want bump or reduce this value, also change
@@ -101,7 +104,17 @@ defmodule SMWeb.UserAuth do
   @spec fetch_current_user(Plug.Conn.t(), any) :: Plug.Conn.t()
   def fetch_current_user(conn, _opts) do
     {user_token, conn} = ensure_user_token(conn)
-    user = user_token && Accounts.get_user_by_session_token(user_token)
+
+    # TODO: clean up/remove Anonymous user support
+    user =
+      (user_token && Accounts.get_user_by_session_token(user_token)) ||
+        %User{
+          id: Ecto.UUID.generate(),
+          first_name: "",
+          last_name: "Anonymous",
+          email: "anonymous@mba.re"
+        }
+
     assign(conn, :current_user, user)
   end
 
@@ -187,14 +200,27 @@ defmodule SMWeb.UserAuth do
   end
 
   defp mount_current_user(session, socket) do
-    case session do
-      %{"user_token" => user_token} ->
+    # TODO: clean up/remove Anonymous user support
+    case {session, Map.get(socket.assigns, :current_user)} do
+      {%{"user_token" => user_token}, _user} ->
         Phoenix.Component.assign_new(socket, :current_user, fn ->
           Accounts.get_user_by_session_token(user_token)
         end)
 
-      %{} ->
-        Phoenix.Component.assign_new(socket, :current_user, fn -> nil end)
+      {%{}, %User{first_name: "", last_name: "Anonymous", email: "anonymous@mba.re"} = user} ->
+        Phoenix.Component.assign_new(socket, :current_user, fn ->
+          user
+        end)
+
+      {%{}, _user} ->
+        Phoenix.Component.assign_new(socket, :current_user, fn ->
+          %User{
+            id: Ecto.UUID.generate(),
+            first_name: "",
+            last_name: "Anonymous",
+            email: "anonymous@mba.re"
+          }
+        end)
     end
   end
 
