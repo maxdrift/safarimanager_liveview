@@ -12,12 +12,15 @@ defmodule SM.Slides.SelectionImport do
   def parse(path) do
     SelectionCSV
     |> CSVHelper.csv_to_stream(path, skip_headers: false)
-    |> Stream.reject(fn
-      [""] -> true
-      _any -> false
+    |> Stream.filter(fn
+      [file_name, _jury?, subject_num | _rest] ->
+        String.trim(file_name) != "" and String.trim(subject_num) != ""
+
+      _row ->
+        false
     end)
     |> Stream.map(fn
-      [file_name, jury?, subject_num, subject_name, coefficient | _] ->
+      [file_name, jury?, subject_num, subject_name, coefficient | _rest] ->
         %{
           file_name: file_name,
           jury?: String.downcase(jury?) == "x",
