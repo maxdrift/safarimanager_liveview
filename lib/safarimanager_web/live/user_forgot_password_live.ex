@@ -13,7 +13,7 @@ defmodule SMWeb.UserForgotPasswordLive do
         <:subtitle><%= gettext("We'll send a password reset link to your inbox") %></:subtitle>
       </.header>
 
-      <.simple_form :let={f} id="reset_password_form" for={:user} phx-submit="send_email">
+      <.simple_form :let={f} id="reset_password_form" for={%{}} as={:user} phx-submit="send_email">
         <.input field={{f, :email}} type="email" placeholder="Email" required />
         <:actions>
           <.button phx-disable-with={gettext("Sending...")} class="w-full">

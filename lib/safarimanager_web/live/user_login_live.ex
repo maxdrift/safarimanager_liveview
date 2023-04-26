@@ -20,7 +20,7 @@ defmodule SMWeb.UserLoginLive do
       <.simple_form
         :let={f}
         id="login_form"
-        for={:user}
+        for={%{}}
         action={~p"/users/log_in"}
         as={:user}
         phx-update="ignore"
