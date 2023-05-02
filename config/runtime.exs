@@ -122,3 +122,17 @@ config :safarimanager, SMWeb.PrometheusPush,
     username: System.get_env("PROMETHEUS_PUSH_GW_USER", "safarimanager"),
     password: System.get_env("PROMETHEUS_PUSH_GW_PASSWORD")
   ]
+
+env =
+  if config_env() == :prod and config_target() == :app do
+    "app"
+  else
+    to_string(config_env())
+  end
+
+config :logger, :svadilfari,
+  labels: [
+    {"service", "safarimanager"},
+    {"env", env},
+    {"hostname", System.get_env("INSTANCE_ID", to_string(hostname))}
+  ]
