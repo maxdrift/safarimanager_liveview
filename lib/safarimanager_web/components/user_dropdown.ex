@@ -22,11 +22,11 @@ defmodule SMWeb.Components.UserDropdown do
         <div class="w-[56px] flex justify-center">
           <UserAvatar
             user={@user}
-            class="w-8 h-8 group-hover:ring-white group-hover:ring-2"
+            class="w-8 h-8 group-hover:ring-primary group-hover:ring-2"
             text_class="text-xs"
           />
         </div>
-        <span class="text-sm text-gray-400 font-medium group-hover:text-white">
+        <span class="text-sm text-base-content font-medium group-hover:text-primary">
           {@user && "#{@user.first_name} #{@user.last_name}"}
         </span>
       </label>

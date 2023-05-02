@@ -15,12 +15,12 @@ defmodule SMWeb.Components.Sidebar do
   def render(assigns) do
     ~F"""
     <nav
-      class="hidden md:flex w-[17rem] h-full py-2 md:py-5 bg-gray-900"
+      class="hidden md:flex w-[12rem] h-full py-2 md:py-5 base-300 border-r border-gray-600"
       aria-label="sidebar"
       data-el-sidebar
     >
       <button
-        class="hidden text-xl text-gray-300 hover:text-white focus:text-white absolute top-4 right-3"
+        class="hidden text-xl text-base-content hover:text-white focus:text-white absolute top-4 right-3"
         aria-label="hide sidebar"
         data-el-toggle-sidebar
         phx-click={JS.add_class("hidden", to: "[data-el-sidebar]")
@@ -32,14 +32,14 @@ defmodule SMWeb.Components.Sidebar do
       <div class="flex flex-col justify-between h-full">
         <div class="flex flex-col">
           <div class="space-y-3">
-            <div class="flex items-center mb-5">
+            <div class="flex flex-col items-center">
               <LiveRedirect to={~p"/"} class="flex items-center border-l-4 border-gray-900 group">
                 <img src={~p"/images/logo.png"} class="mx-2" height="40" width="40" alt="logo safari manager">
-                <span class="text-gray-300 text-xl font-logo ml-[-1px] group-hover:text-white pt-1">
+                <span class="text-base-content text-lg font-logo ml-[-1px] group-hover:text-white pt-1">
                   Safari Manager
                 </span>
               </LiveRedirect>
-              <span class="text-gray-300 text-xs font-normal font-sans mx-2.5 pt-3 cursor-default">
+              <span class="text-base-content text-xs font-normal font-sans cursor-default w-full text-right">
                 v{Application.spec(:safarimanager, :vsn)}
               </span>
             </div>
@@ -51,7 +51,7 @@ defmodule SMWeb.Components.Sidebar do
             />
             <div class="ml-4 border-t border-gray-600" />
             <div class="ml-6 h-7 flex items-center">
-              <span class="text-gray-300 text-md font-semibold">
+              <span class="text-base-content text-md font-semibold">
                 {gettext("Admin")}
               </span>
             </div>
@@ -108,7 +108,7 @@ defmodule SMWeb.Components.Sidebar do
         <div class="flex flex-col">
           <!-- TODO: hide if feature not available -->
           <button
-            class="h-7 flex items-center text-gray-400 hover:text-white border-l-4 border-transparent hover:border-white"
+            class="h-7 flex items-center text-base-content hover:text-primary-content border-l-4 border-transparent hover:bg-primary"
             aria-label="shutdown"
             phx-click={with_confirm(
               JS.push("shutdown"),

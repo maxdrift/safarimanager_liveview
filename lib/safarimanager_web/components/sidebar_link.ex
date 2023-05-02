@@ -19,12 +19,13 @@ defmodule SMWeb.Components.SidebarLink do
         "h-7",
         "flex",
         "items-center",
-        "hover:text-white",
+        "hover:bg-primary",
+        "hover:text-primary-content",
+        "hover:primary-content",
         "border-l-4",
-        "hover:border-white",
-        "text-white": @to == @current,
-        "text-gray-400": @to != @current,
-        "border-white": @to == @current,
+        "text-primary": @to == @current,
+        "border-primary": @to == @current,
+        "text-base-content": @to != @current,
         "border-transparent": @to != @current
       }
     >

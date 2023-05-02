@@ -16,7 +16,7 @@ defmodule SMWeb.Components.ThemeChangeDropdown do
       <label
         tabindex="0"
         aria-label="change theme"
-        class="mt-2 h-7 flex items-center text-gray-400 hover:text-white border-l-4 border-transparent hover:border-white"
+        class="mt-2 h-7 flex items-center text-base-content hover:text-primary-content border-l-4 border-transparent hover:bg-primary"
       >
         <Heroicons.Surface.Icon
           name="swatch"
@@ -32,7 +32,7 @@ defmodule SMWeb.Components.ThemeChangeDropdown do
           class="ml-3 hidden h-4 w-4 sm:inline-block"
         />
       </label>
-      <div class="dropdown-content bg-base-200 text-base-content rounded-t rounded-b top-px max-h-96 h-[70vh] w-52 overflow-y-auto shadow-2xl ml-[-6em]">
+      <div class="dropdown-content bg-base-100 text-base-content rounded-t rounded-b top-px max-h-96 h-[70vh] w-52 overflow-y-auto shadow-2xl ml-[1em]">
         <div class="grid grid-cols-1 gap-3 p-3" tabindex="0">
           {#for theme <- @themes}
             <ThemeChangeDropdownItem theme={theme} />

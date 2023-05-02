@@ -42,7 +42,7 @@ defmodule SMWeb.Components.Layout do
             </#slot>
           </div>
         </div>
-        <div class="container mx-auto pt-5">
+        <div class="container mx-auto pt-5 px-5">
           <#slot />
         </div>
       </div>
