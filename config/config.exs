@@ -128,6 +128,20 @@ config :safarimanager, SM.PromEx,
 
 config :gettext, :default_locale, "it"
 
+config :logger, :backends, [:console, Svadilfari]
+
+config :logger, :svadilfari,
+  metadata: :all,
+  max_buffer: 10,
+  client: [
+    url: "http://maxdrift.org:3100",
+    opts: []
+  ],
+  labels: [
+    {"service", "safarimanager"},
+    {"env", "dev"}
+  ]
+
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
 import_config "#{config_env()}.exs"
