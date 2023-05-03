@@ -60,7 +60,7 @@ defmodule SM.Config do
   Returns an mfa if there's a way to shut down the system.
   """
   @spec shutdown_callback() :: {module(), atom(), list()} | nil
-  def shutdown_callback() do
+  def shutdown_callback do
     Application.fetch_env!(:safarimanager, :shutdown_callback)
   end
 
@@ -68,7 +68,7 @@ defmodule SM.Config do
   Returns the update check URL.
   """
   @spec update_instructions_url() :: String.t() | nil
-  def update_instructions_url() do
+  def update_instructions_url do
     Application.fetch_env!(:safarimanager, :update_instructions_url)
   end
 
@@ -78,7 +78,7 @@ defmodule SM.Config do
   Returns the feature flag list.
   """
   @spec feature_flags() :: keyword(boolean())
-  def feature_flags() do
+  def feature_flags do
     @feature_flags
   end
 
@@ -191,6 +191,7 @@ defmodule SM.Config do
   """
   def cookie!(env) do
     if cookie = System.get_env(env) do
+      # credo:disable-for-next-line
       String.to_atom(cookie)
     end
   end
@@ -204,9 +205,11 @@ defmodule SM.Config do
         nil
 
       {name, "name"} ->
+        # credo:disable-for-next-line
         {:longnames, String.to_atom(name)}
 
       {sname, "sname"} ->
+        # credo:disable-for-next-line
         {:shortnames, String.to_atom(sname)}
 
       {_, other} ->

@@ -26,8 +26,7 @@ defmodule SMWeb.Results do
 
   @impl Phoenix.LiveView
   def handle_event(event_name, params, socket) do
-    IO.inspect(event_name)
-    IO.inspect(params)
+    Logger.debug("#{inspect({event_name, params})}")
 
     {:noreply, socket}
   end

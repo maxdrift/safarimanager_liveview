@@ -5,6 +5,7 @@ defmodule SMWeb.UserConfirmationInstructionsLive do
 
   on_mount SMWeb.SidebarHook
 
+  @impl Phoenix.LiveView
   def render(assigns) do
     ~H"""
     <.header><%= gettext("Resend confirmation instructions") %></.header>
@@ -32,10 +33,12 @@ defmodule SMWeb.UserConfirmationInstructionsLive do
     """
   end
 
+  @impl Phoenix.LiveView
   def mount(_params, _session, socket) do
     {:ok, socket}
   end
 
+  @impl Phoenix.LiveView
   def handle_event("send_instructions", %{"user" => %{"email" => email}}, socket) do
     if user = Accounts.get_user_by_email(email) do
       Accounts.deliver_user_confirmation_instructions(

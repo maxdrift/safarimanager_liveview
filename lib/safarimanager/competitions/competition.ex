@@ -73,7 +73,7 @@ defmodule SM.Competitions.Competition do
     |> put_assoc(:allowed_evaluations, allowed_evaluations)
   end
 
-  @spec put_allowed_evaluations(t(), [%Evaluation{}]) :: Ecto.Changeset.t()
+  @spec put_allowed_evaluations(t(), [Evaluation.t()]) :: Ecto.Changeset.t()
   def put_allowed_evaluations(struct, evaluations) do
     struct
     |> change()

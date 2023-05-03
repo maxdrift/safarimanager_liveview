@@ -160,7 +160,7 @@ defmodule SM.Accounts do
   nil
 
   """
-  @spec get_user_by_email(String.t()) :: User.t()
+  @spec get_user_by_email(String.t()) :: User.t() | nil
   def get_user_by_email(email) when is_binary(email) do
     Repo.get_by(User, email: email)
   end
@@ -177,7 +177,7 @@ defmodule SM.Accounts do
   nil
 
   """
-  @spec get_user_by_email_and_password(String.t(), String.t()) :: User.t()
+  @spec get_user_by_email_and_password(String.t(), String.t()) :: User.t() | nil
   def get_user_by_email_and_password(email, password)
       when is_binary(email) and is_binary(password) do
     user = Repo.get_by(User, email: email)

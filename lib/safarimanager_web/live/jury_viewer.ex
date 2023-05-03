@@ -103,7 +103,7 @@ defmodule SMWeb.JuryViewer do
 
   def handle_event("vote", %{"vote" => vote}, socket) do
     {int_vote, ""} = Integer.parse(vote)
-    IO.inspect(int_vote, label: :voted)
+    Logger.debug("Voted: #{int_vote}")
     # next_image = Enum.at(socket.assigns.images, socket.assigns.curr_index)
     # image_name = String.split(next_image, "/") |> Enum.reverse() |> hd()
 
@@ -117,14 +117,15 @@ defmodule SMWeb.JuryViewer do
   end
 
   def handle_event("prize", %{"prize" => prize}, socket) do
-    IO.inspect(prize, label: :prize)
+    Logger.debug("Prize: #{inspect(prize)}")
     {:noreply, socket}
   end
 
   def handle_event("vote-key", %{"key" => vote}, socket) do
     case Integer.parse(vote) do
       {int_vote, ""} ->
-        IO.inspect(int_vote, label: :key_voted)
+        Logger.debug("Key voted: #{int_vote}")
+
         {:noreply, add_vote(socket, int_vote)}
 
       :error ->

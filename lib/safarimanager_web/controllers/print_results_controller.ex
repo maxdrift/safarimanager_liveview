@@ -9,7 +9,7 @@ defmodule SMWeb.PrintResultsController do
 
   require Logger
 
-  @spec show(Plug.Conn.t(), any()) :: Plug.Conn.t()
+  @spec show(Plug.Conn.t(), any()) :: Plug.Conn.t() | {:error, :not_found}
   def show(conn, %{"competition_id" => competition_id}) do
     with {:ok, competition} <- Competitions.get(competition_id),
          {:ok, results} <- Results.list(competition_id) do

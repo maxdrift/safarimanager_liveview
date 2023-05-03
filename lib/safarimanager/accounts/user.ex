@@ -4,25 +4,25 @@ defmodule SM.Accounts.User do
   """
   use SM, :schema
 
+  import SMWeb.Gettext
+
   alias SM.Categories.Category
   alias SM.Competitions.Competition
   alias SM.Organizations.Organization
   alias SM.Participants.Participant
   alias SM.Slides.Slide
 
-  import SMWeb.Gettext
-
   schema "users" do
-    field :email, :string
-    field :password, :string, virtual: true, redact: true
-    field :hashed_password, :string, redact: true
-    field :confirmed_at, :naive_datetime
-    field :first_name, :string
-    field :last_name, :string
-    belongs_to :organization, Organization
-    belongs_to :category, Category
-    many_to_many :competitions, Competition, join_through: Participant
-    has_many :slides, Slide
+    field(:email, :string)
+    field(:password, :string, virtual: true, redact: true)
+    field(:hashed_password, :string, redact: true)
+    field(:confirmed_at, :naive_datetime)
+    field(:first_name, :string)
+    field(:last_name, :string)
+    belongs_to(:organization, Organization)
+    belongs_to(:category, Category)
+    many_to_many(:competitions, Competition, join_through: Participant)
+    has_many(:slides, Slide)
 
     timestamps()
   end

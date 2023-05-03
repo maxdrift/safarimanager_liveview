@@ -120,6 +120,7 @@ defmodule SMWeb do
       use Phoenix.VerifiedRoutes,
         endpoint: SMWeb.Endpoint,
         router: SMWeb.Router,
+        # credo:disable-for-next-line
         statics: SMWeb.static_paths() ++ ["uploads"]
 
       import SMWeb.Gettext

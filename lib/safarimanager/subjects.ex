@@ -263,27 +263,9 @@ defmodule SM.Subjects do
           Decimal.compare(left.to, right.to) in [:lt]
       end)
 
-    slides_subjects
-    |> Enum.map(fn subject ->
-      distribution =
-        if Decimal.compare(subject.distribution, 1) in [:lt, :eq] do
-          subject.distribution
-        else
-          Logger.error(
-            "Subject distribution over 100% for subject #{subject.id} (#{subject.numeric_id} - #{subject.name})"
-          )
-
-          Decimal.new(1)
-        end
-
-      matches =
-        Enum.flat_map(coefficients, fn coeff ->
-          if between(coeff.from, distribution, coeff.to) do
-            [coeff.value]
-          else
-            []
-          end
-        end)
+    Enum.map(slides_subjects, fn subject ->
+      distribution = get_distribution(subject)
+      matches = get_matches(coefficients, distribution)
 
       # TODO: Handle error with `with/do`
       {:ok, coeff} =
@@ -310,6 +292,28 @@ defmodule SM.Subjects do
       |> Map.put(:distribution, distribution)
       |> Map.put(:coefficient, coeff)
       |> Map.put(:dynamic_coefficient, true)
+    end)
+  end
+
+  defp get_distribution(subject) do
+    if Decimal.compare(subject.distribution, 1) in [:lt, :eq] do
+      subject.distribution
+    else
+      Logger.error(
+        "Subject distribution over 100% for subject #{subject.id} (#{subject.numeric_id} - #{subject.name})"
+      )
+
+      Decimal.new(1)
+    end
+  end
+
+  defp get_matches(coefficients, distribution) do
+    Enum.flat_map(coefficients, fn coeff ->
+      if between(coeff.from, distribution, coeff.to) do
+        [coeff.value]
+      else
+        []
+      end
     end)
   end
 

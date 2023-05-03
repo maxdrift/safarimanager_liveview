@@ -235,12 +235,7 @@ defmodule SM.Competitions do
     Multi.new()
     |> Multi.delete_all(:delete_competitions, query)
     |> Multi.run(:delete_files, fn _repo, %{} ->
-      Enum.reduce_while(ids, {:ok, :deleted}, fn id, acc ->
-        case Slides.delete_files(id) do
-          :ok -> {:cont, acc}
-          {:error, _reason} = error -> {:halt, error}
-        end
-      end)
+      Enum.reduce_while(ids, {:ok, :deleted}, &delete_while/2)
     end)
     |> Repo.transaction()
     |> case do
@@ -316,6 +311,13 @@ defmodule SM.Competitions do
   end
 
   # Internal
+
+  defp delete_while(id, acc) do
+    case Slides.delete_files(id) do
+      :ok -> {:cont, acc}
+      {:error, _reason} = error -> {:halt, error}
+    end
+  end
 
   defp fetch_config!(key) do
     config = Application.fetch_env!(:safarimanager, CompetitionSettings)

@@ -140,15 +140,7 @@ defmodule SMWeb.Components.DirectUploadDialog do
             )
 
             # If importing is complete, close the dialog after 1 second
-            _ref =
-              if Decimal.equal?(progress, 1) do
-                send_update_after(
-                  pid,
-                  DirectUploadDialog,
-                  [id: "auto-upload-dialog", show: false],
-                  1000
-                )
-              end
+            :ok = maybe_close_dialog(progress, pid)
 
             acc + 1
           end)
@@ -173,6 +165,22 @@ defmodule SMWeb.Components.DirectUploadDialog do
 
   def handle_event(_event, _params, socket) do
     {:noreply, socket}
+  end
+
+  # Internal
+
+  defp maybe_close_dialog(progress, pid) do
+    _ref =
+      if Decimal.equal?(progress, 1) do
+        send_update_after(
+          pid,
+          DirectUploadDialog,
+          [id: "auto-upload-dialog", show: false],
+          1000
+        )
+      end
+
+    :ok
   end
 
   defp count_image_type(items) do

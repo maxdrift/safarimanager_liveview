@@ -13,11 +13,12 @@ defmodule SM.CSVExport do
   alias SM.Jurors.Juror
   alias SM.Organizations.Organization
   alias SM.Participants.Participant
-  alias SM.Subjects.Subject
   alias SM.Slides.Slide
   alias SM.Slides.SlideEvaluation
+  alias SM.Subjects.Subject
   alias SM.Utils.CSVHelper
 
+  @spec export(String.t(), fun()) :: any()
   def export("users", callback) when is_function(callback) do
     extra_fields = %{hashed_password: fn _row -> nil end}
 
@@ -102,17 +103,7 @@ defmodule SM.CSVExport do
           |> from()
           |> select([u], map(u, ^fields))
           |> Repo.stream()
-          |> Stream.map(fn row ->
-            extra_fields =
-              extra_fields
-              |> Enum.map(fn {key, fun} ->
-                {key, fun.(row)}
-              end)
-              |> Enum.into(%{})
-
-            row = Map.merge(row, extra_fields)
-            row_map_to_list(row, final_fields)
-          end)
+          |> Stream.map(&stream_row(&1, extra_fields, final_fields))
           |> CSVHelper.stream_to_csv(final_fields)
           |> Stream.scan({:error, :unknown}, fn row, _acc ->
             callback.(row)
@@ -127,6 +118,18 @@ defmodule SM.CSVExport do
       {:ok, result} -> result
       {:error, reason} -> reason
     end
+  end
+
+  defp stream_row(row, extra_fields, final_fields) do
+    extra_fields =
+      extra_fields
+      |> Enum.map(fn {key, fun} ->
+        {key, fun.(row)}
+      end)
+      |> Enum.into(%{})
+
+    row = Map.merge(row, extra_fields)
+    row_map_to_list(row, final_fields)
   end
 
   defp row_map_to_list(row_map, fields) do

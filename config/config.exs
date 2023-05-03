@@ -14,6 +14,9 @@ config :safarimanager,
 config :safarimanager,
   shutdown_callback: nil
 
+config :safarimanager,
+  feature_flags: []
+
 config :safarimanager, SM.Repo,
   migration_primary_key: [name: :id, type: :binary_id],
   migration_foreign_key: [column: :id, type: :binary_id],

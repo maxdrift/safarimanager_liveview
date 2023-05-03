@@ -508,19 +508,7 @@ defmodule SM.Slides do
 
     Multi.new()
     |> Multi.run(:copy_file, fn _repo, %{} ->
-      :ok = File.mkdir_p!(uploads_path)
-      file_path = Path.join(uploads_path, file_name)
-
-      if File.exists?(file_path) do
-        Logger.info(
-          "File #{file_name} from User #{user_id} in Competition #{competition_id} already exists."
-        )
-
-        {:ok, file_path}
-      else
-        with :ok <- File.cp(tmp_path, file_path),
-             do: {:ok, file_path}
-      end
+      multi_copy_file(uploads_path, file_name, user_id, competition_id, tmp_path)
     end)
     |> Multi.run(:verify_duplicate, fn _repo, %{} ->
       case get(competition_id, user_id, file_name) do
@@ -715,14 +703,15 @@ defmodule SM.Slides do
 
     competition_id
     |> list_for_jury()
-    |> Enum.each(fn slide ->
-      Enum.each(0..num_of_jurors, fn _juror ->
-        Enum.each(0..evaluations_per_juror, fn _evaluation ->
-          random_evaluation = Enum.random(allowed_evaluations)
-          evaluate(competition_id, slide.id, random_evaluation.id)
-        end)
-      end)
-    end)
+    |> Enum.each(
+      &assign_random_evaluation(
+        &1,
+        num_of_jurors,
+        evaluations_per_juror,
+        allowed_evaluations,
+        competition_id
+      )
+    )
   end
 
   @spec assign_fixed_evaluations(String.t(), String.t()) :: :ok
@@ -733,13 +722,15 @@ defmodule SM.Slides do
 
     competition_id
     |> list_for_jury()
-    |> Enum.each(fn slide ->
-      Enum.each(0..num_of_jurors, fn _juror ->
-        Enum.each(0..evaluations_per_juror, fn _evaluation ->
-          evaluate(competition_id, slide.id, evaluation_id)
-        end)
-      end)
-    end)
+    |> Enum.each(
+      &assign_evaluation(
+        &1,
+        num_of_jurors,
+        evaluations_per_juror,
+        evaluation_id,
+        competition_id
+      )
+    )
   end
 
   @spec create_slide_evaluation(%{(String.t() | atom()) => any()}) ::
@@ -865,7 +856,7 @@ defmodule SM.Slides do
   def delete_many(ids) do
     Multi.new()
     |> Multi.run(:slides, fn _repo, %{} ->
-      {:ok, Repo.all(from s in Slide, where: s.id in ^ids)}
+      {:ok, Repo.all(from(s in Slide, where: s.id in ^ids))}
     end)
     |> Multi.delete_all(:delete_many, from(entity in Slide, where: entity.id in ^ids))
     |> Multi.run(:delete_files, fn _repo, %{slides: slides} ->
@@ -955,5 +946,52 @@ defmodule SM.Slides do
       else
         :ok
       end
+  end
+
+  # Internal
+
+  defp multi_copy_file(uploads_path, file_name, user_id, competition_id, tmp_path) do
+    :ok = File.mkdir_p!(uploads_path)
+    file_path = Path.join(uploads_path, file_name)
+
+    if File.exists?(file_path) do
+      Logger.info(
+        "File #{file_name} from User #{user_id} in Competition #{competition_id} already exists."
+      )
+
+      {:ok, file_path}
+    else
+      with :ok <- File.cp(tmp_path, file_path),
+           do: {:ok, file_path}
+    end
+  end
+
+  defp assign_random_evaluation(
+         slide,
+         num_of_jurors,
+         evaluations_per_juror,
+         allowed_evaluations,
+         competition_id
+       ) do
+    Enum.each(0..num_of_jurors, fn _juror ->
+      Enum.each(0..evaluations_per_juror, fn _evaluation ->
+        random_evaluation = Enum.random(allowed_evaluations)
+        evaluate(competition_id, slide.id, random_evaluation.id)
+      end)
+    end)
+  end
+
+  defp assign_evaluation(
+         slide,
+         num_of_jurors,
+         evaluations_per_juror,
+         evaluation_id,
+         competition_id
+       ) do
+    Enum.each(0..num_of_jurors, fn _juror ->
+      Enum.each(0..evaluations_per_juror, fn _evaluation ->
+        evaluate(competition_id, slide.id, evaluation_id)
+      end)
+    end)
   end
 end

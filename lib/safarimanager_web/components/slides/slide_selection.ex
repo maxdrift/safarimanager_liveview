@@ -7,9 +7,9 @@ defmodule SMWeb.SlideSelection do
   alias Phoenix.LiveView
   alias SM.Accounts
   alias SM.Competitions
-  alias SM.Slides.SelectionImport
   alias SM.Participants
   alias SM.Slides
+  alias SM.Slides.SelectionImport
   alias SM.Subjects
   alias SMWeb.Components.CompetitionHeader
   alias SMWeb.Components.Layout
@@ -116,8 +116,7 @@ defmodule SMWeb.SlideSelection do
   end
 
   def handle_event(event_name, params, socket) do
-    IO.inspect(event_name)
-    IO.inspect(params)
+    Logger.debug("#{inspect({event_name, params})}")
 
     {:noreply, socket}
   end

@@ -9,23 +9,28 @@ defmodule SM.Utils do
   Generates a random binary id.
   """
   @spec random_id() :: id()
-  def random_id() do
-    :crypto.strong_rand_bytes(20) |> Base.encode32(case: :lower)
+  def random_id do
+    20
+    |> :crypto.strong_rand_bytes()
+    |> Base.encode32(case: :lower)
   end
 
   @doc """
   Generates a random short binary id.
   """
   @spec random_short_id() :: id()
-  def random_short_id() do
-    :crypto.strong_rand_bytes(5) |> Base.encode32(case: :lower)
+  def random_short_id do
+    5
+    |> :crypto.strong_rand_bytes()
+    |> Base.encode32(case: :lower)
   end
 
   @doc """
   Generates a random cookie for a distributed node.
   """
   @spec random_cookie() :: atom()
-  def random_cookie() do
+  def random_cookie do
+    # credo:disable-for-next-line
     :"c_#{Base.url_encode64(:crypto.strong_rand_bytes(39))}"
   end
 
@@ -42,7 +47,7 @@ defmodule SM.Utils do
   The binary is base32 encoded.
   """
   @spec random_node_aware_id() :: id()
-  def random_node_aware_id() do
+  def random_node_aware_id do
     node_part = node_hash(node())
     random_part = :crypto.strong_rand_bytes(9)
     binary = <<node_part::binary, random_part::binary>>
@@ -79,9 +84,11 @@ defmodule SM.Utils do
   @spec node_from_name(String.t()) :: atom()
   def node_from_name(name) do
     if name =~ "@" do
+      # credo:disable-for-next-line
       String.to_atom(name)
     else
       # Default to the same host as the current node
+      # credo:disable-for-next-line
       :"#{name}@#{node_host()}"
     end
   end
@@ -136,8 +143,10 @@ defmodule SM.Utils do
       :get_and_update, data, next when is_list(data) ->
         case Enum.split_while(data, fn item -> item.id != id end) do
           {prev, [item | cons]} ->
+            # credo:disable-for-next-line
             case next.(item) do
               {get, update} ->
+                # credo:disable-for-next-line
                 {get, prev ++ [update | cons]}
 
               :pop ->
@@ -317,6 +326,7 @@ defmodule SM.Utils do
   @doc """
   Opens the given `url` in the browser.
   """
+  @spec browser_open(String.t()) :: :ok
   def browser_open(url) do
     win_cmd_args = ["/c", "start", String.replace(url, "&", "^&")]
 
@@ -340,6 +350,7 @@ defmodule SM.Utils do
     :ok =
       case cmd_args do
         {cmd, args} ->
+          # credo:disable-for-next-line
           {_result, _exit_status} = System.cmd(cmd, args)
           :ok
 

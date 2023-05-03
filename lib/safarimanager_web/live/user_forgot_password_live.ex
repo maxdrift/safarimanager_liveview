@@ -5,6 +5,7 @@ defmodule SMWeb.UserForgotPasswordLive do
 
   on_mount SMWeb.SidebarHook
 
+  @impl Phoenix.LiveView
   def render(assigns) do
     ~H"""
     <div class="mx-auto max-w-sm">
@@ -25,10 +26,12 @@ defmodule SMWeb.UserForgotPasswordLive do
     """
   end
 
+  @impl Phoenix.LiveView
   def mount(_params, _session, socket) do
     {:ok, socket}
   end
 
+  @impl Phoenix.LiveView
   def handle_event("send_email", %{"user" => %{"email" => email}}, socket) do
     if user = Accounts.get_user_by_email(email) do
       Accounts.deliver_user_reset_password_instructions(

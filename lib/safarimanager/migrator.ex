@@ -1,3 +1,4 @@
+# credo:disable-for-this-file
 defmodule SM.Migrator do
   @moduledoc """
   Migration script from the OLD MS Access Safari Manager app to the new Elixir Safari Manager.
@@ -30,8 +31,7 @@ defmodule SM.Migrator do
   def migrate_database(path) do
     with {:ok, conn} <- connect_to_db(path),
          :ok <- migrate_tables(conn, %{}),
-         :ok <- disconnect_from_db(conn),
-         do: :ok
+         do: disconnect_from_db(conn)
   end
 
   # Internal

@@ -73,6 +73,8 @@ defmodule SMWeb.Jury do
       # and will be dispatched to all active hooks on the client who are handling that event.
       |> push_event("new-image", %{options: %{image_url: file_path}})
 
+    # schedule_next_image(5)
+
     {:noreply, socket}
   end
 
@@ -116,7 +118,7 @@ defmodule SMWeb.Jury do
   end
 
   def handle_event("prize", %{"prize" => prize}, socket) do
-    IO.inspect(prize, label: :prize)
+    Logger.debug("Prize: #{inspect(prize)}")
     {:noreply, socket}
   end
 
@@ -215,6 +217,12 @@ defmodule SMWeb.Jury do
     {:noreply, socket}
   end
 
+  def handle_info(:next_slide, socket) do
+    socket = to_next_image(socket)
+
+    {:noreply, socket}
+  end
+
   # Internal
 
   defp set_flash_evaluation(socket, value) do
@@ -231,10 +239,7 @@ defmodule SMWeb.Jury do
            evaluation_id
          ) do
       {:ok, slide_evaluation} ->
-        evaluations_str =
-          slide_evaluation.slide.evaluations
-          |> Enum.map(& &1.value)
-          |> Enum.join("-")
+        evaluations_str = Enum.map_join(slide_evaluation.slide.evaluations, "-", & &1.value)
 
         set_flash_evaluation(socket, evaluations_str)
 
@@ -339,5 +344,9 @@ defmodule SMWeb.Jury do
   defp can_evaluate?(competition, slide) do
     Enum.count(slide.evaluations) <
       Enum.count(competition.jurors) * competition.settings.evaluations_per_juror
+  end
+
+  defp schedule_next_image(seconds) do
+    Process.send_after(self(), :next_slide, seconds * 1000)
   end
 end
