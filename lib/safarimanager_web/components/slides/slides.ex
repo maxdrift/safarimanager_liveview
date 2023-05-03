@@ -95,6 +95,9 @@ defmodule SMWeb.Slides do
     with {:ok, slide} <- Slides.get(slide_id),
          do: Slides.delete(slide)
 
+    participants = Participants.list(socket.assigns.competition_id)
+    socket = assign(socket, participants: participants)
+
     {:noreply, socket}
   end
 
@@ -107,6 +110,9 @@ defmodule SMWeb.Slides do
       for slide <- socket.assigns.slides do
         {:ok, _slide} = Slides.delete(slide)
       end
+
+    participants = Participants.list(socket.assigns.competition_id)
+    socket = assign(socket, participants: participants)
 
     {:noreply, socket}
   end
@@ -174,6 +180,8 @@ defmodule SMWeb.Slides do
             acc + 1
           end)
 
+        :ok = Process.send(pid, {:refresh, :participants}, [])
+
         Logger.info(
           "Imported #{import_result}/#{to_be_imported_cnt} Slides for User #{assigns.user.id} in Competition #{assigns.competition_id}"
         )
@@ -183,8 +191,7 @@ defmodule SMWeb.Slides do
   end
 
   def handle_event(event_name, params, socket) do
-    IO.inspect(event_name, label: __MODULE__)
-    IO.inspect(params)
+    Logger.debug("#{inspect({event_name, params})}")
 
     {:noreply, socket}
   end
@@ -201,8 +208,8 @@ defmodule SMWeb.Slides do
     participants = Participants.list(competition_id)
 
     socket =
-      socket
-      |> assign(
+      assign(
+        socket,
         competition_id: competition_id,
         competition: competition,
         participants: participants,
@@ -219,7 +226,7 @@ defmodule SMWeb.Slides do
     user_id = (socket.assigns.user && socket.assigns.user.id) || nil
     competition_id = socket.assigns.competition_id
 
-    socket = assign(socket, :slides, user_id && Slides.list(user_id, competition_id))
+    socket = assign(socket, slides: user_id && Slides.list(user_id, competition_id))
 
     {:noreply, socket}
   end
@@ -230,14 +237,24 @@ defmodule SMWeb.Slides do
 
     socket =
       socket
-      |> assign(:competition, competition)
-      |> assign(:participants, participants)
+      |> assign(
+        competition: competition,
+        participants: participants
+      )
+
+    {:noreply, socket}
+  end
+
+  def handle_info({:refresh, :participants}, socket) do
+    participants = Participants.list(socket.assigns.competition_id)
+
+    socket = assign(socket, participants: participants)
 
     {:noreply, socket}
   end
 
   def handle_info({:new_volumes, new_volumes}, socket) do
-    IO.inspect("new volume mounted from Component!!")
+    Logger.debug("new volume mounted from Component!!")
     [first_volume | _tail] = new_volumes
     competition_id = socket.assigns.competition_id
     participants = socket.assigns.participants
@@ -247,7 +264,7 @@ defmodule SMWeb.Slides do
   end
 
   def handle_info(:volumes_removed, socket) do
-    IO.inspect("volume removed from Component!!")
+    Logger.debug("volume removed from Component!!")
     DirectUploadDialog.hide("auto-upload-dialog")
 
     {:noreply, socket}
