@@ -9,6 +9,8 @@ defmodule SMWeb.PrometheusPush do
 
   @content_type "text/plain; version=0.0.4"
 
+  adapter Tesla.Adapter.Finch, name: SMFinch
+
   plug Tesla.Middleware.BaseUrl, get_config(:url)
   plug Tesla.Middleware.JSON
   plug Tesla.Middleware.BasicAuth, get_config(:basic_auth)

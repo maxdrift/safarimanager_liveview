@@ -21,7 +21,7 @@ defmodule SM.Application do
         # Start the Ecto repository
         SM.Repo,
         # Finch init for Tesla
-        # {Finch, name: SMFinch, pools: %{default: [count: 1, size: 10]}},
+        {Finch, name: SMFinch, pools: %{default: [count: 1, size: 10]}},
         # Start the supervisor for the GenServer pushing metrics
         # to Prometheus
         SMWeb.TelemetryPusherSupervisor,

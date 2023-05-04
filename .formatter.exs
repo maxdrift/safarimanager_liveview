@@ -1,5 +1,5 @@
 [
-  import_deps: [:ecto, :phoenix, :surface],
+  import_deps: [:ecto, :phoenix, :surface, :tesla],
   inputs: [
     "*.{ex,exs,sface,heex}",
     "priv/*/seeds.exs",
