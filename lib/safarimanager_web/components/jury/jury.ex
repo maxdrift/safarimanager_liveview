@@ -346,7 +346,7 @@ defmodule SMWeb.Jury do
       Enum.count(competition.jurors) * competition.settings.evaluations_per_juror
   end
 
-  defp schedule_next_image(seconds) do
-    Process.send_after(self(), :next_slide, seconds * 1000)
-  end
+  # defp schedule_next_image(seconds) do
+  #   Process.send_after(self(), :next_slide, seconds * 1000)
+  # end
 end

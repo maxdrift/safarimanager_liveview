@@ -347,7 +347,11 @@ defmodule SM.Slides do
       from(sl in Slide,
         where: [competition_id: ^competition_id],
         where: not is_nil(sl.status),
-        select: count(sl.user_id, :distinct)
+        # Workaround added due to ecto_sqlite3 v0.10.0 not supporting
+        # DISTINCT inside the count expression.
+        # Was failing with error "Distinct not supported in expressions in query"
+        # Used to be: select: count(sl.user_id, :distinct)
+        select: fragment("count(DISTINCT ?)", sl.user_id)
       )
 
     Repo.one(query)
