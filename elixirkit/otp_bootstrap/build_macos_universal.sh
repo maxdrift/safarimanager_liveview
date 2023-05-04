@@ -28,7 +28,12 @@ else
   dir2=$PWD/_build/otp-rel-$otp_version-openssl-$openssl_version-macos-x86_64
   cp -R $dir1 $otp_rel_dir
   cd $otp_rel_dir
-  for i in `find . -perm +111 -type f -exec sh -c "file {} | grep --silent 'Mach-O'" \; -print`; do
+  for i in $(find . -perm +111 -type f -exec sh -c "file {} | grep --silent 'Mach-O'" \; -print); do
+    echo lipo $otp_rel_dir/$i
+    lipo $i $dir2/$i -create -output $i.universal
+    mv $i.universal $i
+  done
+  for i in $(find . -name "*.a"); do
     echo lipo $otp_rel_dir/$i
     lipo $i $dir2/$i -create -output $i.universal
     mv $i.universal $i
