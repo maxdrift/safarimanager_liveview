@@ -257,7 +257,6 @@ msgstr "Hai selezionato un tipo di file incompatibile"
 msgid "You have selected too many files"
 msgstr "Hai selezionato troppi file"
 
-#: lib/safarimanager_web/live/key_registration_live.ex:15
 #: lib/safarimanager_web/live/user_registration_live.ex:15
 #, elixir-autogen, elixir-format
 msgid "Already registered?"
@@ -297,13 +296,11 @@ msgstr "Conferma il mio account"
 msgid "Confirm new password"
 msgstr "Conferma la nuova password"
 
-#: lib/safarimanager_web/live/key_registration_live.ex:43
 #: lib/safarimanager_web/live/user_registration_live.ex:43
 #, elixir-autogen, elixir-format
 msgid "Create an account"
 msgstr "Crea un account"
 
-#: lib/safarimanager_web/live/key_registration_live.ex:42
 #: lib/safarimanager_web/live/user_registration_live.ex:42
 #, elixir-autogen, elixir-format
 msgid "Creating account..."
@@ -320,7 +317,6 @@ msgstr "Password attuale"
 msgid "Don't have an account?"
 msgstr "Non hai un account?"
 
-#: lib/safarimanager_web/live/key_registration_live.ex:38
 #: lib/safarimanager_web/live/user_login_live.ex:28
 #: lib/safarimanager_web/live/user_registration_live.ex:38
 #: lib/safarimanager_web/live/user_settings_live.ex:36
@@ -328,18 +324,18 @@ msgstr "Non hai un account?"
 msgid "Email"
 msgstr "Email"
 
-#: lib/safarimanager_web/live/user_forgot_password_live.ex:12
+#: lib/safarimanager_web/live/user_forgot_password_live.ex:13
 #: lib/safarimanager_web/live/user_login_live.ex:34
 #, elixir-autogen, elixir-format
 msgid "Forgot your password?"
 msgstr "Dimenticato la password?"
 
-#: lib/safarimanager_web/live/user_confirmation_instructions_live.ex:42
+#: lib/safarimanager_web/live/user_confirmation_instructions_live.ex:51
 #, elixir-autogen, elixir-format
 msgid "If your email is in our system and it has not been confirmed yet, you will receive an email with instructions shortly."
 msgstr "Se il tuo indirizzo email è nel nostro sistema ma non è stato ancora confermato, riceverai a breve un'email con delle istruzioni."
 
-#: lib/safarimanager_web/live/user_forgot_password_live.ex:41
+#: lib/safarimanager_web/live/user_forgot_password_live.ex:44
 #, elixir-autogen, elixir-format
 msgid "If your email is in our system, you will receive instructions to reset your password shortly."
 msgstr "Se il tuo indirizzo email è nel nostro sistema, riceverai a breve le istruzioni per reimpostare la password."
@@ -349,7 +345,7 @@ msgstr "Se il tuo indirizzo email è nel nostro sistema, riceverai a breve le is
 msgid "Keep me logged in"
 msgstr "Ricordami"
 
-#: lib/safarimanager_web/live/user_confirmation_instructions_live.ex:24
+#: lib/safarimanager_web/live/user_confirmation_instructions_live.ex:31
 #: lib/safarimanager_web/live/user_confirmation_live.ex:22
 #: lib/safarimanager_web/live/user_reset_password_live.ex:40
 #, elixir-autogen, elixir-format
@@ -362,7 +358,6 @@ msgstr "Accedi"
 msgid "New password"
 msgstr "Nuova password"
 
-#: lib/safarimanager_web/live/key_registration_live.ex:35
 #: lib/safarimanager_web/live/user_registration_live.ex:35
 #: lib/safarimanager_web/live/user_reset_password_live.ex:20
 #: lib/safarimanager_web/live/user_settings_live.ex:32
@@ -371,7 +366,6 @@ msgstr "Nuova password"
 msgid "Oops, something went wrong! Please check the errors below."
 msgstr "Ops, si è verificato un problema! Controlla gli errori riportati."
 
-#: lib/safarimanager_web/live/key_registration_live.ex:39
 #: lib/safarimanager_web/live/user_login_live.ex:29
 #: lib/safarimanager_web/live/user_registration_live.ex:39
 #, elixir-autogen, elixir-format
@@ -383,21 +377,20 @@ msgstr "Password"
 msgid "Password reset successfully."
 msgstr "Password reimpostata con successo."
 
-#: lib/safarimanager_web/live/user_confirmation_instructions_live.ex:22
+#: lib/safarimanager_web/live/user_confirmation_instructions_live.ex:29
 #: lib/safarimanager_web/live/user_confirmation_live.ex:20
 #: lib/safarimanager_web/live/user_reset_password_live.ex:38
 #, elixir-autogen, elixir-format
 msgid "Register"
 msgstr "Registra"
 
-#: lib/safarimanager_web/live/key_registration_live.ex:13
 #: lib/safarimanager_web/live/user_registration_live.ex:13
 #, elixir-autogen, elixir-format
 msgid "Register for an account"
 msgstr "Registra un account"
 
-#: lib/safarimanager_web/live/user_confirmation_instructions_live.ex:10
-#: lib/safarimanager_web/live/user_confirmation_instructions_live.ex:16
+#: lib/safarimanager_web/live/user_confirmation_instructions_live.ex:11
+#: lib/safarimanager_web/live/user_confirmation_instructions_live.ex:23
 #, elixir-autogen, elixir-format
 msgid "Resend confirmation instructions"
 msgstr "Re-invia le istruzioni per confermare l'account"
@@ -418,13 +411,13 @@ msgstr "Il link per reimpostare la password non è valido o è scaduto."
 msgid "Resetting..."
 msgstr "Reimpostando..."
 
-#: lib/safarimanager_web/live/user_forgot_password_live.ex:20
+#: lib/safarimanager_web/live/user_forgot_password_live.ex:21
 #, elixir-autogen, elixir-format
 msgid "Send password reset instructions"
 msgstr "Invia le istruzioni per reimpostare la password"
 
-#: lib/safarimanager_web/live/user_confirmation_instructions_live.ex:15
-#: lib/safarimanager_web/live/user_forgot_password_live.ex:19
+#: lib/safarimanager_web/live/user_confirmation_instructions_live.ex:22
+#: lib/safarimanager_web/live/user_forgot_password_live.ex:20
 #, elixir-autogen, elixir-format
 msgid "Sending..."
 msgstr "Invio in corso..."
@@ -434,7 +427,6 @@ msgstr "Invio in corso..."
 msgid "Sigining in..."
 msgstr "Accesso in corso..."
 
-#: lib/safarimanager_web/live/key_registration_live.ex:17
 #: lib/safarimanager_web/live/user_login_live.ex:39
 #: lib/safarimanager_web/live/user_registration_live.ex:17
 #, elixir-autogen, elixir-format
@@ -461,7 +453,7 @@ msgstr "Il link di conferma dell'utente non è valido o è scaduto."
 msgid "User confirmed successfully."
 msgstr "Utente confermato con successo."
 
-#: lib/safarimanager_web/live/user_forgot_password_live.ex:13
+#: lib/safarimanager_web/live/user_forgot_password_live.ex:14
 #, elixir-autogen, elixir-format
 msgid "We'll send a password reset link to your inbox"
 msgstr "Invieremo un link per reimpostare la password al tuo indirizzo email"
@@ -471,7 +463,6 @@ msgstr "Invieremo un link per reimpostare la password al tuo indirizzo email"
 msgid "for an account now."
 msgstr "un account ora."
 
-#: lib/safarimanager_web/live/key_registration_live.ex:19
 #: lib/safarimanager_web/live/user_registration_live.ex:19
 #, elixir-autogen, elixir-format
 msgid "to your account now."
@@ -496,3 +487,23 @@ msgstr "Stampa"
 #, elixir-autogen, elixir-format
 msgid "General Classification"
 msgstr "Classifica Generale"
+
+#: lib/safarimanager_web/components/slides/slide_selection.ex:191
+#, elixir-autogen, elixir-format
+msgid "Slide selection has been imported."
+msgstr "La selezione delle slide è stata importata."
+
+#: lib/safarimanager_web/components/slides/slide_selection.ex:215
+#, elixir-autogen, elixir-format
+msgid "Unable to import slide selection: invalid CSV file"
+msgstr "Impossibile importare la selezione: file CSV non valido"
+
+#: lib/safarimanager_web/components/slides/slide_selection.ex:199
+#, elixir-autogen, elixir-format
+msgid "Unable to import slide selection: slide not found"
+msgstr "Impossibile importare la selezione: slide non trovata"
+
+#: lib/safarimanager_web/components/slides/slide_selection.ex:208
+#, elixir-autogen, elixir-format
+msgid "Unable to import slide selection: subject not found"
+msgstr "Impossibile importare la selezione: soggetto non trovato"

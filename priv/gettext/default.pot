@@ -257,7 +257,6 @@ msgstr ""
 msgid "You have selected too many files"
 msgstr ""
 
-#: lib/safarimanager_web/live/key_registration_live.ex:15
 #: lib/safarimanager_web/live/user_registration_live.ex:15
 #, elixir-autogen, elixir-format
 msgid "Already registered?"
@@ -297,13 +296,11 @@ msgstr ""
 msgid "Confirm new password"
 msgstr ""
 
-#: lib/safarimanager_web/live/key_registration_live.ex:43
 #: lib/safarimanager_web/live/user_registration_live.ex:43
 #, elixir-autogen, elixir-format
 msgid "Create an account"
 msgstr ""
 
-#: lib/safarimanager_web/live/key_registration_live.ex:42
 #: lib/safarimanager_web/live/user_registration_live.ex:42
 #, elixir-autogen, elixir-format
 msgid "Creating account..."
@@ -320,7 +317,6 @@ msgstr ""
 msgid "Don't have an account?"
 msgstr ""
 
-#: lib/safarimanager_web/live/key_registration_live.ex:38
 #: lib/safarimanager_web/live/user_login_live.ex:28
 #: lib/safarimanager_web/live/user_registration_live.ex:38
 #: lib/safarimanager_web/live/user_settings_live.ex:36
@@ -328,18 +324,18 @@ msgstr ""
 msgid "Email"
 msgstr ""
 
-#: lib/safarimanager_web/live/user_forgot_password_live.ex:12
+#: lib/safarimanager_web/live/user_forgot_password_live.ex:13
 #: lib/safarimanager_web/live/user_login_live.ex:34
 #, elixir-autogen, elixir-format
 msgid "Forgot your password?"
 msgstr ""
 
-#: lib/safarimanager_web/live/user_confirmation_instructions_live.ex:42
+#: lib/safarimanager_web/live/user_confirmation_instructions_live.ex:51
 #, elixir-autogen, elixir-format
 msgid "If your email is in our system and it has not been confirmed yet, you will receive an email with instructions shortly."
 msgstr ""
 
-#: lib/safarimanager_web/live/user_forgot_password_live.ex:41
+#: lib/safarimanager_web/live/user_forgot_password_live.ex:44
 #, elixir-autogen, elixir-format
 msgid "If your email is in our system, you will receive instructions to reset your password shortly."
 msgstr ""
@@ -349,7 +345,7 @@ msgstr ""
 msgid "Keep me logged in"
 msgstr ""
 
-#: lib/safarimanager_web/live/user_confirmation_instructions_live.ex:24
+#: lib/safarimanager_web/live/user_confirmation_instructions_live.ex:31
 #: lib/safarimanager_web/live/user_confirmation_live.ex:22
 #: lib/safarimanager_web/live/user_reset_password_live.ex:40
 #, elixir-autogen, elixir-format
@@ -362,7 +358,6 @@ msgstr ""
 msgid "New password"
 msgstr ""
 
-#: lib/safarimanager_web/live/key_registration_live.ex:35
 #: lib/safarimanager_web/live/user_registration_live.ex:35
 #: lib/safarimanager_web/live/user_reset_password_live.ex:20
 #: lib/safarimanager_web/live/user_settings_live.ex:32
@@ -371,7 +366,6 @@ msgstr ""
 msgid "Oops, something went wrong! Please check the errors below."
 msgstr ""
 
-#: lib/safarimanager_web/live/key_registration_live.ex:39
 #: lib/safarimanager_web/live/user_login_live.ex:29
 #: lib/safarimanager_web/live/user_registration_live.ex:39
 #, elixir-autogen, elixir-format
@@ -383,21 +377,20 @@ msgstr ""
 msgid "Password reset successfully."
 msgstr ""
 
-#: lib/safarimanager_web/live/user_confirmation_instructions_live.ex:22
+#: lib/safarimanager_web/live/user_confirmation_instructions_live.ex:29
 #: lib/safarimanager_web/live/user_confirmation_live.ex:20
 #: lib/safarimanager_web/live/user_reset_password_live.ex:38
 #, elixir-autogen, elixir-format
 msgid "Register"
 msgstr ""
 
-#: lib/safarimanager_web/live/key_registration_live.ex:13
 #: lib/safarimanager_web/live/user_registration_live.ex:13
 #, elixir-autogen, elixir-format
 msgid "Register for an account"
 msgstr ""
 
-#: lib/safarimanager_web/live/user_confirmation_instructions_live.ex:10
-#: lib/safarimanager_web/live/user_confirmation_instructions_live.ex:16
+#: lib/safarimanager_web/live/user_confirmation_instructions_live.ex:11
+#: lib/safarimanager_web/live/user_confirmation_instructions_live.ex:23
 #, elixir-autogen, elixir-format
 msgid "Resend confirmation instructions"
 msgstr ""
@@ -418,13 +411,13 @@ msgstr ""
 msgid "Resetting..."
 msgstr ""
 
-#: lib/safarimanager_web/live/user_forgot_password_live.ex:20
+#: lib/safarimanager_web/live/user_forgot_password_live.ex:21
 #, elixir-autogen, elixir-format
 msgid "Send password reset instructions"
 msgstr ""
 
-#: lib/safarimanager_web/live/user_confirmation_instructions_live.ex:15
-#: lib/safarimanager_web/live/user_forgot_password_live.ex:19
+#: lib/safarimanager_web/live/user_confirmation_instructions_live.ex:22
+#: lib/safarimanager_web/live/user_forgot_password_live.ex:20
 #, elixir-autogen, elixir-format
 msgid "Sending..."
 msgstr ""
@@ -434,7 +427,6 @@ msgstr ""
 msgid "Sigining in..."
 msgstr ""
 
-#: lib/safarimanager_web/live/key_registration_live.ex:17
 #: lib/safarimanager_web/live/user_login_live.ex:39
 #: lib/safarimanager_web/live/user_registration_live.ex:17
 #, elixir-autogen, elixir-format
@@ -461,7 +453,7 @@ msgstr ""
 msgid "User confirmed successfully."
 msgstr ""
 
-#: lib/safarimanager_web/live/user_forgot_password_live.ex:13
+#: lib/safarimanager_web/live/user_forgot_password_live.ex:14
 #, elixir-autogen, elixir-format
 msgid "We'll send a password reset link to your inbox"
 msgstr ""
@@ -471,7 +463,6 @@ msgstr ""
 msgid "for an account now."
 msgstr ""
 
-#: lib/safarimanager_web/live/key_registration_live.ex:19
 #: lib/safarimanager_web/live/user_registration_live.ex:19
 #, elixir-autogen, elixir-format
 msgid "to your account now."
@@ -495,4 +486,24 @@ msgstr ""
 #: lib/safarimanager_web/controllers/print_results_controller.ex:21
 #, elixir-autogen, elixir-format
 msgid "General Classification"
+msgstr ""
+
+#: lib/safarimanager_web/components/slides/slide_selection.ex:191
+#, elixir-autogen, elixir-format
+msgid "Slide selection has been imported."
+msgstr ""
+
+#: lib/safarimanager_web/components/slides/slide_selection.ex:215
+#, elixir-autogen, elixir-format
+msgid "Unable to import slide selection: invalid CSV file"
+msgstr ""
+
+#: lib/safarimanager_web/components/slides/slide_selection.ex:199
+#, elixir-autogen, elixir-format
+msgid "Unable to import slide selection: slide not found"
+msgstr ""
+
+#: lib/safarimanager_web/components/slides/slide_selection.ex:208
+#, elixir-autogen, elixir-format
+msgid "Unable to import slide selection: subject not found"
 msgstr ""

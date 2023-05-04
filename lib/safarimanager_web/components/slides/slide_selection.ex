@@ -186,11 +186,36 @@ defmodule SMWeb.SlideSelection do
   end
 
   defp handle_progress(:csv, entry, socket) do
-    if entry.done? do
-      process_uploaded_csv(socket, entry)
-    end
+    with true <- entry.done?,
+         :updated <- process_uploaded_csv(socket, entry) do
+      socket = put_flash(socket, :info, gettext("Slide selection has been imported."))
+      {:noreply, socket}
+    else
+      false ->
+        {:noreply, socket}
 
-    {:noreply, socket}
+      {:error, :slide_not_found} ->
+        socket =
+          put_flash(socket, :error, gettext("Unable to import slide selection: slide not found"))
+
+        {:noreply, socket}
+
+      {:error, :subject_not_found} ->
+        socket =
+          put_flash(
+            socket,
+            :error,
+            gettext("Unable to import slide selection: subject not found")
+          )
+
+        {:noreply, socket}
+
+      {:error, :parse_error} ->
+        socket =
+          put_flash(socket, :error, gettext("Unable to import slide selection: invalid CSV file"))
+
+        {:noreply, socket}
+    end
   end
 
   defp process_uploaded_csv(socket, %Phoenix.LiveView.UploadEntry{} = entry) do
@@ -201,9 +226,9 @@ defmodule SMWeb.SlideSelection do
     LiveView.consume_uploaded_entry(socket, entry, fn %{path: path} ->
       path
       |> SelectionImport.parse()
-      |> Stream.each(fn row ->
-        with {:ok, subject} <- Subjects.get_by_numeric_id(row.subject_num),
-             {:ok, slide} <- Slides.get(competition_id, user_id, row.file_name),
+      |> Stream.map(fn row ->
+        with {:ok, subject} <- find_subject(row.subject_num),
+             {:ok, slide} <- find_slide(competition_id, user_id, row.file_name),
              {:ok, _slide} <-
                Slides.update(slide, %{
                  subject_id: subject.id,
@@ -211,10 +236,40 @@ defmodule SMWeb.SlideSelection do
                }),
              do: :ok
       end)
-      |> Stream.run()
+      |> Stream.filter(fn
+        {:error, _reason} -> true
+        :ok -> false
+      end)
+      |> Enum.to_list()
+      |> case do
+        [] ->
+          {:ok, :updated}
 
-      {:ok, :updated}
+        [first_error | _rest] ->
+          # Wrapping the error in a ok-tuple because LiveView.consume_uploaded_entry/3
+          # expects a result of {:ok, any()} or {:postpone, any()} and we don't need
+          # to postpone in this case.
+          {:ok, first_error}
+      end
     end)
+  rescue
+    e in NimbleCSV.ParseError ->
+      Logger.error("Unable to parse CSV: #{inspect(e)}")
+      {:error, :parse_error}
+  end
+
+  defp find_subject(subject_num) do
+    case Subjects.get_by_numeric_id(subject_num) do
+      {:ok, subject} -> {:ok, subject}
+      {:error, :not_found} -> {:error, :subject_not_found}
+    end
+  end
+
+  defp find_slide(competition_id, user_id, file_name) do
+    case Slides.get(competition_id, user_id, file_name) do
+      {:ok, slide} -> {:ok, slide}
+      {:error, :not_found} -> {:error, :slide_not_found}
+    end
   end
 
   defp get_slide_statuses do
