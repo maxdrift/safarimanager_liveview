@@ -52,7 +52,8 @@ defmodule SMWeb.Components.FileBrowser do
   def handle_event("level-down", %{"item" => item}, socket) do
     {:ok, cwd} = FileBrowser.cd(socket.assigns.cwd, item)
     dir_items = FileBrowser.ls!(cwd, filter: socket.assigns.file_filter)
-    :ok = set_last_dir(Path.dirname(cwd))
+    full_path = Path.dirname(cwd)
+    {:ok, _full_path} = set_last_dir(full_path)
 
     socket =
       socket
@@ -65,7 +66,7 @@ defmodule SMWeb.Components.FileBrowser do
   def handle_event("level-up", _params, socket) do
     {:ok, cwd} = FileBrowser.cd(socket.assigns.cwd, "..")
     dir_items = FileBrowser.ls!(cwd, filter: socket.assigns.file_filter)
-    :ok = set_last_dir(cwd)
+    {:ok, _full_path} = set_last_dir(cwd)
 
     socket =
       socket
@@ -89,15 +90,32 @@ defmodule SMWeb.Components.FileBrowser do
 
   defp set_last_dir(path) do
     true = :ets.insert(@ets_table_name, {:last_dir, path})
-    :ok
+
+    {:ok, path}
   end
 
   defp get_last_dir do
-    :ets.lookup_element(@ets_table_name, :last_dir, 2)
+    with last_dir <- :ets.lookup_element(@ets_table_name, :last_dir, 2),
+         true <- File.exists?(last_dir) do
+      last_dir
+    else
+      false ->
+        Logger.warning("Unable to find last used directory path. Using home directory.")
+
+        {:ok, path} =
+          "~/"
+          |> Path.expand()
+          |> set_last_dir()
+
+        path
+    end
   rescue
     ArgumentError ->
-      path = Path.expand("~/")
-      :ok = set_last_dir(path)
+      {:ok, path} =
+        "~/"
+        |> Path.expand()
+        |> set_last_dir()
+
       path
   end
 end
