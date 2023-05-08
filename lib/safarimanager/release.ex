@@ -5,6 +5,7 @@ defmodule SM.Release do
   """
   @app :safarimanager
 
+  @spec create :: :ok
   def create do
     ensure_app_loaded()
 
@@ -13,6 +14,7 @@ defmodule SM.Release do
     end)
   end
 
+  @spec migrate :: list
   def migrate do
     ensure_app_loaded()
 
@@ -22,10 +24,12 @@ defmodule SM.Release do
     end
   end
 
+  @spec rollback(atom, any) :: :ok
   def rollback(repo, version) do
     ensure_app_loaded()
 
     {:ok, _, _} = Ecto.Migrator.with_repo(repo, &Ecto.Migrator.run(&1, :down, to: version))
+    :ok
   end
 
   defp repos do

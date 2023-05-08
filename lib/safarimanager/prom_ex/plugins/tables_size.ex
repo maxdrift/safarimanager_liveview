@@ -1,15 +1,15 @@
 defmodule SM.PromEx.Plugins.TablesSize do
   use PromEx.Plugin
 
-  alias SM.Repo
-
   import Ecto.Query
+
+  alias SM.Repo
 
   require Logger
 
   @event_prefix [:prom_ex, :plugin, :table, :size]
 
-  @impl true
+  @impl PromEx.Plugin
   def polling_metrics(opts) do
     poll_rate = Keyword.get(opts, :poll_rate, 60_000)
 
@@ -36,14 +36,22 @@ defmodule SM.PromEx.Plugins.TablesSize do
     )
   end
 
+  @spec execute_table_size(any) :: :ok
   @doc false
   def execute_table_size(table_names) do
-    Enum.map(table_names, fn table_name ->
-      :telemetry.execute(@event_prefix, %{size: get_table_size(table_name)}, %{
-        table_name: table_name
-      })
-    end)
+    _result =
+      Enum.map(table_names, fn table_name ->
+        :telemetry.execute(@event_prefix, %{size: get_table_size(table_name)}, %{
+          table_name: table_name
+        })
+      end)
+
+    :ok
   rescue
+    _e in RuntimeError ->
+      Logger.warning("Repo not yet active: skipping one polling cycle")
+      :ok
+
     _e in ArgumentError ->
       :ok
   end
@@ -51,7 +59,8 @@ defmodule SM.PromEx.Plugins.TablesSize do
   defp get_table_names do
     {:ok, modules} = :application.get_key(:safarimanager, :modules)
 
-    Enum.filter(modules, fn module ->
+    modules
+    |> Enum.filter(fn module ->
       {:__schema__, 1} in module.__info__(:functions) and
         String.starts_with?(Atom.to_string(module), "Elixir.SM.") and
         not is_nil(module.__schema__(:source))
