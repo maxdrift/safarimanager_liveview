@@ -57,13 +57,13 @@ defmodule SM.MixProject do
       {:credo, "~> 1.7", only: [:dev, :test], runtime: false},
       {:dialyzex, "~> 1.3.0", only: :dev, runtime: false},
       {:ecto_sql, "~> 3.10"},
-      {:ecto_sqlite3, "~> 0.10.0"},
+      {:ecto_sqlite3, "~> 0.10.1"},
       {:esbuild, "~> 0.6", runtime: Mix.env() == :dev},
       {:ex_heroicons, "~> 2.0"},
       {:finch, "~> 0.16.0", override: true},
       {:floki, ">= 0.30.0", only: :test},
       {:gettext, "~> 0.22.1"},
-      {:image, "~> 0.30"},
+      {:image, "~> 0.31"},
       {:jason, "~> 1.2"},
       {:nimble_csv, "~> 1.2"},
       {:phoenix_ecto, "~> 4.4"},
@@ -85,7 +85,7 @@ defmodule SM.MixProject do
       {:telemetry_metrics, "~> 0.6"},
       {:telemetry_poller, "~> 1.0"},
       {:telemetry, "~> 1.2", override: true},
-      {:tesla, "~> 1.6"}
+      {:tesla, "~> 1.6.1"}
     ]
   end
 
