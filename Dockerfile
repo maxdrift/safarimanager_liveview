@@ -23,7 +23,8 @@ FROM ${BUILDER_IMAGE} AS builder
 
 RUN apk add --no-cache \
   build-base \
-  vips-dev
+  vips-dev \
+  git
 
 
 # prepare build dir
