@@ -237,6 +237,30 @@ msgstr "soggetti"
 msgid "users"
 msgstr "utenti"
 
+#, elixir-format
+msgid "qualification"
+msgstr "qualificazione"
+
+#, elixir-format
+msgid "national championship"
+msgstr "campionato nazionale"
+
+#, elixir-format
+msgid "international championship"
+msgstr "campionato internazionale"
+
+#, elixir-format
+msgid "local event"
+msgstr "event locale"
+
+#, elixir-format
+msgid "national event"
+msgstr "evento nazionale"
+
+#, elixir-format
+msgid "international event"
+msgstr "evento internazionale"
+
 #: lib/safarimanager_web/components/admin/import.ex:94
 #, elixir-autogen, elixir-format
 msgid "Imported %{success} of %{total} entries in %{table}"

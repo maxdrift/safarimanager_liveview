@@ -81,13 +81,15 @@ defmodule SM.Competitions.Competition do
   end
 
   @spec get_types :: [
-          :qualification
-          | :national_championship
-          | :international_championship
-          | :local_event
-          | :national_event
-          | :international_event,
-          ...
+          {
+            :qualification
+            | :national_championship
+            | :international_championship
+            | :local_event
+            | :national_event
+            | :international_event,
+            String.t()
+          }
         ]
   def get_types do
     @types

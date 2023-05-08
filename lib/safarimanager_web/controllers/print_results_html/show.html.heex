@@ -13,13 +13,13 @@
     </div>
     <div class="flex flex-row">
       <div class="mr-10">
-        <span class="text-sm">Data: </span><span class="text-sm font-bold">06/10/2021</span>
+        <span class="text-sm">Data: </span><span class="text-sm font-bold"><%= @competition.start_time |> Calendar.strftime("%d/%m/%Y") %></span>
       </div>
       <div class="mr-10">
         <span class="text-sm">Località: </span><span class="text-sm font-bold"><%= @competition.city || "N/A" %></span>
       </div>
       <div>
-        <span class="text-sm">Tipo: </span><span class="text-sm font-bold">Campionato Italiano</span>
+        <span class="text-sm">Tipo: </span><span class="text-sm font-bold"><%= Gettext.gettext(SMWeb.Gettext, Keyword.get(@competition_types, @competition.type)) |> String.capitalize() || "N/A" %></span>
       </div>
     </div>
     <h1 class="mt-4 text-center text-2xl font-bold uppercase tracking-widest">

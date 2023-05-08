@@ -17,17 +17,25 @@ defmodule SM.Competitions do
   ## Examples
 
   iex> list_competition_types()
-  [:qualification, :national_championship, :international_championship, :local_event, :national_event, :international_event]
-
+  [
+    {:qualification, "qualification"},
+    {:national_championship, "national championship"},
+    {:international_championship, "international championship"},
+    {:local_event, "local event"},
+    {:national_event, "national event"},
+    {:international_event, "international event"}
+  ]
   """
   @spec list_competition_types :: [
-          :qualification
-          | :national_championship
-          | :international_championship
-          | :local_event
-          | :national_event
-          | :international_event,
-          ...
+          {
+            :qualification
+            | :national_championship
+            | :international_championship
+            | :local_event
+            | :national_event
+            | :international_event,
+            String.t()
+          }
         ]
   def list_competition_types do
     Competition.get_types()

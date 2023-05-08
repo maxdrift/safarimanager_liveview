@@ -53,12 +53,12 @@ config :safarimanager, SM.Evaluations.Evaluation, types: [:numeric]
 
 config :safarimanager, SM.Competitions.Competition,
   types: [
-    :qualification,
-    :national_championship,
-    :international_championship,
-    :local_event,
-    :national_event,
-    :international_event
+    {:qualification, "qualification"},
+    {:national_championship, "national championship"},
+    {:international_championship, "international championship"},
+    {:local_event, "local event"},
+    {:national_event, "national event"},
+    {:international_event, "international event"}
   ]
 
 config :safarimanager, SM.Slides.Slide,
