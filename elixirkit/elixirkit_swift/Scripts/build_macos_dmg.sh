@@ -10,7 +10,8 @@ apple_id="${ELIXIRKIT_NOTARY_APPLE_ID:-}"
 password="${ELIXIRKIT_NOTARY_PASSWORD:-}"
 
 if [ -n "$identity" ]; then
-  files=`find $app_dir -perm +111 -type f -exec sh -c "file {} | grep --silent Mach-O" \; -print`
+  files=$(find $app_dir -perm +111 -type f -exec sh -c "file {} | grep --silent Mach-O" \; -print)
+  files="$files $(find $app_dir -name '*.a')"
   files="$files $app_dir/Contents/MacOS/$app_name"
   codesign --sign="$identity" --options=runtime --entitlements=App.entitlements --force --timestamp --verbose=2 $files
 else
@@ -28,9 +29,7 @@ hdiutil create $dmg_path -ov -volname ${app_name}Install -fs HFS+ -srcfolder $dm
 
 if [ -n "$team_id" ]; then
   xcrun notarytool submit \
-    --team-id "${team_id}" \
-    --apple-id "${apple_id}" \
-    --password "${password}" \
+    --team-id "${team_id}" --apple-id "${apple_id}" --password "${password}" \
     --progress \
     --wait \
     $dmg_path
