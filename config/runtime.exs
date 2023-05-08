@@ -136,3 +136,5 @@ config :logger, :svadilfari,
     {"env", env},
     {"hostname", System.get_env("INSTANCE_ID", to_string(hostname))}
   ]
+
+config :gettext, :default_locale, System.get_env("SM_LOCALE", "en")

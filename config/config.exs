@@ -129,7 +129,7 @@ config :safarimanager, SM.PromEx,
   grafana: :disabled,
   metrics_server: :disabled
 
-config :gettext, :default_locale, "it"
+config :gettext, :default_locale, "en"
 
 config :logger, :backends, [:console, Svadilfari]
 
