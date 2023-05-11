@@ -837,9 +837,14 @@ defmodule SM.Slides do
     |> Repo.transaction()
     |> case do
       {:ok, %{delete: slide}} ->
+        Logger.info("Deleted slide #{slide.id} from user #{slide.user_id}")
         notify_subscribers({:ok, slide}, [:slide, :deleted])
 
       {:error, failed_operation, failed_value, _changes_so_far} ->
+        Logger.error(
+          "Failed to delete slide #{slide.id}. #{failed_operation}: #{inspect(failed_value)}"
+        )
+
         {:error, {failed_operation, failed_value}}
     end
   end
@@ -872,8 +877,10 @@ defmodule SM.Slides do
     |> case do
       {:ok, %{delete_many: deleted}} ->
         if deleted == Enum.count(ids) do
+          Logger.info("Deleted #{deleted} slide(s)")
           notify_subscribers({:ok, deleted}, [:slide, :deleted])
         else
+          Logger.warning("Not all slides could be deleted")
           notify_subscribers(:error, [:slide, :deleted])
         end
 

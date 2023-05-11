@@ -24,7 +24,7 @@ defmodule SM.Competitions.Competition do
     field :city, :string
     field :state, :string
     field :country, :string
-    field :type, Ecto.Enum, values: @types
+    field :type, Ecto.Enum, values: Keyword.keys(@types)
 
     belongs_to :organization, Organization
 
