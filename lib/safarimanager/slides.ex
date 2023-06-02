@@ -407,6 +407,7 @@ defmodule SM.Slides do
     query =
       from(sl in Slide,
         where: [competition_id: ^competition_id],
+        where: sl.status in [:submitted_jury, :submitted_fixed],
         join: su in assoc(sl, :subject),
         group_by: [:subject_id],
         order_by: [asc: su.numeric_id],
