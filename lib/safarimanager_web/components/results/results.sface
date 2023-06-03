@@ -135,7 +135,7 @@
               <td class="truncate">{(result.user.organization && result.user.organization.name) || "N/A"}</td>
               <td class="truncate">{(result.participant.category && result.participant.category.name) || "N/A"}</td>
               <td class="truncate">{result.total_score}</td>
-              <td class="truncate">{Enum.count(result.slides)}</td>
+              <td class="truncate">{result.slides_count}</td>
               <td>
                 <button @click="expanded = ! expanded" class="btn btn-xs btn-outline">Show details</button>
               </td>

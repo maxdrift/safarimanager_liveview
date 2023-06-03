@@ -131,6 +131,7 @@ defmodule SM.Slides do
     Slide
     |> where(user_id: ^user_id)
     |> where(competition_id: ^competition_id)
+    |> where([sl], sl.status in [:submitted_jury, :submitted_fixed])
     |> order_by(desc: :status, asc: :file_name)
     |> Repo.all()
     |> Repo.preload([:subject, :evaluations])

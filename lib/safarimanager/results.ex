@@ -22,9 +22,16 @@ defmodule SM.Results do
           {subject.id, subject}
         end)
 
+      unique_coefficients =
+        Enum.reduce(subjects_map, MapSet.new(), fn {_key, s}, acc ->
+          MapSet.put(acc, s.coefficient)
+        end)
+        |> MapSet.to_list()
+        |> Enum.sort({:desc, Decimal})
+
       {results, _acc} =
         Participants.list(competition_id)
-        |> Enum.map(fn participant ->
+        |> Stream.map(fn participant ->
           {slides, total_score} =
             list_by_participant(competition_id, competition, participant.user.id, subjects_map)
 
@@ -32,10 +39,19 @@ defmodule SM.Results do
             participant: participant,
             user: participant.user,
             slides: slides,
+            slides_count: Enum.count(slides),
             total_score: total_score
           }
         end)
-        |> Enum.sort(&(Decimal.compare(&1.total_score, &2.total_score) in [:gt, :eq]))
+        |> Stream.map(fn result ->
+          coefficients_count = Enum.frequencies_by(result.slides, & &1.coefficient)
+
+          Map.put(result, :coefficients_count, coefficients_count)
+        end)
+        |> Enum.sort_by(
+          &List.to_tuple([by_score(&1), by_slides(&1) | by_coefficients(&1, unique_coefficients)]),
+          :desc
+        )
         |> Enum.map_reduce({0, 0, Decimal.new("Infinity")}, fn %{total_score: score} = result,
                                                                {prev_index, prev_rank, prev_score} ->
           if Decimal.compare(score, prev_score) == :lt do
@@ -49,6 +65,18 @@ defmodule SM.Results do
 
       {:ok, results}
     end
+  end
+
+  defp by_score(result),
+    do: result.total_score
+
+  defp by_slides(result),
+    do: result.slides_count
+
+  defp by_coefficients(result, coefficients) do
+    Enum.map(coefficients, fn c ->
+      Map.get(result.coefficients_count, c, 0)
+    end)
   end
 
   @spec list_by_participant(String.t(), Competition.t(), String.t(), %{
