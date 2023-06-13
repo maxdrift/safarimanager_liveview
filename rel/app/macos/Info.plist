@@ -12,6 +12,8 @@
     <string>$(app_version)</string>
     <key>CFBundleIconFile</key>
     <string>AppIcon</string>
+    <key>CFBundleExecutable</key>
+    <string>Safarimanager</string>
     <key>CFBundleURLTypes</key>
     <array>
       <dict>
