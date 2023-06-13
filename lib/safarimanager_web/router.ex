@@ -62,7 +62,10 @@ defmodule SMWeb.Router do
 
       scope "/admin", Components.Admin do
         live "/organizations", Organizations
-        live "/subjects", Subjects
+        live "/subjects", SubjectsLive.Index, :index
+        live "/subjects/new", SubjectsLive.Index, :new
+        live "/subjects/:id", SubjectsLive.Index, :show
+        live "/subjects/:id/edit", SubjectsLive.Index, :edit
         live "/competitions", Competitions
         live "/evaluations", Evaluations
         live "/users", Users
