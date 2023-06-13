@@ -125,7 +125,8 @@ config :surface, :components, [
    default_translator: {SMWeb.ErrorHelpers, :translate_error}, default_class: "label-text-al"},
   {SMWeb.Components.Admin.Users.Form, propagate_context_to_slots: false},
   {SMWeb.Components.Admin.Competitions.Form, propagate_context_to_slots: false},
-  {SMWeb.Components.UploadDropArea, propagate_context_to_slots: false}
+  {SMWeb.Components.UploadDropArea, propagate_context_to_slots: false},
+  {SMWeb.Components.Grid, propagate_context_to_slots: false}
 ]
 
 config :safarimanager, SM.PromEx,
