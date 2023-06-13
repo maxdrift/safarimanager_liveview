@@ -61,7 +61,7 @@ defmodule SMWeb.NewCompetition do
           socket
           |> assign(:entity, %Competition{})
           |> assign(:changeset, Competitions.change(socket.assigns.entity))
-          |> push_redirect(to: "/organize/#{competition_id}/participants")
+          |> push_navigate(to: "/organize/#{competition_id}/participants")
 
         {:noreply, socket}
 
@@ -80,7 +80,7 @@ defmodule SMWeb.NewCompetition do
   end
 
   def handle_event("open", %{"id" => competition_id}, socket) do
-    socket = push_redirect(socket, to: "/organize/#{competition_id}/participants")
+    socket = push_navigate(socket, to: "/organize/#{competition_id}/participants")
 
     {:noreply, socket}
   end

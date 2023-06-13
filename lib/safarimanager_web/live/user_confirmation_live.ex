@@ -18,8 +18,7 @@ defmodule SMWeb.UserConfirmationLive do
 
     <p>
       <.link href={~p"/users/register"}><%= gettext("Register") %></.link>
-      |
-      <.link href={~p"/users/log_in"}><%= gettext("Log in") %></.link>
+      | <.link href={~p"/users/log_in"}><%= gettext("Log in") %></.link>
     </p>
     """
   end

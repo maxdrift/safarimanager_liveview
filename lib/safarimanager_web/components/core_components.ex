@@ -15,104 +15,75 @@ defmodule SMWeb.CoreComponents do
   import SMWeb.Gettext
 
   @doc """
-  Renders a modal.
+  Wraps the given content in a modal dialog.
 
-  ## Examples
+  ## Example
 
-      <.modal id="confirm-modal">
-        Are you sure?
-        <:confirm>OK</:confirm>
-        <:cancel>Cancel</:cancel>
+      <.modal id="edit-modal" patch={...}>
+        <.live_component module={MyComponent}  />
       </.modal>
 
-  JS commands may be passed to the `:on_cancel` and `on_confirm` attributes
-  for the caller to react to each button press, for example:
-
-      <.modal id="confirm" on_confirm={JS.push("delete")} on_cancel={JS.navigate(~p"/posts")}>
-        Are you sure you?
-        <:confirm>OK</:confirm>
-        <:cancel>Cancel</:cancel>
-      </.modal>
   """
   attr :id, :string, required: true
   attr :show, :boolean, default: false
-  attr :on_cancel, JS, default: %JS{}
-  attr :on_confirm, JS, default: %JS{}
+  attr :patch, :string, default: nil
+  attr :navigate, :string, default: nil
+  attr :class, :string, default: nil
+  attr :width, :atom, values: [:small, :medium, :big, :large], required: true
+  attr :rest, :global
 
   slot :inner_block, required: true
-  slot :title
-  slot :subtitle
-  slot :confirm
-  slot :cancel
 
   def modal(assigns) do
     ~H"""
-    <div id={@id} phx-mounted={@show && show_modal(@id)} class="relative z-50 hidden">
-      <div id={"#{@id}-bg"} class="fixed inset-0 bg-zinc-50/90 transition-opacity" aria-hidden="true" />
-      <div
-        class="fixed inset-0 overflow-y-auto"
-        aria-labelledby={"#{@id}-title"}
-        aria-describedby={"#{@id}-description"}
-        role="dialog"
-        aria-modal="true"
-        tabindex="0"
-      >
-        <div class="flex min-h-full items-center justify-center">
-          <div class="w-full max-w-3xl p-4 sm:p-6 lg:py-8">
-            <.focus_wrap
-              id={"#{@id}-container"}
-              phx-mounted={@show && show_modal(@id)}
-              phx-window-keydown={hide_modal(@on_cancel, @id)}
-              phx-key="escape"
-              phx-click-away={hide_modal(@on_cancel, @id)}
-              class="hidden relative rounded-2xl p-14 shadow-lg shadow-zinc-700/10 ring-1 ring-zinc-700/10 transition"
-            >
-              <div class="absolute top-6 right-5">
-                <button
-                  phx-click={hide_modal(@on_cancel, @id)}
-                  type="button"
-                  class="-m-3 flex-none p-3 opacity-20 hover:opacity-40"
-                  aria-label={gettext("close")}
-                >
-                  <Heroicons.LiveView.icon name="x-mark" type="solid" class="h-5 w-5 stroke-current" />
-                </button>
-              </div>
-              <div id={"#{@id}-content"}>
-                <header :if={@title != []}>
-                  <h1 id={"#{@id}-title"} class="text-lg font-semibold leading-8 text-zinc-800">
-                    <%= render_slot(@title) %>
-                  </h1>
-                  <p :if={@subtitle != []} class="mt-2 text-sm leading-6 text-zinc-600">
-                    <%= render_slot(@subtitle) %>
-                  </p>
-                </header>
-                <%= render_slot(@inner_block) %>
-                <div :if={@confirm != [] or @cancel != []} class="ml-6 mb-4 flex items-center gap-5">
-                  <.button
-                    :for={confirm <- @confirm}
-                    id={"#{@id}-confirm"}
-                    phx-click={@on_confirm}
-                    phx-disable-with
-                    class="py-2 px-3"
-                  >
-                    <%= render_slot(confirm) %>
-                  </.button>
-                  <.link
-                    :for={cancel <- @cancel}
-                    phx-click={hide_modal(@on_cancel, @id)}
-                    class="text-sm font-semibold leading-6 text-zinc-900 hover:text-zinc-700"
-                  >
-                    <%= render_slot(cancel) %>
-                  </.link>
-                </div>
-              </div>
-            </.focus_wrap>
-          </div>
-        </div>
+    <div
+      id={@id}
+      class={["fixed z-[10000] inset-0", if(@show, do: "fade-in", else: "hidden")]}
+      phx-remove={JS.transition("fade-out")}
+      {@rest}
+    >
+      <!-- Modal container -->
+      <div class="h-screen flex items-center justify-center p-4">
+        <!-- Overlay -->
+        <div class="absolute z-0 inset-0 bg-gray-500 opacity-75" aria-hidden="true"></div>
+        <!-- Modal box -->
+        <.focus_wrap
+          id={"#{@id}-content"}
+          class={[
+            "relative max-h-full overflow-y-auto bg-neutral rounded-lg shadow-xl",
+            "w-full",
+            modal_width_class(@width)
+          ]}
+          role="dialog"
+          aria-modal="true"
+          tabindex="0"
+          autofocus
+          phx-window-keydown={hide_modal(@id)}
+          phx-click-away={hide_modal(@id)}
+          phx-key="escape"
+        >
+          <.link :if={@patch} patch={@patch} class="hidden" id={"#{@id}-return"}></.link>
+          <.link :if={@navigate} patch={@navigate} class="hidden" id={"#{@id}-return"}></.link>
+          <button
+            type="button"
+            class="absolute top-6 right-6 flex space-x-1 items-center"
+            aria_label="close modal"
+            phx-click={hide_modal(@id)}
+          >
+            <span class="text-sm">(esc)</span>
+            <Heroicons.LiveView.icon name="x-mark" type="solid" class="h-5 w-5 stroke-current" />
+          </button>
+          <%= render_slot(@inner_block) %>
+        </.focus_wrap>
       </div>
     </div>
     """
   end
+
+  defp modal_width_class(:small), do: "max-w-sm"
+  defp modal_width_class(:medium), do: "max-w-xl"
+  defp modal_width_class(:big), do: "max-w-4xl"
+  defp modal_width_class(:large), do: "max-w-6xl"
 
   @doc """
   Renders flash notices.
@@ -589,26 +560,27 @@ defmodule SMWeb.CoreComponents do
     )
   end
 
-  def show_modal(js \\ %JS{}, id) when is_binary(id) do
+  @doc """
+  Shows a modal rendered with `modal/1`.
+  """
+  def show_modal(js \\ %JS{}, id) do
     js
-    |> JS.show(to: "##{id}")
     |> JS.show(
-      to: "##{id}-bg",
-      transition: {"transition-all transform ease-out duration-300", "opacity-0", "opacity-100"}
+      to: "##{id}",
+      transition: {"ease-out duration-200", "opacity-0", "opacity-100"}
     )
-    |> show("##{id}-container")
-    |> JS.focus_first(to: "##{id}-content")
   end
 
+  @doc """
+  Hides a modal rendered with `modal/1`.
+  """
   def hide_modal(js \\ %JS{}, id) do
     js
     |> JS.hide(
-      to: "##{id}-bg",
-      transition: {"transition-all transform ease-in duration-200", "opacity-100", "opacity-0"}
+      to: "##{id}",
+      transition: {"ease-in duration-200", "opacity-100", "opacity-0"}
     )
-    |> hide("##{id}-container")
-    |> JS.hide(to: "##{id}", transition: {"block", "block", "hidden"})
-    |> JS.pop_focus()
+    |> JS.dispatch("click", to: "##{id}-return")
   end
 
   @doc """
