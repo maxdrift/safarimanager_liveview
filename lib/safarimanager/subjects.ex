@@ -242,6 +242,22 @@ defmodule SM.Subjects do
   end
 
   @doc """
+  Deletes all Subjects.
+
+  ## Examples
+
+  iex> delete_all()
+  {:ok, 10}
+
+  """
+  @spec delete_all :: {:ok, integer()}
+  def delete_all do
+    {deleted, nil} = Repo.delete_all(Subject)
+
+    notify_subscribers({:ok, deleted}, [:subject, :deleted])
+  end
+
+  @doc """
   Returns an `%Ecto.Changeset{}` for tracking subject changes.
 
   ## Examples
