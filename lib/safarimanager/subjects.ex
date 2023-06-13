@@ -224,18 +224,18 @@ defmodule SM.Subjects do
   ## Examples
 
   iex> delete_many(["id1", "id2", "id3"])
-  {:ok, 3}
+  {:ok, ["id1", "id2", "id3"]}
 
   iex> delete_many(["id1", "id2", "id3"])
   :error
 
   """
-  @spec delete_many([String.t()]) :: {:ok, integer()} | :error
+  @spec delete_many([String.t()]) :: {:ok, [String.t()]} | :error
   def delete_many(ids) do
     {deleted, nil} = Repo.delete_all(from(entity in Subject, where: entity.id in ^ids))
 
     if deleted == Enum.count(ids) do
-      notify_subscribers({:ok, deleted}, [:subject, :deleted])
+      notify_subscribers({:ok, ids}, [:subject, :deleted])
     else
       notify_subscribers(:error, [:subject, :deleted])
     end
