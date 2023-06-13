@@ -1,4 +1,4 @@
-defmodule SMWeb.Components.Admin.Subjects do
+defmodule SMWeb.Components.Admin.SubjectsLive.Index do
   @moduledoc """
   Subjects live view
   """
@@ -7,14 +7,15 @@ defmodule SMWeb.Components.Admin.Subjects do
   alias SM.Subjects
   alias SM.Subjects.Subject
   alias SMWeb.Components.Admin.Subjects.Edit
-  alias SMWeb.Components.Admin.Subjects.List
   alias SMWeb.Components.Admin.Subjects.Show
-  alias SMWeb.Components.ConfirmationDialog
+  alias SMWeb.Components.Column
+  alias SMWeb.Components.Grid
   alias SMWeb.Components.Layout
-  alias Surface.Components.Link
   alias Surface.Components.LivePatch
 
   require Logger
+
+  @page_size 50
 
   on_mount SMWeb.SidebarHook
 
@@ -26,88 +27,11 @@ defmodule SMWeb.Components.Admin.Subjects do
       socket
       |> load_entities()
       |> reset_current_editing()
-      |> reset_selection()
 
     {:ok, socket}
   end
 
   @impl Phoenix.LiveView
-  def handle_event("toggle-select-item", %{"id" => id, "selected" => selected?}, socket) do
-    items =
-      Enum.map(socket.assigns.items, fn
-        %_struct{id: ^id} = item ->
-          Map.put(item, :selected?, String.to_existing_atom(selected?))
-
-        item ->
-          item
-      end)
-
-    socket =
-      socket
-      |> assign(:items, items)
-      |> update_selection(items)
-
-    {:noreply, socket}
-  end
-
-  def handle_event("toggle-select-all", _value, socket) do
-    items =
-      if socket.assigns.all_selected? do
-        Enum.map(socket.assigns.items, fn item ->
-          Map.put(item, :selected?, false)
-        end)
-      else
-        Enum.map(socket.assigns.items, fn item ->
-          Map.put(item, :selected?, true)
-        end)
-      end
-
-    socket =
-      socket
-      |> assign(:items, items)
-      |> update_selection(items)
-
-    {:noreply, socket}
-  end
-
-  def handle_event("delete-one", %{"id" => id}, socket) do
-    ConfirmationDialog.show("delete-confirmation")
-    {:noreply, assign(socket, :to_be_deleted, [id])}
-  end
-
-  def handle_event("delete-many", %{}, socket) do
-    ConfirmationDialog.show("delete-confirmation")
-    {:noreply, assign(socket, :to_be_deleted, socket.assigns.selected)}
-  end
-
-  def handle_event("confirm", %{}, %{assigns: %{to_be_deleted: [id]}} = socket) do
-    socket =
-      case delete(id) do
-        :ok -> put_flash(socket, :info, "Subject deleted successfully")
-        :error -> put_flash(socket, :error, "Unable to delete Subject")
-      end
-
-    ConfirmationDialog.hide("delete-confirmation")
-    {:noreply, socket}
-  end
-
-  def handle_event("confirm", %{}, %{assigns: %{to_be_deleted: [_ | _] = ids}} = socket) do
-    socket =
-      case delete(ids) do
-        :ok -> put_flash(socket, :info, "Subjects deleted successfully")
-        :error -> put_flash(socket, :error, "Unable to delete Subjects")
-      end
-
-    ConfirmationDialog.hide("delete-confirmation")
-    {:noreply, socket}
-  end
-
-  def handle_event("abort", %{}, socket) do
-    ConfirmationDialog.hide("delete-confirmation")
-
-    {:noreply, socket}
-  end
-
   # Create/Edit dialog validate callback
   def handle_event("validate", %{"entity" => params}, socket) do
     changeset =
@@ -133,7 +57,7 @@ defmodule SMWeb.Components.Admin.Subjects do
           |> push_patch(to: "/admin/subjects")
 
         Edit.hide("edit-dialog")
-        socket = put_flash(socket, :info, "Subject created successfully")
+        socket = put_flash(socket, :info, gettext("Subject created successfully"))
         {:noreply, socket}
 
       {:error, changeset} ->
@@ -155,7 +79,7 @@ defmodule SMWeb.Components.Admin.Subjects do
 
         Edit.hide("edit-dialog")
 
-        socket = put_flash(socket, :info, ~s(Edited subject "#{entity.name}"))
+        socket = put_flash(socket, :info, ~s(#{gettext("Edited subject")} "#{entity.name}"))
 
         {:noreply, socket}
 
@@ -164,66 +88,138 @@ defmodule SMWeb.Components.Admin.Subjects do
     end
   end
 
-  @impl Phoenix.LiveView
-  def handle_params(%{"action" => "new"}, _url, socket) do
-    Edit.show("edit-dialog", :create)
+  def handle_event("load_more", %{}, socket) do
+    last_id = socket.assigns.last_id
 
-    {:noreply, reset_current_editing(socket)}
-  end
+    items =
+      if is_nil(last_id) do
+        []
+      else
+        [after: last_id, cursor_field: :numeric_id]
+        |> Subjects.stream()
+        |> Stream.take(@page_size)
+      end
 
-  def handle_params(%{"id" => id, "action" => "edit"}, _url, socket) do
-    case get(id) do
-      {:ok, subject} ->
-        changeset = change(subject, %{})
-        Edit.show("edit-dialog", :edit)
+    last_id = last_entity_id(items, id_field: :numeric_id)
 
-        socket =
-          socket
-          |> assign(:editing_entity, subject)
-          |> assign(:editing_changeset, changeset)
-
-        {:noreply, socket}
-
-      {:error, reason} ->
-        Logger.error("Error showing Edit modal: #{inspect(reason)}")
-        socket = put_flash(socket, :error, "Unable to edit this Subject")
-        {:noreply, socket}
-    end
-  end
-
-  def handle_params(%{"id" => id, "action" => "show"}, _url, socket) do
-    case get(id) do
-      {:ok, subject} ->
-        Show.show("show-dialog", subject)
-
-        {:noreply, socket}
-
-      {:error, reason} ->
-        socket = put_flash(socket, :error, "Unable to show this Subject")
-        Logger.error("Error showing Subject: #{inspect(reason)}")
-        {:noreply, socket}
-    end
-  end
-
-  def handle_params(%{} = _params, _url, socket) do
-    {:noreply, socket}
-  end
-
-  @impl Phoenix.LiveView
-  def handle_info({Subjects, [:subject, _action], _result}, socket) do
     socket =
-      socket
-      |> load_entities()
-      |> reset_selection()
+      items
+      |> Enum.reduce(socket, fn item, socket ->
+        stream_insert(socket, :items, item)
+      end)
+      |> assign(:last_id, last_id)
 
     {:noreply, socket}
   end
+
+  @impl Phoenix.LiveView
+  def handle_params(%{"id" => id}, _url, socket) do
+    with {:ok, subject} <- get(id) do
+      case socket.assigns.live_action do
+        :show ->
+          Show.show("show-dialog", subject)
+
+          {:noreply, socket}
+
+        :edit ->
+          changeset = change(subject, %{})
+          Edit.show("edit-dialog", :edit)
+
+          socket =
+            socket
+            |> assign(:editing_entity, subject)
+            |> assign(:editing_changeset, changeset)
+
+          {:noreply, socket}
+      end
+    else
+      {:error, reason} ->
+        socket = put_flash(socket, :error, gettext("Unable to retrieve this Subject"))
+        Logger.error("Error retrieving Subject #{id}: #{inspect(reason)}")
+        {:noreply, socket}
+    end
+  end
+
+  def handle_params(_params, _url, socket) do
+    case socket.assigns.live_action do
+      :index ->
+        {:noreply, socket}
+
+      :new ->
+        Edit.show("edit-dialog", :create)
+        {:noreply, reset_current_editing(socket)}
+    end
+  end
+
+  @impl Phoenix.LiveView
+  def handle_info({"delete-one", id}, socket) do
+    socket =
+      case delete(id) do
+        :ok -> put_flash(socket, :info, gettext("Subject deleted successfully"))
+        :error -> put_flash(socket, :error, gettext("Unable to delete Subject"))
+      end
+
+    {:noreply, socket}
+  end
+
+  def handle_info({"delete-selected", selection}, socket) do
+    socket =
+      case delete(selection) do
+        :ok ->
+          put_flash(socket, :info, gettext("Subjects deleted successfully"))
+
+        :error ->
+          put_flash(socket, :error, gettext("Unable to delete Subjects"))
+      end
+
+    {:noreply, socket}
+  end
+
+  def handle_info("delete-all", socket) do
+    {:ok, _result} = Subjects.delete_all()
+
+    {:noreply, put_flash(socket, :info, gettext("All subjects deleted successfully"))}
+  end
+
+  def handle_info({Subjects, [:subject, :deleted], deleted_ids}, socket)
+      when is_list(deleted_ids) do
+    socket =
+      deleted_ids
+      |> Stream.map(fn id -> "items-#{id}" end)
+      |> Stream.scan(socket, fn dom_id, socket ->
+        stream_delete_by_dom_id(socket, :items, dom_id)
+      end)
+      |> Enum.reverse()
+      |> hd()
+
+    {:noreply, socket}
+  end
+
+  def handle_info({Subjects, [:subject, :deleted], deleted_count}, socket)
+      when is_integer(deleted_count) do
+    {:noreply, push_navigate(socket, to: "/admin/subjects")}
+  end
+
+  def handle_info({Subjects, [:subject, :deleted], deleted_item}, socket) do
+    {:noreply, stream_delete(socket, :items, deleted_item)}
+  end
+
+  def handle_info({Subjects, [:subject, :updated], updated_item}, socket) do
+    {:noreply, stream_insert(socket, :items, updated_item)}
+  end
+
+  def handle_info({Subjects, [:subject, :created], inserted_item}, socket) do
+    _socket =
+      if is_nil(socket.assigns.last_id) do
+        {:noreply, stream_insert(socket, :items, inserted_item)}
+      else
+        {:noreply, socket}
+      end
+  end
+
+  def handle_info(_any, socket), do: {:noreply, socket}
 
   # Internal
-
-  defp list do
-    Subjects.list()
-  end
 
   defp get(id) do
     Subjects.get(id)
@@ -239,8 +235,8 @@ defmodule SMWeb.Components.Admin.Subjects do
 
   defp delete(ids) when is_list(ids) do
     case Subjects.delete_many(ids) do
-      {:ok, deleted} ->
-        Logger.debug("Deleted #{deleted} entities")
+      {:ok, ids} ->
+        Logger.debug("Deleted #{Enum.count(ids)} entities")
         :ok
 
       :error ->
@@ -279,11 +275,15 @@ defmodule SMWeb.Components.Admin.Subjects do
 
   defp load_entities(socket) do
     items =
-      Enum.map(list(), fn item ->
-        Map.put(item, :selected?, false)
-      end)
+      [cursor_field: :numeric_id]
+      |> Subjects.stream()
+      |> Stream.take(@page_size)
 
-    assign(socket, :items, items)
+    last_id = last_entity_id(items, id_field: :numeric_id)
+
+    socket
+    |> assign(:last_id, last_id)
+    |> stream(:items, items)
   end
 
   defp reset_current_editing(socket) do
@@ -296,23 +296,16 @@ defmodule SMWeb.Components.Admin.Subjects do
     |> assign(:editing_changeset, changeset)
   end
 
-  defp update_selection(socket, items) do
-    selected =
-      items
-      |> Enum.filter(& &1.selected?)
-      |> Enum.map(& &1.id)
+  defp last_entity_id(items, opts) do
+    id_field = Keyword.get(opts, :id_field, :id)
 
-    socket
-    |> assign(:selected, selected)
-    |> assign(:all_selected?, Enum.all?(items, & &1.selected?))
-    |> assign(:any_selected?, Enum.any?(items, & &1.selected?))
+    case Enum.reverse(items) do
+      [] -> nil
+      [last | _rest] -> Map.get(last, id_field)
+    end
   end
 
-  defp reset_selection(socket) do
-    socket
-    |> assign(:selected, [])
-    |> assign(:to_be_deleted, [])
-    |> assign(:all_selected?, false)
-    |> assign(:any_selected?, false)
+  defp format_date(datetime) do
+    Calendar.strftime(datetime, "%d/%m/%Y %I:%M:%S %P %Z")
   end
 end
