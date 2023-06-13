@@ -53,6 +53,25 @@ defmodule SM.Subjects do
   end
 
   @doc """
+  Returns a Stream of subjects.
+
+  ## Examples
+
+      iex> stream()
+      #Function<60.124013645/2 in Stream.transform/3>
+
+  """
+  @spec stream(Keyword.t()) :: Enumerable.t()
+  def stream(opts \\ []) do
+    cursor_field = Keyword.get(opts, :cursor_field, :id)
+    after_cursor = Keyword.get(opts, :after)
+
+    Subject
+    |> order_by(asc: :numeric_id)
+    |> Repo.cursor_based_stream(after_cursor: after_cursor, cursor_field: cursor_field)
+  end
+
+  @doc """
   Returns the list of subjects filtered by name.
 
   ## Examples

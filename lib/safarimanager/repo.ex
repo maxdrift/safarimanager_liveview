@@ -3,4 +3,6 @@ defmodule SM.Repo do
     otp_app: :safarimanager,
     # adapter: if(Mix.env() == :prod, do: Ecto.Adapters.Postgres, else: Ecto.Adapters.SQLite3)
     adapter: Ecto.Adapters.SQLite3
+
+  use EctoCursorBasedStream
 end

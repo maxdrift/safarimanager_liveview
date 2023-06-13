@@ -56,6 +56,7 @@ defmodule SM.MixProject do
       {:bcrypt_elixir, "~> 3.0"},
       {:credo, "~> 1.7", only: [:dev, :test], runtime: false},
       {:dialyzex, "~> 1.3.0", only: :dev, runtime: false},
+      {:ecto_cursor_based_stream, "~> 1.0"},
       {:ecto_sql, "~> 3.10"},
       {:ecto_sqlite3, "~> 0.10.1"},
       {:esbuild, "~> 0.6", runtime: Mix.env() == :dev},
