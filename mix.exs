@@ -62,17 +62,17 @@ defmodule SM.MixProject do
       {:esbuild, "~> 0.6", runtime: Mix.env() == :dev},
       {:ex_heroicons, "~> 2.0"},
       {:finch, "~> 0.16.0", override: true},
-      {:floki, ">= 0.30.0", only: :test},
-      {:gettext, "~> 0.22.1"},
-      {:image, "~> 0.31"},
+      {:floki, "~> 0.34", only: :test},
+      {:gettext, "~> 0.22.0"},
+      {:image, "~> 0.33"},
       {:jason, "~> 1.2"},
       {:nimble_csv, "~> 1.2"},
-      {:phoenix_ecto, "~> 4.4"},
-      {:phoenix_html, "~> 3.3"},
+      {:phoenix_ecto, "~> 4.4.0"},
+      {:phoenix_html, "~> 3.3.0"},
       {:phoenix_live_reload, "~> 1.4.1", only: :dev},
-      {:phoenix_live_view, "~> 0.18.18"},
+      {:phoenix_live_view, "~> 0.19.0"},
       {:phoenix_view, "~> 2.0"},
-      {:phoenix, "~> 1.7.2", override: true},
+      {:phoenix, "~> 1.7.0"},
       {:plug_cowboy, "~> 2.6", override: true},
       {:postgrex, "~> 0.17.1"},
       {:progress_bar, "~> 2.0"},
@@ -80,13 +80,14 @@ defmodule SM.MixProject do
       {:random_password, "~> 1.0"},
       {:rexbug, "~> 1.0"},
       {:surface_catalogue, "~> 0.6"},
-      {:surface, "~> 0.10.0"},
+      # overriding due to "surface_catalogue" requirements
+      {:surface, "~> 0.11.0", override: true},
       {:svadilfari, git: "https://github.com/maxdrift/svadilfari", branch: "main"},
-      {:swoosh, "~> 1.10.2"},
+      {:swoosh, "~> 1.11"},
       {:telemetry_metrics, "~> 0.6"},
       {:telemetry_poller, "~> 1.0"},
       {:telemetry, "~> 1.2", override: true},
-      {:tesla, "~> 1.6.1"}
+      {:tesla, "~> 1.7.0"}
     ]
   end
 
