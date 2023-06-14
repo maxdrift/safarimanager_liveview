@@ -2,7 +2,7 @@ defmodule SM.MixProject do
   use Mix.Project
 
   @elixir_requirement "~> 1.14"
-  @version "0.1.2"
+  @version "2023.6.1"
   @description ~s(Application to manage "Underwater Photo Safari" competitions)
 
   @app_elixir_version "1.14.2"
