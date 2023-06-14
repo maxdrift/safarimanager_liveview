@@ -4,6 +4,7 @@ defmodule SMWeb.Validation do
   """
   use SMWeb, :surface_view
 
+  alias SM.Cache
   alias SM.Competitions
   alias SM.Slides
   alias SM.Subjects
@@ -65,6 +66,8 @@ defmodule SMWeb.Validation do
       # and will be dispatched to all active hooks on the client who are handling that event.
       |> push_event("new-image", %{options: %{image_url: file_path}})
 
+    Cache.put(:current_validation_slide_id, slide_id)
+
     {:noreply, socket}
   end
 
@@ -80,11 +83,20 @@ defmodule SMWeb.Validation do
       |> assign(:competition, competition)
       |> assign(:slides, slides)
 
-    next_slide = Enum.at(slides, 0)
+    next_slide_id =
+      case Cache.get(:current_validation_slide_id) do
+        nil ->
+          slides
+          |> Enum.at(0)
+          |> Map.get(:id)
+
+        resumed_slide_id ->
+          resumed_slide_id
+      end
 
     socket =
-      if next_slide do
-        push_patch(socket, to: "#{full_path(socket)}?slide_id=#{next_slide.id}")
+      if next_slide_id do
+        push_patch(socket, to: "#{full_path(socket)}?slide_id=#{next_slide_id}")
       else
         assign(socket, :curr_slide, nil)
       end

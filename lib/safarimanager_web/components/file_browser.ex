@@ -4,8 +4,8 @@ defmodule SMWeb.Components.FileBrowser do
   """
   use SMWeb, :surface_live_component
 
-  alias SM.FileBrowser
   alias SM.Cache
+  alias SM.FileBrowser
 
   require Logger
 
@@ -83,7 +83,7 @@ defmodule SMWeb.Components.FileBrowser do
   end
 
   defp set_last_dir(path) do
-    :ok = Cache.put(:last_dir, path)
+    Cache.put(:last_dir, path)
 
     {:ok, path}
   end
