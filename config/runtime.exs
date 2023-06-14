@@ -19,8 +19,6 @@ uploads_path =
   |> System.get_env(priv_dir_uploads)
   |> Path.expand()
 
-IO.puts("Uploads path set to: #{uploads_path}")
-
 unless File.exists?(uploads_path) do
   File.mkdir_p!(uploads_path)
 end
@@ -34,8 +32,6 @@ db_path =
   |> System.get_env(priv_dir)
   |> Path.expand()
   |> Path.join("safarimanager.db")
-
-IO.puts("Database path set to: #{db_path}")
 
 unless File.exists?(db_path) do
   File.mkdir_p!(Path.dirname(db_path))
