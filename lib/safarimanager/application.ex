@@ -63,14 +63,14 @@ defmodule SM.Application do
 
   defp display_startup_info() do
     if Phoenix.Endpoint.server?(:safarimanager, SMWeb.Endpoint) do
-      IO.puts("[Safari Manager] Application running at #{SMWeb.Endpoint.access_url()}")
+      Logger.info("[Safari Manager] Application running at #{SMWeb.Endpoint.access_url()}")
     end
 
     db_path = Application.get_env(:safarimanager, SM.Repo)[:database]
-    IO.puts("[Safari Manager] Database path set to: #{db_path}")
+    Logger.info("[Safari Manager] Database path set to: #{db_path}")
 
     uploads_path = Application.get_env(:safarimanager, SM.Slides.Slide)[:uploads_base_path]
-    IO.puts("[Safari Manager] Uploads path set to #{uploads_path}")
+    Logger.info("[Safari Manager] Uploads path set to #{uploads_path}")
   end
 
   defp set_libvips_concurrency do
