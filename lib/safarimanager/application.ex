@@ -12,7 +12,6 @@ defmodule SM.Application do
   @impl Application
   def start(_type, _args) do
     :ok = set_libvips_concurrency()
-    FileBrowser.create_cache_table()
 
     children =
       [
@@ -27,6 +26,8 @@ defmodule SM.Application do
         SMWeb.TelemetryPusherSupervisor,
         # Start the PubSub system
         {Phoenix.PubSub, name: SM.PubSub},
+        # Nebulex caching system
+        SM.Cache,
         # Start the Endpoint (http/https)
         SMWeb.Endpoint,
         # Start a worker by calling: SM.Worker.start_link(arg)

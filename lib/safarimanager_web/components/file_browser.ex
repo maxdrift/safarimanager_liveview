@@ -5,10 +5,9 @@ defmodule SMWeb.Components.FileBrowser do
   use SMWeb, :surface_live_component
 
   alias SM.FileBrowser
+  alias SM.Cache
 
   require Logger
-
-  @ets_table_name :sm_file_browser
 
   data cwd, :string
   data items, :list
@@ -16,11 +15,6 @@ defmodule SMWeb.Components.FileBrowser do
   prop file_filter, :list, default: []
   prop import_click, :event
   prop user_id, :string
-
-  def create_cache_table do
-    _table = :ets.new(@ets_table_name, [:public, :named_table])
-    :ok
-  end
 
   @impl Phoenix.LiveComponent
   def update(%{file_filter: file_filter} = assigns, socket) do
@@ -89,17 +83,17 @@ defmodule SMWeb.Components.FileBrowser do
   end
 
   defp set_last_dir(path) do
-    true = :ets.insert(@ets_table_name, {:last_dir, path})
+    :ok = Cache.put(:last_dir, path)
 
     {:ok, path}
   end
 
   defp get_last_dir do
-    with last_dir <- :ets.lookup_element(@ets_table_name, :last_dir, 2),
+    with last_dir when not is_nil(last_dir) <- Cache.get(:last_dir),
          true <- File.exists?(last_dir) do
       last_dir
     else
-      false ->
+      _nil_or_false ->
         Logger.warning("Unable to find last used directory path. Using home directory.")
 
         {:ok, path} =
@@ -109,13 +103,5 @@ defmodule SMWeb.Components.FileBrowser do
 
         path
     end
-  rescue
-    ArgumentError ->
-      {:ok, path} =
-        "~/"
-        |> Path.expand()
-        |> set_last_dir()
-
-      path
   end
 end

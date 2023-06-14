@@ -66,6 +66,7 @@ defmodule SM.MixProject do
       {:gettext, "~> 0.22.0"},
       {:image, "~> 0.33"},
       {:jason, "~> 1.2"},
+      {:nebulex, "~> 2.5"},
       {:nimble_csv, "~> 1.2"},
       {:phoenix_ecto, "~> 4.4.0"},
       {:phoenix_html, "~> 3.3.0"},
