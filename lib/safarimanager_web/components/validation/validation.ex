@@ -32,7 +32,11 @@ defmodule SMWeb.Validation do
   end
 
   @impl Phoenix.LiveView
-  def handle_params(%{"competition_id" => competition_id, "slide_id" => slide_id}, _url, socket) do
+  def handle_params(
+        %{"competition_id" => competition_id, "slide_id" => slide_id},
+        _url,
+        socket
+      ) do
     socket =
       if Map.has_key?(socket.assigns, :competition) do
         socket
@@ -87,7 +91,7 @@ defmodule SMWeb.Validation do
       case Cache.get(:current_validation_slide_id) do
         nil ->
           slides
-          |> Enum.at(0)
+          |> Enum.at(0, %{})
           |> Map.get(:id)
 
         resumed_slide_id ->
@@ -162,12 +166,18 @@ defmodule SMWeb.Validation do
   end
 
   # TODO: improve form reset when changing slide
-  def handle_event("validate", %{"wrong_subject_flag" => %{"subject" => subject_id}}, socket) do
+  def handle_event(
+        "validate",
+        %{"wrong_subject_flag" => %{"subject" => subject_id}},
+        socket
+      ) do
     slide_id = socket.assigns.curr_slide.id
     {:ok, slide} = Slides.get(slide_id)
 
     case Slides.update(slide, %{
-           "flags" => %{"wrong_subject_ctx" => %{"from" => slide.subject_id, "to" => subject_id}}
+           "flags" => %{
+             "wrong_subject_ctx" => %{"from" => slide.subject_id, "to" => subject_id}
+           }
          }) do
       {:ok, slide} ->
         :ok
@@ -227,7 +237,9 @@ defmodule SMWeb.Validation do
 
   def handle_event("evaluation-key", %{"key" => "Escape"}, socket) do
     {:noreply,
-     redirect(socket, to: "/organize/#{socket.assigns.competition.id}/validation_launcher")}
+     redirect(socket,
+       to: "/organize/#{socket.assigns.competition.id}/validation_launcher"
+     )}
   end
 
   def handle_event(event, data, socket) do

@@ -97,7 +97,7 @@ defmodule SMWeb.Jury do
       case Cache.get(:current_jury_slide_id) do
         nil ->
           slides
-          |> Enum.at(0)
+          |> Enum.at(0, %{})
           |> Map.get(:id)
 
         resumed_slide_id ->
