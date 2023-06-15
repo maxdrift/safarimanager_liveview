@@ -5,8 +5,6 @@ defmodule SM.Application do
 
   use Application
 
-  alias SMWeb.Components.FileBrowser
-
   require Logger
 
   @impl Application
