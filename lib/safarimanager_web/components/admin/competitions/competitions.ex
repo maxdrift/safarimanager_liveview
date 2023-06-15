@@ -11,7 +11,6 @@ defmodule SMWeb.Components.Admin.Competitions do
   alias SMWeb.Components.Admin.Competitions.Edit
   alias SMWeb.Components.Admin.Competitions.List
   alias SMWeb.Components.Admin.Competitions.Show
-  alias SMWeb.Components.ConfirmationDialog
   alias SMWeb.Components.Layout
   alias Surface.Components.Link
   alias Surface.Components.LivePatch
@@ -74,41 +73,43 @@ defmodule SMWeb.Components.Admin.Competitions do
   end
 
   def handle_event("delete-one", %{"id" => id}, socket) do
-    ConfirmationDialog.show("delete-confirmation")
-    {:noreply, assign(socket, :to_be_deleted, [id])}
-  end
-
-  def handle_event("delete-many", %{}, socket) do
-    ConfirmationDialog.show("delete-confirmation")
-    {:noreply, assign(socket, :to_be_deleted, socket.assigns.selected)}
-  end
-
-  def handle_event("confirm", %{}, %{assigns: %{to_be_deleted: [id]}} = socket) do
-    socket =
+    on_confirm = fn socket ->
       case delete(id) do
         :ok -> put_flash(socket, :info, "Competition deleted successfully")
         :error -> put_flash(socket, :error, "Unable to delete Competition")
       end
+    end
 
-    ConfirmationDialog.hide("delete-confirmation")
-    {:noreply, socket}
+    {:noreply,
+     confirm(socket, on_confirm,
+       title: gettext("Delete record"),
+       description: gettext("Are you sure you want to delete this record?"),
+       confirm_text: gettext("Delete"),
+       confirm_icon: "trash"
+     )}
   end
 
-  def handle_event("confirm", %{}, %{assigns: %{to_be_deleted: [_ | _] = ids}} = socket) do
-    socket =
+  def handle_event("delete-many", %{}, socket) do
+    ids = socket.assigns.selected
+
+    on_confirm = fn socket ->
       case delete(ids) do
         :ok -> put_flash(socket, :info, "Competitions deleted successfully")
         :error -> put_flash(socket, :error, "Unable to delete Competitions")
       end
+    end
 
-    ConfirmationDialog.hide("delete-confirmation")
-    {:noreply, socket}
-  end
-
-  def handle_event("abort", %{}, socket) do
-    ConfirmationDialog.hide("delete-confirmation")
-
-    {:noreply, socket}
+    {:noreply,
+     confirm(socket, on_confirm,
+       title: gettext("Delete records"),
+       description:
+         Gettext.gettext(
+           SMWeb.Gettext,
+           "Are you sure you want to delete #{Enum.count(ids)} records?"
+         ),
+       confirm_text: gettext("Delete"),
+       confirm_icon: "trash"
+     )}
   end
 
   # Create/Edit dialog validate callback
@@ -228,6 +229,8 @@ defmodule SMWeb.Components.Admin.Competitions do
 
     {:noreply, socket}
   end
+
+  def handle_info(_any, socket), do: {:noreply, socket}
 
   # Internal
 
