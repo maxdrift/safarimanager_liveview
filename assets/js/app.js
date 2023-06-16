@@ -26,7 +26,6 @@ import { LiveSocket } from "phoenix_live_view"
 import { themeChange } from 'theme-change'
 import topbar from "../vendor/topbar"
 import Hooks from "./_hooks"
-// import OpenSeadragon from "openseadragon";
 
 window.Alpine = Alpine
 
