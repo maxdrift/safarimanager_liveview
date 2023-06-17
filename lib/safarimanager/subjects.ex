@@ -57,18 +57,21 @@ defmodule SM.Subjects do
 
   ## Examples
 
-      iex> stream()
-      #Function<60.124013645/2 in Stream.transform/3>
-
+      iex> stream() |> Enum.to_list()
+      [%Subject{}, ...]
   """
   @spec stream(Keyword.t()) :: Enumerable.t()
   def stream(opts \\ []) do
-    cursor_field = Keyword.get(opts, :cursor_field, :id)
+    cursor_field = Keyword.get(opts, :cursor_field, :numeric_id)
     after_cursor = Keyword.get(opts, :after)
+    max_rows = Keyword.get(opts, :max_rows, 500)
 
     Subject
-    |> order_by(asc: :numeric_id)
-    |> Repo.cursor_based_stream(after_cursor: after_cursor, cursor_field: cursor_field)
+    |> Repo.cursor_based_stream(
+      after_cursor: after_cursor,
+      cursor_field: cursor_field,
+      max_rows: max_rows
+    )
   end
 
   @doc """

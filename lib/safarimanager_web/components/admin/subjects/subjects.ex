@@ -95,7 +95,7 @@ defmodule SMWeb.Components.Admin.SubjectsLive.Index do
       if is_nil(last_id) do
         []
       else
-        [after: last_id, cursor_field: :numeric_id]
+        [after: last_id, cursor_field: :numeric_id, max_rows: @page_size]
         |> Subjects.stream()
         |> Stream.take(@page_size)
       end
@@ -275,7 +275,7 @@ defmodule SMWeb.Components.Admin.SubjectsLive.Index do
 
   defp load_entities(socket) do
     items =
-      [cursor_field: :numeric_id]
+      [cursor_field: :numeric_id, max_rows: @page_size]
       |> Subjects.stream()
       |> Stream.take(@page_size)
 
