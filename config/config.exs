@@ -18,6 +18,7 @@ config :safarimanager,
   feature_flags: []
 
 config :safarimanager, SM.Repo,
+  pool_size: 10,
   migration_primary_key: [name: :id, type: :binary_id],
   migration_foreign_key: [column: :id, type: :binary_id],
   migration_timestamps: [type: :utc_datetime_usec],
