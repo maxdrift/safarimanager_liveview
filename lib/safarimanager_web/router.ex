@@ -60,12 +60,15 @@ defmodule SMWeb.Router do
         live "/:competition_id/results", Results
       end
 
+      scope "/admin", Live.Admin do
+        live "/subjects", Subjects.Index, :index
+        live "/subjects/new", Subjects.Index, :new
+        live "/subjects/:id", Subjects.Index, :show
+        live "/subjects/:id/edit", Subjects.Index, :edit
+      end
+
       scope "/admin", Components.Admin do
         live "/organizations", Organizations
-        live "/subjects", SubjectsLive.Index, :index
-        live "/subjects/new", SubjectsLive.Index, :new
-        live "/subjects/:id", SubjectsLive.Index, :show
-        live "/subjects/:id/edit", SubjectsLive.Index, :edit
         live "/competitions", Competitions
         live "/evaluations", Evaluations
         live "/users", Users
@@ -74,7 +77,7 @@ defmodule SMWeb.Router do
         live "/import", Import
       end
 
-      live "/gallery", Gallery
+      live "/gallery", Live.Gallery
 
       scope "/users" do
         live "/settings", UserSettingsLive, :edit

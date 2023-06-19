@@ -1,4 +1,4 @@
-defmodule SMWeb.Components.Admin.SubjectsLive.Index do
+defmodule SMWeb.Live.Admin.Subjects.Index do
   @moduledoc """
   Subjects live view
   """

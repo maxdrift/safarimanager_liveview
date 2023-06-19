@@ -1,4 +1,4 @@
-defmodule SMWeb.Gallery do
+defmodule SMWeb.Live.Gallery do
   @moduledoc """
   Live view handling display of a Slide gallery
   """
