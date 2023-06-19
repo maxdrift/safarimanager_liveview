@@ -1,4 +1,4 @@
-defmodule SMWeb.UserResetPasswordLiveTest do
+defmodule SMWeb.Live.UserResetPasswordLiveTest do
   use SMWeb.ConnCase
 
   import Phoenix.LiveViewTest

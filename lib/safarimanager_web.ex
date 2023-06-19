@@ -131,9 +131,9 @@ defmodule SMWeb do
     quote do
       # HTML escaping functionality
       import Phoenix.HTML
-      import SMWeb.Confirm
+      import SMWeb.Components.Confirm
       # Core UI components and translation
-      import SMWeb.CoreComponents
+      import SMWeb.Components.CoreComponents
 
       import SMWeb.ErrorHelpers
 

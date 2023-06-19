@@ -1,4 +1,4 @@
-defmodule SMWeb.UserResetPasswordLive do
+defmodule SMWeb.Live.UserResetPasswordLive do
   use SMWeb, :live_view
 
   alias SM.Accounts

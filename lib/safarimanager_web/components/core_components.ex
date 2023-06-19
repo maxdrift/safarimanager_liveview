@@ -1,4 +1,4 @@
-defmodule SMWeb.CoreComponents do
+defmodule SMWeb.Components.CoreComponents do
   @moduledoc """
   Provides core UI components.
 

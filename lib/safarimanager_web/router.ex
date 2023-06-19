@@ -42,11 +42,11 @@ defmodule SMWeb.Router do
     get "/:competition_id/print_results", PrintResultsController, :show
   end
 
-  scope "/", SMWeb do
+  scope "/", SMWeb.Live do
     pipe_through [:browser, :require_authenticated_user]
 
     live_session :require_authenticated_user,
-      on_mount: [{SMWeb.UserAuth, :ensure_authenticated}, SMWeb.Confirm] do
+      on_mount: [{SMWeb.UserAuth, :ensure_authenticated}, SMWeb.Components.Confirm] do
       scope "/organize" do
         live "/new", NewCompetition
         live "/:competition_id/participants", Participants
@@ -60,15 +60,12 @@ defmodule SMWeb.Router do
         live "/:competition_id/results", Results
       end
 
-      scope "/admin", Live.Admin do
+      scope "/admin", Admin do
+        live "/organizations", Organizations
         live "/subjects", Subjects.Index, :index
         live "/subjects/new", Subjects.Index, :new
         live "/subjects/:id", Subjects.Index, :show
         live "/subjects/:id/edit", Subjects.Index, :edit
-      end
-
-      scope "/admin", Components.Admin do
-        live "/organizations", Organizations
         live "/competitions", Competitions
         live "/evaluations", Evaluations
         live "/users", Users
@@ -77,7 +74,7 @@ defmodule SMWeb.Router do
         live "/import", Import
       end
 
-      live "/gallery", Live.Gallery
+      live "/gallery", Gallery
 
       scope "/users" do
         live "/settings", UserSettingsLive, :edit
@@ -113,11 +110,11 @@ defmodule SMWeb.Router do
     pipe_through [:browser, :redirect_if_user_is_authenticated]
 
     live_session :redirect_if_user_is_authenticated,
-      on_mount: [{SMWeb.UserAuth, :redirect_if_user_is_authenticated}, SMWeb.Confirm] do
-      live "/users/register", UserRegistrationLive, :new
-      live "/users/log_in", UserLoginLive, :new
-      live "/users/reset_password", UserForgotPasswordLive, :new
-      live "/users/reset_password/:token", UserResetPasswordLive, :edit
+      on_mount: [{SMWeb.UserAuth, :redirect_if_user_is_authenticated}, SMWeb.Components.Confirm] do
+      live "/users/register", Live.UserRegistrationLive, :new
+      live "/users/log_in", Live.UserLoginLive, :new
+      live "/users/reset_password", Live.UserForgotPasswordLive, :new
+      live "/users/reset_password/:token", Live.UserResetPasswordLive, :edit
     end
 
     post "/users/log_in", UserSessionController, :create
@@ -129,9 +126,9 @@ defmodule SMWeb.Router do
     delete "/users/log_out", UserSessionController, :delete
 
     live_session :current_user,
-      on_mount: [{SMWeb.UserAuth, :mount_current_user}, SMWeb.Confirm] do
-      live "/users/confirm/:token", UserConfirmationLive, :edit
-      live "/users/confirm", UserConfirmationInstructionsLive, :new
+      on_mount: [{SMWeb.UserAuth, :mount_current_user}, SMWeb.Components.Confirm] do
+      live "/users/confirm/:token", Live.UserConfirmationLive, :edit
+      live "/users/confirm", Live.UserConfirmationInstructionsLive, :new
     end
   end
 end

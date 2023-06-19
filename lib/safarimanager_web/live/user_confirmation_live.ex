@@ -1,4 +1,4 @@
-defmodule SMWeb.UserConfirmationLive do
+defmodule SMWeb.Live.UserConfirmationLive do
   use SMWeb, :live_view
 
   alias SM.Accounts

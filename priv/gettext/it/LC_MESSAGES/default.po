@@ -11,8 +11,8 @@ msgstr ""
 "Language: it\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: lib/safarimanager_web/components/admin/subjects/index.sface:171
 #: lib/safarimanager_web/components/core_components.ex:448
+#: lib/safarimanager_web/live/admin/subjects/index.sface:169
 #, elixir-autogen, elixir-format
 msgid "Actions"
 msgstr "Azioni"
@@ -23,6 +23,7 @@ msgid "Admin"
 msgstr "Amministrazione"
 
 #: lib/safarimanager_web/components/sidebar.ex:116
+#: lib/safarimanager_web/live/hooks/sidebar_hook.ex:41
 #, elixir-autogen, elixir-format
 msgid "Are you sure you want to shut down Safari Manager now?"
 msgstr "Sei sicuro di voler arrestare Safari Manager ora?"
@@ -76,6 +77,8 @@ msgstr "Partecipanti"
 #: lib/safarimanager_web/components/sidebar.ex:115
 #: lib/safarimanager_web/components/sidebar.ex:117
 #: lib/safarimanager_web/components/sidebar.ex:127
+#: lib/safarimanager_web/live/hooks/sidebar_hook.ex:40
+#: lib/safarimanager_web/live/hooks/sidebar_hook.ex:42
 #, elixir-autogen, elixir-format
 msgid "Shut Down"
 msgstr "Arresta"
@@ -544,18 +547,18 @@ msgstr "Sei sicuro di voler eliminare tutti i record?"
 msgid "Are you sure you want to delete this record?"
 msgstr "Sei sicuro di voler eliminare questo record?"
 
-#: lib/safarimanager_web/components/admin/subjects/index.sface:27
+#: lib/safarimanager_web/live/admin/subjects/index.sface:26
 #, elixir-autogen, elixir-format
 msgid "Close"
 msgstr "Chiudi"
 
-#: lib/safarimanager_web/components/admin/subjects/index.sface:159
+#: lib/safarimanager_web/live/admin/subjects/index.sface:157
 #, elixir-autogen, elixir-format
 msgid "Coeff."
 msgstr "Coeff."
 
-#: lib/safarimanager_web/components/admin/subjects/index.sface:19
-#: lib/safarimanager_web/components/admin/subjects/index.sface:94
+#: lib/safarimanager_web/live/admin/subjects/index.sface:18
+#: lib/safarimanager_web/live/admin/subjects/index.sface:92
 #, elixir-autogen, elixir-format
 msgid "Coefficient"
 msgstr "Coefficiente"
@@ -565,19 +568,19 @@ msgstr "Coefficiente"
 msgid "Create"
 msgstr "Crea"
 
-#: lib/safarimanager_web/components/admin/subjects/index.sface:165
+#: lib/safarimanager_web/live/admin/subjects/index.sface:163
 #, elixir-autogen, elixir-format
 msgid "Created"
 msgstr "Creato"
 
 #: lib/safarimanager_web/components/admin/competitions/competitions.ex:87
 #: lib/safarimanager_web/components/admin/competitions/competitions.ex:110
-#: lib/safarimanager_web/components/admin/subjects/index.sface:179
 #: lib/safarimanager_web/components/grid.ex:47
 #: lib/safarimanager_web/components/grid.ex:152
 #: lib/safarimanager_web/components/grid.ex:169
 #: lib/safarimanager_web/components/grid.ex:184
 #: lib/safarimanager_web/components/grid.ex:203
+#: lib/safarimanager_web/live/admin/subjects/index.sface:177
 #, elixir-autogen, elixir-format
 msgid "Delete"
 msgstr "Elimina"
@@ -600,12 +603,12 @@ msgstr "Elimina record"
 msgid "Delete records"
 msgstr "Elimina i record"
 
-#: lib/safarimanager_web/components/admin/subjects/index.sface:174
+#: lib/safarimanager_web/live/admin/subjects/index.sface:172
 #, elixir-autogen, elixir-format
 msgid "Edit"
 msgstr "Modifica"
 
-#: lib/safarimanager_web/components/admin/subjects/subjects.ex:100
+#: lib/safarimanager_web/live/admin/subjects/subjects.ex:100
 #, elixir-autogen, elixir-format
 msgid "Edited subject"
 msgstr "Soggetto modificato"
@@ -620,63 +623,63 @@ msgstr "Esporta in CSV"
 msgid "Merge into"
 msgstr "Riunisci"
 
-#: lib/safarimanager_web/components/admin/subjects/index.sface:168
+#: lib/safarimanager_web/live/admin/subjects/index.sface:166
 #, elixir-autogen, elixir-format
 msgid "Modified"
 msgstr "Modificato"
 
-#: lib/safarimanager_web/components/admin/subjects/index.sface:17
-#: lib/safarimanager_web/components/admin/subjects/index.sface:70
-#: lib/safarimanager_web/components/admin/subjects/index.sface:155
+#: lib/safarimanager_web/live/admin/subjects/index.sface:16
+#: lib/safarimanager_web/live/admin/subjects/index.sface:68
+#: lib/safarimanager_web/live/admin/subjects/index.sface:153
 #, elixir-autogen, elixir-format
 msgid "Name"
 msgstr "Nome"
 
-#: lib/safarimanager_web/components/admin/subjects/index.sface:152
+#: lib/safarimanager_web/live/admin/subjects/index.sface:150
 #, elixir-autogen, elixir-format
 msgid "Num."
 msgstr "Num."
 
-#: lib/safarimanager_web/components/admin/subjects/index.sface:58
+#: lib/safarimanager_web/live/admin/subjects/index.sface:56
 #, elixir-autogen, elixir-format
 msgid "Numeric ID"
 msgstr "ID numerico"
 
-#: lib/safarimanager_web/components/admin/subjects/index.sface:133
+#: lib/safarimanager_web/live/admin/subjects/index.sface:131
 #, elixir-autogen, elixir-format
 msgid "Save"
 msgstr "Salva"
 
-#: lib/safarimanager_web/components/admin/subjects/index.sface:18
-#: lib/safarimanager_web/components/admin/subjects/index.sface:82
+#: lib/safarimanager_web/live/admin/subjects/index.sface:17
+#: lib/safarimanager_web/live/admin/subjects/index.sface:80
 #, elixir-autogen, elixir-format
 msgid "Scientific Name"
 msgstr "Nome Scientifico"
 
-#: lib/safarimanager_web/components/admin/subjects/index.sface:99
+#: lib/safarimanager_web/live/admin/subjects/index.sface:97
 #, elixir-autogen, elixir-format
 msgid "Select a coefficient"
 msgstr "Seleziona un coefficiente"
 
-#: lib/safarimanager_web/components/admin/subjects/index.sface:114
+#: lib/safarimanager_web/live/admin/subjects/index.sface:112
 #, elixir-autogen, elixir-format
 msgid "Select a type"
 msgstr "Seleziona un tipo"
 
-#: lib/safarimanager_web/components/admin/subjects/index.sface:173
+#: lib/safarimanager_web/live/admin/subjects/index.sface:171
 #, elixir-autogen, elixir-format
 msgid "Show"
 msgstr "Mostra"
 
-#: lib/safarimanager_web/components/admin/subjects/index.sface:20
-#: lib/safarimanager_web/components/admin/subjects/index.sface:109
-#: lib/safarimanager_web/components/admin/subjects/index.sface:162
+#: lib/safarimanager_web/live/admin/subjects/index.sface:19
+#: lib/safarimanager_web/live/admin/subjects/index.sface:107
+#: lib/safarimanager_web/live/admin/subjects/index.sface:160
 #, elixir-autogen, elixir-format
 msgid "Type"
 msgstr "Tipo"
 
-#: lib/safarimanager_web/components/admin/subjects/index.sface:138
 #: lib/safarimanager_web/components/confirm.ex:90
+#: lib/safarimanager_web/live/admin/subjects/index.sface:136
 #, elixir-autogen, elixir-format
 msgid "Cancel"
 msgstr "Annulla"
@@ -686,67 +689,82 @@ msgstr "Annulla"
 msgid "Don't show this message again"
 msgstr "Non mostrare più questo messaggio"
 
-#: lib/safarimanager_web/components/admin/subjects/subjects.ex:203
+#: lib/safarimanager_web/live/admin/subjects/subjects.ex:203
 #, elixir-autogen, elixir-format
 msgid "All subjects deleted successfully"
 msgstr "Tutti i soggetti sono stati eliminati con successo"
 
-#: lib/safarimanager_web/components/admin/subjects/subjects.ex:80
+#: lib/safarimanager_web/live/admin/subjects/subjects.ex:80
 #, elixir-autogen, elixir-format
 msgid "Subject created successfully"
 msgstr "Soggetto creato con successo"
 
-#: lib/safarimanager_web/components/admin/subjects/subjects.ex:180
+#: lib/safarimanager_web/live/admin/subjects/subjects.ex:180
 #, elixir-autogen, elixir-format
 msgid "Subject deleted successfully"
 msgstr "Soggetto eliminato con successo"
 
-#: lib/safarimanager_web/components/admin/subjects/subjects.ex:191
+#: lib/safarimanager_web/live/admin/subjects/subjects.ex:191
 #, elixir-autogen, elixir-format
 msgid "Subjects deleted successfully"
 msgstr "Soggetti eliminati con successo"
 
-#: lib/safarimanager_web/components/admin/subjects/subjects.ex:181
+#: lib/safarimanager_web/live/admin/subjects/subjects.ex:181
 #, elixir-autogen, elixir-format
 msgid "Unable to delete Subject"
 msgstr "Impossibile eliminare il soggetto"
 
-#: lib/safarimanager_web/components/admin/subjects/subjects.ex:194
+#: lib/safarimanager_web/live/admin/subjects/subjects.ex:194
 #, elixir-autogen, elixir-format
 msgid "Unable to delete Subjects"
 msgstr "Impossibile eliminare i soggetti"
 
-#: lib/safarimanager_web/components/admin/subjects/subjects.ex:155
+#: lib/safarimanager_web/live/admin/subjects/subjects.ex:155
 #, elixir-autogen, elixir-format
 msgid "Unable to retrieve this Subject"
 msgstr "Impossibile recuperare questo soggetto"
 
-#: lib/safarimanager_web/components/admin/subjects/index.sface:21
+#: lib/safarimanager_web/live/admin/subjects/index.sface:20
 #, elixir-autogen, elixir-format
 msgid "Inserted"
 msgstr "Creato"
 
-#: lib/safarimanager_web/components/admin/subjects/index.sface:16
+#: lib/safarimanager_web/live/admin/subjects/index.sface:15
 #, elixir-autogen, elixir-format
 msgid "Number"
 msgstr "Numero"
 
-#: lib/safarimanager_web/components/admin/subjects/index.sface:12
+#: lib/safarimanager_web/live/admin/subjects/index.sface:11
 #, elixir-autogen, elixir-format
 msgid "Subject details"
 msgstr "Dettagli soggetto"
 
-#: lib/safarimanager_web/components/admin/subjects/index.sface:22
+#: lib/safarimanager_web/live/admin/subjects/index.sface:21
 #, elixir-autogen, elixir-format
 msgid "Updated"
 msgstr "Aggiornato"
 
-#: lib/safarimanager_web/components/admin/subjects/index.sface:45
+#: lib/safarimanager_web/live/admin/subjects/index.sface:43
 #, elixir-autogen, elixir-format
 msgid "Edit subject"
 msgstr "Modifica soggetto"
 
-#: lib/safarimanager_web/components/admin/subjects/index.sface:43
+#: lib/safarimanager_web/live/admin/subjects/index.sface:41
 #, elixir-autogen, elixir-format
 msgid "New subject"
 msgstr "Nuovo soggetto"
+
+#: lib/safarimanager_web/components/confirm.ex:41
+#, elixir-autogen, elixir-format
+msgid "Are you sure?"
+msgstr "Sei sicuro?"
+
+#: lib/safarimanager_web/live/hooks/sidebar_hook.ex:26
+#, elixir-autogen, elixir-format
+msgid "Safari Manager is shutting down. You can close this page."
+msgstr "Arresto di Safari Manager in corso. Puoi chiudere questa pagina."
+
+#: lib/safarimanager_web/components/confirm.ex:43
+#, elixir-autogen, elixir-format
+msgid "Yes"
+msgstr "Sì"

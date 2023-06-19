@@ -1,4 +1,4 @@
-defmodule SMWeb.UserRegistrationLive do
+defmodule SMWeb.Live.UserRegistrationLive do
   use SMWeb, :live_view
 
   alias SM.Accounts

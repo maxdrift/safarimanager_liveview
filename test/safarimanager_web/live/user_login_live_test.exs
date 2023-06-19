@@ -1,4 +1,4 @@
-defmodule SMWeb.UserLoginLiveTest do
+defmodule SMWeb.Live.UserLoginLiveTest do
   use SMWeb.ConnCase
 
   import Phoenix.LiveViewTest

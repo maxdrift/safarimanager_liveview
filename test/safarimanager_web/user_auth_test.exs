@@ -4,6 +4,7 @@ defmodule SMWeb.UserAuthTest do
   alias Phoenix.LiveView
   alias SM.Accounts
   alias SMWeb.UserAuth
+
   import SM.AccountsFixtures
 
   @remember_me_cookie "_sm_web_user_remember_me"

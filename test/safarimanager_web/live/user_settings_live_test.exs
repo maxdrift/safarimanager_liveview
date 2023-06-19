@@ -1,4 +1,4 @@
-defmodule SMWeb.UserSettingsLiveTest do
+defmodule SMWeb.Live.UserSettingsLiveTest do
   use SMWeb.ConnCase
 
   alias SM.Accounts

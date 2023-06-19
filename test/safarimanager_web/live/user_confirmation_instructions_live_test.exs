@@ -1,4 +1,4 @@
-defmodule SMWeb.UserConfirmationInstructionsLiveTest do
+defmodule SMWeb.Live.UserConfirmationInstructionsLiveTest do
   use SMWeb.ConnCase
 
   import Phoenix.LiveViewTest

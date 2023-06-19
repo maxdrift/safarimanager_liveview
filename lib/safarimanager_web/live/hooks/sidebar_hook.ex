@@ -2,7 +2,8 @@ defmodule SMWeb.SidebarHook do
   require Logger
 
   import Phoenix.LiveView
-  import SMWeb.Confirm
+  import SMWeb.Components.Confirm
+  import SMWeb.Gettext
 
   def on_mount(:default, _params, _session, socket) do
     if connected?(socket) do
@@ -18,7 +19,12 @@ defmodule SMWeb.SidebarHook do
   end
 
   defp handle_info(:shutdown, socket) do
-    {:halt, put_flash(socket, :info, "Safari Manager is shutting down. You can close this page.")}
+    {:halt,
+     put_flash(
+       socket,
+       :info,
+       gettext("Safari Manager is shutting down. You can close this page.")
+     )}
   end
 
   defp handle_info(_event, socket), do: {:cont, socket}
@@ -31,9 +37,9 @@ defmodule SMWeb.SidebarHook do
 
     {:halt,
      confirm(socket, on_confirm,
-       title: "Shut Down",
-       description: "Are you sure you want to shut down Safari Manager now?",
-       confirm_text: "Shut Down",
+       title: gettext("Shut Down"),
+       description: gettext("Are you sure you want to shut down Safari Manager now?"),
+       confirm_text: gettext("Shut Down"),
        confirm_icon: "power"
      )}
   end

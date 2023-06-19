@@ -4,7 +4,7 @@ defmodule SMWeb.Components.Flash do
   """
   use SMWeb, :surface_component
 
-  import SMWeb.CoreComponents, only: [show: 1, hide: 2]
+  import SMWeb.Components.CoreComponents, only: [show: 1, hide: 2]
 
   data msg, :string
 

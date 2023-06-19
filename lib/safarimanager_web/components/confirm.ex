@@ -1,8 +1,8 @@
-defmodule SMWeb.Confirm do
+defmodule SMWeb.Components.Confirm do
   use Phoenix.Component
 
   import Phoenix.LiveView
-  import SMWeb.CoreComponents
+  import SMWeb.Components.CoreComponents
   import SMWeb.Gettext
 
   alias Phoenix.LiveView.JS
@@ -38,9 +38,9 @@ defmodule SMWeb.Confirm do
     opts =
       Keyword.validate!(
         opts,
-        title: "Are you sure?",
+        title: gettext("Are you sure?"),
         description: nil,
-        confirm_text: "Yes",
+        confirm_text: gettext("Yes"),
         confirm_icon: nil,
         danger: true,
         opt_out_id: nil

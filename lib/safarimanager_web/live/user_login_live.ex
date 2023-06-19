@@ -1,4 +1,4 @@
-defmodule SMWeb.UserLoginLive do
+defmodule SMWeb.Live.UserLoginLive do
   use SMWeb, :live_view
 
   on_mount SMWeb.SidebarHook
