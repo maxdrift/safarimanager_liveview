@@ -1,9 +1,10 @@
 defmodule SMWeb.Live.UserSettingsLiveTest do
   use SMWeb.ConnCase
 
-  alias SM.Accounts
   import Phoenix.LiveViewTest
   import SM.AccountsFixtures
+
+  alias SM.Accounts
 
   describe "Settings page" do
     test "renders settings page", %{conn: conn} do

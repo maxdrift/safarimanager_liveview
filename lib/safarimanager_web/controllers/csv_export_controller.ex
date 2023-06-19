@@ -1,9 +1,9 @@
 defmodule SMWeb.CSVExportController do
   use SMWeb, :controller
 
-  require Logger
-
   alias SM.CSVExport
+
+  require Logger
 
   @spec create(Plug.Conn.t(), any()) :: Plug.Conn.t()
   def create(conn, %{"entity" => entity}) do

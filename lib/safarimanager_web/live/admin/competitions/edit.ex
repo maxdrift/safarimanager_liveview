@@ -5,9 +5,9 @@ defmodule SMWeb.Live.Admin.Competitions.Edit do
   use SMWeb, :surface_live_component
 
   alias SM.Competitions
-  alias SMWeb.Live.Admin.Competitions.Form
   alias SMWeb.Components.Dialog
   alias SMWeb.Components.FormActions
+  alias SMWeb.Live.Admin.Competitions.Form
 
   data show, :boolean, default: false
   data action, :atom, values!: [:create, :edit]

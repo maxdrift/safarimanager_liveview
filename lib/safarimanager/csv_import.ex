@@ -12,8 +12,8 @@ defmodule SM.CSVImport do
   alias SM.Jurors
   alias SM.Organizations
   alias SM.Participants
-  alias SM.Subjects
   alias SM.Slides
+  alias SM.Subjects
   alias SM.Utils.CSVHelper
 
   @spec import(String.t(), String.t()) :: %{

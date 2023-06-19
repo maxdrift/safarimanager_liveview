@@ -6,12 +6,12 @@ defmodule SMWeb.Live.Admin.Organizations do
 
   alias SM.Organizations
   alias SM.Organizations.Organization
+  alias SMWeb.Components.ConfirmationDialog
+  alias SMWeb.Components.Layout
   alias SMWeb.Live.Admin.Organizations.Edit
   alias SMWeb.Live.Admin.Organizations.List
   alias SMWeb.Live.Admin.Organizations.Merge
   alias SMWeb.Live.Admin.Organizations.Show
-  alias SMWeb.Components.ConfirmationDialog
-  alias SMWeb.Components.Layout
   alias Surface.Components.Link
   alias Surface.Components.LivePatch
 

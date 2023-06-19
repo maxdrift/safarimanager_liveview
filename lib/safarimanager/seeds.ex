@@ -5,8 +5,8 @@ defmodule SM.Seeds do
   Seeds helper
   """
   alias SM.Categories
-  alias SM.SeedsCSV, as: SeedsCSV
   alias SM.Evaluations
+  alias SM.SeedsCSV, as: SeedsCSV
   alias SM.Subjects
 
   @default_categories [

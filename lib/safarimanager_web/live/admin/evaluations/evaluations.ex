@@ -6,11 +6,11 @@ defmodule SMWeb.Live.Admin.Evaluations do
 
   alias SM.Evaluations
   alias SM.Evaluations.Evaluation
+  alias SMWeb.Components.ConfirmationDialog
+  alias SMWeb.Components.Layout
   alias SMWeb.Live.Admin.Evaluations.Edit
   alias SMWeb.Live.Admin.Evaluations.List
   alias SMWeb.Live.Admin.Evaluations.Show
-  alias SMWeb.Components.ConfirmationDialog
-  alias SMWeb.Components.Layout
   alias Surface.Components.Link
   alias Surface.Components.LivePatch
 

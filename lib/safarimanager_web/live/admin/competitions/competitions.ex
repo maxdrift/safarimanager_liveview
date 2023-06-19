@@ -8,10 +8,10 @@ defmodule SMWeb.Live.Admin.Competitions do
   alias SM.Competitions.Competition
   alias SM.Evaluations
   alias SM.Organizations
+  alias SMWeb.Components.Layout
   alias SMWeb.Live.Admin.Competitions.Edit
   alias SMWeb.Live.Admin.Competitions.List
   alias SMWeb.Live.Admin.Competitions.Show
-  alias SMWeb.Components.Layout
   alias Surface.Components.Link
   alias Surface.Components.LivePatch
 

@@ -201,12 +201,10 @@ defmodule SM.Utils do
   """
   @spec valid_cli_flags?(String.t()) :: boolean()
   def valid_cli_flags?(flags) do
-    try do
-      _result = OptionParser.split(flags)
-      true
-    rescue
-      _ -> false
-    end
+    _result = OptionParser.split(flags)
+    true
+  rescue
+    _ -> false
   end
 
   @doc """
@@ -538,14 +536,12 @@ defmodule SM.Utils do
   """
   @spec get_port(:ranch.ref(), :inet.port_number()) :: :inet.port_number()
   def get_port(ref, default) do
-    try do
-      :ranch.get_addr(ref)
-    rescue
-      _ -> default
-    else
-      {_, port} when is_integer(port) -> port
-      _ -> default
-    end
+    :ranch.get_addr(ref)
+  rescue
+    _ -> default
+  else
+    {_, port} when is_integer(port) -> port
+    _ -> default
   end
 
   @doc """

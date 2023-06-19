@@ -60,7 +60,7 @@ defmodule SM.Application do
 
   # Internal
 
-  defp display_startup_info() do
+  defp display_startup_info do
     if Phoenix.Endpoint.server?(:safarimanager, SMWeb.Endpoint) do
       Logger.info("[Safari Manager] Application running at #{SMWeb.Endpoint.access_url()}")
     end

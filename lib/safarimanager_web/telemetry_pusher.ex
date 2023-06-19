@@ -31,7 +31,7 @@ defmodule SMWeb.TelemetryPusher do
     {:noreply, state}
   end
 
-  defp do_recurrent_thing() do
+  defp do_recurrent_thing do
     hostname = get_config!(:instance_id)
     PrometheusPush.push(%{job: "push-metrics", grouping_key: [{"instance", hostname}]})
   end

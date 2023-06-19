@@ -10,8 +10,8 @@ defmodule SMWeb.Live.Admin.Organizations.Merge do
   alias Surface.Components.Form.Field
   alias Surface.Components.Form.Label
   alias Surface.Components.Form.Reset
-  alias Surface.Components.Form.Submit
   alias Surface.Components.Form.Select
+  alias Surface.Components.Form.Submit
 
   require Logger
 

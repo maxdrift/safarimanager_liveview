@@ -10,9 +10,9 @@ defmodule SMWeb.Live.Jurors do
   alias SMWeb.Components.CompetitionHeader
   alias SMWeb.Components.Layout
   alias SMWeb.Components.StepsHeader
-  alias Surface.Components.LiveRedirect
   alias Surface.Components.Form
   alias Surface.Components.Form.TextInput
+  alias Surface.Components.LiveRedirect
 
   require Logger
 

@@ -11,8 +11,10 @@ defmodule SMWeb.Components.CoreComponents do
   """
   use Phoenix.Component
 
-  alias Phoenix.LiveView.JS
   import SMWeb.Gettext
+
+  alias Phoenix.HTML
+  alias Phoenix.LiveView.JS
 
   @doc """
   Wraps the given content in a modal dialog.
@@ -263,11 +265,11 @@ defmodule SMWeb.Components.CoreComponents do
     assigns
     |> assign(field: nil)
     |> assign_new(:name, fn ->
-      name = Phoenix.HTML.Form.input_name(f, field)
+      name = HTML.Form.input_name(f, field)
       if assigns.multiple, do: name <> "[]", else: name
     end)
-    |> assign_new(:id, fn -> Phoenix.HTML.Form.input_id(f, field) end)
-    |> assign_new(:value, fn -> Phoenix.HTML.Form.input_value(f, field) end)
+    |> assign_new(:id, fn -> HTML.Form.input_id(f, field) end)
+    |> assign_new(:value, fn -> HTML.Form.input_value(f, field) end)
     |> assign_new(:errors, fn -> translate_errors(f.errors || [], field) end)
     |> input()
   end
@@ -304,7 +306,7 @@ defmodule SMWeb.Components.CoreComponents do
         {@rest}
       >
         <option :if={@prompt}><%= @prompt %></option>
-        <%= Phoenix.HTML.Form.options_for_select(@options, @value) %>
+        <%= HTML.Form.options_for_select(@options, @value) %>
       </select>
       <.error :for={msg <- @errors}><%= msg %></.error>
     </div>
@@ -619,6 +621,6 @@ defmodule SMWeb.Components.CoreComponents do
   end
 
   defp input_equals?(val1, val2) do
-    Phoenix.HTML.html_escape(val1) == Phoenix.HTML.html_escape(val2)
+    HTML.html_escape(val1) == HTML.html_escape(val2)
   end
 end

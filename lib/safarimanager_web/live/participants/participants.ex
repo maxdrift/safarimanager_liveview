@@ -10,11 +10,11 @@ defmodule SMWeb.Live.Participants do
   alias SM.Competitions
   alias SM.Organizations
   alias SM.Participants
-  alias SMWeb.Live.Admin.Users.Form, as: UsersForm
   alias SMWeb.Components.CompetitionHeader
   alias SMWeb.Components.FormActions
   alias SMWeb.Components.Layout
   alias SMWeb.Components.StepsHeader
+  alias SMWeb.Live.Admin.Users.Form, as: UsersForm
   alias Surface.Components.Form
   alias Surface.Components.Form.TextInput
   alias Surface.Components.LiveRedirect

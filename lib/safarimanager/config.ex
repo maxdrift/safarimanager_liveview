@@ -4,8 +4,8 @@ defmodule SM.Config do
   @doc """
   Returns the longname if the distribution mode is configured to use long names.
   """
-  @spec longname() :: binary() | nil
-  def longname() do
+  @spec longname :: binary() | nil
+  def longname do
     host = SM.Utils.node_host()
 
     if host =~ "." do
@@ -16,28 +16,28 @@ defmodule SM.Config do
   @doc """
   Returns the home path.
   """
-  @spec home() :: String.t()
+  @spec home :: String.t()
   def home do
     Application.get_env(:safarimanager, :home) || user_home() || File.cwd!()
   end
 
-  defp user_home(), do: System.user_home() |> Path.expand()
+  defp user_home, do: System.user_home() |> Path.expand()
 
   @doc """
   Returns the configured port for the Safarimanager endpoint.
 
   Note that the value may be `0`.
   """
-  @spec port() :: pos_integer() | 0
-  def port() do
+  @spec port :: pos_integer() | 0
+  def port do
     Application.get_env(:safarimanager, SMWeb.Endpoint)[:http][:port]
   end
 
   @doc """
   Returns the base url path for the Safarimanager endpoint.
   """
-  @spec base_url_path() :: String.t()
-  def base_url_path() do
+  @spec base_url_path :: String.t()
+  def base_url_path do
     path = Application.get_env(:safarimanager, SMWeb.Endpoint)[:url][:path]
     String.trim_trailing(path, "/")
   end
@@ -86,7 +86,7 @@ defmodule SM.Config do
   Returns enabled feature flags.
   """
   @spec enabled_feature_flags() :: list()
-  def enabled_feature_flags() do
+  def enabled_feature_flags do
     for {flag, enabled?} <- feature_flags(), enabled?, do: flag
   end
 

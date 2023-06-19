@@ -8,10 +8,9 @@ defmodule SMWeb.Live.NewCompetition do
   alias SM.Competitions.Competition
   alias SM.Evaluations
   alias SM.Organizations
-
-  alias SMWeb.Live.Admin.Competitions.Form
   alias SMWeb.Components.FormActions
   alias SMWeb.Components.Layout
+  alias SMWeb.Live.Admin.Competitions.Form
 
   require Logger
 

@@ -1,9 +1,9 @@
 defmodule SMWeb.SidebarHook do
-  require Logger
-
   import Phoenix.LiveView
   import SMWeb.Components.Confirm
   import SMWeb.Gettext
+
+  require Logger
 
   def on_mount(:default, _params, _session, socket) do
     if connected?(socket) do

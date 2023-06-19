@@ -9,11 +9,11 @@ defmodule SMWeb.Live.Admin.Participants do
   alias SM.Competitions
   alias SM.Participants
   alias SM.Participants.Participant
+  alias SMWeb.Components.ConfirmationDialog
+  alias SMWeb.Components.Layout
   alias SMWeb.Live.Admin.Participants.Edit
   alias SMWeb.Live.Admin.Participants.List
   alias SMWeb.Live.Admin.Participants.Show
-  alias SMWeb.Components.ConfirmationDialog
-  alias SMWeb.Components.Layout
   alias Surface.Components.Link
   alias Surface.Components.LivePatch
 

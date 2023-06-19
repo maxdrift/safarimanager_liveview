@@ -6,7 +6,7 @@ if Mix.target() == :app do
       GenServer.start_link(__MODULE__, arg, name: __MODULE__)
     end
 
-    @impl true
+    @impl GenServer
     def init(_) do
       {:ok, pid} = ElixirKit.start()
       ref = Process.monitor(pid)
@@ -16,13 +16,13 @@ if Mix.target() == :app do
       {:ok, %{ref: ref}}
     end
 
-    @impl true
+    @impl GenServer
     def handle_info({:event, "open", url}, state) do
       open(url)
       {:noreply, state}
     end
 
-    @impl true
+    @impl GenServer
     def handle_info({:DOWN, ref, :process, _, :shutdown}, state) when ref == state.ref do
       SM.Config.shutdown()
       {:noreply, state}

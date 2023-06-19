@@ -10,14 +10,14 @@ defmodule SMWeb.Live.Admin.Subjects.Index do
   alias SMWeb.Components.Grid
   alias SMWeb.Components.Layout
   alias Surface.Components.Form
-  alias Surface.Components.Form.HiddenInput
-  alias Surface.Components.Form.Reset
-  alias Surface.Components.Form.Submit
   alias Surface.Components.Form.ErrorTag
   alias Surface.Components.Form.Field
+  alias Surface.Components.Form.HiddenInput
   alias Surface.Components.Form.Label
   alias Surface.Components.Form.NumberInput
+  alias Surface.Components.Form.Reset
   alias Surface.Components.Form.Select
+  alias Surface.Components.Form.Submit
   alias Surface.Components.Form.TextInput
   alias Surface.Components.LivePatch
 
@@ -132,25 +132,26 @@ defmodule SMWeb.Live.Admin.Subjects.Index do
 
   @impl Phoenix.LiveView
   def handle_params(%{"id" => id}, _url, socket) do
-    with {:ok, subject} <- Subjects.get(id) do
-      case socket.assigns.live_action do
-        :show ->
-          {:noreply, assign(socket, editing_entity: subject)}
+    case Subjects.get(id) do
+      {:ok, subject} ->
+        case socket.assigns.live_action do
+          :show ->
+            {:noreply, assign(socket, editing_entity: subject)}
 
-        :edit ->
-          changeset = change(subject, %{})
+          :edit ->
+            changeset = change(subject, %{})
 
-          socket =
-            socket
-            |> assign(
-              editing_entity: subject,
-              editing_changeset: changeset,
-              action: :edit
-            )
+            socket =
+              socket
+              |> assign(
+                editing_entity: subject,
+                editing_changeset: changeset,
+                action: :edit
+              )
 
-          {:noreply, socket}
-      end
-    else
+            {:noreply, socket}
+        end
+
       {:error, reason} ->
         socket = put_flash(socket, :error, gettext("Unable to retrieve this Subject"))
         Logger.error("Error retrieving Subject #{id}: #{inspect(reason)}")

@@ -1,10 +1,11 @@
 defmodule SM.AccountsTest do
   use SM.DataCase
 
-  alias SM.Accounts
-
   import SM.AccountsFixtures
-  alias SM.Accounts.{User, UserToken}
+
+  alias SM.Accounts
+  alias SM.Accounts.User
+  alias SM.Accounts.UserToken
 
   describe "get_user_by_email/1" do
     test "does not return the user if the email does not exist" do

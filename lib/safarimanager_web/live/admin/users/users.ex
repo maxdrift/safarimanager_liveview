@@ -6,12 +6,11 @@ defmodule SMWeb.Live.Admin.Users do
 
   alias SM.Accounts
   alias SM.Accounts.User
-
+  alias SMWeb.Components.ConfirmationDialog
+  alias SMWeb.Components.Layout
   alias SMWeb.Live.Admin.Users.Edit
   alias SMWeb.Live.Admin.Users.List
   alias SMWeb.Live.Admin.Users.Show
-  alias SMWeb.Components.ConfirmationDialog
-  alias SMWeb.Components.Layout
   alias Surface.Components.Link
   alias Surface.Components.LivePatch
 

@@ -194,25 +194,31 @@ defmodule SM.Organizations do
     # Make sure the destination ID is not among the deleted ones.
     source_ids = source_ids -- [dest_id]
 
-    with %Ecto.Changeset{valid?: true} <- Organization.merge_changeset(source_ids, dest_id) do
-      user_query = from(u in User, where: u.organization_id in ^source_ids)
-      competition_query = from(c in Competition, where: c.organization_id in ^source_ids)
-      organization_query = from(o in Organization, where: o.id in ^source_ids)
+    case Organization.merge_changeset(source_ids, dest_id) do
+      %Ecto.Changeset{valid?: true} ->
+        user_query = from(u in User, where: u.organization_id in ^source_ids)
+        competition_query = from(c in Competition, where: c.organization_id in ^source_ids)
+        organization_query = from(o in Organization, where: o.id in ^source_ids)
 
-      Multi.new()
-      |> Multi.one(:organization, from(Organization, where: [id: ^dest_id]))
-      |> Multi.update_all(:update_users, user_query, set: [organization_id: dest_id])
-      |> Multi.update_all(:update_competitions, competition_query, set: [organization_id: dest_id])
-      |> Multi.delete_all(:delete_organizations, organization_query)
-      |> Repo.transaction()
-      |> case do
-        {:ok, %{organization: organization}} ->
-          notify_subscribers({:ok, organization}, [:organization, :deleted])
+        Multi.new()
+        |> Multi.one(:organization, from(Organization, where: [id: ^dest_id]))
+        |> Multi.update_all(:update_users, user_query, set: [organization_id: dest_id])
+        |> Multi.update_all(:update_competitions, competition_query,
+          set: [organization_id: dest_id]
+        )
+        |> Multi.delete_all(:delete_organizations, organization_query)
+        |> Repo.transaction()
+        |> case do
+          {:ok, %{organization: organization}} ->
+            notify_subscribers({:ok, organization}, [:organization, :deleted])
 
-        {:error, failed_operation, failed_value, _changes_so_far} ->
-          notify_subscribers({:error, {failed_operation, failed_value}}, [:organization, :deleted])
-      end
-    else
+          {:error, failed_operation, failed_value, _changes_so_far} ->
+            notify_subscribers({:error, {failed_operation, failed_value}}, [
+              :organization,
+              :deleted
+            ])
+        end
+
       %Ecto.Changeset{valid?: false} = changeset ->
         notify_subscribers({:error, changeset}, [:organization, :deleted])
     end
