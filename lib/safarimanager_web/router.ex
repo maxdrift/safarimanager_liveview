@@ -75,7 +75,6 @@ defmodule SMWeb.Router do
       end
 
       live "/gallery", Gallery
-      live "/jury_viewer", JuryViewer
 
       scope "/users" do
         live "/settings", UserSettingsLive, :edit
