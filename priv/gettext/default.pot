@@ -10,7 +10,8 @@
 msgid ""
 msgstr ""
 
-#: lib/safarimanager_web/components/core_components.ex:477
+#: lib/safarimanager_web/components/admin/subjects/index.sface:171
+#: lib/safarimanager_web/components/core_components.ex:448
 #, elixir-autogen, elixir-format
 msgid "Actions"
 msgstr ""
@@ -89,8 +90,7 @@ msgstr ""
 msgid "Theme"
 msgstr ""
 
-#: lib/safarimanager_web/components/core_components.ex:75
-#: lib/safarimanager_web/components/core_components.ex:180
+#: lib/safarimanager_web/components/core_components.ex:151
 #: lib/safarimanager_web/components/flash.ex:76
 #, elixir-autogen, elixir-format
 msgid "close"
@@ -230,10 +230,6 @@ msgid "slides"
 msgstr ""
 
 #, elixir-format
-msgid "subjects"
-msgstr ""
-
-#, elixir-format
 msgid "users"
 msgstr ""
 
@@ -354,7 +350,7 @@ msgstr ""
 msgid "Forgot your password?"
 msgstr ""
 
-#: lib/safarimanager_web/live/user_confirmation_instructions_live.ex:51
+#: lib/safarimanager_web/live/user_confirmation_instructions_live.ex:50
 #, elixir-autogen, elixir-format
 msgid "If your email is in our system and it has not been confirmed yet, you will receive an email with instructions shortly."
 msgstr ""
@@ -369,9 +365,9 @@ msgstr ""
 msgid "Keep me logged in"
 msgstr ""
 
-#: lib/safarimanager_web/live/user_confirmation_instructions_live.ex:31
-#: lib/safarimanager_web/live/user_confirmation_live.ex:22
-#: lib/safarimanager_web/live/user_reset_password_live.ex:40
+#: lib/safarimanager_web/live/user_confirmation_instructions_live.ex:30
+#: lib/safarimanager_web/live/user_confirmation_live.ex:21
+#: lib/safarimanager_web/live/user_reset_password_live.ex:39
 #, elixir-autogen, elixir-format
 msgid "Log in"
 msgstr ""
@@ -396,7 +392,7 @@ msgstr ""
 msgid "Password"
 msgstr ""
 
-#: lib/safarimanager_web/live/user_reset_password_live.ex:67
+#: lib/safarimanager_web/live/user_reset_password_live.ex:66
 #, elixir-autogen, elixir-format
 msgid "Password reset successfully."
 msgstr ""
@@ -425,7 +421,7 @@ msgstr ""
 msgid "Reset Password"
 msgstr ""
 
-#: lib/safarimanager_web/live/user_reset_password_live.ex:85
+#: lib/safarimanager_web/live/user_reset_password_live.ex:84
 #, elixir-autogen, elixir-format
 msgid "Reset password link is invalid or it has expired."
 msgstr ""
@@ -467,12 +463,12 @@ msgstr ""
 msgid "Sign up"
 msgstr ""
 
-#: lib/safarimanager_web/live/user_confirmation_live.ex:53
+#: lib/safarimanager_web/live/user_confirmation_live.ex:52
 #, elixir-autogen, elixir-format
 msgid "User confirmation link is invalid or it has expired."
 msgstr ""
 
-#: lib/safarimanager_web/live/user_confirmation_live.ex:38
+#: lib/safarimanager_web/live/user_confirmation_live.ex:37
 #, elixir-autogen, elixir-format
 msgid "User confirmed successfully."
 msgstr ""
@@ -507,7 +503,7 @@ msgstr ""
 msgid "Print"
 msgstr ""
 
-#: lib/safarimanager_web/controllers/print_results_controller.ex:21
+#: lib/safarimanager_web/controllers/print_results_controller.ex:24
 #, elixir-autogen, elixir-format
 msgid "General Classification"
 msgstr ""
@@ -530,4 +526,227 @@ msgstr ""
 #: lib/safarimanager_web/components/slides/slide_selection.ex:208
 #, elixir-autogen, elixir-format
 msgid "Unable to import slide selection: subject not found"
+msgstr ""
+
+#: lib/safarimanager_web/components/grid.ex:183
+#, elixir-autogen, elixir-format
+msgid "Are you sure you want to delete 1 record?"
+msgstr ""
+
+#: lib/safarimanager_web/components/grid.ex:168
+#, elixir-autogen, elixir-format
+msgid "Are you sure you want to delete all records?"
+msgstr ""
+
+#: lib/safarimanager_web/components/admin/competitions/competitions.ex:86
+#: lib/safarimanager_web/components/grid.ex:151
+#, elixir-autogen, elixir-format
+msgid "Are you sure you want to delete this record?"
+msgstr ""
+
+#: lib/safarimanager_web/components/admin/subjects/index.sface:27
+#, elixir-autogen, elixir-format
+msgid "Close"
+msgstr ""
+
+#: lib/safarimanager_web/components/admin/subjects/index.sface:159
+#, elixir-autogen, elixir-format
+msgid "Coeff."
+msgstr ""
+
+#: lib/safarimanager_web/components/admin/subjects/index.sface:19
+#: lib/safarimanager_web/components/admin/subjects/index.sface:94
+#, elixir-autogen, elixir-format
+msgid "Coefficient"
+msgstr ""
+
+#: lib/safarimanager_web/components/grid.ex:36
+#, elixir-autogen, elixir-format
+msgid "Create"
+msgstr ""
+
+#: lib/safarimanager_web/components/admin/subjects/index.sface:165
+#, elixir-autogen, elixir-format
+msgid "Created"
+msgstr ""
+
+#: lib/safarimanager_web/components/admin/competitions/competitions.ex:87
+#: lib/safarimanager_web/components/admin/competitions/competitions.ex:110
+#: lib/safarimanager_web/components/admin/subjects/index.sface:179
+#: lib/safarimanager_web/components/grid.ex:47
+#: lib/safarimanager_web/components/grid.ex:152
+#: lib/safarimanager_web/components/grid.ex:169
+#: lib/safarimanager_web/components/grid.ex:184
+#: lib/safarimanager_web/components/grid.ex:203
+#, elixir-autogen, elixir-format
+msgid "Delete"
+msgstr ""
+
+#: lib/safarimanager_web/components/grid.ex:167
+#, elixir-autogen, elixir-format
+msgid "Delete all records"
+msgstr ""
+
+#: lib/safarimanager_web/components/admin/competitions/competitions.ex:85
+#: lib/safarimanager_web/components/grid.ex:150
+#: lib/safarimanager_web/components/grid.ex:182
+#, elixir-autogen, elixir-format
+msgid "Delete record"
+msgstr ""
+
+#: lib/safarimanager_web/components/admin/competitions/competitions.ex:104
+#: lib/safarimanager_web/components/grid.ex:197
+#, elixir-autogen, elixir-format
+msgid "Delete records"
+msgstr ""
+
+#: lib/safarimanager_web/components/admin/subjects/index.sface:174
+#, elixir-autogen, elixir-format
+msgid "Edit"
+msgstr ""
+
+#: lib/safarimanager_web/components/admin/subjects/subjects.ex:100
+#, elixir-autogen, elixir-format
+msgid "Edited subject"
+msgstr ""
+
+#: lib/safarimanager_web/components/grid.ex:38
+#, elixir-autogen, elixir-format
+msgid "Export to CSV"
+msgstr ""
+
+#: lib/safarimanager_web/components/grid.ex:46
+#, elixir-autogen, elixir-format
+msgid "Merge into"
+msgstr ""
+
+#: lib/safarimanager_web/components/admin/subjects/index.sface:168
+#, elixir-autogen, elixir-format
+msgid "Modified"
+msgstr ""
+
+#: lib/safarimanager_web/components/admin/subjects/index.sface:17
+#: lib/safarimanager_web/components/admin/subjects/index.sface:70
+#: lib/safarimanager_web/components/admin/subjects/index.sface:155
+#, elixir-autogen, elixir-format
+msgid "Name"
+msgstr ""
+
+#: lib/safarimanager_web/components/admin/subjects/index.sface:152
+#, elixir-autogen, elixir-format
+msgid "Num."
+msgstr ""
+
+#: lib/safarimanager_web/components/admin/subjects/index.sface:58
+#, elixir-autogen, elixir-format
+msgid "Numeric ID"
+msgstr ""
+
+#: lib/safarimanager_web/components/admin/subjects/index.sface:133
+#, elixir-autogen, elixir-format
+msgid "Save"
+msgstr ""
+
+#: lib/safarimanager_web/components/admin/subjects/index.sface:18
+#: lib/safarimanager_web/components/admin/subjects/index.sface:82
+#, elixir-autogen, elixir-format
+msgid "Scientific Name"
+msgstr ""
+
+#: lib/safarimanager_web/components/admin/subjects/index.sface:99
+#, elixir-autogen, elixir-format
+msgid "Select a coefficient"
+msgstr ""
+
+#: lib/safarimanager_web/components/admin/subjects/index.sface:114
+#, elixir-autogen, elixir-format
+msgid "Select a type"
+msgstr ""
+
+#: lib/safarimanager_web/components/admin/subjects/index.sface:173
+#, elixir-autogen, elixir-format
+msgid "Show"
+msgstr ""
+
+#: lib/safarimanager_web/components/admin/subjects/index.sface:20
+#: lib/safarimanager_web/components/admin/subjects/index.sface:109
+#: lib/safarimanager_web/components/admin/subjects/index.sface:162
+#, elixir-autogen, elixir-format
+msgid "Type"
+msgstr ""
+
+#: lib/safarimanager_web/components/admin/subjects/index.sface:138
+#: lib/safarimanager_web/components/confirm.ex:90
+#, elixir-autogen, elixir-format
+msgid "Cancel"
+msgstr ""
+
+#: lib/safarimanager_web/components/confirm.ex:84
+#, elixir-autogen, elixir-format
+msgid "Don't show this message again"
+msgstr ""
+
+#: lib/safarimanager_web/components/admin/subjects/subjects.ex:203
+#, elixir-autogen, elixir-format
+msgid "All subjects deleted successfully"
+msgstr ""
+
+#: lib/safarimanager_web/components/admin/subjects/subjects.ex:80
+#, elixir-autogen, elixir-format
+msgid "Subject created successfully"
+msgstr ""
+
+#: lib/safarimanager_web/components/admin/subjects/subjects.ex:180
+#, elixir-autogen, elixir-format
+msgid "Subject deleted successfully"
+msgstr ""
+
+#: lib/safarimanager_web/components/admin/subjects/subjects.ex:191
+#, elixir-autogen, elixir-format
+msgid "Subjects deleted successfully"
+msgstr ""
+
+#: lib/safarimanager_web/components/admin/subjects/subjects.ex:181
+#, elixir-autogen, elixir-format
+msgid "Unable to delete Subject"
+msgstr ""
+
+#: lib/safarimanager_web/components/admin/subjects/subjects.ex:194
+#, elixir-autogen, elixir-format
+msgid "Unable to delete Subjects"
+msgstr ""
+
+#: lib/safarimanager_web/components/admin/subjects/subjects.ex:155
+#, elixir-autogen, elixir-format
+msgid "Unable to retrieve this Subject"
+msgstr ""
+
+#: lib/safarimanager_web/components/admin/subjects/index.sface:21
+#, elixir-autogen, elixir-format
+msgid "Inserted"
+msgstr ""
+
+#: lib/safarimanager_web/components/admin/subjects/index.sface:16
+#, elixir-autogen, elixir-format
+msgid "Number"
+msgstr ""
+
+#: lib/safarimanager_web/components/admin/subjects/index.sface:12
+#, elixir-autogen, elixir-format
+msgid "Subject details"
+msgstr ""
+
+#: lib/safarimanager_web/components/admin/subjects/index.sface:22
+#, elixir-autogen, elixir-format
+msgid "Updated"
+msgstr ""
+
+#: lib/safarimanager_web/components/admin/subjects/index.sface:45
+#, elixir-autogen, elixir-format
+msgid "Edit subject"
+msgstr ""
+
+#: lib/safarimanager_web/components/admin/subjects/index.sface:43
+#, elixir-autogen, elixir-format
+msgid "New subject"
 msgstr ""

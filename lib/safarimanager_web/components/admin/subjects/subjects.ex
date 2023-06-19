@@ -6,11 +6,19 @@ defmodule SMWeb.Components.Admin.SubjectsLive.Index do
 
   alias SM.Subjects
   alias SM.Subjects.Subject
-  alias SMWeb.Components.Admin.Subjects.Edit
-  alias SMWeb.Components.Admin.Subjects.Show
   alias SMWeb.Components.Column
   alias SMWeb.Components.Grid
   alias SMWeb.Components.Layout
+  alias Surface.Components.Form
+  alias Surface.Components.Form.HiddenInput
+  alias Surface.Components.Form.Reset
+  alias Surface.Components.Form.Submit
+  alias Surface.Components.Form.ErrorTag
+  alias Surface.Components.Form.Field
+  alias Surface.Components.Form.Label
+  alias Surface.Components.Form.NumberInput
+  alias Surface.Components.Form.Select
+  alias Surface.Components.Form.TextInput
   alias Surface.Components.LivePatch
 
   require Logger
@@ -23,10 +31,23 @@ defmodule SMWeb.Components.Admin.SubjectsLive.Index do
   def mount(_params, _session, socket) do
     _result = subscribe(socket)
 
+    changeset_action =
+      case socket.assigns.live_action do
+        :new -> :create
+        :edit -> :edit
+        _index -> nil
+      end
+
     socket =
       socket
       |> load_entities()
       |> reset_current_editing()
+      # TODO: Maybe use preload here
+      |> assign(
+        action: changeset_action,
+        subject_types: Subjects.list_subject_types(),
+        coefficients: Subjects.list_subject_coefficients()
+      )
 
     {:ok, socket}
   end
@@ -56,7 +77,6 @@ defmodule SMWeb.Components.Admin.SubjectsLive.Index do
           |> reset_current_editing()
           |> push_patch(to: "/admin/subjects")
 
-        Edit.hide("edit-dialog")
         socket = put_flash(socket, :info, gettext("Subject created successfully"))
         {:noreply, socket}
 
@@ -76,8 +96,6 @@ defmodule SMWeb.Components.Admin.SubjectsLive.Index do
           socket
           |> reset_current_editing()
           |> push_patch(to: "/admin/subjects")
-
-        Edit.hide("edit-dialog")
 
         socket = put_flash(socket, :info, ~s(#{gettext("Edited subject")} "#{entity.name}"))
 
@@ -114,21 +132,21 @@ defmodule SMWeb.Components.Admin.SubjectsLive.Index do
 
   @impl Phoenix.LiveView
   def handle_params(%{"id" => id}, _url, socket) do
-    with {:ok, subject} <- get(id) do
+    with {:ok, subject} <- Subjects.get(id) do
       case socket.assigns.live_action do
         :show ->
-          Show.show("show-dialog", subject)
-
-          {:noreply, socket}
+          {:noreply, assign(socket, editing_entity: subject)}
 
         :edit ->
           changeset = change(subject, %{})
-          Edit.show("edit-dialog", :edit)
 
           socket =
             socket
-            |> assign(:editing_entity, subject)
-            |> assign(:editing_changeset, changeset)
+            |> assign(
+              editing_entity: subject,
+              editing_changeset: changeset,
+              action: :edit
+            )
 
           {:noreply, socket}
       end
@@ -146,8 +164,12 @@ defmodule SMWeb.Components.Admin.SubjectsLive.Index do
         {:noreply, socket}
 
       :new ->
-        Edit.show("edit-dialog", :create)
-        {:noreply, reset_current_editing(socket)}
+        socket =
+          socket
+          |> reset_current_editing()
+          |> assign(action: :create)
+
+        {:noreply, socket}
     end
   end
 
@@ -221,14 +243,6 @@ defmodule SMWeb.Components.Admin.SubjectsLive.Index do
 
   # Internal
 
-  defp get(id) do
-    Subjects.get(id)
-  end
-
-  defp new do
-    %Subject{}
-  end
-
   defp change(subject, params) do
     Subjects.change(subject, params)
   end
@@ -287,7 +301,7 @@ defmodule SMWeb.Components.Admin.SubjectsLive.Index do
   end
 
   defp reset_current_editing(socket) do
-    entity = new()
+    entity = %Subject{}
 
     changeset = change(entity, %{})
 

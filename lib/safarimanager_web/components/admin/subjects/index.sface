@@ -1,14 +1,144 @@
 <Layout current_page={~p"/admin/subjects"} current_user={@current_user}>
-  <Show id="show-dialog" redirect_to="/admin/subjects" entity_name="subject" />
-  <Edit
+  <div
+    :if={@live_action == :show}
+    id="show-dialog"
+    class="modal modal-open"
+    :on-window-keydown={JS.patch("/admin/subjects")}
+    phx-key="Escape"
+  >
+    <div class="modal-box">
+      <div class="card-title">
+        {gettext("Subject details")}
+      </div>
+      <div class="card-body">
+        <ul class="leading-loose">
+          <li><b>{gettext("Number")}:</b> {@editing_entity.numeric_id}</li>
+          <li><b>{gettext("Name")}:</b> {@editing_entity.name}</li>
+          <li><b>{gettext("Scientific Name")}:</b> {@editing_entity.scientific_name}</li>
+          <li><b>{gettext("Coefficient")}:</b> {@editing_entity.coefficient}</li>
+          <li><b>{gettext("Type")}:</b> {@editing_entity.type}</li>
+          <li><b>{gettext("Inserted")}:</b> {format_date(@editing_entity.inserted_at)}</li>
+          <li><b>{gettext("Updated")}:</b> {format_date(@editing_entity.updated_at)}</li>
+        </ul>
+      </div>
+      <div class="modal-action">
+        <button :on-click={JS.patch("/admin/subjects")} class="btn btn-md btn-ghost">
+          {gettext("Close")}
+        </button>
+      </div>
+    </div>
+  </div>
+  <div
+    :if={@live_action in [:new, :edit]}
     id="edit-dialog"
-    entity={@editing_entity}
-    changeset={@editing_changeset}
-    validate="validate"
-    submit="submit"
-    redirect_to="/admin/subjects"
-    entity_name="subject"
-  />
+    class="modal modal-open"
+    :on-window-keydown={JS.patch("/admin/subjects")}
+    phx-key="Escape"
+  >
+    <div class="modal-box">
+      <div class="card-title">
+        {#if @live_action == :new}
+          {gettext("New subject")}
+        {#else}
+          {gettext("Edit subject")}
+        {/if}
+      </div>
+      <Form
+        for={@editing_changeset}
+        change="validate"
+        submit="submit"
+        as={:entity}
+        opts={autocomplete: "off"}
+      >
+        <div class="card-body">
+          <Field name={:numeric_id} class="form-control">
+            <Label class="label">
+              <span class="label-text">{gettext("Numeric ID")}</span>
+            </Label>
+            <NumberInput
+              class={state_class("input input-bordered", @editing_changeset, :numeric_id, [])}
+              opts={phx_debounce: "1000"}
+            />
+            <Label class="label h-7">
+              <ErrorTag />
+            </Label>
+          </Field>
+          <Field name={:name} class="form-control">
+            <Label class="label">
+              <span class="label-text">{gettext("Name")}</span>
+            </Label>
+            <TextInput
+              class={state_class("input input-bordered", @editing_changeset, :name, [])}
+              opts={phx_debounce: "1000"}
+            />
+            <Label class="label h-7">
+              <ErrorTag />
+            </Label>
+          </Field>
+          <Field name={:scientific_name} class="form-control">
+            <Label class="label">
+              <span class="label-text">{gettext("Scientific Name")}</span>
+            </Label>
+            <TextInput
+              class={state_class("input input-bordered", @editing_changeset, :scientific_name, [])}
+              opts={phx_debounce: "1000"}
+            />
+            <Label class="label h-7">
+              <ErrorTag />
+            </Label>
+          </Field>
+          <Field name={:coefficient} class="form-control">
+            <Label class="label">
+              <span class="label-text">{gettext("Coefficient")}</span>
+            </Label>
+            <Select
+              options={@coefficients}
+              selected={@editing_entity.coefficient}
+              prompt={gettext("Select a coefficient")}
+              class={state_class("input input-bordered", @editing_changeset, :coefficient, [])}
+              opts={phx_debounce: "1000"}
+            />
+            <Label class="label h-7">
+              <ErrorTag />
+            </Label>
+          </Field>
+          <Field name={:type} class="form-control">
+            <Label class="label">
+              <span class="label-text">{gettext("Type")}</span>
+            </Label>
+            <Select
+              options={@subject_types}
+              selected={@editing_entity.type}
+              prompt={gettext("Select a type")}
+              class={state_class("input input-bordered", @editing_changeset, :type, [])}
+              opts={phx_debounce: "1000"}
+            />
+            <Label class="label h-7">
+              <ErrorTag />
+            </Label>
+          </Field>
+          <HiddenInput field={:_action} value={@action} />
+        </div>
+        <div class="modal-action">
+          <Submit
+            values={[action: @action]}
+            class={
+              "btn btn-md",
+              "btn-success": @editing_changeset.action && @editing_changeset.valid?,
+              "btn-disabled": !(@editing_changeset.action && @editing_changeset.valid?)
+            }
+          >
+            {gettext("Save")}
+          </Submit>
+          <Reset
+            click={JS.patch("/admin/subjects")}
+            class="btn btn-md btn-ghost"
+            value={gettext("Cancel")}
+          />
+        </div>
+      </Form>
+    </div>
+  </div>
 
   <Grid
     id="subjects-list"
@@ -36,7 +166,7 @@
     <Column title={gettext("Modified")} class="w-2/12">
       {format_date(item.updated_at)}
     </Column>
-    <Column title={gettext("Actions")} class="w-2/12">
+    <Column title={gettext("Actions")} class="w-4">
       <div class="overflow-x-auto">
         <LivePatch to={~p"/admin/subjects/#{item.id}"} class="btn btn-xs btn-outline btn-info">{gettext("Show")}</LivePatch>
         <LivePatch to={~p"/admin/subjects/#{item.id}/edit"} class="btn btn-xs btn-warning">{gettext("Edit")}</LivePatch>

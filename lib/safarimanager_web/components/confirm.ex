@@ -1,8 +1,9 @@
 defmodule SMWeb.Confirm do
   use Phoenix.Component
 
-  import SMWeb.CoreComponents
   import Phoenix.LiveView
+  import SMWeb.CoreComponents
+  import SMWeb.Gettext
 
   alias Phoenix.LiveView.JS
 
@@ -80,13 +81,13 @@ defmodule SMWeb.Confirm do
         <label :if={@opt_out_id} class="mt-6 flex items-center">
           <input class="checkbox mr-3" type="checkbox" name="opt_out_id" value={@opt_out_id} />
           <span class="text-sm">
-            Don't show this message again
+            <%= gettext("Don't show this message again") %>
           </span>
         </label>
         <div class="mt-8 flex justify-end">
           <div class={["flex gap-2", @danger && "flex-row-reverse"]}>
             <button class="btn" type="button" phx-click={hide_modal(@id)}>
-              Cancel
+              <%= gettext("Cancel") %>
             </button>
             <button class={["btn", if(@danger, do: "btn-error", else: "btn-info")]} type="submit">
               <Heroicons.LiveView.icon
