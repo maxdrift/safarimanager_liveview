@@ -127,7 +127,8 @@ config :surface, :components, [
   {SMWeb.Live.Admin.Users.Form, propagate_context_to_slots: false},
   {SMWeb.Live.Admin.Competitions.Form, propagate_context_to_slots: false},
   {SMWeb.Components.UploadDropArea, propagate_context_to_slots: false},
-  {SMWeb.Components.Grid, propagate_context_to_slots: false}
+  {SMWeb.Components.Grid, propagate_context_to_slots: false},
+  {SMWeb.Components.SMField, propagate_context_to_slots: true}
 ]
 
 config :safarimanager, SM.PromEx,

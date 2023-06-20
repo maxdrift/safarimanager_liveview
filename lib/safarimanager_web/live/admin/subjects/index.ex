@@ -7,13 +7,14 @@ defmodule SMWeb.Live.Admin.Subjects.Index do
   alias SM.Subjects
   alias SM.Subjects.Subject
   alias SMWeb.Components.Column
+  alias SMWeb.Components.DateTimeString
+  alias SMWeb.Components.FieldsList
+  alias SMWeb.Components.FieldsListItem
   alias SMWeb.Components.Grid
   alias SMWeb.Components.Layout
+  alias SMWeb.Components.SMField
   alias Surface.Components.Form
-  alias Surface.Components.Form.ErrorTag
-  alias Surface.Components.Form.Field
   alias Surface.Components.Form.HiddenInput
-  alias Surface.Components.Form.Label
   alias Surface.Components.Form.NumberInput
   alias Surface.Components.Form.Reset
   alias Surface.Components.Form.Select
@@ -25,7 +26,7 @@ defmodule SMWeb.Live.Admin.Subjects.Index do
 
   @page_size 50
 
-  on_mount SMWeb.SidebarHook
+  on_mount(SMWeb.SidebarHook)
 
   @impl Phoenix.LiveView
   def mount(_params, _session, socket) do
@@ -42,7 +43,6 @@ defmodule SMWeb.Live.Admin.Subjects.Index do
       socket
       |> load_entities()
       |> reset_current_editing()
-      # TODO: Maybe use preload here
       |> assign(
         action: changeset_action,
         subject_types: Subjects.list_subject_types(),
@@ -56,11 +56,11 @@ defmodule SMWeb.Live.Admin.Subjects.Index do
   # Create/Edit dialog validate callback
   def handle_event("validate", %{"entity" => params}, socket) do
     changeset =
-      socket.assigns.editing_entity
+      socket.assigns.record
       |> change(params)
       |> Map.put(:action, :validate)
 
-    socket = assign(socket, :editing_changeset, changeset)
+    socket = assign(socket, :changeset, changeset)
     {:noreply, socket}
   end
 
@@ -81,7 +81,7 @@ defmodule SMWeb.Live.Admin.Subjects.Index do
         {:noreply, socket}
 
       {:error, changeset} ->
-        {:noreply, assign(socket, :editing_changeset, changeset)}
+        {:noreply, assign(socket, :changeset, changeset)}
     end
   end
 
@@ -90,7 +90,7 @@ defmodule SMWeb.Live.Admin.Subjects.Index do
         %{"entity" => %{"_action" => "edit"} = params},
         socket
       ) do
-    case Subjects.update(socket.assigns.editing_entity, params) do
+    case Subjects.update(socket.assigns.record, params) do
       {:ok, entity} ->
         socket =
           socket
@@ -136,7 +136,7 @@ defmodule SMWeb.Live.Admin.Subjects.Index do
       {:ok, subject} ->
         case socket.assigns.live_action do
           :show ->
-            {:noreply, assign(socket, editing_entity: subject)}
+            {:noreply, assign(socket, record: subject)}
 
           :edit ->
             changeset = change(subject, %{})
@@ -144,8 +144,8 @@ defmodule SMWeb.Live.Admin.Subjects.Index do
             socket =
               socket
               |> assign(
-                editing_entity: subject,
-                editing_changeset: changeset,
+                record: subject,
+                changeset: changeset,
                 action: :edit
               )
 
@@ -307,8 +307,8 @@ defmodule SMWeb.Live.Admin.Subjects.Index do
     changeset = change(entity, %{})
 
     socket
-    |> assign(:editing_entity, entity)
-    |> assign(:editing_changeset, changeset)
+    |> assign(:record, entity)
+    |> assign(:changeset, changeset)
   end
 
   defp last_entity_id(items, opts) do
@@ -318,9 +318,5 @@ defmodule SMWeb.Live.Admin.Subjects.Index do
       [] -> nil
       [last | _rest] -> Map.get(last, id_field)
     end
-  end
-
-  defp format_date(datetime) do
-    Calendar.strftime(datetime, "%d/%m/%Y %I:%M:%S %P %Z")
   end
 end

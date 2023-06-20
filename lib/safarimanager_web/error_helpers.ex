@@ -44,8 +44,13 @@ defmodule SMWeb.ErrorHelpers do
     end
   end
 
+  @spec input_state_class(Ecto.Changeset.t(), atom(), Keyword.t()) :: String.t()
+  def input_state_class(changeset, field, opts \\ []) do
+    state_class("input input-bordered", changeset, field, opts)
+  end
+
   @spec state_class(String.t(), Ecto.Changeset.t(), atom(), Keyword.t()) :: String.t()
-  def state_class(class, changeset, field, opts) do
+  def state_class(class, changeset, field, opts \\ []) do
     class =
       cond do
         # no state checking
@@ -54,6 +59,22 @@ defmodule SMWeb.ErrorHelpers do
         !changeset.action -> class
         changeset.errors[field] -> "#{class} input-error"
         true -> "#{class} input-success"
+      end
+
+    String.trim(class)
+  end
+
+  @spec submit_state_class(String.t(), Ecto.Changeset.t(), Keyword.t()) :: String.t()
+  def submit_state_class(class \\ "btn btn-md", changeset, opts \\ []) do
+    class =
+      cond do
+        # no state checking
+        opts[:no_state] -> class
+        # The form was submitted and is valid
+        changeset.action && changeset.valid? -> "#{class} btn-success"
+        # The form was not yet submitted or is not valid
+        !(changeset.action && changeset.valid?) -> "#{class} btn-disabled"
+        true -> class
       end
 
     String.trim(class)
