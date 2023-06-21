@@ -176,7 +176,7 @@ defmodule SMWeb.PrometheusPush do
   defp get_txt_metrics(prom_ex_module) do
     case PromEx.get_metrics(prom_ex_module) do
       :prom_ex_down ->
-        Logger.warn(
+        Logger.warning(
           "Attempted to fetch metrics from #{prom_ex_module}, but the module has not been initialized"
         )
 
