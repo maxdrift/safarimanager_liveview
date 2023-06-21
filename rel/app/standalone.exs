@@ -151,7 +151,7 @@ defmodule Standalone do
   def bundle_dylibs(release) do
     Logger.info("Bundling Dylibs...")
     release_lib_dir = Path.join(release.path, "lib")
-    vis_so_path = Path.join(release_lib_dir, "vix-0.21.0/priv/vix.so")
+    vis_so_path = Path.join(release_lib_dir, "vix-0.22.0/priv/vix.so")
     dylibs_path = Path.join(release.path, "dylibs")
     File.mkdir_p!(dylibs_path)
 

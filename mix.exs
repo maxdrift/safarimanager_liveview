@@ -6,7 +6,7 @@ defmodule SM.MixProject do
   @description ~s(Application to manage "Underwater Photo Safari" competitions)
 
   @app_elixir_version "1.14.2"
-  @app_rebar3_version "3.19.0"
+  @app_rebar3_version "3.22.0"
 
   def project do
     [
