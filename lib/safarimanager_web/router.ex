@@ -69,7 +69,10 @@ defmodule SMWeb.Router do
         live "/competitions", Competitions
         live "/evaluations", Evaluations
         live "/users", Users
-        live "/categories", Categories
+        live "/categories", Categories.Index, :index
+        live "/categories/new", Categories.Index, :new
+        live "/categories/:id", Categories.Index, :show
+        live "/categories/:id/edit", Categories.Index, :edit
         live "/participants", Participants
         live "/import", Import
       end

@@ -127,6 +127,14 @@ defmodule SMWeb do
     end
   end
 
+  def live_action_to_changeset_action(live_action) do
+    case live_action do
+      :new -> :create
+      :edit -> :edit
+      _index -> nil
+    end
+  end
+
   defp html_helpers do
     quote do
       # HTML escaping functionality

@@ -151,21 +151,37 @@ defmodule SM.Categories do
   ## Examples
 
   iex> delete_many(["id1", "id2", "id3"])
-  {:ok, 3}
+  {:ok, ["id1", "id2", "id3"]}
 
   iex> delete_many(["id1", "id2", "id3"])
   :error
 
   """
-  @spec delete_many([String.t()]) :: {:ok, integer()} | :error
+  @spec delete_many([String.t()]) :: {:ok, [String.t()]} | :error
   def delete_many(ids) do
     {deleted, nil} = Repo.delete_all(from entity in Category, where: entity.id in ^ids)
 
     if deleted == Enum.count(ids) do
-      notify_subscribers({:ok, deleted}, [:category, :deleted])
+      notify_subscribers({:ok, ids}, [:category, :deleted])
     else
       notify_subscribers(:error, [:category, :deleted])
     end
+  end
+
+  @doc """
+  Deletes all Categories.
+
+  ## Examples
+
+  iex > delete_all()
+  {:ok, 10}
+
+  """
+  @spec delete_all :: {:ok, integer()}
+  def delete_all do
+    {deleted, nil} = Repo.delete_all(Category)
+
+    notify_subscribers({:ok, deleted}, [:category, :deleted])
   end
 
   @doc """
