@@ -153,21 +153,37 @@ defmodule SM.Organizations do
   ## Examples
 
   iex> delete_many(["id1", "id2", "id3"])
-  {:ok, 3}
+  {:ok, ["id1", "id2", "id3"]}
 
   iex> delete_many(["id1", "id2", "id3"])
   :error
 
   """
-  @spec delete_many([String.t()]) :: {:ok, integer()} | :error
+  @spec delete_many([String.t()]) :: {:ok, [String.t()]} | :error
   def delete_many(ids) do
     {deleted, nil} = Repo.delete_all(from entity in Organization, where: entity.id in ^ids)
 
     if deleted == Enum.count(ids) do
-      notify_subscribers({:ok, deleted}, [:organization, :deleted])
+      notify_subscribers({:ok, ids}, [:organization, :deleted])
     else
       notify_subscribers(:error, [:organization, :deleted])
     end
+  end
+
+  @doc """
+  Deletes all Organizations.
+
+  ## Examples
+
+  iex> delete_all()
+  {:ok, 10}
+
+  """
+  @spec delete_all :: {:ok, integer()}
+  def delete_all do
+    {deleted, nil} = Repo.delete_all(Organization)
+
+    notify_subscribers({:ok, deleted}, [:organization, :deleted])
   end
 
   @doc """
@@ -210,7 +226,8 @@ defmodule SM.Organizations do
         |> Repo.transaction()
         |> case do
           {:ok, %{organization: organization}} ->
-            notify_subscribers({:ok, organization}, [:organization, :deleted])
+            notify_subscribers({:ok, source_ids}, [:organization, :deleted])
+            notify_subscribers({:ok, organization}, [:organization, :updated])
 
           {:error, failed_operation, failed_value, _changes_so_far} ->
             notify_subscribers({:error, {failed_operation, failed_value}}, [

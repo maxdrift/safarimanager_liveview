@@ -5,6 +5,7 @@ defmodule SMWeb.Components.Grid do
   use SMWeb, :surface_live_component
 
   alias Surface.Components.Form
+  alias Surface.Components.Form.HiddenInput
   alias Surface.Components.Form.Submit
   alias Surface.Components.Link
   alias Surface.Components.LivePatch
@@ -38,13 +39,16 @@ defmodule SMWeb.Components.Grid do
               {gettext("Export to CSV")}
             </Link>
             <button
-              name={"#{@id}-selection-action"}
+              type="submit"
               :if={@merge_path}
+              name={"#{@id}-selection-merge"}
               class="btn btn-sm btn-secondary"
-              :on-click="merge-many"
+              phx-click={JS.set_attribute({"value", "merge"}, to: "##{@id}-selection-action-field")}
               disabled
-            >{gettext("Merge into")}</button>
-            <Submit class="btn btn-sm btn-error" opts={disabled: true, name: "#{@id}-selection-action"}>{gettext("Delete")}</Submit>
+            >
+              {gettext("Merge into")}
+            </button>
+            <Submit class="btn btn-sm btn-error" opts={disabled: true, name: "#{@id}-selection-delete"}>{gettext("Delete")}</Submit>
           </div>
         </div>
         <div class="max-h-full overflow-y-auto tiny-scrollbar">
@@ -90,6 +94,7 @@ defmodule SMWeb.Components.Grid do
           </table>
           <div :if={@infinite_scroll} id="infinite-scroll-marker" :hook="InfiniteScroll" />
         </div>
+        <HiddenInput id={"#{@id}-selection-action-field"} field={:action} value={:delete} />
       </Form>
     </div>
     """
@@ -115,7 +120,11 @@ defmodule SMWeb.Components.Grid do
     {:noreply, socket}
   end
 
-  def handle_event("grid-selection-submit", params, socket) do
+  def handle_event(
+        "grid-selection-submit",
+        %{"grid_form" => %{"action" => "delete"}} = params,
+        socket
+      ) do
     grid_id = socket.assigns.id
 
     select_all = Map.get(params, "#{grid_id}-select-all", false) && true
@@ -132,6 +141,20 @@ defmodule SMWeb.Components.Grid do
         true ->
           socket
       end
+
+    {:noreply, push_event(socket, "smgr:reset-selection", %{gridId: grid_id})}
+  end
+
+  def handle_event(
+        "grid-selection-submit",
+        %{"grid_form" => %{"action" => "merge"}} = params,
+        socket
+      ) do
+    grid_id = socket.assigns.id
+
+    selected = Map.get(params, "#{grid_id}-selection", [])
+
+    _result = send(self(), {"merge-selected", selected})
 
     {:noreply, push_event(socket, "smgr:reset-selection", %{gridId: grid_id})}
   end

@@ -13,6 +13,7 @@ msgstr ""
 
 #: lib/safarimanager_web/components/core_components.ex:450
 #: lib/safarimanager_web/live/admin/categories/index.sface:89
+#: lib/safarimanager_web/live/admin/organizations/index.sface:175
 #: lib/safarimanager_web/live/admin/subjects/index.sface:130
 #, elixir-autogen, elixir-format
 msgid "Actions"
@@ -532,23 +533,24 @@ msgstr "Impossibile importare la selezione: slide non trovata"
 msgid "Unable to import slide selection: subject not found"
 msgstr "Impossibile importare la selezione: soggetto non trovato"
 
-#: lib/safarimanager_web/components/grid.ex:183
+#: lib/safarimanager_web/components/grid.ex:206
 #, elixir-autogen, elixir-format
 msgid "Are you sure you want to delete 1 record?"
 msgstr "Sei sicuro di voler eliminare 1 record?"
 
-#: lib/safarimanager_web/components/grid.ex:168
+#: lib/safarimanager_web/components/grid.ex:191
 #, elixir-autogen, elixir-format
 msgid "Are you sure you want to delete all records?"
 msgstr "Sei sicuro di voler eliminare tutti i record?"
 
-#: lib/safarimanager_web/components/grid.ex:151
+#: lib/safarimanager_web/components/grid.ex:174
 #: lib/safarimanager_web/live/admin/competitions/competitions.ex:86
 #, elixir-autogen, elixir-format
 msgid "Are you sure you want to delete this record?"
 msgstr "Sei sicuro di voler eliminare questo record?"
 
 #: lib/safarimanager_web/live/admin/categories/index.sface:32
+#: lib/safarimanager_web/live/admin/organizations/index.sface:35
 #: lib/safarimanager_web/live/admin/subjects/index.sface:41
 #, elixir-autogen, elixir-format
 msgid "Close"
@@ -566,49 +568,52 @@ msgstr "Coeff."
 msgid "Coefficient"
 msgstr "Coefficiente"
 
-#: lib/safarimanager_web/components/grid.ex:36
+#: lib/safarimanager_web/components/grid.ex:37
 #, elixir-autogen, elixir-format
 msgid "Create"
 msgstr "Crea"
 
 #: lib/safarimanager_web/live/admin/categories/index.sface:83
+#: lib/safarimanager_web/live/admin/organizations/index.sface:169
 #: lib/safarimanager_web/live/admin/subjects/index.sface:124
 #, elixir-autogen, elixir-format
 msgid "Created"
 msgstr "Creato"
 
-#: lib/safarimanager_web/components/grid.ex:47
-#: lib/safarimanager_web/components/grid.ex:152
-#: lib/safarimanager_web/components/grid.ex:169
-#: lib/safarimanager_web/components/grid.ex:184
-#: lib/safarimanager_web/components/grid.ex:203
+#: lib/safarimanager_web/components/grid.ex:51
+#: lib/safarimanager_web/components/grid.ex:175
+#: lib/safarimanager_web/components/grid.ex:192
+#: lib/safarimanager_web/components/grid.ex:207
+#: lib/safarimanager_web/components/grid.ex:226
 #: lib/safarimanager_web/live/admin/categories/index.sface:97
 #: lib/safarimanager_web/live/admin/competitions/competitions.ex:87
 #: lib/safarimanager_web/live/admin/competitions/competitions.ex:110
+#: lib/safarimanager_web/live/admin/organizations/index.sface:183
 #: lib/safarimanager_web/live/admin/subjects/index.sface:138
 #, elixir-autogen, elixir-format
 msgid "Delete"
 msgstr "Elimina"
 
-#: lib/safarimanager_web/components/grid.ex:167
+#: lib/safarimanager_web/components/grid.ex:190
 #, elixir-autogen, elixir-format
 msgid "Delete all records"
 msgstr "Elimina tutti i record"
 
-#: lib/safarimanager_web/components/grid.ex:150
-#: lib/safarimanager_web/components/grid.ex:182
+#: lib/safarimanager_web/components/grid.ex:173
+#: lib/safarimanager_web/components/grid.ex:205
 #: lib/safarimanager_web/live/admin/competitions/competitions.ex:85
 #, elixir-autogen, elixir-format
 msgid "Delete record"
 msgstr "Elimina record"
 
-#: lib/safarimanager_web/components/grid.ex:197
+#: lib/safarimanager_web/components/grid.ex:220
 #: lib/safarimanager_web/live/admin/competitions/competitions.ex:104
 #, elixir-autogen, elixir-format
 msgid "Delete records"
 msgstr "Elimina i record"
 
 #: lib/safarimanager_web/live/admin/categories/index.sface:92
+#: lib/safarimanager_web/live/admin/organizations/index.sface:178
 #: lib/safarimanager_web/live/admin/subjects/index.sface:133
 #, elixir-autogen, elixir-format
 msgid "Edit"
@@ -619,17 +624,18 @@ msgstr "Modifica"
 msgid "Edited subject"
 msgstr "Soggetto modificato"
 
-#: lib/safarimanager_web/components/grid.ex:38
+#: lib/safarimanager_web/components/grid.ex:39
 #, elixir-autogen, elixir-format
 msgid "Export to CSV"
 msgstr "Esporta in CSV"
 
-#: lib/safarimanager_web/components/grid.ex:46
+#: lib/safarimanager_web/components/grid.ex:49
 #, elixir-autogen, elixir-format
 msgid "Merge into"
-msgstr "Riunisci"
+msgstr "Unisci"
 
 #: lib/safarimanager_web/live/admin/categories/index.sface:86
+#: lib/safarimanager_web/live/admin/organizations/index.sface:172
 #: lib/safarimanager_web/live/admin/subjects/index.sface:127
 #, elixir-autogen, elixir-format
 msgid "Modified"
@@ -639,6 +645,10 @@ msgstr "Modificato"
 #: lib/safarimanager_web/live/admin/categories/index.sface:19
 #: lib/safarimanager_web/live/admin/categories/index.sface:52
 #: lib/safarimanager_web/live/admin/categories/index.sface:80
+#: lib/safarimanager_web/live/admin/organizations/index.sface:19
+#: lib/safarimanager_web/live/admin/organizations/index.sface:19
+#: lib/safarimanager_web/live/admin/organizations/index.sface:55
+#: lib/safarimanager_web/live/admin/organizations/index.sface:163
 #: lib/safarimanager_web/live/admin/subjects/index.sface:19
 #: lib/safarimanager_web/live/admin/subjects/index.sface:19
 #: lib/safarimanager_web/live/admin/subjects/index.sface:64
@@ -658,6 +668,7 @@ msgid "Numeric ID"
 msgstr "ID numerico"
 
 #: lib/safarimanager_web/live/admin/categories/index.sface:59
+#: lib/safarimanager_web/live/admin/organizations/index.sface:65
 #: lib/safarimanager_web/live/admin/subjects/index.sface:92
 #, elixir-autogen, elixir-format
 msgid "Save"
@@ -681,6 +692,7 @@ msgid "Select a type"
 msgstr "Seleziona un tipo"
 
 #: lib/safarimanager_web/live/admin/categories/index.sface:91
+#: lib/safarimanager_web/live/admin/organizations/index.sface:177
 #: lib/safarimanager_web/live/admin/subjects/index.sface:132
 #, elixir-autogen, elixir-format
 msgid "Show"
@@ -696,6 +708,8 @@ msgstr "Tipo"
 
 #: lib/safarimanager_web/components/confirm.ex:90
 #: lib/safarimanager_web/live/admin/categories/index.sface:64
+#: lib/safarimanager_web/live/admin/organizations/index.sface:70
+#: lib/safarimanager_web/live/admin/organizations/index.sface:144
 #: lib/safarimanager_web/live/admin/subjects/index.sface:97
 #, elixir-autogen, elixir-format
 msgid "Cancel"
@@ -743,6 +757,8 @@ msgstr "Impossibile recuperare questo soggetto"
 
 #: lib/safarimanager_web/live/admin/categories/index.sface:22
 #: lib/safarimanager_web/live/admin/categories/index.sface:22
+#: lib/safarimanager_web/live/admin/organizations/index.sface:25
+#: lib/safarimanager_web/live/admin/organizations/index.sface:25
 #: lib/safarimanager_web/live/admin/subjects/index.sface:31
 #: lib/safarimanager_web/live/admin/subjects/index.sface:31
 #, elixir-autogen, elixir-format
@@ -762,6 +778,8 @@ msgstr "Dettagli soggetto"
 
 #: lib/safarimanager_web/live/admin/categories/index.sface:25
 #: lib/safarimanager_web/live/admin/categories/index.sface:25
+#: lib/safarimanager_web/live/admin/organizations/index.sface:28
+#: lib/safarimanager_web/live/admin/organizations/index.sface:28
 #: lib/safarimanager_web/live/admin/subjects/index.sface:34
 #: lib/safarimanager_web/live/admin/subjects/index.sface:34
 #, elixir-autogen, elixir-format
@@ -831,6 +849,9 @@ msgstr "Categoria modificata"
 #: lib/safarimanager_web/live/admin/categories/index.sface:16
 #: lib/safarimanager_web/live/admin/categories/index.sface:16
 #: lib/safarimanager_web/live/admin/categories/index.sface:77
+#: lib/safarimanager_web/live/admin/organizations/index.sface:16
+#: lib/safarimanager_web/live/admin/organizations/index.sface:16
+#: lib/safarimanager_web/live/admin/organizations/index.sface:160
 #, elixir-autogen, elixir-format
 msgid "ID"
 msgstr "ID"
@@ -854,3 +875,91 @@ msgstr "Impossibile eliminare la categoria"
 #, elixir-autogen, elixir-format
 msgid "Unable to retrieve this Category"
 msgstr "Impossibile recuperare questa categoria"
+
+#: lib/safarimanager_web/live/admin/organizations/index.ex:220
+#, elixir-autogen, elixir-format
+msgid "All organizations deleted successfully"
+msgstr "Tutte le società sono state eliminate con successo"
+
+#: lib/safarimanager_web/live/admin/organizations/index.sface:51
+#, elixir-autogen, elixir-format
+msgid "Edit organization"
+msgstr "Modifica società"
+
+#: lib/safarimanager_web/live/admin/organizations/index.ex:100
+#, elixir-autogen, elixir-format
+msgid "Edited organization"
+msgstr "Società modificata"
+
+#: lib/safarimanager_web/live/admin/organizations/index.sface:22
+#: lib/safarimanager_web/live/admin/organizations/index.sface:22
+#: lib/safarimanager_web/live/admin/organizations/index.sface:58
+#: lib/safarimanager_web/live/admin/organizations/index.sface:166
+#, elixir-autogen, elixir-format
+msgid "Location"
+msgstr "Luogo"
+
+#: lib/safarimanager_web/live/admin/organizations/index.sface:50
+#, elixir-autogen, elixir-format
+msgid "New organization"
+msgstr "Nuova società"
+
+#: lib/safarimanager_web/live/admin/organizations/index.ex:80
+#, elixir-autogen, elixir-format
+msgid "Organization created successfully"
+msgstr "Società creata con successo"
+
+#: lib/safarimanager_web/live/admin/organizations/index.ex:197
+#, elixir-autogen, elixir-format
+msgid "Organization deleted successfully"
+msgstr "Società eliminata con successo"
+
+#: lib/safarimanager_web/live/admin/organizations/index.sface:12
+#, elixir-autogen, elixir-format
+msgid "Organization details"
+msgstr "Dettagli società"
+
+#: lib/safarimanager_web/live/admin/organizations/index.ex:208
+#, elixir-autogen, elixir-format
+msgid "Organizations deleted successfully"
+msgstr "Società eliminate con successo"
+
+#: lib/safarimanager_web/live/admin/organizations/index.ex:198
+#, elixir-autogen, elixir-format
+msgid "Unable to delete Organization"
+msgstr "Impossibile eliminare la società"
+
+#: lib/safarimanager_web/live/admin/organizations/index.ex:211
+#, elixir-autogen, elixir-format
+msgid "Unable to delete Organizations"
+msgstr "Impossibile eliminare le società"
+
+#: lib/safarimanager_web/live/admin/organizations/index.ex:172
+#, elixir-autogen, elixir-format
+msgid "Unable to retrieve this Organization"
+msgstr "Impossibile recuperare questa società"
+
+#: lib/safarimanager_web/live/admin/organizations/index.sface:86
+#, elixir-autogen, elixir-format
+msgid "Merge organization"
+msgstr "Unisci società"
+
+#: lib/safarimanager_web/live/admin/organizations/index.sface:135
+#, elixir-autogen, elixir-format
+msgid "Select an organization..."
+msgstr "Seleziona una società..."
+
+#: lib/safarimanager_web/live/admin/organizations/index.ex:137
+#, elixir-autogen, elixir-format
+msgid "Error merging organizations"
+msgstr "Si è verificato un errore unendo le società"
+
+#: lib/safarimanager_web/live/admin/organizations/index.ex:129
+#, elixir-autogen, elixir-format
+msgid "Error merging organizations: a destination must be specified"
+msgstr "Impossibile unire le società: specificare una società di destinazione"
+
+#: lib/safarimanager_web/live/admin/organizations/index.ex:115
+#, elixir-autogen, elixir-format
+msgid "Successfully merged organizations"
+msgstr "Società unite con successo"

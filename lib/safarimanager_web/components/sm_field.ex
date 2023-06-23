@@ -10,7 +10,7 @@ defmodule SMWeb.Components.SMField do
   alias Surface.Components.Form.Label
 
   prop name, :string, required: true
-  prop label, :string, required: true
+  prop label, :string
   prop class, :css_class, default: []
 
   slot default, required: true
@@ -18,7 +18,7 @@ defmodule SMWeb.Components.SMField do
   def render(assigns) do
     ~F"""
     <Field name={@name} class={["form-control" | @class]}>
-      <Label class="label">
+      <Label :if={@label} class="label">
         <span class="label-text">{@label}</span>
       </Label>
       <#slot />
