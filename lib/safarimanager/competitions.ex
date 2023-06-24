@@ -130,7 +130,15 @@ defmodule SM.Competitions do
     %Competition{}
     |> change(attrs)
     |> Repo.insert()
-    |> notify_subscribers([:competition, :created])
+    |> case do
+      {:ok, competition} ->
+        competition = Repo.preload(competition, :organization)
+
+        notify_subscribers({:ok, competition}, [:competition, :created])
+
+      {:error, changeset} ->
+        notify_subscribers({:error, changeset}, [:competition, :created])
+    end
   end
 
   @doc """
@@ -230,13 +238,13 @@ defmodule SM.Competitions do
   ## Examples
 
   iex> delete_many(["id1", "id2", "id3"])
-  {:ok, 3}
+  {:ok, ["id1", "id2", "id3"]}
 
   iex> delete_many(["id1", "id2", "id3"])
   :error
 
   """
-  @spec delete_many([String.t()]) :: {:ok, integer()} | :error
+  @spec delete_many([String.t()]) :: {:ok, [String.t()]} | :error
   def delete_many(ids) do
     query = from entity in Competition, where: entity.id in ^ids
 
@@ -247,8 +255,8 @@ defmodule SM.Competitions do
     end)
     |> Repo.transaction()
     |> case do
-      {:ok, %{delete_competitions: {deleted, nil}}} ->
-        notify_subscribers({:ok, deleted}, [:competition, :deleted])
+      {:ok, %{delete_competitions: {_deleted, nil}}} ->
+        notify_subscribers({:ok, ids}, [:competition, :deleted])
 
       {:error, failed_operation, failed_value, _changes_so_far} ->
         Logger.error(
@@ -257,6 +265,22 @@ defmodule SM.Competitions do
 
         notify_subscribers({:error, {failed_operation, failed_value}}, [:competition, :deleted])
     end
+  end
+
+  @doc """
+  Deletes all Competitions.
+
+  ## Examples
+
+  iex> delete_all()
+  {:ok, 10}
+
+  """
+  @spec delete_all :: {:ok, integer()}
+  def delete_all do
+    {deleted, nil} = Repo.delete_all(Competition)
+
+    notify_subscribers({:ok, deleted}, [:competition, :deleted])
   end
 
   @doc """
