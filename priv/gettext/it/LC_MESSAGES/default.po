@@ -14,6 +14,7 @@ msgstr ""
 #: lib/safarimanager_web/components/core_components.ex:450
 #: lib/safarimanager_web/live/admin/categories/index.sface:89
 #: lib/safarimanager_web/live/admin/competitions/index.sface:308
+#: lib/safarimanager_web/live/admin/evaluations/index.sface:116
 #: lib/safarimanager_web/live/admin/organizations/index.sface:175
 #: lib/safarimanager_web/live/admin/subjects/index.sface:130
 #, elixir-autogen, elixir-format
@@ -553,6 +554,7 @@ msgstr "Sei sicuro di voler eliminare questo record?"
 
 #: lib/safarimanager_web/live/admin/categories/index.sface:32
 #: lib/safarimanager_web/live/admin/competitions/index.sface:99
+#: lib/safarimanager_web/live/admin/evaluations/index.sface:38
 #: lib/safarimanager_web/live/admin/organizations/index.sface:35
 #: lib/safarimanager_web/live/admin/subjects/index.sface:41
 #, elixir-autogen, elixir-format
@@ -577,6 +579,7 @@ msgid "Create"
 msgstr "Crea"
 
 #: lib/safarimanager_web/live/admin/categories/index.sface:83
+#: lib/safarimanager_web/live/admin/evaluations/index.sface:110
 #: lib/safarimanager_web/live/admin/organizations/index.sface:169
 #: lib/safarimanager_web/live/admin/subjects/index.sface:124
 #, elixir-autogen, elixir-format
@@ -590,6 +593,7 @@ msgstr "Creato"
 #: lib/safarimanager_web/components/grid.ex:226
 #: lib/safarimanager_web/live/admin/categories/index.sface:97
 #: lib/safarimanager_web/live/admin/competitions/index.sface:316
+#: lib/safarimanager_web/live/admin/evaluations/index.sface:124
 #: lib/safarimanager_web/live/admin/organizations/index.sface:183
 #: lib/safarimanager_web/live/admin/subjects/index.sface:138
 #, elixir-autogen, elixir-format
@@ -614,6 +618,7 @@ msgstr "Elimina i record"
 
 #: lib/safarimanager_web/live/admin/categories/index.sface:92
 #: lib/safarimanager_web/live/admin/competitions/index.sface:311
+#: lib/safarimanager_web/live/admin/evaluations/index.sface:119
 #: lib/safarimanager_web/live/admin/organizations/index.sface:178
 #: lib/safarimanager_web/live/admin/subjects/index.sface:133
 #, elixir-autogen, elixir-format
@@ -636,6 +641,7 @@ msgid "Merge into"
 msgstr "Unisci"
 
 #: lib/safarimanager_web/live/admin/categories/index.sface:86
+#: lib/safarimanager_web/live/admin/evaluations/index.sface:113
 #: lib/safarimanager_web/live/admin/organizations/index.sface:172
 #: lib/safarimanager_web/live/admin/subjects/index.sface:127
 #, elixir-autogen, elixir-format
@@ -675,6 +681,7 @@ msgstr "ID numerico"
 
 #: lib/safarimanager_web/live/admin/categories/index.sface:59
 #: lib/safarimanager_web/live/admin/competitions/index.sface:275
+#: lib/safarimanager_web/live/admin/evaluations/index.sface:80
 #: lib/safarimanager_web/live/admin/organizations/index.sface:65
 #: lib/safarimanager_web/live/admin/subjects/index.sface:92
 #, elixir-autogen, elixir-format
@@ -694,6 +701,7 @@ msgid "Select a coefficient"
 msgstr "Seleziona un coefficiente"
 
 #: lib/safarimanager_web/live/admin/competitions/index.sface:136
+#: lib/safarimanager_web/live/admin/evaluations/index.sface:68
 #: lib/safarimanager_web/live/admin/subjects/index.sface:83
 #, elixir-autogen, elixir-format
 msgid "Select a type"
@@ -701,6 +709,7 @@ msgstr "Seleziona un tipo"
 
 #: lib/safarimanager_web/live/admin/categories/index.sface:91
 #: lib/safarimanager_web/live/admin/competitions/index.sface:310
+#: lib/safarimanager_web/live/admin/evaluations/index.sface:118
 #: lib/safarimanager_web/live/admin/organizations/index.sface:177
 #: lib/safarimanager_web/live/admin/subjects/index.sface:132
 #, elixir-autogen, elixir-format
@@ -710,6 +719,10 @@ msgstr "Mostra"
 #: lib/safarimanager_web/live/admin/competitions/index.sface:27
 #: lib/safarimanager_web/live/admin/competitions/index.sface:27
 #: lib/safarimanager_web/live/admin/competitions/index.sface:130
+#: lib/safarimanager_web/live/admin/evaluations/index.sface:22
+#: lib/safarimanager_web/live/admin/evaluations/index.sface:22
+#: lib/safarimanager_web/live/admin/evaluations/index.sface:64
+#: lib/safarimanager_web/live/admin/evaluations/index.sface:104
 #: lib/safarimanager_web/live/admin/subjects/index.sface:28
 #: lib/safarimanager_web/live/admin/subjects/index.sface:28
 #: lib/safarimanager_web/live/admin/subjects/index.sface:79
@@ -721,6 +734,7 @@ msgstr "Tipo"
 #: lib/safarimanager_web/components/confirm.ex:90
 #: lib/safarimanager_web/live/admin/categories/index.sface:64
 #: lib/safarimanager_web/live/admin/competitions/index.sface:280
+#: lib/safarimanager_web/live/admin/evaluations/index.sface:85
 #: lib/safarimanager_web/live/admin/organizations/index.sface:70
 #: lib/safarimanager_web/live/admin/organizations/index.sface:144
 #: lib/safarimanager_web/live/admin/subjects/index.sface:97
@@ -772,6 +786,8 @@ msgstr "Impossibile recuperare questo soggetto"
 #: lib/safarimanager_web/live/admin/categories/index.sface:22
 #: lib/safarimanager_web/live/admin/competitions/index.sface:89
 #: lib/safarimanager_web/live/admin/competitions/index.sface:89
+#: lib/safarimanager_web/live/admin/evaluations/index.sface:28
+#: lib/safarimanager_web/live/admin/evaluations/index.sface:28
 #: lib/safarimanager_web/live/admin/organizations/index.sface:25
 #: lib/safarimanager_web/live/admin/organizations/index.sface:25
 #: lib/safarimanager_web/live/admin/subjects/index.sface:31
@@ -796,6 +812,8 @@ msgstr "Dettagli soggetto"
 #: lib/safarimanager_web/live/admin/categories/index.sface:25
 #: lib/safarimanager_web/live/admin/competitions/index.sface:92
 #: lib/safarimanager_web/live/admin/competitions/index.sface:92
+#: lib/safarimanager_web/live/admin/evaluations/index.sface:31
+#: lib/safarimanager_web/live/admin/evaluations/index.sface:31
 #: lib/safarimanager_web/live/admin/organizations/index.sface:28
 #: lib/safarimanager_web/live/admin/organizations/index.sface:28
 #: lib/safarimanager_web/live/admin/subjects/index.sface:34
@@ -870,6 +888,9 @@ msgstr "Categoria modificata"
 #: lib/safarimanager_web/live/admin/competitions/index.sface:16
 #: lib/safarimanager_web/live/admin/competitions/index.sface:16
 #: lib/safarimanager_web/live/admin/competitions/index.sface:293
+#: lib/safarimanager_web/live/admin/evaluations/index.sface:16
+#: lib/safarimanager_web/live/admin/evaluations/index.sface:16
+#: lib/safarimanager_web/live/admin/evaluations/index.sface:98
 #: lib/safarimanager_web/live/admin/organizations/index.sface:16
 #: lib/safarimanager_web/live/admin/organizations/index.sface:16
 #: lib/safarimanager_web/live/admin/organizations/index.sface:160
@@ -1201,6 +1222,10 @@ msgid "Unable to retrieve this Competition"
 msgstr "Impossibile recuperare questa competizione"
 
 #: lib/safarimanager_web/live/admin/competitions/index.sface:249
+#: lib/safarimanager_web/live/admin/evaluations/index.sface:19
+#: lib/safarimanager_web/live/admin/evaluations/index.sface:19
+#: lib/safarimanager_web/live/admin/evaluations/index.sface:58
+#: lib/safarimanager_web/live/admin/evaluations/index.sface:101
 #, elixir-autogen, elixir-format
 msgid "Value"
 msgstr "Valore"
@@ -1227,3 +1252,66 @@ msgstr "da"
 #, elixir-autogen, elixir-format
 msgid "to"
 msgstr "a"
+
+#: lib/safarimanager_web/live/admin/evaluations/index.ex:179
+#, elixir-autogen, elixir-format
+msgid "All evaluations deleted successfully"
+msgstr "Tutte le valutazioni sono state eliminate con successo"
+
+#: lib/safarimanager_web/live/admin/evaluations/index.sface:25
+#: lib/safarimanager_web/live/admin/evaluations/index.sface:25
+#: lib/safarimanager_web/live/admin/evaluations/index.sface:73
+#: lib/safarimanager_web/live/admin/evaluations/index.sface:107
+#, elixir-autogen, elixir-format
+msgid "Description"
+msgstr "Descrizione"
+
+#: lib/safarimanager_web/live/admin/evaluations/index.sface:54
+#, elixir-autogen, elixir-format
+msgid "Edit evaluation"
+msgstr "Modifica valutazione"
+
+#: lib/safarimanager_web/live/admin/evaluations/index.ex:97
+#, elixir-autogen, elixir-format
+msgid "Edited evaluation"
+msgstr "Valutazione modificata"
+
+#: lib/safarimanager_web/live/admin/evaluations/index.ex:73
+#, elixir-autogen, elixir-format
+msgid "Evaluation created successfully"
+msgstr "Valutazione creata con successo"
+
+#: lib/safarimanager_web/live/admin/evaluations/index.ex:156
+#, elixir-autogen, elixir-format
+msgid "Evaluation deleted successfully"
+msgstr "Valutazione eliminata con successo"
+
+#: lib/safarimanager_web/live/admin/evaluations/index.sface:12
+#, elixir-autogen, elixir-format
+msgid "Evaluation details"
+msgstr "Dettagli valutazione"
+
+#: lib/safarimanager_web/live/admin/evaluations/index.ex:167
+#, elixir-autogen, elixir-format
+msgid "Evaluations deleted successfully"
+msgstr "Valutazioni eliminate con successo"
+
+#: lib/safarimanager_web/live/admin/evaluations/index.sface:53
+#, elixir-autogen, elixir-format
+msgid "New evaluation"
+msgstr "Nuova valutazione"
+
+#: lib/safarimanager_web/live/admin/evaluations/index.ex:157
+#, elixir-autogen, elixir-format
+msgid "Unable to delete Evaluation"
+msgstr "Impossibile eliminare la valutazione"
+
+#: lib/safarimanager_web/live/admin/evaluations/index.ex:170
+#, elixir-autogen, elixir-format
+msgid "Unable to delete Evaluations"
+msgstr "Impossibile eliminare le valutazioni"
+
+#: lib/safarimanager_web/live/admin/evaluations/index.ex:130
+#, elixir-autogen, elixir-format
+msgid "Unable to retrieve this Evaluation"
+msgstr "Impossibile recuperare questa valutazione"

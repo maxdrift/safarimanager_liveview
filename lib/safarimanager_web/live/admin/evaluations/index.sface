@@ -1,0 +1,128 @@
+<Layout current_page={~p"/admin/evaluations"} current_user={@current_user}>
+  {!-- Show dialog --}
+  <div
+    :if={@live_action == :show}
+    id="show-dialog"
+    class="modal modal-open"
+    :on-window-keydown={JS.patch("/admin/evaluations")}
+    phx-key="Escape"
+  >
+    <div class="modal-box">
+      <div class="card-title">
+        {gettext("Evaluation details")}
+      </div>
+      <div class="card-body">
+        <FieldsList>
+          <FieldsListItem label={gettext("ID")}>
+            <ShortUUID value={@record.id} />
+          </FieldsListItem>
+          <FieldsListItem label={gettext("Value")}>
+            {@record.value}
+          </FieldsListItem>
+          <FieldsListItem label={gettext("Type")}>
+            {@record.type}
+          </FieldsListItem>
+          <FieldsListItem label={gettext("Description")}>
+            {@record.description}
+          </FieldsListItem>
+          <FieldsListItem label={gettext("Inserted")}>
+            <DateTimeString value={@record.inserted_at} />
+          </FieldsListItem>
+          <FieldsListItem label={gettext("Updated")}>
+            <DateTimeString value={@record.updated_at} />
+          </FieldsListItem>
+        </FieldsList>
+      </div>
+      <div class="modal-action">
+        <button :on-click={JS.patch("/admin/evaluations")} class="btn btn-md btn-ghost">
+          {gettext("Close")}
+        </button>
+      </div>
+    </div>
+  </div>
+  {!-- New-edit dialog --}
+  <div
+    :if={@live_action in [:new, :edit]}
+    id="edit-dialog"
+    class="modal modal-open"
+    :on-window-keydown={JS.patch("/admin/evaluations")}
+    phx-key="Escape"
+  >
+    <div class="modal-box">
+      <div class="card-title">
+        <span :if={@live_action == :new}>{gettext("New evaluation")}</span>
+        <span :if={@live_action == :edit}>{gettext("Edit evaluation")}</span>
+      </div>
+      <Form for={@changeset} change="validate" submit="submit" as={:entity} opts={autocomplete: "off"}>
+        <div class="card-body">
+          <SMField name={:value} label={gettext("Value")}>
+            <NumberInput
+              class={input_state_class(@changeset, :value)}
+              opts={phx_debounce: "1000", step: "0.01"}
+            />
+          </SMField>
+          <SMField name={:type} label={gettext("Type")}>
+            <Select
+              options={@evaluation_types}
+              selected={@record.type}
+              prompt={gettext("Select a type")}
+              class={input_state_class(@changeset, :type)}
+              opts={phx_debounce: "1000"}
+            />
+          </SMField>
+          <SMField name={:description} label={gettext("Description")}>
+            <TextInput class={input_state_class(@changeset, :description)} opts={phx_debounce: "1000"} />
+          </SMField>
+          <HiddenInput field={:_action} value={@action} />
+        </div>
+        <div class="modal-action">
+          <Submit values={[action: @action]} class={submit_state_class(@changeset)}>
+            {gettext("Save")}
+          </Submit>
+          <Reset
+            click={JS.patch("/admin/evaluations")}
+            class="btn btn-md btn-ghost"
+            value={gettext("Cancel")}
+          />
+        </div>
+      </Form>
+    </div>
+  </div>
+  {!-- Index table --}
+  <Grid
+    id="evaluations-list"
+    items={item <- @streams.items}
+    create_path={~p"/admin/evaluations/new"}
+    export_path={~p"/export?entity=evaluations"}
+  >
+    <Column title={gettext("ID")} class="w-1/12">
+      <ShortUUID value={item.id} />
+    </Column>
+    <Column title={gettext("Value")} class="w-1/12">
+      {item.value}
+    </Column>
+    <Column title={gettext("Type")} class="w-1/12">
+      {item.type}
+    </Column>
+    <Column title={gettext("Description")}>
+      {item.description}
+    </Column>
+    <Column title={gettext("Created")} class="w-2/12">
+      <DateTimeString value={item.inserted_at} />
+    </Column>
+    <Column title={gettext("Modified")} class="w-2/12">
+      <DateTimeString value={item.updated_at} />
+    </Column>
+    <Column title={gettext("Actions")} class="w-4">
+      <div class="overflow-x-auto">
+        <LivePatch to={~p"/admin/evaluations/#{item.id}"} class="btn btn-xs btn-outline btn-info">{gettext("Show")}</LivePatch>
+        <LivePatch to={~p"/admin/evaluations/#{item.id}/edit"} class="btn btn-xs btn-warning">{gettext("Edit")}</LivePatch>
+        <button
+          class="btn btn-xs btn-error"
+          :on-click={"delete-one", target: "#evaluations-list"}
+          :values={id: item.id}
+        >{gettext("Delete")}</button>
+      </div>
+    </Column>
+  </Grid>
+</Layout>
