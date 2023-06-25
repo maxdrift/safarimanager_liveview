@@ -16,6 +16,7 @@ msgstr ""
 #: lib/safarimanager_web/live/admin/evaluations/index.sface:116
 #: lib/safarimanager_web/live/admin/organizations/index.sface:175
 #: lib/safarimanager_web/live/admin/subjects/index.sface:130
+#: lib/safarimanager_web/live/admin/users/index.sface:199
 #, elixir-autogen, elixir-format
 msgid "Actions"
 msgstr ""
@@ -346,6 +347,9 @@ msgstr ""
 msgid "Don't have an account?"
 msgstr ""
 
+#: lib/safarimanager_web/live/admin/users/index.sface:25
+#: lib/safarimanager_web/live/admin/users/index.sface:25
+#: lib/safarimanager_web/live/admin/users/index.sface:70
 #: lib/safarimanager_web/live/user_login_live.ex:28
 #: lib/safarimanager_web/live/user_registration_live.ex:38
 #: lib/safarimanager_web/live/user_settings_live.ex:36
@@ -557,6 +561,7 @@ msgstr ""
 #: lib/safarimanager_web/live/admin/evaluations/index.sface:38
 #: lib/safarimanager_web/live/admin/organizations/index.sface:35
 #: lib/safarimanager_web/live/admin/subjects/index.sface:41
+#: lib/safarimanager_web/live/admin/users/index.sface:44
 #, elixir-autogen, elixir-format
 msgid "Close"
 msgstr ""
@@ -596,6 +601,7 @@ msgstr ""
 #: lib/safarimanager_web/live/admin/evaluations/index.sface:124
 #: lib/safarimanager_web/live/admin/organizations/index.sface:183
 #: lib/safarimanager_web/live/admin/subjects/index.sface:138
+#: lib/safarimanager_web/live/admin/users/index.sface:207
 #, elixir-autogen, elixir-format
 msgid "Delete"
 msgstr ""
@@ -621,6 +627,7 @@ msgstr ""
 #: lib/safarimanager_web/live/admin/evaluations/index.sface:119
 #: lib/safarimanager_web/live/admin/organizations/index.sface:178
 #: lib/safarimanager_web/live/admin/subjects/index.sface:133
+#: lib/safarimanager_web/live/admin/users/index.sface:202
 #, elixir-autogen, elixir-format
 msgid "Edit"
 msgstr ""
@@ -684,6 +691,7 @@ msgstr ""
 #: lib/safarimanager_web/live/admin/evaluations/index.sface:80
 #: lib/safarimanager_web/live/admin/organizations/index.sface:65
 #: lib/safarimanager_web/live/admin/subjects/index.sface:92
+#: lib/safarimanager_web/live/admin/users/index.sface:93
 #, elixir-autogen, elixir-format
 msgid "Save"
 msgstr ""
@@ -712,6 +720,7 @@ msgstr ""
 #: lib/safarimanager_web/live/admin/evaluations/index.sface:118
 #: lib/safarimanager_web/live/admin/organizations/index.sface:177
 #: lib/safarimanager_web/live/admin/subjects/index.sface:132
+#: lib/safarimanager_web/live/admin/users/index.sface:201
 #, elixir-autogen, elixir-format
 msgid "Show"
 msgstr ""
@@ -738,6 +747,8 @@ msgstr ""
 #: lib/safarimanager_web/live/admin/organizations/index.sface:70
 #: lib/safarimanager_web/live/admin/organizations/index.sface:144
 #: lib/safarimanager_web/live/admin/subjects/index.sface:97
+#: lib/safarimanager_web/live/admin/users/index.sface:95
+#: lib/safarimanager_web/live/admin/users/index.sface:168
 #, elixir-autogen, elixir-format
 msgid "Cancel"
 msgstr ""
@@ -792,6 +803,8 @@ msgstr ""
 #: lib/safarimanager_web/live/admin/organizations/index.sface:25
 #: lib/safarimanager_web/live/admin/subjects/index.sface:31
 #: lib/safarimanager_web/live/admin/subjects/index.sface:31
+#: lib/safarimanager_web/live/admin/users/index.sface:34
+#: lib/safarimanager_web/live/admin/users/index.sface:34
 #, elixir-autogen, elixir-format
 msgid "Inserted"
 msgstr ""
@@ -818,6 +831,8 @@ msgstr ""
 #: lib/safarimanager_web/live/admin/organizations/index.sface:28
 #: lib/safarimanager_web/live/admin/subjects/index.sface:34
 #: lib/safarimanager_web/live/admin/subjects/index.sface:34
+#: lib/safarimanager_web/live/admin/users/index.sface:37
+#: lib/safarimanager_web/live/admin/users/index.sface:37
 #, elixir-autogen, elixir-format
 msgid "Updated"
 msgstr ""
@@ -894,6 +909,9 @@ msgstr ""
 #: lib/safarimanager_web/live/admin/organizations/index.sface:16
 #: lib/safarimanager_web/live/admin/organizations/index.sface:16
 #: lib/safarimanager_web/live/admin/organizations/index.sface:160
+#: lib/safarimanager_web/live/admin/users/index.sface:16
+#: lib/safarimanager_web/live/admin/users/index.sface:16
+#: lib/safarimanager_web/live/admin/users/index.sface:184
 #, elixir-autogen, elixir-format
 msgid "ID"
 msgstr ""
@@ -982,12 +1000,8 @@ msgstr ""
 msgid "Unable to retrieve this Organization"
 msgstr ""
 
-#: lib/safarimanager_web/live/admin/organizations/index.sface:86
-#, elixir-autogen, elixir-format
-msgid "Merge organization"
-msgstr ""
-
 #: lib/safarimanager_web/live/admin/organizations/index.sface:135
+#: lib/safarimanager_web/live/admin/users/index.sface:76
 #, elixir-autogen, elixir-format
 msgid "Select an organization..."
 msgstr ""
@@ -1113,6 +1127,10 @@ msgstr ""
 #: lib/safarimanager_web/live/admin/competitions/index.sface:300
 #: lib/safarimanager_web/live/admin/competitions/index.sface:300
 #: lib/safarimanager_web/live/admin/competitions/index.sface:306
+#: lib/safarimanager_web/live/admin/users/index.sface:29
+#: lib/safarimanager_web/live/admin/users/index.sface:32
+#: lib/safarimanager_web/live/admin/users/index.sface:194
+#: lib/safarimanager_web/live/admin/users/index.sface:197
 #, elixir-autogen, elixir-format
 msgid "N/A"
 msgstr ""
@@ -1129,6 +1147,10 @@ msgid "Number of jurors"
 msgstr ""
 
 #: lib/safarimanager_web/live/admin/competitions/index.sface:122
+#: lib/safarimanager_web/live/admin/users/index.sface:28
+#: lib/safarimanager_web/live/admin/users/index.sface:28
+#: lib/safarimanager_web/live/admin/users/index.sface:73
+#: lib/safarimanager_web/live/admin/users/index.sface:193
 #, elixir-autogen, elixir-format
 msgid "Organization"
 msgstr ""
@@ -1314,4 +1336,124 @@ msgstr ""
 #: lib/safarimanager_web/live/admin/evaluations/index.ex:130
 #, elixir-autogen, elixir-format
 msgid "Unable to retrieve this Evaluation"
+msgstr ""
+
+#: lib/safarimanager_web/live/admin/users/index.ex:232
+#, elixir-autogen, elixir-format
+msgid "All users deleted successfully"
+msgstr ""
+
+#: lib/safarimanager_web/live/admin/users/index.sface:31
+#: lib/safarimanager_web/live/admin/users/index.sface:31
+#: lib/safarimanager_web/live/admin/users/index.sface:81
+#: lib/safarimanager_web/live/admin/users/index.sface:196
+#, elixir-autogen, elixir-format
+msgid "Category"
+msgstr ""
+
+#: lib/safarimanager_web/live/admin/users/index.sface:60
+#, elixir-autogen, elixir-format
+msgid "Edit user"
+msgstr ""
+
+#: lib/safarimanager_web/live/admin/users/index.ex:111
+#, elixir-autogen, elixir-format
+msgid "Edited user"
+msgstr ""
+
+#: lib/safarimanager_web/live/admin/users/index.sface:19
+#: lib/safarimanager_web/live/admin/users/index.sface:19
+#: lib/safarimanager_web/live/admin/users/index.sface:67
+#: lib/safarimanager_web/live/admin/users/index.sface:190
+#, elixir-autogen, elixir-format
+msgid "First name"
+msgstr ""
+
+#: lib/safarimanager_web/live/admin/users/index.sface:22
+#: lib/safarimanager_web/live/admin/users/index.sface:22
+#: lib/safarimanager_web/live/admin/users/index.sface:64
+#: lib/safarimanager_web/live/admin/users/index.sface:187
+#, elixir-autogen, elixir-format
+msgid "Last name"
+msgstr ""
+
+#: lib/safarimanager_web/live/admin/users/index.sface:59
+#, elixir-autogen, elixir-format
+msgid "New user"
+msgstr ""
+
+#: lib/safarimanager_web/live/admin/users/index.sface:84
+#, elixir-autogen, elixir-format
+msgid "Select a category..."
+msgstr ""
+
+#: lib/safarimanager_web/live/admin/users/index.ex:210
+#, elixir-autogen, elixir-format
+msgid "Unable to delete User"
+msgstr ""
+
+#: lib/safarimanager_web/live/admin/users/index.ex:223
+#, elixir-autogen, elixir-format
+msgid "Unable to delete Users"
+msgstr ""
+
+#: lib/safarimanager_web/live/admin/users/index.ex:184
+#, elixir-autogen, elixir-format
+msgid "Unable to retrieve this User"
+msgstr ""
+
+#: lib/safarimanager_web/live/admin/users/index.ex:87
+#, elixir-autogen, elixir-format
+msgid "User created successfully"
+msgstr ""
+
+#: lib/safarimanager_web/live/admin/users/index.ex:209
+#, elixir-autogen, elixir-format
+msgid "User deleted successfully"
+msgstr ""
+
+#: lib/safarimanager_web/live/admin/users/index.sface:12
+#, elixir-autogen, elixir-format
+msgid "User details"
+msgstr ""
+
+#: lib/safarimanager_web/live/admin/users/index.ex:220
+#, elixir-autogen, elixir-format
+msgid "Users deleted successfully"
+msgstr ""
+
+#: lib/safarimanager_web/live/admin/users/index.ex:149
+#, elixir-autogen, elixir-format
+msgid "Error merging users"
+msgstr ""
+
+#: lib/safarimanager_web/live/admin/users/index.ex:141
+#, elixir-autogen, elixir-format
+msgid "Error merging users: a destination must be specified"
+msgstr ""
+
+#: lib/safarimanager_web/live/admin/users/index.sface:159
+#, elixir-autogen, elixir-format
+msgid "Select a user..."
+msgstr ""
+
+#: lib/safarimanager_web/live/admin/users/index.ex:127
+#, elixir-autogen, elixir-format
+msgid "Successfully merged users"
+msgstr ""
+
+#: lib/safarimanager_web/live/admin/organizations/index.sface:86
+#, elixir-autogen, elixir-format
+msgid "Merge organizations"
+msgstr ""
+
+#: lib/safarimanager_web/live/admin/users/index.sface:110
+#, elixir-autogen, elixir-format
+msgid "Merge users"
+msgstr ""
+
+#: lib/safarimanager_web/live/admin/organizations/index.sface:140
+#: lib/safarimanager_web/live/admin/users/index.sface:164
+#, elixir-autogen, elixir-format
+msgid "Merge"
 msgstr ""

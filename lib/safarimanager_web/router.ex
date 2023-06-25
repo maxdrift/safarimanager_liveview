@@ -77,7 +77,10 @@ defmodule SMWeb.Router do
         live "/evaluations/new", Evaluations.Index, :new
         live "/evaluations/:id", Evaluations.Index, :show
         live "/evaluations/:id/edit", Evaluations.Index, :edit
-        live "/users", Users
+        live "/users", Users.Index, :index
+        live "/users/new", Users.Index, :new
+        live "/users/:id", Users.Index, :show
+        live "/users/:id/edit", Users.Index, :edit
         live "/categories", Categories.Index, :index
         live "/categories/new", Categories.Index, :new
         live "/categories/:id", Categories.Index, :show

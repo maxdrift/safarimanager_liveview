@@ -10,6 +10,7 @@ defmodule SM.Accounts do
   alias SM.Accounts.UserToken
   alias SM.Jurors.Juror
   alias SM.Participants.Participant
+  alias SM.Slides.Slide
 
   ## Database getters
 
@@ -248,7 +249,10 @@ defmodule SM.Accounts do
     |> Repo.insert()
     |> case do
       {:ok, user} ->
-        reset_user_password(user, %{password: new_password, password_confirmation: new_password})
+        reset_user_password(user, %{
+          password: new_password,
+          password_confirmation: new_password
+        })
 
       {:error, _reason} = error ->
         error
@@ -286,7 +290,14 @@ defmodule SM.Accounts do
     # TODO: Remove in Production!
     |> User.maybe_put_email()
     |> Repo.insert()
-    |> notify_subscribers([:user, :created])
+    |> case do
+      {:ok, user} ->
+        user = Repo.preload(user, [:organization, :category])
+        notify_subscribers({:ok, user}, [:user, :created])
+
+      {:error, changeset} ->
+        notify_subscribers({:error, changeset}, [:user, :created])
+    end
   end
 
   @doc """
@@ -399,7 +410,10 @@ defmodule SM.Accounts do
 
     Ecto.Multi.new()
     |> Ecto.Multi.update(:user, changeset)
-    |> Ecto.Multi.delete_all(:tokens, UserToken.user_and_contexts_query(user, [context]))
+    |> Ecto.Multi.delete_all(
+      :tokens,
+      UserToken.user_and_contexts_query(user, [context])
+    )
   end
 
   @doc ~S"""
@@ -411,7 +425,11 @@ defmodule SM.Accounts do
       {:ok, %{to: ..., body: ...}}
 
   """
-  def deliver_user_update_email_instructions(%User{} = user, current_email, update_email_url_fun)
+  def deliver_user_update_email_instructions(
+        %User{} = user,
+        current_email,
+        update_email_url_fun
+      )
       when is_function(update_email_url_fun, 1) do
     {encoded_token, user_token} = UserToken.build_email_token(user, "change:#{current_email}")
 
@@ -489,20 +507,78 @@ defmodule SM.Accounts do
   ## Examples
 
   iex> delete_many(["id1", "id2", "id3"])
-  {:ok, 3}
+  {:ok, ["id1", "id2", "id3"]}
 
   iex> delete_many(["id1", "id2", "id3"])
   :error
 
   """
-  @spec delete_many([String.t()]) :: {:ok, integer()} | :error
+  @spec delete_many([String.t()]) :: {:ok, [String.t()]} | :error
   def delete_many(ids) do
     {deleted, nil} = Repo.delete_all(from(entity in User, where: entity.id in ^ids))
 
     if deleted == Enum.count(ids) do
-      notify_subscribers({:ok, deleted}, [:user, :deleted])
+      notify_subscribers({:ok, ids}, [:user, :deleted])
     else
       notify_subscribers(:error, [:user, :deleted])
+    end
+  end
+
+  @doc """
+  Deletes all Users.
+
+  ## Examples
+
+  iex> delete_all()
+  {:ok, 10}
+
+  """
+  @spec delete_all :: {:ok, integer()}
+  def delete_all do
+    {deleted, nil} = Repo.delete_all(User)
+
+    notify_subscribers({:ok, deleted}, [:user, :deleted])
+  end
+
+  @spec merge_changeset([String.t()], String.t()) :: Ecto.Changeset.t()
+  def merge_changeset(source_ids, dest_id) when is_list(source_ids) do
+    User.merge_changeset(source_ids, dest_id)
+  end
+
+  @spec merge([String.t()], String.t()) :: {:ok, User.t()} | {:error, any()} | :error
+  def merge(source_ids, dest_id) when is_list(source_ids) do
+    # Make sure the destination ID is not among the deleted ones.
+    source_ids = source_ids -- [dest_id]
+
+    case User.merge_changeset(source_ids, dest_id) do
+      %Ecto.Changeset{valid?: true} ->
+        participant_query = from(p in Participant, where: p.user_id in ^source_ids)
+        juror_query = from(j in Juror, where: j.user_id in ^source_ids)
+        slide_query = from(s in Slide, where: s.user_id in ^source_ids)
+        user_query = from(u in User, where: u.id in ^source_ids)
+
+        Multi.new()
+        |> Multi.one(:user, from(User, where: [id: ^dest_id]))
+        |> Multi.update_all(:update_participants, participant_query, set: [user_id: dest_id])
+        |> Multi.update_all(:update_jurors, juror_query, set: [user_id: dest_id])
+        |> Multi.update_all(:update_slides, slide_query, set: [user_id: dest_id])
+        |> Multi.delete_all(:delete_organizations, user_query)
+        |> Repo.transaction()
+        |> case do
+          {:ok, %{user: user}} ->
+            user = Repo.preload(user, [:organization, :category])
+            notify_subscribers({:ok, source_ids}, [:user, :deleted])
+            notify_subscribers({:ok, user}, [:user, :updated])
+
+          {:error, failed_operation, failed_value, _changes_so_far} ->
+            notify_subscribers({:error, {failed_operation, failed_value}}, [
+              :user,
+              :deleted
+            ])
+        end
+
+      %Ecto.Changeset{valid?: false} = changeset ->
+        notify_subscribers({:error, changeset}, [:organization, :deleted])
     end
   end
 
@@ -554,7 +630,11 @@ defmodule SM.Accounts do
     else
       {encoded_token, user_token} = UserToken.build_email_token(user, "confirm")
       Repo.insert!(user_token)
-      UserNotifier.deliver_confirmation_instructions(user, confirmation_url_fun.(encoded_token))
+
+      UserNotifier.deliver_confirmation_instructions(
+        user,
+        confirmation_url_fun.(encoded_token)
+      )
     end
   end
 
@@ -577,7 +657,10 @@ defmodule SM.Accounts do
   defp confirm_user_multi(user) do
     Ecto.Multi.new()
     |> Ecto.Multi.update(:user, User.confirm_changeset(user))
-    |> Ecto.Multi.delete_all(:tokens, UserToken.user_and_contexts_query(user, ["confirm"]))
+    |> Ecto.Multi.delete_all(
+      :tokens,
+      UserToken.user_and_contexts_query(user, ["confirm"])
+    )
   end
 
   ## Reset password
@@ -595,7 +678,11 @@ defmodule SM.Accounts do
       when is_function(reset_password_url_fun, 1) do
     {encoded_token, user_token} = UserToken.build_email_token(user, "reset_password")
     Repo.insert!(user_token)
-    UserNotifier.deliver_reset_password_instructions(user, reset_password_url_fun.(encoded_token))
+
+    UserNotifier.deliver_reset_password_instructions(
+      user,
+      reset_password_url_fun.(encoded_token)
+    )
   end
 
   @doc """

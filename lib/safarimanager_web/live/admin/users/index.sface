@@ -1,0 +1,211 @@
+<Layout current_page={~p"/admin/users"} current_user={@current_user}>
+  {!-- Show dialog --}
+  <div
+    :if={@live_action == :show}
+    id="show-dialog"
+    class="modal modal-open"
+    :on-window-keydown={JS.patch("/admin/users")}
+    phx-key="Escape"
+  >
+    <div class="modal-box">
+      <div class="card-title">
+        {gettext("User details")}
+      </div>
+      <div class="card-body">
+        <FieldsList>
+          <FieldsListItem label={gettext("ID")}>
+            <ShortUUID value={@record.id} />
+          </FieldsListItem>
+          <FieldsListItem label={gettext("First name")}>
+            <span class="capitalize">{@record.first_name}</span>
+          </FieldsListItem>
+          <FieldsListItem label={gettext("Last name")}>
+            <span class="capitalize">{@record.last_name}</span>
+          </FieldsListItem>
+          <FieldsListItem label={gettext("Email")}>
+            {@record.email}
+          </FieldsListItem>
+          <FieldsListItem label={gettext("Organization")}>
+            {(@record.organization && @record.organization.name) || gettext("N/A")}
+          </FieldsListItem>
+          <FieldsListItem label={gettext("Category")}>
+            {(@record.category && @record.category.name) || gettext("N/A")}
+          </FieldsListItem>
+          <FieldsListItem label={gettext("Inserted")}>
+            <DateTimeString value={@record.inserted_at} />
+          </FieldsListItem>
+          <FieldsListItem label={gettext("Updated")}>
+            <DateTimeString value={@record.updated_at} />
+          </FieldsListItem>
+        </FieldsList>
+      </div>
+      <div class="modal-action">
+        <button :on-click={JS.patch("/admin/users")} class="btn btn-md btn-ghost">
+          {gettext("Close")}
+        </button>
+      </div>
+    </div>
+  </div>
+  {!-- New-edit dialog --}
+  <div
+    :if={@live_action in [:new, :edit]}
+    id="edit-dialog"
+    class="modal modal-open"
+    :on-window-keydown={JS.patch("/admin/users")}
+    phx-key="Escape"
+  >
+    <div class="modal-box">
+      <div class="card-title">
+        <span :if={@live_action == :new}>{gettext("New user")}</span>
+        <span :if={@live_action == :edit}>{gettext("Edit user")}</span>
+      </div>
+      <Form for={@changeset} change="validate" submit="submit" as={:entity} opts={autocomplete: "off"}>
+        <div class="card-body">
+          <SMField name={:last_name} label={gettext("Last name")}>
+            <TextInput class={input_state_class(@changeset, :last_name)} opts={phx_debounce: "1000"} />
+          </SMField>
+          <SMField name={:first_name} label={gettext("First name")}>
+            <TextInput class={input_state_class(@changeset, :first_name)} opts={phx_debounce: "1000"} />
+          </SMField>
+          <SMField name={:email} label={gettext("Email")}>
+            <TextInput class={input_state_class(@changeset, :email)} opts={phx_debounce: "1000"} />
+          </SMField>
+          <SMField name={:organization_id} label={gettext("Organization")}>
+            <Select
+              options={Enum.map(@organizations, &{&1.name, &1.id})}
+              prompt={[key: gettext("Select an organization...")]}
+              selected={@record.organization_id}
+              class={input_state_class(@changeset, :organization_id)}
+            />
+          </SMField>
+          <SMField name={:category_id} label={gettext("Category")}>
+            <Select
+              options={Enum.map(@categories, &{&1.name, &1.id})}
+              prompt={[key: gettext("Select a category...")]}
+              selected={@record.category_id}
+              class={input_state_class(@changeset, :category_id)}
+            />
+          </SMField>
+          <HiddenInput field={:_action} value={@action} />
+        </div>
+        <div class="modal-action">
+          <Submit values={[action: @action]} class={submit_state_class(@changeset)}>
+            {gettext("Save")}
+          </Submit>
+          <Reset click={JS.patch("/admin/users")} class="btn btn-md btn-ghost" value={gettext("Cancel")} />
+        </div>
+      </Form>
+    </div>
+  </div>
+  {!-- Merge dialog --}
+  <div
+    :if={@merge_selection != []}
+    id="merge-dialog"
+    class="modal modal-open"
+    :on-window-keydown={JS.navigate("/admin/users")}
+    phx-key="Escape"
+  >
+    <div class="modal-box">
+      <div class="card-title">
+        {gettext("Merge users")}
+      </div>
+      <div class="card-body">
+        <div class="flex flex-col place-items-center">
+          <div class="w-full text-center">
+            <div class="flex flex-col">
+              {#for record <- @merge_selection}
+                <div class="border border-solid border-base-content rounded my-1">
+                  {record.last_name} {record.first_name}{record.organization && " (#{record.organization.name})"}
+                </div>
+              {/for}
+            </div>
+          </div>
+          <div class="uppercase text-lg font-bold my-4">
+            <svg
+              version="1.1"
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-10 w-10"
+              fill="none"
+              viewBox="0 0 50 50"
+              stroke="white"
+              stroke-width="4"
+            >
+              <path
+                d="M44.3931 7.61117L41.9401 2.43505C34.23 5.51585 28.4312 9.54991 25 14.3392C21.5688 9.54991 15.77 5.52046 8.05987 2.43505L5.60688 7.61117C13.0511 10.5861 21.4334 15.7438 21.4334 25L21.4334 31.7695L13.939 31.7695L25 47.565L36.061 31.7695L28.5666 31.7695L28.5666 25C28.5666 15.7438 36.9489 10.5861 44.3931 7.61117Z"
+                fill="#ffffff"
+                fill-rule="nonzero"
+                opacity="1"
+                stroke="#000000"
+                stroke-linecap="butt"
+                stroke-linejoin="round"
+                stroke-width="1"
+              />
+            </svg>
+          </div>
+          <Form
+            for={@changeset}
+            change="validate"
+            submit="submit"
+            as={:merge}
+            opts={autocomplete: "off"}
+            class="w-full px-auto"
+          >
+            <SMField name={:dest_id}>
+              <Select
+                options={Enum.map(
+                  @merge_selection,
+                  &{"#{&1.last_name} #{&1.first_name} #{&1.organization && ~s|(#{&1.organization.name})|}", &1.id}
+                )}
+                prompt={[key: gettext("Select a user...")]}
+                class={input_state_class(@changeset, :dest_id)}
+              />
+            </SMField>
+            <div class="modal-action">
+              <Submit class={submit_state_class(@changeset)}>{gettext("Merge")}</Submit>
+              <Reset
+                click={JS.navigate("/admin/users")}
+                class="btn btn-md btn-ghost"
+                value={gettext("Cancel")}
+              />
+            </div>
+          </Form>
+        </div>
+      </div>
+    </div>
+  </div>
+  {!-- Index table --}
+  <Grid
+    id="users-list"
+    items={item <- @streams.items}
+    create_path={~p"/admin/users/new"}
+    merge_path={~p"/admin/users/merge"}
+    export_path={~p"/export?entity=users"}
+  >
+    <Column title={gettext("ID")} class="w-1/12">
+      <ShortUUID value={item.id} />
+    </Column>
+    <Column title={gettext("Last name")}>
+      <span class="capitalize">{item.last_name}</span>
+    </Column>
+    <Column title={gettext("First name")}>
+      <span class="capitalize">{item.first_name}</span>
+    </Column>
+    <Column title={gettext("Organization")}>
+      {(item.organization && item.organization.name) || gettext("N/A")}
+    </Column>
+    <Column title={gettext("Category")} class="w-2/12">
+      {(item.category && item.category.name) || gettext("N/A")}
+    </Column>
+    <Column title={gettext("Actions")} class="w-4">
+      <div class="overflow-x-auto">
+        <LivePatch to={~p"/admin/users/#{item.id}"} class="btn btn-xs btn-outline btn-info">{gettext("Show")}</LivePatch>
+        <LivePatch to={~p"/admin/users/#{item.id}/edit"} class="btn btn-xs btn-warning">{gettext("Edit")}</LivePatch>
+        <button
+          class="btn btn-xs btn-error"
+          :on-click={"delete-one", target: "#users-list"}
+          :values={id: item.id}
+        >{gettext("Delete")}</button>
+      </div>
+    </Column>
+  </Grid>
+</Layout>
