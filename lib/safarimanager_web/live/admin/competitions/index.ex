@@ -212,6 +212,7 @@ defmodule SMWeb.Live.Admin.Competitions.Index do
   end
 
   def handle_info({Competitions, [:competition, :updated], updated_item}, socket) do
+    {:ok, updated_item} = Competitions.get(updated_item.id)
     {:noreply, stream_insert(socket, :items, updated_item)}
   end
 
