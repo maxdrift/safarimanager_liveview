@@ -18,6 +18,7 @@ defmodule SMWeb.Components.Grid do
   prop export_path, :string
   prop merge_path, :string
   prop infinite_scroll, :boolean, default: false
+  prop id_fields, :list, default: [:id]
 
   @doc "The list of columns defining the Grid"
   slot cols, required: true, generator_prop: :items
@@ -78,7 +79,7 @@ defmodule SMWeb.Components.Grid do
                       <input
                         type="checkbox"
                         name={"#{@id}-selection[]"}
-                        value={item.id}
+                        value={maybe_encode_compound_ids(item, @id_fields)}
                         class="checkbox checkbox-sm mt-2"
                       />
                     </label>
@@ -128,7 +129,11 @@ defmodule SMWeb.Components.Grid do
     grid_id = socket.assigns.id
 
     select_all = Map.get(params, "#{grid_id}-select-all", false) && true
-    selected = Map.get(params, "#{grid_id}-selection", [])
+
+    selected =
+      params
+      |> Map.get("#{grid_id}-selection", [])
+      |> maybe_decode_compound_ids()
 
     socket =
       cond do
@@ -152,7 +157,10 @@ defmodule SMWeb.Components.Grid do
       ) do
     grid_id = socket.assigns.id
 
-    selected = Map.get(params, "#{grid_id}-selection", [])
+    selected =
+      params
+      |> Map.get("#{grid_id}-selection", [])
+      |> maybe_decode_compound_ids()
 
     _result = send(self(), {"merge-selected", selected})
 
@@ -160,12 +168,12 @@ defmodule SMWeb.Components.Grid do
   end
 
   def handle_event("delete-one", %{"id" => id}, socket) do
+    [id] = maybe_decode_compound_ids([id])
+
     on_confirm = fn socket ->
       send(self(), {"delete-one", id})
 
       socket
-      |> assign(:selection, MapSet.new())
-      |> assign(:select_all, false)
     end
 
     {:noreply,
@@ -226,5 +234,32 @@ defmodule SMWeb.Components.Grid do
       confirm_text: gettext("Delete"),
       confirm_icon: "trash"
     )
+  end
+
+  defp maybe_encode_compound_ids(item, [id_field]) do
+    Map.fetch!(item, id_field)
+  end
+
+  defp maybe_encode_compound_ids(item, id_fields) when is_list(id_fields) do
+    id_fields
+    |> Enum.map(fn id_field ->
+      Map.fetch!(item, id_field)
+    end)
+    |> Enum.join(",")
+  end
+
+  defp maybe_decode_compound_ids(encoded) do
+    encoded
+    |> Enum.map(fn encoded_ids ->
+      encoded_ids
+      |> String.split(",")
+      |> case do
+        [id] ->
+          id
+
+        [_ | _] = ids ->
+          List.to_tuple(ids)
+      end
+    end)
   end
 end

@@ -1,0 +1,144 @@
+<Layout current_page={~p"/admin/participants"} current_user={@current_user}>
+  {!-- Show dialog --}
+  <div
+    :if={@live_action == :show}
+    id="show-dialog"
+    class="modal modal-open"
+    :on-window-keydown={JS.patch("/admin/participants")}
+    phx-key="Escape"
+  >
+    <div class="modal-box">
+      <div class="card-title">
+        {gettext("Participant details")}
+      </div>
+      <div class="card-body">
+        <FieldsList>
+          <FieldsListItem label={gettext("Number")}>
+            {@record.number}
+          </FieldsListItem>
+          <FieldsListItem label={gettext("Competition")}>
+            {@record.competition.name}
+          </FieldsListItem>
+          <FieldsListItem label={gettext("User")}>
+            {@record.user.first_name} {@record.user.last_name}
+          </FieldsListItem>
+          <FieldsListItem label={gettext("Category")}>
+            {(@record.category && @record.category.name) || gettext("N/A")}
+          </FieldsListItem>
+          <FieldsListItem label={gettext("Inserted")}>
+            <DateTimeString value={@record.inserted_at} />
+          </FieldsListItem>
+          <FieldsListItem label={gettext("Updated")}>
+            <DateTimeString value={@record.updated_at} />
+          </FieldsListItem>
+        </FieldsList>
+      </div>
+      <div class="modal-action">
+        <button :on-click={JS.patch("/admin/participants")} class="btn btn-md btn-ghost">
+          {gettext("Close")}
+        </button>
+      </div>
+    </div>
+  </div>
+  {!-- New-edit dialog --}
+  <div
+    :if={@live_action in [:new, :edit]}
+    id="edit-dialog"
+    class="modal modal-open"
+    :on-window-keydown={JS.patch("/admin/participants")}
+    phx-key="Escape"
+  >
+    <div class="modal-box">
+      <div class="card-title">
+        <span :if={@live_action == :new}>{gettext("New participant")}</span>
+        <span :if={@live_action == :edit}>{gettext("Edit participant")}</span>
+      </div>
+      <Form for={@changeset} change="validate" submit="submit" as={:entity} opts={autocomplete: "off"}>
+        <div class="card-body">
+          <SMField name={:number} label={gettext("Number")}>
+            <NumberInput class={input_state_class(@changeset, :number)} opts={phx_debounce: "1000"} />
+          </SMField>
+          <SMField name={:competition_id} label={gettext("Competition")}>
+            <Select
+              options={Enum.map(@competitions, &{&1.name, &1.id})}
+              selected={@record.competition_id}
+              prompt={[key: gettext("Select a competition...")]}
+              class={input_state_class(@changeset, :competition_id)}
+              opts={phx_debounce: "1000"}
+            />
+          </SMField>
+          <SMField name={:user_id} label={gettext("User")}>
+            <Select
+              options={Enum.map(@users, &{"#{&1.first_name} #{&1.last_name}", &1.id})}
+              selected={@record.user_id}
+              prompt={[key: gettext("Select a user...")]}
+              class={input_state_class(@changeset, :user_id)}
+              opts={phx_debounce: "1000"}
+            />
+          </SMField>
+          <SMField name={:category_id} label={gettext("Category")}>
+            <Select
+              options={Enum.map(@categories, &{&1.name, &1.id})}
+              selected={@record.category_id}
+              prompt={[key: gettext("Select a category...")]}
+              class={input_state_class(@changeset, :category_id)}
+              opts={phx_debounce: "1000"}
+            />
+          </SMField>
+          <HiddenInput field={:_action} value={@action} />
+        </div>
+        <div class="modal-action">
+          <Submit values={[action: @action]} class={submit_state_class(@changeset)}>
+            {gettext("Save")}
+          </Submit>
+          <Reset
+            click={JS.patch("/admin/participants")}
+            class="btn btn-md btn-ghost"
+            value={gettext("Cancel")}
+          />
+        </div>
+      </Form>
+    </div>
+  </div>
+  {!-- Index table --}
+  <Grid
+    id="participants-list"
+    items={item <- @streams.items}
+    create_path={~p"/admin/participants/new"}
+    export_path={~p"/export?entity=participants"}
+    id_fields={[:user_id, :competition_id]}
+  >
+    <Column title={gettext("#")} class="w-1/12">
+      {item.number}
+    </Column>
+    <Column title={gettext("Competition")}>
+      {item.competition.name}
+    </Column>
+    <Column title={gettext("User")}>
+      {item.user.first_name} {item.user.last_name}
+    </Column>
+    <Column title={gettext("Category")}>
+      {(item.category && item.category.name) || gettext("N/A")}
+    </Column>
+    <Column title={gettext("Created")} class="w-2/12">
+      <DateTimeString value={item.inserted_at} />
+    </Column>
+    <Column title={gettext("Actions")} class="w-4">
+      <div class="overflow-x-auto">
+        <LivePatch
+          to={~p"/admin/participants/#{item.user_id}/#{item.competition_id}"}
+          class="btn btn-xs btn-outline btn-info"
+        >{gettext("Show")}</LivePatch>
+        <LivePatch
+          to={~p"/admin/participants/#{item.user_id}/#{item.competition_id}/edit"}
+          class="btn btn-xs btn-warning"
+        >{gettext("Edit")}</LivePatch>
+        <button
+          class="btn btn-xs btn-error"
+          :on-click={"delete-one", target: "#participants-list"}
+          :values={id: "#{item.user_id},#{item.competition_id}"}
+        >{gettext("Delete")}</button>
+      </div>
+    </Column>
+  </Grid>
+</Layout>

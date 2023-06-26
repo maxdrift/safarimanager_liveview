@@ -140,8 +140,8 @@ defmodule SM.Participants do
     |> Participant.changeset(attrs)
     |> Repo.insert()
     |> case do
-      {:ok, _participant} = result ->
-        result
+      {:ok, participant} ->
+        {:ok, Repo.preload(participant, [:user, :competition, :category])}
 
       {:error,
        %Ecto.Changeset{
@@ -150,12 +150,11 @@ defmodule SM.Participants do
          ],
          valid?: false
        }} ->
-        new_number = Map.get(attrs, :number, 0) + 1
-        attrs = Map.put(attrs, :number, new_number)
+        new_number = Map.get(attrs, "number", 0) + 1
+        attrs = Map.put(attrs, "number", new_number)
         create(attrs)
     end
-    |> notify_subscribers([:competition, :updated], id_key: :competition_id)
-    |> notify_subscribers([:user, :updated], id_key: :user_id)
+    |> notify_subscribers([:participant, :created], id_key: :user_id)
   end
 
   @doc """
@@ -175,8 +174,7 @@ defmodule SM.Participants do
     %Participant{}
     |> Participant.import_changeset(attrs)
     |> Repo.insert()
-    |> notify_subscribers([:competition, :updated], id_key: :competition_id)
-    |> notify_subscribers([:user, :updated], id_key: :user_id)
+    |> notify_subscribers([:participant, :updated], id_key: :user_id)
   end
 
   @doc """
@@ -197,8 +195,7 @@ defmodule SM.Participants do
     participant
     |> Participant.changeset(attrs)
     |> Repo.update()
-    |> notify_subscribers([:competition, :updated], id_key: :competition_id)
-    |> notify_subscribers([:user, :updated], id_key: :user_id)
+    |> notify_subscribers([:participant, :updated], id_key: :user_id)
   end
 
   @doc """
@@ -217,8 +214,7 @@ defmodule SM.Participants do
   def delete(participant) do
     participant
     |> Repo.delete()
-    |> notify_subscribers([:competition, :updated], id_key: :competition_id)
-    |> notify_subscribers([:user, :updated], id_key: :user_id)
+    |> notify_subscribers([:participant, :deleted], id_key: :user_id)
   end
 
   @doc """
@@ -238,35 +234,23 @@ defmodule SM.Participants do
     Participant
     |> Repo.get_by!(user_id: user_id, competition_id: competition_id)
     |> Repo.delete()
-    |> notify_subscribers([:competition, :updated], id_key: :competition_id)
-    |> notify_subscribers([:user, :updated], id_key: :user_id)
+    |> notify_subscribers([:participant, :deleted], id_key: :user_id)
   end
 
   @doc """
-  Deletes many Participants by ID.
+  Deletes all Participants.
 
   ## Examples
 
-  iex> delete_many(["id1", "id2", "id3"])
-  {:ok, 3}
-
-  iex> delete_many(["id1", "id2", "id3"])
-  :error
+  iex> delete_all()
+  {:ok, 10}
 
   """
-  @spec delete_many([String.t()]) :: {:ok, integer()} | :error
-  def delete_many(ids) do
-    {deleted, nil} = Repo.delete_all(from entity in Participant, where: entity.id in ^ids)
+  @spec delete_all :: {:ok, integer()}
+  def delete_all do
+    {deleted, nil} = Repo.delete_all(Participant)
 
-    if deleted == Enum.count(ids) do
-      with {:ok, _result} <-
-             notify_subscribers({:ok, deleted}, [:competition, :updated], id_key: :competition_id),
-           do: notify_subscribers({:ok, deleted}, [:user, :updated], id_key: :user_id)
-    else
-      with {:ok, _result} <-
-             notify_subscribers(:error, [:competition, :updated], id_key: :competition_id),
-           do: notify_subscribers(:error, [:user, :updated], id_key: :user_id)
-    end
+    notify_subscribers({:ok, deleted}, [:participant, :deleted], id_key: :user_id)
   end
 
   @doc """

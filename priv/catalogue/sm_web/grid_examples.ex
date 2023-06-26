@@ -88,4 +88,24 @@ defmodule SMWeb.Components.GridExamples do
     </Grid>
     """
   end
+
+    @example true
+  def custom_id_fields(assigns) do
+    ~F"""
+    <Grid id="grid-basic-example" id_fields={[:first_id, :second_id]} items={album <- [
+      {"item-1", %{first_id: 1, second_id: "a", name: "The Dark Side of the Moon", artist: "Pink Floyd", released: "March 1, 1973"}},
+      {"item-2", %{first_id: 2, second_id: "b", name: "OK Computer", artist: "Radiohead", released: "June 16, 1997"}},
+      {"item-3", %{first_id: 3, second_id: "c", name: "Disraeli Gears", artist: "Cream", released: "November 2, 1967", selected: true}},
+      {"item-4", %{first_id: 4, second_id: "d", name: "Physical Graffiti", artist: "Led Zeppelin", released: "February 24, 1975"}},
+    ]}>
+      <Column title="Title">
+        {album.name} (Released: <strong>{album.released}</strong>)
+      </Column>
+      <Column title="Artist">
+        <a href="#">{album.artist}</a>
+      </Column>
+    </Grid>
+    """
+  end
+
 end

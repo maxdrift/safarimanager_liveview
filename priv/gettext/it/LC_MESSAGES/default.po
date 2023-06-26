@@ -16,6 +16,7 @@ msgstr ""
 #: lib/safarimanager_web/live/admin/competitions/index.sface:308
 #: lib/safarimanager_web/live/admin/evaluations/index.sface:116
 #: lib/safarimanager_web/live/admin/organizations/index.sface:175
+#: lib/safarimanager_web/live/admin/participants/index.sface:126
 #: lib/safarimanager_web/live/admin/subjects/index.sface:130
 #: lib/safarimanager_web/live/admin/users/index.sface:199
 #, elixir-autogen, elixir-format
@@ -541,17 +542,17 @@ msgstr "Impossibile importare la selezione: slide non trovata"
 msgid "Unable to import slide selection: subject not found"
 msgstr "Impossibile importare la selezione: soggetto non trovato"
 
-#: lib/safarimanager_web/components/grid.ex:206
+#: lib/safarimanager_web/components/grid.ex:214
 #, elixir-autogen, elixir-format
 msgid "Are you sure you want to delete 1 record?"
 msgstr "Sei sicuro di voler eliminare 1 record?"
 
-#: lib/safarimanager_web/components/grid.ex:191
+#: lib/safarimanager_web/components/grid.ex:199
 #, elixir-autogen, elixir-format
 msgid "Are you sure you want to delete all records?"
 msgstr "Sei sicuro di voler eliminare tutti i record?"
 
-#: lib/safarimanager_web/components/grid.ex:174
+#: lib/safarimanager_web/components/grid.ex:182
 #, elixir-autogen, elixir-format
 msgid "Are you sure you want to delete this record?"
 msgstr "Sei sicuro di voler eliminare questo record?"
@@ -560,6 +561,7 @@ msgstr "Sei sicuro di voler eliminare questo record?"
 #: lib/safarimanager_web/live/admin/competitions/index.sface:99
 #: lib/safarimanager_web/live/admin/evaluations/index.sface:38
 #: lib/safarimanager_web/live/admin/organizations/index.sface:35
+#: lib/safarimanager_web/live/admin/participants/index.sface:38
 #: lib/safarimanager_web/live/admin/subjects/index.sface:41
 #: lib/safarimanager_web/live/admin/users/index.sface:44
 #, elixir-autogen, elixir-format
@@ -578,7 +580,7 @@ msgstr "Coeff."
 msgid "Coefficient"
 msgstr "Coefficiente"
 
-#: lib/safarimanager_web/components/grid.ex:37
+#: lib/safarimanager_web/components/grid.ex:38
 #, elixir-autogen, elixir-format
 msgid "Create"
 msgstr "Crea"
@@ -586,38 +588,40 @@ msgstr "Crea"
 #: lib/safarimanager_web/live/admin/categories/index.sface:83
 #: lib/safarimanager_web/live/admin/evaluations/index.sface:110
 #: lib/safarimanager_web/live/admin/organizations/index.sface:169
+#: lib/safarimanager_web/live/admin/participants/index.sface:123
 #: lib/safarimanager_web/live/admin/subjects/index.sface:124
 #, elixir-autogen, elixir-format
 msgid "Created"
 msgstr "Creato"
 
-#: lib/safarimanager_web/components/grid.ex:51
-#: lib/safarimanager_web/components/grid.ex:175
-#: lib/safarimanager_web/components/grid.ex:192
-#: lib/safarimanager_web/components/grid.ex:207
-#: lib/safarimanager_web/components/grid.ex:226
+#: lib/safarimanager_web/components/grid.ex:52
+#: lib/safarimanager_web/components/grid.ex:183
+#: lib/safarimanager_web/components/grid.ex:200
+#: lib/safarimanager_web/components/grid.ex:215
+#: lib/safarimanager_web/components/grid.ex:234
 #: lib/safarimanager_web/live/admin/categories/index.sface:97
 #: lib/safarimanager_web/live/admin/competitions/index.sface:316
 #: lib/safarimanager_web/live/admin/evaluations/index.sface:124
 #: lib/safarimanager_web/live/admin/organizations/index.sface:183
+#: lib/safarimanager_web/live/admin/participants/index.sface:140
 #: lib/safarimanager_web/live/admin/subjects/index.sface:138
 #: lib/safarimanager_web/live/admin/users/index.sface:207
 #, elixir-autogen, elixir-format
 msgid "Delete"
 msgstr "Elimina"
 
-#: lib/safarimanager_web/components/grid.ex:190
+#: lib/safarimanager_web/components/grid.ex:198
 #, elixir-autogen, elixir-format
 msgid "Delete all records"
 msgstr "Elimina tutti i record"
 
-#: lib/safarimanager_web/components/grid.ex:173
-#: lib/safarimanager_web/components/grid.ex:205
+#: lib/safarimanager_web/components/grid.ex:181
+#: lib/safarimanager_web/components/grid.ex:213
 #, elixir-autogen, elixir-format
 msgid "Delete record"
 msgstr "Elimina record"
 
-#: lib/safarimanager_web/components/grid.ex:220
+#: lib/safarimanager_web/components/grid.ex:228
 #, elixir-autogen, elixir-format
 msgid "Delete records"
 msgstr "Elimina i record"
@@ -626,6 +630,7 @@ msgstr "Elimina i record"
 #: lib/safarimanager_web/live/admin/competitions/index.sface:311
 #: lib/safarimanager_web/live/admin/evaluations/index.sface:119
 #: lib/safarimanager_web/live/admin/organizations/index.sface:178
+#: lib/safarimanager_web/live/admin/participants/index.sface:135
 #: lib/safarimanager_web/live/admin/subjects/index.sface:133
 #: lib/safarimanager_web/live/admin/users/index.sface:202
 #, elixir-autogen, elixir-format
@@ -637,12 +642,12 @@ msgstr "Modifica"
 msgid "Edited subject"
 msgstr "Soggetto modificato"
 
-#: lib/safarimanager_web/components/grid.ex:39
+#: lib/safarimanager_web/components/grid.ex:40
 #, elixir-autogen, elixir-format
 msgid "Export to CSV"
 msgstr "Esporta in CSV"
 
-#: lib/safarimanager_web/components/grid.ex:49
+#: lib/safarimanager_web/components/grid.ex:50
 #, elixir-autogen, elixir-format
 msgid "Merge into"
 msgstr "Unisci"
@@ -690,6 +695,7 @@ msgstr "ID numerico"
 #: lib/safarimanager_web/live/admin/competitions/index.sface:275
 #: lib/safarimanager_web/live/admin/evaluations/index.sface:80
 #: lib/safarimanager_web/live/admin/organizations/index.sface:65
+#: lib/safarimanager_web/live/admin/participants/index.sface:92
 #: lib/safarimanager_web/live/admin/subjects/index.sface:92
 #: lib/safarimanager_web/live/admin/users/index.sface:93
 #, elixir-autogen, elixir-format
@@ -719,6 +725,7 @@ msgstr "Seleziona un tipo"
 #: lib/safarimanager_web/live/admin/competitions/index.sface:310
 #: lib/safarimanager_web/live/admin/evaluations/index.sface:118
 #: lib/safarimanager_web/live/admin/organizations/index.sface:177
+#: lib/safarimanager_web/live/admin/participants/index.sface:131
 #: lib/safarimanager_web/live/admin/subjects/index.sface:132
 #: lib/safarimanager_web/live/admin/users/index.sface:201
 #, elixir-autogen, elixir-format
@@ -746,6 +753,7 @@ msgstr "Tipo"
 #: lib/safarimanager_web/live/admin/evaluations/index.sface:85
 #: lib/safarimanager_web/live/admin/organizations/index.sface:70
 #: lib/safarimanager_web/live/admin/organizations/index.sface:144
+#: lib/safarimanager_web/live/admin/participants/index.sface:97
 #: lib/safarimanager_web/live/admin/subjects/index.sface:97
 #: lib/safarimanager_web/live/admin/users/index.sface:95
 #: lib/safarimanager_web/live/admin/users/index.sface:168
@@ -801,6 +809,8 @@ msgstr "Impossibile recuperare questo soggetto"
 #: lib/safarimanager_web/live/admin/evaluations/index.sface:28
 #: lib/safarimanager_web/live/admin/organizations/index.sface:25
 #: lib/safarimanager_web/live/admin/organizations/index.sface:25
+#: lib/safarimanager_web/live/admin/participants/index.sface:28
+#: lib/safarimanager_web/live/admin/participants/index.sface:28
 #: lib/safarimanager_web/live/admin/subjects/index.sface:31
 #: lib/safarimanager_web/live/admin/subjects/index.sface:31
 #: lib/safarimanager_web/live/admin/users/index.sface:34
@@ -810,6 +820,9 @@ msgid "Inserted"
 msgstr "Creato"
 
 #: lib/safarimanager_web/live/admin/competitions/index.sface:155
+#: lib/safarimanager_web/live/admin/participants/index.sface:16
+#: lib/safarimanager_web/live/admin/participants/index.sface:16
+#: lib/safarimanager_web/live/admin/participants/index.sface:58
 #: lib/safarimanager_web/live/admin/subjects/index.sface:16
 #: lib/safarimanager_web/live/admin/subjects/index.sface:16
 #, elixir-autogen, elixir-format
@@ -829,6 +842,8 @@ msgstr "Dettagli soggetto"
 #: lib/safarimanager_web/live/admin/evaluations/index.sface:31
 #: lib/safarimanager_web/live/admin/organizations/index.sface:28
 #: lib/safarimanager_web/live/admin/organizations/index.sface:28
+#: lib/safarimanager_web/live/admin/participants/index.sface:31
+#: lib/safarimanager_web/live/admin/participants/index.sface:31
 #: lib/safarimanager_web/live/admin/subjects/index.sface:34
 #: lib/safarimanager_web/live/admin/subjects/index.sface:34
 #: lib/safarimanager_web/live/admin/users/index.sface:37
@@ -1127,6 +1142,8 @@ msgstr "Max slide presentate"
 #: lib/safarimanager_web/live/admin/competitions/index.sface:300
 #: lib/safarimanager_web/live/admin/competitions/index.sface:300
 #: lib/safarimanager_web/live/admin/competitions/index.sface:306
+#: lib/safarimanager_web/live/admin/participants/index.sface:26
+#: lib/safarimanager_web/live/admin/participants/index.sface:121
 #: lib/safarimanager_web/live/admin/users/index.sface:29
 #: lib/safarimanager_web/live/admin/users/index.sface:32
 #: lib/safarimanager_web/live/admin/users/index.sface:194
@@ -1343,6 +1360,10 @@ msgstr "Impossibile recuperare questa valutazione"
 msgid "All users deleted successfully"
 msgstr "Tutti gli utenti sono stati eliminati con successo"
 
+#: lib/safarimanager_web/live/admin/participants/index.sface:25
+#: lib/safarimanager_web/live/admin/participants/index.sface:25
+#: lib/safarimanager_web/live/admin/participants/index.sface:79
+#: lib/safarimanager_web/live/admin/participants/index.sface:120
 #: lib/safarimanager_web/live/admin/users/index.sface:31
 #: lib/safarimanager_web/live/admin/users/index.sface:31
 #: lib/safarimanager_web/live/admin/users/index.sface:81
@@ -1382,6 +1403,7 @@ msgstr "Cognome"
 msgid "New user"
 msgstr "Nuovo utente"
 
+#: lib/safarimanager_web/live/admin/participants/index.sface:83
 #: lib/safarimanager_web/live/admin/users/index.sface:84
 #, elixir-autogen, elixir-format
 msgid "Select a category..."
@@ -1432,6 +1454,7 @@ msgstr "Si è verificato un errore unendo gli utenti"
 msgid "Error merging users: a destination must be specified"
 msgstr "Impossibile unire gli utenti: specificare un utente di destinazione"
 
+#: lib/safarimanager_web/live/admin/participants/index.sface:74
 #: lib/safarimanager_web/live/admin/users/index.sface:159
 #, elixir-autogen, elixir-format
 msgid "Select a user..."
@@ -1457,3 +1480,84 @@ msgstr "Unisci utenti"
 #, elixir-autogen, elixir-format
 msgid "Merge"
 msgstr "Unisci"
+
+#: lib/safarimanager_web/live/admin/participants/index.sface:111
+#, elixir-autogen, elixir-format
+msgid "#"
+msgstr "#"
+
+#: lib/safarimanager_web/live/admin/participants/index.ex:186
+#, elixir-autogen, elixir-format
+msgid "All participants deleted successfully"
+msgstr "Tutti i partecipanti sono stati eliminati con successo"
+
+#: lib/safarimanager_web/live/admin/participants/index.sface:19
+#: lib/safarimanager_web/live/admin/participants/index.sface:19
+#: lib/safarimanager_web/live/admin/participants/index.sface:61
+#: lib/safarimanager_web/live/admin/participants/index.sface:114
+#, elixir-autogen, elixir-format
+msgid "Competition"
+msgstr "Competizione"
+
+#: lib/safarimanager_web/live/admin/participants/index.sface:54
+#, elixir-autogen, elixir-format
+msgid "Edit participant"
+msgstr "Modifica partecipante"
+
+#: lib/safarimanager_web/live/admin/participants/index.ex:101
+#, elixir-autogen, elixir-format
+msgid "Edited participant"
+msgstr "Partecipante modificato"
+
+#: lib/safarimanager_web/live/admin/participants/index.sface:53
+#, elixir-autogen, elixir-format
+msgid "New participant"
+msgstr "Nuovo partecipante"
+
+#: lib/safarimanager_web/live/admin/participants/index.ex:77
+#, elixir-autogen, elixir-format
+msgid "Participant created successfully"
+msgstr "Partecipante creato con successo"
+
+#: lib/safarimanager_web/live/admin/participants/index.ex:163
+#, elixir-autogen, elixir-format
+msgid "Participant deleted successfully"
+msgstr "Partecipante eliminato con successo"
+
+#: lib/safarimanager_web/live/admin/participants/index.sface:12
+#, elixir-autogen, elixir-format
+msgid "Participant details"
+msgstr "Dettagli Partecipante"
+
+#: lib/safarimanager_web/live/admin/participants/index.ex:174
+#, elixir-autogen, elixir-format
+msgid "Participants deleted successfully"
+msgstr "Partecipanti eliminati con successo"
+
+#: lib/safarimanager_web/live/admin/participants/index.ex:164
+#, elixir-autogen, elixir-format
+msgid "Unable to delete Participant"
+msgstr "Impossibile eliminare il partecipante"
+
+#: lib/safarimanager_web/live/admin/participants/index.ex:177
+#, elixir-autogen, elixir-format
+msgid "Unable to delete Participants"
+msgstr "Impossibile eliminare i partecipanti"
+
+#: lib/safarimanager_web/live/admin/participants/index.ex:134
+#, elixir-autogen, elixir-format
+msgid "Unable to retrieve this Participant"
+msgstr "Impossibile recuperare questo partecipante"
+
+#: lib/safarimanager_web/live/admin/participants/index.sface:22
+#: lib/safarimanager_web/live/admin/participants/index.sface:22
+#: lib/safarimanager_web/live/admin/participants/index.sface:70
+#: lib/safarimanager_web/live/admin/participants/index.sface:117
+#, elixir-autogen, elixir-format
+msgid "User"
+msgstr "Utente"
+
+#: lib/safarimanager_web/live/admin/participants/index.sface:65
+#, elixir-autogen, elixir-format
+msgid "Select a competition..."
+msgstr "Seleziona una competizione..."
