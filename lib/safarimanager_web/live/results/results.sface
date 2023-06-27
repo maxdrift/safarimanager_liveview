@@ -2,11 +2,18 @@
   <CompetitionHeader {=@competition} />
   <StepsHeader current_step={7} competition_id={@competition.id} />
   <div class="pt-10 cursor-pointer" x-data="{ expanded: false }">
-    <Link
-      class="btn btn-outline btn-sm"
-      to={~p"/#{@competition.id}/results_printout"}
-      opts={target: "_blank"}
-    >{gettext("Print")}</Link>
+    <div class="mb-4">
+      <Link
+        class="btn btn-outline btn-sm"
+        to={~p"/#{@competition.id}/results_printout"}
+        opts={target: "_blank"}
+      >{gettext("Print overall classification")}</Link>
+      <Link
+        class="btn btn-outline btn-sm"
+        to={~p"/#{@competition.id}/slides_printout"}
+        opts={target: "_blank"}
+      >{gettext("Print participants slides report")}</Link>
+    </div>
     <div @click="expanded = ! expanded" class="text-xl bg-base-200 p-2 pl-4 rounded-xl shadow-lg">
       <span>
         <svg

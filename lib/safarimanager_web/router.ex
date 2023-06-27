@@ -41,6 +41,7 @@ defmodule SMWeb.Router do
     # TODO: Move under authenticated routes
     post "/export", SMWeb.CSVExportController, :create
     get "/:competition_id/results_printout", SMWeb.ResultsPrintoutController, :show
+    get "/:competition_id/slides_printout", SMWeb.SlidesPrintoutController, :show
     get "/:competition_id/participants_printout", SMWeb.ParticipantsPrintoutController, :show
   end
 
