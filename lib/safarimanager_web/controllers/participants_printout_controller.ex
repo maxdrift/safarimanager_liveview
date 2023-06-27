@@ -1,10 +1,11 @@
-defmodule SMWeb.PrintResultsController do
+defmodule SMWeb.ParticipantsPrintoutController do
   @moduledoc """
-  Controller to format competition results for printing
+  Controller to format competition participants for printing
   """
   use SMWeb, :controller
 
   alias SM.Competitions
+  alias SM.Participants
   alias SM.Results
 
   require Logger
@@ -16,16 +17,16 @@ defmodule SMWeb.PrintResultsController do
     config = Results.get_printout_config()
 
     with {:ok, competition} <- Competitions.get(competition_id),
-         {:ok, results} <- Results.list(competition_id) do
+         participants <- Participants.list(competition_id) do
       conn
       |> put_root_layout({SMWeb.Layouts, :print})
       |> render(:show,
         header_line: config[:header_line],
         sub_header_line: config[:sub_header_line],
-        results: results,
+        participants: participants,
         competition: competition,
         competition_types: competition_types,
-        page_title: "Safari Manager - #{gettext("Overall classification")}"
+        page_title: "Safari Manager - #{gettext("Participants list")}"
       )
     end
   end

@@ -17,6 +17,7 @@ defmodule SMWeb.Live.Participants do
   alias SMWeb.Live.Admin.Users.Form, as: UsersForm
   alias Surface.Components.Form
   alias Surface.Components.Form.TextInput
+  alias Surface.Components.Link
   alias Surface.Components.LiveRedirect
 
   require Logger

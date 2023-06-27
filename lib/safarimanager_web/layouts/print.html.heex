@@ -13,11 +13,14 @@
     <script defer phx-track-static type="text/javascript" src={~p"/assets/app.js"}>
     </script>
     <script>
-      document.addEventListener("DOMContentLoaded", () => window.print(), false);
+      document.addEventListener("DOMContentLoaded", () => {
+        window.print();
+        window.onfocus=function(){ window.close();}
+        }, false);
     </script>
   </head>
 
-  <body data-theme="light">
+  <body class="hidden print:block" data-theme="light">
     <%= @inner_content %>
   </body>
 </html>

@@ -1,4 +1,5 @@
 defmodule SMWeb.Router do
+  alias SMWeb.ParticipantsPrintoutController
   use SMWeb, :router
 
   import SMWeb.UserAuth
@@ -33,13 +34,14 @@ defmodule SMWeb.Router do
   #   pipe_through :api
   # end
 
-  scope "/", SMWeb do
+  scope "/" do
     pipe_through [:browser]
 
-    get "/", HomeController, :new
+    get "/", SMWeb.HomeController, :new
     # TODO: Move under authenticated routes
-    post "/export", CSVExportController, :create
-    get "/:competition_id/print_results", PrintResultsController, :show
+    post "/export", SMWeb.CSVExportController, :create
+    get "/:competition_id/results_printout", SMWeb.ResultsPrintoutController, :show
+    get "/:competition_id/participants_printout", SMWeb.ParticipantsPrintoutController, :show
   end
 
   scope "/", SMWeb.Live do
