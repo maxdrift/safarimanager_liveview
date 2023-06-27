@@ -502,24 +502,9 @@ msgstr ""
 msgid "to your account now."
 msgstr ""
 
-#: lib/safarimanager_web/live/admin/participants/edit.sface:4
-#, elixir-autogen, elixir-format
-msgid "Create %{entity_name}"
-msgstr ""
-
-#: lib/safarimanager_web/live/admin/participants/edit.sface:6
-#, elixir-autogen, elixir-format
-msgid "Edit %{entity_name}"
-msgstr ""
-
 #: lib/safarimanager_web/live/results/results.sface:9
 #, elixir-autogen, elixir-format
 msgid "Print"
-msgstr ""
-
-#: lib/safarimanager_web/controllers/print_results_controller.ex:24
-#, elixir-autogen, elixir-format
-msgid "General Classification"
 msgstr ""
 
 #: lib/safarimanager_web/live/slides/slide_selection.ex:191
@@ -732,6 +717,7 @@ msgstr ""
 msgid "Show"
 msgstr ""
 
+#: lib/safarimanager_web/controllers/print_results_html/show.html.heex:22
 #: lib/safarimanager_web/live/admin/competitions/index.sface:27
 #: lib/safarimanager_web/live/admin/competitions/index.sface:27
 #: lib/safarimanager_web/live/admin/competitions/index.sface:130
@@ -966,6 +952,7 @@ msgstr ""
 msgid "Edited organization"
 msgstr ""
 
+#: lib/safarimanager_web/controllers/print_results_html/show.html.heex:19
 #: lib/safarimanager_web/live/admin/competitions/index.sface:299
 #: lib/safarimanager_web/live/admin/organizations/index.sface:22
 #: lib/safarimanager_web/live/admin/organizations/index.sface:22
@@ -1136,6 +1123,10 @@ msgid "Max submitted slides"
 msgstr ""
 
 #: lib/safarimanager_web/components/datetime_string.ex:17
+#: lib/safarimanager_web/controllers/print_results_html/show.html.heex:19
+#: lib/safarimanager_web/controllers/print_results_html/show.html.heex:22
+#: lib/safarimanager_web/controllers/print_results_html/show.html.heex:48
+#: lib/safarimanager_web/controllers/print_results_html/show.html.heex:52
 #: lib/safarimanager_web/live/admin/competitions/index.sface:24
 #: lib/safarimanager_web/live/admin/competitions/index.sface:61
 #: lib/safarimanager_web/live/admin/competitions/index.sface:85
@@ -1163,6 +1154,7 @@ msgstr ""
 msgid "Number of jurors"
 msgstr ""
 
+#: lib/safarimanager_web/controllers/print_results_html/show.html.heex:34
 #: lib/safarimanager_web/live/admin/competitions/index.sface:122
 #: lib/safarimanager_web/live/admin/users/index.sface:28
 #: lib/safarimanager_web/live/admin/users/index.sface:28
@@ -1360,6 +1352,7 @@ msgstr ""
 msgid "All users deleted successfully"
 msgstr ""
 
+#: lib/safarimanager_web/controllers/print_results_html/show.html.heex:35
 #: lib/safarimanager_web/live/admin/participants/index.sface:25
 #: lib/safarimanager_web/live/admin/participants/index.sface:25
 #: lib/safarimanager_web/live/admin/participants/index.sface:79
@@ -1560,4 +1553,60 @@ msgstr ""
 #: lib/safarimanager_web/live/admin/participants/index.sface:65
 #, elixir-autogen, elixir-format
 msgid "Select a competition..."
+msgstr ""
+
+#: lib/safarimanager_web/controllers/print_results_html/show.html.heex:16
+#, elixir-autogen, elixir-format
+msgid "Date"
+msgstr ""
+
+#: lib/safarimanager_web/controllers/print_results_html/show.html.heex:9
+#, elixir-autogen, elixir-format
+msgid "Denomination"
+msgstr ""
+
+#: lib/safarimanager_web/controllers/print_results_html/show.html.heex:76
+#, elixir-autogen, elixir-format
+msgid "Director"
+msgstr ""
+
+#: lib/safarimanager_web/controllers/print_results_html/show.html.heex:33
+#, elixir-autogen, elixir-format
+msgid "Full name"
+msgstr ""
+
+#: lib/safarimanager_web/controllers/print_results_html/show.html.heex:12
+#, elixir-autogen, elixir-format
+msgid "Organizing organization"
+msgstr ""
+
+#: lib/safarimanager_web/controllers/print_results_controller.ex:28
+#: lib/safarimanager_web/controllers/print_results_html/show.html.heex:26
+#, elixir-autogen, elixir-format
+msgid "Overall classification"
+msgstr ""
+
+#: lib/safarimanager_web/controllers/print_results_html/show.html.heex:36
+#, elixir-autogen, elixir-format
+msgid "Points"
+msgstr ""
+
+#: lib/safarimanager_web/controllers/print_results_html/show.html.heex:73
+#, elixir-autogen, elixir-format
+msgid "Pubblication time"
+msgstr ""
+
+#: lib/safarimanager_web/controllers/print_results_html/show.html.heex:32
+#, elixir-autogen, elixir-format
+msgid "Rank"
+msgstr ""
+
+#: lib/safarimanager_web/controllers/print_results_html/show.html.heex:70
+#, elixir-autogen, elixir-format
+msgid "Referee"
+msgstr ""
+
+#: lib/safarimanager_web/controllers/print_results_html/show.html.heex:37
+#, elixir-autogen, elixir-format
+msgid "Species"
 msgstr ""

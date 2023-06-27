@@ -120,4 +120,11 @@ defmodule SM.Results do
         {[], total_score}
     end)
   end
+
+  @spec get_printout_config :: any
+  def get_printout_config do
+    :safarimanager
+    |> Application.fetch_env!(__MODULE__)
+    |> Keyword.fetch!(:results_printout)
+  end
 end

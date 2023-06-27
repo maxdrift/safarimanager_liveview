@@ -88,6 +88,12 @@ config :safarimanager, SM.Competitions.CompetitionSettings,
     ]
   ]
 
+config :safarimanager, SM.Results,
+  results_printout: [
+    header_line: "Federazione italiana persca sportiva e attività subacquee",
+    sub_header_line: "Viale Tiziano, 70 - 00196 Roma - Tel (06) 36858220"
+  ]
+
 config :safarimanager, :generators,
   binary_id: true,
   sample_binary_id: "11111111-1111-1111-1111-111111111111"
