@@ -7,6 +7,14 @@
   <div class="flex flex-col mt-5">
     <div class="rounded-lg bg-base-200 shadow-lg p-4">
       <div class="text-2xl font-bold text-center pb-4">Participants</div>
+      <div class="my-2">
+        <Link
+          class="btn btn-outline btn-xs"
+          to={~p"/#{@competition.id}/selection_printout"}
+          opts={target: "_blank"}
+        >{gettext("Print all slides selection reports")}</Link>
+      </div>
+
       <Form for={%{}} as={:participants_filter} change="filter-participants" opts={autocomplete: "off"}>
         <TextInput
           name={:value}
@@ -36,7 +44,7 @@
                 <td class="truncate">{(item.user.organization && item.user.organization.name) || "N/A"}</td>
                 <td class="truncate">{(item.category && item.category.name) || "N/A"}</td>
                 <td class="truncate">{item.slides_count}</td>
-                <td class="truncate">
+                <td>
                   <LivePatch to={"?user_id=#{item.user_id}"} class="btn btn-xs">
                     Select
                   </LivePatch>
@@ -60,6 +68,13 @@
     <div class="overflow-y-auto rounded-lg bg-base-200 shadow-lg p-4">
       {#if @user}
         <div class="text-2xl font-bold text-center py-4">Load CSV for {@user.last_name} {@user.first_name}</div>
+        <div class="my-4">
+          <Link
+            class="btn btn-outline btn-xs"
+            to={~p"/#{@competition.id}/#{@user.id}/selection_printout"}
+            opts={target: "_blank"}
+          >{gettext("Print slides selection report")}</Link>
+        </div>
         <Form id="upload-drop-area-form" for={%{}} as={:slides} change="validate" submit="submit">
           <UploadDropArea field={:csv} uploads={@uploads}>
             Click or drop CSV files in this box

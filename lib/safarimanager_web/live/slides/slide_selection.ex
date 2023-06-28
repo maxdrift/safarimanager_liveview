@@ -23,6 +23,7 @@ defmodule SMWeb.Live.SlideSelection do
   alias Surface.Components.Form.Select
   alias Surface.Components.Form.Submit
   alias Surface.Components.Form.TextInput
+  alias Surface.Components.Link
   alias Surface.Components.LivePatch
   alias Surface.Components.LiveRedirect
 

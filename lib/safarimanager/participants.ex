@@ -5,6 +5,7 @@ defmodule SM.Participants do
   use SM, :context
 
   alias SM.Participants.Participant
+  alias SM.Slides.Slide
 
   @doc """
   Returns the list of participants.
@@ -86,6 +87,37 @@ defmodule SM.Participants do
     Repo.all(query)
   end
 
+  @doc """
+  Returns the list of participants filtered by competition ID with their slides.
+
+  ## Examples
+
+      iex> list("123")
+      [%Participant{}, ...]
+
+  """
+  @spec list_with_slides(String.t()) :: [Participant.t()]
+  def list_with_slides(competition_id) do
+    slides_query =
+      from(s in Slide,
+        where: s.status in [:submitted_jury, :submitted_fixed],
+        order_by: [asc: :file_name]
+      )
+
+    query =
+      from(
+        p in Participant,
+        where: [competition_id: ^competition_id],
+        inner_join: u in assoc(p, :user),
+        left_join: o in assoc(u, :organization),
+        left_join: c in assoc(p, :category),
+        order_by: [asc: :number],
+        preload: [category: c, user: {u, [organization: o, slides: ^{slides_query, [:subject]}]}]
+      )
+
+    Repo.all(query)
+  end
+
   @spec get_next_participant_number(String.t()) :: integer()
   def get_next_participant_number(competition_id) do
     query =
@@ -118,7 +150,7 @@ defmodule SM.Participants do
   def get(user_id, competition_id) do
     case Repo.get_by(Participant, user_id: user_id, competition_id: competition_id) do
       nil -> {:error, :not_found}
-      result -> {:ok, Repo.preload(result, [:user, :competition, :category])}
+      result -> {:ok, Repo.preload(result, [:competition, :category, user: [:organization]])}
     end
   end
 

@@ -42,6 +42,7 @@ defmodule SMWeb.Router do
     get "/:competition_id/results_printout", ResultsPrintoutController, :show
     get "/:competition_id/slides_printout", SlidesPrintoutController, :show
     get "/:competition_id/participants_printout", ParticipantsPrintoutController, :show
+    get "/:competition_id/selection_printout", SelectionPrintoutController, :show
     get "/:competition_id/:user_id/selection_printout", SelectionPrintoutController, :show
   end
 

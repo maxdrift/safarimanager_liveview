@@ -13,16 +13,16 @@ defmodule SM.Accounts.User do
   alias SM.Slides.Slide
 
   schema "users" do
-    field(:email, :string)
-    field(:password, :string, virtual: true, redact: true)
-    field(:hashed_password, :string, redact: true)
-    field(:confirmed_at, :naive_datetime)
-    field(:first_name, :string)
-    field(:last_name, :string)
-    belongs_to(:organization, Organization)
-    belongs_to(:category, Category)
-    many_to_many(:competitions, Competition, join_through: Participant)
-    has_many(:slides, Slide)
+    field :email, :string
+    field :password, :string, virtual: true, redact: true
+    field :hashed_password, :string, redact: true
+    field :confirmed_at, :naive_datetime
+    field :first_name, :string
+    field :last_name, :string
+    belongs_to :organization, Organization
+    belongs_to :category, Category
+    many_to_many :competitions, Competition, join_through: Participant
+    has_many :slides, Slide
 
     timestamps()
   end

@@ -149,6 +149,8 @@ msgid "Jurors"
 msgstr ""
 
 #: lib/safarimanager_web/components/steps_header.ex:28
+#: lib/safarimanager_web/controllers/selection_printout_html/show_multi.html.heex:36
+#: lib/safarimanager_web/controllers/selection_printout_html/show_single.html.heex:35
 #: lib/safarimanager_web/controllers/slides_printout_html/show.html.heex:36
 #, elixir-autogen, elixir-format
 msgid "Jury"
@@ -508,22 +510,22 @@ msgstr ""
 msgid "Print"
 msgstr ""
 
-#: lib/safarimanager_web/live/slides/slide_selection.ex:191
+#: lib/safarimanager_web/live/slides/slide_selection.ex:192
 #, elixir-autogen, elixir-format
 msgid "Slide selection has been imported."
 msgstr ""
 
-#: lib/safarimanager_web/live/slides/slide_selection.ex:215
+#: lib/safarimanager_web/live/slides/slide_selection.ex:216
 #, elixir-autogen, elixir-format
 msgid "Unable to import slide selection: invalid CSV file"
 msgstr ""
 
-#: lib/safarimanager_web/live/slides/slide_selection.ex:199
+#: lib/safarimanager_web/live/slides/slide_selection.ex:200
 #, elixir-autogen, elixir-format
 msgid "Unable to import slide selection: slide not found"
 msgstr ""
 
-#: lib/safarimanager_web/live/slides/slide_selection.ex:208
+#: lib/safarimanager_web/live/slides/slide_selection.ex:209
 #, elixir-autogen, elixir-format
 msgid "Unable to import slide selection: subject not found"
 msgstr ""
@@ -554,6 +556,8 @@ msgstr ""
 msgid "Close"
 msgstr ""
 
+#: lib/safarimanager_web/controllers/selection_printout_html/show_multi.html.heex:35
+#: lib/safarimanager_web/controllers/selection_printout_html/show_single.html.heex:34
 #: lib/safarimanager_web/controllers/slides_printout_html/show.html.heex:33
 #: lib/safarimanager_web/live/admin/subjects/index.sface:118
 #, elixir-autogen, elixir-format
@@ -1138,6 +1142,10 @@ msgstr ""
 #: lib/safarimanager_web/controllers/results_printout_html/show.html.heex:22
 #: lib/safarimanager_web/controllers/results_printout_html/show.html.heex:48
 #: lib/safarimanager_web/controllers/results_printout_html/show.html.heex:52
+#: lib/safarimanager_web/controllers/selection_printout_html/show_multi.html.heex:21
+#: lib/safarimanager_web/controllers/selection_printout_html/show_multi.html.heex:25
+#: lib/safarimanager_web/controllers/selection_printout_html/show_single.html.heex:20
+#: lib/safarimanager_web/controllers/selection_printout_html/show_single.html.heex:24
 #: lib/safarimanager_web/controllers/slides_printout_html/show.html.heex:16
 #: lib/safarimanager_web/controllers/slides_printout_html/show.html.heex:20
 #: lib/safarimanager_web/controllers/slides_printout_html/show.html.heex:24
@@ -1170,6 +1178,8 @@ msgstr ""
 
 #: lib/safarimanager_web/controllers/participants_printout_html/show.html.heex:34
 #: lib/safarimanager_web/controllers/results_printout_html/show.html.heex:34
+#: lib/safarimanager_web/controllers/selection_printout_html/show_multi.html.heex:19
+#: lib/safarimanager_web/controllers/selection_printout_html/show_single.html.heex:18
 #: lib/safarimanager_web/controllers/slides_printout_html/show.html.heex:15
 #: lib/safarimanager_web/live/admin/competitions/index.sface:122
 #: lib/safarimanager_web/live/admin/users/index.sface:28
@@ -1370,6 +1380,8 @@ msgstr ""
 
 #: lib/safarimanager_web/controllers/participants_printout_html/show.html.heex:35
 #: lib/safarimanager_web/controllers/results_printout_html/show.html.heex:35
+#: lib/safarimanager_web/controllers/selection_printout_html/show_multi.html.heex:24
+#: lib/safarimanager_web/controllers/selection_printout_html/show_single.html.heex:23
 #: lib/safarimanager_web/controllers/slides_printout_html/show.html.heex:23
 #: lib/safarimanager_web/live/admin/participants/index.sface:25
 #: lib/safarimanager_web/live/admin/participants/index.sface:25
@@ -1492,6 +1504,8 @@ msgstr ""
 msgid "Merge"
 msgstr ""
 
+#: lib/safarimanager_web/controllers/selection_printout_html/show_multi.html.heex:31
+#: lib/safarimanager_web/controllers/selection_printout_html/show_single.html.heex:30
 #: lib/safarimanager_web/live/admin/participants/index.sface:111
 #, elixir-autogen, elixir-format
 msgid "#"
@@ -1638,6 +1652,8 @@ msgstr ""
 msgid "Participants list"
 msgstr ""
 
+#: lib/safarimanager_web/controllers/selection_printout_html/show_multi.html.heex:32
+#: lib/safarimanager_web/controllers/selection_printout_html/show_single.html.heex:31
 #: lib/safarimanager_web/controllers/slides_printout_html/show.html.heex:30
 #, elixir-autogen, elixir-format
 msgid "File name"
@@ -1663,11 +1679,15 @@ msgstr ""
 msgid "Score"
 msgstr ""
 
+#: lib/safarimanager_web/controllers/selection_printout_html/show_multi.html.heex:33
+#: lib/safarimanager_web/controllers/selection_printout_html/show_single.html.heex:32
 #: lib/safarimanager_web/controllers/slides_printout_html/show.html.heex:31
 #, elixir-autogen, elixir-format
 msgid "Sub. #"
 msgstr ""
 
+#: lib/safarimanager_web/controllers/selection_printout_html/show_multi.html.heex:34
+#: lib/safarimanager_web/controllers/selection_printout_html/show_single.html.heex:33
 #: lib/safarimanager_web/controllers/slides_printout_html/show.html.heex:32
 #, elixir-autogen, elixir-format
 msgid "Sub. name"
@@ -1691,4 +1711,38 @@ msgstr ""
 #: lib/safarimanager_web/controllers/slides_printout_html/show.html.heex:85
 #, elixir-autogen, elixir-format
 msgid "Total score"
+msgstr ""
+
+#: lib/safarimanager_web/controllers/selection_printout_html/show_multi.html.heex:37
+#: lib/safarimanager_web/controllers/selection_printout_html/show_single.html.heex:36
+#, elixir-autogen, elixir-format
+msgid "Notes"
+msgstr ""
+
+#: lib/safarimanager_web/live/slides/slide_selection.sface:15
+#, elixir-autogen, elixir-format
+msgid "Print all slides selection reports"
+msgstr ""
+
+#: lib/safarimanager_web/live/slides/slide_selection.sface:76
+#, elixir-autogen, elixir-format
+msgid "Print slides selection report"
+msgstr ""
+
+#: lib/safarimanager_web/controllers/selection_printout_controller.ex:30
+#: lib/safarimanager_web/controllers/selection_printout_controller.ex:48
+#, elixir-autogen, elixir-format
+msgid "Slides selection report"
+msgstr ""
+
+#: lib/safarimanager_web/controllers/selection_printout_html/show_multi.html.heex:70
+#: lib/safarimanager_web/controllers/selection_printout_html/show_single.html.heex:68
+#, elixir-autogen, elixir-format
+msgid "The participant"
+msgstr ""
+
+#: lib/safarimanager_web/controllers/selection_printout_html/show_multi.html.heex:15
+#: lib/safarimanager_web/controllers/selection_printout_html/show_single.html.heex:14
+#, elixir-autogen, elixir-format
+msgid "Participant number"
 msgstr ""
