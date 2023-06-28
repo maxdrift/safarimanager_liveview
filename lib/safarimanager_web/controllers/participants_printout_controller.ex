@@ -19,7 +19,7 @@ defmodule SMWeb.ParticipantsPrintoutController do
     with {:ok, competition} <- Competitions.get(competition_id),
          participants <- Participants.list(competition_id) do
       conn
-      |> put_root_layout({SMWeb.Layouts, :print})
+      |> put_root_layout(html: :print)
       |> render(:show,
         header_line: config[:header_line],
         sub_header_line: config[:sub_header_line],

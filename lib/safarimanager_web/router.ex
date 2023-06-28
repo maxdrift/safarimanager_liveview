@@ -1,5 +1,4 @@
 defmodule SMWeb.Router do
-  alias SMWeb.ParticipantsPrintoutController
   use SMWeb, :router
 
   import SMWeb.UserAuth
@@ -10,7 +9,7 @@ defmodule SMWeb.Router do
     plug :accepts, ["html"]
     plug :fetch_session
     plug :fetch_live_flash
-    plug :put_root_layout, {SMWeb.Layouts, :root}
+    plug :put_root_layout, html: {SMWeb.Layouts, :root}
     plug :protect_from_forgery
     plug :put_secure_browser_headers
     plug :fetch_current_user
@@ -20,7 +19,7 @@ defmodule SMWeb.Router do
     plug :accepts, ["html"]
     plug :fetch_session
     plug :fetch_live_flash
-    plug :put_root_layout, {SMWeb.Layouts, :jury}
+    plug :put_root_layout, html: {SMWeb.Layouts, :jury}
     plug :protect_from_forgery
     plug :put_secure_browser_headers
     plug :fetch_current_user
@@ -34,15 +33,16 @@ defmodule SMWeb.Router do
   #   pipe_through :api
   # end
 
-  scope "/" do
+  scope "/", SMWeb do
     pipe_through [:browser]
 
-    get "/", SMWeb.HomeController, :new
+    get "/", HomeController, :new
     # TODO: Move under authenticated routes
-    post "/export", SMWeb.CSVExportController, :create
-    get "/:competition_id/results_printout", SMWeb.ResultsPrintoutController, :show
-    get "/:competition_id/slides_printout", SMWeb.SlidesPrintoutController, :show
-    get "/:competition_id/participants_printout", SMWeb.ParticipantsPrintoutController, :show
+    post "/export", CSVExportController, :create
+    get "/:competition_id/results_printout", ResultsPrintoutController, :show
+    get "/:competition_id/slides_printout", SlidesPrintoutController, :show
+    get "/:competition_id/participants_printout", ParticipantsPrintoutController, :show
+    get "/:competition_id/:user_id/selection_printout", SelectionPrintoutController, :show
   end
 
   scope "/", SMWeb.Live do
