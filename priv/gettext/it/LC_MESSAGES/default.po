@@ -1599,11 +1599,6 @@ msgstr "Data"
 msgid "Denomination"
 msgstr "Denominazione"
 
-#: lib/safarimanager_web/controllers/results_printout_html/show.html.heex:76
-#, elixir-autogen, elixir-format
-msgid "Director"
-msgstr "Direttore di gara"
-
 #: lib/safarimanager_web/controllers/results_printout_html/show.html.heex:33
 #, elixir-autogen, elixir-format
 msgid "Full name"
@@ -1635,11 +1630,6 @@ msgstr "Ora di esposizione"
 #, elixir-autogen, elixir-format
 msgid "Rank"
 msgstr "Pos."
-
-#: lib/safarimanager_web/controllers/results_printout_html/show.html.heex:70
-#, elixir-autogen, elixir-format
-msgid "Referee"
-msgstr "Giudice di gara"
 
 #: lib/safarimanager_web/controllers/results_printout_html/show.html.heex:37
 #, elixir-autogen, elixir-format
@@ -1746,3 +1736,14 @@ msgstr "Il partecipante"
 #, elixir-autogen, elixir-format
 msgid "Participant number"
 msgstr "Numero partecipante"
+
+#: lib/safarimanager_web/controllers/results_printout_html/show.html.heex:76
+#, elixir-autogen, elixir-format
+msgid "The director"
+msgstr "Il direttore di gara"
+
+#: lib/safarimanager_web/controllers/participants_printout_html/show.html.heex:69
+#: lib/safarimanager_web/controllers/results_printout_html/show.html.heex:70
+#, elixir-autogen, elixir-format
+msgid "The referee"
+msgstr "Il giudice di gara"

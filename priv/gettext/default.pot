@@ -1599,11 +1599,6 @@ msgstr ""
 msgid "Denomination"
 msgstr ""
 
-#: lib/safarimanager_web/controllers/results_printout_html/show.html.heex:76
-#, elixir-autogen, elixir-format
-msgid "Director"
-msgstr ""
-
 #: lib/safarimanager_web/controllers/results_printout_html/show.html.heex:33
 #, elixir-autogen, elixir-format
 msgid "Full name"
@@ -1634,11 +1629,6 @@ msgstr ""
 #: lib/safarimanager_web/controllers/results_printout_html/show.html.heex:32
 #, elixir-autogen, elixir-format
 msgid "Rank"
-msgstr ""
-
-#: lib/safarimanager_web/controllers/results_printout_html/show.html.heex:70
-#, elixir-autogen, elixir-format
-msgid "Referee"
 msgstr ""
 
 #: lib/safarimanager_web/controllers/results_printout_html/show.html.heex:37
@@ -1745,4 +1735,15 @@ msgstr ""
 #: lib/safarimanager_web/controllers/selection_printout_html/show_single.html.heex:14
 #, elixir-autogen, elixir-format
 msgid "Participant number"
+msgstr ""
+
+#: lib/safarimanager_web/controllers/results_printout_html/show.html.heex:76
+#, elixir-autogen, elixir-format
+msgid "The director"
+msgstr ""
+
+#: lib/safarimanager_web/controllers/participants_printout_html/show.html.heex:69
+#: lib/safarimanager_web/controllers/results_printout_html/show.html.heex:70
+#, elixir-autogen, elixir-format
+msgid "The referee"
 msgstr ""
