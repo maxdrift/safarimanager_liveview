@@ -5,7 +5,7 @@ defmodule SM.MixProject do
   @version "2023.6.3"
   @description ~s(Application to manage "Underwater Photo Safari" competitions)
 
-  @app_elixir_version "1.14.2"
+  @app_elixir_version "1.15.1"
   @app_rebar3_version "3.22.0"
 
   def project do
@@ -171,8 +171,8 @@ defmodule SM.MixProject do
 
   defp dialyzer_ignored_warnings do
     [
-      {:_, {'deps/nimble_csv/lib/nimble_csv.ex', 523}, {:_, :_}},
-      {:_, {'lib/safarimanager/default_password.ex', 5}, {:_, :_}}
+      {:_, {~c"deps/nimble_csv/lib/nimble_csv.ex", 523}, {:_, :_}},
+      {:_, {~c"lib/safarimanager/default_password.ex", 5}, {:_, :_}}
     ]
   end
 
