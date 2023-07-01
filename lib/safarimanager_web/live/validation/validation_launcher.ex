@@ -10,6 +10,7 @@ defmodule SMWeb.Live.ValidationLauncher do
   alias SMWeb.Components.CompetitionHeader
   alias SMWeb.Components.Layout
   alias SMWeb.Components.StepsHeader
+  alias SMWeb.Components.ValidationCheckmark
   alias Surface.Components.Link
   alias Surface.Components.LiveRedirect
 
@@ -25,6 +26,19 @@ defmodule SMWeb.Live.ValidationLauncher do
       |> assign(:subjects, Subjects.list())
 
     {:ok, socket}
+  end
+
+  @impl Phoenix.LiveView
+  def handle_event(
+        "apply-subject",
+        %{"slide-id" => slide_id, "new-subject" => new_subject},
+        socket
+      ) do
+    with {:ok, slide} <- Slides.get(slide_id),
+         {:ok, _slide} <- Slides.update(slide, %{"subject_id" => new_subject}) do
+      {:noreply,
+       push_navigate(socket, to: "/organize/#{socket.competition.id}/validation_launcher")}
+    end
   end
 
   @impl Phoenix.LiveView
@@ -108,11 +122,14 @@ defmodule SMWeb.Live.ValidationLauncher do
     end)
   end
 
-  defp status_to_label(:submitted_fixed), do: "Fixed points"
-  defp status_to_label(:submitted_jury), do: "Jury"
+  defp status_to_label(:submitted_fixed), do: gettext("Fixed points")
+  defp status_to_label(:submitted_jury), do: gettext("Jury")
 
   defp list_to_boolean([]), do: false
   defp list_to_boolean([_ | _]), do: true
+
+  defp list_to_variant([]), do: :pass
+  defp list_to_variant([_ | _]), do: :fail
 
   defp over_jury_th_tooltip(%{over_jury_threshold: [value]} = stats, competition) do
     if competition.settings.proportional_submission do

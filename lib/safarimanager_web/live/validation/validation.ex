@@ -117,54 +117,6 @@ defmodule SMWeb.Live.Validation do
     {:noreply, to_prev_image(socket)}
   end
 
-  def handle_event("flag", %{"reason" => "wrong-subject"}, socket) do
-    slide_id = socket.assigns.curr_slide.id
-    {:ok, slide} = Slides.get(slide_id)
-
-    flags =
-      if (slide.flags && slide.flags.wrong_subject) || false do
-        %{"wrong_subject" => false, "wrong_subject_ctx" => nil}
-      else
-        %{"wrong_subject" => true}
-      end
-
-    :ok =
-      case Slides.update(slide, %{"flags" => flags}) do
-        {:ok, _slide} ->
-          :ok
-
-        {:error, reason} = error ->
-          Logger.error("Unable to update Slide: #{inspect(reason)}")
-          error
-      end
-
-    {:noreply, socket}
-  end
-
-  def handle_event("flag", %{"reason" => "other"}, socket) do
-    slide_id = socket.assigns.curr_slide.id
-    {:ok, slide} = Slides.get(slide_id)
-
-    flags =
-      if (slide.flags && slide.flags.other_reason) || false do
-        %{"other_reason" => false, "other_reason_ctx" => nil}
-      else
-        %{"other_reason" => true}
-      end
-
-    :ok =
-      case Slides.update(slide, %{"flags" => flags}) do
-        {:ok, _slide} ->
-          :ok
-
-        {:error, reason} = error ->
-          Logger.error("Unable to update Slide: #{inspect(reason)}")
-          error
-      end
-
-    {:noreply, socket}
-  end
-
   # TODO: improve form reset when changing slide
   def handle_event(
         "validate",
@@ -174,14 +126,24 @@ defmodule SMWeb.Live.Validation do
     slide_id = socket.assigns.curr_slide.id
     {:ok, slide} = Slides.get(slide_id)
 
+    flag_params =
+      if slide.subject_id != subject_id do
+        %{
+          "wrong_subject" => true,
+          "wrong_subject_ctx" => %{"from" => slide.subject_id, "to" => subject_id}
+        }
+      else
+        %{
+          "wrong_subject" => false,
+          "wrong_subject_ctx" => nil
+        }
+      end
+
     case Slides.update(slide, %{
-           "flags" => %{
-             "wrong_subject_ctx" => %{"from" => slide.subject_id, "to" => subject_id}
-           }
+           "flags" => flag_params
          }) do
       {:ok, slide} ->
         :ok
-        # IO.inspect(slide)
 
         {:noreply, assign(socket, :curr_slide, slide)}
 
@@ -195,11 +157,23 @@ defmodule SMWeb.Live.Validation do
   def handle_event("validate", %{"other_reason_flag" => %{"reason" => reason}}, socket) do
     slide_id = socket.assigns.curr_slide.id
     {:ok, slide} = Slides.get(slide_id)
+    trimmed_reason = String.trim(reason)
+
+    flag_params =
+      if trimmed_reason == "" do
+        %{
+          "other_reason" => false,
+          "other_reason_ctx" => nil
+        }
+      else
+        %{
+          "other_reason" => true,
+          "other_reason_ctx" => trimmed_reason
+        }
+      end
 
     :ok =
-      case Slides.update(slide, %{
-             "flags" => %{"other_reason_ctx" => reason}
-           }) do
+      case Slides.update(slide, %{"flags" => flag_params}) do
         {:ok, _slide} ->
           :ok
 
@@ -346,6 +320,6 @@ defmodule SMWeb.Live.Validation do
     ~p"/uploads/#{slide.competition_id}/#{slide.user_id}/#{slide.file_name}"
   end
 
-  defp status_to_label(:submitted_fixed), do: "Fixed points"
-  defp status_to_label(:submitted_jury), do: "Jury"
+  defp status_to_label(:submitted_fixed), do: gettext("Fixed points")
+  defp status_to_label(:submitted_jury), do: gettext("Jury")
 end
