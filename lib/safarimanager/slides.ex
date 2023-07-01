@@ -466,7 +466,7 @@ defmodule SM.Slides do
 
   """
   @spec get(String.t(), String.t() | nil, String.t()) ::
-          {:error, :not_found} | {:ok, Slide.t()}
+          {:error, :not_found} | {:error, {:multiple_results, String.t()}} | {:ok, Slide.t()}
   def get(_competition_id, nil, _file_name), do: {:error, :not_found}
 
   def get(competition_id, user_id, file_name) do
