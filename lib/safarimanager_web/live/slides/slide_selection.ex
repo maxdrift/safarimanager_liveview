@@ -201,6 +201,16 @@ defmodule SMWeb.Live.SlideSelection do
 
         {:noreply, socket}
 
+      {:error, {:multiple_slides_found, file_name}} ->
+        socket =
+          put_flash(
+            socket,
+            :error,
+            "#{gettext("Unable to import slide selection: multiple slides with the same name (or very similar) were found")}: #{file_name}"
+          )
+
+        {:noreply, socket}
+
       {:error, :subject_not_found} ->
         socket =
           put_flash(
@@ -270,6 +280,7 @@ defmodule SMWeb.Live.SlideSelection do
     case Slides.get(competition_id, user_id, file_name) do
       {:ok, slide} -> {:ok, slide}
       {:error, :not_found} -> {:error, :slide_not_found}
+      {:error, {:multiple_results, file_name}} -> {:error, {:multiple_slides_found, file_name}}
     end
   end
 

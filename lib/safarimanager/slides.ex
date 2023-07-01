@@ -470,6 +470,36 @@ defmodule SM.Slides do
   def get(_competition_id, nil, _file_name), do: {:error, :not_found}
 
   def get(competition_id, user_id, file_name) do
+    file_name_jpg = "#{file_name}.JPG"
+    file_name_jpeg = "#{file_name}.JPEG"
+
+    matches = [file_name, file_name_jpg, file_name_jpeg]
+
+    query =
+      from(
+        s in Slide,
+        where: [competition_id: ^competition_id, user_id: ^user_id],
+        where: s.file_name in ^matches
+      )
+
+    case Repo.one(query) do
+      nil ->
+        Logger.warning("Falling back to LIKE query to find slide with file name #{file_name}")
+        # Fall back to the LIKE query as a last resort
+        find(competition_id, user_id, file_name)
+
+      result ->
+        {:ok, result}
+    end
+  rescue
+    e in Ecto.MultipleResultsError ->
+      Logger.error("Found multiple slides with name '#{file_name}': #{inspect(e.message)}")
+      {:error, {:multiple_results, file_name}}
+  end
+
+  @spec find(String.t(), String.t() | nil, String.t()) ::
+          {:error, :not_found} | {:error, {:multiple_results, String.t()}} | {:ok, Slide.t()}
+  def find(competition_id, user_id, file_name) do
     file_name_match = "#{file_name}%"
 
     query =
@@ -483,6 +513,10 @@ defmodule SM.Slides do
       nil -> {:error, :not_found}
       result -> {:ok, result}
     end
+  rescue
+    e in Ecto.MultipleResultsError ->
+      Logger.error("Found multiple slides with name '#{file_name}': #{inspect(e)}")
+      {:error, {:multiple_results, file_name}}
   end
 
   @doc """
@@ -814,7 +848,9 @@ defmodule SM.Slides do
   @spec clear_penalty(String.t()) :: {:ok, Slide.t()} | {:error, any()}
   def clear_penalty(slide_id) do
     Multi.new()
-    |> Multi.update_all(:clear_penalty, from(Slide, where: [id: ^slide_id]), set: [penalty: false])
+    |> Multi.update_all(:clear_penalty, from(Slide, where: [id: ^slide_id]),
+      set: [penalty: false]
+    )
     |> Repo.transaction()
     |> case do
       {:ok, _result} ->
