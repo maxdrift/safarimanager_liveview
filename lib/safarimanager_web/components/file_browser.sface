@@ -1,8 +1,6 @@
 <div {=@id}>
   <div class="my-2">
     <progress
-      alias
-      SM.DefaultPassword.Decimal
       class={
         "progress",
         "progress-secondary",
@@ -13,7 +11,7 @@
     />
   </div>
   <div class="text-xl font-bold text-center">
-    File browser
+    {gettext("File browser")}
   </div>
   <div class="my-6">
     <div>
@@ -28,7 +26,7 @@
         >
           <path stroke-linecap="round" stroke-linejoin="round" d="M7 11l5-5m0 0l5 5m-5-5v12" />
         </svg>
-        Level up
+        {gettext("Level up")}
       </button>
     </div>
     <div class="flex flex-col mt-4 max-h-60 overflow-y-auto tiny-scrollbar">
@@ -113,7 +111,7 @@
           |> Enum.join(",")
       }
     >
-      Import all<span :if={can_import?(@user_id, @items)}>&nbsp;{count_selectable_files(@items)} files</span>
+      {gettext("Import all")}<span :if={can_import?(@user_id, @items)}>&nbsp;{count_selectable_files(@items)} {gettext("files")}</span>
     </button>
   </div>
 </div>

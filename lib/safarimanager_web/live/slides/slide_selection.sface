@@ -6,7 +6,7 @@
   <StepsHeader current_step={4} competition_id={@competition.id} />
   <div class="flex flex-col mt-5">
     <div class="rounded-lg bg-base-200 shadow-lg p-4">
-      <div class="text-2xl font-bold text-center pb-4">Participants</div>
+      <div class="text-2xl font-bold text-center pb-4">{gettext("Participants")}</div>
       <div class="my-2">
         <Link
           class="btn btn-outline btn-xs"
@@ -19,19 +19,19 @@
         <TextInput
           name={:value}
           class="input input-bordered w-full mb-1"
-          opts={placeholder: "Search for a participant...", phx_debounce: "500", autocomplete: "nope"}
+          opts={placeholder: gettext("Search for a participant..."), phx_debounce: "500", autocomplete: "nope"}
         />
       </Form>
       <div class="max-h-48 overflow-y-auto tiny-scrollbar">
         <table class="table table-zebra table-fixed w-full">
           <thead>
             <tr>
-              <th class="sticky top-0 w-1/12">#</th>
-              <th class="sticky top-0 w-auto">Last Name</th>
-              <th class="sticky top-0 w-auto">First Name</th>
-              <th class="sticky top-0 w-auto">Organization</th>
-              <th class="sticky top-0 w-auto">Category</th>
-              <th class="sticky top-0 w-auto">Slides</th>
+              <th class="sticky top-0 w-1/12">{gettext("#")}</th>
+              <th class="sticky top-0 w-auto">{gettext("Last Name")}</th>
+              <th class="sticky top-0 w-auto">{gettext("First Name")}</th>
+              <th class="sticky top-0 w-auto">{gettext("Organization")}</th>
+              <th class="sticky top-0 w-auto">{gettext("Category")}</th>
+              <th class="sticky top-0 w-auto">{gettext("Slides")}</th>
               <th class="sticky top-0 w-auto" />
             </tr>
           </thead>
@@ -41,18 +41,18 @@
                 <td class="truncate">{item.number}</td>
                 <td class="truncate">{item.user.last_name}</td>
                 <td class="truncate">{item.user.first_name}</td>
-                <td class="truncate">{(item.user.organization && item.user.organization.name) || "N/A"}</td>
-                <td class="truncate">{(item.category && item.category.name) || "N/A"}</td>
+                <td class="truncate">{(item.user.organization && item.user.organization.name) || gettext("N/A")}</td>
+                <td class="truncate">{(item.category && item.category.name) || gettext("N/A")}</td>
                 <td class="truncate">{item.slides_count}</td>
                 <td>
                   <LivePatch to={"?user_id=#{item.user_id}"} class="btn btn-xs">
-                    Select
+                    {gettext("Select")}
                   </LivePatch>
                 </td>
               </tr>
             {#else}
               <tr>
-                <td>No items yet!</td>
+                <td>{gettext("No items yet!")}</td>
                 <td />
                 <td />
                 <td />
@@ -67,7 +67,7 @@
     <div class="divider" />
     <div class="overflow-y-auto rounded-lg bg-base-200 shadow-lg p-4">
       {#if @user}
-        <div class="text-2xl font-bold text-center py-4">Load CSV for {@user.last_name} {@user.first_name}</div>
+        <div class="text-2xl font-bold text-center py-4">{gettext("Load CSV for")} {@user.last_name} {@user.first_name}</div>
         <div class="my-4">
           <Link
             class="btn btn-outline btn-xs"
@@ -77,14 +77,14 @@
         </div>
         <Form id="upload-drop-area-form" for={%{}} as={:slides} change="validate" submit="submit">
           <UploadDropArea field={:csv} uploads={@uploads}>
-            Click or drop CSV files in this box
+            {gettext("Click or drop CSV files in this box")}
           </UploadDropArea>
         </Form>
         <!-- Edit dialog start -->
         <input type="checkbox" id="edit-selection" class="modal-toggle" checked={@editing?}>
         <div class="modal">
           <div :if={@editing?} class="modal-box">
-            <h3 class="font-bold text-lg">Edit slide selection</h3>
+            <h3 class="font-bold text-lg">{gettext("Edit slide selection")}</h3>
             <Form
               for={@editing_changeset}
               change="validate-editing"
@@ -95,12 +95,12 @@
               <div class="card-body">
                 <Field name={:subject_id} class="form-control">
                   <Label class="label">
-                    <span class="label-text">Subject</span>
+                    <span class="label-text">{gettext("Subject")}</span>
                   </Label>
                   <Select
                     options={Enum.map(@subjects, fn s -> {String.capitalize(s.name), s.id} end)}
                     prompt={
-                      key: "Select a subject",
+                      key: gettext("Select a subject..."),
                       disabled: true,
                       selected: is_nil(@editing_slide.subject_id)
                     }
@@ -113,10 +113,10 @@
                 </Field>
                 <Field name={:status} class="form-control">
                   <Label class="label">
-                    <span class="label-text">Status</span>
+                    <span class="label-text">{gettext("Status")}</span>
                   </Label>
                   <Select
-                    options={"Submitted Jury": "submitted_jury", "Submitted Fixed": "submitted_fixed", Discarded: "discarded"}
+                    options={get_status_select_options()}
                     class={state_class("input input-bordered", @editing_changeset, :status, [])}
                     opts={selected: @editing_slide.status}
                   />
@@ -130,8 +130,8 @@
                   "btn btn-md",
                   "btn-success": @editing_changeset.action && @editing_changeset.valid?,
                   "btn-disabled": !(@editing_changeset.action && @editing_changeset.valid?)
-                }>Save</Submit>
-                <Reset click="stop-editing" class="btn btn-md btn-ghost" value="Close" />
+                }>{gettext("Save")}</Submit>
+                <Reset click="stop-editing" class="btn btn-md btn-ghost" value={gettext("Close")} />
               </div>
             </Form>
           </div>
@@ -140,7 +140,7 @@
         <div x-data="{ expanded: true }">
           <div class="alert alert-success alert-sm my-2" @click="expanded = ! expanded">
             <span class="text-xl mx-auto">
-              Selected for Jury ({Enum.count(@jury_slides)})
+              {gettext("Selected for Jury")} ({Enum.count(@jury_slides)})
             </span>
             <span>
               <svg
@@ -173,9 +173,9 @@
               <thead>
                 <tr>
                   <th class="sticky top-0 w-1/12" />
-                  <th class="sticky top-0 w-auto">File name</th>
-                  <th class="sticky top-0 w-auto">Size</th>
-                  <th class="sticky top-0 w-auto">Subject</th>
+                  <th class="sticky top-0 w-auto">{gettext("File name")}</th>
+                  <th class="sticky top-0 w-auto">{gettext("Size")}</th>
+                  <th class="sticky top-0 w-auto">{gettext("Subject")}</th>
                   <th class="sticky top-0 w-auto" />
                 </tr>
               </thead>
@@ -192,17 +192,17 @@
                     <td class="truncate">{slide.file_name}</td>
                     <td class="truncate">{pretty_size(slide.file_size)}</td>
                     <td>
-                      <span class="capitalize">{(slide.subject && slide.subject.name) || "N/A"}</span>
+                      <span class="capitalize">{(slide.subject && slide.subject.name) || gettext("N/A")}</span>
                       <br>
-                      <span class="text-xs italic">{(slide.subject && slide.subject.scientific_name) || "N/A"}</span>
+                      <span class="text-xs italic">{(slide.subject && slide.subject.scientific_name) || gettext("N/A")}</span>
                     </td>
                     <td>
-                      <button class="btn btn-secondary btn-xs" :on-click="start-editing" :values={id: slide.id}>Edit</button>
+                      <button class="btn btn-secondary btn-xs" :on-click="start-editing" :values={id: slide.id}>{gettext("Edit")}</button>
                     </td>
                   </tr>
                 {#else}
                   <tr>
-                    <td>No slides selected for Jury.</td>
+                    <td>{gettext("No slides selected for Jury")}.</td>
                     <td />
                     <td />
                     <td />
@@ -216,7 +216,7 @@
         <div x-data="{ expanded: false }">
           <div class="alert alert-warning alert-sm my-2" @click="expanded = ! expanded">
             <span class="text-xl mx-auto">
-              Fixed points ({Enum.count(@fixed_slides)})
+              {gettext("Fixed points")} ({Enum.count(@fixed_slides)})
             </span>
             <span>
               <svg
@@ -249,9 +249,9 @@
               <thead>
                 <tr>
                   <th class="sticky top-0 w-1/12" />
-                  <th class="sticky top-0 w-auto">File name</th>
-                  <th class="sticky top-0 w-auto">Size</th>
-                  <th class="sticky top-0 w-auto">Subject</th>
+                  <th class="sticky top-0 w-auto">{gettext("File name")}</th>
+                  <th class="sticky top-0 w-auto">{gettext("Size")}</th>
+                  <th class="sticky top-0 w-auto">{gettext("Subject")}</th>
                   <th class="sticky top-0 w-auto" />
                 </tr>
               </thead>
@@ -268,17 +268,17 @@
                     <td class="truncate">{slide.file_name}</td>
                     <td class="truncate">{pretty_size(slide.file_size)}</td>
                     <td>
-                      <span class="capitalize">{(slide.subject && slide.subject.name) || "N/A"}</span>
+                      <span class="capitalize">{(slide.subject && slide.subject.name) || gettext("N/A")}</span>
                       <br>
-                      <span class="text-xs italic">{(slide.subject && slide.subject.scientific_name) || "N/A"}</span>
+                      <span class="text-xs italic">{(slide.subject && slide.subject.scientific_name) || gettext("N/A")}</span>
                     </td>
                     <td>
-                      <button class="btn btn-secondary btn-xs" :on-click="start-editing" :values={id: slide.id}>Edit</button>
+                      <button class="btn btn-secondary btn-xs" :on-click="start-editing" :values={id: slide.id}>{gettext("Edit")}</button>
                     </td>
                   </tr>
                 {#else}
                   <tr>
-                    <td>No slides selected for fixed points.</td>
+                    <td>{gettext("No slides selected for fixed points")}.</td>
                     <td />
                     <td />
                     <td />
@@ -292,7 +292,7 @@
         <div x-data="{ expanded: false }">
           <div class="alert alert-error alert-sm my-2" @click="expanded = ! expanded">
             <span class="text-xl mx-auto">
-              Discarded ({Enum.count(@discarded_slides)})
+              {ngettext("Discarded", "Discarded", Enum.count(@discarded_slides))} ({Enum.count(@discarded_slides)})
             </span>
             <span>
               <svg
@@ -325,9 +325,9 @@
               <thead>
                 <tr>
                   <th class="sticky top-0 w-1/12" />
-                  <th class="sticky top-0 w-auto">File name</th>
-                  <th class="sticky top-0 w-auto">Size</th>
-                  <th class="sticky top-0 w-auto">Subject</th>
+                  <th class="sticky top-0 w-auto">{gettext("File name")}</th>
+                  <th class="sticky top-0 w-auto">{gettext("Size")}</th>
+                  <th class="sticky top-0 w-auto">{gettext("Subject")}</th>
                   <th class="sticky top-0 w-auto" />
                 </tr>
               </thead>
@@ -344,17 +344,17 @@
                     <td class="truncate">{slide.file_name}</td>
                     <td class="truncate">{pretty_size(slide.file_size)}</td>
                     <td>
-                      <span class="capitalize">{(slide.subject && slide.subject.name) || "N/A"}</span>
+                      <span class="capitalize">{(slide.subject && slide.subject.name) || gettext("N/A")}</span>
                       <br>
-                      <span class="text-xs italic">{(slide.subject && slide.subject.scientific_name) || "N/A"}</span>
+                      <span class="text-xs italic">{(slide.subject && slide.subject.scientific_name) || gettext("N/A")}</span>
                     </td>
                     <td>
-                      <button class="btn btn-secondary btn-xs" :on-click="start-editing" :values={id: slide.id}>Edit</button>
+                      <button class="btn btn-secondary btn-xs" :on-click="start-editing" :values={id: slide.id}>{gettext("Edit")}</button>
                     </td>
                   </tr>
                 {#else}
                   <tr>
-                    <td>No slides selected to be discarded.</td>
+                    <td>{gettext("No slides selected to be discarded.")}</td>
                     <td />
                     <td />
                     <td />
@@ -367,7 +367,7 @@
         </div>
       {#else}
         <div class="mt-2 text-center align-middle">
-          Select a participant from the top.
+          {gettext("Select a participant from the top")}.
         </div>
       {/if}
     </div>
@@ -384,14 +384,14 @@
       >
         <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
       </svg>
-      Slides
+      {gettext("Slides")}
     </LiveRedirect>
     <div class="grow" />
     <LiveRedirect
       to={"/organize/#{@competition_id}/validation_launcher"}
       class="flex-none btn btn-primary gap-2"
     >
-      Validation
+      {gettext("Validation")}
       <svg
         xmlns="http://www.w3.org/2000/svg"
         class="h-6 w-6"

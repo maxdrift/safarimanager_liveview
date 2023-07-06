@@ -8,7 +8,7 @@
   <div class="flex flex-wrap pt-3">
     <Field name={:last_name} class="form-control w-1/2 px-3">
       <Label class="label">
-        <span class="label-text">Last Name</span>
+        <span class="label-text">{gettext("Last Name")}</span>
       </Label>
       <TextInput
         class={state_class("input input-bordered", @changeset, :last_name, [])}
@@ -20,7 +20,7 @@
     </Field>
     <Field name={:first_name} class="form-control w-1/2 px-3">
       <Label class="label">
-        <span class="label-text">First Name</span>
+        <span class="label-text">{gettext("First Name")}</span>
       </Label>
       <TextInput
         class={state_class("input input-bordered", @changeset, :first_name, [])}
@@ -32,7 +32,7 @@
     </Field>
     <Field name={:email} class="form-control w-1/2 px-3">
       <Label class="label">
-        <span class="label-text">Email</span>
+        <span class="label-text">{gettext("Email")}</span>
       </Label>
       <TextInput
         class={state_class("input input-bordered", @changeset, :email, [])}
@@ -44,11 +44,11 @@
     </Field>
     <Field name={:organization_id} class="form-control w-1/2 px-3">
       <Label class="label">
-        <span class="label-text">Organization</span>
+        <span class="label-text">{gettext("Organization")}</span>
       </Label>
       <Select
         options={Enum.map(@organizations, &{&1.name, &1.id})}
-        prompt={[key: "Select an organization..."]}
+        prompt={[key: gettext("Select an organization...")]}
         selected={@entity.organization_id}
         class={state_class("input input-bordered", @changeset, :organization_id, [])}
       />
@@ -58,11 +58,11 @@
     </Field>
     <Field name={:category_id} class="form-control w-1/2 px-3">
       <Label class="label">
-        <span class="label-text">Category</span>
+        <span class="label-text">{gettext("Category")}</span>
       </Label>
       <Select
         options={Enum.map(@categories, &{&1.name, &1.id})}
-        prompt={[key: "Select a category"]}
+        prompt={[key: gettext("Select a category...")]}
         selected={@entity.category_id}
         class={state_class("input input-bordered", @changeset, :category_id, [])}
       />

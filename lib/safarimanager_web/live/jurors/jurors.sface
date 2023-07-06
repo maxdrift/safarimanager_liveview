@@ -4,21 +4,21 @@
 
   <div class="flex flex-col lg:flex-row mt-5">
     <div class="overflow-y-auto rounded-lg lg:w-1/2 bg-base-200 shadow-lg p-4">
-      <div class="text-2xl font-bold text-center py-4">Users</div>
+      <div class="text-2xl font-bold text-center py-4">{gettext("Users")}</div>
       <Form for={%{}} as={:users_filter} change="filter-users" opts={autocomplete: "off"}>
         <TextInput
           name={:value}
           class="input input-bordered w-full mb-1"
-          opts={placeholder: "Search for a user...", phx_debounce: "500", autocomplete: "nope"}
+          opts={placeholder: gettext("Search for a user..."), phx_debounce: "500", autocomplete: "nope"}
         />
       </Form>
       <div class="max-h-48 overflow-y-auto tiny-scrollbar">
         <table class="table table-zebra table-fixed w-full">
           <thead>
             <tr>
-              <th class="sticky top-0 w-auto">Last Name</th>
-              <th class="sticky top-0 w-auto">First Name</th>
-              <th class="sticky top-0 w-auto">Organization</th>
+              <th class="sticky top-0 w-auto">{gettext("Last Name")}</th>
+              <th class="sticky top-0 w-auto">{gettext("First Name")}</th>
+              <th class="sticky top-0 w-auto">{gettext("Organization")}</th>
               <th class="sticky top-0 w-auto" />
             </tr>
           </thead>
@@ -27,14 +27,14 @@
               <tr>
                 <td class="truncate">{item.last_name}</td>
                 <td class="truncate">{item.first_name}</td>
-                <td class="truncate">{(item.organization && item.organization.name) || "N/A"}</td>
+                <td class="truncate">{(item.organization && item.organization.name) || gettext("N/A")}</td>
                 <td>
-                  <button class="btn btn-xs btn-success" :on-click="enroll" :values={user_id: item.id}>Enroll</button>
+                  <button class="btn btn-xs btn-success" :on-click="enroll" :values={user_id: item.id}>{gettext("Enroll")}</button>
                 </td>
               </tr>
             {#else}
               <tr>
-                <td>No items yet!</td>
+                <td>{gettext("No items yet!")}</td>
                 <td />
                 <td />
                 <td />
@@ -46,14 +46,14 @@
     </div>
     <div class="divider lg:divider-horizontal" />
     <div class="overflow-y-auto rounded-lg lg:w-1/2 bg-base-200 shadow-lg p-4 tiny-scrollbar">
-      <div class="text-2xl font-bold text-center py-4">Jurors (max: {@competition.settings.number_of_jurors})</div>
+      <div class="text-2xl font-bold text-center py-4">{gettext("Jurors")} (max: {@competition.settings.number_of_jurors})</div>
       <!-- <input class="input input-bordered w-full mb-1" placeholder="Search for a juror..."> -->
       <table class="table table-zebra table-fixed w-full">
         <thead>
           <tr>
-            <th class="w-auto">Last Name</th>
-            <th class="w-auto">First Name</th>
-            <th class="w-auto">Organization</th>
+            <th class="w-auto">{gettext("Last Name")}</th>
+            <th class="w-auto">{gettext("First Name")}</th>
+            <th class="w-auto">{gettext("Organization")}</th>
           </tr>
         </thead>
         <tbody>
@@ -61,14 +61,14 @@
             <tr>
               <td class="truncate">{item.last_name}</td>
               <td class="truncate">{item.first_name}</td>
-              <td class="truncate">{(item.organization && item.organization.name) || "N/A"}</td>
+              <td class="truncate">{(item.organization && item.organization.name) || gettext("N/A")}</td>
               <td>
-                <button class="btn btn-xs btn-error" :on-click="remove" :values={user_id: item.id}>Remove</button>
+                <button class="btn btn-xs btn-error" :on-click="remove" :values={user_id: item.id}>{gettext("Remove")}</button>
               </td>
             </tr>
           {#else}
             <tr>
-              <td>No items yet!</td>
+              <td>{gettext("No items yet!")}</td>
               <td />
               <td />
               <td />
@@ -90,11 +90,11 @@
       >
         <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
       </svg>
-      Participants
+      {gettext("Participants")}
     </LiveRedirect>
     <div class="grow" />
     <LiveRedirect to={"/organize/#{@competition_id}/slides"} class="flex-none btn btn-primary gap-2">
-      Slides
+      {gettext("Slides")}
       <svg
         xmlns="http://www.w3.org/2000/svg"
         class="h-6 w-6"

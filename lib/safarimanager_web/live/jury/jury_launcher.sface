@@ -6,7 +6,7 @@
   <StepsHeader current_step={6} competition_id={@competition.id} />
   <div class="mt-20 text-center">
     <Link to={"/organize/#{@competition_id}/jury"} class="btn btn-xl btn-primary">
-      Start Jury
+      {gettext("Start Jury")}
     </Link>
   </div>
   <div class="flex flex-row my-10 w-full">
@@ -21,11 +21,11 @@
       >
         <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
       </svg>
-      Validation
+      {gettext("Validation")}
     </LiveRedirect>
     <div class="grow" />
     <LiveRedirect to={"/organize/#{@competition_id}/results"} class="flex-none btn btn-primary gap-2">
-      Results
+      {gettext("Results")}
       <svg
         xmlns="http://www.w3.org/2000/svg"
         class="h-6 w-6"

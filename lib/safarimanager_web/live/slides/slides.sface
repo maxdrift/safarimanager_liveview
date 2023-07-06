@@ -3,29 +3,29 @@
   <StepsHeader current_step={3} competition_id={@competition.id} />
   <div class="flex flex-col mt-5">
     <div class="rounded-lg bg-base-200 shadow-lg p-4">
-      <div class="text-2xl font-bold text-center pb-4">Participants</div>
+      <div class="text-2xl font-bold text-center pb-4">{gettext("Participants")}</div>
       <div class="flex flex-row-reverse my-2">
         <Link to={~p"/export?entity=slides"} method={:post} class="btn btn-sm btn-outline">
-          Export Slides to CSV
+          {gettext("Export Slides to CSV")}
         </Link>
       </div>
       <Form for={%{}} as={:participants_filter} change="filter-participants" opts={autocomplete: "off"}>
         <TextInput
           name={:value}
           class="input input-bordered w-full mb-1"
-          opts={placeholder: "Search for a participant...", phx_debounce: "500", autocomplete: "nope"}
+          opts={placeholder: gettext("Search for a participant..."), phx_debounce: "500", autocomplete: "nope"}
         />
       </Form>
       <div class="max-h-48 overflow-y-auto tiny-scrollbar">
         <table class="table table-zebra table-fixed w-full">
           <thead>
             <tr>
-              <th class="sticky top-0 w-1/12">#</th>
-              <th class="sticky top-0 w-auto">Last Name</th>
-              <th class="sticky top-0 w-auto">First Name</th>
-              <th class="sticky top-0 w-auto">Organization</th>
-              <th class="sticky top-0 w-auto">Category</th>
-              <th class="sticky top-0 w-auto">Slides</th>
+              <th class="sticky top-0 w-1/12">{gettext("#")}</th>
+              <th class="sticky top-0 w-auto">{gettext("Last Name")}</th>
+              <th class="sticky top-0 w-auto">{gettext("First Name")}</th>
+              <th class="sticky top-0 w-auto">{gettext("Organization")}</th>
+              <th class="sticky top-0 w-auto">{gettext("Category")}</th>
+              <th class="sticky top-0 w-auto">{gettext("Slides")}</th>
               <th class="sticky top-0 w-auto" />
             </tr>
           </thead>
@@ -35,18 +35,18 @@
                 <td class="truncate">{item.number}</td>
                 <td class="truncate">{item.user.last_name}</td>
                 <td class="truncate">{item.user.first_name}</td>
-                <td class="truncate">{(item.user.organization && item.user.organization.name) || "N/A"}</td>
-                <td class="truncate">{(item.category && item.category.name) || "N/A"}</td>
+                <td class="truncate">{(item.user.organization && item.user.organization.name) || gettext("N/A")}</td>
+                <td class="truncate">{(item.category && item.category.name) || gettext("N/A")}</td>
                 <td class="truncate">{item.slides_count}</td>
                 <td class="truncate">
                   <LivePatch to={"?user_id=#{item.user_id}"} class="btn btn-xs">
-                    Select
+                    {gettext("Select")}
                   </LivePatch>
                 </td>
               </tr>
             {#else}
               <tr>
-                <td>No items yet!</td>
+                <td>{gettext("No items yet!")}</td>
                 <td />
                 <td />
                 <td />
@@ -63,16 +63,16 @@
     <div class="form-control w-44">
       <Form for={%{}} as={:discovery_mode} change="validate">
         <label class="label cursor-pointer">
-          <span class="label-text">Auto discovery</span>
+          <span class="label-text">{gettext("Auto discovery")}</span>
           <Checkbox class="toggle toggle-primary" value={@discovery_mode} />
         </label>
       </Form>
     </div>
     <div class="overflow-y-auto rounded-lg bg-base-200 shadow-lg p-4">
       {#if @user}
-        <div class="text-2xl font-bold text-center py-4">Load slides for {@user.last_name} {@user.first_name}</div>
+        <div class="text-2xl font-bold text-center py-4">{gettext("Load slides for")} {@user.last_name} {@user.first_name}</div>
         <div class="text-lg text-center pb-4">
-          Currently {Enum.count(@slides || [])} slides - {Enum.count(@uploads.images.entries || [])} uploading
+          {gettext("Currently")} {Enum.count(@slides || [])} {gettext("slides")} - {Enum.count(@uploads.images.entries || [])} {gettext("uploading")}
         </div>
 
         {#if @direct_file_upload}
@@ -85,7 +85,7 @@
         {#else}
           <Form id="upload-drop-area-form" for={%{}} as={:slides} change="validate" submit="submit">
             <UploadDropArea field={:images} uploads={@uploads}>
-              Click or drop some images in this box
+              {gettext("Click or drop some images in this box")}
             </UploadDropArea>
           </Form>
         {/if}
@@ -94,9 +94,9 @@
             <thead>
               <tr>
                 <th class="sticky top-0 w-1/12" />
-                <th class="sticky top-0 w-auto">Name</th>
-                <th class="sticky top-0 w-auto">Size</th>
-                <th class="sticky top-0 w-auto">Dimensions</th>
+                <th class="sticky top-0 w-auto">{gettext("Name")}</th>
+                <th class="sticky top-0 w-auto">{gettext("Size")}</th>
+                <th class="sticky top-0 w-auto">{gettext("Dimensions")}</th>
                 <th class="sticky top-0 w-auto">
                   <button
                     :on-click="delete-all-slides"
@@ -107,7 +107,7 @@
                       "btn-disabled": @slides == []
                     }
                   >
-                    Delete all
+                    {gettext("Delete all")}
                   </button>
                 </th>
               </tr>
@@ -125,10 +125,10 @@
                     </td>
                     <td class="truncate">{image.file_name}</td>
                     <td class="truncate">{pretty_size(image.file_size)}</td>
-                    <td class="truncate">{(image.width && "#{image.width}x#{image.height}") || "N/A"}</td>
+                    <td class="truncate">{(image.width && "#{image.width}x#{image.height}") || gettext("N/A")}</td>
                     <td class="truncate">
                       <button :on-click="delete-slide" :values={id: image.id} class="btn btn-xs btn-error">
-                        Delete
+                        {gettext("Delete")}
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
                           class="h-4 w-4"
@@ -159,10 +159,10 @@
                     </td>
                     <td class="truncate">{image.client_name}</td>
                     <td class="truncate">{pretty_size(image.client_size)}</td>
-                    <td class="truncate">N/A</td>
+                    <td class="truncate">{gettext("N/A")}</td>
                     <td class="truncate">
                       <button :on-click="cancel-upload" :values={ref: image.ref} class="btn btn-xs btn-error">
-                        Cancel
+                        {gettext("Cancel")}
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
                           class="h-4 w-4"
@@ -179,7 +179,7 @@
                 {/if}
               {#else}
                 <tr>
-                  <td>No items yet!</td>
+                  <td>{gettext("No items yet!")}</td>
                   <td />
                   <td />
                   <td />
@@ -191,7 +191,7 @@
         </div>
       {#else}
         <div class="mt-2 text-center align-middle">
-          Select a participant from the top.
+          {gettext("Select a participant from the top")}.
         </div>
       {/if}
     </div>
@@ -208,14 +208,14 @@
       >
         <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
       </svg>
-      Jurors
+      {gettext("Jurors")}
     </LiveRedirect>
     <div class="grow" />
     <LiveRedirect
       to={"/organize/#{@competition_id}/slide_selection"}
       class="flex-none btn btn-primary gap-2"
     >
-      Selection
+      {gettext("Selection")}
       <svg
         xmlns="http://www.w3.org/2000/svg"
         class="h-6 w-6"

@@ -288,6 +288,15 @@ defmodule SMWeb.Live.SlideSelection do
     Slides.list_slide_statuses()
   end
 
+  defp get_status_select_options do
+    Enum.map(Slides.list_slide_statuses(), &{status_to_label(&1), &1})
+  end
+
+  defp status_to_label(:submitted_fixed), do: gettext("Fixed points")
+  defp status_to_label(:submitted_jury), do: gettext("Jury")
+  # Gettext hack to reuse existing localization
+  defp status_to_label(:discarded), do: ngettext("Discarded", "Discarded", 1)
+
   defp pretty_size(byte_size) do
     cond do
       byte_size >= 1_000_000_000 ->

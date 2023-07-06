@@ -1,6 +1,6 @@
 <Dialog {=@id} {=@show}>
   <div class="text-xl font-bold text-center">
-    Image import
+    {gettext("Image import")}
   </div>
   <div class="my-2">
     <progress
@@ -14,7 +14,7 @@
       <Field name={:user_id} class="form-control">
         <Select
           options={Enum.map(@participants, &{participant_select_option_txt(&1), &1.user_id})}
-          prompt={[key: "Select a participant"]}
+          prompt={[key: gettext("Select a participant...")]}
           selected={@user_id}
           class="input input-bordered"
         />
@@ -37,7 +37,7 @@
         >
           <path stroke-linecap="round" stroke-linejoin="round" d="M7 11l5-5m0 0l5 5m-5-5v12" />
         </svg>
-        Level up
+        {gettext("Level up")}
       </button>
     </div>
     <div class="flex flex-col mt-4 max-h-60 overflow-y-auto tiny-scrollbar">
@@ -91,9 +91,9 @@
       class={"flex-none", "btn", "btn-primary", "btn-disabled": not can_import?(@user_id, @items)}
       :on-click="import"
     >
-      Import<span :if={can_import?(@user_id, @items)}>&nbsp;{count_image_type(@items)} images</span>
+      {gettext("Import")}<span :if={can_import?(@user_id, @items)}>&nbsp;{count_image_type(@items)} {gettext("images")}</span>
     </button>
     <div class="grow" />
-    <button class="flex-none btn btn-error" :on-click="hide">Close</button>
+    <button class="flex-none btn btn-error" :on-click="hide">{gettext("Close")}</button>
   </div>
 </Dialog>

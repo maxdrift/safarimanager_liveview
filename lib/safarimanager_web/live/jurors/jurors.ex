@@ -40,7 +40,7 @@ defmodule SMWeb.Live.Jurors do
         put_flash(
           socket,
           :error,
-          "Reached max of #{max_jurors_count} Jurors"
+          "#{gettext("Reached max num. of Jurors")}: #{max_jurors_count}"
         )
       end
 

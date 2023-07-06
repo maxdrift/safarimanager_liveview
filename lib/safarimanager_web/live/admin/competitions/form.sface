@@ -8,7 +8,7 @@
   <div class="flex flex-wrap pt-3">
     <Field name={:name} class="form-control w-full px-3">
       <Label class="label">
-        <span class="label-text">Name</span>
+        <span class="label-text">{gettext("Name")}</span>
       </Label>
       <TextInput
         class={state_class("input input-bordered", @changeset, :name, [])}
@@ -20,11 +20,11 @@
     </Field>
     <Field name={:organization_id} class="form-control w-full px-3">
       <Label class="label">
-        <span class="label-text">Organization</span>
+        <span class="label-text">{gettext("Organization")}</span>
       </Label>
       <Select
         options={Enum.map(@organizations, &{&1.name, &1.id})}
-        prompt={[key: "Select an organization"]}
+        prompt={[key: gettext("Select an organization...")]}
         selected={@entity.organization_id}
         class={state_class("input input-bordered", @changeset, :organization_id, [])}
       />
@@ -34,14 +34,14 @@
     </Field>
     <Field name={:type} class="form-control w-full px-3">
       <Label class="label">
-        <span class="label-text">Type</span>
+        <span class="label-text">{gettext("Type")}</span>
       </Label>
       <Select
         options={Enum.map(@competition_types, fn {value, label} ->
           {String.capitalize(Gettext.gettext(SMWeb.Gettext, label)), value}
         end)}
         selected={@entity.type}
-        prompt={[key: "Select a type"]}
+        prompt={[key: gettext("Select a type...")]}
         class={state_class("input input-bordered", @changeset, :type, [])}
       />
       <Label class="label h-7">
@@ -51,7 +51,7 @@
 
     <Field name={:start_time} class="form-control w-1/2 px-3">
       <Label class="label">
-        <span class="label-text">Start date/time</span>
+        <span class="label-text">{gettext("Start date/time")}</span>
       </Label>
       <DateTimeLocalInput
         class={state_class("input input-bordered", @changeset, :start_time, [])}
@@ -63,7 +63,7 @@
     </Field>
     <Field name={:end_time} class="form-control w-1/2 px-3">
       <Label class="label">
-        <span class="label-text">End date/time</span>
+        <span class="label-text">{gettext("End date/time")}</span>
       </Label>
       <DateTimeLocalInput
         class={state_class("input input-bordered", @changeset, :end_time, [])}
@@ -75,7 +75,7 @@
     </Field>
     <Field name={:street_name} class="form-control w-4/5 px-3">
       <Label class="label">
-        <span class="label-text">Street name</span>
+        <span class="label-text">{gettext("Street name")}</span>
       </Label>
       <TextInput
         class={state_class("input input-bordered", @changeset, :street_name, [])}
@@ -87,7 +87,7 @@
     </Field>
     <Field name={:street_number} class="form-control w-1/5 px-3">
       <Label class="label">
-        <span class="label-text">Number</span>
+        <span class="label-text">{gettext("Number")}</span>
       </Label>
       <TextInput
         class={state_class("input input-bordered", @changeset, :street_number, [])}
@@ -99,7 +99,7 @@
     </Field>
     <Field name={:postal_code} class="form-control w-1/2 px-3">
       <Label class="label">
-        <span class="label-text">Postal code</span>
+        <span class="label-text">{gettext("Postal code")}</span>
       </Label>
       <TextInput
         class={state_class("input input-bordered", @changeset, :postal_code, [])}
@@ -111,7 +111,7 @@
     </Field>
     <Field name={:city} class="form-control w-1/2 px-3">
       <Label class="label">
-        <span class="label-text">City</span>
+        <span class="label-text">{gettext("City")}</span>
       </Label>
       <TextInput
         class={state_class("input input-bordered", @changeset, :city, [])}
@@ -123,7 +123,7 @@
     </Field>
     <Field name={:state} class="form-control w-1/2 px-3">
       <Label class="label">
-        <span class="label-text">State/Province</span>
+        <span class="label-text">{gettext("State/Province")}</span>
       </Label>
       <TextInput
         class={state_class("input input-bordered", @changeset, :state, [])}
@@ -135,7 +135,7 @@
     </Field>
     <Field name={:country} class="form-control w-1/2 px-3">
       <Label class="label">
-        <span class="label-text">Country</span>
+        <span class="label-text">{gettext("Country")}</span>
       </Label>
       <TextInput
         class={state_class("input input-bordered", @changeset, :country, [])}
@@ -147,7 +147,7 @@
       <Context get={Form, form: settings_form}>
         <Field name={:number_of_jurors} class="form-control w-1/2 px-3">
           <Label class="label">
-            <span class="label-text">Number of jurors</span>
+            <span class="label-text">{gettext("Number of jurors")}</span>
           </Label>
           <NumberInput
             class={state_class("input input-bordered", settings_form.source, :number_of_jurors, [])}
@@ -157,7 +157,7 @@
         </Field>
         <Field name={:evaluations_per_juror} class="form-control w-1/2 px-3">
           <Label class="label">
-            <span class="label-text">Evaluations per juror</span>
+            <span class="label-text">{gettext("Evaluations per juror")}</span>
           </Label>
           <NumberInput
             class={state_class("input input-bordered", settings_form.source, :evaluations_per_juror, [])}
@@ -167,7 +167,7 @@
         </Field>
         <Field name={:max_jury_slides} class="form-control w-1/2 px-3">
           <Label class="label">
-            <span class="label-text">Max slides for jury</span>
+            <span class="label-text">{gettext("Max slides for jury")}</span>
           </Label>
           <NumberInput
             class={state_class("input input-bordered", settings_form.source, :max_jury_slides, [])}
@@ -177,7 +177,7 @@
         </Field>
         <Field name={:max_submitted_slides} class="form-control w-1/2 px-3">
           <Label class="label">
-            <span class="label-text">Max submitted slides</span>
+            <span class="label-text">{gettext("Max submitted slides")}</span>
           </Label>
           <NumberInput
             class={state_class("input input-bordered", settings_form.source, :max_submitted_slides, [])}
@@ -187,7 +187,7 @@
         </Field>
         <Field name={:proportional_submission} class="form-control w-1/2 px-3">
           <Label class="label cursor-pointer">
-            <span class="label-text">Proportional submission</span>
+            <span class="label-text">{gettext("Proportional submission")}</span>
             <Checkbox
               class={state_class("checkbox", settings_form.source, :proportional_submission, [])}
               opts={phx_debounce: "1000"}
@@ -197,7 +197,7 @@
         </Field>
         <Field name={:submission_ratio} class="form-control w-1/2 px-3">
           <Label class="label">
-            <span class="label-text">Submission ratio</span>
+            <span class="label-text">{gettext("Submission ratio")}</span>
           </Label>
           <NumberInput
             class={state_class("input input-bordered", settings_form.source, :submission_ratio, [])}
@@ -207,7 +207,7 @@
         </Field>
         <Field name={:fixed_points_multiplier} class="form-control w-1/2 px-3">
           <Label class="label">
-            <span class="label-text">Fixed points multiplier</span>
+            <span class="label-text">{gettext("Fixed points multiplier")}</span>
           </Label>
           <NumberInput
             class={state_class("input input-bordered", settings_form.source, :fixed_points_multiplier, [])}
@@ -217,7 +217,7 @@
         </Field>
         <Field name={:penalty_amount} class="form-control w-1/2 px-3">
           <Label class="label">
-            <span class="label-text">Penalty amount</span>
+            <span class="label-text">{gettext("Penalty amount")}</span>
           </Label>
           <NumberInput
             class={state_class("input input-bordered", settings_form.source, :penalty_amount, [])}
@@ -227,7 +227,7 @@
         </Field>
         <Field name={:dynamic_coefficients_enabled} class="form-control w-1/2 px-3">
           <Label class="label cursor-pointer">
-            <span class="label-text">Dynamic coefficients</span>
+            <span class="label-text">{gettext("Dynamic coefficients")}</span>
             <Checkbox
               class={state_class("checkbox", settings_form.source, :dynamic_coefficients_enabled, [])}
               opts={phx_debounce: "1000"}
@@ -235,12 +235,12 @@
           </Label>
           <Label class="label h-7"><ErrorTag /></Label>
         </Field>
-        <div class="text-lg w-full px-3">Dynamic coefficients:</div>
+        <div class="text-lg w-full px-3">{gettext("Dynamic coefficients")}:</div>
         <Inputs for={:dynamic_coefficients}>
           <Context get={Form, form: dynamic_coefficients_form}>
             <Field name={:name} class="form-control w-1/2 px-3">
               <Label class="label">
-                <span class="label-text">Name</span>
+                <span class="label-text">{gettext("Name")}</span>
               </Label>
               <TextInput
                 class={state_class(
@@ -255,7 +255,7 @@
             </Field>
             <Field name={:value} class="form-control w-1/2 px-3">
               <Label class="label">
-                <span class="label-text">Value</span>
+                <span class="label-text">{gettext("Value")}</span>
               </Label>
               <NumberInput
                 class={state_class(
@@ -270,7 +270,7 @@
             </Field>
             <Field name={:from} class="form-control w-1/2 px-3">
               <Label class="label">
-                <span class="label-text">From</span>
+                <span class="label-text">{gettext("From")}</span>
               </Label>
               <NumberInput
                 class={state_class(
@@ -285,7 +285,7 @@
             </Field>
             <Field name={:to} class="form-control w-1/2 px-3">
               <Label class="label">
-                <span class="label-text">To</span>
+                <span class="label-text">{gettext("To")}</span>
               </Label>
               <NumberInput
                 class={state_class(

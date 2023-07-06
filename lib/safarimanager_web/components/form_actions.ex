@@ -10,6 +10,6 @@ defmodule SMWeb.Components.FormActions do
   prop container_class, :css_class
   prop submit_enabled?, :boolean, required: true
   prop reset, :event, required: true
-  prop reset_label, :string, default: "Reset"
-  prop submit_label, :string, default: "Save"
+  prop reset_label, :string, default: gettext("Reset")
+  prop submit_label, :string, default: gettext("Save")
 end

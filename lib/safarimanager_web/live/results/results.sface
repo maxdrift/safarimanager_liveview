@@ -40,39 +40,39 @@
         </svg>
       </span>
       <span class="inline-block">
-        Competition details
+        {gettext("Competition details")}
       </span>
     </div>
     <div x-show="expanded" x-collapse class="flex flex-col lg:flex-row mt-4 mx-4">
       <div class="lg:w-1/2">
-        <div class="text-lg text-center pb-4">Stats</div>
+        <div class="text-lg text-center pb-4">{gettext("Stats")}</div>
         <table class="table table-compact table-fixed w-full">
           <tr>
-            <th class="bg-base-200 w-4/12">Num. of participants</th>
+            <th class="bg-base-200 w-4/12">{gettext("Num. of participants")}</th>
             <td class="truncate">{Enum.count(@competition.participants)}</td>
           </tr>
           <tr>
-            <th class="bg-base-200 w-4/12">Num. of jurors</th>
+            <th class="bg-base-200 w-4/12">{gettext("Num. of jurors")}</th>
             <td class="truncate">{Enum.count(@competition.jurors)}</td>
           </tr>
           <tr>
-            <th class="bg-base-200 w-4/12">Slides for jury</th>
+            <th class="bg-base-200 w-4/12">{gettext("Slides for jury")}</th>
             <td class="truncate">{@slides_count.submitted_jury}</td>
           </tr>
           <tr>
-            <th class="bg-base-200 w-4/12">Slides with fixed points</th>
+            <th class="bg-base-200 w-4/12">{gettext("Slides with fixed points")}</th>
             <td class="truncate">{@slides_count.submitted_fixed}</td>
           </tr>
           <tr>
-            <th class="bg-base-200 w-4/12">Total slides</th>
+            <th class="bg-base-200 w-4/12">{gettext("Total slides")}</th>
             <td class="truncate">{@slides_count.total}</td>
           </tr>
           <tr>
-            <th class="bg-base-200 w-4/12">Penalties</th>
+            <th class="bg-base-200 w-4/12">{gettext("Penalties")}</th>
             <td class="truncate">{@penalties_count}</td>
           </tr>
           <tr>
-            <th class="bg-base-200 w-4/12">Subjects</th>
+            <th class="bg-base-200 w-4/12">{gettext("Subjects")}</th>
             <td class="truncate">{@subjects_count}</td>
           </tr>
           <!-- <tr>
@@ -83,15 +83,15 @@
       </div>
       <div class="divider lg:divider-horizontal" />
       <div class="max-h-96 overflow-y-auto lg:w-1/2 tiny-scrollbar">
-        <div class="text-lg text-center pb-4">Subjects</div>
+        <div class="text-lg text-center pb-4">{gettext("Subjects")}</div>
         <table class="table table-zebra table-compact w-full">
           <thead>
             <tr>
-              <th class="sticky top-0 w-auto">#</th>
-              <th class="sticky top-0 w-auto">Name</th>
-              <th class="sticky top-0 w-auto">Count</th>
-              <th class="sticky top-0 w-auto">Distribution</th>
-              <th class="sticky top-0 w-auto">Coefficient</th>
+              <th class="sticky top-0 w-auto">{gettext("#")}</th>
+              <th class="sticky top-0 w-auto">{gettext("Name")}</th>
+              <th class="sticky top-0 w-auto">{gettext("Count")}</th>
+              <th class="sticky top-0 w-auto">{gettext("Distribution")}</th>
+              <th class="sticky top-0 w-auto">{gettext("Coefficient")}</th>
             </tr>
           </thead>
           <tbody>
@@ -101,7 +101,7 @@
                 <td class="capitalize">{subject.name}</td>
                 <td>{subject.count}</td>
                 <td>{(subject.distribution && "#{Decimal.mult(subject.distribution, 100) |> Decimal.round(2)}%") ||
-                    "N/A"}</td>
+                    gettext("N/A")}</td>
                 <td>
                   <span class="font-mono" title="dynamic coefficient">{subject.coefficient}</span>
                   <span :if={subject.dynamic_coefficient} title="dynamic coefficient">
@@ -120,16 +120,16 @@
     </div>
   </div>
   <div class="overflow-y-auto mt-6">
-    <div class="text-2xl font-bold text-center mb-4">Results</div>
+    <div class="text-2xl font-bold text-center mb-4">{gettext("Results")}</div>
     <table class="table table-fixed w-full">
       <thead>
         <tr>
-          <th class="w-1/12">Rank</th>
-          <th class="w-auto">Name</th>
-          <th class="w-auto">Organization</th>
-          <th class="w-auto">Category</th>
-          <th class="w-1/12">Score</th>
-          <th class="w-1/12">Species</th>
+          <th class="w-1/12">{gettext("Rank")}</th>
+          <th class="w-auto">{gettext("Name")}</th>
+          <th class="w-auto">{gettext("Organization")}</th>
+          <th class="w-auto">{gettext("Category")}</th>
+          <th class="w-1/12">{gettext("Score")}</th>
+          <th class="w-1/12">{gettext("Species")}</th>
           <th class="w-2/12" />
         </tr>
       </thead>
@@ -139,12 +139,12 @@
             <tr>
               <td class="truncate">{result.rank}</td>
               <td class="truncate">{result.user.last_name} {result.user.first_name}</td>
-              <td class="truncate">{(result.user.organization && result.user.organization.name) || "N/A"}</td>
-              <td class="truncate">{(result.participant.category && result.participant.category.name) || "N/A"}</td>
+              <td class="truncate">{(result.user.organization && result.user.organization.name) || gettext("N/A")}</td>
+              <td class="truncate">{(result.participant.category && result.participant.category.name) || gettext("N/A")}</td>
               <td class="truncate">{result.total_score}</td>
               <td class="truncate">{result.slides_count}</td>
               <td>
-                <button @click="expanded = ! expanded" class="btn btn-xs btn-outline">Show details</button>
+                <button @click="expanded = ! expanded" class="btn btn-xs btn-outline">{gettext("Show details")}</button>
               </td>
             </tr>
             <tr x-show="expanded">
@@ -153,14 +153,14 @@
                 <table class="table table-compact w-full">
                   <thead>
                     <tr>
-                      <th class="bg-base-200">File name</th>
-                      <th class="bg-base-200">Subject #</th>
-                      <th class="bg-base-200">Subject name</th>
-                      <th class="bg-base-200">Coeff.</th>
-                      <th class="bg-base-200 text-center">Votes</th>
-                      <th class="bg-base-200">Pen.</th>
-                      <th class="bg-base-200">Status</th>
-                      <th class="bg-base-200">Score</th>
+                      <th class="bg-base-200">{gettext("File name")}</th>
+                      <th class="bg-base-200">{gettext("Subject #")}</th>
+                      <th class="bg-base-200">{gettext("Subject name")}</th>
+                      <th class="bg-base-200">{gettext("Coeff.")}</th>
+                      <th class="bg-base-200 text-center">{gettext("Votes")}</th>
+                      <th class="bg-base-200">{gettext("Pen.")}</th>
+                      <th class="bg-base-200">{gettext("Status")}</th>
+                      <th class="bg-base-200">{gettext("Score")}</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -209,7 +209,7 @@
             </tr>
           </tbody>
         {#else}
-          <td>No results available yet</td>
+          <td>{gettext("No results available yet")}</td>
         {/for}
       </tbody>
     </table>
@@ -226,7 +226,7 @@
       >
         <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
       </svg>
-      Jury
+      {gettext("Jury")}
     </LiveRedirect>
     <div class="grow" />
   </div>

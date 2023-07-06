@@ -260,11 +260,11 @@ defmodule SMWeb.Live.Jury do
 
       {:error, :has_penalty} ->
         Logger.error("Error saving evaluation: :has_penalty")
-        put_flash(socket, :error, "Error saving evaluation: slide has a penalty")
+        put_flash(socket, :error, gettext("Error saving evaluation: slide has a penalty"))
 
       {:error, reason} ->
         Logger.error("Error saving evaluation: #{inspect(reason)}")
-        put_flash(socket, :error, "Unexpected error while saving evaluation")
+        put_flash(socket, :error, gettext("Unexpected error while saving evaluation"))
     end
   end
 

@@ -65,7 +65,7 @@
             <Select
               options={@evaluation_types}
               selected={@record.type}
-              prompt={gettext("Select a type")}
+              prompt={gettext("Select a type...")}
               class={input_state_class(@changeset, :type)}
               opts={phx_debounce: "1000"}
             />

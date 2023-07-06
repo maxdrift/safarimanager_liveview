@@ -13,7 +13,7 @@ msgstr ""
 
 #: lib/safarimanager_web/components/core_components.ex:450
 #: lib/safarimanager_web/live/admin/categories/index.sface:89
-#: lib/safarimanager_web/live/admin/competitions/index.sface:308
+#: lib/safarimanager_web/live/admin/competitions/index.sface:306
 #: lib/safarimanager_web/live/admin/evaluations/index.sface:116
 #: lib/safarimanager_web/live/admin/organizations/index.sface:175
 #: lib/safarimanager_web/live/admin/participants/index.sface:126
@@ -53,6 +53,7 @@ msgstr "Competizioni"
 
 #: lib/safarimanager_web/components/sidebar.ex:77
 #: lib/safarimanager_web/live/admin/import.ex:46
+#: lib/safarimanager_web/live/jury/jury.sface:13
 #, elixir-autogen, elixir-format
 msgid "Evaluations"
 msgstr "Valutazioni"
@@ -76,6 +77,10 @@ msgstr "Società"
 #: lib/safarimanager_web/components/sidebar.ex:95
 #: lib/safarimanager_web/components/steps_header.ex:15
 #: lib/safarimanager_web/live/admin/import.ex:49
+#: lib/safarimanager_web/live/jurors/jurors.sface:93
+#: lib/safarimanager_web/live/participants/participants.sface:70
+#: lib/safarimanager_web/live/slides/slide_selection.sface:9
+#: lib/safarimanager_web/live/slides/slides.sface:6
 #, elixir-autogen, elixir-format
 msgid "Participants"
 msgstr "Partecipanti"
@@ -91,6 +96,8 @@ msgstr "Arresta"
 
 #: lib/safarimanager_web/components/sidebar.ex:65
 #: lib/safarimanager_web/live/admin/import.ex:51
+#: lib/safarimanager_web/live/results/results.sface:75
+#: lib/safarimanager_web/live/results/results.sface:86
 #, elixir-autogen, elixir-format
 msgid "Subjects"
 msgstr "Soggetti"
@@ -126,11 +133,6 @@ msgstr "non è valido"
 msgid "must have the @ sign and no spaces"
 msgstr "deve contenere il simbolo @ e nessuno spazio"
 
-#: lib/safarimanager_web/components/user_dropdown.ex:41
-#, elixir-autogen, elixir-format
-msgid "Log out"
-msgstr "Esci"
-
 #: lib/safarimanager_web/components/user_dropdown.ex:36
 #: lib/safarimanager_web/live/admin/competitions/index.sface:65
 #: lib/safarimanager_web/live/admin/competitions/index.sface:65
@@ -145,6 +147,9 @@ msgstr "Opzioni utente"
 
 #: lib/safarimanager_web/components/steps_header.ex:18
 #: lib/safarimanager_web/live/admin/import.ex:47
+#: lib/safarimanager_web/live/jurors/jurors.sface:49
+#: lib/safarimanager_web/live/participants/participants.sface:139
+#: lib/safarimanager_web/live/slides/slides.sface:211
 #, elixir-autogen, elixir-format
 msgid "Jurors"
 msgstr "Giurati"
@@ -153,6 +158,9 @@ msgstr "Giurati"
 #: lib/safarimanager_web/controllers/selection_printout_html/show_multi.html.heex:36
 #: lib/safarimanager_web/controllers/selection_printout_html/show_single.html.heex:35
 #: lib/safarimanager_web/controllers/slides_printout_html/show.html.heex:36
+#: lib/safarimanager_web/live/results/results.ex:67
+#: lib/safarimanager_web/live/results/results.sface:229
+#: lib/safarimanager_web/live/slides/slide_selection.ex:296
 #: lib/safarimanager_web/live/validation/validation.ex:324
 #: lib/safarimanager_web/live/validation/validation_launcher.ex:126
 #: lib/safarimanager_web/live/validation/validation_launcher.sface:23
@@ -162,11 +170,14 @@ msgid "Jury"
 msgstr "Giuria"
 
 #: lib/safarimanager_web/components/steps_header.ex:29
+#: lib/safarimanager_web/live/jury/jury_launcher.sface:28
+#: lib/safarimanager_web/live/results/results.sface:123
 #, elixir-autogen, elixir-format
 msgid "Results"
 msgstr "Classifica"
 
 #: lib/safarimanager_web/components/steps_header.ex:21
+#: lib/safarimanager_web/live/slides/slides.sface:218
 #: lib/safarimanager_web/live/validation/validation_launcher.sface:159
 #, elixir-autogen, elixir-format
 msgid "Selection"
@@ -174,17 +185,25 @@ msgstr "Selezione"
 
 #: lib/safarimanager_web/components/steps_header.ex:19
 #: lib/safarimanager_web/live/admin/import.ex:50
+#: lib/safarimanager_web/live/jurors/jurors.sface:97
+#: lib/safarimanager_web/live/slides/slide_selection.sface:34
+#: lib/safarimanager_web/live/slides/slide_selection.sface:387
+#: lib/safarimanager_web/live/slides/slides.sface:28
 #, elixir-autogen, elixir-format
 msgid "Slides"
 msgstr "Slide"
 
 #: lib/safarimanager_web/components/steps_header.ex:25
+#: lib/safarimanager_web/live/jury/jury_launcher.sface:24
+#: lib/safarimanager_web/live/slides/slide_selection.sface:394
 #, elixir-autogen, elixir-format
 msgid "Validation"
 msgstr "Convalida"
 
 #: lib/safarimanager_web/components/sidebar.ex:83
 #: lib/safarimanager_web/live/admin/import.ex:52
+#: lib/safarimanager_web/live/jurors/jurors.sface:7
+#: lib/safarimanager_web/live/participants/participants.sface:7
 #, elixir-autogen, elixir-format
 msgid "Users"
 msgstr "Utenti"
@@ -204,6 +223,7 @@ msgstr "Clicca o trascina files in quest'area"
 msgid "Select a table"
 msgstr "Seleziona una tabella"
 
+#: lib/safarimanager_web/components/direct_upload_dialog.sface:94
 #: lib/safarimanager_web/components/sidebar.ex:101
 #: lib/safarimanager_web/live/admin/import.sface:65
 #, elixir-autogen, elixir-format
@@ -215,6 +235,7 @@ msgstr "Importa"
 msgid "Import from CSV"
 msgstr "Importa da CSV"
 
+#: lib/safarimanager_web/components/form_actions.ex:13
 #: lib/safarimanager_web/live/admin/import.sface:69
 #, elixir-autogen, elixir-format
 msgid "Reset"
@@ -244,7 +265,8 @@ msgstr "società"
 msgid "participants"
 msgstr "partecipanti"
 
-#, elixir-format
+#: lib/safarimanager_web/live/slides/slides.sface:75
+#, elixir-format, elixir-autogen
 msgid "slides"
 msgstr "slide"
 
@@ -356,6 +378,7 @@ msgstr "Password attuale"
 msgid "Don't have an account?"
 msgstr "Non hai un account?"
 
+#: lib/safarimanager_web/live/admin/users/form.sface:35
 #: lib/safarimanager_web/live/admin/users/index.sface:25
 #: lib/safarimanager_web/live/admin/users/index.sface:25
 #: lib/safarimanager_web/live/admin/users/index.sface:70
@@ -520,7 +543,7 @@ msgstr "Stampa"
 msgid "Slide selection has been imported."
 msgstr "La selezione delle slide è stata importata."
 
-#: lib/safarimanager_web/live/slides/slide_selection.ex:216
+#: lib/safarimanager_web/live/slides/slide_selection.ex:226
 #, elixir-autogen, elixir-format
 msgid "Unable to import slide selection: invalid CSV file"
 msgstr "Impossibile importare la selezione: file CSV non valido"
@@ -530,7 +553,7 @@ msgstr "Impossibile importare la selezione: file CSV non valido"
 msgid "Unable to import slide selection: slide not found"
 msgstr "Impossibile importare la selezione: slide non trovata"
 
-#: lib/safarimanager_web/live/slides/slide_selection.ex:209
+#: lib/safarimanager_web/live/slides/slide_selection.ex:219
 #, elixir-autogen, elixir-format
 msgid "Unable to import slide selection: subject not found"
 msgstr "Impossibile importare la selezione: soggetto non trovato"
@@ -550,6 +573,7 @@ msgstr "Sei sicuro di voler eliminare tutti i record?"
 msgid "Are you sure you want to delete this record?"
 msgstr "Sei sicuro di voler eliminare questo record?"
 
+#: lib/safarimanager_web/components/direct_upload_dialog.sface:97
 #: lib/safarimanager_web/live/admin/categories/index.sface:32
 #: lib/safarimanager_web/live/admin/competitions/index.sface:99
 #: lib/safarimanager_web/live/admin/evaluations/index.sface:38
@@ -557,6 +581,7 @@ msgstr "Sei sicuro di voler eliminare questo record?"
 #: lib/safarimanager_web/live/admin/participants/index.sface:38
 #: lib/safarimanager_web/live/admin/subjects/index.sface:41
 #: lib/safarimanager_web/live/admin/users/index.sface:44
+#: lib/safarimanager_web/live/slides/slide_selection.sface:134
 #, elixir-autogen, elixir-format
 msgid "Close"
 msgstr "Chiudi"
@@ -565,6 +590,7 @@ msgstr "Chiudi"
 #: lib/safarimanager_web/controllers/selection_printout_html/show_single.html.heex:34
 #: lib/safarimanager_web/controllers/slides_printout_html/show.html.heex:33
 #: lib/safarimanager_web/live/admin/subjects/index.sface:118
+#: lib/safarimanager_web/live/results/results.sface:159
 #, elixir-autogen, elixir-format
 msgid "Coeff."
 msgstr "Coeff."
@@ -572,6 +598,7 @@ msgstr "Coeff."
 #: lib/safarimanager_web/live/admin/subjects/index.sface:25
 #: lib/safarimanager_web/live/admin/subjects/index.sface:25
 #: lib/safarimanager_web/live/admin/subjects/index.sface:70
+#: lib/safarimanager_web/live/results/results.sface:94
 #, elixir-autogen, elixir-format
 msgid "Coefficient"
 msgstr "Coefficiente"
@@ -596,12 +623,13 @@ msgstr "Creato"
 #: lib/safarimanager_web/components/grid.ex:215
 #: lib/safarimanager_web/components/grid.ex:234
 #: lib/safarimanager_web/live/admin/categories/index.sface:97
-#: lib/safarimanager_web/live/admin/competitions/index.sface:316
+#: lib/safarimanager_web/live/admin/competitions/index.sface:314
 #: lib/safarimanager_web/live/admin/evaluations/index.sface:124
 #: lib/safarimanager_web/live/admin/organizations/index.sface:183
 #: lib/safarimanager_web/live/admin/participants/index.sface:140
 #: lib/safarimanager_web/live/admin/subjects/index.sface:138
 #: lib/safarimanager_web/live/admin/users/index.sface:207
+#: lib/safarimanager_web/live/slides/slides.sface:131
 #, elixir-autogen, elixir-format
 msgid "Delete"
 msgstr "Elimina"
@@ -623,12 +651,15 @@ msgid "Delete records"
 msgstr "Elimina i record"
 
 #: lib/safarimanager_web/live/admin/categories/index.sface:92
-#: lib/safarimanager_web/live/admin/competitions/index.sface:311
+#: lib/safarimanager_web/live/admin/competitions/index.sface:309
 #: lib/safarimanager_web/live/admin/evaluations/index.sface:119
 #: lib/safarimanager_web/live/admin/organizations/index.sface:178
 #: lib/safarimanager_web/live/admin/participants/index.sface:135
 #: lib/safarimanager_web/live/admin/subjects/index.sface:133
 #: lib/safarimanager_web/live/admin/users/index.sface:202
+#: lib/safarimanager_web/live/slides/slide_selection.sface:200
+#: lib/safarimanager_web/live/slides/slide_selection.sface:276
+#: lib/safarimanager_web/live/slides/slide_selection.sface:352
 #, elixir-autogen, elixir-format
 msgid "Edit"
 msgstr "Modifica"
@@ -661,11 +692,13 @@ msgstr "Modificato"
 #: lib/safarimanager_web/live/admin/categories/index.sface:19
 #: lib/safarimanager_web/live/admin/categories/index.sface:52
 #: lib/safarimanager_web/live/admin/categories/index.sface:80
+#: lib/safarimanager_web/live/admin/competitions/form.sface:11
+#: lib/safarimanager_web/live/admin/competitions/form.sface:243
 #: lib/safarimanager_web/live/admin/competitions/index.sface:19
 #: lib/safarimanager_web/live/admin/competitions/index.sface:19
-#: lib/safarimanager_web/live/admin/competitions/index.sface:119
-#: lib/safarimanager_web/live/admin/competitions/index.sface:243
-#: lib/safarimanager_web/live/admin/competitions/index.sface:296
+#: lib/safarimanager_web/live/admin/competitions/index.sface:120
+#: lib/safarimanager_web/live/admin/competitions/index.sface:240
+#: lib/safarimanager_web/live/admin/competitions/index.sface:294
 #: lib/safarimanager_web/live/admin/organizations/index.sface:19
 #: lib/safarimanager_web/live/admin/organizations/index.sface:19
 #: lib/safarimanager_web/live/admin/organizations/index.sface:55
@@ -674,6 +707,10 @@ msgstr "Modificato"
 #: lib/safarimanager_web/live/admin/subjects/index.sface:19
 #: lib/safarimanager_web/live/admin/subjects/index.sface:64
 #: lib/safarimanager_web/live/admin/subjects/index.sface:114
+#: lib/safarimanager_web/live/new_competition/new_competition.sface:8
+#: lib/safarimanager_web/live/results/results.sface:91
+#: lib/safarimanager_web/live/results/results.sface:128
+#: lib/safarimanager_web/live/slides/slides.sface:97
 #, elixir-autogen, elixir-format
 msgid "Name"
 msgstr "Nome"
@@ -689,13 +726,15 @@ msgstr "Num."
 msgid "Numeric ID"
 msgstr "ID numerico"
 
+#: lib/safarimanager_web/components/form_actions.ex:14
 #: lib/safarimanager_web/live/admin/categories/index.sface:59
-#: lib/safarimanager_web/live/admin/competitions/index.sface:275
+#: lib/safarimanager_web/live/admin/competitions/index.sface:273
 #: lib/safarimanager_web/live/admin/evaluations/index.sface:80
 #: lib/safarimanager_web/live/admin/organizations/index.sface:65
 #: lib/safarimanager_web/live/admin/participants/index.sface:92
 #: lib/safarimanager_web/live/admin/subjects/index.sface:92
 #: lib/safarimanager_web/live/admin/users/index.sface:93
+#: lib/safarimanager_web/live/slides/slide_selection.sface:133
 #, elixir-autogen, elixir-format
 msgid "Save"
 msgstr "Salva"
@@ -712,15 +751,8 @@ msgstr "Nome Scientifico"
 msgid "Select a coefficient"
 msgstr "Seleziona un coefficiente"
 
-#: lib/safarimanager_web/live/admin/competitions/index.sface:136
-#: lib/safarimanager_web/live/admin/evaluations/index.sface:68
-#: lib/safarimanager_web/live/admin/subjects/index.sface:83
-#, elixir-autogen, elixir-format
-msgid "Select a type"
-msgstr "Seleziona un tipo"
-
 #: lib/safarimanager_web/live/admin/categories/index.sface:91
-#: lib/safarimanager_web/live/admin/competitions/index.sface:310
+#: lib/safarimanager_web/live/admin/competitions/index.sface:308
 #: lib/safarimanager_web/live/admin/evaluations/index.sface:118
 #: lib/safarimanager_web/live/admin/organizations/index.sface:177
 #: lib/safarimanager_web/live/admin/participants/index.sface:131
@@ -732,9 +764,10 @@ msgstr "Mostra"
 
 #: lib/safarimanager_web/controllers/participants_printout_html/show.html.heex:22
 #: lib/safarimanager_web/controllers/results_printout_html/show.html.heex:22
+#: lib/safarimanager_web/live/admin/competitions/form.sface:37
 #: lib/safarimanager_web/live/admin/competitions/index.sface:27
 #: lib/safarimanager_web/live/admin/competitions/index.sface:27
-#: lib/safarimanager_web/live/admin/competitions/index.sface:130
+#: lib/safarimanager_web/live/admin/competitions/index.sface:131
 #: lib/safarimanager_web/live/admin/evaluations/index.sface:22
 #: lib/safarimanager_web/live/admin/evaluations/index.sface:22
 #: lib/safarimanager_web/live/admin/evaluations/index.sface:64
@@ -749,7 +782,7 @@ msgstr "Tipo"
 
 #: lib/safarimanager_web/components/confirm.ex:90
 #: lib/safarimanager_web/live/admin/categories/index.sface:64
-#: lib/safarimanager_web/live/admin/competitions/index.sface:280
+#: lib/safarimanager_web/live/admin/competitions/index.sface:278
 #: lib/safarimanager_web/live/admin/evaluations/index.sface:85
 #: lib/safarimanager_web/live/admin/organizations/index.sface:70
 #: lib/safarimanager_web/live/admin/organizations/index.sface:144
@@ -757,6 +790,7 @@ msgstr "Tipo"
 #: lib/safarimanager_web/live/admin/subjects/index.sface:97
 #: lib/safarimanager_web/live/admin/users/index.sface:95
 #: lib/safarimanager_web/live/admin/users/index.sface:168
+#: lib/safarimanager_web/live/slides/slides.sface:165
 #, elixir-autogen, elixir-format
 msgid "Cancel"
 msgstr "Annulla"
@@ -819,7 +853,8 @@ msgstr "Impossibile recuperare questo soggetto"
 msgid "Inserted"
 msgstr "Creato"
 
-#: lib/safarimanager_web/live/admin/competitions/index.sface:155
+#: lib/safarimanager_web/live/admin/competitions/form.sface:90
+#: lib/safarimanager_web/live/admin/competitions/index.sface:156
 #: lib/safarimanager_web/live/admin/participants/index.sface:16
 #: lib/safarimanager_web/live/admin/participants/index.sface:16
 #: lib/safarimanager_web/live/admin/participants/index.sface:58
@@ -917,7 +952,7 @@ msgstr "Categoria modificata"
 #: lib/safarimanager_web/live/admin/categories/index.sface:77
 #: lib/safarimanager_web/live/admin/competitions/index.sface:16
 #: lib/safarimanager_web/live/admin/competitions/index.sface:16
-#: lib/safarimanager_web/live/admin/competitions/index.sface:293
+#: lib/safarimanager_web/live/admin/competitions/index.sface:291
 #: lib/safarimanager_web/live/admin/evaluations/index.sface:16
 #: lib/safarimanager_web/live/admin/evaluations/index.sface:16
 #: lib/safarimanager_web/live/admin/evaluations/index.sface:98
@@ -969,11 +1004,12 @@ msgstr "Società modificata"
 #: lib/safarimanager_web/controllers/participants_printout_html/show.html.heex:19
 #: lib/safarimanager_web/controllers/results_printout_html/show.html.heex:19
 #: lib/safarimanager_web/controllers/slides_printout_html/show.html.heex:19
-#: lib/safarimanager_web/live/admin/competitions/index.sface:299
+#: lib/safarimanager_web/live/admin/competitions/index.sface:297
 #: lib/safarimanager_web/live/admin/organizations/index.sface:22
 #: lib/safarimanager_web/live/admin/organizations/index.sface:22
 #: lib/safarimanager_web/live/admin/organizations/index.sface:58
 #: lib/safarimanager_web/live/admin/organizations/index.sface:166
+#: lib/safarimanager_web/live/new_competition/new_competition.sface:9
 #, elixir-autogen, elixir-format
 msgid "Location"
 msgstr "Luogo"
@@ -1018,7 +1054,9 @@ msgstr "Impossibile eliminare le società"
 msgid "Unable to retrieve this Organization"
 msgstr "Impossibile recuperare questa società"
 
+#: lib/safarimanager_web/live/admin/competitions/form.sface:27
 #: lib/safarimanager_web/live/admin/organizations/index.sface:135
+#: lib/safarimanager_web/live/admin/users/form.sface:51
 #: lib/safarimanager_web/live/admin/users/index.sface:76
 #, elixir-autogen, elixir-format
 msgid "Select an organization..."
@@ -1050,9 +1088,10 @@ msgstr "Tutte le competizioni sono state eliminate con successo"
 msgid "Allowed evaluations"
 msgstr "Valutazioni consentite"
 
+#: lib/safarimanager_web/live/admin/competitions/form.sface:114
 #: lib/safarimanager_web/live/admin/competitions/index.sface:47
 #: lib/safarimanager_web/live/admin/competitions/index.sface:47
-#: lib/safarimanager_web/live/admin/competitions/index.sface:161
+#: lib/safarimanager_web/live/admin/competitions/index.sface:162
 #, elixir-autogen, elixir-format
 msgid "City"
 msgstr "Città"
@@ -1068,6 +1107,7 @@ msgid "Competition deleted successfully"
 msgstr "Competizione eliminata con successo"
 
 #: lib/safarimanager_web/live/admin/competitions/index.sface:12
+#: lib/safarimanager_web/live/results/results.sface:43
 #, elixir-autogen, elixir-format
 msgid "Competition details"
 msgstr "Dettagli competizione"
@@ -1077,14 +1117,15 @@ msgstr "Dettagli competizione"
 msgid "Competitions deleted successfully"
 msgstr "Competizioni eliminate con successo"
 
+#: lib/safarimanager_web/live/admin/competitions/form.sface:138
 #: lib/safarimanager_web/live/admin/competitions/index.sface:53
 #: lib/safarimanager_web/live/admin/competitions/index.sface:53
-#: lib/safarimanager_web/live/admin/competitions/index.sface:167
+#: lib/safarimanager_web/live/admin/competitions/index.sface:168
 #, elixir-autogen, elixir-format
 msgid "Country"
 msgstr "Paese"
 
-#: lib/safarimanager_web/live/admin/competitions/index.sface:302
+#: lib/safarimanager_web/live/admin/competitions/index.sface:300
 #, elixir-autogen, elixir-format
 msgid "Date (start)"
 msgstr "Data (inizio)"
@@ -1105,35 +1146,41 @@ msgstr "Competizione modificata"
 msgid "End"
 msgstr "Fine"
 
-#: lib/safarimanager_web/live/admin/competitions/index.sface:146
+#: lib/safarimanager_web/live/admin/competitions/form.sface:66
+#: lib/safarimanager_web/live/admin/competitions/index.sface:147
 #, elixir-autogen, elixir-format
 msgid "End date/time"
 msgstr "Data/ora Fine"
 
+#: lib/safarimanager_web/live/admin/competitions/form.sface:160
 #: lib/safarimanager_web/live/admin/competitions/index.sface:69
-#: lib/safarimanager_web/live/admin/competitions/index.sface:180
+#: lib/safarimanager_web/live/admin/competitions/index.sface:179
 #, elixir-autogen, elixir-format
 msgid "Evaluations per juror"
 msgstr "Valutazioni per giurato"
 
+#: lib/safarimanager_web/live/admin/competitions/form.sface:210
 #: lib/safarimanager_web/live/admin/competitions/index.sface:74
-#: lib/safarimanager_web/live/admin/competitions/index.sface:217
+#: lib/safarimanager_web/live/admin/competitions/index.sface:214
 #, elixir-autogen, elixir-format
 msgid "Fixed points multiplier"
-msgstr "Moltiplicatore punteggio fisso"
+msgstr "Molt. punteggio fisso"
 
-#: lib/safarimanager_web/live/admin/competitions/index.sface:255
+#: lib/safarimanager_web/live/admin/competitions/form.sface:273
+#: lib/safarimanager_web/live/admin/competitions/index.sface:252
 #, elixir-autogen, elixir-format
 msgid "From"
 msgstr "Da"
 
-#: lib/safarimanager_web/live/admin/competitions/index.sface:188
+#: lib/safarimanager_web/live/admin/competitions/form.sface:170
+#: lib/safarimanager_web/live/admin/competitions/index.sface:185
 #, elixir-autogen, elixir-format
 msgid "Max slides for jury"
 msgstr "Max slide in giuria"
 
+#: lib/safarimanager_web/live/admin/competitions/form.sface:180
 #: lib/safarimanager_web/live/admin/competitions/index.sface:71
-#: lib/safarimanager_web/live/admin/competitions/index.sface:194
+#: lib/safarimanager_web/live/admin/competitions/index.sface:191
 #, elixir-autogen, elixir-format
 msgid "Max submitted slides"
 msgstr "Max slide presentate"
@@ -1157,15 +1204,36 @@ msgstr "Max slide presentate"
 #: lib/safarimanager_web/live/admin/competitions/index.sface:24
 #: lib/safarimanager_web/live/admin/competitions/index.sface:61
 #: lib/safarimanager_web/live/admin/competitions/index.sface:85
-#: lib/safarimanager_web/live/admin/competitions/index.sface:300
-#: lib/safarimanager_web/live/admin/competitions/index.sface:300
-#: lib/safarimanager_web/live/admin/competitions/index.sface:306
+#: lib/safarimanager_web/live/admin/competitions/index.sface:298
+#: lib/safarimanager_web/live/admin/competitions/index.sface:298
+#: lib/safarimanager_web/live/admin/competitions/index.sface:304
 #: lib/safarimanager_web/live/admin/participants/index.sface:26
 #: lib/safarimanager_web/live/admin/participants/index.sface:121
 #: lib/safarimanager_web/live/admin/users/index.sface:29
 #: lib/safarimanager_web/live/admin/users/index.sface:32
 #: lib/safarimanager_web/live/admin/users/index.sface:194
 #: lib/safarimanager_web/live/admin/users/index.sface:197
+#: lib/safarimanager_web/live/jurors/jurors.sface:30
+#: lib/safarimanager_web/live/jurors/jurors.sface:64
+#: lib/safarimanager_web/live/participants/participants.sface:31
+#: lib/safarimanager_web/live/participants/participants.sface:32
+#: lib/safarimanager_web/live/participants/participants.sface:101
+#: lib/safarimanager_web/live/participants/participants.sface:102
+#: lib/safarimanager_web/live/results/results.sface:104
+#: lib/safarimanager_web/live/results/results.sface:142
+#: lib/safarimanager_web/live/results/results.sface:143
+#: lib/safarimanager_web/live/slides/slide_selection.sface:44
+#: lib/safarimanager_web/live/slides/slide_selection.sface:45
+#: lib/safarimanager_web/live/slides/slide_selection.sface:195
+#: lib/safarimanager_web/live/slides/slide_selection.sface:197
+#: lib/safarimanager_web/live/slides/slide_selection.sface:271
+#: lib/safarimanager_web/live/slides/slide_selection.sface:273
+#: lib/safarimanager_web/live/slides/slide_selection.sface:347
+#: lib/safarimanager_web/live/slides/slide_selection.sface:349
+#: lib/safarimanager_web/live/slides/slides.sface:38
+#: lib/safarimanager_web/live/slides/slides.sface:39
+#: lib/safarimanager_web/live/slides/slides.sface:128
+#: lib/safarimanager_web/live/slides/slides.sface:162
 #, elixir-autogen, elixir-format
 msgid "N/A"
 msgstr "N/D"
@@ -1175,8 +1243,9 @@ msgstr "N/D"
 msgid "New competition"
 msgstr "Nuova competizione"
 
+#: lib/safarimanager_web/live/admin/competitions/form.sface:150
 #: lib/safarimanager_web/live/admin/competitions/index.sface:68
-#: lib/safarimanager_web/live/admin/competitions/index.sface:172
+#: lib/safarimanager_web/live/admin/competitions/index.sface:173
 #, elixir-autogen, elixir-format
 msgid "Number of jurors"
 msgstr "Numero di giurati"
@@ -1186,42 +1255,54 @@ msgstr "Numero di giurati"
 #: lib/safarimanager_web/controllers/selection_printout_html/show_multi.html.heex:19
 #: lib/safarimanager_web/controllers/selection_printout_html/show_single.html.heex:18
 #: lib/safarimanager_web/controllers/slides_printout_html/show.html.heex:15
-#: lib/safarimanager_web/live/admin/competitions/index.sface:122
+#: lib/safarimanager_web/live/admin/competitions/form.sface:23
+#: lib/safarimanager_web/live/admin/competitions/index.sface:123
+#: lib/safarimanager_web/live/admin/users/form.sface:47
 #: lib/safarimanager_web/live/admin/users/index.sface:28
 #: lib/safarimanager_web/live/admin/users/index.sface:28
 #: lib/safarimanager_web/live/admin/users/index.sface:73
 #: lib/safarimanager_web/live/admin/users/index.sface:193
+#: lib/safarimanager_web/live/jurors/jurors.sface:21
+#: lib/safarimanager_web/live/jurors/jurors.sface:56
+#: lib/safarimanager_web/live/participants/participants.sface:21
+#: lib/safarimanager_web/live/participants/participants.sface:90
+#: lib/safarimanager_web/live/results/results.sface:129
+#: lib/safarimanager_web/live/slides/slide_selection.sface:32
+#: lib/safarimanager_web/live/slides/slides.sface:26
 #, elixir-autogen, elixir-format
 msgid "Organization"
 msgstr "Società"
 
 #: lib/safarimanager_web/live/admin/competitions/index.sface:22
 #: lib/safarimanager_web/live/admin/competitions/index.sface:22
-#: lib/safarimanager_web/live/admin/competitions/index.sface:305
+#: lib/safarimanager_web/live/admin/competitions/index.sface:303
 #, elixir-autogen, elixir-format
 msgid "Organizer"
 msgstr "Organizzatore"
 
+#: lib/safarimanager_web/live/admin/competitions/form.sface:220
 #: lib/safarimanager_web/live/admin/competitions/index.sface:75
-#: lib/safarimanager_web/live/admin/competitions/index.sface:225
+#: lib/safarimanager_web/live/admin/competitions/index.sface:222
 #, elixir-autogen, elixir-format
 msgid "Penalty amount"
 msgstr "Valore penalizzazione"
 
+#: lib/safarimanager_web/live/admin/competitions/form.sface:102
 #: lib/safarimanager_web/live/admin/competitions/index.sface:44
 #: lib/safarimanager_web/live/admin/competitions/index.sface:44
-#: lib/safarimanager_web/live/admin/competitions/index.sface:158
+#: lib/safarimanager_web/live/admin/competitions/index.sface:159
 #, elixir-autogen, elixir-format
 msgid "Postal code"
 msgstr "Codice postale"
 
+#: lib/safarimanager_web/live/admin/competitions/form.sface:190
 #: lib/safarimanager_web/live/admin/competitions/index.sface:72
-#: lib/safarimanager_web/live/admin/competitions/index.sface:202
+#: lib/safarimanager_web/live/admin/competitions/index.sface:199
 #, elixir-autogen, elixir-format
 msgid "Proportional submission"
 msgstr "Sistema percentuale"
 
-#: lib/safarimanager_web/live/admin/competitions/index.sface:125
+#: lib/safarimanager_web/live/admin/competitions/index.sface:126
 #, elixir-autogen, elixir-format
 msgid "Select an organization"
 msgstr "Seleziona una società"
@@ -1232,21 +1313,24 @@ msgstr "Seleziona una società"
 msgid "Start"
 msgstr "Inizio"
 
-#: lib/safarimanager_web/live/admin/competitions/index.sface:140
+#: lib/safarimanager_web/live/admin/competitions/form.sface:54
+#: lib/safarimanager_web/live/admin/competitions/index.sface:141
 #, elixir-autogen, elixir-format
 msgid "Start date/time"
 msgstr "Data/ora inizio"
 
+#: lib/safarimanager_web/live/admin/competitions/form.sface:126
 #: lib/safarimanager_web/live/admin/competitions/index.sface:50
 #: lib/safarimanager_web/live/admin/competitions/index.sface:50
-#: lib/safarimanager_web/live/admin/competitions/index.sface:164
+#: lib/safarimanager_web/live/admin/competitions/index.sface:165
 #, elixir-autogen, elixir-format
 msgid "State/Province"
 msgstr "Stato/Provincia"
 
+#: lib/safarimanager_web/live/admin/competitions/form.sface:78
 #: lib/safarimanager_web/live/admin/competitions/index.sface:38
 #: lib/safarimanager_web/live/admin/competitions/index.sface:38
-#: lib/safarimanager_web/live/admin/competitions/index.sface:152
+#: lib/safarimanager_web/live/admin/competitions/index.sface:153
 #, elixir-autogen, elixir-format
 msgid "Street name"
 msgstr "Via"
@@ -1257,13 +1341,15 @@ msgstr "Via"
 msgid "Street number"
 msgstr "Numero"
 
+#: lib/safarimanager_web/live/admin/competitions/form.sface:200
 #: lib/safarimanager_web/live/admin/competitions/index.sface:73
-#: lib/safarimanager_web/live/admin/competitions/index.sface:209
+#: lib/safarimanager_web/live/admin/competitions/index.sface:206
 #, elixir-autogen, elixir-format
 msgid "Submission ratio"
 msgstr "Percentuale in giuria"
 
-#: lib/safarimanager_web/live/admin/competitions/index.sface:261
+#: lib/safarimanager_web/live/admin/competitions/form.sface:288
+#: lib/safarimanager_web/live/admin/competitions/index.sface:258
 #, elixir-autogen, elixir-format
 msgid "To"
 msgstr "A"
@@ -1283,7 +1369,8 @@ msgstr "Impossibile eliminare le competizioni"
 msgid "Unable to retrieve this Competition"
 msgstr "Impossibile recuperare questa competizione"
 
-#: lib/safarimanager_web/live/admin/competitions/index.sface:249
+#: lib/safarimanager_web/live/admin/competitions/form.sface:258
+#: lib/safarimanager_web/live/admin/competitions/index.sface:246
 #: lib/safarimanager_web/live/admin/evaluations/index.sface:19
 #: lib/safarimanager_web/live/admin/evaluations/index.sface:19
 #: lib/safarimanager_web/live/admin/evaluations/index.sface:58
@@ -1292,10 +1379,12 @@ msgstr "Impossibile recuperare questa competizione"
 msgid "Value"
 msgstr "Valore"
 
+#: lib/safarimanager_web/live/admin/competitions/form.sface:230
+#: lib/safarimanager_web/live/admin/competitions/form.sface:238
 #: lib/safarimanager_web/live/admin/competitions/index.sface:76
 #: lib/safarimanager_web/live/admin/competitions/index.sface:77
-#: lib/safarimanager_web/live/admin/competitions/index.sface:233
-#: lib/safarimanager_web/live/admin/competitions/index.sface:240
+#: lib/safarimanager_web/live/admin/competitions/index.sface:230
+#: lib/safarimanager_web/live/admin/competitions/index.sface:237
 #, elixir-autogen, elixir-format
 msgid "Dynamic coefficients"
 msgstr "Coefficienti dinamici"
@@ -1392,10 +1481,16 @@ msgstr "Tutti gli utenti sono stati eliminati con successo"
 #: lib/safarimanager_web/live/admin/participants/index.sface:25
 #: lib/safarimanager_web/live/admin/participants/index.sface:79
 #: lib/safarimanager_web/live/admin/participants/index.sface:120
+#: lib/safarimanager_web/live/admin/users/form.sface:61
 #: lib/safarimanager_web/live/admin/users/index.sface:31
 #: lib/safarimanager_web/live/admin/users/index.sface:31
 #: lib/safarimanager_web/live/admin/users/index.sface:81
 #: lib/safarimanager_web/live/admin/users/index.sface:196
+#: lib/safarimanager_web/live/participants/participants.sface:22
+#: lib/safarimanager_web/live/participants/participants.sface:91
+#: lib/safarimanager_web/live/results/results.sface:130
+#: lib/safarimanager_web/live/slides/slide_selection.sface:33
+#: lib/safarimanager_web/live/slides/slides.sface:27
 #, elixir-autogen, elixir-format
 msgid "Category"
 msgstr "Categoria"
@@ -1432,6 +1527,7 @@ msgid "New user"
 msgstr "Nuovo utente"
 
 #: lib/safarimanager_web/live/admin/participants/index.sface:83
+#: lib/safarimanager_web/live/admin/users/form.sface:65
 #: lib/safarimanager_web/live/admin/users/index.sface:84
 #, elixir-autogen, elixir-format
 msgid "Select a category..."
@@ -1512,6 +1608,10 @@ msgstr "Unisci"
 #: lib/safarimanager_web/controllers/selection_printout_html/show_multi.html.heex:31
 #: lib/safarimanager_web/controllers/selection_printout_html/show_single.html.heex:30
 #: lib/safarimanager_web/live/admin/participants/index.sface:111
+#: lib/safarimanager_web/live/participants/participants.sface:87
+#: lib/safarimanager_web/live/results/results.sface:90
+#: lib/safarimanager_web/live/slides/slide_selection.sface:29
+#: lib/safarimanager_web/live/slides/slides.sface:23
 #, elixir-autogen, elixir-format
 msgid "#"
 msgstr "#"
@@ -1525,6 +1625,7 @@ msgstr "Tutti i partecipanti sono stati eliminati con successo"
 #: lib/safarimanager_web/live/admin/participants/index.sface:19
 #: lib/safarimanager_web/live/admin/participants/index.sface:61
 #: lib/safarimanager_web/live/admin/participants/index.sface:114
+#: lib/safarimanager_web/live/participants/participants.sface:135
 #, elixir-autogen, elixir-format
 msgid "Competition"
 msgstr "Competizione"
@@ -1594,6 +1695,7 @@ msgstr "Seleziona una competizione..."
 
 #: lib/safarimanager_web/controllers/participants_printout_html/show.html.heex:16
 #: lib/safarimanager_web/controllers/results_printout_html/show.html.heex:16
+#: lib/safarimanager_web/live/new_competition/new_competition.sface:10
 #, elixir-autogen, elixir-format
 msgid "Date"
 msgstr "Data"
@@ -1632,11 +1734,13 @@ msgid "Pubblication time"
 msgstr "Ora di esposizione"
 
 #: lib/safarimanager_web/controllers/results_printout_html/show.html.heex:32
+#: lib/safarimanager_web/live/results/results.sface:127
 #, elixir-autogen, elixir-format
 msgid "Rank"
 msgstr "Pos."
 
 #: lib/safarimanager_web/controllers/results_printout_html/show.html.heex:37
+#: lib/safarimanager_web/live/results/results.sface:132
 #, elixir-autogen, elixir-format
 msgid "Species"
 msgstr "Specie"
@@ -1650,12 +1754,17 @@ msgstr "Lista partecipanti"
 #: lib/safarimanager_web/controllers/selection_printout_html/show_multi.html.heex:32
 #: lib/safarimanager_web/controllers/selection_printout_html/show_single.html.heex:31
 #: lib/safarimanager_web/controllers/slides_printout_html/show.html.heex:30
+#: lib/safarimanager_web/live/results/results.sface:156
+#: lib/safarimanager_web/live/slides/slide_selection.sface:176
+#: lib/safarimanager_web/live/slides/slide_selection.sface:252
+#: lib/safarimanager_web/live/slides/slide_selection.sface:328
 #: lib/safarimanager_web/live/validation/validation_launcher.sface:60
 #, elixir-autogen, elixir-format
 msgid "File name"
 msgstr "Nome file"
 
 #: lib/safarimanager_web/controllers/slides_printout_html/show.html.heex:35
+#: lib/safarimanager_web/live/results/results.sface:161
 #, elixir-autogen, elixir-format
 msgid "Pen."
 msgstr "Pen."
@@ -1671,6 +1780,8 @@ msgid "Print participants slides report"
 msgstr "Stampa le schede concorrente"
 
 #: lib/safarimanager_web/controllers/slides_printout_html/show.html.heex:37
+#: lib/safarimanager_web/live/results/results.sface:131
+#: lib/safarimanager_web/live/results/results.sface:163
 #, elixir-autogen, elixir-format
 msgid "Score"
 msgstr "Punti"
@@ -1690,6 +1801,7 @@ msgid "Sub. name"
 msgstr "Nome specie"
 
 #: lib/safarimanager_web/controllers/slides_printout_html/show.html.heex:34
+#: lib/safarimanager_web/live/results/results.sface:160
 #, elixir-autogen, elixir-format
 msgid "Votes"
 msgstr "Voti"
@@ -1754,11 +1866,13 @@ msgstr "Il direttore di gara"
 msgid "The referee"
 msgstr "Il giudice di gara"
 
+#: lib/safarimanager_web/live/jury/jury.sface:43
 #: lib/safarimanager_web/live/validation/validation.sface:44
 #, elixir-autogen, elixir-format
 msgid "Exit"
 msgstr "Esci"
 
+#: lib/safarimanager_web/live/jury/jury.sface:23
 #: lib/safarimanager_web/live/validation/validation.sface:24
 #, elixir-autogen, elixir-format
 msgid "Fit"
@@ -1769,6 +1883,7 @@ msgstr "Adatta"
 msgid "Insert a reason here..."
 msgstr "Inserisci una motivazione qui..."
 
+#: lib/safarimanager_web/live/jury/jury.sface:18
 #: lib/safarimanager_web/live/validation/validation.sface:19
 #, elixir-autogen, elixir-format
 msgid "Next"
@@ -1780,6 +1895,7 @@ msgstr "Successiva"
 msgid "Other reason"
 msgstr "Altra motivazione"
 
+#: lib/safarimanager_web/live/jury/jury.sface:17
 #: lib/safarimanager_web/live/validation/validation.sface:18
 #, elixir-autogen, elixir-format
 msgid "Prev"
@@ -1791,11 +1907,15 @@ msgstr "Precedente"
 msgid "Wrong subject"
 msgstr "Soggetto errato"
 
+#: lib/safarimanager_web/live/jury/jury.sface:9
 #: lib/safarimanager_web/live/validation/validation.sface:6
 #, elixir-autogen, elixir-format
 msgid "of"
 msgstr "di"
 
+#: lib/safarimanager_web/live/results/results.ex:66
+#: lib/safarimanager_web/live/slides/slide_selection.ex:295
+#: lib/safarimanager_web/live/slides/slide_selection.sface:219
 #: lib/safarimanager_web/live/validation/validation.ex:323
 #: lib/safarimanager_web/live/validation/validation_launcher.ex:125
 #: lib/safarimanager_web/live/validation/validation_launcher.sface:24
@@ -1856,11 +1976,17 @@ msgstr "# partecipanti"
 msgid "Start Validation"
 msgstr "Avvia convalida"
 
+#: lib/safarimanager_web/live/results/results.sface:162
+#: lib/safarimanager_web/live/slides/slide_selection.sface:116
 #: lib/safarimanager_web/live/validation/validation_launcher.sface:62
 #, elixir-autogen, elixir-format
 msgid "Status"
 msgstr "Stato"
 
+#: lib/safarimanager_web/live/slides/slide_selection.sface:98
+#: lib/safarimanager_web/live/slides/slide_selection.sface:178
+#: lib/safarimanager_web/live/slides/slide_selection.sface:254
+#: lib/safarimanager_web/live/slides/slide_selection.sface:330
 #: lib/safarimanager_web/live/validation/validation_launcher.sface:61
 #, elixir-autogen, elixir-format
 msgid "Subject"
@@ -1880,3 +2006,348 @@ msgstr "Ancora non ci sono slide"
 #, elixir-autogen, elixir-format
 msgid "Total"
 msgstr "Totale"
+
+#: lib/safarimanager_web/live/new_competition/new_competition.sface:32
+#, elixir-autogen, elixir-format
+msgid "Create a new one"
+msgstr "Crea nuova"
+
+#: lib/safarimanager_web/live/jurors/jurors.sface:32
+#: lib/safarimanager_web/live/participants/participants.sface:34
+#, elixir-autogen, elixir-format
+msgid "Enroll"
+msgstr "Iscrivi"
+
+#: lib/safarimanager_web/live/admin/users/form.sface:23
+#: lib/safarimanager_web/live/jurors/jurors.sface:20
+#: lib/safarimanager_web/live/jurors/jurors.sface:55
+#: lib/safarimanager_web/live/participants/participants.sface:20
+#: lib/safarimanager_web/live/participants/participants.sface:89
+#: lib/safarimanager_web/live/slides/slide_selection.sface:31
+#: lib/safarimanager_web/live/slides/slides.sface:25
+#, elixir-autogen, elixir-format
+msgid "First Name"
+msgstr "Nome"
+
+#: lib/safarimanager_web/live/admin/users/form.sface:11
+#: lib/safarimanager_web/live/jurors/jurors.sface:19
+#: lib/safarimanager_web/live/jurors/jurors.sface:54
+#: lib/safarimanager_web/live/participants/participants.sface:19
+#: lib/safarimanager_web/live/participants/participants.sface:88
+#: lib/safarimanager_web/live/slides/slide_selection.sface:30
+#: lib/safarimanager_web/live/slides/slides.sface:24
+#, elixir-autogen, elixir-format
+msgid "Last Name"
+msgstr "Cognome"
+
+#: lib/safarimanager_web/live/participants/participants.sface:50
+#, elixir-autogen, elixir-format
+msgid "New User"
+msgstr "Nuovo utente"
+
+#: lib/safarimanager_web/live/jurors/jurors.sface:37
+#: lib/safarimanager_web/live/jurors/jurors.sface:71
+#: lib/safarimanager_web/live/new_competition/new_competition.sface:22
+#: lib/safarimanager_web/live/participants/participants.sface:109
+#: lib/safarimanager_web/live/slides/slide_selection.sface:55
+#: lib/safarimanager_web/live/slides/slides.sface:49
+#: lib/safarimanager_web/live/slides/slides.sface:182
+#, elixir-autogen, elixir-format
+msgid "No items yet!"
+msgstr "Non ci sono ancora elementi!"
+
+#: lib/safarimanager_web/live/participants/participants.sface:39
+#, elixir-autogen, elixir-format
+msgid "No results"
+msgstr "Nessun risultato"
+
+#: lib/safarimanager_web/live/new_competition/new_competition.sface:30
+#, elixir-autogen, elixir-format
+msgid "OR"
+msgstr "Oppure"
+
+#: lib/safarimanager_web/live/jurors/jurors.sface:66
+#: lib/safarimanager_web/live/participants/participants.sface:104
+#, elixir-autogen, elixir-format
+msgid "Remove"
+msgstr "Rimuovi"
+
+#: lib/safarimanager_web/live/participants/participants.sface:80
+#: lib/safarimanager_web/live/slides/slide_selection.sface:22
+#: lib/safarimanager_web/live/slides/slides.sface:16
+#, elixir-autogen, elixir-format
+msgid "Search for a participant..."
+msgstr "Cerca un partecipante..."
+
+#: lib/safarimanager_web/live/jurors/jurors.sface:12
+#: lib/safarimanager_web/live/participants/participants.sface:12
+#, elixir-autogen, elixir-format
+msgid "Search for a user..."
+msgstr "Cerca un utente..."
+
+#: lib/safarimanager_web/live/new_competition/new_competition.sface:4
+#, elixir-autogen, elixir-format
+msgid "Select an existing competition"
+msgstr "Seleziona una competizione"
+
+#: lib/safarimanager_web/live/slides/slide_selection.ex:209
+#, elixir-autogen, elixir-format
+msgid "Unable to import slide selection: multiple slides with the same name (or very similar) were found"
+msgstr "Impossibile importare la selezione delle slide: più slide hanno lo stesso nome file (o molto simile)"
+
+#: lib/safarimanager_web/live/admin/competitions/form.sface:44
+#: lib/safarimanager_web/live/admin/competitions/index.sface:137
+#: lib/safarimanager_web/live/admin/evaluations/index.sface:68
+#: lib/safarimanager_web/live/admin/subjects/index.sface:83
+#, elixir-autogen, elixir-format
+msgid "Select a type..."
+msgstr "Seleziona un tipo..."
+
+#: lib/safarimanager_web/live/slides/slides.sface:66
+#, elixir-autogen, elixir-format
+msgid "Auto discovery"
+msgstr "Auto rilevamento"
+
+#: lib/safarimanager_web/live/slides/slides.sface:88
+#, elixir-autogen, elixir-format
+msgid "Click or drop some images in this box"
+msgstr "Clicca o trascina immagini in quest'area"
+
+#: lib/safarimanager_web/live/slides/slides.sface:75
+#, elixir-autogen, elixir-format
+msgid "Currently"
+msgstr "Attualmente"
+
+#: lib/safarimanager_web/live/slides/slides.sface:110
+#, elixir-autogen, elixir-format
+msgid "Delete all"
+msgstr "Elimina tutto"
+
+#: lib/safarimanager_web/live/slides/slides.sface:99
+#, elixir-autogen, elixir-format
+msgid "Dimensions"
+msgstr "Dimensioni"
+
+#: lib/safarimanager_web/live/slides/slides.sface:9
+#, elixir-autogen, elixir-format
+msgid "Export Slides to CSV"
+msgstr "Esporta slide in CSV"
+
+#: lib/safarimanager_web/components/file_browser.sface:14
+#, elixir-autogen, elixir-format
+msgid "File browser"
+msgstr "Browser file"
+
+#: lib/safarimanager_web/components/direct_upload_dialog.sface:3
+#, elixir-autogen, elixir-format
+msgid "Image import"
+msgstr "Importazione immagini"
+
+#: lib/safarimanager_web/components/file_browser.sface:114
+#, elixir-autogen, elixir-format
+msgid "Import all"
+msgstr "Importa tutte"
+
+#: lib/safarimanager_web/components/direct_upload_dialog.sface:40
+#: lib/safarimanager_web/components/file_browser.sface:29
+#, elixir-autogen, elixir-format
+msgid "Level up"
+msgstr "Livello superiore"
+
+#: lib/safarimanager_web/live/slides/slides.sface:73
+#, elixir-autogen, elixir-format
+msgid "Load slides for"
+msgstr "Carica le slide per"
+
+#: lib/safarimanager_web/live/jurors/jurors.ex:43
+#, elixir-autogen, elixir-format
+msgid "Reached max num. of Jurors"
+msgstr "Raggiunto il limite di giurati"
+
+#: lib/safarimanager_web/live/slides/slide_selection.sface:49
+#: lib/safarimanager_web/live/slides/slides.sface:43
+#, elixir-autogen, elixir-format
+msgid "Select"
+msgstr "Seleziona"
+
+#: lib/safarimanager_web/live/slides/slide_selection.sface:370
+#: lib/safarimanager_web/live/slides/slides.sface:194
+#, elixir-autogen, elixir-format
+msgid "Select a participant from the top"
+msgstr "Seleziona un partecipante dalla lista qui su"
+
+#: lib/safarimanager_web/components/direct_upload_dialog.sface:17
+#, elixir-autogen, elixir-format
+msgid "Select a participant..."
+msgstr "Seleziona un partecipante..."
+
+#: lib/safarimanager_web/live/slides/slide_selection.sface:177
+#: lib/safarimanager_web/live/slides/slide_selection.sface:253
+#: lib/safarimanager_web/live/slides/slide_selection.sface:329
+#: lib/safarimanager_web/live/slides/slides.sface:98
+#, elixir-autogen, elixir-format
+msgid "Size"
+msgstr "Peso"
+
+#: lib/safarimanager_web/components/competition_header.sface:3
+#, elixir-autogen, elixir-format
+msgid "Somewhere..."
+msgstr "Da qualche parte..."
+
+#: lib/safarimanager_web/components/file_browser.sface:114
+#, elixir-autogen, elixir-format
+msgid "files"
+msgstr "file"
+
+#: lib/safarimanager_web/components/direct_upload_dialog.sface:94
+#, elixir-autogen, elixir-format
+msgid "images"
+msgstr "immagini"
+
+#: lib/safarimanager_web/live/slides/slides.sface:75
+#, elixir-autogen, elixir-format
+msgid "uploading"
+msgstr "in caricamento"
+
+#: lib/safarimanager_web/live/slides/slide_selection.sface:80
+#, elixir-autogen, elixir-format
+msgid "Click or drop CSV files in this box"
+msgstr "Clicca o trascina file CSV in quest'area"
+
+#: lib/safarimanager_web/live/slides/slide_selection.sface:87
+#, elixir-autogen, elixir-format
+msgid "Edit slide selection"
+msgstr "Modifica la selezione delle slide"
+
+#: lib/safarimanager_web/live/slides/slide_selection.sface:70
+#, elixir-autogen, elixir-format
+msgid "Load CSV for"
+msgstr "Carica CSV per"
+
+#: lib/safarimanager_web/live/slides/slide_selection.sface:205
+#, elixir-autogen, elixir-format
+msgid "No slides selected for Jury"
+msgstr "Nessuna slide selezionata per la giuria"
+
+#: lib/safarimanager_web/live/slides/slide_selection.sface:281
+#, elixir-autogen, elixir-format
+msgid "No slides selected for fixed points"
+msgstr "Nessuna slide selezionata a punteggio fisso"
+
+#: lib/safarimanager_web/live/slides/slide_selection.sface:357
+#, elixir-autogen, elixir-format
+msgid "No slides selected to be discarded."
+msgstr "Nessuna slide scartata"
+
+#: lib/safarimanager_web/live/slides/slide_selection.sface:103
+#, elixir-autogen, elixir-format
+msgid "Select a subject..."
+msgstr "Seleziona un soggetto..."
+
+#: lib/safarimanager_web/live/slides/slide_selection.sface:143
+#, elixir-autogen, elixir-format
+msgid "Selected for Jury"
+msgstr "In giuria"
+
+#: lib/safarimanager_web/live/slides/slide_selection.ex:298
+#: lib/safarimanager_web/live/slides/slide_selection.sface:295
+#, elixir-autogen, elixir-format
+msgid "Discarded"
+msgid_plural "Discarded"
+msgstr[0] "Scartata"
+msgstr[1] "Scartate"
+
+#: lib/safarimanager_web/live/jury/jury.sface:61
+#, elixir-autogen, elixir-format
+msgid "Clear"
+msgstr "Resetta"
+
+#: lib/safarimanager_web/live/jury/jury.ex:263
+#, elixir-autogen, elixir-format
+msgid "Error saving evaluation: slide has a penalty"
+msgstr "Impossibile salvare la valutazione: la slide ha una penalizzazione"
+
+#: lib/safarimanager_web/live/jury/jury.sface:58
+#, elixir-autogen, elixir-format
+msgid "No evaluations available"
+msgstr "Non ci sono valutazioni disponibili"
+
+#: lib/safarimanager_web/live/jury/jury.sface:69
+#, elixir-autogen, elixir-format
+msgid "Penalty"
+msgstr "Penalizzazione"
+
+#: lib/safarimanager_web/live/jury/jury_launcher.sface:9
+#, elixir-autogen, elixir-format
+msgid "Start Jury"
+msgstr "Avvia giuria"
+
+#: lib/safarimanager_web/live/jury/jury.ex:267
+#, elixir-autogen, elixir-format
+msgid "Unexpected error while saving evaluation"
+msgstr "Errore inaspettato nell'applicare la valutazione"
+
+#: lib/safarimanager_web/live/results/results.sface:92
+#, elixir-autogen, elixir-format
+msgid "Count"
+msgstr "Conteggio"
+
+#: lib/safarimanager_web/live/results/results.sface:93
+#, elixir-autogen, elixir-format
+msgid "Distribution"
+msgstr "Distribuzione"
+
+#: lib/safarimanager_web/live/results/results.sface:212
+#, elixir-autogen, elixir-format
+msgid "No results available yet"
+msgstr "Classifica non ancora disponibile"
+
+#: lib/safarimanager_web/live/results/results.sface:55
+#, elixir-autogen, elixir-format
+msgid "Num. of jurors"
+msgstr "Num. di giurati"
+
+#: lib/safarimanager_web/live/results/results.sface:51
+#, elixir-autogen, elixir-format
+msgid "Num. of participants"
+msgstr "Num di partecipanti"
+
+#: lib/safarimanager_web/live/results/results.sface:71
+#, elixir-autogen, elixir-format
+msgid "Penalties"
+msgstr "Penalizzazioni"
+
+#: lib/safarimanager_web/live/results/results.sface:147
+#, elixir-autogen, elixir-format
+msgid "Show details"
+msgstr "Mostra dettagli"
+
+#: lib/safarimanager_web/live/results/results.sface:59
+#, elixir-autogen, elixir-format
+msgid "Slides for jury"
+msgstr "Slide in giuria"
+
+#: lib/safarimanager_web/live/results/results.sface:63
+#, elixir-autogen, elixir-format
+msgid "Slides with fixed points"
+msgstr "Slide a punteggio fisso"
+
+#: lib/safarimanager_web/live/results/results.sface:48
+#, elixir-autogen, elixir-format
+msgid "Stats"
+msgstr "Statistiche"
+
+#: lib/safarimanager_web/live/results/results.sface:157
+#, elixir-autogen, elixir-format
+msgid "Subject #"
+msgstr "# soggetto"
+
+#: lib/safarimanager_web/live/results/results.sface:158
+#, elixir-autogen, elixir-format
+msgid "Subject name"
+msgstr "Nome soggetto"
+
+#: lib/safarimanager_web/live/results/results.sface:67
+#, elixir-autogen, elixir-format
+msgid "Total slides"
+msgstr "Totale slide"

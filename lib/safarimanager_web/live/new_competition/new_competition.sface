@@ -1,13 +1,13 @@
 <Layout current_page={~p"/organize/new"} current_user={@current_user}>
   <div class="flex flex-col lg:flex-row mt-10">
     <div class="overflow-y-auto rounded-lg lg:w-1/2 bg-base-200 shadow-lg">
-      <div class="text-2xl font-bold text-center py-4">Select an existing competition</div>
+      <div class="text-2xl font-bold text-center py-4">{gettext("Select an existing competition")}</div>
       <table class="table table-zebra table-fixed w-full">
         <thead>
           <tr>
-            <th class="w-auto">Name</th>
-            <th class="w-3/12">Location</th>
-            <th class="w-4/12">Date</th>
+            <th class="w-auto">{gettext("Name")}</th>
+            <th class="w-3/12">{gettext("Location")}</th>
+            <th class="w-4/12">{gettext("Date")}</th>
           </tr>
         </thead>
         <tbody>
@@ -19,7 +19,7 @@
             </tr>
           {#else}
             <tr>
-              <td>No items yet!</td>
+              <td>{gettext("No items yet!")}</td>
               <td />
               <td />
             </tr>
@@ -27,9 +27,9 @@
         </tbody>
       </table>
     </div>
-    <div class="divider lg:divider-horizontal">OR</div>
+    <div class="divider lg:divider-horizontal px-4">{gettext("OR")}</div>
     <div class="overflow-y-auto rounded-lg lg:w-1/2 bg-base-200 shadow-lg">
-      <div class="text-2xl font-bold text-center py-4">Create a new one</div>
+      <div class="text-2xl font-bold text-center py-4">{gettext("Create a new one")}</div>
       <Form
         {=@action}
         {=@competition_types}

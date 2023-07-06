@@ -63,6 +63,6 @@ defmodule SMWeb.Live.Results do
     {:noreply, socket}
   end
 
-  defp status_to_label(:submitted_fixed), do: "Fixed points"
-  defp status_to_label(:submitted_jury), do: "Jury"
+  defp status_to_label(:submitted_fixed), do: gettext("Fixed points")
+  defp status_to_label(:submitted_jury), do: gettext("Jury")
 end
