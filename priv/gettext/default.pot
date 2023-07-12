@@ -629,6 +629,8 @@ msgstr ""
 #: lib/safarimanager_web/live/admin/participants/index.sface:140
 #: lib/safarimanager_web/live/admin/subjects/index.sface:138
 #: lib/safarimanager_web/live/admin/users/index.sface:207
+#: lib/safarimanager_web/live/slides/slides.ex:108
+#: lib/safarimanager_web/live/slides/slides.ex:132
 #: lib/safarimanager_web/live/slides/slides.sface:131
 #, elixir-autogen, elixir-format
 msgid "Delete"
@@ -2350,4 +2352,24 @@ msgstr ""
 #: lib/safarimanager_web/live/results/results.sface:67
 #, elixir-autogen, elixir-format
 msgid "Total slides"
+msgstr ""
+
+#: lib/safarimanager_web/live/slides/slides.ex:131
+#, elixir-autogen, elixir-format
+msgid "Are you sure you want to delete all slides?"
+msgstr ""
+
+#: lib/safarimanager_web/live/slides/slides.ex:107
+#, elixir-autogen, elixir-format
+msgid "Are you sure you want to delete this slide?"
+msgstr ""
+
+#: lib/safarimanager_web/live/slides/slides.ex:106
+#, elixir-autogen, elixir-format
+msgid "Delete slide"
+msgstr ""
+
+#: lib/safarimanager_web/live/slides/slides.ex:130
+#, elixir-autogen, elixir-format
+msgid "Delete all slides"
 msgstr ""

@@ -92,13 +92,22 @@ defmodule SMWeb.Live.Slides do
   end
 
   def handle_event("delete-slide", %{"id" => slide_id}, socket) do
-    with {:ok, slide} <- Slides.get(slide_id),
-         do: Slides.delete(slide)
+    on_confirm = fn socket ->
+      with {:ok, slide} <- Slides.get(slide_id),
+           do: Slides.delete(slide)
 
-    participants = Participants.list(socket.assigns.competition_id)
-    socket = assign(socket, participants: participants)
+      #  TODO: use handle_info to update the list
+      participants = Participants.list(socket.assigns.competition_id)
+      assign(socket, participants: participants)
+    end
 
-    {:noreply, socket}
+    {:noreply,
+     confirm(socket, on_confirm,
+       title: gettext("Delete slide"),
+       description: gettext("Are you sure you want to delete this slide?"),
+       confirm_text: gettext("Delete"),
+       confirm_icon: "trash"
+     )}
   end
 
   def handle_event("cancel-upload", %{"ref" => ref}, socket) do
@@ -106,15 +115,24 @@ defmodule SMWeb.Live.Slides do
   end
 
   def handle_event("delete-all-slides", %{}, socket) do
-    [_head | _tail] =
-      for slide <- socket.assigns.slides do
-        {:ok, _slide} = Slides.delete(slide)
-      end
+    on_confirm = fn socket ->
+      [_head | _tail] =
+        for slide <- socket.assigns.slides do
+          {:ok, _slide} = Slides.delete(slide)
+        end
 
-    participants = Participants.list(socket.assigns.competition_id)
-    socket = assign(socket, participants: participants)
+      #  TODO: use handle_info to update the list
+      participants = Participants.list(socket.assigns.competition_id)
+      assign(socket, participants: participants)
+    end
 
-    {:noreply, socket}
+    {:noreply,
+     confirm(socket, on_confirm,
+       title: gettext("Delete all slides"),
+       description: gettext("Are you sure you want to delete all slides?"),
+       confirm_text: gettext("Delete"),
+       confirm_icon: "trash"
+     )}
   end
 
   def handle_event("filter-participants", %{"value" => ""}, socket) do
@@ -269,6 +287,8 @@ defmodule SMWeb.Live.Slides do
 
     {:noreply, socket}
   end
+
+  def handle_info(_any, socket), do: {:noreply, socket}
 
   # Internal
 
