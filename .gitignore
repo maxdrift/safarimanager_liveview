@@ -54,3 +54,6 @@ TODO
 
 # The directory used by ExUnit :tmp_dir
 /tmp/
+
+# Elixir-tools cache
+.elixir-tools/_build/dev/lib/safarimanager/.mix/compile.app_cache
