@@ -90,7 +90,7 @@ config :safarimanager, SM.Competitions.CompetitionSettings,
 
 config :safarimanager, SM.Results,
   results_printout: [
-    header_line: "Federazione italiana persca sportiva e attività subacquee",
+    header_line: "Federazione italiana pesca sportiva e attività subacquee",
     sub_header_line: "Viale Tiziano, 70 - 00196 Roma"
   ]
 
