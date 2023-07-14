@@ -37,7 +37,7 @@ defmodule SMWeb.Live.ValidationLauncher do
     with {:ok, slide} <- Slides.get(slide_id),
          {:ok, _slide} <- Slides.update(slide, %{"subject_id" => new_subject}) do
       {:noreply,
-       push_navigate(socket, to: "/organize/#{socket.competition.id}/validation_launcher")}
+       push_navigate(socket, to: "/organize/#{socket.assigns.competition.id}/validation_launcher")}
     end
   end
 
