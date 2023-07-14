@@ -81,13 +81,17 @@ defmodule SMWeb.Live.SlideSelection do
   end
 
   def handle_event("validate-editing", %{"slide" => params}, socket) do
-    changeset =
-      socket.assigns.editing_slide
-      |> Slides.change(params)
-      |> Map.put(:action, :validate)
+    if socket.assigns.editing_slide do
+      changeset =
+        socket.assigns.editing_slide
+        |> Slides.change(params)
+        |> Map.put(:action, :validate)
 
-    socket = assign(socket, :editing_changeset, changeset)
-    {:noreply, socket}
+      socket = assign(socket, :editing_changeset, changeset)
+      {:noreply, socket}
+    else
+      {:noreply, socket}
+    end
   end
 
   def handle_event("submit-editing", %{"slide" => params}, socket) do
