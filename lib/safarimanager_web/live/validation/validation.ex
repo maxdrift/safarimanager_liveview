@@ -70,7 +70,7 @@ defmodule SMWeb.Live.Validation do
       # and will be dispatched to all active hooks on the client who are handling that event.
       |> push_event("new-image", %{options: %{image_url: file_path}})
 
-    Cache.put(:current_validation_slide_id, slide_id)
+    Cache.put("#{competition_id}_current_validation_slide_id", slide_id)
 
     {:noreply, socket}
   end
@@ -88,7 +88,7 @@ defmodule SMWeb.Live.Validation do
       |> assign(:slides, slides)
 
     next_slide_id =
-      case Cache.get(:current_validation_slide_id) do
+      case Cache.get("#{competition_id}_current_validation_slide_id") do
         nil ->
           slides
           |> Enum.at(0, %{})
