@@ -1,7 +1,12 @@
 <div class="font-sans">
   <%= for participant <- @participants do %>
     <header class="relative mb-6">
-      <img class="absolute top-10 right-6 w-24" src={~p"/images/fipsas-logo-print.png"} />
+      <object
+        data={~p"/images/fipsas-logo.svg"}
+        width="96"
+        height="96"
+        class="absolute top-10 right-6 w-24"
+      />
       <h4 class="text-center text-md font-semibold uppercase">
         <%= @header_line %>
       </h4>
