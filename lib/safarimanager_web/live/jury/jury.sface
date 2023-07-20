@@ -17,32 +17,125 @@
       </div>
       <div class="flex flex-row justify-between gap-2">
         <div class="join">
-          <JuryToolbarButton class="btn btn-sm join-item" click="prev-image">{gettext("Prev")}</JuryToolbarButton>
-          <JuryToolbarButton class="btn btn-sm join-item" click="next-image">{gettext("Next")}</JuryToolbarButton>
+          <JuryToolbarButton
+            :if={false}
+            class="btn btn-sm join-item"
+            click="prev-image"
+            title={gettext("First")}
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              class="h-[1.4rem] w-[1.4rem]"
+              stroke="none"
+              fill="currentColor"
+            >
+              <path d="M11.92,19.92L4,12L11.92,4.08L13.33,5.5L7.83,11H22V13H7.83L13.34,18.5L11.92,19.92M4,12V2H2V22H4V12Z" />
+            </svg>
+          </JuryToolbarButton>
+          <JuryToolbarButton class="btn btn-sm join-item" click="prev-image" title={gettext("Prev")}>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              class="h-6 w-6"
+              stroke="currentColor"
+              fill="currentColor"
+            >
+              <path d="M19,13H6.75L12,18.25L11.34,19L4.84,12.5L11.34,6L12,6.75L6.75,12H19V13Z" />
+            </svg>
+          </JuryToolbarButton>
+          <JuryToolbarButton class="btn btn-sm join-item" click="next-image" title={gettext("Next")}>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              class="h-6 w-6"
+              stroke="currentColor"
+              fill="currentColor"
+            >
+              <path d="M4,12H16.25L11,6.75L11.66,6L18.16,12.5L11.66,19L11,18.25L16.25,13H4V12Z" />
+            </svg>
+          </JuryToolbarButton>
+          <JuryToolbarButton
+            :if={false}
+            class="btn btn-sm join-item"
+            click="next-image"
+            title={gettext("Last")}
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              class="h-[1.4rem] w-[1.4rem]"
+              stroke="none"
+              fill="currentColor"
+            >
+              <path d="M12.08,4.08L20,12L12.08,19.92L10.67,18.5L16.17,13H2V11H16.17L10.67,5.5L12.08,4.08M20,12V22H22V2H20V12Z" />
+            </svg>
+          </JuryToolbarButton>
         </div>
         <div class="join">
-          <JuryToolbarButton class="btn btn-sm join-item" id="zoom-out">-</JuryToolbarButton>
-          <JuryToolbarButton class="btn btn-sm join-item" id="zoom-100">100%</JuryToolbarButton>
-          <JuryToolbarButton class="btn btn-sm join-item" id="home">{gettext("Fit")}</JuryToolbarButton>
-          <JuryToolbarButton class="btn btn-sm join-item" id="zoom-in">+</JuryToolbarButton>
+          <JuryToolbarButton class="btn btn-sm join-item" id="zoom-out" title={gettext("Zoom out")}>
+            <Heroicons.Surface.Icon name="magnifying-glass-minus" type="outline" class="w-6 h-6" />
+          </JuryToolbarButton>
+          <JuryToolbarButton class="btn btn-sm join-item" id="zoom-100" title={gettext("Zoom 100%")}>
+            <svg
+              stroke-miterlimit="10"
+              style="fill-rule:nonzero;clip-rule:evenodd;stroke-linecap:round;stroke-linejoin:round;"
+              viewBox="0 0 24 24"
+              class="h-6 w-6"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M21 21L15.803 15.803M15.803 15.803C18.732 12.874 18.732 8.12504 15.803 5.196C12.874 2.26696 8.12504 2.26696 5.196 5.196C2.26696 8.12504 2.26696 12.874 5.196 15.803C8.12504 18.732 12.874 18.732 15.803 15.803Z"
+                fill="none"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="1.5"
+              />
+              <path
+                d="M5.93396 12.832L5.93396 9.21033C5.26003 9.72772 4.80632 9.98641 4.57284 9.98641C4.4614 9.98641 4.36257 9.94197 4.27634 9.85309C4.19011 9.7642 4.14699 9.66139 4.14699 9.54464C4.14699 9.40933 4.18944 9.30983 4.27435 9.24615C4.35925 9.18247 4.50916 9.10022 4.72407 8.9994C5.04512 8.84816 5.30182 8.68897 5.49418 8.52181C5.68654 8.35466 5.85702 8.1676 6.0056 7.96065C6.15418 7.75369 6.25102 7.62634 6.29613 7.57858C6.34124 7.53082 6.42614 7.50694 6.55084 7.50694C6.69147 7.50694 6.80423 7.56133 6.88913 7.67012C6.97404 7.7789 7.01649 7.92881 7.01649 8.11984L7.01649 12.6768C7.01649 13.2101 6.83474 13.4768 6.47125 13.4768C6.3094 13.4768 6.17939 13.4224 6.08122 13.3136C5.98305 13.2048 5.93396 13.0443 5.93396 12.832Z"
+                fill="currentColor"
+                fill-rule="nonzero"
+                opacity="1"
+                stroke="none"
+              />
+              <path
+                d="M12.0908 10.5237C12.0908 10.9588 12.0642 11.3329 12.0112 11.646C11.9581 11.9591 11.8599 12.243 11.7166 12.4977C11.5362 12.8108 11.3027 13.0523 11.0162 13.2221C10.7296 13.3919 10.4112 13.4768 10.061 13.4768C9.65771 13.4768 9.29621 13.3627 8.97649 13.1345C8.65677 12.9063 8.41599 12.5906 8.25414 12.1873C8.17189 11.9671 8.11152 11.7236 8.07305 11.457C8.03458 11.1903 8.01534 10.9018 8.01534 10.5914C8.01534 10.1907 8.03657 9.82987 8.07902 9.50883C8.12147 9.18778 8.18781 8.91184 8.27802 8.68101C8.43456 8.29894 8.66208 8.00774 8.96057 7.80742C9.25906 7.6071 9.61526 7.50694 10.0292 7.50694C10.3025 7.50694 10.5505 7.55138 10.7734 7.64027C10.9963 7.72915 11.192 7.85916 11.3604 8.0303C11.5289 8.20143 11.6715 8.41303 11.7883 8.66509C11.9899 9.10288 12.0908 9.72241 12.0908 10.5237ZM11.0003 10.4441C11.0003 9.95855 10.9711 9.56123 10.9127 9.25212C10.8543 8.94302 10.7562 8.70953 10.6182 8.55166C10.4802 8.39379 10.2892 8.31486 10.0451 8.31486C9.69486 8.31486 9.45142 8.4913 9.31478 8.84418C9.17814 9.19707 9.10981 9.74099 9.10981 10.4759C9.10981 10.9748 9.139 11.3834 9.19737 11.7017C9.25574 12.0201 9.35391 12.2609 9.49188 12.4241C9.62985 12.5873 9.81691 12.6689 10.053 12.6689C10.2971 12.6689 10.4882 12.584 10.6262 12.4141C10.7641 12.2443 10.861 12.0016 10.9167 11.6858C10.9724 11.3701 11.0003 10.9562 11.0003 10.4441Z"
+                fill="currentColor"
+                fill-rule="nonzero"
+                opacity="1"
+                stroke="none"
+              />
+              <path
+                d="M16.9343 10.5237C16.9343 10.9588 16.9077 11.3329 16.8547 11.646C16.8016 11.9591 16.7034 12.243 16.5602 12.4977C16.3797 12.8108 16.1463 13.0523 15.8597 13.2221C15.5732 13.3919 15.2548 13.4768 14.9045 13.4768C14.5012 13.4768 14.1397 13.3627 13.82 13.1345C13.5003 12.9063 13.2595 12.5906 13.0977 12.1873C13.0154 11.9671 12.9551 11.7236 12.9166 11.457C12.8781 11.1903 12.8589 10.9018 12.8589 10.5914C12.8589 10.1907 12.8801 9.82987 12.9225 9.50883C12.965 9.18778 13.0313 8.91184 13.1215 8.68101C13.2781 8.29894 13.5056 8.00774 13.8041 7.80742C14.1026 7.6071 14.4588 7.50694 14.8727 7.50694C15.146 7.50694 15.3941 7.55138 15.6169 7.64027C15.8398 7.72915 16.0355 7.85916 16.204 8.0303C16.3724 8.20143 16.5151 8.41303 16.6318 8.66509C16.8335 9.10288 16.9343 9.72241 16.9343 10.5237ZM15.8438 10.4441C15.8438 9.95855 15.8146 9.56123 15.7562 9.25212C15.6979 8.94302 15.5997 8.70953 15.4617 8.55166C15.3237 8.39379 15.1327 8.31486 14.8886 8.31486C14.5384 8.31486 14.2949 8.4913 14.1583 8.84418C14.0217 9.19707 13.9533 9.74099 13.9533 10.4759C13.9533 10.9748 13.9825 11.3834 14.0409 11.7017C14.0993 12.0201 14.1974 12.2609 14.3354 12.4241C14.4734 12.5873 14.6604 12.6689 14.8966 12.6689C15.1407 12.6689 15.3317 12.584 15.4697 12.4141C15.6076 12.2443 15.7045 12.0016 15.7602 11.6858C15.8159 11.3701 15.8438 10.9562 15.8438 10.4441Z"
+                fill="currentColor"
+                fill-rule="nonzero"
+                opacity="1"
+                stroke="none"
+              />
+            </svg>
+          </JuryToolbarButton>
+          <JuryToolbarButton class="btn btn-sm join-item" id="home" title={gettext("Fit to window")}>
+            <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="h-6 w-6" viewBox="0 0 16 16">
+              <path d="M0 3.5A1.5 1.5 0 0 1 1.5 2h13A1.5 1.5 0 0 1 16 3.5v9a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 0 12.5v-9zM1.5 3a.5.5 0 0 0-.5.5v9a.5.5 0 0 0 .5.5h13a.5.5 0 0 0 .5-.5v-9a.5.5 0 0 0-.5-.5h-13z" /> <path d="M2 4.5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 0 1H3v2.5a.5.5 0 0 1-1 0v-3zm12 7a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1 0-1H13V8.5a.5.5 0 0 1 1 0v3z" />
+            </svg>
+          </JuryToolbarButton>
+          <JuryToolbarButton class="btn btn-sm join-item" id="zoom-in" title={gettext("Zoom in")}>
+            <Heroicons.Surface.Icon name="magnifying-glass-plus" type="outline" class="w-6 h-6" />
+          </JuryToolbarButton>
         </div>
-        <JuryToolbarButton id="full-page">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke-width="1.5"
-            stroke="currentColor"
-            class="w-6 h-6"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              d="M3.75 3.75v4.5m0-4.5h4.5m-4.5 0L9 9M3.75 20.25v-4.5m0 4.5h4.5m-4.5 0L9 15M20.25 3.75h-4.5m4.5 0v4.5m0-4.5L15 9m5.25 11.25h-4.5m4.5 0v-4.5m0 4.5L15 15"
-            />
-          </svg>
+        <div class="join">
+          <JuryToolbarButton class="btn btn-sm join-item" id="rotate-left" title={gettext("Rotate left")}>
+            <Heroicons.Surface.Icon name="arrow-uturn-left" type="solid" class="w-6 h-6" />
+          </JuryToolbarButton>
+          <JuryToolbarButton class="btn btn-sm join-item" id="rotate-right" title={gettext("Rotate right")}>
+            <Heroicons.Surface.Icon name="arrow-uturn-right" type="solid" class="w-6 h-6" />
+          </JuryToolbarButton>
+        </div>
+        <JuryToolbarButton class="btn btn-square btn-sm" id="full-page" title={gettext("Fullscreen")}>
+          <Heroicons.Surface.Icon name="arrows-pointing-out" type="solid" class="w-6 h-6 mx-auto" />
         </JuryToolbarButton>
-        <a href={"/organize/#{@competition.id}/jury_launcher"} class="btn btn-sm">
+        <a href={"/organize/#{@competition.id}/jury_launcher"} class="btn btn-sm" title={gettext("Exit")}>
           {gettext("Exit")}
         </a>
       </div>
