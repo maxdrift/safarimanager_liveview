@@ -190,7 +190,7 @@
             <Heroicons.Surface.Icon name="magnifying-glass-plus" type="outline" class="w-6 h-6" />
           </JuryToolbarButton>
         </div>
-        <div :if={false} class="join">
+        <div class="join">
           <JuryToolbarButton class="btn btn-sm join-item" id="rotate-left" title={gettext("Rotate left")}>
             <Heroicons.Surface.Icon name="arrow-uturn-left" type="solid" class="w-6 h-6" />
           </JuryToolbarButton>
