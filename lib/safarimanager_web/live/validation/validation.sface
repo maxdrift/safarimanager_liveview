@@ -1,31 +1,96 @@
 <div class="flex flex-col flex-nowrap h-screen" :on-window-keyup="evaluation-key">
   <div class="flex-initial">
     <div class="flex flex-row justify-between">
-      <div class="btn-group">
-        <span class="inline-block align-sub p-1 pl-3 font-bold">{@curr_index + 1} {gettext("of")} {@image_count}</span>
-        <div class={
-          "mt-1.5",
-          "ml-4",
-          "badge",
-          "badge-success": @curr_slide && @curr_slide.status == :submitted_jury,
-          "badge-warning": @curr_slide && @curr_slide.status == :submitted_fixed
-        }>
+      <div>
+        <span :if={@curr_slide} class="align-sub p-1 pl-3 font-bold">{@curr_index + 1} {gettext("of")} {@image_count}</span>
+        <span :if={!@curr_slide} class="align-sub p-1 pl-3 font-bold">0 {gettext("of")} {@image_count}</span>
+        <div
+          :if={@curr_slide}
+          class={
+            "align-sub",
+            "ml-4",
+            "badge",
+            "badge-success": @curr_slide && @curr_slide.status == :submitted_jury,
+            "badge-warning": @curr_slide && @curr_slide.status == :submitted_fixed
+          }
+        >
           {@curr_slide && status_to_label(@curr_slide.status)}
         </div>
       </div>
-      <div class="my-auto">
-        <span class="inline-block align-sub p-1 pl-3 font-bold">{@curr_slide && String.capitalize(@curr_slide.subject.name)}</span>
+      <div :if={@curr_slide} class="my-auto">
+        <div class="flex flex-row">
+          <button
+            id="subject-label"
+            class={
+              "btn",
+              "btn-outline",
+              "btn-xs",
+              "line-through": @slide_flags.wrong_subject,
+              "btn-disabled": @slide_flags.wrong_subject
+            }
+            :on-click={unless @slide_flags.wrong_subject, do: JS.hide() |> JS.show(to: "#wrong-subject-select")}
+          >{@curr_slide && String.capitalize(@curr_slide.subject.name)}</button>
+          <Heroicons.Surface.Icon
+            :if={@slide_flags.wrong_subject}
+            name="arrow-long-right"
+            type="solid"
+            class="w-4 h-4 my-auto mx-2"
+          />
+          <button
+            :if={@slide_flags.wrong_subject}
+            id="wrong-subject-label"
+            class="btn btn-outline btn-xs"
+            :on-click={JS.hide() |> JS.show(to: "#wrong-subject-select")}
+          >{@slide_flags.wrong_subject &&
+              String.capitalize(
+                Enum.find(@subjects, &(&1.id == @slide_flags.wrong_subject.context["to"])).name
+              )}</button>
+          <Form
+            for={%{}}
+            as={:wrong_subject_flag}
+            change={JS.hide(to: "#wrong-subject-select")
+            |> JS.show(to: "#subject-label")
+            |> maybe_show_wrong_subject_label(@slide_flags)
+            |> JS.push("wrong-subject-change")}
+            submit="wrong-subject-submit"
+          >
+            <div
+              id="wrong-subject-select"
+              class="hidden"
+              phx-click-away={JS.hide(to: "#wrong-subject-select")
+              |> JS.show(to: "#subject-label")
+              |> maybe_show_wrong_subject_label(@slide_flags)}
+            >
+              <Select
+                field={:new_subject}
+                class="select select-bordered select-xs"
+                options={Enum.map(@subjects, &{String.capitalize(&1.name), &1.id})}
+                selected={(@slide_flags.wrong_subject && @slide_flags.wrong_subject.context["to"]) || @curr_slide.subject_id}
+              />
+              <HiddenInput
+                field={:flag_id}
+                value={@slide_flags.wrong_subject && @slide_flags.wrong_subject.id}
+              />
+              <span
+                class="btn btn-xs btn-square"
+                :on-click={JS.hide(to: "#wrong-subject-select")
+                |> JS.show(to: "#subject-label")
+                |> maybe_show_wrong_subject_label(@slide_flags)}
+              >X</span>
+            </div>
+          </Form>
+        </div>
       </div>
       <div class="flex flex-row justify-between gap-2">
-        <div class="btn-group">
-          <JuryToolbarButton click="prev-image">{gettext("Prev")}</JuryToolbarButton>
-          <JuryToolbarButton click="next-image">{gettext("Next")}</JuryToolbarButton>
+        <div class="join">
+          <JuryToolbarButton class="btn btn-sm join-item" click="prev-image">{gettext("Prev")}</JuryToolbarButton>
+          <JuryToolbarButton class="btn btn-sm join-item" click="next-image">{gettext("Next")}</JuryToolbarButton>
         </div>
-        <div class="btn-group">
-          <JuryToolbarButton id="zoom-out">-</JuryToolbarButton>
-          <JuryToolbarButton id="zoom-100">100%</JuryToolbarButton>
-          <JuryToolbarButton id="home">{gettext("Fit")}</JuryToolbarButton>
-          <JuryToolbarButton id="zoom-in">+</JuryToolbarButton>
+        <div class="join">
+          <JuryToolbarButton class="btn btn-sm join-item" id="zoom-out">-</JuryToolbarButton>
+          <JuryToolbarButton class="btn btn-sm join-item" id="zoom-100">100%</JuryToolbarButton>
+          <JuryToolbarButton class="btn btn-sm join-item" id="home">{gettext("Fit")}</JuryToolbarButton>
+          <JuryToolbarButton class="btn btn-sm join-item" id="zoom-in">+</JuryToolbarButton>
         </div>
         <JuryToolbarButton id="full-page">
           <svg
@@ -49,33 +114,31 @@
       </div>
     </div>
   </div>
-  <!-- phx-update="ignore" is VERY VERY important! -->
+  {!-- phx-update="ignore" is VERY VERY important! --}
   <div id="openseadragon-viewer" class="flex-1" :hook="Lightbox" phx-update="ignore" />
   <div class="flex-initial">
-    <div class="flex flex-row">
-      {#if @curr_slide}
-        <span class="inline-block align-sub p-1 pl-3">{gettext("Wrong subject")}</span>
-        <Form for={%{}} as={:wrong_subject_flag} change="validate" class="mx-2">
-          <Select
-            field="subject"
-            options={Enum.map(@subjects, &{String.capitalize(&1.name), &1.id})}
-            selected={(@curr_slide.flags && @curr_slide.flags.wrong_subject_ctx &&
-               @curr_slide.flags.wrong_subject_ctx.to) || @curr_slide.subject_id}
-            class="select select-bordered select-sm text-xs w-full max-w-xs"
-          />
-        </Form>
-        <span class="inline-block align-sub p-1 pl-3">{gettext("Other reason")}</span>
-        <Form for={%{}} as={:other_reason_flag} change="validate" class="mx-2 w-60">
-          <TextInput
-            field="reason"
-            class="input input-bordered input-sm text-xs w-full max-w-xs"
-            value={@curr_slide.flags && @curr_slide.flags.other_reason_ctx}
-            opts={
-              placeholder: gettext("Insert a reason here...")
-            }
-          />
-        </Form>
-      {/if}
+    <div :if={@curr_slide} class="flex flex-row">
+      <Form for={%{}} as={:unrecognizable} submit="unrecognizable-submit">
+        <button class={"btn", "btn-xs", "mx-2", "btn-error": @slide_flags.unrecognizable} field={:value}>{gettext("unrecognizable")}</button>
+        <HiddenInput
+          field={:flag_id}
+          value={@slide_flags.unrecognizable && @slide_flags.unrecognizable.id}
+        />
+      </Form>
+      <Form for={%{}} as={:distinction} submit="distinction-submit">
+        <button class={"btn", "btn-xs", "mx-2", "btn-error": @slide_flags.distinction} field={:value}>{gettext("distinction")}</button>
+        <HiddenInput field={:flag_id} value={@slide_flags.distinction && @slide_flags.distinction.id} />
+      </Form>
+      <Form for={%{}} as={:note} change="note-change" submit="note-submit">
+        <Label field={:value} class="capitalize ml-2">{gettext("note")}:</Label>
+        <TextInput
+          value={(@slide_flags.note && @slide_flags.note.context["message"]) || ""}
+          class={"input", "input-bordered", "input-xs", "input-error": @slide_flags.note}
+          field={:value}
+          opts={placeholder: gettext("Insert a note here...")}
+        />
+        <HiddenInput field={:flag_id} value={@slide_flags.note && @slide_flags.note.id} />
+      </Form>
     </div>
   </div>
 </div>

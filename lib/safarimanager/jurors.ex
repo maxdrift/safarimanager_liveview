@@ -59,8 +59,7 @@ defmodule SM.Jurors do
     %Juror{}
     |> Juror.changeset(attrs)
     |> Repo.insert()
-    |> notify_subscribers([:competition, :updated], id_key: :competition_id)
-    |> notify_subscribers([:user, :updated], id_key: :user_id)
+    |> notify_subscribers([:juror, :updated], id_key: :user_id)
   end
 
   @doc """
@@ -80,8 +79,7 @@ defmodule SM.Jurors do
     %Juror{}
     |> Juror.import_changeset(attrs)
     |> Repo.insert()
-    |> notify_subscribers([:competition, :updated], id_key: :competition_id)
-    |> notify_subscribers([:user, :updated], id_key: :user_id)
+    |> notify_subscribers([:juror, :updated], id_key: :user_id)
   end
 
   @doc """
@@ -102,8 +100,7 @@ defmodule SM.Jurors do
     juror
     |> Juror.changeset(attrs)
     |> Repo.update()
-    |> notify_subscribers([:competition, :updated], id_key: :competition_id)
-    |> notify_subscribers([:user, :updated], id_key: :user_id)
+    |> notify_subscribers([:juror, :updated], id_key: :user_id)
   end
 
   @doc """
@@ -123,8 +120,7 @@ defmodule SM.Jurors do
     Juror
     |> Repo.get_by!(user_id: user_id, competition_id: competition_id)
     |> Repo.delete()
-    |> notify_subscribers([:competition, :updated], id_key: :competition_id)
-    |> notify_subscribers([:user, :updated], id_key: :user_id)
+    |> notify_subscribers([:juror, :deleted], id_key: :user_id)
   end
 
   @doc """
@@ -144,13 +140,9 @@ defmodule SM.Jurors do
     {deleted, nil} = Repo.delete_all(from(entity in Juror, where: entity.id in ^ids))
 
     if deleted == Enum.count(ids) do
-      with {:ok, _result} <-
-             notify_subscribers({:ok, deleted}, [:competition, :updated], id_key: :competition_id),
-           do: notify_subscribers({:ok, deleted}, [:user, :updated], id_key: :user_id)
+      notify_subscribers({:ok, deleted}, [:juror, :deleted], id_key: :user_id)
     else
-      with {:ok, _result} <-
-             notify_subscribers(:error, [:competition, :updated], id_key: :competition_id),
-           do: notify_subscribers(:error, [:user, :updated], id_key: :user_id)
+      notify_subscribers(:error, [:juror, :deleted], id_key: :user_id)
     end
   end
 

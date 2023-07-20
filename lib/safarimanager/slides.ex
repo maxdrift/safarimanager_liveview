@@ -11,6 +11,7 @@ defmodule SM.Slides do
   alias SM.Participants.Participant
   alias SM.Slides.Slide
   alias SM.Slides.SlideEvaluation
+  alias SM.Slides.SlideFlag
   alias SM.Subjects.Subject
 
   @doc """
@@ -25,6 +26,30 @@ defmodule SM.Slides do
   @spec list_slide_statuses :: [:discarded | :submitted_jury | :submitted_fixed, ...]
   def list_slide_statuses do
     Slide.get_statuses()
+  end
+
+  @doc """
+  Returns the list of slide flag types.
+
+  ## Examples
+
+  iex> list_slide_flag_types()
+  [
+  wrong_subject: "wrong subject",
+  unrecognizable: "unrecognizable",
+  distinction: "distinction",
+  note: "note"
+  ]
+
+  """
+  @spec list_slide_flag_types :: [
+          {:wrong_subject
+           | :unrecognizable
+           | :distinction
+           | :note, String.t()}
+        ]
+  def list_slide_flag_types do
+    SlideFlag.get_types()
   end
 
   @spec direct_file_upload? :: boolean()
@@ -199,7 +224,7 @@ defmodule SM.Slides do
         where: sl.status in [:submitted_fixed, :submitted_jury],
         group_by: [sl.id, sl.subject_id, su.numeric_id],
         order_by: [desc: sl.status, asc: su.numeric_id, asc: sl.id],
-        preload: [:subject, :evaluations],
+        preload: [:subject, :evaluations, :slide_flags],
         select: sl
       )
 
@@ -213,13 +238,12 @@ defmodule SM.Slides do
         join: su in assoc(sl, :subject),
         join: p in Participant,
         on: p.user_id == sl.user_id and p.competition_id == ^competition_id,
+        join: fl in assoc(sl, :slide_flags),
         where: [competition_id: ^competition_id],
         where: sl.status in [:submitted_fixed, :submitted_jury],
-        where: not is_nil(sl.flags),
-        where: sl.flags["wrong_subject"] or sl.flags["other_reason"],
         group_by: [sl.id, sl.subject_id, su.numeric_id],
         order_by: [desc: sl.status, asc: su.numeric_id, asc: sl.id],
-        preload: [:evaluations, subject: su],
+        preload: [:evaluations, :slide_flags, subject: su],
         select: {p.number, sl}
       )
 
@@ -228,7 +252,7 @@ defmodule SM.Slides do
 
   @spec list_duplicate_subjects(String.t()) :: [{Participant.t(), Subject.t(), non_neg_integer()}]
   def list_duplicate_subjects(competition_id) do
-    query =
+    subquery =
       from(sl in Slide,
         join: su in assoc(sl, :subject),
         join: p in Participant,
@@ -236,10 +260,20 @@ defmodule SM.Slides do
         where: [competition_id: ^competition_id],
         where: sl.status in [:submitted_fixed, :submitted_jury],
         group_by: [sl.user_id, sl.subject_id],
-        order_by: [desc: count(sl.subject_id)],
-        preload: [subject: su],
-        select: {p.number, sl, count(sl.id)},
         having: count(sl.id) > 1
+      )
+
+    query =
+      from(sl in Slide,
+        join: dup in subquery(subquery),
+        on:
+          dup.competition_id == sl.competition_id and dup.user_id == sl.user_id and
+            dup.subject_id == sl.subject_id,
+        join: p in Participant,
+        on: p.user_id == sl.user_id and p.competition_id == ^competition_id,
+        order_by: [asc: sl.id],
+        preload: [:subject],
+        select: {p.number, sl}
       )
 
     Repo.all(query)
@@ -449,7 +483,7 @@ defmodule SM.Slides do
   def get(id) do
     case Repo.get(Slide, id) do
       nil -> {:error, :not_found}
-      result -> {:ok, Repo.preload(result, [:subject, :evaluations])}
+      result -> {:ok, Repo.preload(result, [:subject, :evaluations, :slide_flags])}
     end
   end
 
@@ -642,19 +676,23 @@ defmodule SM.Slides do
       |> then(&(&1 || "{}"))
       |> Jason.decode!()
 
-    flags =
-      attrs
-      |> Map.get("flags")
-      |> case do
-        nil -> []
-        "" -> []
-        value -> Jason.decode!(value)
-      end
+    attrs = Map.put(attrs, "metadata", metadata)
 
-    attrs =
+    slide_flags =
       attrs
-      |> Map.put("metadata", metadata)
-      |> Map.put("flags", flags)
+      |> Map.get("slide_flags", "[]")
+      |> Jason.decode!()
+      |> Enum.map(fn slide_flag ->
+        %{
+          slide_id: Map.fetch!(slide_flag, "slide_id"),
+          type: slide_flag |> Map.fetch!("type") |> String.to_existing_atom(),
+          context: Map.fetch!(slide_flag, "context"),
+          comment: Map.fetch!(slide_flag, "comment"),
+          resolved: Map.fetch!(slide_flag, "resolved"),
+          inserted_at: DateTime.utc_now(),
+          updated_at: DateTime.utc_now()
+        }
+      end)
 
     evaluations =
       attrs
@@ -674,6 +712,7 @@ defmodule SM.Slides do
 
     Multi.new()
     |> Multi.insert(:slide, slide_changeset)
+    |> Multi.insert_all(:slide_flags, SlideFlag, slide_flags)
     |> Multi.insert_all(:slide_evaluations, SlideEvaluation, evaluations)
     |> Repo.transaction()
     |> case do
@@ -956,20 +995,6 @@ defmodule SM.Slides do
     Slide.changeset(slide, params)
   end
 
-  @doc """
-  Returns an `%Ecto.Changeset{}` for tracking slide flags changes.
-
-  ## Examples
-
-  iex> change_flags(slide)
-  %Ecto.Changeset{source: %Slide.Flags{}}
-
-  """
-  @spec change_flags(Slide.Flags.t(), %{String.t() => any()}) :: Ecto.Changeset.t()
-  def change_flags(%Slide.Flags{} = slide_flags \\ %Slide.Flags{}, params \\ %{}) do
-    Slide.Flags.changeset(slide_flags, params)
-  end
-
   @spec delete_files(String.t()) :: :ok | {:error, any()}
   def delete_files(competition_id) do
     uploads_path = Path.join(get_uploads_path(), competition_id)
@@ -1006,6 +1031,105 @@ defmodule SM.Slides do
       else
         :ok
       end
+  end
+
+  # Slide Flags
+
+  @spec list_slide_flags(String.t()) :: %{atom() => SlideFlag.t()}
+  def list_slide_flags(slide_id) do
+    query =
+      from(sf in SlideFlag,
+        where: [slide_id: ^slide_id],
+        order_by: [asc: :inserted_at]
+      )
+
+    Repo.all(query)
+    |> Enum.map(fn sf ->
+      {sf.type, sf}
+    end)
+    |> Enum.into(%{})
+  end
+
+  @spec get_slide_flag(String.t()) :: {:ok, SlideFlag.t()} | {:error, :not_found}
+  def get_slide_flag(slide_flag_id) do
+    SlideFlag
+    |> Repo.get(slide_flag_id)
+    |> case do
+      nil -> {:error, :not_found}
+      slide_flag -> {:ok, slide_flag}
+    end
+  end
+
+  @spec add_slide_flag(map()) :: {:ok, SlideFlag.t()} | {:error, any()}
+  def add_slide_flag(params) do
+    %SlideFlag{}
+    |> SlideFlag.changeset(params)
+    |> Repo.insert()
+    |> notify_subscribers([:slide_flag, :created])
+  end
+
+  @spec update_slide_flag(SlideFlag.t(), map()) :: {:ok, SlideFlag.t()} | {:error, any()}
+  def update_slide_flag(slide_flag, params) do
+    slide_flag
+    |> SlideFlag.changeset(params)
+    |> Repo.update()
+    |> notify_subscribers([:slide_flag, :updated])
+  end
+
+  @spec remove_slide_flag(SlideFlag.t()) :: {:ok, SlideFlag.t()} | {:error, any()}
+  def remove_slide_flag(slide_flag) do
+    slide_flag
+    |> Repo.delete()
+    |> notify_subscribers([:slide_flag, :deleted])
+  end
+
+  @spec clear_slide_flags(String.t()) :: {:ok, non_neg_integer()} | {:error, any()}
+  def clear_slide_flags(slide_id) do
+    {deleted, nil} = Repo.delete_all(from(SlideFlag, where: [slide_id: ^slide_id]))
+
+    notify_subscribers({:ok, deleted}, [:slide_flag, :deleted])
+  end
+
+  @spec apply_correct_subject(String.t(), String.t()) :: {:error, any} | {:ok, Slide.t()}
+  def apply_correct_subject(slide_id, new_subject_id) do
+    Multi.new()
+    |> Multi.one(:slide, from(s in Slide, where: [id: ^slide_id]))
+    |> Multi.update(:update_subject, fn %{slide: slide} ->
+      Slide.changeset(slide, %{"subject_id" => new_subject_id})
+    end)
+    |> Multi.one(
+      :wrong_subject_flag,
+      from(sf in SlideFlag, where: [slide_id: ^slide_id, type: :wrong_subject])
+    )
+    |> Multi.delete(:remove_flag, fn %{wrong_subject_flag: flag} ->
+      flag
+    end)
+    |> Repo.transaction()
+    |> case do
+      {:ok, _context} ->
+        notify_subscribers(get(slide_id), [:slide, :updated])
+
+      {:error, failed_operation, failed_value, _changes_so_far} ->
+        Logger.error(
+          "Error applying correct subject. #{failed_operation}: #{inspect(failed_value)}"
+        )
+
+        notify_subscribers(:error, [:slide, :updated])
+    end
+  end
+
+  @spec slide_flags_by_types(Slide.t()) :: %{atom() => SlideFlag.t()}
+  def slide_flags_by_types(slide) do
+    flags =
+      slide.slide_flags
+      |> Enum.map(fn sf ->
+        {sf.type, sf}
+      end)
+
+    list_slide_flag_types()
+    |> Enum.map(&{elem(&1, 0), nil})
+    |> Keyword.merge(flags)
+    |> Enum.into(%{})
   end
 
   # Internal

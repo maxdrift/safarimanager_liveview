@@ -210,7 +210,7 @@ defmodule SMWeb.Live.SlideSelection do
           put_flash(
             socket,
             :error,
-            "#{gettext("Unable to import slide selection: multiple slides with the same name (or very similar) were found")}: #{file_name}"
+            "#{gettext("Unable to import slide selection: multiple slides with the same file name (or very similar) were found")}: #{file_name}"
           )
 
         {:noreply, socket}

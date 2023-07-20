@@ -10,13 +10,13 @@
     </Link>
   </div>
   <div class="mt-10">
-    <table class="table table-compact table-zebra w-full text-center">
+    <table class="table table-xs w-full text-center">
       <colgroup span="4" />
       <colgroup span="4" />
       <thead>
         <tr>
           <th scope="colgroup" colspan="4" class="bg-transparent" />
-          <th scope="colgroup" colspan="4">{gettext("Checks")}</th>
+          <th scope="colgroup" colspan="4" class="bg-base-200">{gettext("Checks")}</th>
         </tr>
         <tr>
           <th scope="col">{gettext("Participant #")}</th>
@@ -54,19 +54,125 @@
           <tr :if={list_to_boolean(stats.flagged_slides ++ stats.duplicate_subjects)}>
             <td />
             <td colspan="7">
-              <table class="table table-compact w-full">
+              <table :if={stats.flagged_slides != []} class="table table-xs w-full text-center">
+                <colgroup span="8" />
                 <thead>
                   <tr>
-                    <th class="bg-base-200">{gettext("File name")}</th>
-                    <th class="bg-base-200">{gettext("Subject")}</th>
-                    <th class="bg-base-200">{gettext("Status")}</th>
-                    <th class="bg-base-200">{gettext("Wrong subject")}</th>
-                    <th class="bg-base-200">{gettext("Other reason")}</th>
-                    <th class="bg-base-200" />
+                    <th scope="colgroup" colspan="8" class="bg-base-200">{gettext("Flags")}</th>
+                  </tr>
+                  <tr>
+                    <th scope="col" class="bg-base-200">{gettext("File name")}</th>
+                    <th scope="col" class="bg-base-200">{gettext("Subject")}</th>
+                    <th scope="col" class="bg-base-200">{gettext("Status")}</th>
+                    <th scope="col" class="bg-base-200">{gettext("Wrong subject")}</th>
+                    <th scope="col" class="bg-base-200">{gettext("Unrecognizable")}</th>
+                    <th scope="col" class="bg-base-200">{gettext("Distinction")}</th>
+                    <th scope="col" class="bg-base-200">{gettext("Note")}</th>
+                    <th scope="col" class="bg-base-200" />
                   </tr>
                 </thead>
                 <tbody>
                   {#for slide <- stats.flagged_slides}
+                    {#for slide_flags <- [Slides.slide_flags_by_types(slide)]}
+                      <tr>
+                        <td>{slide.file_name}</td>
+                        <td><span class="capitalize">{slide.subject.name}</span></td>
+                        <td>
+                          <div class={
+                            "my-auto",
+                            "badge",
+                            "badge-success": slide.status == :submitted_jury,
+                            "badge-warning": slide.status == :submitted_fixed
+                          }>
+                            {status_to_label(slide.status)}
+                          </div>
+                        </td>
+                        <td class="capitalize text-center">{(slide_flags.wrong_subject &&
+                             "#{subject_name(@subjects, slide.subject_id)} → #{subject_name(@subjects, slide_flags.wrong_subject.context["to"])}") ||
+                            "-"}
+                        </td>
+                        <td>
+                          {(slide_flags.unrecognizable && "✓") || "-"}
+                        </td>
+                        <td>
+                          {(slide_flags.distinction && "✓") || "-"}
+                        </td>
+                        <td>
+                          {#if slide_flags.note}
+                            <div class="tooltip" data-tip={slide_flags.note.context["message"]}>
+                              <div class="max-w-xs truncate">
+                                {(slide_flags.note && slide_flags.note.context["message"]) || "-"}
+                              </div>
+                            </div>
+                          {#else}
+                            -
+                          {/if}
+                        </td>
+                        <td>
+                          <Link to={"/organize/#{@competition_id}/validation?slide_id=#{slide.id}"} class="btn btn-xs">
+                            {gettext("Open")}
+                          </Link>
+                          <div class="dropdown mx-auto">
+                            <label tabindex="0" class="btn btn-xs">
+                              {gettext("Actions")}
+                            </label>
+                            <ul tabindex="0" class="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52">
+                              <li>
+                                <a
+                                  :if={slide_flags.wrong_subject}
+                                  class="btn btn-sm btn-ghost"
+                                  :on-click="apply-subject-correction"
+                                  :values={
+                                    slide_id: slide.id,
+                                    new_subject: slide_flags.wrong_subject && slide_flags.wrong_subject.context["to"]
+                                  }
+                                >{gettext("Apply subject correction")}</a>
+                              </li>
+                              <li>
+                                <a
+                                  :if={slide.status != :submitted_jury}
+                                  class="btn btn-sm btn-ghost"
+                                  :on-click="move-slide-to-jury"
+                                  :values={slide_id: slide.id}
+                                >{gettext("Move to jury")}</a>
+                              </li>
+                              <li>
+                                <a
+                                  :if={slide.status != :submitted_fixed}
+                                  class="btn btn-sm btn-ghost"
+                                  :on-click="move-slide-to-fixed"
+                                  :values={slide_id: slide.id}
+                                >{gettext("Move to fixed points")}</a>
+                              </li>
+                              <li>
+                                <a class="btn btn-sm btn-ghost" :on-click="move-slide-to-discarded" :values={slide_id: slide.id}>{gettext("Move to discarded")}</a>
+                              </li>
+                              <li>
+                                <a class="btn btn-sm btn-ghost" :on-click="clear-all-flags" :values={slide_id: slide.id}>{gettext("Clear all flags")}</a>
+                              </li>
+                            </ul>
+                          </div>
+                        </td>
+                      </tr>
+                    {/for}
+                  {/for}
+                </tbody>
+              </table>
+              <table :if={stats.duplicate_subjects != []} class="table table-xs w-full text-center mt-2">
+                <colgroup span="4" />
+                <thead>
+                  <tr>
+                    <th scope="colgroup" colspan="4" class="bg-base-200">{gettext("Duplicate subjects")}</th>
+                  </tr>
+                  <tr>
+                    <th scope="col" class="bg-base-200">{gettext("File name")}</th>
+                    <th scope="col" class="bg-base-200">{gettext("Subject")}</th>
+                    <th scope="col" class="bg-base-200">{gettext("Status")}</th>
+                    <th scope="col" class="bg-base-200" />
+                  </tr>
+                </thead>
+                <tbody>
+                  {#for slide <- stats.duplicate_subjects}
                     <tr>
                       <td>{slide.file_name}</td>
                       <td><span class="capitalize">{slide.subject.name}</span></td>
@@ -80,48 +186,36 @@
                           {status_to_label(slide.status)}
                         </div>
                       </td>
-                      <td class="capitalize">{(slide.flags.wrong_subject_ctx &&
-                           "#{subject_name(@subjects, slide.flags.wrong_subject_ctx.from)} → #{subject_name(@subjects, slide.flags.wrong_subject_ctx.to)}") ||
-                          "-"}
-                        <button
-                          :if={slide.flags.wrong_subject}
-                          :on-click="apply-subject"
-                          :values={slide_id: slide.id, new_subject: slide.flags.wrong_subject_ctx.to}
-                          class="btn btn-xs btn-primary ml-2"
-                        >
-                          {gettext("Apply")}
-                        </button>
-                      </td>
-                      <td>{slide.flags.other_reason_ctx || "-"}</td>
                       <td>
                         <Link to={"/organize/#{@competition_id}/validation?slide_id=#{slide.id}"} class="btn btn-xs">
                           {gettext("Open")}
                         </Link>
-                      </td>
-                    </tr>
-                  {/for}
-                  {#for {slide, count} <- stats.duplicate_subjects}
-                    <tr>
-                      <td>-</td>
-                      <td><span class="capitalize">{slide.subject.name}</span></td>
-                      <td>
-                        <div class={
-                          "my-auto",
-                          "badge",
-                          "badge-success": slide.status == :submitted_jury,
-                          "badge-warning": slide.status == :submitted_fixed
-                        }>
-                          {status_to_label(slide.status)}
+                        <div class="dropdown mx-auto">
+                          <label tabindex="0" class="btn btn-xs">
+                            {gettext("Actions")}
+                          </label>
+                          <ul tabindex="0" class="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52">
+                            <li>
+                              <a
+                                :if={slide.status != :submitted_jury}
+                                class="btn btn-sm btn-ghost"
+                                :on-click="move-slide-to-jury"
+                                :values={slide_id: slide.id}
+                              >{gettext("Move to jury")}</a>
+                            </li>
+                            <li>
+                              <a
+                                :if={slide.status != :submitted_fixed}
+                                class="btn btn-sm btn-ghost"
+                                :on-click="move-slide-to-fixed"
+                                :values={slide_id: slide.id}
+                              >{gettext("Move to fixed points")}</a>
+                            </li>
+                            <li>
+                              <a class="btn btn-sm btn-ghost" :on-click="move-slide-to-discarded" :values={slide_id: slide.id}>{gettext("Move to discarded")}</a>
+                            </li>
+                          </ul>
                         </div>
-                      </td>
-                      <td>
-                        {gettext("Duplicate")}: {count} {ngettext("occurrence", "occurrences", count)}
-                      </td>
-                      <td>-</td>
-                      <td>
-                        <Link to={"/organize/#{@competition_id}/validation?slide_id=#{slide.id}"} class="btn btn-xs">
-                          {gettext("Open")}
-                        </Link>
                       </td>
                     </tr>
                   {/for}

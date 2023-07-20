@@ -138,22 +138,18 @@ defmodule SMWeb.Live.Participants do
   end
 
   @impl Phoenix.LiveView
-  def handle_info({Participants, [:competition, :updated], _result}, socket) do
+  def handle_info({Participants, [:participant, _action], _result}, socket) do
     competition_id = socket.assigns.competition_id
     {:ok, competition} = Competitions.get(competition_id)
+    users = Accounts.list_enrollable(competition_id)
 
     socket =
       socket
-      |> assign(:competition, competition)
-      |> assign(:participants, Participants.list(competition_id))
-
-    {:noreply, socket}
-  end
-
-  def handle_info({Participants, [:user, :updated], _result}, socket) do
-    users = Accounts.list_enrollable(socket.assigns.competition_id)
-
-    socket = assign(socket, :users, users)
+      |> assign(
+        competition: competition,
+        participants: Participants.list(competition_id),
+        users: users
+      )
 
     {:noreply, socket}
   end

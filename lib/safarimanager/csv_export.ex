@@ -15,6 +15,7 @@ defmodule SM.CSVExport do
   alias SM.Participants.Participant
   alias SM.Slides.Slide
   alias SM.Slides.SlideEvaluation
+  alias SM.Slides.SlideFlag
   alias SM.Subjects.Subject
   alias SM.Utils.CSVHelper
 
@@ -68,6 +69,13 @@ defmodule SM.CSVExport do
   def export("slides", callback) when is_function(callback) do
     extra_fields = %{
       metadata: fn row -> Jason.encode!(row.metadata) end,
+      slide_flags: fn row ->
+        query = from(sf in SlideFlag, where: [slide_id: ^row.id])
+
+        query
+        |> Repo.all()
+        |> Jason.encode!()
+      end,
       evaluations: fn row ->
         query =
           from(se in SlideEvaluation,

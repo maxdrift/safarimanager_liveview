@@ -10,6 +10,8 @@ defmodule SMWeb.Live.Validation do
   alias SM.Subjects
   alias SMWeb.Components.JuryToolbarButton
   alias Surface.Components.Form
+  alias Surface.Components.Form.HiddenInput
+  alias Surface.Components.Form.Label
   alias Surface.Components.Form.Select
   alias Surface.Components.Form.TextInput
 
@@ -63,9 +65,12 @@ defmodule SMWeb.Live.Validation do
 
     socket =
       socket
-      |> assign(:image_count, Enum.count(slides))
-      |> assign(:curr_index, current_index)
-      |> assign(:curr_slide, slide)
+      |> assign(
+        image_count: Enum.count(slides),
+        curr_index: current_index,
+        curr_slide: slide,
+        slide_flags: Slides.slide_flags_by_types(slide)
+      )
       # Note: remember events pushed from the server via push_event are global
       # and will be dispatched to all active hooks on the client who are handling that event.
       |> push_event("new-image", %{options: %{image_url: file_path}})
@@ -117,72 +122,137 @@ defmodule SMWeb.Live.Validation do
     {:noreply, to_prev_image(socket)}
   end
 
-  # TODO: improve form reset when changing slide
   def handle_event(
-        "validate",
-        %{"wrong_subject_flag" => %{"subject" => subject_id}},
+        "wrong-subject-change",
+        %{"wrong_subject_flag" => %{"new_subject" => new_subject_id, "flag_id" => flag_id}},
         socket
       ) do
-    slide_id = socket.assigns.curr_slide.id
-    {:ok, slide} = Slides.get(slide_id)
+    old_subject_id = socket.assigns.curr_slide.subject_id
 
-    flag_params =
-      if slide.subject_id != subject_id do
-        %{
-          "wrong_subject" => true,
-          "wrong_subject_ctx" => %{"from" => slide.subject_id, "to" => subject_id}
-        }
+    socket =
+      if new_subject_id != old_subject_id do
+        if flag_id == "" do
+          {:ok, slide_flag} =
+            Slides.add_slide_flag(%{
+              "slide_id" => socket.assigns.curr_slide.id,
+              "type" => :wrong_subject,
+              "context" => %{"from" => old_subject_id, "to" => new_subject_id}
+            })
+
+          assign(socket,
+            slide_flags: Map.put(socket.assigns.slide_flags, :wrong_subject, slide_flag)
+          )
+        else
+          {:ok, slide_flag} = Slides.get_slide_flag(flag_id)
+
+          {:ok, slide_flag} =
+            Slides.update_slide_flag(slide_flag, %{
+              "context" => %{"from" => old_subject_id, "to" => new_subject_id}
+            })
+
+          assign(socket,
+            slide_flags: Map.put(socket.assigns.slide_flags, :wrong_subject, slide_flag)
+          )
+        end
       else
-        %{
-          "wrong_subject" => false,
-          "wrong_subject_ctx" => nil
-        }
-      end
-
-    case Slides.update(slide, %{
-           "flags" => flag_params
-         }) do
-      {:ok, slide} ->
-        :ok
-
-        {:noreply, assign(socket, :curr_slide, slide)}
-
-      {:error, reason} ->
-        Logger.error("Unable to update Slide: #{inspect(reason)}")
-        {:noreply, socket}
-    end
-  end
-
-  # TODO: improve form reset when changing slide
-  def handle_event("validate", %{"other_reason_flag" => %{"reason" => reason}}, socket) do
-    slide_id = socket.assigns.curr_slide.id
-    {:ok, slide} = Slides.get(slide_id)
-    trimmed_reason = String.trim(reason)
-
-    flag_params =
-      if trimmed_reason == "" do
-        %{
-          "other_reason" => false,
-          "other_reason_ctx" => nil
-        }
-      else
-        %{
-          "other_reason" => true,
-          "other_reason_ctx" => trimmed_reason
-        }
-      end
-
-    :ok =
-      case Slides.update(slide, %{"flags" => flag_params}) do
-        {:ok, _slide} ->
-          :ok
-
-        {:error, reason} = error ->
-          Logger.error("Unable to update Slide: #{inspect(reason)}")
-          error
+        if flag_id do
+          {:ok, slide_flag} = Slides.get_slide_flag(flag_id)
+          {:ok, _slide_flag} = Slides.remove_slide_flag(slide_flag)
+          # TODO: Remove in favor of handle_info callback
+          assign(socket, slide_flags: Map.put(socket.assigns.slide_flags, :wrong_subject, nil))
+        else
+          socket
+        end
       end
 
     {:noreply, socket}
+  end
+
+  def handle_event(
+        "unrecognizable-submit",
+        %{"unrecognizable" => %{"flag_id" => flag_id}},
+        socket
+      ) do
+    slide_flag =
+      if flag_id == "" do
+        {:ok, slide_flag} =
+          Slides.add_slide_flag(%{
+            "slide_id" => socket.assigns.curr_slide.id,
+            "type" => :unrecognizable
+          })
+
+        slide_flag
+      else
+        {:ok, slide_flag} = Slides.get_slide_flag(flag_id)
+
+        {:ok, _slide_flag} = Slides.remove_slide_flag(slide_flag)
+        nil
+      end
+
+    {:noreply,
+     assign(socket, slide_flags: Map.put(socket.assigns.slide_flags, :unrecognizable, slide_flag))}
+  end
+
+  def handle_event(
+        "distinction-submit",
+        %{"distinction" => %{"flag_id" => flag_id}},
+        socket
+      ) do
+    slide_flag =
+      if flag_id == "" do
+        {:ok, slide_flag} =
+          Slides.add_slide_flag(%{
+            "slide_id" => socket.assigns.curr_slide.id,
+            "type" => :distinction
+          })
+
+        slide_flag
+      else
+        {:ok, slide_flag} = Slides.get_slide_flag(flag_id)
+
+        {:ok, _slide_flag} = Slides.remove_slide_flag(slide_flag)
+        nil
+      end
+
+    {:noreply,
+     assign(socket, slide_flags: Map.put(socket.assigns.slide_flags, :distinction, slide_flag))}
+  end
+
+  def handle_event(
+        "note-change",
+        %{"note" => %{"value" => value, "flag_id" => flag_id}},
+        socket
+      ) do
+    slide_flag =
+      if flag_id == "" do
+        {:ok, slide_flag} =
+          Slides.add_slide_flag(%{
+            "slide_id" => socket.assigns.curr_slide.id,
+            "type" => :note,
+            "context" => %{"message" => String.trim(value)}
+          })
+
+        slide_flag
+      else
+        {:ok, slide_flag} = Slides.get_slide_flag(flag_id)
+
+        if String.trim(value) != "" do
+          {:ok, slide_flag} =
+            Slides.update_slide_flag(slide_flag, %{
+              "context" => %{"message" => String.trim(value)}
+            })
+
+          slide_flag
+        else
+          {:ok, _slide_flag} =
+            Slides.remove_slide_flag(slide_flag)
+
+          nil
+        end
+      end
+
+    {:noreply,
+     assign(socket, slide_flags: Map.put(socket.assigns.slide_flags, :note, slide_flag))}
   end
 
   def handle_event("evaluation-key", %{"key" => "ArrowLeft"}, socket) do
@@ -223,6 +293,20 @@ defmodule SMWeb.Live.Validation do
 
   @impl Phoenix.LiveView
   def handle_info({Slides, [:slide, _action], _result}, socket) do
+    curr_slide_id = socket.assigns.curr_slide.id
+    {:ok, updated_slide} = Slides.get(curr_slide_id)
+    slides = Slides.list_for_validation(socket.assigns.competition.id)
+
+    socket =
+      socket
+      |> assign(:curr_slide, updated_slide)
+      |> assign(:slides, slides)
+
+    {:noreply, socket}
+  end
+
+  def handle_info({Slides, [:slide_flag, _action], _result}, socket) do
+    # TODO: Refactor using Phoenix streams and replacing slide flags efficiently
     curr_slide_id = socket.assigns.curr_slide.id
     {:ok, updated_slide} = Slides.get(curr_slide_id)
     slides = Slides.list_for_validation(socket.assigns.competition.id)
@@ -322,4 +406,12 @@ defmodule SMWeb.Live.Validation do
 
   defp status_to_label(:submitted_fixed), do: gettext("Fixed points")
   defp status_to_label(:submitted_jury), do: gettext("Jury")
+
+  defp maybe_show_wrong_subject_label(js, slide_flags) do
+    if slide_flags.wrong_subject do
+      JS.show(js, to: "#wrong-subject-label")
+    else
+      js
+    end
+  end
 end

@@ -53,7 +53,11 @@ defmodule SMWeb.Components.Grid do
           </div>
         </div>
         <div class="max-h-full overflow-y-auto tiny-scrollbar">
-          <table id={"#{@id}-table"} class="table table-zebra table-fixed w-full" :hook="GridSelection">
+          <table
+            id={"#{@id}-table"}
+            class="table table-zebra table-sm table-fixed w-full"
+            :hook="GridSelection"
+          >
             <thead>
               <tr>
                 <th class={["sticky", "top-0", "w-1"]}>

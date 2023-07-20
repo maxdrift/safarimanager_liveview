@@ -48,7 +48,7 @@ defmodule SM.Config do
   def shutdown do
     case SM.Config.shutdown_callback() do
       {m, f, a} ->
-        Phoenix.PubSub.broadcast(SM.PubSub, "sidebar", :shutdown)
+        _result = Phoenix.PubSub.broadcast(SM.PubSub, "sidebar", :shutdown)
         apply(m, f, a)
 
       nil ->

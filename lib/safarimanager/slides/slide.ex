@@ -8,54 +8,10 @@ defmodule SM.Slides.Slide do
   alias SM.Competitions.Competition
   alias SM.Evaluations.Evaluation
   alias SM.Slides.SlideEvaluation
+  alias SM.Slides.SlideFlag
   alias SM.Subjects.Subject
 
   @statuses Application.compile_env!(:safarimanager, [__MODULE__, :statuses])
-
-  defmodule WrongSubjectContext do
-    @moduledoc false
-    use SM, :schema
-
-    @primary_key false
-    @derive {Jason.Encoder, except: [:__struct__]}
-    embedded_schema do
-      field :from, Ecto.UUID
-      field :to, Ecto.UUID
-    end
-
-    @spec changeset(t(), %{(String.t() | atom()) => any()}) :: Ecto.Changeset.t()
-    def changeset(flags, attrs) do
-      cast(flags, attrs, [:from, :to])
-    end
-  end
-
-  defmodule Flags do
-    @moduledoc """
-    Slides flags embedded schema
-    """
-    use SM, :schema
-    alias SM.Slides.Slide.WrongSubjectContext
-
-    @primary_key false
-    @derive {Jason.Encoder, except: [:__struct__]}
-    embedded_schema do
-      field :wrong_subject, :boolean, default: false
-      embeds_one :wrong_subject_ctx, WrongSubjectContext, on_replace: :update
-      field :other_reason, :boolean, default: false
-      field :other_reason_ctx, :string
-    end
-
-    @spec changeset(t(), %{(String.t() | atom()) => any()}) :: Ecto.Changeset.t()
-    def changeset(flags, attrs) do
-      flags
-      |> cast(attrs, [
-        :wrong_subject,
-        :other_reason,
-        :other_reason_ctx
-      ])
-      |> cast_embed(:wrong_subject_ctx)
-    end
-  end
 
   schema "slides" do
     field :file_name, :string
@@ -67,7 +23,7 @@ defmodule SM.Slides.Slide do
     field :metadata, :map
     field :status, Ecto.Enum, values: @statuses, default: :discarded
     field :penalty, :boolean
-    embeds_one :flags, Flags, on_replace: :update
+    has_many :slide_flags, SlideFlag
     belongs_to :user, User
     belongs_to :competition, Competition
     belongs_to :subject, Subject
@@ -95,7 +51,6 @@ defmodule SM.Slides.Slide do
       :subject_id
     ])
     |> validate_required([:file_name, :file_size, :user_id, :competition_id])
-    |> cast_embed(:flags)
     |> maybe_require_subject()
     |> foreign_key_constraint(:user_id)
     |> foreign_key_constraint(:competition_id)
@@ -106,8 +61,7 @@ defmodule SM.Slides.Slide do
   @spec import_changeset(t(), map()) :: Ecto.Changeset.t()
   def import_changeset(struct, attrs) do
     struct
-    |> cast(attrs, __MODULE__.__schema__(:fields) -- [:flags])
-    |> cast_embed(:flags)
+    |> cast(attrs, __MODULE__.__schema__(:fields))
     |> validate_required([:id, :file_name, :file_size, :user_id, :competition_id])
     |> maybe_require_subject()
     |> unique_constraint(:id)

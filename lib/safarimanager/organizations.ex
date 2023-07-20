@@ -226,7 +226,7 @@ defmodule SM.Organizations do
         |> Repo.transaction()
         |> case do
           {:ok, %{organization: organization}} ->
-            notify_subscribers({:ok, source_ids}, [:organization, :deleted])
+            _result = notify_subscribers({:ok, source_ids}, [:organization, :deleted])
             notify_subscribers({:ok, organization}, [:organization, :updated])
 
           {:error, failed_operation, failed_value, _changes_so_far} ->

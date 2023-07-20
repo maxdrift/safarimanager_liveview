@@ -567,7 +567,7 @@ defmodule SM.Accounts do
         |> case do
           {:ok, %{user: user}} ->
             user = Repo.preload(user, [:organization, :category])
-            notify_subscribers({:ok, source_ids}, [:user, :deleted])
+            _result = notify_subscribers({:ok, source_ids}, [:user, :deleted])
             notify_subscribers({:ok, user}, [:user, :updated])
 
           {:error, failed_operation, failed_value, _changes_so_far} ->

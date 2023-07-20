@@ -30,15 +30,82 @@ defmodule SMWeb.Live.ValidationLauncher do
 
   @impl Phoenix.LiveView
   def handle_event(
-        "apply-subject",
+        "apply-subject-correction",
         %{"slide-id" => slide_id, "new-subject" => new_subject},
         socket
       ) do
-    with {:ok, slide} <- Slides.get(slide_id),
-         {:ok, _slide} <- Slides.update(slide, %{"subject_id" => new_subject}) do
-      {:noreply,
-       push_navigate(socket, to: "/organize/#{socket.assigns.competition.id}/validation_launcher")}
-    end
+    socket =
+      case Slides.apply_correct_subject(slide_id, new_subject) do
+        {:ok, _slide} ->
+          socket
+          |> put_flash(:info, gettext("Subject correction applied successfully"))
+          |> push_navigate(to: "/organize/#{socket.assigns.competition.id}/validation_launcher")
+
+        {:error, _reason} = error ->
+          Logger.error("Unable to apply correct subject to slide #{slide_id}: #{inspect(error)}")
+          put_flash(socket, :error, gettext("Error applying subject correction to slide"))
+      end
+
+    {:noreply, socket}
+  end
+
+  def handle_event("move-slide-to-jury", %{"slide-id" => slide_id}, socket) do
+    socket =
+      with {:ok, slide} <- Slides.get(slide_id),
+           {:ok, _slide} <- Slides.update(slide, %{"status" => :submitted_jury}) do
+        socket
+        |> put_flash(:info, gettext("Slide moved to jury"))
+        |> push_navigate(to: "/organize/#{socket.assigns.competition.id}/validation_launcher")
+      else
+        {:error, _reason} = error ->
+          Logger.error("Unable to move slide #{slide_id} to jury: #{inspect(error)}")
+          put_flash(socket, :error, gettext("Error moving slide to jury"))
+      end
+
+    {:noreply, socket}
+  end
+
+  def handle_event("move-slide-to-fixed", %{"slide-id" => slide_id}, socket) do
+    socket =
+      with {:ok, slide} <- Slides.get(slide_id),
+           {:ok, _slide} <- Slides.update(slide, %{"status" => :submitted_fixed}) do
+        socket
+        |> put_flash(:info, gettext("Slide moved to fixed points"))
+        |> push_navigate(to: "/organize/#{socket.assigns.competition.id}/validation_launcher")
+      else
+        {:error, _reason} = error ->
+          Logger.error("Unable to move slide #{slide_id} to fixed points: #{inspect(error)}")
+          put_flash(socket, :error, gettext("Error moving slide to fixed points"))
+      end
+
+    {:noreply, socket}
+  end
+
+  def handle_event("move-slide-to-discarded", %{"slide-id" => slide_id}, socket) do
+    socket =
+      with {:ok, slide} <- Slides.get(slide_id),
+           {:ok, _slide} <- Slides.update(slide, %{"status" => :discarded}) do
+        socket
+        |> put_flash(:info, gettext("Slide moved to discarded"))
+        |> push_navigate(to: "/organize/#{socket.assigns.competition.id}/validation_launcher")
+      else
+        {:error, _reason} = error ->
+          Logger.error("Unable to move slide #{slide_id} to discarded: #{inspect(error)}")
+          put_flash(socket, :error, gettext("Error moving slide to discarded"))
+      end
+
+    {:noreply, socket}
+  end
+
+  def handle_event("clear-all-flags", %{"slide-id" => slide_id}, socket) do
+    {:ok, _deleted} = Slides.clear_slide_flags(slide_id)
+
+    socket =
+      socket
+      |> put_flash(:info, gettext("Removed all slide flags"))
+      |> push_navigate(to: "/organize/#{socket.assigns.competition.id}/validation_launcher")
+
+    {:noreply, socket}
   end
 
   @impl Phoenix.LiveView
@@ -78,8 +145,8 @@ defmodule SMWeb.Live.ValidationLauncher do
 
         duplicate_subjects =
           Enum.flat_map(duplicate_subjects, fn
-            {^participant_number, slide, count} -> [{slide, count}]
-            {_participant_number, _slide, _count} -> []
+            {^participant_number, slide} -> [slide]
+            {_participant_number, _slide} -> []
           end)
 
         over_submitted_threshold =
@@ -104,6 +171,7 @@ defmodule SMWeb.Live.ValidationLauncher do
 
         {participant_number, new_stats}
       end)
+      |> List.keysort(0)
 
     socket =
       socket

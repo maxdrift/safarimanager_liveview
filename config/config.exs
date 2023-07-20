@@ -71,6 +71,14 @@ config :safarimanager, SM.Slides.Slide,
     large: {2560, 2560}
   ]
 
+config :safarimanager, SM.Slides.SlideFlag,
+  types: [
+    {:wrong_subject, "wrong subject"},
+    {:unrecognizable, "unrecognizable"},
+    {:distinction, "distinction"},
+    {:note, "note"}
+  ]
+
 config :safarimanager, SM.Competitions.CompetitionSettings,
   defaults: [
     evaluations_per_juror: 1,

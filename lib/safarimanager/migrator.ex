@@ -593,10 +593,11 @@ defmodule SM.Migrator do
 
   defp migrate_jurors(_conn, accumulator, _version) do
     for i <- 1..3 do
-      SM.Accounts.register_simplified_user(%{
-        first_name: "Giurato #{i}",
-        last_name: "Anonimo"
-      })
+      {:ok, _user} =
+        SM.Accounts.register_simplified_user(%{
+          first_name: "Giurato #{i}",
+          last_name: "Anonimo"
+        })
     end
 
     competition_id =
@@ -686,9 +687,10 @@ defmodule SM.Migrator do
 
                 penalty? = if row.pen == -1, do: true, else: false
 
-                if penalty? do
-                  {:ok, _slide} = SM.Slides.apply_penalty(slide.id)
-                end
+                _result =
+                  if penalty? do
+                    {:ok, _slide} = SM.Slides.apply_penalty(slide.id)
+                  end
 
                 :ok = SM.Slides.generate_thumbnail(competition_id, user_id, file_name, :small)
 
@@ -779,9 +781,10 @@ defmodule SM.Migrator do
 
                 penalty? = if row.pen == -1, do: true, else: false
 
-                if penalty? do
-                  {:ok, _slide} = SM.Slides.apply_penalty(slide.id)
-                end
+                _result =
+                  if penalty? do
+                    {:ok, _slide} = SM.Slides.apply_penalty(slide.id)
+                  end
 
                 :ok = SM.Slides.generate_thumbnail(competition_id, user_id, file_name, :small)
 

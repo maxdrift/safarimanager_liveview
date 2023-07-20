@@ -26,11 +26,10 @@ defmodule SM.Application do
         {Phoenix.PubSub, name: SM.PubSub},
         # Nebulex caching system
         SM.Cache,
+        # Mounted devices watcher process
+        {SM.USBWatcherSupervisor, []},
         # Start the Endpoint (http/https)
-        SMWeb.Endpoint,
-        # Start a worker by calling: SM.Worker.start_link(arg)
-        # {SM.Worker, arg}
-        {SM.USBWatcherSupervisor, []}
+        SMWeb.Endpoint
       ] ++ app_specs()
 
     # See https://hexdocs.pm/elixir/Supervisor.html

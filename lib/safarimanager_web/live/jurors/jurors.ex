@@ -80,18 +80,12 @@ defmodule SMWeb.Live.Jurors do
   end
 
   @impl Phoenix.LiveView
-  def handle_info({Jurors, [:competition, :updated], _result}, socket) do
-    {:ok, competition} = Competitions.get(socket.assigns.competition_id)
+  def handle_info({Jurors, [:juror, _action], _result}, socket) do
+    competition_id = socket.assigns.competition_id
+    {:ok, competition} = Competitions.get(competition_id)
+    users = Accounts.list_enrollable_jurors(competition_id)
 
-    socket = assign(socket, :competition, competition)
-
-    {:noreply, socket}
-  end
-
-  def handle_info({Jurors, [:user, :updated], _result}, socket) do
-    users = Accounts.list_enrollable_jurors(socket.assigns.competition_id)
-
-    socket = assign(socket, :users, users)
+    socket = assign(socket, competition: competition, users: users)
 
     {:noreply, socket}
   end

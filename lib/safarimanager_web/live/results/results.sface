@@ -46,7 +46,7 @@
     <div x-show="expanded" x-collapse class="flex flex-col lg:flex-row mt-4 mx-4">
       <div class="lg:w-1/2">
         <div class="text-lg text-center pb-4">{gettext("Stats")}</div>
-        <table class="table table-compact table-fixed w-full">
+        <table class="table table-xs table-fixed w-full">
           <tr>
             <th class="bg-base-200 w-4/12">{gettext("Num. of participants")}</th>
             <td class="truncate">{Enum.count(@competition.participants)}</td>
@@ -84,7 +84,7 @@
       <div class="divider lg:divider-horizontal" />
       <div class="max-h-96 overflow-y-auto lg:w-1/2 tiny-scrollbar">
         <div class="text-lg text-center pb-4">{gettext("Subjects")}</div>
-        <table class="table table-zebra table-compact w-full">
+        <table class="table table-zebra table-xs w-full">
           <thead>
             <tr>
               <th class="sticky top-0 w-auto">{gettext("#")}</th>
@@ -121,7 +121,7 @@
   </div>
   <div class="overflow-y-auto mt-6">
     <div class="text-2xl font-bold text-center mb-4">{gettext("Results")}</div>
-    <table class="table table-fixed w-full">
+    <table class="table table-sm table-fixed w-full">
       <thead>
         <tr>
           <th class="w-1/12">{gettext("Rank")}</th>
@@ -150,7 +150,7 @@
             <tr x-show="expanded">
               <td />
               <td colspan="5">
-                <table class="table table-compact w-full">
+                <table class="table table-xs w-full">
                   <thead>
                     <tr>
                       <th class="bg-base-200">{gettext("File name")}</th>

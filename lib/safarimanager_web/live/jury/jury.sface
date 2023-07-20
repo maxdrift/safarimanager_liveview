@@ -4,8 +4,9 @@
   </div>
   <div class="flex-initial">
     <div class="flex flex-row justify-between">
-      <div class="btn-group">
-        <span class="inline-block align-sub p-1 pl-3 font-bold">{@curr_index + 1} {gettext("of")} {@image_count}</span>
+      <div class="join">
+        <span :if={@curr_slide} class="inline-block align-sub p-1 pl-3 font-bold">{@curr_index + 1} {gettext("of")} {@image_count}</span>
+        <span :if={!@curr_slide} class="inline-block align-sub p-1 pl-3 font-bold">0 {gettext("of")} {@image_count}</span>
         <span
           :if={@curr_slide && @curr_slide.evaluations != []}
           class="inline-block align-sub p-1 pl-3 font-bold"
@@ -15,15 +16,15 @@
         <span class="inline-block align-sub p-1 pl-3 font-bold">{@curr_slide && String.capitalize(@curr_slide.subject.name)}</span>
       </div>
       <div class="flex flex-row justify-between gap-2">
-        <div class="btn-group">
-          <JuryToolbarButton click="prev-image">{gettext("Prev")}</JuryToolbarButton>
-          <JuryToolbarButton click="next-image">{gettext("Next")}</JuryToolbarButton>
+        <div class="join">
+          <JuryToolbarButton class="btn btn-sm join-item" click="prev-image">{gettext("Prev")}</JuryToolbarButton>
+          <JuryToolbarButton class="btn btn-sm join-item" click="next-image">{gettext("Next")}</JuryToolbarButton>
         </div>
-        <div class="btn-group">
-          <JuryToolbarButton id="zoom-out">-</JuryToolbarButton>
-          <JuryToolbarButton id="zoom-100">100%</JuryToolbarButton>
-          <JuryToolbarButton id="home">{gettext("Fit")}</JuryToolbarButton>
-          <JuryToolbarButton id="zoom-in">+</JuryToolbarButton>
+        <div class="join">
+          <JuryToolbarButton class="btn btn-sm join-item" id="zoom-out">-</JuryToolbarButton>
+          <JuryToolbarButton class="btn btn-sm join-item" id="zoom-100">100%</JuryToolbarButton>
+          <JuryToolbarButton class="btn btn-sm join-item" id="home">{gettext("Fit")}</JuryToolbarButton>
+          <JuryToolbarButton class="btn btn-sm join-item" id="zoom-in">+</JuryToolbarButton>
         </div>
         <JuryToolbarButton id="full-page">
           <svg
@@ -47,22 +48,27 @@
       </div>
     </div>
   </div>
-  <!-- phx-update="ignore" is VERY VERY important!
-  It prevents the viewer from being replaced during LV updates. -->
+  {!-- phx-update="ignore" is VERY VERY important!
+  It prevents the viewer from being replaced during LV updates. --}
   <div id="openseadragon-viewer" class="flex-1" :hook="Lightbox" phx-update="ignore"> </div>
   <div class="flex-initial">
     <div class="flex flex-row justify-between">
       <div class={["flex", "flex-row", "justify-between", "gap-2"]}>
-        <div class={["btn-group", "btn-disabled": !can_evaluate?(@competition, @curr_slide)]}>
+        <div class={["join", "btn-disabled": !can_evaluate?(@competition, @curr_slide)]}>
           {#for evaluation <- @evaluations}
-            <JuryToolbarButton click="evaluate" click_key="evaluation-id" click_value={evaluation.id}>{evaluation.value}</JuryToolbarButton>
+            <JuryToolbarButton
+              class="btn btn-sm join-item"
+              click="evaluate"
+              click_key="evaluation-id"
+              click_value={evaluation.id}
+            >{evaluation.value}</JuryToolbarButton>
           {#else}
             {gettext("No evaluations available")}
           {/for}
         </div>
         <JuryToolbarButton click="clear-evaluations">{gettext("Clear")}</JuryToolbarButton>
       </div>
-      <div class="btn-group">
+      <div class="join">
         <JuryToolbarButton
           click="penalty"
           click_key="penalty"
@@ -70,7 +76,7 @@
           class={"btn", "btn-sm", "btn-error": @curr_slide && @curr_slide.penalty}
         >{gettext("Penalty")}</JuryToolbarButton>
       </div>
-      <div class="btn-group">
+      <div class="join">
         <!-- {#for prize <- @prizes}
           <JuryToolbarButton click="prize" click_key="prize" click_value={prize}>{prize}</JuryToolbarButton>
         {#else}
