@@ -141,7 +141,7 @@ defmodule SMWeb.Live.Slides do
   end
 
   def handle_event("filter-participants", %{"value" => value}, socket) do
-    participants = Participants.list(socket.assigns.competition_id, value)
+    participants = Participants.filter_by_name(socket.assigns.competition_id, value)
     {:noreply, assign(socket, :participants, participants)}
   end
 

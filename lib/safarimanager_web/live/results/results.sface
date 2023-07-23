@@ -120,7 +120,23 @@
     </div>
   </div>
   <div class="overflow-y-auto mt-6">
-    <div class="text-2xl font-bold text-center mb-4">{gettext("Results")}</div>
+    <div class="text-2xl font-bold text-center my-4">
+      <Form
+        for={%{}}
+        as={:results_type_change}
+        change="results-type-change"
+        submit="results-type-submit"
+      >
+        <span>{gettext("Results")}</span>
+        <Select
+          field={:results_type}
+          options={[
+            {gettext("Overall"), :overall} | Categories.list() |> Enum.map(fn c -> {c.name, c.id} end)
+          ]}
+          class="select select-bordered select-sm ml-2"
+        />
+      </Form>
+    </div>
     <table class="table table-sm table-fixed w-full">
       <thead>
         <tr>

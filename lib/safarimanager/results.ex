@@ -13,7 +13,7 @@ defmodule SM.Results do
   alias SM.Subjects.Subject
 
   @spec list(String.t()) :: {:ok, [Subject.t()]} | {:error, :not_found}
-  def list(competition_id) do
+  def list(competition_id, category_id \\ nil) do
     with {:ok, competition} <- Competitions.get(competition_id) do
       subjects_map =
         competition_id
@@ -30,7 +30,7 @@ defmodule SM.Results do
         |> Enum.sort({:desc, Decimal})
 
       {results, _acc} =
-        Participants.list(competition_id)
+        Participants.list(competition_id, category_id)
         |> Stream.map(fn participant ->
           {slides, total_score} =
             list_by_participant(competition_id, competition, participant.user.id, subjects_map)

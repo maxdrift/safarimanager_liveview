@@ -25,20 +25,30 @@ defmodule SM.Participants do
   end
 
   @doc """
-  Returns the list of participants filtered by competition ID.
+  Returns the list of participants filtered by competition ID and (optionally) category ID.
 
   ## Examples
 
       iex> list("123")
       [%Participant{}, ...]
 
+      iex> list("123", "123")
+      [%Participant{}, ...]
+
   """
-  @spec list(String.t()) :: [Participant.t()]
-  def list(competition_id) do
+  @spec list(String.t(), String.t() | nil) :: [Participant.t()]
+  def list(competition_id, category_id \\ nil) do
+    conditions =
+      if is_nil(category_id) do
+        dynamic([p], p.competition_id == ^competition_id)
+      else
+        dynamic([p], p.competition_id == ^competition_id and p.category_id == ^category_id)
+      end
+
     query =
       from(
         p in Participant,
-        where: [competition_id: ^competition_id],
+        where: ^conditions,
         inner_join: u in assoc(p, :user),
         left_join: o in assoc(u, :organization),
         left_join: c in assoc(p, :category),
@@ -58,12 +68,12 @@ defmodule SM.Participants do
 
   ## Examples
 
-      iex> list("123", "foo")
+      iex> filter_by_name("123", "foo")
       [%Participant{}, ...]
 
   """
-  @spec list(String.t(), String.t()) :: [Participant.t()]
-  def list(competition_id, name) do
+  @spec filter_by_name(String.t(), String.t()) :: [Participant.t()]
+  def filter_by_name(competition_id, name) do
     pattern = "%#{name}%"
 
     query =
