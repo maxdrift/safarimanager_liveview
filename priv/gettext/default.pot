@@ -159,10 +159,10 @@ msgstr ""
 #: lib/safarimanager_web/controllers/selection_printout_html/show_multi.html.heex:41
 #: lib/safarimanager_web/controllers/selection_printout_html/show_single.html.heex:40
 #: lib/safarimanager_web/controllers/slides_printout_html/show.html.heex:41
-#: lib/safarimanager_web/live/results/results.ex:67
-#: lib/safarimanager_web/live/results/results.sface:229
+#: lib/safarimanager_web/live/results/results.ex:88
+#: lib/safarimanager_web/live/results/results.sface:245
 #: lib/safarimanager_web/live/slides/slide_selection.ex:300
-#: lib/safarimanager_web/live/validation/validation.ex:508
+#: lib/safarimanager_web/live/validation/validation.ex:408
 #: lib/safarimanager_web/live/validation/validation_launcher.ex:194
 #: lib/safarimanager_web/live/validation/validation_launcher.sface:23
 #: lib/safarimanager_web/live/validation/validation_launcher.sface:260
@@ -172,7 +172,7 @@ msgstr ""
 
 #: lib/safarimanager_web/components/steps_header.ex:29
 #: lib/safarimanager_web/live/jury/jury_launcher.sface:28
-#: lib/safarimanager_web/live/results/results.sface:123
+#: lib/safarimanager_web/live/results/results.sface:130
 #, elixir-autogen, elixir-format
 msgid "Results"
 msgstr ""
@@ -592,7 +592,7 @@ msgstr ""
 #: lib/safarimanager_web/controllers/selection_printout_html/show_single.html.heex:39
 #: lib/safarimanager_web/controllers/slides_printout_html/show.html.heex:38
 #: lib/safarimanager_web/live/admin/subjects/index.sface:118
-#: lib/safarimanager_web/live/results/results.sface:159
+#: lib/safarimanager_web/live/results/results.sface:175
 #, elixir-autogen, elixir-format
 msgid "Coeff."
 msgstr ""
@@ -624,13 +624,13 @@ msgstr ""
 #: lib/safarimanager_web/components/grid.ex:204
 #: lib/safarimanager_web/components/grid.ex:219
 #: lib/safarimanager_web/components/grid.ex:238
-#: lib/safarimanager_web/live/admin/categories/index.sface:97
-#: lib/safarimanager_web/live/admin/competitions/index.sface:314
-#: lib/safarimanager_web/live/admin/evaluations/index.sface:124
-#: lib/safarimanager_web/live/admin/organizations/index.sface:183
-#: lib/safarimanager_web/live/admin/participants/index.sface:140
-#: lib/safarimanager_web/live/admin/subjects/index.sface:138
-#: lib/safarimanager_web/live/admin/users/index.sface:207
+#: lib/safarimanager_web/live/admin/categories/index.sface:105
+#: lib/safarimanager_web/live/admin/competitions/index.sface:322
+#: lib/safarimanager_web/live/admin/evaluations/index.sface:132
+#: lib/safarimanager_web/live/admin/organizations/index.sface:191
+#: lib/safarimanager_web/live/admin/participants/index.sface:142
+#: lib/safarimanager_web/live/admin/subjects/index.sface:146
+#: lib/safarimanager_web/live/admin/users/index.sface:216
 #: lib/safarimanager_web/live/slides/slides.ex:108
 #: lib/safarimanager_web/live/slides/slides.ex:133
 #: lib/safarimanager_web/live/slides/slides.sface:131
@@ -654,13 +654,13 @@ msgstr ""
 msgid "Delete records"
 msgstr ""
 
-#: lib/safarimanager_web/live/admin/categories/index.sface:92
-#: lib/safarimanager_web/live/admin/competitions/index.sface:309
-#: lib/safarimanager_web/live/admin/evaluations/index.sface:119
-#: lib/safarimanager_web/live/admin/organizations/index.sface:178
-#: lib/safarimanager_web/live/admin/participants/index.sface:135
-#: lib/safarimanager_web/live/admin/subjects/index.sface:133
-#: lib/safarimanager_web/live/admin/users/index.sface:202
+#: lib/safarimanager_web/live/admin/categories/index.sface:99
+#: lib/safarimanager_web/live/admin/competitions/index.sface:316
+#: lib/safarimanager_web/live/admin/evaluations/index.sface:126
+#: lib/safarimanager_web/live/admin/organizations/index.sface:185
+#: lib/safarimanager_web/live/admin/participants/index.sface:136
+#: lib/safarimanager_web/live/admin/subjects/index.sface:140
+#: lib/safarimanager_web/live/admin/users/index.sface:210
 #: lib/safarimanager_web/live/slides/slide_selection.sface:200
 #: lib/safarimanager_web/live/slides/slide_selection.sface:276
 #: lib/safarimanager_web/live/slides/slide_selection.sface:352
@@ -713,7 +713,7 @@ msgstr ""
 #: lib/safarimanager_web/live/admin/subjects/index.sface:114
 #: lib/safarimanager_web/live/new_competition/new_competition.sface:8
 #: lib/safarimanager_web/live/results/results.sface:91
-#: lib/safarimanager_web/live/results/results.sface:128
+#: lib/safarimanager_web/live/results/results.sface:144
 #: lib/safarimanager_web/live/slides/slides.sface:97
 #, elixir-autogen, elixir-format
 msgid "Name"
@@ -755,13 +755,13 @@ msgstr ""
 msgid "Select a coefficient"
 msgstr ""
 
-#: lib/safarimanager_web/live/admin/categories/index.sface:91
-#: lib/safarimanager_web/live/admin/competitions/index.sface:308
-#: lib/safarimanager_web/live/admin/evaluations/index.sface:118
-#: lib/safarimanager_web/live/admin/organizations/index.sface:177
+#: lib/safarimanager_web/live/admin/categories/index.sface:94
+#: lib/safarimanager_web/live/admin/competitions/index.sface:311
+#: lib/safarimanager_web/live/admin/evaluations/index.sface:121
+#: lib/safarimanager_web/live/admin/organizations/index.sface:180
 #: lib/safarimanager_web/live/admin/participants/index.sface:131
-#: lib/safarimanager_web/live/admin/subjects/index.sface:132
-#: lib/safarimanager_web/live/admin/users/index.sface:201
+#: lib/safarimanager_web/live/admin/subjects/index.sface:135
+#: lib/safarimanager_web/live/admin/users/index.sface:204
 #, elixir-autogen, elixir-format
 msgid "Show"
 msgstr ""
@@ -1224,8 +1224,8 @@ msgstr ""
 #: lib/safarimanager_web/live/participants/participants.sface:101
 #: lib/safarimanager_web/live/participants/participants.sface:102
 #: lib/safarimanager_web/live/results/results.sface:104
-#: lib/safarimanager_web/live/results/results.sface:142
-#: lib/safarimanager_web/live/results/results.sface:143
+#: lib/safarimanager_web/live/results/results.sface:158
+#: lib/safarimanager_web/live/results/results.sface:159
 #: lib/safarimanager_web/live/slides/slide_selection.sface:44
 #: lib/safarimanager_web/live/slides/slide_selection.sface:45
 #: lib/safarimanager_web/live/slides/slide_selection.sface:195
@@ -1270,7 +1270,7 @@ msgstr ""
 #: lib/safarimanager_web/live/jurors/jurors.sface:56
 #: lib/safarimanager_web/live/participants/participants.sface:21
 #: lib/safarimanager_web/live/participants/participants.sface:90
-#: lib/safarimanager_web/live/results/results.sface:129
+#: lib/safarimanager_web/live/results/results.sface:145
 #: lib/safarimanager_web/live/slides/slide_selection.sface:32
 #: lib/safarimanager_web/live/slides/slides.sface:26
 #, elixir-autogen, elixir-format
@@ -1492,7 +1492,7 @@ msgstr ""
 #: lib/safarimanager_web/live/admin/users/index.sface:196
 #: lib/safarimanager_web/live/participants/participants.sface:22
 #: lib/safarimanager_web/live/participants/participants.sface:91
-#: lib/safarimanager_web/live/results/results.sface:130
+#: lib/safarimanager_web/live/results/results.sface:146
 #: lib/safarimanager_web/live/slides/slide_selection.sface:33
 #: lib/safarimanager_web/live/slides/slides.sface:27
 #, elixir-autogen, elixir-format
@@ -1738,13 +1738,13 @@ msgid "Pubblication time"
 msgstr ""
 
 #: lib/safarimanager_web/controllers/results_printout_html/show.html.heex:37
-#: lib/safarimanager_web/live/results/results.sface:127
+#: lib/safarimanager_web/live/results/results.sface:143
 #, elixir-autogen, elixir-format
 msgid "Rank"
 msgstr ""
 
 #: lib/safarimanager_web/controllers/results_printout_html/show.html.heex:42
-#: lib/safarimanager_web/live/results/results.sface:132
+#: lib/safarimanager_web/live/results/results.sface:148
 #, elixir-autogen, elixir-format
 msgid "Species"
 msgstr ""
@@ -1758,7 +1758,7 @@ msgstr ""
 #: lib/safarimanager_web/controllers/selection_printout_html/show_multi.html.heex:37
 #: lib/safarimanager_web/controllers/selection_printout_html/show_single.html.heex:36
 #: lib/safarimanager_web/controllers/slides_printout_html/show.html.heex:35
-#: lib/safarimanager_web/live/results/results.sface:156
+#: lib/safarimanager_web/live/results/results.sface:172
 #: lib/safarimanager_web/live/slides/slide_selection.sface:176
 #: lib/safarimanager_web/live/slides/slide_selection.sface:252
 #: lib/safarimanager_web/live/slides/slide_selection.sface:328
@@ -1769,7 +1769,7 @@ msgid "File name"
 msgstr ""
 
 #: lib/safarimanager_web/controllers/slides_printout_html/show.html.heex:40
-#: lib/safarimanager_web/live/results/results.sface:161
+#: lib/safarimanager_web/live/results/results.sface:177
 #, elixir-autogen, elixir-format
 msgid "Pen."
 msgstr ""
@@ -1785,8 +1785,8 @@ msgid "Print participants slides report"
 msgstr ""
 
 #: lib/safarimanager_web/controllers/slides_printout_html/show.html.heex:42
-#: lib/safarimanager_web/live/results/results.sface:131
-#: lib/safarimanager_web/live/results/results.sface:163
+#: lib/safarimanager_web/live/results/results.sface:147
+#: lib/safarimanager_web/live/results/results.sface:179
 #, elixir-autogen, elixir-format
 msgid "Score"
 msgstr ""
@@ -1806,7 +1806,7 @@ msgid "Sub. name"
 msgstr ""
 
 #: lib/safarimanager_web/controllers/slides_printout_html/show.html.heex:39
-#: lib/safarimanager_web/live/results/results.sface:160
+#: lib/safarimanager_web/live/results/results.sface:176
 #, elixir-autogen, elixir-format
 msgid "Votes"
 msgstr ""
@@ -1871,26 +1871,21 @@ msgstr ""
 msgid "The referee"
 msgstr ""
 
-#: lib/safarimanager_web/live/jury/jury.sface:46
-#: lib/safarimanager_web/live/validation/validation.sface:113
+#: lib/safarimanager_web/live/jury/jury.sface:138
+#: lib/safarimanager_web/live/jury/jury.sface:139
+#: lib/safarimanager_web/live/validation/validation.sface:205
 #, elixir-autogen, elixir-format
 msgid "Exit"
 msgstr ""
 
-#: lib/safarimanager_web/live/jury/jury.sface:26
-#: lib/safarimanager_web/live/validation/validation.sface:93
-#, elixir-autogen, elixir-format
-msgid "Fit"
-msgstr ""
-
-#: lib/safarimanager_web/live/jury/jury.sface:21
-#: lib/safarimanager_web/live/validation/validation.sface:88
+#: lib/safarimanager_web/live/jury/jury.sface:47
+#: lib/safarimanager_web/live/validation/validation.sface:113
 #, elixir-autogen, elixir-format
 msgid "Next"
 msgstr ""
 
-#: lib/safarimanager_web/live/jury/jury.sface:20
-#: lib/safarimanager_web/live/validation/validation.sface:87
+#: lib/safarimanager_web/live/jury/jury.sface:36
+#: lib/safarimanager_web/live/validation/validation.sface:102
 #, elixir-autogen, elixir-format
 msgid "Prev"
 msgstr ""
@@ -1908,10 +1903,10 @@ msgstr ""
 msgid "of"
 msgstr ""
 
-#: lib/safarimanager_web/live/results/results.ex:66
+#: lib/safarimanager_web/live/results/results.ex:87
 #: lib/safarimanager_web/live/slides/slide_selection.ex:299
 #: lib/safarimanager_web/live/slides/slide_selection.sface:219
-#: lib/safarimanager_web/live/validation/validation.ex:507
+#: lib/safarimanager_web/live/validation/validation.ex:407
 #: lib/safarimanager_web/live/validation/validation_launcher.ex:193
 #: lib/safarimanager_web/live/validation/validation_launcher.sface:24
 #, elixir-autogen, elixir-format
@@ -1955,7 +1950,7 @@ msgstr ""
 msgid "Start Validation"
 msgstr ""
 
-#: lib/safarimanager_web/live/results/results.sface:162
+#: lib/safarimanager_web/live/results/results.sface:178
 #: lib/safarimanager_web/live/slides/slide_selection.sface:116
 #: lib/safarimanager_web/live/validation/validation_launcher.sface:66
 #: lib/safarimanager_web/live/validation/validation_launcher.sface:170
@@ -2233,7 +2228,7 @@ msgid_plural "Discarded"
 msgstr[0] ""
 msgstr[1] ""
 
-#: lib/safarimanager_web/live/jury/jury.sface:69
+#: lib/safarimanager_web/live/jury/jury.sface:162
 #, elixir-autogen, elixir-format
 msgid "Clear"
 msgstr ""
@@ -2243,12 +2238,12 @@ msgstr ""
 msgid "Error saving evaluation: slide has a penalty"
 msgstr ""
 
-#: lib/safarimanager_web/live/jury/jury.sface:66
+#: lib/safarimanager_web/live/jury/jury.sface:159
 #, elixir-autogen, elixir-format
 msgid "No evaluations available"
 msgstr ""
 
-#: lib/safarimanager_web/live/jury/jury.sface:77
+#: lib/safarimanager_web/live/jury/jury.sface:170
 #, elixir-autogen, elixir-format
 msgid "Penalty"
 msgstr ""
@@ -2273,7 +2268,7 @@ msgstr ""
 msgid "Distribution"
 msgstr ""
 
-#: lib/safarimanager_web/live/results/results.sface:212
+#: lib/safarimanager_web/live/results/results.sface:228
 #, elixir-autogen, elixir-format
 msgid "No results available yet"
 msgstr ""
@@ -2293,7 +2288,7 @@ msgstr ""
 msgid "Penalties"
 msgstr ""
 
-#: lib/safarimanager_web/live/results/results.sface:147
+#: lib/safarimanager_web/live/results/results.sface:163
 #, elixir-autogen, elixir-format
 msgid "Show details"
 msgstr ""
@@ -2313,12 +2308,12 @@ msgstr ""
 msgid "Stats"
 msgstr ""
 
-#: lib/safarimanager_web/live/results/results.sface:157
+#: lib/safarimanager_web/live/results/results.sface:173
 #, elixir-autogen, elixir-format
 msgid "Subject #"
 msgstr ""
 
-#: lib/safarimanager_web/live/results/results.sface:158
+#: lib/safarimanager_web/live/results/results.sface:174
 #, elixir-autogen, elixir-format
 msgid "Subject name"
 msgstr ""
@@ -2333,17 +2328,17 @@ msgstr ""
 msgid "Unable to import slide selection: multiple slides with the same file name (or very similar) were found"
 msgstr ""
 
-#: lib/safarimanager_web/live/validation/validation.sface:123
+#: lib/safarimanager_web/live/validation/validation.sface:215
 #, elixir-format, elixir-autogen
 msgid "unrecognizable"
 msgstr ""
 
-#: lib/safarimanager_web/live/validation/validation.sface:130
+#: lib/safarimanager_web/live/validation/validation.sface:222
 #, elixir-format, elixir-autogen
 msgid "distinction"
 msgstr ""
 
-#: lib/safarimanager_web/live/validation/validation.sface:134
+#: lib/safarimanager_web/live/validation/validation.sface:226
 #, elixir-format, elixir-autogen
 msgid "note"
 msgstr ""
@@ -2398,7 +2393,7 @@ msgstr ""
 msgid "Error moving slide to jury"
 msgstr ""
 
-#: lib/safarimanager_web/live/validation/validation.sface:139
+#: lib/safarimanager_web/live/validation/validation.sface:231
 #, elixir-autogen, elixir-format
 msgid "Insert a note here..."
 msgstr ""
@@ -2464,4 +2459,63 @@ msgstr ""
 #: lib/safarimanager_web/live/validation/validation_launcher.ex:41
 #, elixir-autogen, elixir-format
 msgid "Subject correction applied successfully"
+msgstr ""
+
+#: lib/safarimanager_web/live/jury/jury.sface:24
+#: lib/safarimanager_web/live/validation/validation.sface:90
+#, elixir-autogen, elixir-format
+msgid "First"
+msgstr ""
+
+#: lib/safarimanager_web/live/jury/jury.sface:118
+#: lib/safarimanager_web/live/validation/validation.sface:184
+#, elixir-autogen, elixir-format
+msgid "Fit to window"
+msgstr ""
+
+#: lib/safarimanager_web/live/jury/jury.sface:135
+#: lib/safarimanager_web/live/validation/validation.sface:201
+#, elixir-autogen, elixir-format
+msgid "Fullscreen"
+msgstr ""
+
+#: lib/safarimanager_web/live/jury/jury.sface:62
+#: lib/safarimanager_web/live/validation/validation.sface:128
+#, elixir-autogen, elixir-format
+msgid "Last"
+msgstr ""
+
+#: lib/safarimanager_web/live/results/results.sface:134
+#, elixir-autogen, elixir-format
+msgid "Overall"
+msgstr ""
+
+#: lib/safarimanager_web/live/jury/jury.sface:128
+#: lib/safarimanager_web/live/validation/validation.sface:194
+#, elixir-autogen, elixir-format
+msgid "Rotate left"
+msgstr ""
+
+#: lib/safarimanager_web/live/jury/jury.sface:131
+#: lib/safarimanager_web/live/validation/validation.sface:197
+#, elixir-autogen, elixir-format
+msgid "Rotate right"
+msgstr ""
+
+#: lib/safarimanager_web/live/jury/jury.sface:79
+#: lib/safarimanager_web/live/validation/validation.sface:145
+#, elixir-autogen, elixir-format
+msgid "Zoom 100%"
+msgstr ""
+
+#: lib/safarimanager_web/live/jury/jury.sface:123
+#: lib/safarimanager_web/live/validation/validation.sface:189
+#, elixir-autogen, elixir-format
+msgid "Zoom in"
+msgstr ""
+
+#: lib/safarimanager_web/live/jury/jury.sface:76
+#: lib/safarimanager_web/live/validation/validation.sface:142
+#, elixir-autogen, elixir-format
+msgid "Zoom out"
 msgstr ""
