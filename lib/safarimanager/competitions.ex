@@ -5,10 +5,12 @@ defmodule SM.Competitions do
   use SM, :context
 
   alias Ecto.Multi
+  alias SM.Categories.Category
   alias SM.Competitions.Competition
   alias SM.Competitions.CompetitionSettings
   alias SM.Evaluations
   alias SM.Evaluations.Evaluation
+  alias SM.Participants.Participant
   alias SM.Slides
 
   @doc """
@@ -81,6 +83,32 @@ defmodule SM.Competitions do
     query
     |> Repo.all()
     |> Repo.preload([:organization])
+  end
+
+  @doc """
+  Returns the list of categories in a competitions.
+
+  ## Examples
+
+      iex> list_categories()
+      [%Category{}, ...]
+
+  """
+  @spec list_categories(String.t()) :: [Category.t()]
+  def list_categories(competition_id) do
+    query =
+      from(
+        c in Competition,
+        where: [id: ^competition_id],
+        join: p in Participant,
+        on: p.competition_id == c.id,
+        join: cat in assoc(p, :category),
+        on: p.category_id == cat.id,
+        group_by: p.category_id,
+        select: cat
+      )
+
+    Repo.all(query)
   end
 
   @doc """

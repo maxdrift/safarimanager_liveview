@@ -131,7 +131,8 @@
         <Select
           field={:results_type}
           options={[
-            {gettext("Overall"), :overall} | Categories.list() |> Enum.map(fn c -> {c.name, c.id} end)
+            {gettext("Overall"), :overall}
+            | Competitions.list_categories(@competition.id) |> Enum.map(fn c -> {c.name, c.id} end)
           ]}
           class="select select-bordered select-sm ml-2"
         />

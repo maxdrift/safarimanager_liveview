@@ -4,7 +4,6 @@ defmodule SMWeb.Live.Results do
   """
   use SMWeb, :surface_view
 
-  alias SM.Categories
   alias SM.Competitions
   alias SM.Results
   alias SM.Slides
