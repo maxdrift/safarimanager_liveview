@@ -1,11 +1,8 @@
 <div class="font-sans">
   <header class="relative mb-6">
-    <object
-      data={~p"/images/fipsas-logo.svg"}
-      width="96"
-      height="96"
-      class="absolute top-10 right-6 w-24"
-    />
+    <div class="absolute top-10 right-6 w-24">
+      <%= fipsas_logo() %>
+    </div>
     <h4 class="text-center text-md font-semibold uppercase">
       <%= @header_line %>
     </h4>
