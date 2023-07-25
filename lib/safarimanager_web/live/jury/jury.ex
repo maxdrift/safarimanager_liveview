@@ -7,7 +7,6 @@ defmodule SMWeb.Live.Jury do
   alias SM.Cache
   alias SM.Competitions
   alias SM.Slides
-
   alias SMWeb.Components.JuryToolbarButton
 
   require Logger

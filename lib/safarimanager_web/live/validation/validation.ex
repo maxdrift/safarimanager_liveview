@@ -12,6 +12,7 @@ defmodule SMWeb.Live.Validation do
   alias Surface.Components.Form
   alias Surface.Components.Form.HiddenInput
   alias Surface.Components.Form.Label
+  alias Surface.Components.Form.NumberInput
   alias Surface.Components.Form.Select
   alias Surface.Components.Form.TextInput
 
@@ -253,6 +254,25 @@ defmodule SMWeb.Live.Validation do
 
     {:noreply,
      assign(socket, slide_flags: Map.put(socket.assigns.slide_flags, :note, slide_flag))}
+  end
+
+  def handle_event("go-to-change", %{"go_to" => %{"go_to" => index}}, socket) do
+    case String.to_integer(index) do
+      new_index when new_index >= 1 and new_index <= socket.assigns.image_count ->
+        {:noreply, to_image_index(socket, new_index - 1)}
+
+      new_index when new_index <= 1 ->
+        {:noreply, to_first_image(socket)}
+
+      new_index when new_index >= socket.assigns.image_count ->
+        {:noreply, to_last_image(socket)}
+
+      _invalid_index ->
+        {:noreply, socket}
+    end
+  rescue
+    ArgumentError ->
+      {:noreply, socket}
   end
 
   def handle_event("evaluation-key", %{"key" => "ArrowLeft"}, socket) do

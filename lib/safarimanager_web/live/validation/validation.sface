@@ -110,6 +110,13 @@
               <path d="M19,13H6.75L12,18.25L11.34,19L4.84,12.5L11.34,6L12,6.75L6.75,12H19V13Z" />
             </svg>
           </JuryToolbarButton>
+          <Form for={%{}} as={:go_to} change="go-to-change" submit="go-to-submit">
+            <NumberInput
+              class="join-item input input-sm w-24 mx-0.5"
+              field={:go_to}
+              opts={placeholder: gettext("Go to..."), phx_debounce: "1000"}
+            />
+          </Form>
           <JuryToolbarButton class="btn btn-sm join-item" click="next-image" title={gettext("Next")}>
             <svg
               xmlns="http://www.w3.org/2000/svg"
