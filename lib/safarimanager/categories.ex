@@ -7,6 +7,20 @@ defmodule SM.Categories do
   alias SM.Categories.Category
 
   @doc """
+  Returns the list of camera types.
+
+  ## Examples
+
+  iex> list_camera_types()
+  [:any, :compact, :reflex]
+
+  """
+  @spec list_camera_types :: [:any | :compact | :reflex, ...]
+  def list_camera_types do
+    Category.get_camera_types()
+  end
+
+  @doc """
   Returns the list of categories.
 
   ## Examples

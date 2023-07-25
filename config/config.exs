@@ -50,6 +50,8 @@ config :safarimanager, SM.Subjects.Subject,
   types: [:fish, :macro, :fish_macro, :ambient],
   coefficients: [2, 4, 6]
 
+config :safarimanager, SM.Categories.Category, camera_types: [:any, :compact, :reflex]
+
 config :safarimanager, SM.Evaluations.Evaluation, types: [:numeric]
 
 config :safarimanager, SM.Competitions.Competition,

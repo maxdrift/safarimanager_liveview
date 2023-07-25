@@ -19,6 +19,9 @@
           <FieldsListItem label={gettext("Name")}>
             {@record.name}
           </FieldsListItem>
+          <FieldsListItem label={gettext("Camera type")}>
+            {camera_type_option_label(@record.camera_type)}
+          </FieldsListItem>
           <FieldsListItem label={gettext("Inserted")}>
             <DateTimeString value={@record.inserted_at} />
           </FieldsListItem>
@@ -52,6 +55,15 @@
           <SMField name={:name} label={gettext("Name")}>
             <TextInput class={input_state_class(@changeset, :name)} opts={phx_debounce: "1000"} />
           </SMField>
+          <SMField name={:camera_type} label={gettext("Camera type")}>
+            <Select
+              options={Enum.map(@camera_types, &{camera_type_option_label(&1), &1})}
+              selected={@record.camera_type}
+              prompt={gettext("Select a camera type...")}
+              class={input_state_class(@changeset, :camera_type)}
+              opts={phx_debounce: "1000"}
+            />
+          </SMField>
           <HiddenInput field={:_action} value={@action} />
         </div>
         <div class="modal-action">
@@ -79,6 +91,9 @@
     </Column>
     <Column title={gettext("Name")}>
       <span class="capitalize">{item.name}</span>
+    </Column>
+    <Column title={gettext("Camera type")}>
+      <span class="capitalize">{camera_type_option_label(item.camera_type)}</span>
     </Column>
     <Column title={gettext("Created")} class="w-2/12">
       <DateTimeString value={item.inserted_at} />

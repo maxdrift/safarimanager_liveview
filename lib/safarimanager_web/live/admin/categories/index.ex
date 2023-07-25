@@ -17,6 +17,7 @@ defmodule SMWeb.Live.Admin.Categories.Index do
   alias Surface.Components.Form
   alias Surface.Components.Form.HiddenInput
   alias Surface.Components.Form.Reset
+  alias Surface.Components.Form.Select
   alias Surface.Components.Form.Submit
   alias Surface.Components.Form.TextInput
   alias Surface.Components.LivePatch
@@ -35,7 +36,10 @@ defmodule SMWeb.Live.Admin.Categories.Index do
       socket
       |> load_entities()
       |> reset_current_editing()
-      |> assign(action: changeset_action)
+      |> assign(
+        action: changeset_action,
+        camera_types: Categories.list_camera_types()
+      )
 
     {:ok, socket}
   end
@@ -265,4 +269,8 @@ defmodule SMWeb.Live.Admin.Categories.Index do
     |> assign(:record, entity)
     |> assign(:changeset, changeset)
   end
+
+  defp camera_type_option_label(:any), do: gettext("Any")
+  defp camera_type_option_label(:compact), do: gettext("Compact")
+  defp camera_type_option_label(:reflex), do: gettext("Reflex")
 end

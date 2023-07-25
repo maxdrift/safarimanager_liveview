@@ -2519,3 +2519,31 @@ msgstr "Ingrandisci"
 #, elixir-autogen, elixir-format
 msgid "Zoom out"
 msgstr "Rimpicciolisci"
+
+#: lib/safarimanager_web/live/admin/categories/index.sface:22
+#: lib/safarimanager_web/live/admin/categories/index.sface:22
+#: lib/safarimanager_web/live/admin/categories/index.sface:58
+#: lib/safarimanager_web/live/admin/categories/index.sface:95
+#, elixir-autogen, elixir-format
+msgid "Camera type"
+msgstr "Tipo di fotocamera"
+
+#: lib/safarimanager_web/live/admin/categories/index.sface:62
+#, elixir-autogen, elixir-format
+msgid "Select a camera type..."
+msgstr "Seleziona un tipo di fotocamera..."
+
+#: lib/safarimanager_web/live/admin/categories/index.ex:273
+#, elixir-autogen, elixir-format
+msgid "Any"
+msgstr "Qualsiasi"
+
+#: lib/safarimanager_web/live/admin/categories/index.ex:274
+#, elixir-autogen, elixir-format
+msgid "Compact"
+msgstr "Compatta"
+
+#: lib/safarimanager_web/live/admin/categories/index.ex:275
+#, elixir-autogen, elixir-format
+msgid "Reflex"
+msgstr "Reflex"
