@@ -112,6 +112,32 @@ defmodule SM.Competitions do
   end
 
   @doc """
+  Returns the list of camera types in a competitions.
+
+  ## Examples
+
+      iex> list_camera_types()
+      [%Category{}, ...]
+
+  """
+  @spec list_camera_types(String.t()) :: [Category.t()]
+  def list_camera_types(competition_id) do
+    query =
+      from(
+        c in Competition,
+        where: [id: ^competition_id],
+        join: p in Participant,
+        on: p.competition_id == c.id,
+        join: cat in assoc(p, :category),
+        on: p.category_id == cat.id,
+        group_by: cat.camera_type,
+        select: cat.camera_type
+      )
+
+    Repo.all(query)
+  end
+
+  @doc """
   Gets a single Competition.
 
   ## Examples

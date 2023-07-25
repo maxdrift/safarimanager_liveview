@@ -5,9 +5,35 @@
   <CompetitionHeader {=@competition} />
   <StepsHeader current_step={6} competition_id={@competition.id} />
   <div class="mt-20 text-center">
-    <Link to={"/organize/#{@competition_id}/jury"} class="btn btn-xl btn-primary">
-      {gettext("Start Jury")}
-    </Link>
+    <div class="stats stats-vertical lg:stats-horizontal shadow">
+      {#for camera_type <- @camera_types}
+        <div class="stat">
+          <div class="stat-value text-2xl capitalize">{camera_type_label(camera_type)}</div>
+          <div class="stat-title">{@slides_count_by_camera_type[camera_type] |> elem(0)} {gettext("slides")}</div>
+          <div class="stat-desc">{@slides_count_by_camera_type[camera_type] |> elem(1)} {gettext("species")}</div>
+          <div class="stat-actions">
+            <Link
+              to={"/organize/#{@competition_id}/jury?camera_type=#{camera_type}"}
+              class="btn btn-xl btn-primary"
+            >
+              {gettext("Start Jury")}
+            </Link>
+          </div>
+        </div>
+      {#else}
+        gettext("Jury is not yet available")
+      {/for}
+      <div :if={@camera_types != []} class="stat">
+        <div class="stat-value text-2xl capitalize">{gettext("all")}</div>
+        <div class="stat-title">{@slides_count |> elem(0)} {gettext("slides")}</div>
+        <div class="stat-desc">{@slides_count |> elem(1)} {gettext("species")}</div>
+        <div class="stat-actions">
+          <Link to={"/organize/#{@competition_id}/jury"} class="btn btn-xl btn-primary">
+            {gettext("Start Jury")}
+          </Link>
+        </div>
+      </div>
+    </div>
   </div>
   <div class="flex flex-row my-10 w-full">
     <LiveRedirect to={"/organize/#{@competition_id}/validation_launcher"} class="flex-none btn gap-2">

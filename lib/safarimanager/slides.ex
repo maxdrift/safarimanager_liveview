@@ -200,12 +200,25 @@ defmodule SM.Slides do
       [%Slide{}, ...]
 
   """
-  @spec list_for_jury(String.t()) :: [Slide.t()]
-  def list_for_jury(competition_id) do
+  @spec list_for_jury(String.t(), atom()) :: [Slide.t()]
+  def list_for_jury(competition_id, camera_type \\ :all) do
+    conditions =
+      case camera_type do
+        "all" ->
+          dynamic([_sl, _su, p, cat], p.category_id == cat.id)
+
+        camera_type ->
+          dynamic([_sl, _su, p, cat], p.category_id == cat.id and cat.camera_type == ^camera_type)
+      end
+
     query =
       from(sl in Slide,
-        join: su in assoc(sl, :subject),
         where: [competition_id: ^competition_id, status: :submitted_jury],
+        join: su in assoc(sl, :subject),
+        join: p in Participant,
+        on: p.competition_id == ^competition_id and sl.user_id == p.user_id,
+        join: cat in assoc(p, :category),
+        on: ^conditions,
         group_by: [sl.id, sl.subject_id, su.numeric_id],
         order_by: [asc: su.numeric_id, asc: sl.id],
         preload: [:subject, :evaluations],
@@ -213,6 +226,34 @@ defmodule SM.Slides do
       )
 
     Repo.all(query)
+  end
+
+  @spec count_for_jury_by_camera_type(String.t()) :: [
+          {atom(), {non_neg_integer(), non_neg_integer()}}
+        ]
+  def count_for_jury_by_camera_type(competition_id) do
+    query =
+      from(sl in Slide,
+        where: [competition_id: ^competition_id, status: :submitted_jury],
+        join: p in Participant,
+        on: p.competition_id == ^competition_id and sl.user_id == p.user_id,
+        join: cat in assoc(p, :category),
+        group_by: [cat.camera_type],
+        select: {cat.camera_type, {count(sl.id), fragment("count(DISTINCT ?)", sl.subject_id)}}
+      )
+
+    Repo.all(query)
+  end
+
+  @spec count_for_jury(String.t()) :: {non_neg_integer(), non_neg_integer()}
+  def count_for_jury(competition_id) do
+    query =
+      from(sl in Slide,
+        where: [competition_id: ^competition_id, status: :submitted_jury],
+        select: {count(sl.id), fragment("count(DISTINCT ?)", sl.subject_id)}
+      )
+
+    Repo.one(query)
   end
 
   @spec list_for_validation(String.t()) :: [Slide.t()]

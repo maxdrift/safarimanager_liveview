@@ -270,7 +270,7 @@ defmodule SMWeb.Live.Admin.Categories.Index do
     |> assign(:changeset, changeset)
   end
 
-  defp camera_type_option_label(:any), do: gettext("Any")
-  defp camera_type_option_label(:compact), do: gettext("Compact")
-  defp camera_type_option_label(:reflex), do: gettext("Reflex")
+  defp camera_type_option_label(:any), do: gettext("any")
+  defp camera_type_option_label(:compact), do: gettext("compact")
+  defp camera_type_option_label(:reflex), do: gettext("reflex")
 end

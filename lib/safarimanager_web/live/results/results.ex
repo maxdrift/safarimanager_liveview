@@ -85,4 +85,5 @@ defmodule SMWeb.Live.Results do
 
   defp status_to_label(:submitted_fixed), do: gettext("Fixed points")
   defp status_to_label(:submitted_jury), do: gettext("Jury")
+  defp status_to_label(other), do: Gettext.gettext(SMWeb.Gettext, other)
 end

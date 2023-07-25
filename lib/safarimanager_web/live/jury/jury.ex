@@ -24,18 +24,27 @@ defmodule SMWeb.Live.Jury do
 
     socket =
       socket
-      |> assign(:curr_index, 0)
-      |> assign(:image_count, 0)
-      |> assign(:flash_eval, nil)
-      |> assign(:prizes, @evaluations.prizes)
-      |> assign(:curr_slide, nil)
-      |> assign(:evaluations, [])
+      |> assign(
+        camera_type: "all",
+        curr_index: 0,
+        image_count: 0,
+        flash_eval: nil,
+        prizes: @evaluations.prizes,
+        curr_slide: nil,
+        evaluations: []
+      )
 
     {:ok, socket}
   end
 
   @impl Phoenix.LiveView
-  def handle_params(%{"competition_id" => competition_id, "slide_id" => slide_id}, _url, socket) do
+  def handle_params(
+        %{"competition_id" => competition_id, "slide_id" => slide_id} = params,
+        _url,
+        socket
+      ) do
+    camera_type = Map.get(params, "camera_type", "all")
+
     socket =
       if Map.has_key?(socket.assigns, :competition) do
         socket
@@ -49,7 +58,7 @@ defmodule SMWeb.Live.Jury do
       if Map.has_key?(socket.assigns, :slides) do
         socket
       else
-        slides = Slides.list_for_jury(competition_id)
+        slides = Slides.list_for_jury(competition_id, camera_type)
 
         assign(socket, :slides, slides)
       end
@@ -62,19 +71,20 @@ defmodule SMWeb.Live.Jury do
 
     socket =
       socket
-      |> assign(:image_count, Enum.count(slides))
-      |> assign(:curr_index, current_index)
-      |> assign(:curr_slide, slide)
       |> assign(
-        :evaluations,
-        Enum.sort(socket.assigns.competition.allowed_evaluations, &(&1.value <= &2.value))
+        image_count: Enum.count(slides),
+        curr_index: current_index,
+        curr_slide: slide,
+        camera_type: camera_type,
+        evaluations:
+          Enum.sort(socket.assigns.competition.allowed_evaluations, &(&1.value <= &2.value))
       )
       |> assign(:jurors, socket.assigns.competition.jurors)
       # Note: remember events pushed from the server via push_event are global
       # and will be dispatched to all active hooks on the client who are handling that event.
       |> push_event("new-image", %{options: %{image_url: file_path}})
 
-    Cache.put("#{competition_id}_current_jury_slide_id", slide_id)
+    Cache.put("#{competition_id}_#{camera_type}_current_jury_slide_id", slide_id)
 
     # schedule_next_image(5)
 
@@ -84,17 +94,21 @@ defmodule SMWeb.Live.Jury do
   @doc """
   Entry point
   """
-  def handle_params(%{"competition_id" => competition_id}, _url, socket) do
+  def handle_params(%{"competition_id" => competition_id} = params, _url, socket) do
+    camera_type = Map.get(params, "camera_type", "all")
     {:ok, competition} = Competitions.get(competition_id)
-    slides = Slides.list_for_jury(competition_id)
+    slides = Slides.list_for_jury(competition_id, camera_type)
 
     socket =
       socket
-      |> assign(:competition, competition)
-      |> assign(:slides, slides)
+      |> assign(
+        competition: competition,
+        slides: slides,
+        camera_type: camera_type
+      )
 
     next_slide_id =
-      case Cache.get("#{competition_id}_current_jury_slide_id") do
+      case Cache.get("#{competition_id}_#{camera_type}_current_jury_slide_id") do
         nil ->
           slides
           |> Enum.at(0, %{})
@@ -106,7 +120,9 @@ defmodule SMWeb.Live.Jury do
 
     socket =
       if next_slide_id do
-        push_patch(socket, to: "#{full_path(socket)}?slide_id=#{next_slide_id}")
+        push_patch(socket,
+          to: "#{full_path(socket)}?camera_type=#{camera_type}&slide_id=#{next_slide_id}"
+        )
       else
         assign(socket, :curr_slide, nil)
       end
@@ -213,7 +229,7 @@ defmodule SMWeb.Live.Jury do
   def handle_info({Slides, [:slide, _action], _result}, socket) do
     curr_slide_id = socket.assigns.curr_slide.id
     {:ok, updated_slide} = Slides.get(curr_slide_id)
-    slides = Slides.list_for_jury(socket.assigns.competition.id)
+    slides = Slides.list_for_jury(socket.assigns.competition.id, socket.assigns.camera_type)
 
     socket =
       socket
@@ -340,7 +356,10 @@ defmodule SMWeb.Live.Jury do
 
     socket
     |> assign(:curr_index, index)
-    |> push_patch(to: "#{full_path(socket)}?slide_id=#{next_slide.id}")
+    |> push_patch(
+      to:
+        "#{full_path(socket)}?camera_type=#{socket.assigns.camera_type}&slide_id=#{next_slide.id}"
+    )
   end
 
   defp full_path(socket) do
