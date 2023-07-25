@@ -5,11 +5,6 @@
     <div class="mb-4">
       <Link
         class="btn btn-outline btn-sm"
-        to={~p"/#{@competition.id}/results_printout"}
-        opts={target: "_blank"}
-      >{gettext("Print overall classification")}</Link>
-      <Link
-        class="btn btn-outline btn-sm"
         to={~p"/#{@competition.id}/slides_printout"}
         opts={target: "_blank"}
       >{gettext("Print participants slides report")}</Link>
@@ -120,23 +115,32 @@
     </div>
   </div>
   <div class="overflow-y-auto mt-6">
-    <div class="text-2xl font-bold text-center my-4">
-      <Form
-        for={%{}}
-        as={:results_type_change}
-        change="results-type-change"
-        submit="results-type-submit"
-      >
-        <span>{gettext("Results")}</span>
-        <Select
-          field={:results_type}
-          options={[
-            {gettext("Overall"), :overall}
-            | Competitions.list_categories(@competition.id) |> Enum.map(fn c -> {c.name, c.id} end)
-          ]}
-          class="select select-bordered select-sm ml-2"
-        />
-      </Form>
+    <div class="flex flex-row w-full my-4 mx-auto">
+      <div class="grow" />
+      <div class="flex-none text-2xl font-bold text-center">
+        <Form
+          for={%{}}
+          as={:results_type_change}
+          change="results-type-change"
+          submit="results-type-submit"
+        >
+          <span>{gettext("Results")}</span>
+          <Select
+            field={:results_type}
+            options={[
+              {gettext("Overall"), :overall}
+              | Competitions.list_categories(@competition.id) |> Enum.map(fn c -> {c.name, c.id} end)
+            ]}
+            class="select select-bordered select-sm ml-2"
+          />
+        </Form>
+      </div>
+      <div class="grow" />
+      <Link
+        class="flex-none btn btn-outline btn-sm mt-0.5"
+        to={"/#{@competition.id}/results_printout#{(@category_id && "?category_id=#{@category_id}") || ""}"}
+        opts={target: "_blank"}
+      >{gettext("Print")}</Link>
     </div>
     <table class="table table-sm table-fixed w-full">
       <thead>

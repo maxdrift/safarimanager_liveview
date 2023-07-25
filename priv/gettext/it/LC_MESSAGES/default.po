@@ -98,8 +98,8 @@ msgstr "Arresta"
 
 #: lib/safarimanager_web/components/sidebar.ex:65
 #: lib/safarimanager_web/live/admin/import.ex:51
-#: lib/safarimanager_web/live/results/results.sface:75
-#: lib/safarimanager_web/live/results/results.sface:86
+#: lib/safarimanager_web/live/results/results.sface:70
+#: lib/safarimanager_web/live/results/results.sface:81
 #, elixir-autogen, elixir-format
 msgid "Subjects"
 msgstr "Soggetti"
@@ -160,8 +160,8 @@ msgstr "Giurati"
 #: lib/safarimanager_web/controllers/selection_printout_html/show_multi.html.heex:41
 #: lib/safarimanager_web/controllers/selection_printout_html/show_single.html.heex:40
 #: lib/safarimanager_web/controllers/slides_printout_html/show.html.heex:41
-#: lib/safarimanager_web/live/results/results.ex:87
-#: lib/safarimanager_web/live/results/results.sface:246
+#: lib/safarimanager_web/live/results/results.ex:84
+#: lib/safarimanager_web/live/results/results.sface:250
 #: lib/safarimanager_web/live/slides/slide_selection.ex:300
 #: lib/safarimanager_web/live/validation/validation.ex:408
 #: lib/safarimanager_web/live/validation/validation_launcher.ex:194
@@ -173,7 +173,7 @@ msgstr "Giuria"
 
 #: lib/safarimanager_web/components/steps_header.ex:29
 #: lib/safarimanager_web/live/jury/jury_launcher.sface:54
-#: lib/safarimanager_web/live/results/results.sface:130
+#: lib/safarimanager_web/live/results/results.sface:127
 #, elixir-autogen, elixir-format
 msgid "Results"
 msgstr "Classifica"
@@ -538,6 +538,7 @@ msgid "to your account now."
 msgstr "al tuo account ora."
 
 #: lib/safarimanager_web/live/participants/participants.sface:75
+#: lib/safarimanager_web/live/results/results.sface:143
 #, elixir-autogen, elixir-format
 msgid "Print"
 msgstr "Stampa"
@@ -594,7 +595,7 @@ msgstr "Chiudi"
 #: lib/safarimanager_web/controllers/selection_printout_html/show_single.html.heex:39
 #: lib/safarimanager_web/controllers/slides_printout_html/show.html.heex:38
 #: lib/safarimanager_web/live/admin/subjects/index.sface:118
-#: lib/safarimanager_web/live/results/results.sface:176
+#: lib/safarimanager_web/live/results/results.sface:180
 #, elixir-autogen, elixir-format
 msgid "Coeff."
 msgstr "Coeff."
@@ -602,7 +603,7 @@ msgstr "Coeff."
 #: lib/safarimanager_web/live/admin/subjects/index.sface:25
 #: lib/safarimanager_web/live/admin/subjects/index.sface:25
 #: lib/safarimanager_web/live/admin/subjects/index.sface:70
-#: lib/safarimanager_web/live/results/results.sface:94
+#: lib/safarimanager_web/live/results/results.sface:89
 #, elixir-autogen, elixir-format
 msgid "Coefficient"
 msgstr "Coefficiente"
@@ -714,8 +715,8 @@ msgstr "Modificato"
 #: lib/safarimanager_web/live/admin/subjects/index.sface:64
 #: lib/safarimanager_web/live/admin/subjects/index.sface:114
 #: lib/safarimanager_web/live/new_competition/new_competition.sface:8
-#: lib/safarimanager_web/live/results/results.sface:91
-#: lib/safarimanager_web/live/results/results.sface:145
+#: lib/safarimanager_web/live/results/results.sface:86
+#: lib/safarimanager_web/live/results/results.sface:149
 #: lib/safarimanager_web/live/slides/slides.sface:97
 #, elixir-autogen, elixir-format
 msgid "Name"
@@ -1113,7 +1114,7 @@ msgid "Competition deleted successfully"
 msgstr "Competizione eliminata con successo"
 
 #: lib/safarimanager_web/live/admin/competitions/index.sface:12
-#: lib/safarimanager_web/live/results/results.sface:43
+#: lib/safarimanager_web/live/results/results.sface:38
 #, elixir-autogen, elixir-format
 msgid "Competition details"
 msgstr "Dettagli competizione"
@@ -1225,9 +1226,9 @@ msgstr "Max slide presentate"
 #: lib/safarimanager_web/live/participants/participants.sface:32
 #: lib/safarimanager_web/live/participants/participants.sface:101
 #: lib/safarimanager_web/live/participants/participants.sface:102
-#: lib/safarimanager_web/live/results/results.sface:104
-#: lib/safarimanager_web/live/results/results.sface:159
-#: lib/safarimanager_web/live/results/results.sface:160
+#: lib/safarimanager_web/live/results/results.sface:99
+#: lib/safarimanager_web/live/results/results.sface:163
+#: lib/safarimanager_web/live/results/results.sface:164
 #: lib/safarimanager_web/live/slides/slide_selection.sface:44
 #: lib/safarimanager_web/live/slides/slide_selection.sface:45
 #: lib/safarimanager_web/live/slides/slide_selection.sface:195
@@ -1272,7 +1273,7 @@ msgstr "Numero di giurati"
 #: lib/safarimanager_web/live/jurors/jurors.sface:56
 #: lib/safarimanager_web/live/participants/participants.sface:21
 #: lib/safarimanager_web/live/participants/participants.sface:90
-#: lib/safarimanager_web/live/results/results.sface:146
+#: lib/safarimanager_web/live/results/results.sface:150
 #: lib/safarimanager_web/live/slides/slide_selection.sface:32
 #: lib/safarimanager_web/live/slides/slides.sface:26
 #, elixir-autogen, elixir-format
@@ -1494,7 +1495,7 @@ msgstr "Tutti gli utenti sono stati eliminati con successo"
 #: lib/safarimanager_web/live/admin/users/index.sface:196
 #: lib/safarimanager_web/live/participants/participants.sface:22
 #: lib/safarimanager_web/live/participants/participants.sface:91
-#: lib/safarimanager_web/live/results/results.sface:147
+#: lib/safarimanager_web/live/results/results.sface:151
 #: lib/safarimanager_web/live/slides/slide_selection.sface:33
 #: lib/safarimanager_web/live/slides/slides.sface:27
 #, elixir-autogen, elixir-format
@@ -1615,7 +1616,7 @@ msgstr "Unisci"
 #: lib/safarimanager_web/controllers/selection_printout_html/show_single.html.heex:35
 #: lib/safarimanager_web/live/admin/participants/index.sface:111
 #: lib/safarimanager_web/live/participants/participants.sface:87
-#: lib/safarimanager_web/live/results/results.sface:90
+#: lib/safarimanager_web/live/results/results.sface:85
 #: lib/safarimanager_web/live/slides/slide_selection.sface:29
 #: lib/safarimanager_web/live/slides/slides.sface:23
 #, elixir-autogen, elixir-format
@@ -1723,8 +1724,7 @@ msgstr "Cognome e nome"
 msgid "Organizing organization"
 msgstr "Società organizzatrice"
 
-#: lib/safarimanager_web/controllers/results_printout_controller.ex:28
-#: lib/safarimanager_web/controllers/results_printout_html/show.html.heex:31
+#: lib/safarimanager_web/controllers/results_printout_controller.ex:20
 #, elixir-autogen, elixir-format
 msgid "Overall classification"
 msgstr "Classifica generale"
@@ -1740,13 +1740,13 @@ msgid "Pubblication time"
 msgstr "Ora di esposizione"
 
 #: lib/safarimanager_web/controllers/results_printout_html/show.html.heex:37
-#: lib/safarimanager_web/live/results/results.sface:144
+#: lib/safarimanager_web/live/results/results.sface:148
 #, elixir-autogen, elixir-format
 msgid "Rank"
 msgstr "Pos."
 
 #: lib/safarimanager_web/controllers/results_printout_html/show.html.heex:42
-#: lib/safarimanager_web/live/results/results.sface:149
+#: lib/safarimanager_web/live/results/results.sface:153
 #, elixir-autogen, elixir-format
 msgid "Species"
 msgstr "Specie"
@@ -1760,7 +1760,7 @@ msgstr "Lista partecipanti"
 #: lib/safarimanager_web/controllers/selection_printout_html/show_multi.html.heex:37
 #: lib/safarimanager_web/controllers/selection_printout_html/show_single.html.heex:36
 #: lib/safarimanager_web/controllers/slides_printout_html/show.html.heex:35
-#: lib/safarimanager_web/live/results/results.sface:173
+#: lib/safarimanager_web/live/results/results.sface:177
 #: lib/safarimanager_web/live/slides/slide_selection.sface:176
 #: lib/safarimanager_web/live/slides/slide_selection.sface:252
 #: lib/safarimanager_web/live/slides/slide_selection.sface:328
@@ -1771,24 +1771,19 @@ msgid "File name"
 msgstr "Nome file"
 
 #: lib/safarimanager_web/controllers/slides_printout_html/show.html.heex:40
-#: lib/safarimanager_web/live/results/results.sface:178
+#: lib/safarimanager_web/live/results/results.sface:182
 #, elixir-autogen, elixir-format
 msgid "Pen."
 msgstr "Pen."
 
 #: lib/safarimanager_web/live/results/results.sface:10
 #, elixir-autogen, elixir-format
-msgid "Print overall classification"
-msgstr "Stampa la classifica generale"
-
-#: lib/safarimanager_web/live/results/results.sface:15
-#, elixir-autogen, elixir-format
 msgid "Print participants slides report"
 msgstr "Stampa le schede concorrente"
 
 #: lib/safarimanager_web/controllers/slides_printout_html/show.html.heex:42
-#: lib/safarimanager_web/live/results/results.sface:148
-#: lib/safarimanager_web/live/results/results.sface:180
+#: lib/safarimanager_web/live/results/results.sface:152
+#: lib/safarimanager_web/live/results/results.sface:184
 #, elixir-autogen, elixir-format
 msgid "Score"
 msgstr "Punti"
@@ -1808,7 +1803,7 @@ msgid "Sub. name"
 msgstr "Nome specie"
 
 #: lib/safarimanager_web/controllers/slides_printout_html/show.html.heex:39
-#: lib/safarimanager_web/live/results/results.sface:177
+#: lib/safarimanager_web/live/results/results.sface:181
 #, elixir-autogen, elixir-format
 msgid "Votes"
 msgstr "Voti"
@@ -1905,7 +1900,7 @@ msgstr "Soggetto errato"
 msgid "of"
 msgstr "di"
 
-#: lib/safarimanager_web/live/results/results.ex:86
+#: lib/safarimanager_web/live/results/results.ex:83
 #: lib/safarimanager_web/live/slides/slide_selection.ex:299
 #: lib/safarimanager_web/live/slides/slide_selection.sface:219
 #: lib/safarimanager_web/live/validation/validation.ex:407
@@ -1952,7 +1947,7 @@ msgstr "# partecipante"
 msgid "Start Validation"
 msgstr "Avvia convalida"
 
-#: lib/safarimanager_web/live/results/results.sface:179
+#: lib/safarimanager_web/live/results/results.sface:183
 #: lib/safarimanager_web/live/slides/slide_selection.sface:116
 #: lib/safarimanager_web/live/validation/validation_launcher.sface:66
 #: lib/safarimanager_web/live/validation/validation_launcher.sface:170
@@ -2261,67 +2256,67 @@ msgstr "Avvia giuria"
 msgid "Unexpected error while saving evaluation"
 msgstr "Errore inaspettato nell'applicare la valutazione"
 
-#: lib/safarimanager_web/live/results/results.sface:92
+#: lib/safarimanager_web/live/results/results.sface:87
 #, elixir-autogen, elixir-format
 msgid "Count"
 msgstr "Conteggio"
 
-#: lib/safarimanager_web/live/results/results.sface:93
+#: lib/safarimanager_web/live/results/results.sface:88
 #, elixir-autogen, elixir-format
 msgid "Distribution"
 msgstr "Distribuzione"
 
-#: lib/safarimanager_web/live/results/results.sface:229
+#: lib/safarimanager_web/live/results/results.sface:233
 #, elixir-autogen, elixir-format
 msgid "No results available yet"
 msgstr "Classifica non ancora disponibile"
 
-#: lib/safarimanager_web/live/results/results.sface:55
+#: lib/safarimanager_web/live/results/results.sface:50
 #, elixir-autogen, elixir-format
 msgid "Num. of jurors"
 msgstr "Num. di giurati"
 
-#: lib/safarimanager_web/live/results/results.sface:51
+#: lib/safarimanager_web/live/results/results.sface:46
 #, elixir-autogen, elixir-format
 msgid "Num. of participants"
 msgstr "Num di partecipanti"
 
-#: lib/safarimanager_web/live/results/results.sface:71
+#: lib/safarimanager_web/live/results/results.sface:66
 #, elixir-autogen, elixir-format
 msgid "Penalties"
 msgstr "Penalizzazioni"
 
-#: lib/safarimanager_web/live/results/results.sface:164
+#: lib/safarimanager_web/live/results/results.sface:168
 #, elixir-autogen, elixir-format
 msgid "Show details"
 msgstr "Mostra dettagli"
 
-#: lib/safarimanager_web/live/results/results.sface:59
+#: lib/safarimanager_web/live/results/results.sface:54
 #, elixir-autogen, elixir-format
 msgid "Slides for jury"
 msgstr "Slide in giuria"
 
-#: lib/safarimanager_web/live/results/results.sface:63
+#: lib/safarimanager_web/live/results/results.sface:58
 #, elixir-autogen, elixir-format
 msgid "Slides with fixed points"
 msgstr "Slide a punteggio fisso"
 
-#: lib/safarimanager_web/live/results/results.sface:48
+#: lib/safarimanager_web/live/results/results.sface:43
 #, elixir-autogen, elixir-format
 msgid "Stats"
 msgstr "Statistiche"
 
-#: lib/safarimanager_web/live/results/results.sface:174
+#: lib/safarimanager_web/live/results/results.sface:178
 #, elixir-autogen, elixir-format
 msgid "Subject #"
 msgstr "# soggetto"
 
-#: lib/safarimanager_web/live/results/results.sface:175
+#: lib/safarimanager_web/live/results/results.sface:179
 #, elixir-autogen, elixir-format
 msgid "Subject name"
 msgstr "Nome soggetto"
 
-#: lib/safarimanager_web/live/results/results.sface:67
+#: lib/safarimanager_web/live/results/results.sface:62
 #, elixir-autogen, elixir-format
 msgid "Total slides"
 msgstr "Totale slide"
@@ -2488,7 +2483,7 @@ msgstr "Schermo intero"
 msgid "Last"
 msgstr "Ultima"
 
-#: lib/safarimanager_web/live/results/results.sface:134
+#: lib/safarimanager_web/live/results/results.sface:131
 #, elixir-autogen, elixir-format
 msgid "Overall"
 msgstr "Generale"
@@ -2564,3 +2559,8 @@ msgstr "specie"
 #, elixir-autogen, elixir-format
 msgid "all"
 msgstr "tutte"
+
+#: lib/safarimanager_web/controllers/results_printout_controller.ex:24
+#, elixir-autogen, elixir-format
+msgid "classification"
+msgstr "classifica"

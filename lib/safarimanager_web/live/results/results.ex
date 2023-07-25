@@ -35,11 +35,11 @@ defmodule SMWeb.Live.Results do
       case type do
         "overall" ->
           {:ok, results} = Results.list(competition_id)
-          assign(socket, :results, results)
+          assign(socket, results: results, category_id: nil)
 
         category_id ->
           {:ok, results} = Results.list(competition_id, category_id)
-          assign(socket, :results, results)
+          assign(socket, results: results, category_id: category_id)
       end
 
     {:noreply, socket}
@@ -61,26 +61,23 @@ defmodule SMWeb.Live.Results do
 
     socket =
       socket
-      |> assign(:competition_id, competition_id)
-      |> assign(:competition, competition)
-      |> assign(:results, results)
-      |> assign(:subjects, subjects)
-      |> assign(:subjects_count, subjects_count)
-      |> assign(:slides_count, slides_count)
-      |> assign(:penalties_count, Slides.count_penalties(competition_id))
+      |> assign(
+        competition_id: competition_id,
+        category_id: nil,
+        competition: competition,
+        results: results,
+        subjects: subjects,
+        subjects_count: subjects_count,
+        slides_count: slides_count,
+        penalties_count: Slides.count_penalties(competition_id)
+      )
 
     {:noreply, socket}
   end
 
   @impl Phoenix.LiveView
   def handle_info({Slides, [:slide, _action], _result}, socket) do
-    {:ok, results} = Results.list(socket.assigns.competition_id)
-
-    socket =
-      socket
-      |> assign(:results, results)
-
-    {:noreply, socket}
+    {:noreply, push_navigate(socket, to: ~p"/organize/#{socket.assigns.competition_id}/results")}
   end
 
   defp status_to_label(:submitted_fixed), do: gettext("Fixed points")
