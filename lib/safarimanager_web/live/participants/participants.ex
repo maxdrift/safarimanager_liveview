@@ -16,6 +16,8 @@ defmodule SMWeb.Live.Participants do
   alias SMWeb.Components.StepsHeader
   alias SMWeb.Live.Admin.Users.Form, as: UsersForm
   alias Surface.Components.Form
+  alias Surface.Components.Form.HiddenInput
+  alias Surface.Components.Form.Select
   alias Surface.Components.Form.TextInput
   alias Surface.Components.Link
   alias Surface.Components.LiveRedirect
@@ -28,11 +30,13 @@ defmodule SMWeb.Live.Participants do
   def mount(_params, _session, socket) do
     socket =
       socket
-      |> assign(:organizations, Organizations.list())
-      |> assign(:categories, Categories.list())
-      |> assign(:participants, [])
-      |> assign(:entity, %User{})
-      |> assign(:changeset, Accounts.change_for_competition_registration(%User{}))
+      |> assign(
+        organizations: Organizations.list(),
+        categories: Categories.list(),
+        participants: [],
+        entity: %User{},
+        changeset: Accounts.change_for_competition_registration(%User{})
+      )
 
     {:ok, socket}
   end
@@ -118,6 +122,31 @@ defmodule SMWeb.Live.Participants do
   def handle_event("filter-participants", %{"value" => value}, socket) do
     participants = Participants.filter_by_name(socket.assigns.competition_id, value)
     {:noreply, assign(socket, :participants, participants)}
+  end
+
+  def handle_event(
+        "category-change",
+        %{"category" => %{"category_id" => new_category_id, "user_id" => user_id}},
+        socket
+      ) do
+    {:ok, participant} = Participants.get(user_id, socket.assigns.competition_id)
+
+    participant
+    |> Participants.update(%{"category_id" => new_category_id})
+    |> case do
+      {:ok, _participant} ->
+        socket = put_flash(socket, :info, gettext("Category was changed successfully"))
+        {:noreply, socket}
+
+      {:error, reason} ->
+        Logger.error(
+          "Error changing participant (user ID: #{user_id}) category during enrollment: #{inspect(reason)}"
+        )
+
+        socket = put_flash(socket, :error, gettext("Unable to change Category"))
+
+        {:noreply, socket}
+    end
   end
 
   @impl Phoenix.LiveView

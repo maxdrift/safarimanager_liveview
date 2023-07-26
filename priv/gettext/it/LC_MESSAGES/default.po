@@ -150,20 +150,20 @@ msgstr "Opzioni utente"
 #: lib/safarimanager_web/components/steps_header.ex:18
 #: lib/safarimanager_web/live/admin/import.ex:47
 #: lib/safarimanager_web/live/jurors/jurors.sface:49
-#: lib/safarimanager_web/live/participants/participants.sface:139
+#: lib/safarimanager_web/live/participants/participants.sface:155
 #: lib/safarimanager_web/live/slides/slides.sface:211
 #, elixir-autogen, elixir-format
 msgid "Jurors"
 msgstr "Giurati"
 
 #: lib/safarimanager_web/components/steps_header.ex:28
-#: lib/safarimanager_web/controllers/selection_printout_html/show_multi.html.heex:41
-#: lib/safarimanager_web/controllers/selection_printout_html/show_single.html.heex:40
-#: lib/safarimanager_web/controllers/slides_printout_html/show.html.heex:41
+#: lib/safarimanager_web/controllers/selection_printout_html/show_multi.html.heex:38
+#: lib/safarimanager_web/controllers/selection_printout_html/show_single.html.heex:37
+#: lib/safarimanager_web/controllers/slides_printout_html/show.html.heex:38
 #: lib/safarimanager_web/live/results/results.ex:84
 #: lib/safarimanager_web/live/results/results.sface:250
 #: lib/safarimanager_web/live/slides/slide_selection.ex:300
-#: lib/safarimanager_web/live/validation/validation.ex:408
+#: lib/safarimanager_web/live/validation/validation.ex:428
 #: lib/safarimanager_web/live/validation/validation_launcher.ex:194
 #: lib/safarimanager_web/live/validation/validation_launcher.sface:23
 #: lib/safarimanager_web/live/validation/validation_launcher.sface:260
@@ -591,9 +591,9 @@ msgstr "Sei sicuro di voler eliminare questo record?"
 msgid "Close"
 msgstr "Chiudi"
 
-#: lib/safarimanager_web/controllers/selection_printout_html/show_multi.html.heex:40
-#: lib/safarimanager_web/controllers/selection_printout_html/show_single.html.heex:39
-#: lib/safarimanager_web/controllers/slides_printout_html/show.html.heex:38
+#: lib/safarimanager_web/controllers/selection_printout_html/show_multi.html.heex:37
+#: lib/safarimanager_web/controllers/selection_printout_html/show_single.html.heex:36
+#: lib/safarimanager_web/controllers/slides_printout_html/show.html.heex:35
 #: lib/safarimanager_web/live/admin/subjects/index.sface:118
 #: lib/safarimanager_web/live/results/results.sface:180
 #, elixir-autogen, elixir-format
@@ -694,7 +694,7 @@ msgstr "Unisci"
 msgid "Modified"
 msgstr "Modificato"
 
-#: lib/safarimanager_web/controllers/participants_printout_html/show.html.heex:38
+#: lib/safarimanager_web/controllers/participants_printout_html/show.html.heex:35
 #: lib/safarimanager_web/live/admin/categories/index.sface:19
 #: lib/safarimanager_web/live/admin/categories/index.sface:19
 #: lib/safarimanager_web/live/admin/categories/index.sface:55
@@ -722,7 +722,7 @@ msgstr "Modificato"
 msgid "Name"
 msgstr "Nome"
 
-#: lib/safarimanager_web/controllers/participants_printout_html/show.html.heex:37
+#: lib/safarimanager_web/controllers/participants_printout_html/show.html.heex:34
 #: lib/safarimanager_web/live/admin/subjects/index.sface:111
 #, elixir-autogen, elixir-format
 msgid "Num."
@@ -769,8 +769,8 @@ msgstr "Seleziona un coefficiente"
 msgid "Show"
 msgstr "Mostra"
 
-#: lib/safarimanager_web/controllers/participants_printout_html/show.html.heex:27
-#: lib/safarimanager_web/controllers/results_printout_html/show.html.heex:27
+#: lib/safarimanager_web/controllers/participants_printout_html/show.html.heex:24
+#: lib/safarimanager_web/controllers/results_printout_html/show.html.heex:24
 #: lib/safarimanager_web/live/admin/competitions/form.sface:37
 #: lib/safarimanager_web/live/admin/competitions/index.sface:27
 #: lib/safarimanager_web/live/admin/competitions/index.sface:27
@@ -1008,9 +1008,9 @@ msgstr "Modifica società"
 msgid "Edited organization"
 msgstr "Società modificata"
 
-#: lib/safarimanager_web/controllers/participants_printout_html/show.html.heex:24
-#: lib/safarimanager_web/controllers/results_printout_html/show.html.heex:24
-#: lib/safarimanager_web/controllers/slides_printout_html/show.html.heex:24
+#: lib/safarimanager_web/controllers/participants_printout_html/show.html.heex:21
+#: lib/safarimanager_web/controllers/results_printout_html/show.html.heex:21
+#: lib/safarimanager_web/controllers/slides_printout_html/show.html.heex:21
 #: lib/safarimanager_web/live/admin/competitions/index.sface:297
 #: lib/safarimanager_web/live/admin/organizations/index.sface:22
 #: lib/safarimanager_web/live/admin/organizations/index.sface:22
@@ -1193,21 +1193,21 @@ msgid "Max submitted slides"
 msgstr "Max slide presentate"
 
 #: lib/safarimanager_web/components/datetime_string.ex:17
+#: lib/safarimanager_web/controllers/participants_printout_html/show.html.heex:21
 #: lib/safarimanager_web/controllers/participants_printout_html/show.html.heex:24
-#: lib/safarimanager_web/controllers/participants_printout_html/show.html.heex:27
-#: lib/safarimanager_web/controllers/participants_printout_html/show.html.heex:52
-#: lib/safarimanager_web/controllers/participants_printout_html/show.html.heex:56
+#: lib/safarimanager_web/controllers/participants_printout_html/show.html.heex:49
+#: lib/safarimanager_web/controllers/participants_printout_html/show.html.heex:53
+#: lib/safarimanager_web/controllers/results_printout_html/show.html.heex:21
 #: lib/safarimanager_web/controllers/results_printout_html/show.html.heex:24
-#: lib/safarimanager_web/controllers/results_printout_html/show.html.heex:27
-#: lib/safarimanager_web/controllers/results_printout_html/show.html.heex:53
-#: lib/safarimanager_web/controllers/results_printout_html/show.html.heex:57
-#: lib/safarimanager_web/controllers/selection_printout_html/show_multi.html.heex:26
-#: lib/safarimanager_web/controllers/selection_printout_html/show_multi.html.heex:30
-#: lib/safarimanager_web/controllers/selection_printout_html/show_single.html.heex:25
-#: lib/safarimanager_web/controllers/selection_printout_html/show_single.html.heex:29
-#: lib/safarimanager_web/controllers/slides_printout_html/show.html.heex:21
-#: lib/safarimanager_web/controllers/slides_printout_html/show.html.heex:25
-#: lib/safarimanager_web/controllers/slides_printout_html/show.html.heex:29
+#: lib/safarimanager_web/controllers/results_printout_html/show.html.heex:50
+#: lib/safarimanager_web/controllers/results_printout_html/show.html.heex:54
+#: lib/safarimanager_web/controllers/selection_printout_html/show_multi.html.heex:23
+#: lib/safarimanager_web/controllers/selection_printout_html/show_multi.html.heex:27
+#: lib/safarimanager_web/controllers/selection_printout_html/show_single.html.heex:22
+#: lib/safarimanager_web/controllers/selection_printout_html/show_single.html.heex:26
+#: lib/safarimanager_web/controllers/slides_printout_html/show.html.heex:18
+#: lib/safarimanager_web/controllers/slides_printout_html/show.html.heex:22
+#: lib/safarimanager_web/controllers/slides_printout_html/show.html.heex:26
 #: lib/safarimanager_web/live/admin/competitions/index.sface:24
 #: lib/safarimanager_web/live/admin/competitions/index.sface:61
 #: lib/safarimanager_web/live/admin/competitions/index.sface:85
@@ -1225,7 +1225,6 @@ msgstr "Max slide presentate"
 #: lib/safarimanager_web/live/participants/participants.sface:31
 #: lib/safarimanager_web/live/participants/participants.sface:32
 #: lib/safarimanager_web/live/participants/participants.sface:101
-#: lib/safarimanager_web/live/participants/participants.sface:102
 #: lib/safarimanager_web/live/results/results.sface:99
 #: lib/safarimanager_web/live/results/results.sface:163
 #: lib/safarimanager_web/live/results/results.sface:164
@@ -1257,11 +1256,11 @@ msgstr "Nuova competizione"
 msgid "Number of jurors"
 msgstr "Numero di giurati"
 
-#: lib/safarimanager_web/controllers/participants_printout_html/show.html.heex:39
-#: lib/safarimanager_web/controllers/results_printout_html/show.html.heex:39
-#: lib/safarimanager_web/controllers/selection_printout_html/show_multi.html.heex:24
-#: lib/safarimanager_web/controllers/selection_printout_html/show_single.html.heex:23
-#: lib/safarimanager_web/controllers/slides_printout_html/show.html.heex:20
+#: lib/safarimanager_web/controllers/participants_printout_html/show.html.heex:36
+#: lib/safarimanager_web/controllers/results_printout_html/show.html.heex:36
+#: lib/safarimanager_web/controllers/selection_printout_html/show_multi.html.heex:21
+#: lib/safarimanager_web/controllers/selection_printout_html/show_single.html.heex:20
+#: lib/safarimanager_web/controllers/slides_printout_html/show.html.heex:17
 #: lib/safarimanager_web/live/admin/competitions/form.sface:23
 #: lib/safarimanager_web/live/admin/competitions/index.sface:123
 #: lib/safarimanager_web/live/admin/users/form.sface:47
@@ -1479,11 +1478,11 @@ msgstr "Impossibile recuperare questa valutazione"
 msgid "All users deleted successfully"
 msgstr "Tutti gli utenti sono stati eliminati con successo"
 
-#: lib/safarimanager_web/controllers/participants_printout_html/show.html.heex:40
-#: lib/safarimanager_web/controllers/results_printout_html/show.html.heex:40
-#: lib/safarimanager_web/controllers/selection_printout_html/show_multi.html.heex:29
-#: lib/safarimanager_web/controllers/selection_printout_html/show_single.html.heex:28
-#: lib/safarimanager_web/controllers/slides_printout_html/show.html.heex:28
+#: lib/safarimanager_web/controllers/participants_printout_html/show.html.heex:37
+#: lib/safarimanager_web/controllers/results_printout_html/show.html.heex:37
+#: lib/safarimanager_web/controllers/selection_printout_html/show_multi.html.heex:26
+#: lib/safarimanager_web/controllers/selection_printout_html/show_single.html.heex:25
+#: lib/safarimanager_web/controllers/slides_printout_html/show.html.heex:25
 #: lib/safarimanager_web/live/admin/participants/index.sface:25
 #: lib/safarimanager_web/live/admin/participants/index.sface:25
 #: lib/safarimanager_web/live/admin/participants/index.sface:79
@@ -1612,8 +1611,8 @@ msgstr "Unisci utenti"
 msgid "Merge"
 msgstr "Unisci"
 
-#: lib/safarimanager_web/controllers/selection_printout_html/show_multi.html.heex:36
-#: lib/safarimanager_web/controllers/selection_printout_html/show_single.html.heex:35
+#: lib/safarimanager_web/controllers/selection_printout_html/show_multi.html.heex:33
+#: lib/safarimanager_web/controllers/selection_printout_html/show_single.html.heex:32
 #: lib/safarimanager_web/live/admin/participants/index.sface:111
 #: lib/safarimanager_web/live/participants/participants.sface:87
 #: lib/safarimanager_web/live/results/results.sface:85
@@ -1632,7 +1631,7 @@ msgstr "Tutti i partecipanti sono stati eliminati con successo"
 #: lib/safarimanager_web/live/admin/participants/index.sface:19
 #: lib/safarimanager_web/live/admin/participants/index.sface:61
 #: lib/safarimanager_web/live/admin/participants/index.sface:114
-#: lib/safarimanager_web/live/participants/participants.sface:135
+#: lib/safarimanager_web/live/participants/participants.sface:151
 #, elixir-autogen, elixir-format
 msgid "Competition"
 msgstr "Competizione"
@@ -1700,26 +1699,26 @@ msgstr "Utente"
 msgid "Select a competition..."
 msgstr "Seleziona una competizione..."
 
-#: lib/safarimanager_web/controllers/participants_printout_html/show.html.heex:21
-#: lib/safarimanager_web/controllers/results_printout_html/show.html.heex:21
+#: lib/safarimanager_web/controllers/participants_printout_html/show.html.heex:18
+#: lib/safarimanager_web/controllers/results_printout_html/show.html.heex:18
 #: lib/safarimanager_web/live/new_competition/new_competition.sface:10
 #, elixir-autogen, elixir-format
 msgid "Date"
 msgstr "Data"
 
-#: lib/safarimanager_web/controllers/participants_printout_html/show.html.heex:14
-#: lib/safarimanager_web/controllers/results_printout_html/show.html.heex:14
+#: lib/safarimanager_web/controllers/participants_printout_html/show.html.heex:11
+#: lib/safarimanager_web/controllers/results_printout_html/show.html.heex:11
 #, elixir-autogen, elixir-format
 msgid "Denomination"
 msgstr "Denominazione"
 
-#: lib/safarimanager_web/controllers/results_printout_html/show.html.heex:38
+#: lib/safarimanager_web/controllers/results_printout_html/show.html.heex:35
 #, elixir-autogen, elixir-format
 msgid "Full name"
 msgstr "Cognome e nome"
 
-#: lib/safarimanager_web/controllers/participants_printout_html/show.html.heex:17
-#: lib/safarimanager_web/controllers/results_printout_html/show.html.heex:17
+#: lib/safarimanager_web/controllers/participants_printout_html/show.html.heex:14
+#: lib/safarimanager_web/controllers/results_printout_html/show.html.heex:14
 #, elixir-autogen, elixir-format
 msgid "Organizing organization"
 msgstr "Società organizzatrice"
@@ -1729,37 +1728,37 @@ msgstr "Società organizzatrice"
 msgid "Overall classification"
 msgstr "Classifica generale"
 
-#: lib/safarimanager_web/controllers/results_printout_html/show.html.heex:41
+#: lib/safarimanager_web/controllers/results_printout_html/show.html.heex:38
 #, elixir-autogen, elixir-format
 msgid "Points"
 msgstr "Punti"
 
-#: lib/safarimanager_web/controllers/results_printout_html/show.html.heex:78
+#: lib/safarimanager_web/controllers/results_printout_html/show.html.heex:75
 #, elixir-autogen, elixir-format
 msgid "Pubblication time"
 msgstr "Ora di esposizione"
 
-#: lib/safarimanager_web/controllers/results_printout_html/show.html.heex:37
+#: lib/safarimanager_web/controllers/results_printout_html/show.html.heex:34
 #: lib/safarimanager_web/live/results/results.sface:148
 #, elixir-autogen, elixir-format
 msgid "Rank"
 msgstr "Pos."
 
-#: lib/safarimanager_web/controllers/results_printout_html/show.html.heex:42
+#: lib/safarimanager_web/controllers/results_printout_html/show.html.heex:39
 #: lib/safarimanager_web/live/results/results.sface:153
 #, elixir-autogen, elixir-format
 msgid "Species"
 msgstr "Specie"
 
 #: lib/safarimanager_web/controllers/participants_printout_controller.ex:29
-#: lib/safarimanager_web/controllers/participants_printout_html/show.html.heex:31
+#: lib/safarimanager_web/controllers/participants_printout_html/show.html.heex:28
 #, elixir-autogen, elixir-format
 msgid "Participants list"
 msgstr "Lista partecipanti"
 
-#: lib/safarimanager_web/controllers/selection_printout_html/show_multi.html.heex:37
-#: lib/safarimanager_web/controllers/selection_printout_html/show_single.html.heex:36
-#: lib/safarimanager_web/controllers/slides_printout_html/show.html.heex:35
+#: lib/safarimanager_web/controllers/selection_printout_html/show_multi.html.heex:34
+#: lib/safarimanager_web/controllers/selection_printout_html/show_single.html.heex:33
+#: lib/safarimanager_web/controllers/slides_printout_html/show.html.heex:32
 #: lib/safarimanager_web/live/results/results.sface:177
 #: lib/safarimanager_web/live/slides/slide_selection.sface:176
 #: lib/safarimanager_web/live/slides/slide_selection.sface:252
@@ -1770,7 +1769,7 @@ msgstr "Lista partecipanti"
 msgid "File name"
 msgstr "Nome file"
 
-#: lib/safarimanager_web/controllers/slides_printout_html/show.html.heex:40
+#: lib/safarimanager_web/controllers/slides_printout_html/show.html.heex:37
 #: lib/safarimanager_web/live/results/results.sface:182
 #, elixir-autogen, elixir-format
 msgid "Pen."
@@ -1781,28 +1780,28 @@ msgstr "Pen."
 msgid "Print participants slides report"
 msgstr "Stampa le schede concorrente"
 
-#: lib/safarimanager_web/controllers/slides_printout_html/show.html.heex:42
+#: lib/safarimanager_web/controllers/slides_printout_html/show.html.heex:39
 #: lib/safarimanager_web/live/results/results.sface:152
 #: lib/safarimanager_web/live/results/results.sface:184
 #, elixir-autogen, elixir-format
 msgid "Score"
 msgstr "Punti"
 
-#: lib/safarimanager_web/controllers/selection_printout_html/show_multi.html.heex:38
-#: lib/safarimanager_web/controllers/selection_printout_html/show_single.html.heex:37
-#: lib/safarimanager_web/controllers/slides_printout_html/show.html.heex:36
+#: lib/safarimanager_web/controllers/selection_printout_html/show_multi.html.heex:35
+#: lib/safarimanager_web/controllers/selection_printout_html/show_single.html.heex:34
+#: lib/safarimanager_web/controllers/slides_printout_html/show.html.heex:33
 #, elixir-autogen, elixir-format
 msgid "Sub. #"
 msgstr "# Specie"
 
-#: lib/safarimanager_web/controllers/selection_printout_html/show_multi.html.heex:39
-#: lib/safarimanager_web/controllers/selection_printout_html/show_single.html.heex:38
-#: lib/safarimanager_web/controllers/slides_printout_html/show.html.heex:37
+#: lib/safarimanager_web/controllers/selection_printout_html/show_multi.html.heex:36
+#: lib/safarimanager_web/controllers/selection_printout_html/show_single.html.heex:35
+#: lib/safarimanager_web/controllers/slides_printout_html/show.html.heex:34
 #, elixir-autogen, elixir-format
 msgid "Sub. name"
 msgstr "Nome specie"
 
-#: lib/safarimanager_web/controllers/slides_printout_html/show.html.heex:39
+#: lib/safarimanager_web/controllers/slides_printout_html/show.html.heex:36
 #: lib/safarimanager_web/live/results/results.sface:181
 #, elixir-autogen, elixir-format
 msgid "Votes"
@@ -1813,18 +1812,18 @@ msgstr "Voti"
 msgid "Participants slides report"
 msgstr "Schede concorrente"
 
-#: lib/safarimanager_web/controllers/slides_printout_html/show.html.heex:85
+#: lib/safarimanager_web/controllers/slides_printout_html/show.html.heex:82
 #, elixir-autogen, elixir-format
 msgid "Number of subjects captured"
 msgstr "Numero di specie fotografate"
 
-#: lib/safarimanager_web/controllers/slides_printout_html/show.html.heex:90
+#: lib/safarimanager_web/controllers/slides_printout_html/show.html.heex:87
 #, elixir-autogen, elixir-format
 msgid "Total score"
 msgstr "Punteggio totale"
 
-#: lib/safarimanager_web/controllers/selection_printout_html/show_multi.html.heex:42
-#: lib/safarimanager_web/controllers/selection_printout_html/show_single.html.heex:41
+#: lib/safarimanager_web/controllers/selection_printout_html/show_multi.html.heex:39
+#: lib/safarimanager_web/controllers/selection_printout_html/show_single.html.heex:38
 #, elixir-autogen, elixir-format
 msgid "Notes"
 msgstr "Note"
@@ -1845,38 +1844,38 @@ msgstr "Stampa il riepilogo della selezione"
 msgid "Slides selection report"
 msgstr "Riepilogo della selezione"
 
-#: lib/safarimanager_web/controllers/selection_printout_html/show_multi.html.heex:75
-#: lib/safarimanager_web/controllers/selection_printout_html/show_single.html.heex:73
+#: lib/safarimanager_web/controllers/selection_printout_html/show_multi.html.heex:72
+#: lib/safarimanager_web/controllers/selection_printout_html/show_single.html.heex:70
 #, elixir-autogen, elixir-format
 msgid "The participant"
 msgstr "Il partecipante"
 
-#: lib/safarimanager_web/controllers/selection_printout_html/show_multi.html.heex:20
-#: lib/safarimanager_web/controllers/selection_printout_html/show_single.html.heex:19
+#: lib/safarimanager_web/controllers/selection_printout_html/show_multi.html.heex:17
+#: lib/safarimanager_web/controllers/selection_printout_html/show_single.html.heex:16
 #, elixir-autogen, elixir-format
 msgid "Participant number"
 msgstr "Numero partecipante"
 
-#: lib/safarimanager_web/controllers/results_printout_html/show.html.heex:81
+#: lib/safarimanager_web/controllers/results_printout_html/show.html.heex:78
 #, elixir-autogen, elixir-format
 msgid "The director"
 msgstr "Il direttore di gara"
 
-#: lib/safarimanager_web/controllers/participants_printout_html/show.html.heex:74
-#: lib/safarimanager_web/controllers/results_printout_html/show.html.heex:75
+#: lib/safarimanager_web/controllers/participants_printout_html/show.html.heex:71
+#: lib/safarimanager_web/controllers/results_printout_html/show.html.heex:72
 #, elixir-autogen, elixir-format
 msgid "The referee"
 msgstr "Il giudice di gara"
 
 #: lib/safarimanager_web/live/jury/jury.sface:138
 #: lib/safarimanager_web/live/jury/jury.sface:139
-#: lib/safarimanager_web/live/validation/validation.sface:205
+#: lib/safarimanager_web/live/validation/validation.sface:212
 #, elixir-autogen, elixir-format
 msgid "Exit"
 msgstr "Esci"
 
 #: lib/safarimanager_web/live/jury/jury.sface:47
-#: lib/safarimanager_web/live/validation/validation.sface:113
+#: lib/safarimanager_web/live/validation/validation.sface:120
 #, elixir-autogen, elixir-format
 msgid "Next"
 msgstr "Successiva"
@@ -1903,7 +1902,7 @@ msgstr "di"
 #: lib/safarimanager_web/live/results/results.ex:83
 #: lib/safarimanager_web/live/slides/slide_selection.ex:299
 #: lib/safarimanager_web/live/slides/slide_selection.sface:219
-#: lib/safarimanager_web/live/validation/validation.ex:407
+#: lib/safarimanager_web/live/validation/validation.ex:427
 #: lib/safarimanager_web/live/validation/validation_launcher.ex:193
 #: lib/safarimanager_web/live/validation/validation_launcher.sface:24
 #, elixir-autogen, elixir-format
@@ -2021,7 +2020,7 @@ msgstr "Nuovo utente"
 #: lib/safarimanager_web/live/jurors/jurors.sface:37
 #: lib/safarimanager_web/live/jurors/jurors.sface:71
 #: lib/safarimanager_web/live/new_competition/new_competition.sface:22
-#: lib/safarimanager_web/live/participants/participants.sface:109
+#: lib/safarimanager_web/live/participants/participants.sface:125
 #: lib/safarimanager_web/live/slides/slide_selection.sface:55
 #: lib/safarimanager_web/live/slides/slides.sface:49
 #: lib/safarimanager_web/live/slides/slides.sface:182
@@ -2040,7 +2039,7 @@ msgid "OR"
 msgstr "Oppure"
 
 #: lib/safarimanager_web/live/jurors/jurors.sface:66
-#: lib/safarimanager_web/live/participants/participants.sface:104
+#: lib/safarimanager_web/live/participants/participants.sface:119
 #, elixir-autogen, elixir-format
 msgid "Remove"
 msgstr "Rimuovi"
@@ -2230,7 +2229,7 @@ msgstr[1] "Scartate"
 msgid "Clear"
 msgstr "Resetta"
 
-#: lib/safarimanager_web/live/jury/jury.ex:279
+#: lib/safarimanager_web/live/jury/jury.ex:278
 #, elixir-autogen, elixir-format
 msgid "Error saving evaluation: slide has a penalty"
 msgstr "Impossibile salvare la valutazione: la slide ha una penalizzazione"
@@ -2251,7 +2250,7 @@ msgstr "Penalizzazione"
 msgid "Start Jury"
 msgstr "Avvia giuria"
 
-#: lib/safarimanager_web/live/jury/jury.ex:283
+#: lib/safarimanager_web/live/jury/jury.ex:282
 #, elixir-autogen, elixir-format
 msgid "Unexpected error while saving evaluation"
 msgstr "Errore inaspettato nell'applicare la valutazione"
@@ -2326,17 +2325,17 @@ msgstr "Totale slide"
 msgid "Unable to import slide selection: multiple slides with the same file name (or very similar) were found"
 msgstr "Impossibile importare la selezione delle slide: sono presenti più slide con lo stesso nome file (o molto simile)"
 
-#: lib/safarimanager_web/live/validation/validation.sface:215
+#: lib/safarimanager_web/live/validation/validation.sface:222
 #, elixir-format, elixir-autogen
 msgid "unrecognizable"
 msgstr "irriconoscibile"
 
-#: lib/safarimanager_web/live/validation/validation.sface:222
+#: lib/safarimanager_web/live/validation/validation.sface:229
 #, elixir-format, elixir-autogen
 msgid "distinction"
 msgstr "segnalazione"
 
-#: lib/safarimanager_web/live/validation/validation.sface:226
+#: lib/safarimanager_web/live/validation/validation.sface:233
 #, elixir-format, elixir-autogen
 msgid "note"
 msgstr "nota"
@@ -2391,7 +2390,7 @@ msgstr "Impossibile spostare la slide in punteggio fisso"
 msgid "Error moving slide to jury"
 msgstr "Impossibile spostare la slide in giuria"
 
-#: lib/safarimanager_web/live/validation/validation.sface:231
+#: lib/safarimanager_web/live/validation/validation.sface:238
 #, elixir-autogen, elixir-format
 msgid "Insert a note here..."
 msgstr "Inserisci una nota qui..."
@@ -2466,19 +2465,19 @@ msgid "First"
 msgstr "Prima"
 
 #: lib/safarimanager_web/live/jury/jury.sface:118
-#: lib/safarimanager_web/live/validation/validation.sface:184
+#: lib/safarimanager_web/live/validation/validation.sface:191
 #, elixir-autogen, elixir-format
 msgid "Fit to window"
 msgstr "Adatta alla finestra"
 
 #: lib/safarimanager_web/live/jury/jury.sface:135
-#: lib/safarimanager_web/live/validation/validation.sface:201
+#: lib/safarimanager_web/live/validation/validation.sface:208
 #, elixir-autogen, elixir-format
 msgid "Fullscreen"
 msgstr "Schermo intero"
 
 #: lib/safarimanager_web/live/jury/jury.sface:62
-#: lib/safarimanager_web/live/validation/validation.sface:128
+#: lib/safarimanager_web/live/validation/validation.sface:135
 #, elixir-autogen, elixir-format
 msgid "Last"
 msgstr "Ultima"
@@ -2489,31 +2488,31 @@ msgid "Overall"
 msgstr "Generale"
 
 #: lib/safarimanager_web/live/jury/jury.sface:128
-#: lib/safarimanager_web/live/validation/validation.sface:194
+#: lib/safarimanager_web/live/validation/validation.sface:201
 #, elixir-autogen, elixir-format
 msgid "Rotate left"
 msgstr "Ruota in senso antiorario"
 
 #: lib/safarimanager_web/live/jury/jury.sface:131
-#: lib/safarimanager_web/live/validation/validation.sface:197
+#: lib/safarimanager_web/live/validation/validation.sface:204
 #, elixir-autogen, elixir-format
 msgid "Rotate right"
 msgstr "Ruota in senso orario"
 
 #: lib/safarimanager_web/live/jury/jury.sface:79
-#: lib/safarimanager_web/live/validation/validation.sface:145
+#: lib/safarimanager_web/live/validation/validation.sface:152
 #, elixir-autogen, elixir-format
 msgid "Zoom 100%"
 msgstr "Zoom 100%"
 
 #: lib/safarimanager_web/live/jury/jury.sface:123
-#: lib/safarimanager_web/live/validation/validation.sface:189
+#: lib/safarimanager_web/live/validation/validation.sface:196
 #, elixir-autogen, elixir-format
 msgid "Zoom in"
 msgstr "Ingrandisci"
 
 #: lib/safarimanager_web/live/jury/jury.sface:76
-#: lib/safarimanager_web/live/validation/validation.sface:142
+#: lib/safarimanager_web/live/validation/validation.sface:149
 #, elixir-autogen, elixir-format
 msgid "Zoom out"
 msgstr "Rimpicciolisci"
@@ -2564,3 +2563,23 @@ msgstr "tutte"
 #, elixir-autogen, elixir-format
 msgid "classification"
 msgstr "classifica"
+
+#: lib/safarimanager_web/live/participants/participants.ex:138
+#, elixir-autogen, elixir-format
+msgid "Category was changed successfully"
+msgstr "Categoria modificate con successo"
+
+#: lib/safarimanager_web/live/participants/participants.sface:108
+#, elixir-autogen, elixir-format
+msgid "Category..."
+msgstr "Categoria..."
+
+#: lib/safarimanager_web/live/validation/validation.sface:117
+#, elixir-autogen, elixir-format
+msgid "Go to..."
+msgstr "Vai a..."
+
+#: lib/safarimanager_web/live/participants/participants.ex:146
+#, elixir-autogen, elixir-format
+msgid "Unable to change Category"
+msgstr "Impossibile modificare la categoria"

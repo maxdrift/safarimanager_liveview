@@ -121,26 +121,26 @@ defmodule SMWeb.Components.CoreComponents do
       ]}
       {@rest}
     >
-      <div>
+      <div class="flex flex-row">
         <Heroicons.LiveView.icon
           :if={@kind == :info}
           name="information-circle"
           type="outline"
-          class="stroke-current flex-shrink-0 h-6 w-6"
+          class="flex-none stroke-current flex-shrink-0 h-6 w-6"
         />
         <Heroicons.LiveView.icon
           :if={@kind == :warning}
           name="exclamation-triangle"
           type="outline"
-          class="stroke-current flex-shrink-0 h-6 w-6"
+          class="flex-none stroke-current flex-shrink-0 h-6 w-6"
         />
         <Heroicons.LiveView.icon
           :if={@kind == :error}
           name="x-circle"
           type="outline"
-          class="stroke-current flex-shrink-0 h-6 w-6"
+          class="flex-none stroke-current flex-shrink-0 h-6 w-6"
         />
-        <div class="pr-4">
+        <div class="flex-none my-auto pl-2 w-80">
           <h3 :if={@title} class="font-bold"><%= @title %></h3>
           <div class="text-xs"><%= msg %></div>
         </div>
