@@ -108,11 +108,14 @@
                             -
                           {/if}
                         </td>
-                        <td>
-                          <Link to={"/organize/#{@competition_id}/validation?slide_id=#{slide.id}"} class="btn btn-xs">
+                        <td class="flex flex-row">
+                          <Link
+                            to={"/organize/#{@competition_id}/validation?slide_id=#{slide.id}"}
+                            class="flex-none btn btn-xs"
+                          >
                             {gettext("Open")}
                           </Link>
-                          <div class="dropdown mx-auto">
+                          <div class="flex-none mx-1.5 dropdown">
                             <label tabindex="0" class="btn btn-xs">
                               {gettext("Actions")}
                             </label>
@@ -152,6 +155,12 @@
                               </li>
                             </ul>
                           </div>
+                          <Form for={%{}} method="post" action={~p"/image_export"} class="flex-none">
+                            <HiddenInput field={:slide_id} value={slide.id} />
+                            <Submit class="btn btn-square btn-xs">
+                              <Heroicons.Surface.Icon name="arrow-down-tray" type="outline" class="h-4 w-4" />
+                            </Submit>
+                          </Form>
                         </td>
                       </tr>
                     {/for}

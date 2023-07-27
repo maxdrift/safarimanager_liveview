@@ -11,6 +11,9 @@ defmodule SMWeb.Live.ValidationLauncher do
   alias SMWeb.Components.Layout
   alias SMWeb.Components.StepsHeader
   alias SMWeb.Components.ValidationCheckmark
+  alias Surface.Components.Form
+  alias Surface.Components.Form.HiddenInput
+  alias Surface.Components.Form.Submit
   alias Surface.Components.Link
   alias Surface.Components.LiveRedirect
 
