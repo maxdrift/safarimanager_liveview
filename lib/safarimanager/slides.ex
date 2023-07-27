@@ -176,39 +176,30 @@ defmodule SM.Slides do
   @doc """
   Returns the list of slides grouped by subject, in random order (by slide ID).
 
-  select
-      sl.id,
-      su.name
-      sl.file_name,
-  from
-      slides sl
-      inner join subjects su on su.id = sl.subject_id
-  where
-      sl.competition_id = '7e1ce81a-fc38-4f9d-a182-6f7bbbcf6504'
-      and sl.status = 'submitted_jury'
-  group by
-      sl.id,
-      sl.subject_id,
-      su.name,
-      u.first_name
-  order by
-      sl.subject_id;
-
   ## Examples
 
       iex> list(competition_id)
       [%Slide{}, ...]
 
   """
-  @spec list_for_jury(String.t(), atom()) :: [Slide.t()]
-  def list_for_jury(competition_id, camera_type \\ :all) do
+  @spec list_for_jury(String.t(), String.t()) :: [Slide.t()]
+  def list_for_jury(competition_id, category \\ "all") do
     conditions =
-      case camera_type do
+      case category do
         "all" ->
           dynamic([_sl, _su, p, cat], p.category_id == cat.id)
 
-        camera_type ->
-          dynamic([_sl, _su, p, cat], p.category_id == cat.id and cat.camera_type == ^camera_type)
+        category ->
+          case Ecto.UUID.cast(category) do
+            {:ok, category_id} ->
+              dynamic([_sl, _su, p, cat], p.category_id == cat.id and cat.id == ^category_id)
+
+            :error ->
+              dynamic(
+                [_sl, _su, p, cat],
+                p.category_id == cat.id and cat.camera_type == ^category
+              )
+          end
       end
 
     query =
@@ -243,6 +234,24 @@ defmodule SM.Slides do
       )
 
     Repo.all(query)
+  end
+
+  @spec count_for_jury_by_category(String.t()) :: [
+          %{String.t() => {non_neg_integer(), non_neg_integer()}}
+        ]
+  def count_for_jury_by_category(competition_id) do
+    query =
+      from(sl in Slide,
+        where: [competition_id: ^competition_id, status: :submitted_jury],
+        join: p in Participant,
+        on: p.competition_id == ^competition_id and sl.user_id == p.user_id,
+        group_by: [p.category_id],
+        select: {p.category_id, {count(sl.id), fragment("count(DISTINCT ?)", sl.subject_id)}}
+      )
+
+    query
+    |> Repo.all()
+    |> Enum.into(%{})
   end
 
   @spec count_for_jury(String.t()) :: {non_neg_integer(), non_neg_integer()}

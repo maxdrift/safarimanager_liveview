@@ -31,7 +31,9 @@ defmodule SMWeb.Live.JuryLauncher do
         competition_id: competition_id,
         competition: competition,
         camera_types: Competitions.list_camera_types(competition_id),
+        categories: Competitions.list_categories(competition_id),
         slides_count_by_camera_type: Slides.count_for_jury_by_camera_type(competition_id),
+        slides_count_by_category: Slides.count_for_jury_by_category(competition_id),
         slides_count: Slides.count_for_jury(competition_id)
       )
 

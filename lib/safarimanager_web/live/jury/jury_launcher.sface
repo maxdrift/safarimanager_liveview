@@ -13,7 +13,24 @@
           <div class="stat-desc">{@slides_count_by_camera_type[camera_type] |> elem(1)} {gettext("species")}</div>
           <div class="stat-actions">
             <Link
-              to={"/organize/#{@competition_id}/jury?camera_type=#{camera_type}"}
+              to={"/organize/#{@competition_id}/jury?category=#{camera_type}"}
+              class="btn btn-xl btn-primary"
+            >
+              {gettext("Start Jury")}
+            </Link>
+          </div>
+        </div>
+      {#else}
+        gettext("Jury is not yet available")
+      {/for}
+      {#for category <- @categories}
+        <div class="stat">
+          <div class="stat-value text-2xl capitalize">{category.name}</div>
+          <div class="stat-title">{@slides_count_by_category[category.id] |> elem(0)} {gettext("slides")}</div>
+          <div class="stat-desc">{@slides_count_by_category[category.id] |> elem(1)} {gettext("species")}</div>
+          <div class="stat-actions">
+            <Link
+              to={"/organize/#{@competition_id}/jury?category=#{category.id}"}
               class="btn btn-xl btn-primary"
             >
               {gettext("Start Jury")}

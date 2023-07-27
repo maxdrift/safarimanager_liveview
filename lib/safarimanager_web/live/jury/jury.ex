@@ -24,7 +24,7 @@ defmodule SMWeb.Live.Jury do
     socket =
       socket
       |> assign(
-        camera_type: "all",
+        category: "all",
         curr_index: 0,
         image_count: 0,
         flash_eval: nil,
@@ -42,7 +42,7 @@ defmodule SMWeb.Live.Jury do
         _url,
         socket
       ) do
-    camera_type = Map.get(params, "camera_type", "all")
+    category = Map.get(params, "category", "all")
 
     socket =
       if Map.has_key?(socket.assigns, :competition) do
@@ -57,7 +57,7 @@ defmodule SMWeb.Live.Jury do
       if Map.has_key?(socket.assigns, :slides) do
         socket
       else
-        slides = Slides.list_for_jury(competition_id, camera_type)
+        slides = Slides.list_for_jury(competition_id, category)
 
         assign(socket, :slides, slides)
       end
@@ -74,7 +74,7 @@ defmodule SMWeb.Live.Jury do
         image_count: Enum.count(slides),
         curr_index: current_index,
         curr_slide: slide,
-        camera_type: camera_type,
+        category: category,
         evaluations:
           Enum.sort(socket.assigns.competition.allowed_evaluations, &(&1.value <= &2.value))
       )
@@ -83,7 +83,7 @@ defmodule SMWeb.Live.Jury do
       # and will be dispatched to all active hooks on the client who are handling that event.
       |> push_event("new-image", %{options: %{image_url: file_path}})
 
-    Cache.put("#{competition_id}_#{camera_type}_current_jury_slide_id", slide_id)
+    Cache.put("#{competition_id}_#{category}_current_jury_slide_id", slide_id)
 
     # schedule_next_image(5)
 
@@ -94,20 +94,20 @@ defmodule SMWeb.Live.Jury do
   Entry point
   """
   def handle_params(%{"competition_id" => competition_id} = params, _url, socket) do
-    camera_type = Map.get(params, "camera_type", "all")
+    category = Map.get(params, "category", "all")
     {:ok, competition} = Competitions.get(competition_id)
-    slides = Slides.list_for_jury(competition_id, camera_type)
+    slides = Slides.list_for_jury(competition_id, category)
 
     socket =
       socket
       |> assign(
         competition: competition,
         slides: slides,
-        camera_type: camera_type
+        category: category
       )
 
     next_slide_id =
-      case Cache.get("#{competition_id}_#{camera_type}_current_jury_slide_id") do
+      case Cache.get("#{competition_id}_#{category}_current_jury_slide_id") do
         nil ->
           slides
           |> Enum.at(0, %{})
@@ -120,7 +120,7 @@ defmodule SMWeb.Live.Jury do
     socket =
       if next_slide_id do
         push_patch(socket,
-          to: "#{full_path(socket)}?camera_type=#{camera_type}&slide_id=#{next_slide_id}"
+          to: "#{full_path(socket)}?category=#{category}&slide_id=#{next_slide_id}"
         )
       else
         assign(socket, :curr_slide, nil)
@@ -228,7 +228,7 @@ defmodule SMWeb.Live.Jury do
   def handle_info({Slides, [:slide, _action], _result}, socket) do
     curr_slide_id = socket.assigns.curr_slide.id
     {:ok, updated_slide} = Slides.get(curr_slide_id)
-    slides = Slides.list_for_jury(socket.assigns.competition.id, socket.assigns.camera_type)
+    slides = Slides.list_for_jury(socket.assigns.competition.id, socket.assigns.category)
 
     socket =
       socket
@@ -356,8 +356,7 @@ defmodule SMWeb.Live.Jury do
     socket
     |> assign(:curr_index, index)
     |> push_patch(
-      to:
-        "#{full_path(socket)}?camera_type=#{socket.assigns.camera_type}&slide_id=#{next_slide.id}"
+      to: "#{full_path(socket)}?category=#{socket.assigns.category}&slide_id=#{next_slide.id}"
     )
   end
 
