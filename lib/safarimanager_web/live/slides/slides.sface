@@ -5,7 +5,7 @@
     <div class="rounded-lg bg-base-200 shadow-lg p-4">
       <div class="text-2xl font-bold text-center pb-4">{gettext("Participants")}</div>
       <div class="flex flex-row-reverse my-2">
-        <Link to={~p"/export?entity=slides"} method={:post} class="btn btn-sm btn-outline">
+        <Link to={~p"/csv_export?entity=slides"} method={:post} class="btn btn-sm btn-outline">
           {gettext("Export Slides to CSV")}
         </Link>
       </div>

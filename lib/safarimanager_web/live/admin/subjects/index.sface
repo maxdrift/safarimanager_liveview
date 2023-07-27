@@ -105,7 +105,7 @@
     id="subjects-list"
     items={item <- @streams.items}
     create_path={~p"/admin/subjects/new"}
-    export_path={~p"/export?entity=subjects"}
+    export_path={~p"/csv_export?entity=subjects"}
     infinite_scroll="true"
   >
     <Column title={gettext("Num.")} class="w-1/12">

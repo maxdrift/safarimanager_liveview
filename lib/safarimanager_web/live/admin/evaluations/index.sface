@@ -93,7 +93,7 @@
     id="evaluations-list"
     items={item <- @streams.items}
     create_path={~p"/admin/evaluations/new"}
-    export_path={~p"/export?entity=evaluations"}
+    export_path={~p"/csv_export?entity=evaluations"}
   >
     <Column title={gettext("ID")} class="w-1/12">
       <ShortUUID value={item.id} />

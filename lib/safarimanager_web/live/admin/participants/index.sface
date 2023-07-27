@@ -105,7 +105,7 @@
     id="participants-list"
     items={item <- @streams.items}
     create_path={~p"/admin/participants/new"}
-    export_path={~p"/export?entity=participants"}
+    export_path={~p"/csv_export?entity=participants"}
     id_fields={[:user_id, :competition_id]}
   >
     <Column title={gettext("#")} class="w-1/12">

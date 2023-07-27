@@ -38,6 +38,7 @@ defmodule SMWeb.Router do
 
     get "/", HomeController, :new
     # TODO: Move under authenticated routes
+    post "/csv_export", CSVExportController, :create
     post "/export", CSVExportController, :create
     get "/:competition_id/results_printout", ResultsPrintoutController, :show
     get "/:competition_id/slides_printout", SlidesPrintoutController, :show

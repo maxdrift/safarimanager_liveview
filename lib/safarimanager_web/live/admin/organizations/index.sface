@@ -155,7 +155,7 @@
     items={item <- @streams.items}
     create_path={~p"/admin/organizations/new"}
     merge_path={~p"/admin/organizations/merge"}
-    export_path={~p"/export?entity=organizations"}
+    export_path={~p"/csv_export?entity=organizations"}
   >
     <Column title={gettext("ID")} class="w-1/12">
       <ShortUUID value={item.id} />

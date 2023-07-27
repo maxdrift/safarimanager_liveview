@@ -286,7 +286,7 @@
     id="competitions-list"
     items={item <- @streams.items}
     create_path={~p"/admin/competitions/new"}
-    export_path={~p"/export?entity=competitions"}
+    export_path={~p"/csv_export?entity=competitions"}
   >
     <Column title={gettext("ID")} class="w-1/12">
       <ShortUUID value={item.id} />
