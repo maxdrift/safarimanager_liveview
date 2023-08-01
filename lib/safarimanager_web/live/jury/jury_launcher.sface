@@ -6,15 +6,15 @@
   <StepsHeader current_step={6} competition_id={@competition.id} />
   <div class="mt-20 text-center">
     <div class="stats stats-vertical lg:stats-horizontal shadow">
-      {#for camera_type <- @camera_types}
+      {#for {camera_type, stats} <- @stats.camera_type}
         <div class="stat">
-          <div class="stat-value text-2xl capitalize">{camera_type_label(camera_type)}</div>
-          <div class="stat-title">{@slides_count_by_camera_type[camera_type] |> elem(0)} {gettext("slides")}</div>
-          <div class="stat-desc">{@slides_count_by_camera_type[camera_type] |> elem(1)} {gettext("species")}</div>
+          <div class="stat-value text-2xl capitalize">{stats.name}</div>
+          <div class="stat-title">{stats.slides_count} {gettext("slides")}</div>
+          <div class="stat-desc">{stats.species_count} {gettext("species")}</div>
           <div class="stat-actions">
             <Link
               to={"/organize/#{@competition_id}/jury?category=#{camera_type}"}
-              class="btn btn-xl btn-primary"
+              class={"btn", "btn-xl", "btn-primary", "btn-disabled": stats.slides_count == 0}
             >
               {gettext("Start Jury")}
             </Link>
@@ -23,15 +23,15 @@
       {#else}
         gettext("Jury is not yet available")
       {/for}
-      {#for category <- @categories}
+      {#for {category, stats} <- @stats.category}
         <div class="stat">
-          <div class="stat-value text-2xl capitalize">{category.name}</div>
-          <div class="stat-title">{@slides_count_by_category[category.id] |> elem(0)} {gettext("slides")}</div>
-          <div class="stat-desc">{@slides_count_by_category[category.id] |> elem(1)} {gettext("species")}</div>
+          <div class="stat-value text-2xl capitalize">{stats.name}</div>
+          <div class="stat-title">{stats.slides_count} {gettext("slides")}</div>
+          <div class="stat-desc">{stats.species_count} {gettext("species")}</div>
           <div class="stat-actions">
             <Link
-              to={"/organize/#{@competition_id}/jury?category=#{category.id}"}
-              class="btn btn-xl btn-primary"
+              to={"/organize/#{@competition_id}/jury?category=#{category}"}
+              class={"btn", "btn-xl", "btn-primary", "btn-disabled": stats.slides_count == 0}
             >
               {gettext("Start Jury")}
             </Link>
@@ -40,12 +40,15 @@
       {#else}
         gettext("Jury is not yet available")
       {/for}
-      <div :if={@camera_types != []} class="stat">
-        <div class="stat-value text-2xl capitalize">{gettext("all")}</div>
-        <div class="stat-title">{@slides_count |> elem(0)} {gettext("slides")}</div>
-        <div class="stat-desc">{@slides_count |> elem(1)} {gettext("species")}</div>
+      <div class="stat">
+        <div class="stat-value text-2xl capitalize">{@stats.all.name}</div>
+        <div class="stat-title">{@stats.all.slides_count} {gettext("slides")}</div>
+        <div class="stat-desc">{@stats.all.species_count} {gettext("species")}</div>
         <div class="stat-actions">
-          <Link to={"/organize/#{@competition_id}/jury"} class="btn btn-xl btn-primary">
+          <Link
+            to={"/organize/#{@competition_id}/jury"}
+            class={"btn", "btn-xl", "btn-primary", "btn-disabled": @stats.all.slides_count == 0}
+          >
             {gettext("Start Jury")}
           </Link>
         </div>

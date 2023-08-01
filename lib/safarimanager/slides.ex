@@ -220,7 +220,7 @@ defmodule SM.Slides do
   end
 
   @spec count_for_jury_by_camera_type(String.t()) :: [
-          {atom(), {non_neg_integer(), non_neg_integer()}}
+          %{String.t() => {non_neg_integer(), non_neg_integer()}}
         ]
   def count_for_jury_by_camera_type(competition_id) do
     query =
@@ -233,11 +233,13 @@ defmodule SM.Slides do
         select: {cat.camera_type, {count(sl.id), fragment("count(DISTINCT ?)", sl.subject_id)}}
       )
 
-    Repo.all(query)
+    query
+    |> Repo.all()
+    |> Enum.into(%{})
   end
 
   @spec count_for_jury_by_category(String.t()) :: [
-          %{String.t() => {non_neg_integer(), non_neg_integer()}}
+          %{String.t() => {String.t(), non_neg_integer(), non_neg_integer()}}
         ]
   def count_for_jury_by_category(competition_id) do
     query =
@@ -245,8 +247,10 @@ defmodule SM.Slides do
         where: [competition_id: ^competition_id, status: :submitted_jury],
         join: p in Participant,
         on: p.competition_id == ^competition_id and sl.user_id == p.user_id,
+        join: c in assoc(p, :category),
         group_by: [p.category_id],
-        select: {p.category_id, {count(sl.id), fragment("count(DISTINCT ?)", sl.subject_id)}}
+        select:
+          {p.category_id, {c.name, count(sl.id), fragment("count(DISTINCT ?)", sl.subject_id)}}
       )
 
     query

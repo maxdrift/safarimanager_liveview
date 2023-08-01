@@ -30,14 +30,49 @@ defmodule SMWeb.Live.JuryLauncher do
       |> assign(
         competition_id: competition_id,
         competition: competition,
-        camera_types: Competitions.list_camera_types(competition_id),
-        categories: Competitions.list_categories(competition_id),
-        slides_count_by_camera_type: Slides.count_for_jury_by_camera_type(competition_id),
-        slides_count_by_category: Slides.count_for_jury_by_category(competition_id),
-        slides_count: Slides.count_for_jury(competition_id)
+        stats: slides_count_and_stats(competition_id)
       )
 
     {:noreply, socket}
+  end
+
+  defp slides_count_and_stats(competition_id) do
+    slides_count_by_camera_type = Slides.count_for_jury_by_camera_type(competition_id)
+    slides_count_by_category = Slides.count_for_jury_by_category(competition_id)
+    {slides_count, species_count} = Slides.count_for_jury(competition_id)
+
+    camera_type_stats =
+      Enum.map(slides_count_by_camera_type, fn {camera_type, {slides_count, species_count}} ->
+        {camera_type,
+         %{
+           name: camera_type_label(camera_type),
+           slides_count: slides_count,
+           species_count: species_count
+         }}
+      end)
+      |> Enum.into(%{})
+
+    category_stats =
+      Enum.map(slides_count_by_category, fn {category_id,
+                                             {category_name, slides_count, species_count}} ->
+        {category_id,
+         %{
+           name: category_name,
+           slides_count: slides_count,
+           species_count: species_count
+         }}
+      end)
+      |> Enum.into(%{})
+
+    %{
+      all: %{
+        name: gettext("all"),
+        slides_count: slides_count,
+        species_count: species_count
+      },
+      camera_type: camera_type_stats,
+      category: category_stats
+    }
   end
 
   defp camera_type_label(:reflex), do: gettext("reflex")

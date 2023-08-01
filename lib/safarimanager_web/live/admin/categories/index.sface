@@ -57,7 +57,7 @@
           </SMField>
           <SMField name={:camera_type} label={gettext("Camera type")}>
             <Select
-              options={Enum.map(@camera_types, &{camera_type_option_label(&1), &1})}
+              options={Enum.map(@camera_types, &{String.capitalize(camera_type_option_label(&1)), &1})}
               selected={@record.camera_type}
               prompt={gettext("Select a camera type...")}
               class={input_state_class(@changeset, :camera_type)}
