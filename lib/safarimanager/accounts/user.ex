@@ -11,6 +11,7 @@ defmodule SM.Accounts.User do
   alias SM.Organizations.Organization
   alias SM.Participants.Participant
   alias SM.Slides.Slide
+  alias SM.Teams.TeamMember
 
   schema "users" do
     field :email, :string
@@ -23,6 +24,8 @@ defmodule SM.Accounts.User do
     belongs_to :category, Category
     many_to_many :competitions, Competition, join_through: Participant
     has_many :slides, Slide
+    has_many :team_members, TeamMember
+    has_many :teams, through: [:team_members, :team]
 
     timestamps()
   end

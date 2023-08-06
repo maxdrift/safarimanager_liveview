@@ -1,0 +1,206 @@
+<Layout current_page={~p"/admin/teams"} current_user={@current_user}>
+  {!-- Show dialog --}
+  <div
+    :if={@live_action == :show}
+    id="show-dialog"
+    class="modal modal-open"
+    :on-window-keydown={JS.patch("/admin/teams")}
+    phx-key="Escape"
+  >
+    <div class="modal-box">
+      <div class="card-title">
+        {gettext("Team details")}
+      </div>
+      <div class="card-body">
+        <FieldsList>
+          <FieldsListItem label={gettext("ID")}>
+            {@record.id}
+          </FieldsListItem>
+          <FieldsListItem label={gettext("Competition")}>
+            <span class="capitalize">{@record.competition.name || gettext("N/A")}</span>
+          </FieldsListItem>
+          <FieldsListItem label={gettext("Name")}>
+            <span class="capitalize">
+              {#if @record.name}
+                {@record.name}
+              {#else}
+                {Teams.synthesize_team_name(@record) || gettext("N/A")}
+              {/if}
+            </span>
+          </FieldsListItem>
+          <FieldsListItem label={gettext("Organization name")}>
+            <span class="capitalize">
+              {#if @record.organization_name}
+                {@record.organization_name}
+              {#else}
+                {Teams.synthesize_org_name(@record) || gettext("N/A")}
+              {/if}
+            </span>
+          </FieldsListItem>
+          <FieldsListItem label={gettext("Members")}>
+            <ul class="list-disc list-inside">
+              {#for u <- @record.users}
+                <li>{u.last_name} {u.first_name}</li>
+              {#else}
+                <li>{gettext("N/A")}</li>
+              {/for}
+            </ul>
+          </FieldsListItem>
+
+          <FieldsListItem label={gettext("Inserted")}>
+            <DateTimeString value={@record.inserted_at} />
+          </FieldsListItem>
+          <FieldsListItem label={gettext("Updated")}>
+            <DateTimeString value={@record.updated_at} />
+          </FieldsListItem>
+        </FieldsList>
+      </div>
+      <div class="modal-action">
+        <button :on-click={JS.patch("/admin/teams")} class="btn btn-md btn-ghost">
+          {gettext("Close")}
+        </button>
+      </div>
+    </div>
+  </div>
+  {!-- New-edit dialog --}
+  <div
+    :if={@live_action in [:new, :edit]}
+    id="edit-dialog"
+    class="modal modal-open"
+    :on-window-keydown={JS.patch("/admin/teams")}
+    phx-key="Escape"
+  >
+    <div class="modal-box">
+      <div class="card-title">
+        <span :if={@live_action == :new}>{gettext("New team")}</span>
+        <span :if={@live_action == :edit}>{gettext("Edit team")}</span>
+      </div>
+      <Form for={@changeset} change="validate" submit="submit" as={:entity} opts={autocomplete: "off"}>
+        <div class="card-body">
+          <div class="flex flex-wrap">
+            <SMField name={:competition_id} label={gettext("Competition")} class="w-full">
+              <Select
+                options={Enum.map(@competitions, &{&1.name, &1.id})}
+                selected={@competition_id}
+                prompt={[key: gettext("Select a competition...")]}
+                class={input_state_class(@changeset, :competition_id)}
+                opts={phx_debounce: "1000"}
+              />
+            </SMField>
+            <Inputs for={:members}>
+              <Context get={Form, form: members_form}>
+                <HiddenInput name="entity[members_sort][]" value={members_form.index} />
+                <HiddenInput field={:competition_id} value={@competition_id} />
+                <Field name={:user_id} class="form-control w-11/12">
+                  <Label class="label">
+                    <span class="label-text">{gettext("Member")} {members_form.index + 1}</span>
+                  </Label>
+                  <Select
+                    options={@participants}
+                    selected={members_form.data.user_id}
+                    prompt={[key: gettext("Select a user...")]}
+                    class={state_class("input input-bordered mr-2", members_form.source, :user_id, [])}
+                    opts={phx_debounce: "1000", disabled: @participants == []}
+                  />
+                  <Label class="label h-7">
+                    <ErrorTag />
+                    <ErrorTag form={members_form} field={:members} />
+                  </Label>
+                </Field>
+                <div class="w-1/12 my-auto">
+                  <label class="btn btn-ghost btn-square btn-sm">
+                    <input
+                      type="checkbox"
+                      name="entity[members_drop][]"
+                      value={members_form.index}
+                      class="hidden"
+                      title={gettext("remove")}
+                    />
+                    <Heroicons.Surface.Icon name="trash" type="outline" class="w-4 h-4" />
+                  </label>
+                </div>
+              </Context>
+            </Inputs>
+            <Label class="label h-7"><ErrorTag field={:members} /></Label>
+            <div class="form-control w-full">
+              <label class="btn btn-ghost btn-sm">
+                <input type="checkbox" name="entity[members_sort][]" class="hidden">
+                <Heroicons.Surface.Icon name="plus-circle" type="solid" class="w-6 h-6" /> {gettext("add more")}
+              </label>
+            </div>
+            <SMField name={:name} label={gettext("Name")} class="w-full">
+              <TextInput
+                class={input_state_class(@changeset, :name)}
+                opts={placeholder: Teams.synthesize_team_name(@changeset.data), phx_debounce: "1000"}
+              />
+            </SMField>
+            <SMField name={:organization_name} label={gettext("Org. name")} class="w-full">
+              <TextInput
+                class={input_state_class(@changeset, :organization_name)}
+                opts={placeholder: Teams.synthesize_org_name(@changeset.data), phx_debounce: "1000"}
+              />
+            </SMField>
+            <HiddenInput field={:_action} value={@action} />
+          </div>
+        </div>
+        <div class="modal-action">
+          <Submit values={[action: @action]} class={submit_state_class(@changeset)}>
+            {gettext("Save")}
+          </Submit>
+          <Reset click={JS.patch("/admin/teams")} class="btn btn-md btn-ghost" value={gettext("Cancel")} />
+        </div>
+      </Form>
+    </div>
+  </div>
+  {!-- Index table --}
+  <Grid
+    id="teams-list"
+    items={item <- @streams.items}
+    create_path={~p"/admin/teams/new"}
+    export_path={~p"/csv_export?entity=teams"}
+  >
+    <Column title={gettext("ID")} class="w-1/12">
+      <ShortUUID value={item.id} />
+    </Column>
+    <Column title={gettext("Competition")}>
+      {item.competition.name || gettext("N/A")}
+    </Column>
+    <Column title={gettext("Name")}>
+      {#if item.name}
+        {item.name}
+      {#else}
+        {Teams.synthesize_team_name(item) || gettext("N/A")}
+      {/if}
+    </Column>
+    <Column title={gettext("Org. name")}>
+      {#if item.organization_name}
+        {item.organization_name}
+      {#else}
+        {Teams.synthesize_org_name(item) || gettext("N/A")}
+      {/if}
+    </Column>
+    <Column title={gettext("Members")}>
+      {Teams.synthesize_team_name(item) || gettext("N/A")}
+    </Column>
+    <Column title={gettext("Actions")} class="w-4">
+      <div class="overflow-x-auto">
+        <LivePatch
+          to={~p"/admin/teams/#{item.id}"}
+          class="btn btn-square btn-sm btn-info"
+          opts={title: gettext("Show")}
+        ><Heroicons.Surface.Icon name="eye" type="outline" class="w-4 h-4" /></LivePatch>
+        <LivePatch
+          to={~p"/admin/teams/#{item.id}/edit"}
+          class="btn btn-square btn-sm btn-warning"
+          opts={title: gettext("Edit")}
+        ><Heroicons.Surface.Icon name="pencil-square" type="solid" class="w-4 h-4" /></LivePatch>
+        <button
+          class="btn btn-square btn-sm btn-error"
+          :on-click={"delete-one", target: "#teams-list"}
+          :values={id: item.id}
+          title={gettext("Delete")}
+        ><Heroicons.Surface.Icon name="trash" type="outline" class="w-4 h-4" /></button>
+      </div>
+    </Column>
+  </Grid>
+</Layout>

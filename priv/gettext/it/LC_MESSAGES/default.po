@@ -18,9 +18,10 @@ msgstr ""
 #: lib/safarimanager_web/live/admin/organizations/index.sface:175
 #: lib/safarimanager_web/live/admin/participants/index.sface:126
 #: lib/safarimanager_web/live/admin/subjects/index.sface:130
+#: lib/safarimanager_web/live/admin/teams/index.sface:185
 #: lib/safarimanager_web/live/admin/users/index.sface:199
-#: lib/safarimanager_web/live/validation/validation_launcher.sface:117
-#: lib/safarimanager_web/live/validation/validation_launcher.sface:195
+#: lib/safarimanager_web/live/validation/validation_launcher.sface:120
+#: lib/safarimanager_web/live/validation/validation_launcher.sface:204
 #, elixir-autogen, elixir-format
 msgid "Actions"
 msgstr "Azioni"
@@ -30,7 +31,7 @@ msgstr "Azioni"
 msgid "Admin"
 msgstr "Amministrazione"
 
-#: lib/safarimanager_web/components/sidebar.ex:116
+#: lib/safarimanager_web/components/sidebar.ex:122
 #: lib/safarimanager_web/live/hooks/sidebar_hook.ex:41
 #, elixir-autogen, elixir-format
 msgid "Are you sure you want to shut down Safari Manager now?"
@@ -87,9 +88,9 @@ msgstr "Società"
 msgid "Participants"
 msgstr "Partecipanti"
 
-#: lib/safarimanager_web/components/sidebar.ex:115
-#: lib/safarimanager_web/components/sidebar.ex:117
-#: lib/safarimanager_web/components/sidebar.ex:127
+#: lib/safarimanager_web/components/sidebar.ex:121
+#: lib/safarimanager_web/components/sidebar.ex:123
+#: lib/safarimanager_web/components/sidebar.ex:133
 #: lib/safarimanager_web/live/hooks/sidebar_hook.ex:40
 #: lib/safarimanager_web/live/hooks/sidebar_hook.ex:42
 #, elixir-autogen, elixir-format
@@ -115,22 +116,22 @@ msgstr "Tema"
 msgid "close"
 msgstr "chiudi"
 
-#: lib/safarimanager/accounts/user.ex:151
+#: lib/safarimanager/accounts/user.ex:154
 #, elixir-autogen, elixir-format
 msgid "did not change"
 msgstr "non è cambiato"
 
-#: lib/safarimanager/accounts/user.ex:172
+#: lib/safarimanager/accounts/user.ex:175
 #, elixir-autogen, elixir-format
 msgid "does not match password"
 msgstr "non coincide con la password"
 
-#: lib/safarimanager/accounts/user.ex:210
+#: lib/safarimanager/accounts/user.ex:213
 #, elixir-autogen, elixir-format
 msgid "is not valid"
 msgstr "non è valido"
 
-#: lib/safarimanager/accounts/user.ex:60
+#: lib/safarimanager/accounts/user.ex:63
 #, elixir-autogen, elixir-format
 msgid "must have the @ sign and no spaces"
 msgstr "deve contenere il simbolo @ e nessuno spazio"
@@ -164,15 +165,15 @@ msgstr "Giurati"
 #: lib/safarimanager_web/live/results/results.sface:250
 #: lib/safarimanager_web/live/slides/slide_selection.ex:300
 #: lib/safarimanager_web/live/validation/validation.ex:428
-#: lib/safarimanager_web/live/validation/validation_launcher.ex:194
+#: lib/safarimanager_web/live/validation/validation_launcher.ex:197
 #: lib/safarimanager_web/live/validation/validation_launcher.sface:23
-#: lib/safarimanager_web/live/validation/validation_launcher.sface:260
+#: lib/safarimanager_web/live/validation/validation_launcher.sface:269
 #, elixir-autogen, elixir-format
 msgid "Jury"
 msgstr "Giuria"
 
 #: lib/safarimanager_web/components/steps_header.ex:29
-#: lib/safarimanager_web/live/jury/jury_launcher.sface:54
+#: lib/safarimanager_web/live/jury/jury_launcher.sface:74
 #: lib/safarimanager_web/live/results/results.sface:127
 #, elixir-autogen, elixir-format
 msgid "Results"
@@ -180,7 +181,7 @@ msgstr "Classifica"
 
 #: lib/safarimanager_web/components/steps_header.ex:21
 #: lib/safarimanager_web/live/slides/slides.sface:218
-#: lib/safarimanager_web/live/validation/validation_launcher.sface:253
+#: lib/safarimanager_web/live/validation/validation_launcher.sface:262
 #, elixir-autogen, elixir-format
 msgid "Selection"
 msgstr "Selezione"
@@ -196,7 +197,7 @@ msgid "Slides"
 msgstr "Slide"
 
 #: lib/safarimanager_web/components/steps_header.ex:25
-#: lib/safarimanager_web/live/jury/jury_launcher.sface:50
+#: lib/safarimanager_web/live/jury/jury_launcher.sface:70
 #: lib/safarimanager_web/live/slides/slide_selection.sface:394
 #, elixir-autogen, elixir-format
 msgid "Validation"
@@ -226,7 +227,7 @@ msgid "Select a table"
 msgstr "Seleziona una tabella"
 
 #: lib/safarimanager_web/components/direct_upload_dialog.sface:94
-#: lib/safarimanager_web/components/sidebar.ex:101
+#: lib/safarimanager_web/components/sidebar.ex:107
 #: lib/safarimanager_web/live/admin/import.sface:65
 #, elixir-autogen, elixir-format
 msgid "Import"
@@ -268,7 +269,8 @@ msgid "participants"
 msgstr "partecipanti"
 
 #: lib/safarimanager_web/live/jury/jury_launcher.sface:12
-#: lib/safarimanager_web/live/jury/jury_launcher.sface:28
+#: lib/safarimanager_web/live/jury/jury_launcher.sface:29
+#: lib/safarimanager_web/live/jury/jury_launcher.sface:45
 #: lib/safarimanager_web/live/slides/slides.sface:75
 #, elixir-format, elixir-autogen
 msgid "slides"
@@ -585,6 +587,7 @@ msgstr "Sei sicuro di voler eliminare questo record?"
 #: lib/safarimanager_web/live/admin/organizations/index.sface:35
 #: lib/safarimanager_web/live/admin/participants/index.sface:38
 #: lib/safarimanager_web/live/admin/subjects/index.sface:41
+#: lib/safarimanager_web/live/admin/teams/index.sface:60
 #: lib/safarimanager_web/live/admin/users/index.sface:44
 #: lib/safarimanager_web/live/slides/slide_selection.sface:134
 #, elixir-autogen, elixir-format
@@ -633,6 +636,7 @@ msgstr "Creato"
 #: lib/safarimanager_web/live/admin/organizations/index.sface:191
 #: lib/safarimanager_web/live/admin/participants/index.sface:142
 #: lib/safarimanager_web/live/admin/subjects/index.sface:146
+#: lib/safarimanager_web/live/admin/teams/index.sface:201
 #: lib/safarimanager_web/live/admin/users/index.sface:216
 #: lib/safarimanager_web/live/slides/slides.ex:108
 #: lib/safarimanager_web/live/slides/slides.ex:133
@@ -663,6 +667,7 @@ msgstr "Elimina i record"
 #: lib/safarimanager_web/live/admin/organizations/index.sface:185
 #: lib/safarimanager_web/live/admin/participants/index.sface:136
 #: lib/safarimanager_web/live/admin/subjects/index.sface:140
+#: lib/safarimanager_web/live/admin/teams/index.sface:195
 #: lib/safarimanager_web/live/admin/users/index.sface:210
 #: lib/safarimanager_web/live/slides/slide_selection.sface:200
 #: lib/safarimanager_web/live/slides/slide_selection.sface:276
@@ -714,6 +719,10 @@ msgstr "Modificato"
 #: lib/safarimanager_web/live/admin/subjects/index.sface:19
 #: lib/safarimanager_web/live/admin/subjects/index.sface:64
 #: lib/safarimanager_web/live/admin/subjects/index.sface:114
+#: lib/safarimanager_web/live/admin/teams/index.sface:22
+#: lib/safarimanager_web/live/admin/teams/index.sface:22
+#: lib/safarimanager_web/live/admin/teams/index.sface:131
+#: lib/safarimanager_web/live/admin/teams/index.sface:168
 #: lib/safarimanager_web/live/new_competition/new_competition.sface:8
 #: lib/safarimanager_web/live/results/results.sface:86
 #: lib/safarimanager_web/live/results/results.sface:149
@@ -740,6 +749,7 @@ msgstr "ID numerico"
 #: lib/safarimanager_web/live/admin/organizations/index.sface:65
 #: lib/safarimanager_web/live/admin/participants/index.sface:92
 #: lib/safarimanager_web/live/admin/subjects/index.sface:92
+#: lib/safarimanager_web/live/admin/teams/index.sface:148
 #: lib/safarimanager_web/live/admin/users/index.sface:93
 #: lib/safarimanager_web/live/slides/slide_selection.sface:133
 #, elixir-autogen, elixir-format
@@ -764,6 +774,7 @@ msgstr "Seleziona un coefficiente"
 #: lib/safarimanager_web/live/admin/organizations/index.sface:180
 #: lib/safarimanager_web/live/admin/participants/index.sface:131
 #: lib/safarimanager_web/live/admin/subjects/index.sface:135
+#: lib/safarimanager_web/live/admin/teams/index.sface:190
 #: lib/safarimanager_web/live/admin/users/index.sface:204
 #, elixir-autogen, elixir-format
 msgid "Show"
@@ -795,6 +806,7 @@ msgstr "Tipo"
 #: lib/safarimanager_web/live/admin/organizations/index.sface:144
 #: lib/safarimanager_web/live/admin/participants/index.sface:97
 #: lib/safarimanager_web/live/admin/subjects/index.sface:97
+#: lib/safarimanager_web/live/admin/teams/index.sface:150
 #: lib/safarimanager_web/live/admin/users/index.sface:95
 #: lib/safarimanager_web/live/admin/users/index.sface:168
 #: lib/safarimanager_web/live/slides/slides.sface:165
@@ -854,6 +866,8 @@ msgstr "Impossibile recuperare questo soggetto"
 #: lib/safarimanager_web/live/admin/participants/index.sface:28
 #: lib/safarimanager_web/live/admin/subjects/index.sface:31
 #: lib/safarimanager_web/live/admin/subjects/index.sface:31
+#: lib/safarimanager_web/live/admin/teams/index.sface:50
+#: lib/safarimanager_web/live/admin/teams/index.sface:50
 #: lib/safarimanager_web/live/admin/users/index.sface:34
 #: lib/safarimanager_web/live/admin/users/index.sface:34
 #, elixir-autogen, elixir-format
@@ -888,6 +902,8 @@ msgstr "Dettagli soggetto"
 #: lib/safarimanager_web/live/admin/participants/index.sface:31
 #: lib/safarimanager_web/live/admin/subjects/index.sface:34
 #: lib/safarimanager_web/live/admin/subjects/index.sface:34
+#: lib/safarimanager_web/live/admin/teams/index.sface:53
+#: lib/safarimanager_web/live/admin/teams/index.sface:53
 #: lib/safarimanager_web/live/admin/users/index.sface:37
 #: lib/safarimanager_web/live/admin/users/index.sface:37
 #, elixir-autogen, elixir-format
@@ -966,6 +982,9 @@ msgstr "Categoria modificata"
 #: lib/safarimanager_web/live/admin/organizations/index.sface:16
 #: lib/safarimanager_web/live/admin/organizations/index.sface:16
 #: lib/safarimanager_web/live/admin/organizations/index.sface:160
+#: lib/safarimanager_web/live/admin/teams/index.sface:16
+#: lib/safarimanager_web/live/admin/teams/index.sface:16
+#: lib/safarimanager_web/live/admin/teams/index.sface:162
 #: lib/safarimanager_web/live/admin/users/index.sface:16
 #: lib/safarimanager_web/live/admin/users/index.sface:16
 #: lib/safarimanager_web/live/admin/users/index.sface:184
@@ -1216,6 +1235,14 @@ msgstr "Max slide presentate"
 #: lib/safarimanager_web/live/admin/competitions/index.sface:304
 #: lib/safarimanager_web/live/admin/participants/index.sface:26
 #: lib/safarimanager_web/live/admin/participants/index.sface:121
+#: lib/safarimanager_web/live/admin/teams/index.sface:20
+#: lib/safarimanager_web/live/admin/teams/index.sface:27
+#: lib/safarimanager_web/live/admin/teams/index.sface:36
+#: lib/safarimanager_web/live/admin/teams/index.sface:45
+#: lib/safarimanager_web/live/admin/teams/index.sface:166
+#: lib/safarimanager_web/live/admin/teams/index.sface:172
+#: lib/safarimanager_web/live/admin/teams/index.sface:179
+#: lib/safarimanager_web/live/admin/teams/index.sface:183
 #: lib/safarimanager_web/live/admin/users/index.sface:29
 #: lib/safarimanager_web/live/admin/users/index.sface:32
 #: lib/safarimanager_web/live/admin/users/index.sface:194
@@ -1585,6 +1612,7 @@ msgid "Error merging users: a destination must be specified"
 msgstr "Impossibile unire gli utenti: specificare un utente di destinazione"
 
 #: lib/safarimanager_web/live/admin/participants/index.sface:74
+#: lib/safarimanager_web/live/admin/teams/index.sface:101
 #: lib/safarimanager_web/live/admin/users/index.sface:159
 #, elixir-autogen, elixir-format
 msgid "Select a user..."
@@ -1631,6 +1659,10 @@ msgstr "Tutti i partecipanti sono stati eliminati con successo"
 #: lib/safarimanager_web/live/admin/participants/index.sface:19
 #: lib/safarimanager_web/live/admin/participants/index.sface:61
 #: lib/safarimanager_web/live/admin/participants/index.sface:114
+#: lib/safarimanager_web/live/admin/teams/index.sface:19
+#: lib/safarimanager_web/live/admin/teams/index.sface:19
+#: lib/safarimanager_web/live/admin/teams/index.sface:81
+#: lib/safarimanager_web/live/admin/teams/index.sface:165
 #: lib/safarimanager_web/live/participants/participants.sface:151
 #, elixir-autogen, elixir-format
 msgid "Competition"
@@ -1695,6 +1727,7 @@ msgid "User"
 msgstr "Utente"
 
 #: lib/safarimanager_web/live/admin/participants/index.sface:65
+#: lib/safarimanager_web/live/admin/teams/index.sface:85
 #, elixir-autogen, elixir-format
 msgid "Select a competition..."
 msgstr "Seleziona una competizione..."
@@ -1764,7 +1797,7 @@ msgstr "Lista partecipanti"
 #: lib/safarimanager_web/live/slides/slide_selection.sface:252
 #: lib/safarimanager_web/live/slides/slide_selection.sface:328
 #: lib/safarimanager_web/live/validation/validation_launcher.sface:64
-#: lib/safarimanager_web/live/validation/validation_launcher.sface:168
+#: lib/safarimanager_web/live/validation/validation_launcher.sface:177
 #, elixir-autogen, elixir-format
 msgid "File name"
 msgstr "Nome file"
@@ -1903,7 +1936,7 @@ msgstr "di"
 #: lib/safarimanager_web/live/slides/slide_selection.ex:299
 #: lib/safarimanager_web/live/slides/slide_selection.sface:219
 #: lib/safarimanager_web/live/validation/validation.ex:427
-#: lib/safarimanager_web/live/validation/validation_launcher.ex:193
+#: lib/safarimanager_web/live/validation/validation_launcher.ex:196
 #: lib/safarimanager_web/live/validation/validation_launcher.sface:24
 #, elixir-autogen, elixir-format
 msgid "Fixed points"
@@ -1930,8 +1963,8 @@ msgstr "Flag"
 msgid "Jury Count"
 msgstr "Conteggio in giuria"
 
-#: lib/safarimanager_web/live/validation/validation_launcher.sface:113
-#: lib/safarimanager_web/live/validation/validation_launcher.sface:191
+#: lib/safarimanager_web/live/validation/validation_launcher.sface:116
+#: lib/safarimanager_web/live/validation/validation_launcher.sface:200
 #, elixir-autogen, elixir-format
 msgid "Open"
 msgstr "Apri"
@@ -1949,7 +1982,7 @@ msgstr "Avvia convalida"
 #: lib/safarimanager_web/live/results/results.sface:183
 #: lib/safarimanager_web/live/slides/slide_selection.sface:116
 #: lib/safarimanager_web/live/validation/validation_launcher.sface:66
-#: lib/safarimanager_web/live/validation/validation_launcher.sface:170
+#: lib/safarimanager_web/live/validation/validation_launcher.sface:179
 #, elixir-autogen, elixir-format
 msgid "Status"
 msgstr "Stato"
@@ -1959,7 +1992,7 @@ msgstr "Stato"
 #: lib/safarimanager_web/live/slides/slide_selection.sface:254
 #: lib/safarimanager_web/live/slides/slide_selection.sface:330
 #: lib/safarimanager_web/live/validation/validation_launcher.sface:65
-#: lib/safarimanager_web/live/validation/validation_launcher.sface:169
+#: lib/safarimanager_web/live/validation/validation_launcher.sface:178
 #, elixir-autogen, elixir-format
 msgid "Subject"
 msgstr "Soggetto"
@@ -1969,7 +2002,7 @@ msgstr "Soggetto"
 msgid "Submitted Count"
 msgstr "Conteggio presentate"
 
-#: lib/safarimanager_web/live/validation/validation_launcher.sface:228
+#: lib/safarimanager_web/live/validation/validation_launcher.sface:237
 #, elixir-autogen, elixir-format
 msgid "There are no slides yet"
 msgstr "Ancora non ci sono slide"
@@ -2245,7 +2278,8 @@ msgid "Penalty"
 msgstr "Penalizzazione"
 
 #: lib/safarimanager_web/live/jury/jury_launcher.sface:19
-#: lib/safarimanager_web/live/jury/jury_launcher.sface:32
+#: lib/safarimanager_web/live/jury/jury_launcher.sface:36
+#: lib/safarimanager_web/live/jury/jury_launcher.sface:52
 #, elixir-autogen, elixir-format
 msgid "Start Jury"
 msgstr "Avvia giuria"
@@ -2360,7 +2394,7 @@ msgstr "Elimina slide"
 msgid "Delete all slides"
 msgstr "Elimina tutte le slide"
 
-#: lib/safarimanager_web/live/validation/validation_launcher.sface:151
+#: lib/safarimanager_web/live/validation/validation_launcher.sface:154
 #, elixir-autogen, elixir-format
 msgid "Clear all flags"
 msgstr "Rimuovi tutte le flag"
@@ -2370,22 +2404,22 @@ msgstr "Rimuovi tutte le flag"
 msgid "Distinction"
 msgstr "Segnalazione"
 
-#: lib/safarimanager_web/live/validation/validation_launcher.sface:165
+#: lib/safarimanager_web/live/validation/validation_launcher.sface:174
 #, elixir-autogen, elixir-format
 msgid "Duplicate subjects"
 msgstr "Soggetti duplicati"
 
-#: lib/safarimanager_web/live/validation/validation_launcher.ex:94
+#: lib/safarimanager_web/live/validation/validation_launcher.ex:97
 #, elixir-autogen, elixir-format
 msgid "Error moving slide to discarded"
 msgstr "Impossibile spostare la slide negli scarti"
 
-#: lib/safarimanager_web/live/validation/validation_launcher.ex:78
+#: lib/safarimanager_web/live/validation/validation_launcher.ex:81
 #, elixir-autogen, elixir-format
 msgid "Error moving slide to fixed points"
 msgstr "Impossibile spostare la slide in punteggio fisso"
 
-#: lib/safarimanager_web/live/validation/validation_launcher.ex:62
+#: lib/safarimanager_web/live/validation/validation_launcher.ex:65
 #, elixir-autogen, elixir-format
 msgid "Error moving slide to jury"
 msgstr "Impossibile spostare la slide in giuria"
@@ -2395,20 +2429,20 @@ msgstr "Impossibile spostare la slide in giuria"
 msgid "Insert a note here..."
 msgstr "Inserisci una nota qui..."
 
-#: lib/safarimanager_web/live/validation/validation_launcher.sface:148
-#: lib/safarimanager_web/live/validation/validation_launcher.sface:215
+#: lib/safarimanager_web/live/validation/validation_launcher.sface:151
+#: lib/safarimanager_web/live/validation/validation_launcher.sface:224
 #, elixir-autogen, elixir-format
 msgid "Move to discarded"
 msgstr "Sposta negli scarti"
 
-#: lib/safarimanager_web/live/validation/validation_launcher.sface:145
-#: lib/safarimanager_web/live/validation/validation_launcher.sface:212
+#: lib/safarimanager_web/live/validation/validation_launcher.sface:148
+#: lib/safarimanager_web/live/validation/validation_launcher.sface:221
 #, elixir-autogen, elixir-format
 msgid "Move to fixed points"
 msgstr "Sposta in punteggio fisso"
 
-#: lib/safarimanager_web/live/validation/validation_launcher.sface:137
-#: lib/safarimanager_web/live/validation/validation_launcher.sface:204
+#: lib/safarimanager_web/live/validation/validation_launcher.sface:140
+#: lib/safarimanager_web/live/validation/validation_launcher.sface:213
 #, elixir-autogen, elixir-format
 msgid "Move to jury"
 msgstr "Sposta in giuria"
@@ -2418,22 +2452,22 @@ msgstr "Sposta in giuria"
 msgid "Note"
 msgstr "Nota"
 
-#: lib/safarimanager_web/live/validation/validation_launcher.ex:105
+#: lib/safarimanager_web/live/validation/validation_launcher.ex:108
 #, elixir-autogen, elixir-format
 msgid "Removed all slide flags"
 msgstr "Tutte le flag sono state rimosse"
 
-#: lib/safarimanager_web/live/validation/validation_launcher.ex:89
+#: lib/safarimanager_web/live/validation/validation_launcher.ex:92
 #, elixir-autogen, elixir-format
 msgid "Slide moved to discarded"
 msgstr "Slide spostata negli scarti"
 
-#: lib/safarimanager_web/live/validation/validation_launcher.ex:73
+#: lib/safarimanager_web/live/validation/validation_launcher.ex:76
 #, elixir-autogen, elixir-format
 msgid "Slide moved to fixed points"
 msgstr "Slide spostata in punteggio fisso"
 
-#: lib/safarimanager_web/live/validation/validation_launcher.ex:57
+#: lib/safarimanager_web/live/validation/validation_launcher.ex:60
 #, elixir-autogen, elixir-format
 msgid "Slide moved to jury"
 msgstr "Slide spostata in giuria"
@@ -2443,17 +2477,17 @@ msgstr "Slide spostata in giuria"
 msgid "Unrecognizable"
 msgstr "Irriconoscibile"
 
-#: lib/safarimanager_web/live/validation/validation_launcher.sface:129
+#: lib/safarimanager_web/live/validation/validation_launcher.sface:132
 #, elixir-autogen, elixir-format
 msgid "Apply subject correction"
 msgstr "Applica correzione soggetto"
 
-#: lib/safarimanager_web/live/validation/validation_launcher.ex:46
+#: lib/safarimanager_web/live/validation/validation_launcher.ex:49
 #, elixir-autogen, elixir-format
 msgid "Error applying subject correction to slide"
 msgstr "Impossibile applicare la correzione del soggetto alla slide"
 
-#: lib/safarimanager_web/live/validation/validation_launcher.ex:41
+#: lib/safarimanager_web/live/validation/validation_launcher.ex:44
 #, elixir-autogen, elixir-format
 msgid "Subject correction applied successfully"
 msgstr "Correzione soggetto applicata con successo"
@@ -2531,30 +2565,31 @@ msgid "Select a camera type..."
 msgstr "Seleziona un tipo di fotocamera..."
 
 #: lib/safarimanager_web/live/admin/categories/index.ex:273
-#: lib/safarimanager_web/live/jury/jury_launcher.ex:43
+#: lib/safarimanager_web/live/jury/jury_launcher.ex:80
 #, elixir-autogen, elixir-format
 msgid "any"
 msgstr "qualsiasi"
 
 #: lib/safarimanager_web/live/admin/categories/index.ex:274
-#: lib/safarimanager_web/live/jury/jury_launcher.ex:42
+#: lib/safarimanager_web/live/jury/jury_launcher.ex:79
 #, elixir-autogen, elixir-format
 msgid "compact"
 msgstr "compatte"
 
 #: lib/safarimanager_web/live/admin/categories/index.ex:275
-#: lib/safarimanager_web/live/jury/jury_launcher.ex:41
+#: lib/safarimanager_web/live/jury/jury_launcher.ex:78
 #, elixir-autogen, elixir-format
 msgid "reflex"
 msgstr "reflex"
 
 #: lib/safarimanager_web/live/jury/jury_launcher.sface:13
-#: lib/safarimanager_web/live/jury/jury_launcher.sface:29
+#: lib/safarimanager_web/live/jury/jury_launcher.sface:30
+#: lib/safarimanager_web/live/jury/jury_launcher.sface:46
 #, elixir-autogen, elixir-format
 msgid "species"
 msgstr "specie"
 
-#: lib/safarimanager_web/live/jury/jury_launcher.sface:27
+#: lib/safarimanager_web/live/jury/jury_launcher.ex:69
 #, elixir-autogen, elixir-format
 msgid "all"
 msgstr "tutte"
@@ -2583,3 +2618,102 @@ msgstr "Vai a..."
 #, elixir-autogen, elixir-format
 msgid "Unable to change Category"
 msgstr "Impossibile modificare la categoria"
+
+#: lib/safarimanager_web/live/admin/teams/index.ex:222
+#, elixir-autogen, elixir-format
+msgid "All teams deleted successfully"
+msgstr "Tutti i team sono stati eliminati con successo"
+
+#: lib/safarimanager_web/live/admin/teams/index.sface:76
+#, elixir-autogen, elixir-format
+msgid "Edit team"
+msgstr "Modifica team"
+
+#: lib/safarimanager_web/live/admin/teams/index.ex:134
+#, elixir-autogen, elixir-format
+msgid "Edited team"
+msgstr "Team modificato"
+
+#: lib/safarimanager_web/live/admin/teams/index.sface:96
+#, elixir-autogen, elixir-format
+msgid "Member"
+msgstr "Membro"
+
+#: lib/safarimanager_web/live/admin/teams/index.sface:40
+#: lib/safarimanager_web/live/admin/teams/index.sface:40
+#: lib/safarimanager_web/live/admin/teams/index.sface:182
+#, elixir-autogen, elixir-format
+msgid "Members"
+msgstr "Membri"
+
+#: lib/safarimanager_web/live/admin/teams/index.sface:75
+#, elixir-autogen, elixir-format
+msgid "New team"
+msgstr "Nuovo team"
+
+#: lib/safarimanager_web/live/admin/teams/index.sface:137
+#: lib/safarimanager_web/live/admin/teams/index.sface:175
+#, elixir-autogen, elixir-format
+msgid "Org. name"
+msgstr "Nome Soc."
+
+#: lib/safarimanager_web/live/admin/teams/index.sface:31
+#: lib/safarimanager_web/live/admin/teams/index.sface:31
+#, elixir-autogen, elixir-format
+msgid "Organization name"
+msgstr "Nome società"
+
+#: lib/safarimanager_web/live/admin/teams/index.ex:107
+#, elixir-autogen, elixir-format
+msgid "Team created successfully"
+msgstr "Team creato con successo"
+
+#: lib/safarimanager_web/live/admin/teams/index.ex:199
+#, elixir-autogen, elixir-format
+msgid "Team deleted successfully"
+msgstr "Team eliminato con successo"
+
+#: lib/safarimanager_web/live/admin/teams/index.sface:12
+#, elixir-autogen, elixir-format
+msgid "Team details"
+msgstr "Dettagli team"
+
+#: lib/safarimanager_web/components/sidebar.ex:101
+#, elixir-autogen, elixir-format
+msgid "Teams"
+msgstr "Team"
+
+#: lib/safarimanager_web/live/admin/teams/index.ex:210
+#, elixir-autogen, elixir-format
+msgid "Teams deleted successfully"
+msgstr "Team eliminati con successo"
+
+#: lib/safarimanager_web/live/admin/teams/index.ex:116
+#, elixir-autogen, elixir-format
+msgid "Unable to create the team"
+msgstr "Impossibile creare il team"
+
+#: lib/safarimanager_web/live/admin/teams/index.ex:200
+#, elixir-autogen, elixir-format
+msgid "Unable to delete Team"
+msgstr "Impossibile eliminare il team"
+
+#: lib/safarimanager_web/live/admin/teams/index.ex:213
+#, elixir-autogen, elixir-format
+msgid "Unable to delete Teams"
+msgstr "Impossibile eliminare i team"
+
+#: lib/safarimanager_web/live/admin/teams/index.ex:170
+#, elixir-autogen, elixir-format
+msgid "Unable to retrieve this Team"
+msgstr "Impossibile recuperare questo team"
+
+#: lib/safarimanager_web/live/admin/teams/index.sface:128
+#, elixir-autogen, elixir-format
+msgid "add more"
+msgstr "aggiungi"
+
+#: lib/safarimanager_web/live/admin/teams/index.sface:117
+#, elixir-autogen, elixir-format
+msgid "remove"
+msgstr "rimuovi"

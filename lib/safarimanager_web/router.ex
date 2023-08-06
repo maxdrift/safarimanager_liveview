@@ -94,6 +94,10 @@ defmodule SMWeb.Router do
         live "/participants/new", Participants.Index, :new
         live "/participants/:user_id/:competition_id", Participants.Index, :show
         live "/participants/:user_id/:competition_id/edit", Participants.Index, :edit
+        live "/teams", Teams.Index, :index
+        live "/teams/new", Teams.Index, :new
+        live "/teams/:id", Teams.Index, :show
+        live "/teams/:id/edit", Teams.Index, :edit
         live "/import", Import
       end
 

@@ -11,6 +11,7 @@ defmodule SM.Competitions.Competition do
   alias SM.Organizations.Organization
   alias SM.Participants.Participant
   alias SM.Slides.Slide
+  alias SM.Teams.TeamMember
 
   @types Application.compile_env!(:safarimanager, [__MODULE__, :types])
 
@@ -31,6 +32,8 @@ defmodule SM.Competitions.Competition do
     has_one :settings, CompetitionSettings, on_replace: :delete
     many_to_many :allowed_evaluations, Evaluation, join_through: "competitions_evaluations"
     many_to_many :participants, User, join_through: Participant
+    has_many :team_members, TeamMember
+    has_many :teams, through: [:team_members, :team]
     many_to_many :jurors, User, join_through: Juror
     has_many :slides, Slide
 

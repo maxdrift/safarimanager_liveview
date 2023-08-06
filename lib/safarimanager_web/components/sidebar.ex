@@ -93,8 +93,14 @@ defmodule SMWeb.Components.Sidebar do
             />
             <SidebarLink
               label={gettext("Participants")}
-              hero_icon="users"
+              hero_icon="ticket"
               to={~p"/admin/participants"}
+              current={@current_page}
+            />
+            <SidebarLink
+              label={gettext("Teams")}
+              hero_icon="users"
+              to={~p"/admin/teams"}
               current={@current_page}
             />
             <SidebarLink
