@@ -10,6 +10,7 @@ defmodule SMWeb.Live.Participants do
   alias SM.Competitions
   alias SM.Organizations
   alias SM.Participants
+  alias SM.Teams
   alias SMWeb.Components.CompetitionHeader
   alias SMWeb.Components.FormActions
   alias SMWeb.Components.Layout
@@ -35,7 +36,9 @@ defmodule SMWeb.Live.Participants do
         categories: Categories.list(),
         participants: [],
         entity: %User{},
-        changeset: Accounts.change_for_competition_registration(%User{})
+        changeset: Accounts.change_for_competition_registration(%User{}),
+        participants_selection: MapSet.new(),
+        teamed_up_users: MapSet.new()
       )
 
     {:ok, socket}
@@ -125,8 +128,11 @@ defmodule SMWeb.Live.Participants do
   end
 
   def handle_event(
-        "category-change",
-        %{"category" => %{"category_id" => new_category_id, "user_id" => user_id}},
+        "change",
+        %{
+          "_target" => ["category-form", "category_id"],
+          "category-form" => %{"category_id" => new_category_id, "user_id" => user_id}
+        },
         socket
       ) do
     {:ok, participant} = Participants.get(user_id, socket.assigns.competition_id)
@@ -149,6 +155,53 @@ defmodule SMWeb.Live.Participants do
     end
   end
 
+  def handle_event(
+        "change",
+        %{
+          "_target" => ["participants-list-selection"],
+          "participants-list-selection" => selection
+        },
+        socket
+      ) do
+    socket =
+      assign(socket, participants_selection: MapSet.new(selection))
+
+    {:noreply, socket}
+  end
+
+  def handle_event("create-team", _params, socket) do
+    members =
+      socket.assigns.participants_selection
+      |> MapSet.to_list()
+      |> Enum.map(&%{"competition_id" => socket.assigns.competition.id, "user_id" => &1})
+
+    socket =
+      case Teams.create(%{"members" => members}) do
+        {:ok, team} ->
+          put_flash(
+            socket,
+            :info,
+            "#{gettext("Team created successfully")}: #{Teams.synthesize_team_name(team)}"
+          )
+
+        {:error, reason} ->
+          Logger.error("Unable to create team from selected participants: #{inspect(reason)}")
+          put_flash(socket, :error, gettext("Unable to create team"))
+      end
+
+    socket =
+      assign(socket,
+        participants_selection: MapSet.new(),
+        teamed_up_users: MapSet.new(Teams.list_member_users(socket.assigns.competition.id))
+      )
+
+    {:noreply, socket}
+  end
+
+  def handle_event(_event, _params, socket) do
+    {:noreply, socket}
+  end
+
   @impl Phoenix.LiveView
   def handle_params(%{"competition_id" => competition_id}, _uri, socket) do
     _result = if connected?(socket), do: {Participants.subscribe(), Accounts.subscribe()}
@@ -158,10 +211,13 @@ defmodule SMWeb.Live.Participants do
 
     socket =
       socket
-      |> assign(:competition_id, competition_id)
-      |> assign(:competition, competition)
-      |> assign(:participants, Participants.list(competition_id))
-      |> assign(:users, users)
+      |> assign(
+        competition_id: competition_id,
+        competition: competition,
+        participants: Participants.list(competition_id),
+        users: users,
+        teamed_up_users: MapSet.new(Teams.list_member_users(competition_id))
+      )
 
     {:noreply, socket}
   end

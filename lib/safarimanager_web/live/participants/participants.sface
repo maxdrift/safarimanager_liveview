@@ -1,8 +1,8 @@
 <Layout current_page={~p"/organize/#{@competition.id}/participants"} current_user={@current_user}>
   <CompetitionHeader {=@competition} />
   <StepsHeader current_step={1} competition_id={@competition.id} />
-  <div class="flex flex-col lg:flex-row mt-5">
-    <div class="overflow-y-auto rounded-lg lg:w-1/2 bg-base-200 shadow-lg">
+  <div class="flex flex-col xl:flex-row mt-5">
+    <div class="overflow-y-auto rounded-lg xl:w-1/2 bg-base-200 shadow-lg">
       <div class="p-4">
         <div class="text-2xl font-bold text-center py-4">{gettext("Users")}</div>
         <Form for={%{}} as={:users_filter} change="filter-users" opts={autocomplete: "off"}>
@@ -64,15 +64,30 @@
         />
       </UsersForm>
     </div>
-    <div class="divider lg:divider-horizontal" />
-    <div class="overflow-y-auto rounded-lg lg:w-1/2 bg-base-200 shadow-lg">
+    <div class="divider xl:divider-horizontal" />
+    <div class="overflow-y-auto rounded-lg xl:w-1/2 bg-base-200 shadow-lg">
       <div class="p-4">
         <div class="text-2xl font-bold text-center py-4">{gettext("Participants")}</div>
-        <Link
-          class="btn btn-outline btn-sm mb-2"
-          to={~p"/#{@competition.id}/participants_printout"}
-          opts={target: "_blank"}
-        >{gettext("Print")}</Link>
+        <div class="flex flex-row">
+          <Link
+            class="flex-none btn btn-outline btn-sm mb-2"
+            to={~p"/#{@competition.id}/participants_printout"}
+            opts={target: "_blank"}
+          >{gettext("Print")}</Link>
+          <div class="grow" />
+          <button
+            class={
+              "flex-none",
+              "btn",
+              "btn-sm",
+              "btn-primary",
+              "btn-disabled": MapSet.size(@participants_selection) < 2
+            }
+            :on-click="create-team"
+          >
+            {gettext("Create team")}
+          </button>
+        </div>
         <Form for={%{}} as={:participants_filter} change="filter-participants" opts={autocomplete: "off"}>
           <TextInput
             name={:value}
@@ -84,6 +99,7 @@
           <table class="table table-zebra table-fixed w-full">
             <thead>
               <tr>
+                <th class="sticky top-0 w-1" />
                 <th class="sticky top-0 w-2">{gettext("#")}</th>
                 <th class="sticky top-0 w-auto">{gettext("Last Name")}</th>
                 <th class="sticky top-0 w-auto">{gettext("First Name")}</th>
@@ -93,43 +109,65 @@
               </tr>
             </thead>
             <tbody>
-              {#for item <- @participants}
-                <tr>
-                  <td class="truncate">{item.number}</td>
-                  <td class="truncate">{item.user.last_name}</td>
-                  <td class="truncate">{item.user.first_name}</td>
-                  <td class="truncate">{(item.user.organization && item.user.organization.name) || gettext("N/A")}</td>
-                  <td class="truncate">
-                    <Form for={%{}} as={:category} change="category-change" submit="category-submit">
-                      <Select
-                        field={:category_id}
-                        options={Enum.map(@categories, &{&1.name, &1.id})}
-                        selected={item.category_id}
-                        prompt={[key: gettext("Category...")]}
-                        class="select select-xs select-bordered max-w-4"
-                      />
-                      <HiddenInput field={:user_id} value={item.user_id} />
-                    </Form>
-                  </td>
-                  <td>
-                    <button
-                      class="btn btn-square btn-xs btn-error"
-                      :on-click="remove"
-                      :values={user_id: item.user.id}
-                      title={gettext("Remove")}
-                    ><Heroicons.Surface.Icon name="trash" type="outline" class="w-4 h-4" /></button>
-                  </td>
-                </tr>
-              {#else}
-                <tr>
-                  <td>{gettext("No items yet!")}</td>
-                  <td />
-                  <td />
-                  <td />
-                  <td />
-                  <td />
-                </tr>
-              {/for}
+              <Form id="participants-selection-form" for={%{}} as={:participants_selection} change="change">
+                {#for item <- @participants}
+                  <tr>
+                    <td>
+                      <label>
+                        <input
+                          form="participants-selection-form"
+                          type="checkbox"
+                          name="participants-list-selection[]"
+                          value={item.user_id}
+                          checked={MapSet.member?(@participants_selection, item.user_id)}
+                          class="checkbox checkbox-sm mt-2"
+                          disabled={MapSet.member?(@teamed_up_users, item.user_id)}
+                        />
+                      </label>
+                    </td>
+                    <td class="truncate">{item.number}</td>
+                    <td class="truncate">{item.user.last_name}</td>
+                    <td class="truncate">{item.user.first_name}</td>
+                    <td class="truncate">{(item.user.organization && item.user.organization.name) || gettext("N/A")}</td>
+                    <td>
+                      <Form id="category-form" for={%{}} as={:category}>
+                        <Select
+                          id={"#{item.user_id}-category-select"}
+                          form="category-form"
+                          field={:category_id}
+                          options={Enum.map(@categories, &{&1.name, &1.id})}
+                          selected={item.category_id}
+                          prompt={[key: gettext("Category...")]}
+                          class="select select-xs select-bordered max-w-4"
+                        />
+                        <HiddenInput
+                          form="category-form"
+                          id={"#{item.user_id}-category-user-id"}
+                          field={:user_id}
+                          value={item.user_id}
+                        />
+                      </Form>
+                    </td>
+                    <td>
+                      <button
+                        class="btn btn-square btn-xs btn-error"
+                        :on-click="remove"
+                        :values={user_id: item.user.id}
+                        title={gettext("Remove")}
+                      ><Heroicons.Surface.Icon name="trash" type="outline" class="w-4 h-4" /></button>
+                    </td>
+                  </tr>
+                {#else}
+                  <tr>
+                    <td>{gettext("No items yet!")}</td>
+                    <td />
+                    <td />
+                    <td />
+                    <td />
+                    <td />
+                  </tr>
+                {/for}
+              </Form>
             </tbody>
           </table>
         </div>

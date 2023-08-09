@@ -150,7 +150,7 @@ msgstr ""
 #: lib/safarimanager_web/components/steps_header.ex:18
 #: lib/safarimanager_web/live/admin/import.ex:47
 #: lib/safarimanager_web/live/jurors/jurors.sface:49
-#: lib/safarimanager_web/live/participants/participants.sface:155
+#: lib/safarimanager_web/live/participants/participants.sface:193
 #: lib/safarimanager_web/live/slides/slides.sface:211
 #, elixir-autogen, elixir-format
 msgid "Jurors"
@@ -539,7 +539,7 @@ msgstr ""
 msgid "to your account now."
 msgstr ""
 
-#: lib/safarimanager_web/live/participants/participants.sface:75
+#: lib/safarimanager_web/live/participants/participants.sface:76
 #: lib/safarimanager_web/live/results/results.sface:143
 #, elixir-autogen, elixir-format
 msgid "Print"
@@ -1251,7 +1251,7 @@ msgstr ""
 #: lib/safarimanager_web/live/jurors/jurors.sface:64
 #: lib/safarimanager_web/live/participants/participants.sface:31
 #: lib/safarimanager_web/live/participants/participants.sface:32
-#: lib/safarimanager_web/live/participants/participants.sface:101
+#: lib/safarimanager_web/live/participants/participants.sface:131
 #: lib/safarimanager_web/live/results/results.sface:99
 #: lib/safarimanager_web/live/results/results.sface:163
 #: lib/safarimanager_web/live/results/results.sface:164
@@ -1298,7 +1298,7 @@ msgstr ""
 #: lib/safarimanager_web/live/jurors/jurors.sface:21
 #: lib/safarimanager_web/live/jurors/jurors.sface:56
 #: lib/safarimanager_web/live/participants/participants.sface:21
-#: lib/safarimanager_web/live/participants/participants.sface:90
+#: lib/safarimanager_web/live/participants/participants.sface:106
 #: lib/safarimanager_web/live/results/results.sface:150
 #: lib/safarimanager_web/live/slides/slide_selection.sface:32
 #: lib/safarimanager_web/live/slides/slides.sface:26
@@ -1520,7 +1520,7 @@ msgstr ""
 #: lib/safarimanager_web/live/admin/users/index.sface:81
 #: lib/safarimanager_web/live/admin/users/index.sface:196
 #: lib/safarimanager_web/live/participants/participants.sface:22
-#: lib/safarimanager_web/live/participants/participants.sface:91
+#: lib/safarimanager_web/live/participants/participants.sface:107
 #: lib/safarimanager_web/live/results/results.sface:151
 #: lib/safarimanager_web/live/slides/slide_selection.sface:33
 #: lib/safarimanager_web/live/slides/slides.sface:27
@@ -1642,7 +1642,7 @@ msgstr ""
 #: lib/safarimanager_web/controllers/selection_printout_html/show_multi.html.heex:33
 #: lib/safarimanager_web/controllers/selection_printout_html/show_single.html.heex:32
 #: lib/safarimanager_web/live/admin/participants/index.sface:111
-#: lib/safarimanager_web/live/participants/participants.sface:87
+#: lib/safarimanager_web/live/participants/participants.sface:103
 #: lib/safarimanager_web/live/results/results.sface:85
 #: lib/safarimanager_web/live/slides/slide_selection.sface:29
 #: lib/safarimanager_web/live/slides/slides.sface:23
@@ -1663,7 +1663,7 @@ msgstr ""
 #: lib/safarimanager_web/live/admin/teams/index.sface:19
 #: lib/safarimanager_web/live/admin/teams/index.sface:81
 #: lib/safarimanager_web/live/admin/teams/index.sface:165
-#: lib/safarimanager_web/live/participants/participants.sface:151
+#: lib/safarimanager_web/live/participants/participants.sface:189
 #, elixir-autogen, elixir-format
 msgid "Competition"
 msgstr ""
@@ -2027,7 +2027,7 @@ msgstr ""
 #: lib/safarimanager_web/live/jurors/jurors.sface:20
 #: lib/safarimanager_web/live/jurors/jurors.sface:55
 #: lib/safarimanager_web/live/participants/participants.sface:20
-#: lib/safarimanager_web/live/participants/participants.sface:89
+#: lib/safarimanager_web/live/participants/participants.sface:105
 #: lib/safarimanager_web/live/slides/slide_selection.sface:31
 #: lib/safarimanager_web/live/slides/slides.sface:25
 #, elixir-autogen, elixir-format
@@ -2038,7 +2038,7 @@ msgstr ""
 #: lib/safarimanager_web/live/jurors/jurors.sface:19
 #: lib/safarimanager_web/live/jurors/jurors.sface:54
 #: lib/safarimanager_web/live/participants/participants.sface:19
-#: lib/safarimanager_web/live/participants/participants.sface:88
+#: lib/safarimanager_web/live/participants/participants.sface:104
 #: lib/safarimanager_web/live/slides/slide_selection.sface:30
 #: lib/safarimanager_web/live/slides/slides.sface:24
 #, elixir-autogen, elixir-format
@@ -2053,7 +2053,7 @@ msgstr ""
 #: lib/safarimanager_web/live/jurors/jurors.sface:37
 #: lib/safarimanager_web/live/jurors/jurors.sface:71
 #: lib/safarimanager_web/live/new_competition/new_competition.sface:22
-#: lib/safarimanager_web/live/participants/participants.sface:125
+#: lib/safarimanager_web/live/participants/participants.sface:162
 #: lib/safarimanager_web/live/slides/slide_selection.sface:55
 #: lib/safarimanager_web/live/slides/slides.sface:49
 #: lib/safarimanager_web/live/slides/slides.sface:182
@@ -2072,12 +2072,12 @@ msgid "OR"
 msgstr ""
 
 #: lib/safarimanager_web/live/jurors/jurors.sface:66
-#: lib/safarimanager_web/live/participants/participants.sface:119
+#: lib/safarimanager_web/live/participants/participants.sface:156
 #, elixir-autogen, elixir-format
 msgid "Remove"
 msgstr ""
 
-#: lib/safarimanager_web/live/participants/participants.sface:80
+#: lib/safarimanager_web/live/participants/participants.sface:95
 #: lib/safarimanager_web/live/slides/slide_selection.sface:22
 #: lib/safarimanager_web/live/slides/slides.sface:16
 #, elixir-autogen, elixir-format
@@ -2599,12 +2599,12 @@ msgstr ""
 msgid "classification"
 msgstr ""
 
-#: lib/safarimanager_web/live/participants/participants.ex:138
+#: lib/safarimanager_web/live/participants/participants.ex:144
 #, elixir-autogen, elixir-format
 msgid "Category was changed successfully"
 msgstr ""
 
-#: lib/safarimanager_web/live/participants/participants.sface:108
+#: lib/safarimanager_web/live/participants/participants.sface:140
 #, elixir-autogen, elixir-format
 msgid "Category..."
 msgstr ""
@@ -2614,12 +2614,12 @@ msgstr ""
 msgid "Go to..."
 msgstr ""
 
-#: lib/safarimanager_web/live/participants/participants.ex:146
+#: lib/safarimanager_web/live/participants/participants.ex:152
 #, elixir-autogen, elixir-format
 msgid "Unable to change Category"
 msgstr ""
 
-#: lib/safarimanager_web/live/admin/teams/index.ex:222
+#: lib/safarimanager_web/live/admin/teams/index.ex:227
 #, elixir-autogen, elixir-format
 msgid "All teams deleted successfully"
 msgstr ""
@@ -2629,7 +2629,7 @@ msgstr ""
 msgid "Edit team"
 msgstr ""
 
-#: lib/safarimanager_web/live/admin/teams/index.ex:134
+#: lib/safarimanager_web/live/admin/teams/index.ex:138
 #, elixir-autogen, elixir-format
 msgid "Edited team"
 msgstr ""
@@ -2664,11 +2664,12 @@ msgid "Organization name"
 msgstr ""
 
 #: lib/safarimanager_web/live/admin/teams/index.ex:107
+#: lib/safarimanager_web/live/participants/participants.ex:184
 #, elixir-autogen, elixir-format
 msgid "Team created successfully"
 msgstr ""
 
-#: lib/safarimanager_web/live/admin/teams/index.ex:199
+#: lib/safarimanager_web/live/admin/teams/index.ex:204
 #, elixir-autogen, elixir-format
 msgid "Team deleted successfully"
 msgstr ""
@@ -2683,7 +2684,7 @@ msgstr ""
 msgid "Teams"
 msgstr ""
 
-#: lib/safarimanager_web/live/admin/teams/index.ex:210
+#: lib/safarimanager_web/live/admin/teams/index.ex:215
 #, elixir-autogen, elixir-format
 msgid "Teams deleted successfully"
 msgstr ""
@@ -2693,17 +2694,17 @@ msgstr ""
 msgid "Unable to create the team"
 msgstr ""
 
-#: lib/safarimanager_web/live/admin/teams/index.ex:200
+#: lib/safarimanager_web/live/admin/teams/index.ex:205
 #, elixir-autogen, elixir-format
 msgid "Unable to delete Team"
 msgstr ""
 
-#: lib/safarimanager_web/live/admin/teams/index.ex:213
+#: lib/safarimanager_web/live/admin/teams/index.ex:218
 #, elixir-autogen, elixir-format
 msgid "Unable to delete Teams"
 msgstr ""
 
-#: lib/safarimanager_web/live/admin/teams/index.ex:170
+#: lib/safarimanager_web/live/admin/teams/index.ex:175
 #, elixir-autogen, elixir-format
 msgid "Unable to retrieve this Team"
 msgstr ""
@@ -2716,4 +2717,14 @@ msgstr ""
 #: lib/safarimanager_web/live/admin/teams/index.sface:117
 #, elixir-autogen, elixir-format
 msgid "remove"
+msgstr ""
+
+#: lib/safarimanager_web/live/participants/participants.sface:88
+#, elixir-autogen, elixir-format
+msgid "Create team"
+msgstr ""
+
+#: lib/safarimanager_web/live/participants/participants.ex:189
+#, elixir-autogen, elixir-format
+msgid "Unable to create team"
 msgstr ""
