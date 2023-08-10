@@ -80,6 +80,7 @@ defmodule SM.MixProject do
       {:prom_ex, "~> 1.8"},
       {:random_password, "~> 1.0"},
       {:rexbug, "~> 1.0"},
+      {:styler, "~> 0.8", only: [:dev, :test], runtime: false},
       {:surface_catalogue, "~> 0.6"},
       # overriding due to "surface_catalogue" requirements
       {:surface, "~> 0.11.0", override: true},

@@ -6,5 +6,5 @@
     "{config,lib,test}/**/*.{ex,exs,sface,heex}"
   ],
   subdirectories: ["priv/*/migrations"],
-  plugins: [Surface.Formatter.Plugin, Phoenix.LiveView.HTMLFormatter]
+  plugins: [Styler, Surface.Formatter.Plugin, Phoenix.LiveView.HTMLFormatter]
 ]
