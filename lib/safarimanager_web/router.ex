@@ -2,7 +2,6 @@ defmodule SMWeb.Router do
   use SMWeb, :router
 
   import SMWeb.UserAuth
-
   import Surface.Catalogue.Router
 
   pipeline :browser do

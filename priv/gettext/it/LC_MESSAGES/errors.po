@@ -102,7 +102,7 @@ msgstr "deve essere uguale a %{number}"
 msgid "You must log in to access this page."
 msgstr "Devi effettuare il login per accedere a questa pagina."
 
-#: lib/safarimanager/teams/team.ex:49
+#: lib/safarimanager/teams/team.ex:48
 #, elixir-autogen, elixir-format
 msgid "is already a member of this team"
 msgstr "è già un membro di questo team"

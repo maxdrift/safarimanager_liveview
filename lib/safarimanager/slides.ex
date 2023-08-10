@@ -72,8 +72,7 @@ defmodule SM.Slides do
   end
 
   @spec get_thumbnails_path(String.t(), String.t(), :small | :medium | :large) :: String.t()
-  def get_thumbnails_path(competition_id, user_id, size_type)
-      when size_type in [:small, :medium, :large] do
+  def get_thumbnails_path(competition_id, user_id, size_type) when size_type in [:small, :medium, :large] do
     path = get_uploads_path(competition_id, user_id)
 
     Path.join([path, "thumbnails", Atom.to_string(size_type)])
@@ -235,7 +234,7 @@ defmodule SM.Slides do
 
     query
     |> Repo.all()
-    |> Enum.into(%{})
+    |> Map.new()
   end
 
   @spec count_for_jury_by_category(String.t()) :: [
@@ -249,13 +248,12 @@ defmodule SM.Slides do
         on: p.competition_id == ^competition_id and sl.user_id == p.user_id,
         join: c in assoc(p, :category),
         group_by: [p.category_id],
-        select:
-          {p.category_id, {c.name, count(sl.id), fragment("count(DISTINCT ?)", sl.subject_id)}}
+        select: {p.category_id, {c.name, count(sl.id), fragment("count(DISTINCT ?)", sl.subject_id)}}
       )
 
     query
     |> Repo.all()
-    |> Enum.into(%{})
+    |> Map.new()
   end
 
   @spec count_for_jury(String.t()) :: {non_neg_integer(), non_neg_integer()}
@@ -478,7 +476,7 @@ defmodule SM.Slides do
     result =
       query
       |> Repo.all()
-      |> Enum.into(%{})
+      |> Map.new()
 
     submitted_jury = Map.get(result, :submitted_jury, 0)
     submitted_fixed = Map.get(result, :submitted_fixed, 0)
@@ -635,14 +633,7 @@ defmodule SM.Slides do
           String.t(),
           String.t()
         ) :: {:error, any()} | {:ok, Slide.t()}
-  def create_and_store_slide_file(
-        competition_id,
-        user_id,
-        file_name,
-        file_size,
-        file_type,
-        tmp_path
-      ) do
+  def create_and_store_slide_file(competition_id, user_id, file_name, file_size, file_type, tmp_path) do
     uploads_path = get_uploads_path(competition_id, user_id)
 
     Multi.new()
@@ -652,9 +643,7 @@ defmodule SM.Slides do
     |> Multi.run(:verify_duplicate, fn _repo, %{} ->
       case get(competition_id, user_id, file_name) do
         {:ok, result} ->
-          Logger.info(
-            "Slide #{result.id} from User #{user_id} in Competition #{competition_id} already exists."
-          )
+          Logger.info("Slide #{result.id} from User #{user_id} in Competition #{competition_id} already exists.")
 
           {:error, {:duplicate, result}}
 
@@ -941,9 +930,7 @@ defmodule SM.Slides do
   @spec clear_penalty(String.t()) :: {:ok, Slide.t()} | {:error, any()}
   def clear_penalty(slide_id) do
     Multi.new()
-    |> Multi.update_all(:clear_penalty, from(Slide, where: [id: ^slide_id]),
-      set: [penalty: false]
-    )
+    |> Multi.update_all(:clear_penalty, from(Slide, where: [id: ^slide_id]), set: [penalty: false])
     |> Repo.transaction()
     |> case do
       {:ok, _result} ->
@@ -983,9 +970,7 @@ defmodule SM.Slides do
         notify_subscribers({:ok, slide}, [:slide, :deleted])
 
       {:error, failed_operation, failed_value, _changes_so_far} ->
-        Logger.error(
-          "Failed to delete slide #{slide.id}. #{failed_operation}: #{inspect(failed_value)}"
-        )
+        Logger.error("Failed to delete slide #{slide.id}. #{failed_operation}: #{inspect(failed_value)}")
 
         {:error, {failed_operation, failed_value}}
     end
@@ -1027,9 +1012,7 @@ defmodule SM.Slides do
         end
 
       {:error, failed_operation, failed_value, _changes_so_far} ->
-        Logger.error(
-          "Failed to delete multiple slides. #{failed_operation}: #{inspect(failed_value)}"
-        )
+        Logger.error("Failed to delete multiple slides. #{failed_operation}: #{inspect(failed_value)}")
 
         notify_subscribers(:error, [:slide, :deleted])
     end
@@ -1097,11 +1080,7 @@ defmodule SM.Slides do
         order_by: [asc: :inserted_at]
       )
 
-    Repo.all(query)
-    |> Enum.map(fn sf ->
-      {sf.type, sf}
-    end)
-    |> Enum.into(%{})
+    query |> Repo.all() |> Map.new(fn sf -> {sf.type, sf} end)
   end
 
   @spec get_slide_flag(String.t()) :: {:ok, SlideFlag.t()} | {:error, :not_found}
@@ -1164,9 +1143,7 @@ defmodule SM.Slides do
         notify_subscribers(get(slide_id), [:slide, :updated])
 
       {:error, failed_operation, failed_value, _changes_so_far} ->
-        Logger.error(
-          "Error applying correct subject. #{failed_operation}: #{inspect(failed_value)}"
-        )
+        Logger.error("Error applying correct subject. #{failed_operation}: #{inspect(failed_value)}")
 
         notify_subscribers(:error, [:slide, :updated])
     end
@@ -1175,15 +1152,12 @@ defmodule SM.Slides do
   @spec slide_flags_by_types(Slide.t()) :: %{atom() => SlideFlag.t()}
   def slide_flags_by_types(slide) do
     flags =
-      slide.slide_flags
-      |> Enum.map(fn sf ->
-        {sf.type, sf}
-      end)
+      Enum.map(slide.slide_flags, fn sf -> {sf.type, sf} end)
 
     list_slide_flag_types()
     |> Enum.map(&{elem(&1, 0), nil})
     |> Keyword.merge(flags)
-    |> Enum.into(%{})
+    |> Map.new()
   end
 
   # Internal
@@ -1193,9 +1167,7 @@ defmodule SM.Slides do
     file_path = Path.join(uploads_path, file_name)
 
     if File.exists?(file_path) do
-      Logger.info(
-        "File #{file_name} from User #{user_id} in Competition #{competition_id} already exists."
-      )
+      Logger.info("File #{file_name} from User #{user_id} in Competition #{competition_id} already exists.")
 
       {:ok, file_path}
     else
@@ -1204,13 +1176,7 @@ defmodule SM.Slides do
     end
   end
 
-  defp assign_random_evaluation(
-         slide,
-         num_of_jurors,
-         evaluations_per_juror,
-         allowed_evaluations,
-         competition_id
-       ) do
+  defp assign_random_evaluation(slide, num_of_jurors, evaluations_per_juror, allowed_evaluations, competition_id) do
     Enum.each(0..num_of_jurors, fn _juror ->
       Enum.each(0..evaluations_per_juror, fn _evaluation ->
         random_evaluation = Enum.random(allowed_evaluations)
@@ -1219,13 +1185,7 @@ defmodule SM.Slides do
     end)
   end
 
-  defp assign_evaluation(
-         slide,
-         num_of_jurors,
-         evaluations_per_juror,
-         evaluation_id,
-         competition_id
-       ) do
+  defp assign_evaluation(slide, num_of_jurors, evaluations_per_juror, evaluation_id, competition_id) do
     Enum.each(0..num_of_jurors, fn _juror ->
       Enum.each(0..evaluations_per_juror, fn _evaluation ->
         evaluate(competition_id, slide.id, evaluation_id)

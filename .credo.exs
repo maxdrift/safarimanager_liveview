@@ -82,8 +82,7 @@
           # You can customize the priority of any check
           # Priority values are: `low, normal, high, higher`
           #
-          {Credo.Check.Design.AliasUsage,
-           [priority: :low, if_nested_deeper_than: 2, if_called_more_often_than: 0]},
+          {Credo.Check.Design.AliasUsage, [priority: :low, if_nested_deeper_than: 2, if_called_more_often_than: 0]},
           # You can also customize the exit_status of each check.
           # If you don't want TODO comments to cause `mix credo` to fail, just
           # set this value to 0 (zero).
@@ -184,22 +183,37 @@
           # Controversial and experimental checks (opt-in, just move the check to `:enabled`
           #   and be sure to use `mix credo --strict` to see low priority checks)
           #
+          {Credo.Check.Consistency.MultiAliasImportRequireUse, []},
+          {Credo.Check.Consistency.ParameterPatternMatching, []},
           {Credo.Check.Design.DuplicatedCode, []},
           {Credo.Check.Design.SkipTestWithoutComment, []},
           {Credo.Check.Readability.AliasAs, []},
+          {Credo.Check.Readability.AliasOrder, []},
           {Credo.Check.Readability.BlockPipe, []},
+          {Credo.Check.Readability.LargeNumbers, []},
+          {Credo.Check.Readability.ModuleDoc, []},
+          {Credo.Check.Readability.MultiAlias, []},
+          {Credo.Check.Readability.OneArityFunctionInPipe, []},
+          {Credo.Check.Readability.ParenthesesOnZeroArityDefs, []},
+          {Credo.Check.Readability.PipeIntoAnonymousFunctions, []},
+          {Credo.Check.Readability.PreferImplicitTry, []},
           {Credo.Check.Readability.SingleFunctionToBlockPipe, []},
+          {Credo.Check.Readability.SinglePipe, []},
+          {Credo.Check.Readability.StrictModuleLayout, []},
+          {Credo.Check.Readability.UnnecessaryAliasExpansion, []},
           {Credo.Check.Refactor.ABCSize, []},
+          {Credo.Check.Refactor.CaseTrivialMatches, []},
+          {Credo.Check.Refactor.FilterCount, []},
           {Credo.Check.Refactor.IoPuts, []},
+          {Credo.Check.Refactor.MapInto, []},
+          {Credo.Check.Refactor.MapJoin, []},
           {Credo.Check.Refactor.MapMap, []},
           {Credo.Check.Refactor.ModuleDependencies, []},
           {Credo.Check.Refactor.NegatedIsNil, []},
           {Credo.Check.Refactor.PipeChainStart, []},
           {Credo.Check.Refactor.RejectFilter, []},
           {Credo.Check.Refactor.VariableRebinding, []},
-          {Credo.Check.Warning.LazyLogging, []}
-
-          # {Credo.Check.Refactor.MapInto, []},
+          {Credo.Check.Warning.LazyLogging, []},
 
           #
           # Custom checks can be created using `mix credo.gen.check`.

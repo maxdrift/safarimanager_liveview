@@ -1,4 +1,5 @@
 defmodule SMWeb.SidebarHook do
+  @moduledoc false
   import Phoenix.LiveView
   import SMWeb.Components.Confirm
   import SMWeb.Gettext

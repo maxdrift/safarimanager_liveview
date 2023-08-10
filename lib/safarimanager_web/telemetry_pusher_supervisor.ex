@@ -1,4 +1,5 @@
 defmodule SMWeb.TelemetryPusherSupervisor do
+  @moduledoc false
   use Supervisor
 
   alias SMWeb.TelemetryPusher

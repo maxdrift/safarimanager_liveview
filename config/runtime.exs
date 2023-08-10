@@ -10,7 +10,7 @@ import Config
 config :safarimanager,
   shutdown_callback: {System, :stop, []}
 
-priv_dir = :code.priv_dir(:safarimanager) |> to_string()
+priv_dir = :safarimanager |> :code.priv_dir() |> to_string()
 
 priv_dir_uploads = Path.join(priv_dir, "/uploads")
 
@@ -109,8 +109,7 @@ config :safarimanager, SMWeb.Endpoint,
 
 {:ok, hostname} = :inet.gethostname()
 
-config :safarimanager, SMWeb.TelemetryPusher,
-  instance_id: System.get_env("INSTANCE_ID", to_string(hostname))
+config :safarimanager, SMWeb.TelemetryPusher, instance_id: System.get_env("INSTANCE_ID", to_string(hostname))
 
 config :safarimanager, SMWeb.PrometheusPush,
   url: System.get_env("PROMETHEUS_PUSH_GW_HOST", "https://prometheus.maxdrift.org"),

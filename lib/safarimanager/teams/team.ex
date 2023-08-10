@@ -45,8 +45,7 @@ defmodule SM.Teams.Team do
 
       if duplicates != [] do
         [
-          members:
-            {dgettext("errors", "is already a member of this team"), user_id: hd(duplicates)}
+          members: {dgettext("errors", "is already a member of this team"), user_id: hd(duplicates)}
         ]
       else
         []

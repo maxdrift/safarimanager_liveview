@@ -11,7 +11,7 @@ msgstr ""
 "Language: it\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: lib/safarimanager_web/components/core_components.ex:450
+#: lib/safarimanager_web/components/core_components.ex:448
 #: lib/safarimanager_web/live/admin/categories/index.sface:104
 #: lib/safarimanager_web/live/admin/competitions/index.sface:306
 #: lib/safarimanager_web/live/admin/evaluations/index.sface:116
@@ -32,7 +32,7 @@ msgid "Admin"
 msgstr "Amministrazione"
 
 #: lib/safarimanager_web/components/sidebar.ex:122
-#: lib/safarimanager_web/live/hooks/sidebar_hook.ex:41
+#: lib/safarimanager_web/live/hooks/sidebar_hook.ex:42
 #, elixir-autogen, elixir-format
 msgid "Are you sure you want to shut down Safari Manager now?"
 msgstr "Sei sicuro di voler arrestare Safari Manager ora?"
@@ -91,8 +91,8 @@ msgstr "Partecipanti"
 #: lib/safarimanager_web/components/sidebar.ex:121
 #: lib/safarimanager_web/components/sidebar.ex:123
 #: lib/safarimanager_web/components/sidebar.ex:133
-#: lib/safarimanager_web/live/hooks/sidebar_hook.ex:40
-#: lib/safarimanager_web/live/hooks/sidebar_hook.ex:42
+#: lib/safarimanager_web/live/hooks/sidebar_hook.ex:41
+#: lib/safarimanager_web/live/hooks/sidebar_hook.ex:43
 #, elixir-autogen, elixir-format
 msgid "Shut Down"
 msgstr "Arresta"
@@ -116,22 +116,22 @@ msgstr "Tema"
 msgid "close"
 msgstr "chiudi"
 
-#: lib/safarimanager/accounts/user.ex:154
+#: lib/safarimanager/accounts/user.ex:152
 #, elixir-autogen, elixir-format
 msgid "did not change"
 msgstr "non è cambiato"
 
-#: lib/safarimanager/accounts/user.ex:175
+#: lib/safarimanager/accounts/user.ex:173
 #, elixir-autogen, elixir-format
 msgid "does not match password"
 msgstr "non coincide con la password"
 
-#: lib/safarimanager/accounts/user.ex:213
+#: lib/safarimanager/accounts/user.ex:211
 #, elixir-autogen, elixir-format
 msgid "is not valid"
 msgstr "non è valido"
 
-#: lib/safarimanager/accounts/user.ex:63
+#: lib/safarimanager/accounts/user.ex:62
 #, elixir-autogen, elixir-format
 msgid "must have the @ sign and no spaces"
 msgstr "deve contenere il simbolo @ e nessuno spazio"
@@ -161,11 +161,11 @@ msgstr "Giurati"
 #: lib/safarimanager_web/controllers/selection_printout_html/show_multi.html.heex:38
 #: lib/safarimanager_web/controllers/selection_printout_html/show_single.html.heex:37
 #: lib/safarimanager_web/controllers/slides_printout_html/show.html.heex:38
-#: lib/safarimanager_web/live/results/results.ex:84
+#: lib/safarimanager_web/live/results/results.ex:83
 #: lib/safarimanager_web/live/results/results.sface:250
 #: lib/safarimanager_web/live/slides/slide_selection.ex:300
-#: lib/safarimanager_web/live/validation/validation.ex:428
-#: lib/safarimanager_web/live/validation/validation_launcher.ex:197
+#: lib/safarimanager_web/live/validation/validation.ex:409
+#: lib/safarimanager_web/live/validation/validation_launcher.ex:193
 #: lib/safarimanager_web/live/validation/validation_launcher.sface:23
 #: lib/safarimanager_web/live/validation/validation_launcher.sface:269
 #, elixir-autogen, elixir-format
@@ -309,77 +309,77 @@ msgstr "evento internazionale"
 msgid "Imported %{success} of %{total} entries in %{table}"
 msgstr "Importati %{success} su %{total} elementi in %{table}"
 
-#: lib/safarimanager_web/live/admin/import.ex:114
+#: lib/safarimanager_web/live/admin/import.ex:113
 #, elixir-autogen, elixir-format
 msgid "Too large"
 msgstr "Troppo grande"
 
-#: lib/safarimanager_web/live/admin/import.ex:116
+#: lib/safarimanager_web/live/admin/import.ex:115
 #, elixir-autogen, elixir-format
 msgid "You have selected an unacceptable file type"
 msgstr "Hai selezionato un tipo di file incompatibile"
 
-#: lib/safarimanager_web/live/admin/import.ex:115
+#: lib/safarimanager_web/live/admin/import.ex:114
 #, elixir-autogen, elixir-format
 msgid "You have selected too many files"
 msgstr "Hai selezionato troppi file"
 
-#: lib/safarimanager_web/live/user_registration_live.ex:15
+#: lib/safarimanager_web/live/user_registration_live.ex:16
 #, elixir-autogen, elixir-format
 msgid "Already registered?"
 msgstr "Già iscritto?"
 
-#: lib/safarimanager_web/live/user_settings_live.ex:21
-#: lib/safarimanager_web/live/user_settings_live.ex:58
+#: lib/safarimanager_web/live/user_settings_live.ex:22
+#: lib/safarimanager_web/live/user_settings_live.ex:59
 #, elixir-autogen, elixir-format
 msgid "Change Email"
 msgstr "Modifica Email"
 
-#: lib/safarimanager_web/live/user_settings_live.ex:64
-#: lib/safarimanager_web/live/user_settings_live.ex:119
+#: lib/safarimanager_web/live/user_settings_live.ex:65
+#: lib/safarimanager_web/live/user_settings_live.ex:120
 #, elixir-autogen, elixir-format
 msgid "Change Password"
 msgstr "Modifica Password"
 
-#: lib/safarimanager_web/live/user_settings_live.ex:57
-#: lib/safarimanager_web/live/user_settings_live.ex:118
+#: lib/safarimanager_web/live/user_settings_live.ex:58
+#: lib/safarimanager_web/live/user_settings_live.ex:119
 #, elixir-autogen, elixir-format
 msgid "Changing..."
 msgstr "Modifica in corso..."
 
-#: lib/safarimanager_web/live/user_confirmation_live.ex:10
+#: lib/safarimanager_web/live/user_confirmation_live.ex:11
 #, elixir-autogen, elixir-format
 msgid "Confirm Account"
 msgstr "Conferma Account"
 
-#: lib/safarimanager_web/live/user_confirmation_live.ex:15
+#: lib/safarimanager_web/live/user_confirmation_live.ex:16
 #, elixir-autogen, elixir-format
 msgid "Confirm my account"
 msgstr "Conferma il mio account"
 
-#: lib/safarimanager_web/live/user_reset_password_live.ex:27
-#: lib/safarimanager_web/live/user_settings_live.ex:99
+#: lib/safarimanager_web/live/user_reset_password_live.ex:28
+#: lib/safarimanager_web/live/user_settings_live.ex:100
 #, elixir-autogen, elixir-format
 msgid "Confirm new password"
 msgstr "Conferma la nuova password"
 
-#: lib/safarimanager_web/live/user_registration_live.ex:43
+#: lib/safarimanager_web/live/user_registration_live.ex:44
 #, elixir-autogen, elixir-format
 msgid "Create an account"
 msgstr "Crea un account"
 
-#: lib/safarimanager_web/live/user_registration_live.ex:42
+#: lib/safarimanager_web/live/user_registration_live.ex:43
 #, elixir-autogen, elixir-format
 msgid "Creating account..."
 msgstr "Creazione account in corso..."
 
-#: lib/safarimanager_web/live/user_settings_live.ex:44
-#: lib/safarimanager_web/live/user_settings_live.ex:106
+#: lib/safarimanager_web/live/user_settings_live.ex:45
+#: lib/safarimanager_web/live/user_settings_live.ex:107
 #, elixir-autogen, elixir-format
 msgid "Current password"
 msgstr "Password attuale"
 
-#: lib/safarimanager_web/live/user_login_live.ex:12
+#: lib/safarimanager_web/live/user_login_live.ex:13
 #, elixir-autogen, elixir-format
 msgid "Don't have an account?"
 msgstr "Non hai un account?"
@@ -388,153 +388,153 @@ msgstr "Non hai un account?"
 #: lib/safarimanager_web/live/admin/users/index.sface:25
 #: lib/safarimanager_web/live/admin/users/index.sface:25
 #: lib/safarimanager_web/live/admin/users/index.sface:70
-#: lib/safarimanager_web/live/user_login_live.ex:28
-#: lib/safarimanager_web/live/user_registration_live.ex:38
-#: lib/safarimanager_web/live/user_settings_live.ex:36
+#: lib/safarimanager_web/live/user_login_live.ex:29
+#: lib/safarimanager_web/live/user_registration_live.ex:39
+#: lib/safarimanager_web/live/user_settings_live.ex:37
 #, elixir-autogen, elixir-format
 msgid "Email"
 msgstr "Email"
 
-#: lib/safarimanager_web/live/user_forgot_password_live.ex:13
-#: lib/safarimanager_web/live/user_login_live.ex:34
+#: lib/safarimanager_web/live/user_forgot_password_live.ex:14
+#: lib/safarimanager_web/live/user_login_live.ex:35
 #, elixir-autogen, elixir-format
 msgid "Forgot your password?"
 msgstr "Dimenticato la password?"
 
-#: lib/safarimanager_web/live/user_confirmation_instructions_live.ex:50
+#: lib/safarimanager_web/live/user_confirmation_instructions_live.ex:51
 #, elixir-autogen, elixir-format
 msgid "If your email is in our system and it has not been confirmed yet, you will receive an email with instructions shortly."
 msgstr "Se il tuo indirizzo email è nel nostro sistema ma non è stato ancora confermato, riceverai a breve un'email con delle istruzioni."
 
-#: lib/safarimanager_web/live/user_forgot_password_live.ex:44
+#: lib/safarimanager_web/live/user_forgot_password_live.ex:45
 #, elixir-autogen, elixir-format
 msgid "If your email is in our system, you will receive instructions to reset your password shortly."
 msgstr "Se il tuo indirizzo email è nel nostro sistema, riceverai a breve le istruzioni per reimpostare la password."
 
-#: lib/safarimanager_web/live/user_login_live.ex:32
+#: lib/safarimanager_web/live/user_login_live.ex:33
 #, elixir-autogen, elixir-format
 msgid "Keep me logged in"
 msgstr "Ricordami"
+
+#: lib/safarimanager_web/live/user_confirmation_instructions_live.ex:31
+#: lib/safarimanager_web/live/user_confirmation_live.ex:22
+#: lib/safarimanager_web/live/user_reset_password_live.ex:40
+#, elixir-autogen, elixir-format
+msgid "Log in"
+msgstr "Accedi"
+
+#: lib/safarimanager_web/live/user_reset_password_live.ex:24
+#: lib/safarimanager_web/live/user_settings_live.ex:93
+#, elixir-autogen, elixir-format
+msgid "New password"
+msgstr "Nuova password"
+
+#: lib/safarimanager_web/live/user_registration_live.ex:36
+#: lib/safarimanager_web/live/user_reset_password_live.ex:21
+#: lib/safarimanager_web/live/user_settings_live.ex:33
+#: lib/safarimanager_web/live/user_settings_live.ex:84
+#, elixir-autogen, elixir-format
+msgid "Oops, something went wrong! Please check the errors below."
+msgstr "Ops, si è verificato un problema! Controlla gli errori riportati."
+
+#: lib/safarimanager_web/live/user_login_live.ex:30
+#: lib/safarimanager_web/live/user_registration_live.ex:40
+#, elixir-autogen, elixir-format
+msgid "Password"
+msgstr "Password"
+
+#: lib/safarimanager_web/live/user_reset_password_live.ex:67
+#, elixir-autogen, elixir-format
+msgid "Password reset successfully."
+msgstr "Password reimpostata con successo."
 
 #: lib/safarimanager_web/live/user_confirmation_instructions_live.ex:30
 #: lib/safarimanager_web/live/user_confirmation_live.ex:21
 #: lib/safarimanager_web/live/user_reset_password_live.ex:39
 #, elixir-autogen, elixir-format
-msgid "Log in"
-msgstr "Accedi"
-
-#: lib/safarimanager_web/live/user_reset_password_live.ex:23
-#: lib/safarimanager_web/live/user_settings_live.ex:92
-#, elixir-autogen, elixir-format
-msgid "New password"
-msgstr "Nuova password"
-
-#: lib/safarimanager_web/live/user_registration_live.ex:35
-#: lib/safarimanager_web/live/user_reset_password_live.ex:20
-#: lib/safarimanager_web/live/user_settings_live.ex:32
-#: lib/safarimanager_web/live/user_settings_live.ex:83
-#, elixir-autogen, elixir-format
-msgid "Oops, something went wrong! Please check the errors below."
-msgstr "Ops, si è verificato un problema! Controlla gli errori riportati."
-
-#: lib/safarimanager_web/live/user_login_live.ex:29
-#: lib/safarimanager_web/live/user_registration_live.ex:39
-#, elixir-autogen, elixir-format
-msgid "Password"
-msgstr "Password"
-
-#: lib/safarimanager_web/live/user_reset_password_live.ex:66
-#, elixir-autogen, elixir-format
-msgid "Password reset successfully."
-msgstr "Password reimpostata con successo."
-
-#: lib/safarimanager_web/live/user_confirmation_instructions_live.ex:29
-#: lib/safarimanager_web/live/user_confirmation_live.ex:20
-#: lib/safarimanager_web/live/user_reset_password_live.ex:38
-#, elixir-autogen, elixir-format
 msgid "Register"
 msgstr "Registra"
 
-#: lib/safarimanager_web/live/user_registration_live.ex:13
+#: lib/safarimanager_web/live/user_registration_live.ex:14
 #, elixir-autogen, elixir-format
 msgid "Register for an account"
 msgstr "Registra un account"
 
-#: lib/safarimanager_web/live/user_confirmation_instructions_live.ex:11
-#: lib/safarimanager_web/live/user_confirmation_instructions_live.ex:23
+#: lib/safarimanager_web/live/user_confirmation_instructions_live.ex:12
+#: lib/safarimanager_web/live/user_confirmation_instructions_live.ex:24
 #, elixir-autogen, elixir-format
 msgid "Resend confirmation instructions"
 msgstr "Re-invia le istruzioni per confermare l'account"
 
-#: lib/safarimanager_web/live/user_reset_password_live.ex:10
-#: lib/safarimanager_web/live/user_reset_password_live.ex:32
+#: lib/safarimanager_web/live/user_reset_password_live.ex:11
+#: lib/safarimanager_web/live/user_reset_password_live.ex:33
 #, elixir-autogen, elixir-format
 msgid "Reset Password"
 msgstr "Reimposta la password"
 
-#: lib/safarimanager_web/live/user_reset_password_live.ex:84
+#: lib/safarimanager_web/live/user_reset_password_live.ex:85
 #, elixir-autogen, elixir-format
 msgid "Reset password link is invalid or it has expired."
 msgstr "Il link per reimpostare la password non è valido o è scaduto."
 
-#: lib/safarimanager_web/live/user_reset_password_live.ex:31
+#: lib/safarimanager_web/live/user_reset_password_live.ex:32
 #, elixir-autogen, elixir-format
 msgid "Resetting..."
 msgstr "Reimpostando..."
 
-#: lib/safarimanager_web/live/user_forgot_password_live.ex:21
+#: lib/safarimanager_web/live/user_forgot_password_live.ex:22
 #, elixir-autogen, elixir-format
 msgid "Send password reset instructions"
 msgstr "Invia le istruzioni per reimpostare la password"
 
-#: lib/safarimanager_web/live/user_confirmation_instructions_live.ex:22
-#: lib/safarimanager_web/live/user_forgot_password_live.ex:20
+#: lib/safarimanager_web/live/user_confirmation_instructions_live.ex:23
+#: lib/safarimanager_web/live/user_forgot_password_live.ex:21
 #, elixir-autogen, elixir-format
 msgid "Sending..."
 msgstr "Invio in corso..."
 
-#: lib/safarimanager_web/live/user_login_live.ex:38
+#: lib/safarimanager_web/live/user_login_live.ex:39
 #, elixir-autogen, elixir-format
 msgid "Sigining in..."
 msgstr "Accesso in corso..."
 
-#: lib/safarimanager_web/live/user_login_live.ex:39
-#: lib/safarimanager_web/live/user_registration_live.ex:17
+#: lib/safarimanager_web/live/user_login_live.ex:40
+#: lib/safarimanager_web/live/user_registration_live.ex:18
 #, elixir-autogen, elixir-format
 msgid "Sign in"
 msgstr "Accedi"
 
-#: lib/safarimanager_web/live/user_login_live.ex:10
+#: lib/safarimanager_web/live/user_login_live.ex:11
 #, elixir-autogen, elixir-format
 msgid "Sign in to account"
 msgstr "Accedi all'account"
 
-#: lib/safarimanager_web/live/user_login_live.ex:14
+#: lib/safarimanager_web/live/user_login_live.ex:15
 #, elixir-autogen, elixir-format
 msgid "Sign up"
 msgstr "Registra"
 
-#: lib/safarimanager_web/live/user_confirmation_live.ex:52
+#: lib/safarimanager_web/live/user_confirmation_live.ex:53
 #, elixir-autogen, elixir-format
 msgid "User confirmation link is invalid or it has expired."
 msgstr "Il link di conferma dell'utente non è valido o è scaduto."
 
-#: lib/safarimanager_web/live/user_confirmation_live.ex:37
+#: lib/safarimanager_web/live/user_confirmation_live.ex:38
 #, elixir-autogen, elixir-format
 msgid "User confirmed successfully."
 msgstr "Utente confermato con successo."
 
-#: lib/safarimanager_web/live/user_forgot_password_live.ex:14
+#: lib/safarimanager_web/live/user_forgot_password_live.ex:15
 #, elixir-autogen, elixir-format
 msgid "We'll send a password reset link to your inbox"
 msgstr "Invieremo un link per reimpostare la password al tuo indirizzo email"
 
-#: lib/safarimanager_web/live/user_login_live.ex:16
+#: lib/safarimanager_web/live/user_login_live.ex:17
 #, elixir-autogen, elixir-format
 msgid "for an account now."
 msgstr "un account ora."
 
-#: lib/safarimanager_web/live/user_registration_live.ex:19
+#: lib/safarimanager_web/live/user_registration_live.ex:20
 #, elixir-autogen, elixir-format
 msgid "to your account now."
 msgstr "al tuo account ora."
@@ -565,17 +565,17 @@ msgstr "Impossibile importare la selezione: slide non trovata"
 msgid "Unable to import slide selection: subject not found"
 msgstr "Impossibile importare la selezione: soggetto non trovato"
 
-#: lib/safarimanager_web/components/grid.ex:218
+#: lib/safarimanager_web/components/grid.ex:210
 #, elixir-autogen, elixir-format
 msgid "Are you sure you want to delete 1 record?"
 msgstr "Sei sicuro di voler eliminare 1 record?"
 
-#: lib/safarimanager_web/components/grid.ex:203
+#: lib/safarimanager_web/components/grid.ex:195
 #, elixir-autogen, elixir-format
 msgid "Are you sure you want to delete all records?"
 msgstr "Sei sicuro di voler eliminare tutti i record?"
 
-#: lib/safarimanager_web/components/grid.ex:186
+#: lib/safarimanager_web/components/grid.ex:178
 #, elixir-autogen, elixir-format
 msgid "Are you sure you want to delete this record?"
 msgstr "Sei sicuro di voler eliminare questo record?"
@@ -626,10 +626,10 @@ msgid "Created"
 msgstr "Creato"
 
 #: lib/safarimanager_web/components/grid.ex:52
-#: lib/safarimanager_web/components/grid.ex:187
-#: lib/safarimanager_web/components/grid.ex:204
-#: lib/safarimanager_web/components/grid.ex:219
-#: lib/safarimanager_web/components/grid.ex:238
+#: lib/safarimanager_web/components/grid.ex:179
+#: lib/safarimanager_web/components/grid.ex:196
+#: lib/safarimanager_web/components/grid.ex:211
+#: lib/safarimanager_web/components/grid.ex:230
 #: lib/safarimanager_web/live/admin/categories/index.sface:120
 #: lib/safarimanager_web/live/admin/competitions/index.sface:322
 #: lib/safarimanager_web/live/admin/evaluations/index.sface:132
@@ -638,25 +638,25 @@ msgstr "Creato"
 #: lib/safarimanager_web/live/admin/subjects/index.sface:146
 #: lib/safarimanager_web/live/admin/teams/index.sface:201
 #: lib/safarimanager_web/live/admin/users/index.sface:216
-#: lib/safarimanager_web/live/slides/slides.ex:108
-#: lib/safarimanager_web/live/slides/slides.ex:133
+#: lib/safarimanager_web/live/slides/slides.ex:102
+#: lib/safarimanager_web/live/slides/slides.ex:127
 #: lib/safarimanager_web/live/slides/slides.sface:131
 #, elixir-autogen, elixir-format
 msgid "Delete"
 msgstr "Elimina"
 
-#: lib/safarimanager_web/components/grid.ex:202
+#: lib/safarimanager_web/components/grid.ex:194
 #, elixir-autogen, elixir-format
 msgid "Delete all records"
 msgstr "Elimina tutti i record"
 
-#: lib/safarimanager_web/components/grid.ex:185
-#: lib/safarimanager_web/components/grid.ex:217
+#: lib/safarimanager_web/components/grid.ex:177
+#: lib/safarimanager_web/components/grid.ex:209
 #, elixir-autogen, elixir-format
 msgid "Delete record"
 msgstr "Elimina record"
 
-#: lib/safarimanager_web/components/grid.ex:232
+#: lib/safarimanager_web/components/grid.ex:224
 #, elixir-autogen, elixir-format
 msgid "Delete records"
 msgstr "Elimina i record"
@@ -676,7 +676,7 @@ msgstr "Elimina i record"
 msgid "Edit"
 msgstr "Modifica"
 
-#: lib/safarimanager_web/live/admin/subjects/index.ex:95
+#: lib/safarimanager_web/live/admin/subjects/index.ex:87
 #, elixir-autogen, elixir-format
 msgid "Edited subject"
 msgstr "Soggetto modificato"
@@ -798,7 +798,7 @@ msgstr "Mostra"
 msgid "Type"
 msgstr "Tipo"
 
-#: lib/safarimanager_web/components/confirm.ex:90
+#: lib/safarimanager_web/components/confirm.ex:91
 #: lib/safarimanager_web/live/admin/categories/index.sface:76
 #: lib/safarimanager_web/live/admin/competitions/index.sface:278
 #: lib/safarimanager_web/live/admin/evaluations/index.sface:85
@@ -814,42 +814,42 @@ msgstr "Tipo"
 msgid "Cancel"
 msgstr "Annulla"
 
-#: lib/safarimanager_web/components/confirm.ex:84
+#: lib/safarimanager_web/components/confirm.ex:85
 #, elixir-autogen, elixir-format
 msgid "Don't show this message again"
 msgstr "Non mostrare più questo messaggio"
 
-#: lib/safarimanager_web/live/admin/subjects/index.ex:199
+#: lib/safarimanager_web/live/admin/subjects/index.ex:186
 #, elixir-autogen, elixir-format
 msgid "All subjects deleted successfully"
 msgstr "Tutti i soggetti sono stati eliminati con successo"
 
-#: lib/safarimanager_web/live/admin/subjects/index.ex:75
+#: lib/safarimanager_web/live/admin/subjects/index.ex:71
 #, elixir-autogen, elixir-format
 msgid "Subject created successfully"
 msgstr "Soggetto creato con successo"
 
-#: lib/safarimanager_web/live/admin/subjects/index.ex:176
+#: lib/safarimanager_web/live/admin/subjects/index.ex:163
 #, elixir-autogen, elixir-format
 msgid "Subject deleted successfully"
 msgstr "Soggetto eliminato con successo"
 
-#: lib/safarimanager_web/live/admin/subjects/index.ex:187
+#: lib/safarimanager_web/live/admin/subjects/index.ex:174
 #, elixir-autogen, elixir-format
 msgid "Subjects deleted successfully"
 msgstr "Soggetti eliminati con successo"
 
-#: lib/safarimanager_web/live/admin/subjects/index.ex:177
+#: lib/safarimanager_web/live/admin/subjects/index.ex:164
 #, elixir-autogen, elixir-format
 msgid "Unable to delete Subject"
 msgstr "Impossibile eliminare il soggetto"
 
-#: lib/safarimanager_web/live/admin/subjects/index.ex:190
+#: lib/safarimanager_web/live/admin/subjects/index.ex:177
 #, elixir-autogen, elixir-format
 msgid "Unable to delete Subjects"
 msgstr "Impossibile eliminare i soggetti"
 
-#: lib/safarimanager_web/live/admin/subjects/index.ex:151
+#: lib/safarimanager_web/live/admin/subjects/index.ex:138
 #, elixir-autogen, elixir-format
 msgid "Unable to retrieve this Subject"
 msgstr "Impossibile recuperare questo soggetto"
@@ -920,37 +920,37 @@ msgstr "Modifica soggetto"
 msgid "New subject"
 msgstr "Nuovo soggetto"
 
-#: lib/safarimanager_web/components/confirm.ex:41
+#: lib/safarimanager_web/components/confirm.ex:42
 #, elixir-autogen, elixir-format
 msgid "Are you sure?"
 msgstr "Sei sicuro?"
 
-#: lib/safarimanager_web/live/hooks/sidebar_hook.ex:26
+#: lib/safarimanager_web/live/hooks/sidebar_hook.ex:27
 #, elixir-autogen, elixir-format
 msgid "Safari Manager is shutting down. You can close this page."
 msgstr "Arresto di Safari Manager in corso. Puoi chiudere questa pagina."
 
-#: lib/safarimanager_web/components/confirm.ex:43
+#: lib/safarimanager_web/components/confirm.ex:44
 #, elixir-autogen, elixir-format
 msgid "Yes"
 msgstr "Sì"
 
-#: lib/safarimanager_web/live/admin/categories/index.ex:172
+#: lib/safarimanager_web/live/admin/categories/index.ex:159
 #, elixir-autogen, elixir-format
 msgid "All categories deleted successfully"
 msgstr "Tutti le categorie sono state eliminate con successo"
 
-#: lib/safarimanager_web/live/admin/categories/index.ex:160
+#: lib/safarimanager_web/live/admin/categories/index.ex:147
 #, elixir-autogen, elixir-format
 msgid "Categories deleted successfully"
 msgstr "Categorie eliminate con successo"
 
-#: lib/safarimanager_web/live/admin/categories/index.ex:72
+#: lib/safarimanager_web/live/admin/categories/index.ex:68
 #, elixir-autogen, elixir-format
 msgid "Category created successfully"
 msgstr "Categoria creata con successo"
 
-#: lib/safarimanager_web/live/admin/categories/index.ex:149
+#: lib/safarimanager_web/live/admin/categories/index.ex:136
 #, elixir-autogen, elixir-format
 msgid "Category deleted successfully"
 msgstr "Categoria eliminata con successo"
@@ -965,7 +965,7 @@ msgstr "Dettagli categoria"
 msgid "Edit category"
 msgstr "Modifica categoria"
 
-#: lib/safarimanager_web/live/admin/categories/index.ex:92
+#: lib/safarimanager_web/live/admin/categories/index.ex:84
 #, elixir-autogen, elixir-format
 msgid "Edited category"
 msgstr "Categoria modificata"
@@ -997,22 +997,22 @@ msgstr "ID"
 msgid "New category"
 msgstr "Nuova categoria"
 
-#: lib/safarimanager_web/live/admin/categories/index.ex:163
+#: lib/safarimanager_web/live/admin/categories/index.ex:150
 #, elixir-autogen, elixir-format
 msgid "Unable to delete Categories"
 msgstr "Impossibile eliminare le categorie"
 
-#: lib/safarimanager_web/live/admin/categories/index.ex:150
+#: lib/safarimanager_web/live/admin/categories/index.ex:137
 #, elixir-autogen, elixir-format
 msgid "Unable to delete Category"
 msgstr "Impossibile eliminare la categoria"
 
-#: lib/safarimanager_web/live/admin/categories/index.ex:124
+#: lib/safarimanager_web/live/admin/categories/index.ex:111
 #, elixir-autogen, elixir-format
 msgid "Unable to retrieve this Category"
 msgstr "Impossibile recuperare questa categoria"
 
-#: lib/safarimanager_web/live/admin/organizations/index.ex:220
+#: lib/safarimanager_web/live/admin/organizations/index.ex:203
 #, elixir-autogen, elixir-format
 msgid "All organizations deleted successfully"
 msgstr "Tutte le società sono state eliminate con successo"
@@ -1022,7 +1022,7 @@ msgstr "Tutte le società sono state eliminate con successo"
 msgid "Edit organization"
 msgstr "Modifica società"
 
-#: lib/safarimanager_web/live/admin/organizations/index.ex:100
+#: lib/safarimanager_web/live/admin/organizations/index.ex:92
 #, elixir-autogen, elixir-format
 msgid "Edited organization"
 msgstr "Società modificata"
@@ -1045,12 +1045,12 @@ msgstr "Luogo"
 msgid "New organization"
 msgstr "Nuova società"
 
-#: lib/safarimanager_web/live/admin/organizations/index.ex:80
+#: lib/safarimanager_web/live/admin/organizations/index.ex:76
 #, elixir-autogen, elixir-format
 msgid "Organization created successfully"
 msgstr "Società creata con successo"
 
-#: lib/safarimanager_web/live/admin/organizations/index.ex:197
+#: lib/safarimanager_web/live/admin/organizations/index.ex:180
 #, elixir-autogen, elixir-format
 msgid "Organization deleted successfully"
 msgstr "Società eliminata con successo"
@@ -1060,22 +1060,22 @@ msgstr "Società eliminata con successo"
 msgid "Organization details"
 msgstr "Dettagli società"
 
-#: lib/safarimanager_web/live/admin/organizations/index.ex:208
+#: lib/safarimanager_web/live/admin/organizations/index.ex:191
 #, elixir-autogen, elixir-format
 msgid "Organizations deleted successfully"
 msgstr "Società eliminate con successo"
 
-#: lib/safarimanager_web/live/admin/organizations/index.ex:198
+#: lib/safarimanager_web/live/admin/organizations/index.ex:181
 #, elixir-autogen, elixir-format
 msgid "Unable to delete Organization"
 msgstr "Impossibile eliminare la società"
 
-#: lib/safarimanager_web/live/admin/organizations/index.ex:211
+#: lib/safarimanager_web/live/admin/organizations/index.ex:194
 #, elixir-autogen, elixir-format
 msgid "Unable to delete Organizations"
 msgstr "Impossibile eliminare le società"
 
-#: lib/safarimanager_web/live/admin/organizations/index.ex:172
+#: lib/safarimanager_web/live/admin/organizations/index.ex:155
 #, elixir-autogen, elixir-format
 msgid "Unable to retrieve this Organization"
 msgstr "Impossibile recuperare questa società"
@@ -1088,22 +1088,22 @@ msgstr "Impossibile recuperare questa società"
 msgid "Select an organization..."
 msgstr "Seleziona una società..."
 
-#: lib/safarimanager_web/live/admin/organizations/index.ex:137
+#: lib/safarimanager_web/live/admin/organizations/index.ex:125
 #, elixir-autogen, elixir-format
 msgid "Error merging organizations"
 msgstr "Si è verificato un errore unendo le società"
 
-#: lib/safarimanager_web/live/admin/organizations/index.ex:129
+#: lib/safarimanager_web/live/admin/organizations/index.ex:119
 #, elixir-autogen, elixir-format
 msgid "Error merging organizations: a destination must be specified"
 msgstr "Impossibile unire le società: specificare una società di destinazione"
 
-#: lib/safarimanager_web/live/admin/organizations/index.ex:115
+#: lib/safarimanager_web/live/admin/organizations/index.ex:107
 #, elixir-autogen, elixir-format
 msgid "Successfully merged organizations"
 msgstr "Società unite con successo"
 
-#: lib/safarimanager_web/live/admin/competitions/index.ex:188
+#: lib/safarimanager_web/live/admin/competitions/index.ex:175
 #, elixir-autogen, elixir-format
 msgid "All competitions deleted successfully"
 msgstr "Tutte le competizioni sono state eliminate con successo"
@@ -1122,12 +1122,12 @@ msgstr "Valutazioni consentite"
 msgid "City"
 msgstr "Città"
 
-#: lib/safarimanager_web/live/admin/competitions/index.ex:88
+#: lib/safarimanager_web/live/admin/competitions/index.ex:84
 #, elixir-autogen, elixir-format
 msgid "Competition created successfully"
 msgstr "Competizione creata con successo"
 
-#: lib/safarimanager_web/live/admin/competitions/index.ex:165
+#: lib/safarimanager_web/live/admin/competitions/index.ex:152
 #, elixir-autogen, elixir-format
 msgid "Competition deleted successfully"
 msgstr "Competizione eliminata con successo"
@@ -1138,7 +1138,7 @@ msgstr "Competizione eliminata con successo"
 msgid "Competition details"
 msgstr "Dettagli competizione"
 
-#: lib/safarimanager_web/live/admin/competitions/index.ex:176
+#: lib/safarimanager_web/live/admin/competitions/index.ex:163
 #, elixir-autogen, elixir-format
 msgid "Competitions deleted successfully"
 msgstr "Competizioni eliminate con successo"
@@ -1161,7 +1161,7 @@ msgstr "Data (inizio)"
 msgid "Edit competition"
 msgstr "Modifica competizione"
 
-#: lib/safarimanager_web/live/admin/competitions/index.ex:108
+#: lib/safarimanager_web/live/admin/competitions/index.ex:100
 #, elixir-autogen, elixir-format
 msgid "Edited competition"
 msgstr "Competizione modificata"
@@ -1387,17 +1387,17 @@ msgstr "Percentuale in giuria"
 msgid "To"
 msgstr "A"
 
-#: lib/safarimanager_web/live/admin/competitions/index.ex:166
+#: lib/safarimanager_web/live/admin/competitions/index.ex:153
 #, elixir-autogen, elixir-format
 msgid "Unable to delete Competition"
 msgstr "Impossibile eliminare la competizione"
 
-#: lib/safarimanager_web/live/admin/competitions/index.ex:179
+#: lib/safarimanager_web/live/admin/competitions/index.ex:166
 #, elixir-autogen, elixir-format
 msgid "Unable to delete Competitions"
 msgstr "Impossibile eliminare le competizioni"
 
-#: lib/safarimanager_web/live/admin/competitions/index.ex:140
+#: lib/safarimanager_web/live/admin/competitions/index.ex:127
 #, elixir-autogen, elixir-format
 msgid "Unable to retrieve this Competition"
 msgstr "Impossibile recuperare questa competizione"
@@ -1437,7 +1437,7 @@ msgstr "da"
 msgid "to"
 msgstr "a"
 
-#: lib/safarimanager_web/live/admin/evaluations/index.ex:179
+#: lib/safarimanager_web/live/admin/evaluations/index.ex:166
 #, elixir-autogen, elixir-format
 msgid "All evaluations deleted successfully"
 msgstr "Tutte le valutazioni sono state eliminate con successo"
@@ -1455,17 +1455,17 @@ msgstr "Descrizione"
 msgid "Edit evaluation"
 msgstr "Modifica valutazione"
 
-#: lib/safarimanager_web/live/admin/evaluations/index.ex:97
+#: lib/safarimanager_web/live/admin/evaluations/index.ex:89
 #, elixir-autogen, elixir-format
 msgid "Edited evaluation"
 msgstr "Valutazione modificata"
 
-#: lib/safarimanager_web/live/admin/evaluations/index.ex:73
+#: lib/safarimanager_web/live/admin/evaluations/index.ex:69
 #, elixir-autogen, elixir-format
 msgid "Evaluation created successfully"
 msgstr "Valutazione creata con successo"
 
-#: lib/safarimanager_web/live/admin/evaluations/index.ex:156
+#: lib/safarimanager_web/live/admin/evaluations/index.ex:143
 #, elixir-autogen, elixir-format
 msgid "Evaluation deleted successfully"
 msgstr "Valutazione eliminata con successo"
@@ -1475,7 +1475,7 @@ msgstr "Valutazione eliminata con successo"
 msgid "Evaluation details"
 msgstr "Dettagli valutazione"
 
-#: lib/safarimanager_web/live/admin/evaluations/index.ex:167
+#: lib/safarimanager_web/live/admin/evaluations/index.ex:154
 #, elixir-autogen, elixir-format
 msgid "Evaluations deleted successfully"
 msgstr "Valutazioni eliminate con successo"
@@ -1485,22 +1485,22 @@ msgstr "Valutazioni eliminate con successo"
 msgid "New evaluation"
 msgstr "Nuova valutazione"
 
-#: lib/safarimanager_web/live/admin/evaluations/index.ex:157
+#: lib/safarimanager_web/live/admin/evaluations/index.ex:144
 #, elixir-autogen, elixir-format
 msgid "Unable to delete Evaluation"
 msgstr "Impossibile eliminare la valutazione"
 
-#: lib/safarimanager_web/live/admin/evaluations/index.ex:170
+#: lib/safarimanager_web/live/admin/evaluations/index.ex:157
 #, elixir-autogen, elixir-format
 msgid "Unable to delete Evaluations"
 msgstr "Impossibile eliminare le valutazioni"
 
-#: lib/safarimanager_web/live/admin/evaluations/index.ex:130
+#: lib/safarimanager_web/live/admin/evaluations/index.ex:117
 #, elixir-autogen, elixir-format
 msgid "Unable to retrieve this Evaluation"
 msgstr "Impossibile recuperare questa valutazione"
 
-#: lib/safarimanager_web/live/admin/users/index.ex:232
+#: lib/safarimanager_web/live/admin/users/index.ex:215
 #, elixir-autogen, elixir-format
 msgid "All users deleted successfully"
 msgstr "Tutti gli utenti sono stati eliminati con successo"
@@ -1533,7 +1533,7 @@ msgstr "Categoria"
 msgid "Edit user"
 msgstr "Modifica utente"
 
-#: lib/safarimanager_web/live/admin/users/index.ex:111
+#: lib/safarimanager_web/live/admin/users/index.ex:103
 #, elixir-autogen, elixir-format
 msgid "Edited user"
 msgstr "Utente modificato"
@@ -1566,27 +1566,27 @@ msgstr "Nuovo utente"
 msgid "Select a category..."
 msgstr "Seleziona una categoria..."
 
-#: lib/safarimanager_web/live/admin/users/index.ex:210
+#: lib/safarimanager_web/live/admin/users/index.ex:193
 #, elixir-autogen, elixir-format
 msgid "Unable to delete User"
 msgstr "Impossibile eliminare l'utente"
 
-#: lib/safarimanager_web/live/admin/users/index.ex:223
+#: lib/safarimanager_web/live/admin/users/index.ex:206
 #, elixir-autogen, elixir-format
 msgid "Unable to delete Users"
 msgstr "Impossibile eliminare gli utenti"
 
-#: lib/safarimanager_web/live/admin/users/index.ex:184
+#: lib/safarimanager_web/live/admin/users/index.ex:167
 #, elixir-autogen, elixir-format
 msgid "Unable to retrieve this User"
 msgstr "Impossibile recuperare questo utente"
 
-#: lib/safarimanager_web/live/admin/users/index.ex:87
+#: lib/safarimanager_web/live/admin/users/index.ex:83
 #, elixir-autogen, elixir-format
 msgid "User created successfully"
 msgstr "Utente creato con successo"
 
-#: lib/safarimanager_web/live/admin/users/index.ex:209
+#: lib/safarimanager_web/live/admin/users/index.ex:192
 #, elixir-autogen, elixir-format
 msgid "User deleted successfully"
 msgstr "Utente eliminato con successo"
@@ -1596,17 +1596,17 @@ msgstr "Utente eliminato con successo"
 msgid "User details"
 msgstr "Dettagli utente"
 
-#: lib/safarimanager_web/live/admin/users/index.ex:220
+#: lib/safarimanager_web/live/admin/users/index.ex:203
 #, elixir-autogen, elixir-format
 msgid "Users deleted successfully"
 msgstr "Utenti eliminati con successo"
 
-#: lib/safarimanager_web/live/admin/users/index.ex:149
+#: lib/safarimanager_web/live/admin/users/index.ex:137
 #, elixir-autogen, elixir-format
 msgid "Error merging users"
 msgstr "Si è verificato un errore unendo gli utenti"
 
-#: lib/safarimanager_web/live/admin/users/index.ex:141
+#: lib/safarimanager_web/live/admin/users/index.ex:131
 #, elixir-autogen, elixir-format
 msgid "Error merging users: a destination must be specified"
 msgstr "Impossibile unire gli utenti: specificare un utente di destinazione"
@@ -1618,7 +1618,7 @@ msgstr "Impossibile unire gli utenti: specificare un utente di destinazione"
 msgid "Select a user..."
 msgstr "Seleziona un utente..."
 
-#: lib/safarimanager_web/live/admin/users/index.ex:127
+#: lib/safarimanager_web/live/admin/users/index.ex:119
 #, elixir-autogen, elixir-format
 msgid "Successfully merged users"
 msgstr "Utenti uniti con successo"
@@ -1650,7 +1650,7 @@ msgstr "Unisci"
 msgid "#"
 msgstr "#"
 
-#: lib/safarimanager_web/live/admin/participants/index.ex:186
+#: lib/safarimanager_web/live/admin/participants/index.ex:171
 #, elixir-autogen, elixir-format
 msgid "All participants deleted successfully"
 msgstr "Tutti i partecipanti sono stati eliminati con successo"
@@ -1673,7 +1673,7 @@ msgstr "Competizione"
 msgid "Edit participant"
 msgstr "Modifica partecipante"
 
-#: lib/safarimanager_web/live/admin/participants/index.ex:101
+#: lib/safarimanager_web/live/admin/participants/index.ex:93
 #, elixir-autogen, elixir-format
 msgid "Edited participant"
 msgstr "Partecipante modificato"
@@ -1683,12 +1683,12 @@ msgstr "Partecipante modificato"
 msgid "New participant"
 msgstr "Nuovo partecipante"
 
-#: lib/safarimanager_web/live/admin/participants/index.ex:77
+#: lib/safarimanager_web/live/admin/participants/index.ex:73
 #, elixir-autogen, elixir-format
 msgid "Participant created successfully"
 msgstr "Partecipante creato con successo"
 
-#: lib/safarimanager_web/live/admin/participants/index.ex:163
+#: lib/safarimanager_web/live/admin/participants/index.ex:148
 #, elixir-autogen, elixir-format
 msgid "Participant deleted successfully"
 msgstr "Partecipante eliminato con successo"
@@ -1698,22 +1698,22 @@ msgstr "Partecipante eliminato con successo"
 msgid "Participant details"
 msgstr "Dettagli Partecipante"
 
-#: lib/safarimanager_web/live/admin/participants/index.ex:174
+#: lib/safarimanager_web/live/admin/participants/index.ex:159
 #, elixir-autogen, elixir-format
 msgid "Participants deleted successfully"
 msgstr "Partecipanti eliminati con successo"
 
-#: lib/safarimanager_web/live/admin/participants/index.ex:164
+#: lib/safarimanager_web/live/admin/participants/index.ex:149
 #, elixir-autogen, elixir-format
 msgid "Unable to delete Participant"
 msgstr "Impossibile eliminare il partecipante"
 
-#: lib/safarimanager_web/live/admin/participants/index.ex:177
+#: lib/safarimanager_web/live/admin/participants/index.ex:162
 #, elixir-autogen, elixir-format
 msgid "Unable to delete Participants"
 msgstr "Impossibile eliminare i partecipanti"
 
-#: lib/safarimanager_web/live/admin/participants/index.ex:134
+#: lib/safarimanager_web/live/admin/participants/index.ex:121
 #, elixir-autogen, elixir-format
 msgid "Unable to retrieve this Participant"
 msgstr "Impossibile recuperare questo partecipante"
@@ -1932,11 +1932,11 @@ msgstr "Soggetto errato"
 msgid "of"
 msgstr "di"
 
-#: lib/safarimanager_web/live/results/results.ex:83
+#: lib/safarimanager_web/live/results/results.ex:82
 #: lib/safarimanager_web/live/slides/slide_selection.ex:299
 #: lib/safarimanager_web/live/slides/slide_selection.sface:219
-#: lib/safarimanager_web/live/validation/validation.ex:427
-#: lib/safarimanager_web/live/validation/validation_launcher.ex:196
+#: lib/safarimanager_web/live/validation/validation.ex:408
+#: lib/safarimanager_web/live/validation/validation_launcher.ex:192
 #: lib/safarimanager_web/live/validation/validation_launcher.sface:24
 #, elixir-autogen, elixir-format
 msgid "Fixed points"
@@ -2159,7 +2159,7 @@ msgstr "Livello superiore"
 msgid "Load slides for"
 msgstr "Carica le slide per"
 
-#: lib/safarimanager_web/live/jurors/jurors.ex:43
+#: lib/safarimanager_web/live/jurors/jurors.ex:41
 #, elixir-autogen, elixir-format
 msgid "Reached max num. of Jurors"
 msgstr "Raggiunto il limite di giurati"
@@ -2262,7 +2262,7 @@ msgstr[1] "Scartate"
 msgid "Clear"
 msgstr "Resetta"
 
-#: lib/safarimanager_web/live/jury/jury.ex:278
+#: lib/safarimanager_web/live/jury/jury.ex:267
 #, elixir-autogen, elixir-format
 msgid "Error saving evaluation: slide has a penalty"
 msgstr "Impossibile salvare la valutazione: la slide ha una penalizzazione"
@@ -2284,7 +2284,7 @@ msgstr "Penalizzazione"
 msgid "Start Jury"
 msgstr "Avvia giuria"
 
-#: lib/safarimanager_web/live/jury/jury.ex:282
+#: lib/safarimanager_web/live/jury/jury.ex:271
 #, elixir-autogen, elixir-format
 msgid "Unexpected error while saving evaluation"
 msgstr "Errore inaspettato nell'applicare la valutazione"
@@ -2374,22 +2374,22 @@ msgstr "segnalazione"
 msgid "note"
 msgstr "nota"
 
-#: lib/safarimanager_web/live/slides/slides.ex:132
+#: lib/safarimanager_web/live/slides/slides.ex:126
 #, elixir-autogen, elixir-format
 msgid "Are you sure you want to delete all slides?"
 msgstr "Sei sicuro di voler eliminare tutte le slide?"
 
-#: lib/safarimanager_web/live/slides/slides.ex:107
+#: lib/safarimanager_web/live/slides/slides.ex:101
 #, elixir-autogen, elixir-format
 msgid "Are you sure you want to delete this slide?"
 msgstr "Sei sicuro di voler eliminare questa slide?"
 
-#: lib/safarimanager_web/live/slides/slides.ex:106
+#: lib/safarimanager_web/live/slides/slides.ex:100
 #, elixir-autogen, elixir-format
 msgid "Delete slide"
 msgstr "Elimina slide"
 
-#: lib/safarimanager_web/live/slides/slides.ex:131
+#: lib/safarimanager_web/live/slides/slides.ex:125
 #, elixir-autogen, elixir-format
 msgid "Delete all slides"
 msgstr "Elimina tutte le slide"
@@ -2409,17 +2409,17 @@ msgstr "Segnalazione"
 msgid "Duplicate subjects"
 msgstr "Soggetti duplicati"
 
-#: lib/safarimanager_web/live/validation/validation_launcher.ex:97
+#: lib/safarimanager_web/live/validation/validation_launcher.ex:93
 #, elixir-autogen, elixir-format
 msgid "Error moving slide to discarded"
 msgstr "Impossibile spostare la slide negli scarti"
 
-#: lib/safarimanager_web/live/validation/validation_launcher.ex:81
+#: lib/safarimanager_web/live/validation/validation_launcher.ex:77
 #, elixir-autogen, elixir-format
 msgid "Error moving slide to fixed points"
 msgstr "Impossibile spostare la slide in punteggio fisso"
 
-#: lib/safarimanager_web/live/validation/validation_launcher.ex:65
+#: lib/safarimanager_web/live/validation/validation_launcher.ex:61
 #, elixir-autogen, elixir-format
 msgid "Error moving slide to jury"
 msgstr "Impossibile spostare la slide in giuria"
@@ -2452,22 +2452,22 @@ msgstr "Sposta in giuria"
 msgid "Note"
 msgstr "Nota"
 
-#: lib/safarimanager_web/live/validation/validation_launcher.ex:108
+#: lib/safarimanager_web/live/validation/validation_launcher.ex:104
 #, elixir-autogen, elixir-format
 msgid "Removed all slide flags"
 msgstr "Tutte le flag sono state rimosse"
 
-#: lib/safarimanager_web/live/validation/validation_launcher.ex:92
+#: lib/safarimanager_web/live/validation/validation_launcher.ex:88
 #, elixir-autogen, elixir-format
 msgid "Slide moved to discarded"
 msgstr "Slide spostata negli scarti"
 
-#: lib/safarimanager_web/live/validation/validation_launcher.ex:76
+#: lib/safarimanager_web/live/validation/validation_launcher.ex:72
 #, elixir-autogen, elixir-format
 msgid "Slide moved to fixed points"
 msgstr "Slide spostata in punteggio fisso"
 
-#: lib/safarimanager_web/live/validation/validation_launcher.ex:60
+#: lib/safarimanager_web/live/validation/validation_launcher.ex:56
 #, elixir-autogen, elixir-format
 msgid "Slide moved to jury"
 msgstr "Slide spostata in giuria"
@@ -2482,12 +2482,12 @@ msgstr "Irriconoscibile"
 msgid "Apply subject correction"
 msgstr "Applica correzione soggetto"
 
-#: lib/safarimanager_web/live/validation/validation_launcher.ex:49
+#: lib/safarimanager_web/live/validation/validation_launcher.ex:45
 #, elixir-autogen, elixir-format
 msgid "Error applying subject correction to slide"
 msgstr "Impossibile applicare la correzione del soggetto alla slide"
 
-#: lib/safarimanager_web/live/validation/validation_launcher.ex:44
+#: lib/safarimanager_web/live/validation/validation_launcher.ex:40
 #, elixir-autogen, elixir-format
 msgid "Subject correction applied successfully"
 msgstr "Correzione soggetto applicata con successo"
@@ -2564,20 +2564,20 @@ msgstr "Tipo di fotocamera"
 msgid "Select a camera type..."
 msgstr "Seleziona un tipo di fotocamera..."
 
-#: lib/safarimanager_web/live/admin/categories/index.ex:273
-#: lib/safarimanager_web/live/jury/jury_launcher.ex:80
+#: lib/safarimanager_web/live/admin/categories/index.ex:258
+#: lib/safarimanager_web/live/jury/jury_launcher.ex:66
 #, elixir-autogen, elixir-format
 msgid "any"
 msgstr "qualsiasi"
 
-#: lib/safarimanager_web/live/admin/categories/index.ex:274
-#: lib/safarimanager_web/live/jury/jury_launcher.ex:79
+#: lib/safarimanager_web/live/admin/categories/index.ex:259
+#: lib/safarimanager_web/live/jury/jury_launcher.ex:65
 #, elixir-autogen, elixir-format
 msgid "compact"
 msgstr "compatte"
 
-#: lib/safarimanager_web/live/admin/categories/index.ex:275
-#: lib/safarimanager_web/live/jury/jury_launcher.ex:78
+#: lib/safarimanager_web/live/admin/categories/index.ex:260
+#: lib/safarimanager_web/live/jury/jury_launcher.ex:64
 #, elixir-autogen, elixir-format
 msgid "reflex"
 msgstr "reflex"
@@ -2589,7 +2589,7 @@ msgstr "reflex"
 msgid "species"
 msgstr "specie"
 
-#: lib/safarimanager_web/live/jury/jury_launcher.ex:69
+#: lib/safarimanager_web/live/jury/jury_launcher.ex:55
 #, elixir-autogen, elixir-format
 msgid "all"
 msgstr "tutte"
@@ -2599,7 +2599,7 @@ msgstr "tutte"
 msgid "classification"
 msgstr "classifica"
 
-#: lib/safarimanager_web/live/participants/participants.ex:144
+#: lib/safarimanager_web/live/participants/participants.ex:143
 #, elixir-autogen, elixir-format
 msgid "Category was changed successfully"
 msgstr "Categoria modificate con successo"
@@ -2614,12 +2614,12 @@ msgstr "Categoria..."
 msgid "Go to..."
 msgstr "Vai a..."
 
-#: lib/safarimanager_web/live/participants/participants.ex:152
+#: lib/safarimanager_web/live/participants/participants.ex:149
 #, elixir-autogen, elixir-format
 msgid "Unable to change Category"
 msgstr "Impossibile modificare la categoria"
 
-#: lib/safarimanager_web/live/admin/teams/index.ex:227
+#: lib/safarimanager_web/live/admin/teams/index.ex:215
 #, elixir-autogen, elixir-format
 msgid "All teams deleted successfully"
 msgstr "Tutti i team sono stati eliminati con successo"
@@ -2629,7 +2629,7 @@ msgstr "Tutti i team sono stati eliminati con successo"
 msgid "Edit team"
 msgstr "Modifica team"
 
-#: lib/safarimanager_web/live/admin/teams/index.ex:138
+#: lib/safarimanager_web/live/admin/teams/index.ex:127
 #, elixir-autogen, elixir-format
 msgid "Edited team"
 msgstr "Team modificato"
@@ -2663,13 +2663,13 @@ msgstr "Nome Soc."
 msgid "Organization name"
 msgstr "Nome società"
 
-#: lib/safarimanager_web/live/admin/teams/index.ex:107
-#: lib/safarimanager_web/live/participants/participants.ex:184
+#: lib/safarimanager_web/live/admin/teams/index.ex:100
+#: lib/safarimanager_web/live/participants/participants.ex:178
 #, elixir-autogen, elixir-format
 msgid "Team created successfully"
 msgstr "Team creato con successo"
 
-#: lib/safarimanager_web/live/admin/teams/index.ex:204
+#: lib/safarimanager_web/live/admin/teams/index.ex:192
 #, elixir-autogen, elixir-format
 msgid "Team deleted successfully"
 msgstr "Team eliminato con successo"
@@ -2684,27 +2684,27 @@ msgstr "Dettagli team"
 msgid "Teams"
 msgstr "Team"
 
-#: lib/safarimanager_web/live/admin/teams/index.ex:215
+#: lib/safarimanager_web/live/admin/teams/index.ex:203
 #, elixir-autogen, elixir-format
 msgid "Teams deleted successfully"
 msgstr "Team eliminati con successo"
 
-#: lib/safarimanager_web/live/admin/teams/index.ex:116
+#: lib/safarimanager_web/live/admin/teams/index.ex:109
 #, elixir-autogen, elixir-format
 msgid "Unable to create the team"
 msgstr "Impossibile creare il team"
 
-#: lib/safarimanager_web/live/admin/teams/index.ex:205
+#: lib/safarimanager_web/live/admin/teams/index.ex:193
 #, elixir-autogen, elixir-format
 msgid "Unable to delete Team"
 msgstr "Impossibile eliminare il team"
 
-#: lib/safarimanager_web/live/admin/teams/index.ex:218
+#: lib/safarimanager_web/live/admin/teams/index.ex:206
 #, elixir-autogen, elixir-format
 msgid "Unable to delete Teams"
 msgstr "Impossibile eliminare i team"
 
-#: lib/safarimanager_web/live/admin/teams/index.ex:175
+#: lib/safarimanager_web/live/admin/teams/index.ex:163
 #, elixir-autogen, elixir-format
 msgid "Unable to retrieve this Team"
 msgstr "Impossibile recuperare questo team"
@@ -2724,7 +2724,12 @@ msgstr "rimuovi"
 msgid "Create team"
 msgstr "Crea team"
 
-#: lib/safarimanager_web/live/participants/participants.ex:189
+#: lib/safarimanager_web/live/participants/participants.ex:183
 #, elixir-autogen, elixir-format
 msgid "Unable to create team"
 msgstr "Impossibile creare il team"
+
+#: lib/safarimanager_web/components/competition_header.ex:34
+#, elixir-autogen, elixir-format
+msgid "Sometime..."
+msgstr "In qualche data..."

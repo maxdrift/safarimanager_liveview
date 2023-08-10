@@ -62,10 +62,7 @@ defmodule SMWeb.Live.Admin.Teams.Index do
     members =
       params
       |> Map.get("members")
-      |> Enum.map(fn {pos, member} ->
-        {pos, Map.put(member, "competition_id", competition_id)}
-      end)
-      |> Enum.into(%{})
+      |> Map.new(fn {pos, member} -> {pos, Map.put(member, "competition_id", competition_id)} end)
 
     params = Map.put(params, "members", members)
 
@@ -92,11 +89,7 @@ defmodule SMWeb.Live.Admin.Teams.Index do
   end
 
   # Create/Edit dialog submit callback
-  def handle_event(
-        "submit",
-        %{"entity" => %{"_action" => "create"} = params},
-        socket
-      ) do
+  def handle_event("submit", %{"entity" => %{"_action" => "create"} = params}, socket) do
     case Teams.create(params) do
       {:ok, _entity} ->
         socket =
@@ -119,11 +112,7 @@ defmodule SMWeb.Live.Admin.Teams.Index do
     end
   end
 
-  def handle_event(
-        "submit",
-        %{"entity" => %{"_action" => "edit"} = params},
-        socket
-      ) do
+  def handle_event("submit", %{"entity" => %{"_action" => "edit"} = params}, socket) do
     case Teams.update(socket.assigns.record, params) do
       {:ok, entity} ->
         socket =
@@ -159,8 +148,7 @@ defmodule SMWeb.Live.Admin.Teams.Index do
             user_ids = unique_member_users(changeset, competition_id)
 
             socket =
-              socket
-              |> assign(
+              assign(socket,
                 record: team,
                 changeset: changeset,
                 competition_id: competition_id,
@@ -227,8 +215,7 @@ defmodule SMWeb.Live.Admin.Teams.Index do
     {:noreply, put_flash(socket, :info, gettext("All teams deleted successfully"))}
   end
 
-  def handle_info({Teams, [:team, :deleted], deleted_ids}, socket)
-      when is_list(deleted_ids) do
+  def handle_info({Teams, [:team, :deleted], deleted_ids}, socket) when is_list(deleted_ids) do
     socket =
       deleted_ids
       |> Stream.map(fn id -> "items-#{id}" end)
@@ -241,8 +228,7 @@ defmodule SMWeb.Live.Admin.Teams.Index do
     {:noreply, socket}
   end
 
-  def handle_info({Teams, [:team, :deleted], deleted_count}, socket)
-      when is_integer(deleted_count) do
+  def handle_info({Teams, [:team, :deleted], deleted_count}, socket) when is_integer(deleted_count) do
     {:noreply, push_navigate(socket, to: "/admin/teams")}
   end
 

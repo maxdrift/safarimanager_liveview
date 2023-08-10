@@ -62,11 +62,7 @@ defmodule SMWeb.Live.Admin.Participants.Index do
   end
 
   # Create/Edit dialog submit callback
-  def handle_event(
-        "submit",
-        %{"entity" => %{"_action" => "create"} = params},
-        socket
-      ) do
+  def handle_event("submit", %{"entity" => %{"_action" => "create"} = params}, socket) do
     case Participants.create(params) do
       {:ok, _entity} ->
         socket =
@@ -82,11 +78,7 @@ defmodule SMWeb.Live.Admin.Participants.Index do
     end
   end
 
-  def handle_event(
-        "submit",
-        %{"entity" => %{"_action" => "edit"} = params},
-        socket
-      ) do
+  def handle_event("submit", %{"entity" => %{"_action" => "edit"} = params}, socket) do
     case Participants.update(socket.assigns.record, params) do
       {:ok, entity} ->
         socket =
@@ -120,12 +112,7 @@ defmodule SMWeb.Live.Admin.Participants.Index do
             changeset = change(participant, %{})
 
             socket =
-              socket
-              |> assign(
-                record: participant,
-                changeset: changeset,
-                action: :edit
-              )
+              assign(socket, record: participant, changeset: changeset, action: :edit)
 
             {:noreply, socket}
         end
@@ -133,9 +120,7 @@ defmodule SMWeb.Live.Admin.Participants.Index do
       {:error, reason} ->
         socket = put_flash(socket, :error, gettext("Unable to retrieve this Participant"))
 
-        Logger.error(
-          "Error retrieving Participant #{user_id}/#{competition_id}: #{inspect(reason)}"
-        )
+        Logger.error("Error retrieving Participant #{user_id}/#{competition_id}: #{inspect(reason)}")
 
         {:noreply, socket}
     end
@@ -186,8 +171,7 @@ defmodule SMWeb.Live.Admin.Participants.Index do
     {:noreply, put_flash(socket, :info, gettext("All participants deleted successfully"))}
   end
 
-  def handle_info({Participants, [:participant, :deleted], deleted_ids}, socket)
-      when is_list(deleted_ids) do
+  def handle_info({Participants, [:participant, :deleted], deleted_ids}, socket) when is_list(deleted_ids) do
     socket =
       deleted_ids
       |> Stream.map(fn {user_id, competition_id} -> "items-#{user_id}-#{competition_id}" end)
@@ -200,8 +184,7 @@ defmodule SMWeb.Live.Admin.Participants.Index do
     {:noreply, socket}
   end
 
-  def handle_info({Participants, [:participant, :deleted], deleted_count}, socket)
-      when is_integer(deleted_count) do
+  def handle_info({Participants, [:participant, :deleted], deleted_count}, socket) when is_integer(deleted_count) do
     {:noreply, push_navigate(socket, to: "/admin/participants")}
   end
 

@@ -51,7 +51,7 @@ defmodule SMWeb.Live.NewCompetition do
     case Competitions.create(entity) do
       {:ok, %Competition{id: competition_id}} ->
         # TODO: Perform evaluations selection in the UI
-        all_evaluations = Evaluations.list() |> Enum.map(& &1.id)
+        all_evaluations = Enum.map(Evaluations.list(), & &1.id)
 
         {:ok, _competition} =
           Competitions.update_allowed_evaluations(competition_id, all_evaluations)

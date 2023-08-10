@@ -130,11 +130,7 @@ defmodule SM.CSVExport do
 
   defp stream_row(row, extra_fields, final_fields) do
     extra_fields =
-      extra_fields
-      |> Enum.map(fn {key, fun} ->
-        {key, fun.(row)}
-      end)
-      |> Enum.into(%{})
+      Map.new(extra_fields, fn {key, fun} -> {key, fun.(row)} end)
 
     row = Map.merge(row, extra_fields)
     row_map_to_list(row, final_fields)

@@ -33,9 +33,7 @@ defmodule SMWeb.Live.Jurors do
         {:ok, _juror} = Jurors.create(%{user_id: user_id, competition_id: competition_id})
         socket
       else
-        Logger.warning(
-          "Reached max of #{max_jurors_count} Jurors for Competition #{competition_id}"
-        )
+        Logger.warning("Reached max of #{max_jurors_count} Jurors for Competition #{competition_id}")
 
         put_flash(
           socket,

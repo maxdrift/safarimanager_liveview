@@ -65,11 +65,7 @@ defmodule SMWeb.Live.Admin.Organizations.Index do
   end
 
   # Create/Edit dialog submit callback
-  def handle_event(
-        "submit",
-        %{"entity" => %{"_action" => "create"} = params},
-        socket
-      ) do
+  def handle_event("submit", %{"entity" => %{"_action" => "create"} = params}, socket) do
     case Organizations.create(params) do
       {:ok, _entity} ->
         socket =
@@ -85,11 +81,7 @@ defmodule SMWeb.Live.Admin.Organizations.Index do
     end
   end
 
-  def handle_event(
-        "submit",
-        %{"entity" => %{"_action" => "edit"} = params},
-        socket
-      ) do
+  def handle_event("submit", %{"entity" => %{"_action" => "edit"} = params}, socket) do
     case Organizations.update(socket.assigns.record, params) do
       {:ok, entity} ->
         socket =
@@ -119,9 +111,7 @@ defmodule SMWeb.Live.Admin.Organizations.Index do
            valid?: false,
            errors: [dest_id: {"can't be blank", [validation: :required]}]
          }} ->
-          Logger.error(
-            "Unable to merge organizations #{inspect(selected_ids)}: a destination must be specified"
-          )
+          Logger.error("Unable to merge organizations #{inspect(selected_ids)}: a destination must be specified")
 
           put_flash(
             socket,
@@ -130,9 +120,7 @@ defmodule SMWeb.Live.Admin.Organizations.Index do
           )
 
         {:error, reason} ->
-          Logger.error(
-            "Unable to merge organizations #{inspect(selected_ids)} into #{dest_id}: #{inspect(reason)}"
-          )
+          Logger.error("Unable to merge organizations #{inspect(selected_ids)} into #{dest_id}: #{inspect(reason)}")
 
           put_flash(socket, :error, gettext("Error merging organizations"))
       end
@@ -158,12 +146,7 @@ defmodule SMWeb.Live.Admin.Organizations.Index do
             changeset = change(organization, %{})
 
             socket =
-              socket
-              |> assign(
-                record: organization,
-                changeset: changeset,
-                action: :edit
-              )
+              assign(socket, record: organization, changeset: changeset, action: :edit)
 
             {:noreply, socket}
         end
@@ -222,14 +205,12 @@ defmodule SMWeb.Live.Admin.Organizations.Index do
 
   def handle_info({"merge-selected", selection}, socket) do
     selection =
-      Organizations.list()
-      |> Enum.filter(fn org -> org.id in selection end)
+      Enum.filter(Organizations.list(), fn org -> org.id in selection end)
 
     {:noreply, assign(socket, merge_selection: selection)}
   end
 
-  def handle_info({Organizations, [:organization, :deleted], deleted_ids}, socket)
-      when is_list(deleted_ids) do
+  def handle_info({Organizations, [:organization, :deleted], deleted_ids}, socket) when is_list(deleted_ids) do
     socket =
       deleted_ids
       |> Stream.map(fn id -> "items-#{id}" end)
@@ -242,8 +223,7 @@ defmodule SMWeb.Live.Admin.Organizations.Index do
     {:noreply, socket}
   end
 
-  def handle_info({Organizations, [:organization, :deleted], deleted_count}, socket)
-      when is_integer(deleted_count) do
+  def handle_info({Organizations, [:organization, :deleted], deleted_count}, socket) when is_integer(deleted_count) do
     {:noreply, push_navigate(socket, to: "/admin/organizations")}
   end
 

@@ -58,11 +58,7 @@ defmodule SMWeb.Live.Admin.Evaluations.Index do
   end
 
   # Create/Edit dialog submit callback
-  def handle_event(
-        "submit",
-        %{"entity" => %{"_action" => "create"} = params},
-        socket
-      ) do
+  def handle_event("submit", %{"entity" => %{"_action" => "create"} = params}, socket) do
     case Evaluations.create(params) do
       {:ok, _entity} ->
         socket =
@@ -78,11 +74,7 @@ defmodule SMWeb.Live.Admin.Evaluations.Index do
     end
   end
 
-  def handle_event(
-        "submit",
-        %{"entity" => %{"_action" => "edit"} = params},
-        socket
-      ) do
+  def handle_event("submit", %{"entity" => %{"_action" => "edit"} = params}, socket) do
     case Evaluations.update(socket.assigns.record, params) do
       {:ok, entity} ->
         socket =
@@ -116,12 +108,7 @@ defmodule SMWeb.Live.Admin.Evaluations.Index do
             changeset = change(evaluation, %{})
 
             socket =
-              socket
-              |> assign(
-                record: evaluation,
-                changeset: changeset,
-                action: :edit
-              )
+              assign(socket, record: evaluation, changeset: changeset, action: :edit)
 
             {:noreply, socket}
         end
@@ -179,8 +166,7 @@ defmodule SMWeb.Live.Admin.Evaluations.Index do
     {:noreply, put_flash(socket, :info, gettext("All evaluations deleted successfully"))}
   end
 
-  def handle_info({Evaluations, [:evaluation, :deleted], deleted_ids}, socket)
-      when is_list(deleted_ids) do
+  def handle_info({Evaluations, [:evaluation, :deleted], deleted_ids}, socket) when is_list(deleted_ids) do
     socket =
       deleted_ids
       |> Stream.map(fn id -> "items-#{id}" end)
@@ -193,8 +179,7 @@ defmodule SMWeb.Live.Admin.Evaluations.Index do
     {:noreply, socket}
   end
 
-  def handle_info({Evaluations, [:evaluation, :deleted], deleted_count}, socket)
-      when is_integer(deleted_count) do
+  def handle_info({Evaluations, [:evaluation, :deleted], deleted_count}, socket) when is_integer(deleted_count) do
     {:noreply, push_navigate(socket, to: "/admin/evaluations")}
   end
 

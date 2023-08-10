@@ -32,11 +32,7 @@ defmodule SMWeb.Live.ValidationLauncher do
   end
 
   @impl Phoenix.LiveView
-  def handle_event(
-        "apply-subject-correction",
-        %{"slide-id" => slide_id, "new-subject" => new_subject},
-        socket
-      ) do
+  def handle_event("apply-subject-correction", %{"slide-id" => slide_id, "new-subject" => new_subject}, socket) do
     socket =
       case Slides.apply_correct_subject(slide_id, new_subject) do
         {:ok, _slide} ->

@@ -1,5 +1,6 @@
 if Mix.target() == :app do
   defmodule SMApp do
+    @moduledoc false
     use GenServer
 
     def start_link(arg) do

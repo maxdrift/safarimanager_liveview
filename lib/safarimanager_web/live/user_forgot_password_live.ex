@@ -1,4 +1,5 @@
 defmodule SMWeb.Live.UserForgotPasswordLive do
+  @moduledoc false
   use SMWeb, :live_view
 
   alias SM.Accounts
@@ -41,9 +42,7 @@ defmodule SMWeb.Live.UserForgotPasswordLive do
     end
 
     info =
-      gettext(
-        "If your email is in our system, you will receive instructions to reset your password shortly."
-      )
+      gettext("If your email is in our system, you will receive instructions to reset your password shortly.")
 
     {:noreply,
      socket

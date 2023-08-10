@@ -66,12 +66,7 @@ defmodule SM.Subjects do
     after_cursor = Keyword.get(opts, :after)
     max_rows = Keyword.get(opts, :max_rows, 500)
 
-    Subject
-    |> Repo.cursor_based_stream(
-      after_cursor: after_cursor,
-      cursor_field: cursor_field,
-      max_rows: max_rows
-    )
+    Repo.cursor_based_stream(Subject, after_cursor: after_cursor, cursor_field: cursor_field, max_rows: max_rows)
   end
 
   @doc """
@@ -319,9 +314,7 @@ defmodule SM.Subjects do
             {:ok, match}
 
           [_match | _tail] = matches ->
-            Logger.warning(
-              "Dynamic coefficients config has overlapping intervals for coefficients: #{inspect(matches)}"
-            )
+            Logger.warning("Dynamic coefficients config has overlapping intervals for coefficients: #{inspect(matches)}")
 
             {:error, :overlapping_intervals}
         end
@@ -337,9 +330,7 @@ defmodule SM.Subjects do
     if Decimal.compare(subject.distribution, 1) in [:lt, :eq] do
       subject.distribution
     else
-      Logger.error(
-        "Subject distribution over 100% for subject #{subject.id} (#{subject.numeric_id} - #{subject.name})"
-      )
+      Logger.error("Subject distribution over 100% for subject #{subject.id} (#{subject.numeric_id} - #{subject.name})")
 
       Decimal.new(1)
     end

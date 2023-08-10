@@ -18,19 +18,21 @@ defmodule SM.Results do
       subjects_map =
         competition_id
         |> Subjects.list_with_coefficients()
-        |> Enum.into(%{}, fn subject ->
+        |> Map.new(fn subject ->
           {subject.id, subject}
         end)
 
       unique_coefficients =
-        Enum.reduce(subjects_map, MapSet.new(), fn {_key, s}, acc ->
+        subjects_map
+        |> Enum.reduce(MapSet.new(), fn {_key, s}, acc ->
           MapSet.put(acc, s.coefficient)
         end)
         |> MapSet.to_list()
         |> Enum.sort({:desc, Decimal})
 
       {results, _acc} =
-        Participants.list(competition_id, category_id)
+        competition_id
+        |> Participants.list(category_id)
         |> Stream.map(fn participant ->
           {slides, total_score} =
             list_by_participant(competition_id, competition, participant.user.id, subjects_map)
@@ -67,11 +69,9 @@ defmodule SM.Results do
     end
   end
 
-  defp by_score(result),
-    do: result.total_score
+  defp by_score(result), do: result.total_score
 
-  defp by_slides(result),
-    do: result.slides_count
+  defp by_slides(result), do: result.slides_count
 
   defp by_coefficients(result, coefficients) do
     Enum.map(coefficients, fn c ->

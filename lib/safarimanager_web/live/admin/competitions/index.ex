@@ -12,9 +12,9 @@ defmodule SMWeb.Live.Admin.Competitions.Index do
   alias SMWeb.Components.DateTimeString
   alias SMWeb.Components.FieldsList
   alias SMWeb.Components.FieldsListItem
-  alias SMWeb.Components.ShortUUID
   alias SMWeb.Components.Grid
   alias SMWeb.Components.Layout
+  alias SMWeb.Components.ShortUUID
   alias SMWeb.Components.SMField
   alias Surface.Components.Context
   alias Surface.Components.Form
@@ -67,15 +67,11 @@ defmodule SMWeb.Live.Admin.Competitions.Index do
   end
 
   # Create/Edit dialog submit callback
-  def handle_event(
-        "submit",
-        %{"entity" => %{"_action" => "create"} = params},
-        socket
-      ) do
+  def handle_event("submit", %{"entity" => %{"_action" => "create"} = params}, socket) do
     case Competitions.create(params) do
       {:ok, %Competition{id: competition_id}} ->
         # TODO: Perform evaluations selection in the UI
-        all_evaluations = Evaluations.list() |> Enum.map(& &1.id)
+        all_evaluations = Enum.map(Evaluations.list(), & &1.id)
 
         {:ok, _competition} =
           Competitions.update_allowed_evaluations(competition_id, all_evaluations)
@@ -93,11 +89,7 @@ defmodule SMWeb.Live.Admin.Competitions.Index do
     end
   end
 
-  def handle_event(
-        "submit",
-        %{"entity" => %{"_action" => "edit"} = params},
-        socket
-      ) do
+  def handle_event("submit", %{"entity" => %{"_action" => "edit"} = params}, socket) do
     case Competitions.update(socket.assigns.record, params) do
       {:ok, entity} ->
         socket =
@@ -126,12 +118,7 @@ defmodule SMWeb.Live.Admin.Competitions.Index do
             changeset = change(competition, %{})
 
             socket =
-              socket
-              |> assign(
-                record: competition,
-                changeset: changeset,
-                action: :edit
-              )
+              assign(socket, record: competition, changeset: changeset, action: :edit)
 
             {:noreply, socket}
         end
@@ -188,8 +175,7 @@ defmodule SMWeb.Live.Admin.Competitions.Index do
     {:noreply, put_flash(socket, :info, gettext("All competitions deleted successfully"))}
   end
 
-  def handle_info({Competitions, [:competition, :deleted], deleted_ids}, socket)
-      when is_list(deleted_ids) do
+  def handle_info({Competitions, [:competition, :deleted], deleted_ids}, socket) when is_list(deleted_ids) do
     socket =
       deleted_ids
       |> Stream.map(fn id -> "items-#{id}" end)
@@ -202,8 +188,7 @@ defmodule SMWeb.Live.Admin.Competitions.Index do
     {:noreply, socket}
   end
 
-  def handle_info({Competitions, [:competition, :deleted], deleted_count}, socket)
-      when is_integer(deleted_count) do
+  def handle_info({Competitions, [:competition, :deleted], deleted_count}, socket) when is_integer(deleted_count) do
     {:noreply, push_navigate(socket, to: "/admin/competitions")}
   end
 

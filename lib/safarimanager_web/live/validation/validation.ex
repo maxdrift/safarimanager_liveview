@@ -35,11 +35,7 @@ defmodule SMWeb.Live.Validation do
   end
 
   @impl Phoenix.LiveView
-  def handle_params(
-        %{"competition_id" => competition_id, "slide_id" => slide_id},
-        _url,
-        socket
-      ) do
+  def handle_params(%{"competition_id" => competition_id, "slide_id" => slide_id}, _url, socket) do
     socket =
       if Map.has_key?(socket.assigns, :competition) do
         socket
@@ -169,11 +165,7 @@ defmodule SMWeb.Live.Validation do
     {:noreply, socket}
   end
 
-  def handle_event(
-        "unrecognizable-submit",
-        %{"unrecognizable" => %{"flag_id" => flag_id}},
-        socket
-      ) do
+  def handle_event("unrecognizable-submit", %{"unrecognizable" => %{"flag_id" => flag_id}}, socket) do
     slide_flag =
       if flag_id == "" do
         {:ok, slide_flag} =
@@ -190,15 +182,10 @@ defmodule SMWeb.Live.Validation do
         nil
       end
 
-    {:noreply,
-     assign(socket, slide_flags: Map.put(socket.assigns.slide_flags, :unrecognizable, slide_flag))}
+    {:noreply, assign(socket, slide_flags: Map.put(socket.assigns.slide_flags, :unrecognizable, slide_flag))}
   end
 
-  def handle_event(
-        "distinction-submit",
-        %{"distinction" => %{"flag_id" => flag_id}},
-        socket
-      ) do
+  def handle_event("distinction-submit", %{"distinction" => %{"flag_id" => flag_id}}, socket) do
     slide_flag =
       if flag_id == "" do
         {:ok, slide_flag} =
@@ -215,15 +202,10 @@ defmodule SMWeb.Live.Validation do
         nil
       end
 
-    {:noreply,
-     assign(socket, slide_flags: Map.put(socket.assigns.slide_flags, :distinction, slide_flag))}
+    {:noreply, assign(socket, slide_flags: Map.put(socket.assigns.slide_flags, :distinction, slide_flag))}
   end
 
-  def handle_event(
-        "note-change",
-        %{"note" => %{"value" => value, "flag_id" => flag_id}},
-        socket
-      ) do
+  def handle_event("note-change", %{"note" => %{"value" => value, "flag_id" => flag_id}}, socket) do
     slide_flag =
       if flag_id == "" do
         {:ok, slide_flag} =
@@ -252,8 +234,7 @@ defmodule SMWeb.Live.Validation do
         end
       end
 
-    {:noreply,
-     assign(socket, slide_flags: Map.put(socket.assigns.slide_flags, :note, slide_flag))}
+    {:noreply, assign(socket, slide_flags: Map.put(socket.assigns.slide_flags, :note, slide_flag))}
   end
 
   def handle_event("go-to-change", %{"go_to" => %{"go_to" => index}}, socket) do

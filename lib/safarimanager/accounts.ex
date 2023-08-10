@@ -179,8 +179,7 @@ defmodule SM.Accounts do
 
   """
   @spec get_user_by_email_and_password(String.t(), String.t()) :: User.t() | nil
-  def get_user_by_email_and_password(email, password)
-      when is_binary(email) and is_binary(password) do
+  def get_user_by_email_and_password(email, password) when is_binary(email) and is_binary(password) do
     user = Repo.get_by(User, email: email)
     if User.valid_password?(user, password), do: user
   end
@@ -425,11 +424,7 @@ defmodule SM.Accounts do
       {:ok, %{to: ..., body: ...}}
 
   """
-  def deliver_user_update_email_instructions(
-        %User{} = user,
-        current_email,
-        update_email_url_fun
-      )
+  def deliver_user_update_email_instructions(%User{} = user, current_email, update_email_url_fun)
       when is_function(update_email_url_fun, 1) do
     {encoded_token, user_token} = UserToken.build_email_token(user, "change:#{current_email}")
 

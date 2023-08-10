@@ -1,4 +1,5 @@
 defmodule SMWeb.TelemetryPusher do
+  @moduledoc false
   use GenServer
 
   alias SMWeb.PrometheusPush

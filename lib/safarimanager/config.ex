@@ -21,7 +21,7 @@ defmodule SM.Config do
     Application.get_env(:safarimanager, :home) || user_home() || File.cwd!()
   end
 
-  defp user_home, do: System.user_home() |> Path.expand()
+  defp user_home, do: Path.expand(System.user_home())
 
   @doc """
   Returns the configured port for the Safarimanager endpoint.
@@ -259,7 +259,7 @@ defmodule SM.Config do
   @doc """
   Returns the current version of running Safarimanager.
   """
-  def app_version, do: Application.spec(:safarimanager, :vsn) |> List.to_string()
+  def app_version, do: :safarimanager |> Application.spec(:vsn) |> List.to_string()
 
   @doc """
   Aborts booting due to a configuration error.

@@ -60,8 +60,7 @@ defmodule SMWeb.Live.Results do
     subjects_count = Enum.count(subjects)
 
     socket =
-      socket
-      |> assign(
+      assign(socket,
         competition_id: competition_id,
         category_id: nil,
         competition: competition,

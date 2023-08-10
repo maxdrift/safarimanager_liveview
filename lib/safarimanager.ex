@@ -12,7 +12,9 @@ defmodule SM do
   def schema do
     quote do
       use Ecto.Schema
+
       import Ecto.Changeset
+
       alias __MODULE__
 
       @primary_key {:id, Ecto.UUID, autogenerate: true}
@@ -26,14 +28,14 @@ defmodule SM do
     quote do
       import Ecto.Query
 
-      @like_fragment if SM.Repo.__adapter__() == Ecto.Adapters.Postgres,
-                       do: "? ILIKE ?",
-                       else: "? LIKE ?"
-
       alias Ecto.Multi
       alias SM.Repo
 
       require Logger
+
+      @like_fragment if SM.Repo.__adapter__() == Ecto.Adapters.Postgres,
+                       do: "? ILIKE ?",
+                       else: "? LIKE ?"
 
       # Phoenix PubSub subscription
 

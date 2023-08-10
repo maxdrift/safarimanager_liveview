@@ -102,15 +102,16 @@ defmodule SMWeb do
     quote do
       use Phoenix.Router, helpers: false
 
-      import Plug.Conn
       import Phoenix.Controller
       import Phoenix.LiveView.Router
+      import Plug.Conn
     end
   end
 
   def channel do
     quote do
       use Phoenix.Channel
+
       import SMWeb.Gettext
     end
   end
@@ -142,7 +143,6 @@ defmodule SMWeb do
       import SMWeb.Components.Confirm
       # Core UI components and translation
       import SMWeb.Components.CoreComponents
-
       import SMWeb.ErrorHelpers
 
       # Shortcut for generating JS commands

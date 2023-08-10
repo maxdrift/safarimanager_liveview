@@ -5,8 +5,8 @@ defmodule SMWeb.UserAuth do
 
   use SMWeb, :verified_routes
 
-  import Plug.Conn
   import Phoenix.Controller
+  import Plug.Conn
 
   alias SM.Accounts
   alias SM.Accounts.User

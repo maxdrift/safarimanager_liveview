@@ -1,4 +1,5 @@
 defmodule SMWeb.Live.UserSettingsLive do
+  @moduledoc false
   use SMWeb, :surface_view
 
   alias SM.Accounts

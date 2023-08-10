@@ -278,9 +278,7 @@ defmodule SM.Competitions do
         notify_subscribers({:ok, competition}, [:competition, :deleted])
 
       {:error, failed_operation, failed_value, _changes_so_far} ->
-        Logger.error(
-          "Failed to delete competition. #{failed_operation}: #{inspect(failed_value)}"
-        )
+        Logger.error("Failed to delete competition. #{failed_operation}: #{inspect(failed_value)}")
 
         notify_subscribers({:error, {failed_operation, failed_value}}, [:competition, :deleted])
     end
@@ -313,9 +311,7 @@ defmodule SM.Competitions do
         notify_subscribers({:ok, ids}, [:competition, :deleted])
 
       {:error, failed_operation, failed_value, _changes_so_far} ->
-        Logger.error(
-          "Failed to delete competitions. #{failed_operation}: #{inspect(failed_value)}"
-        )
+        Logger.error("Failed to delete competitions. #{failed_operation}: #{inspect(failed_value)}")
 
         notify_subscribers({:error, {failed_operation, failed_value}}, [:competition, :deleted])
     end

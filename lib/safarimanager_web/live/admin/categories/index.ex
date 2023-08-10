@@ -57,11 +57,7 @@ defmodule SMWeb.Live.Admin.Categories.Index do
   end
 
   # Create/Edit dialog submit callback
-  def handle_event(
-        "submit",
-        %{"entity" => %{"_action" => "create"} = params},
-        socket
-      ) do
+  def handle_event("submit", %{"entity" => %{"_action" => "create"} = params}, socket) do
     case Categories.create(params) do
       {:ok, _entity} ->
         socket =
@@ -77,11 +73,7 @@ defmodule SMWeb.Live.Admin.Categories.Index do
     end
   end
 
-  def handle_event(
-        "submit",
-        %{"entity" => %{"_action" => "edit"} = params},
-        socket
-      ) do
+  def handle_event("submit", %{"entity" => %{"_action" => "edit"} = params}, socket) do
     case Categories.update(socket.assigns.record, params) do
       {:ok, entity} ->
         socket =
@@ -110,12 +102,7 @@ defmodule SMWeb.Live.Admin.Categories.Index do
             changeset = change(category, %{})
 
             socket =
-              socket
-              |> assign(
-                record: category,
-                changeset: changeset,
-                action: :edit
-              )
+              assign(socket, record: category, changeset: changeset, action: :edit)
 
             {:noreply, socket}
         end
@@ -172,8 +159,7 @@ defmodule SMWeb.Live.Admin.Categories.Index do
     {:noreply, put_flash(socket, :info, gettext("All categories deleted successfully"))}
   end
 
-  def handle_info({Categories, [:category, :deleted], deleted_ids}, socket)
-      when is_list(deleted_ids) do
+  def handle_info({Categories, [:category, :deleted], deleted_ids}, socket) when is_list(deleted_ids) do
     socket =
       deleted_ids
       |> Stream.map(fn id -> "items-#{id}" end)
@@ -186,8 +172,7 @@ defmodule SMWeb.Live.Admin.Categories.Index do
     {:noreply, socket}
   end
 
-  def handle_info({Categories, [:category, :deleted], deleted_count}, socket)
-      when is_integer(deleted_count) do
+  def handle_info({Categories, [:category, :deleted], deleted_count}, socket) when is_integer(deleted_count) do
     {:noreply, push_navigate(socket, to: "/admin/categories")}
   end
 

@@ -103,8 +103,7 @@ defmodule SMWeb.Live.Admin.Import do
 
   def handle_event("clear-form", _params, socket) do
     socket =
-      socket.assigns.uploads.csv.entries
-      |> Enum.reduce(socket, fn entry, acc ->
+      Enum.reduce(socket.assigns.uploads.csv.entries, socket, fn entry, acc ->
         LiveView.cancel_upload(acc, :csv, entry.ref)
       end)
 

@@ -1,4 +1,5 @@
 defmodule SM.PromEx.Plugins.TablesSize do
+  @moduledoc false
   use PromEx.Plugin
 
   import Ecto.Query

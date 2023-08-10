@@ -73,12 +73,12 @@ defmodule SM.Migrator do
   end
 
   defp has_id_societa?(conn) do
-    Basic.exec(conn, "select ID_societa from iscritti") |> Basic.rows() !=
+    conn |> Basic.exec("select ID_societa from iscritti") |> Basic.rows() !=
       {:error, "no such column: ID_societa"}
   end
 
   defp has_coefficients?(conn) do
-    Basic.exec(conn, "select * from coefficients") |> Basic.rows() !=
+    conn |> Basic.exec("select * from coefficients") |> Basic.rows() !=
       {:error, "no such table: coefficients"}
   end
 
@@ -108,9 +108,9 @@ defmodule SM.Migrator do
 
           {key, new_row}
         end)
-        |> Enum.into(%{})
+        |> Map.new()
 
-      accumulator = Map.put(accumulator, :societa, Enum.into(societa, %{}))
+      accumulator = Map.put(accumulator, :societa, Map.new(societa))
       accumulator = Map.put(accumulator, :organizations, organizations)
       {:ok, accumulator}
     end
@@ -150,9 +150,9 @@ defmodule SM.Migrator do
 
           {key, new_row}
         end)
-        |> Enum.into(%{})
+        |> Map.new()
 
-      accumulator = Map.put(accumulator, :pesci, Enum.into(pesci, %{}))
+      accumulator = Map.put(accumulator, :pesci, Map.new(pesci))
       accumulator = Map.put(accumulator, :subjects, subjects)
       {:ok, accumulator}
     end
@@ -187,9 +187,9 @@ defmodule SM.Migrator do
 
           {key, new_row}
         end)
-        |> Enum.into(%{})
+        |> Map.new()
 
-      accumulator = Map.put(accumulator, :pesci, Enum.into(pesci, %{}))
+      accumulator = Map.put(accumulator, :pesci, Map.new(pesci))
       accumulator = Map.put(accumulator, :subjects, subjects)
       {:ok, accumulator}
     end
@@ -217,9 +217,9 @@ defmodule SM.Migrator do
 
           {key, new_row}
         end)
-        |> Enum.into(%{})
+        |> Map.new()
 
-      accumulator = Map.put(accumulator, :categorie, Enum.into(categorie, %{}))
+      accumulator = Map.put(accumulator, :categorie, Map.new(categorie))
       accumulator = Map.put(accumulator, :categories, categories)
       {:ok, accumulator}
     end
@@ -249,9 +249,9 @@ defmodule SM.Migrator do
 
           {key, new_row}
         end)
-        |> Enum.into(%{})
+        |> Map.new()
 
-      accumulator = Map.put(accumulator, :coefficienti, Enum.into(coefficienti, %{}))
+      accumulator = Map.put(accumulator, :coefficienti, Map.new(coefficienti))
       accumulator = Map.put(accumulator, :coefficients, coefficients)
       {:ok, accumulator}
     end
@@ -322,9 +322,9 @@ defmodule SM.Migrator do
 
           {key, new_row}
         end)
-        |> Enum.into(%{})
+        |> Map.new()
 
-      accumulator = Map.put(accumulator, :iscritti, Enum.into(iscritti, %{}))
+      accumulator = Map.put(accumulator, :iscritti, Map.new(iscritti))
       accumulator = Map.put(accumulator, :users, users)
       {:ok, accumulator}
     end
@@ -375,9 +375,9 @@ defmodule SM.Migrator do
 
           {key, new_row}
         end)
-        |> Enum.into(%{})
+        |> Map.new()
 
-      accumulator = Map.put(accumulator, :iscritti, Enum.into(iscritti, %{}))
+      accumulator = Map.put(accumulator, :iscritti, Map.new(iscritti))
       accumulator = Map.put(accumulator, :users, users)
       {:ok, accumulator}
     end
@@ -426,8 +426,7 @@ defmodule SM.Migrator do
                 |> Enum.map(fn {_id, value} -> value end)
 
               dynamic_coefficients_enabled? =
-                dynamic_coefficients
-                |> Enum.any?(fn dc -> !Decimal.equal?(dc.value, 1) end)
+                Enum.any?(dynamic_coefficients, fn dc -> !Decimal.equal?(dc.value, 1) end)
 
               percentuale = Map.get(row, :percentuale) || 0
               pspeciep = Map.get(row, :pspeciep) || 1
@@ -459,7 +458,7 @@ defmodule SM.Migrator do
                   }
                 })
 
-              all_evaluations = SM.Evaluations.list() |> Enum.map(& &1.id)
+              all_evaluations = Enum.map(SM.Evaluations.list(), & &1.id)
 
               {:ok, new_record} =
                 SM.Competitions.update_allowed_evaluations(competition.id, all_evaluations)
@@ -477,7 +476,7 @@ defmodule SM.Migrator do
           {:error, :existing_competition}
 
         competition ->
-          accumulator = Map.put(accumulator, :gara, Enum.into(gara, %{}))
+          accumulator = Map.put(accumulator, :gara, Map.new(gara))
           accumulator = Map.put(accumulator, :competition, competition)
           {:ok, accumulator}
       end
@@ -534,7 +533,7 @@ defmodule SM.Migrator do
 
           {key, new_row}
         end)
-        |> Enum.into(%{})
+        |> Map.new()
 
       accumulator = Map.put(accumulator, :participants, participants)
       {:ok, accumulator}
@@ -584,7 +583,7 @@ defmodule SM.Migrator do
 
           {key, new_row}
         end)
-        |> Enum.into(%{})
+        |> Map.new()
 
       accumulator = Map.put(accumulator, :participants, participants)
       {:ok, accumulator}
@@ -703,9 +702,9 @@ defmodule SM.Migrator do
 
           {key, new_row}
         end)
-        |> Enum.into(%{})
+        |> Map.new()
 
-      accumulator = Map.put(accumulator, :slide, Enum.into(slide, %{}))
+      accumulator = Map.put(accumulator, :slide, Map.new(slide))
       accumulator = Map.put(accumulator, :slides, slides)
       {:ok, accumulator}
     end
@@ -797,9 +796,9 @@ defmodule SM.Migrator do
 
           {key, new_row}
         end)
-        |> Enum.into(%{})
+        |> Map.new()
 
-      accumulator = Map.put(accumulator, :slide, Enum.into(slide, %{}))
+      accumulator = Map.put(accumulator, :slide, Map.new(slide))
       accumulator = Map.put(accumulator, :slides, slides)
       {:ok, accumulator}
     end
@@ -920,7 +919,7 @@ defmodule SM.Migrator do
         |> Stream.map(fn row ->
           columns
           |> Enum.zip(row)
-          |> Enum.into(%{})
+          |> Map.new()
         end)
         |> Stream.map(&{Map.fetch!(&1, pk), &1})
         |> Stream.into(%{})

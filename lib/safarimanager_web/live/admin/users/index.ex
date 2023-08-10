@@ -72,11 +72,7 @@ defmodule SMWeb.Live.Admin.Users.Index do
   end
 
   # Create/Edit dialog submit callback
-  def handle_event(
-        "submit",
-        %{"entity" => %{"_action" => "create"} = params},
-        socket
-      ) do
+  def handle_event("submit", %{"entity" => %{"_action" => "create"} = params}, socket) do
     case Accounts.register_simplified_user(params) do
       {:ok, _entity} ->
         socket =
@@ -92,11 +88,7 @@ defmodule SMWeb.Live.Admin.Users.Index do
     end
   end
 
-  def handle_event(
-        "submit",
-        %{"entity" => %{"_action" => "edit"} = params},
-        socket
-      ) do
+  def handle_event("submit", %{"entity" => %{"_action" => "edit"} = params}, socket) do
     case Accounts.update(socket.assigns.record, params) do
       {:ok, entity} ->
         socket =
@@ -131,9 +123,7 @@ defmodule SMWeb.Live.Admin.Users.Index do
            valid?: false,
            errors: [dest_id: {"can't be blank", [validation: :required]}]
          }} ->
-          Logger.error(
-            "Unable to merge users #{inspect(selected_ids)}: a destination must be specified"
-          )
+          Logger.error("Unable to merge users #{inspect(selected_ids)}: a destination must be specified")
 
           put_flash(
             socket,
@@ -142,9 +132,7 @@ defmodule SMWeb.Live.Admin.Users.Index do
           )
 
         {:error, reason} ->
-          Logger.error(
-            "Unable to merge users #{inspect(selected_ids)} into #{dest_id}: #{inspect(reason)}"
-          )
+          Logger.error("Unable to merge users #{inspect(selected_ids)} into #{dest_id}: #{inspect(reason)}")
 
           put_flash(socket, :error, gettext("Error merging users"))
       end
@@ -170,12 +158,7 @@ defmodule SMWeb.Live.Admin.Users.Index do
             changeset = change(user, %{})
 
             socket =
-              socket
-              |> assign(
-                record: user,
-                changeset: changeset,
-                action: :edit
-              )
+              assign(socket, record: user, changeset: changeset, action: :edit)
 
             {:noreply, socket}
         end
@@ -232,8 +215,7 @@ defmodule SMWeb.Live.Admin.Users.Index do
     {:noreply, put_flash(socket, :info, gettext("All users deleted successfully"))}
   end
 
-  def handle_info({Accounts, [:user, :deleted], deleted_ids}, socket)
-      when is_list(deleted_ids) do
+  def handle_info({Accounts, [:user, :deleted], deleted_ids}, socket) when is_list(deleted_ids) do
     socket =
       deleted_ids
       |> Stream.map(fn id -> "items-#{id}" end)
@@ -248,14 +230,12 @@ defmodule SMWeb.Live.Admin.Users.Index do
 
   def handle_info({"merge-selected", selection}, socket) do
     selection =
-      Accounts.list()
-      |> Enum.filter(fn user -> user.id in selection end)
+      Enum.filter(Accounts.list(), fn user -> user.id in selection end)
 
     {:noreply, assign(socket, merge_selection: selection)}
   end
 
-  def handle_info({Accounts, [:user, :deleted], deleted_count}, socket)
-      when is_integer(deleted_count) do
+  def handle_info({Accounts, [:user, :deleted], deleted_count}, socket) when is_integer(deleted_count) do
     {:noreply, push_navigate(socket, to: "/admin/users")}
   end
 

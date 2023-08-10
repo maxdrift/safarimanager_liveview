@@ -140,7 +140,7 @@ defmodule SMWeb.UserAuthTest do
     end
 
     test "assigns nil to current_ user assign if there isn't a user_token", %{conn: conn} do
-      session = conn |> get_session()
+      session = get_session(conn)
 
       {:cont, updated_socket} =
         UserAuth.on_mount(:mount_current_user, %{}, session, %LiveView.Socket{})
@@ -174,7 +174,7 @@ defmodule SMWeb.UserAuthTest do
     end
 
     test "redirects to login page if there isn't a user_token ", %{conn: conn} do
-      session = conn |> get_session()
+      session = get_session(conn)
 
       socket = %LiveView.Socket{
         endpoint: SMWeb.Endpoint,
@@ -201,7 +201,7 @@ defmodule SMWeb.UserAuthTest do
     end
 
     test "Don't redirect is there is no authenticated user", %{conn: conn} do
-      session = conn |> get_session()
+      session = get_session(conn)
 
       assert {:cont, _updated_socket} =
                UserAuth.on_mount(

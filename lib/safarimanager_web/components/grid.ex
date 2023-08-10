@@ -125,11 +125,7 @@ defmodule SMWeb.Components.Grid do
     {:noreply, socket}
   end
 
-  def handle_event(
-        "grid-selection-submit",
-        %{"grid_form" => %{"action" => "delete"}} = params,
-        socket
-      ) do
+  def handle_event("grid-selection-submit", %{"grid_form" => %{"action" => "delete"}} = params, socket) do
     grid_id = socket.assigns.id
 
     select_all = Map.get(params, "#{grid_id}-select-all", false) && true
@@ -154,11 +150,7 @@ defmodule SMWeb.Components.Grid do
     {:noreply, push_event(socket, "smgr:reset-selection", %{gridId: grid_id})}
   end
 
-  def handle_event(
-        "grid-selection-submit",
-        %{"grid_form" => %{"action" => "merge"}} = params,
-        socket
-      ) do
+  def handle_event("grid-selection-submit", %{"grid_form" => %{"action" => "merge"}} = params, socket) do
     grid_id = socket.assigns.id
 
     selected =
@@ -245,24 +237,16 @@ defmodule SMWeb.Components.Grid do
   end
 
   defp maybe_encode_compound_ids(item, id_fields) when is_list(id_fields) do
-    id_fields
-    |> Enum.map(fn id_field ->
-      Map.fetch!(item, id_field)
-    end)
-    |> Enum.join(",")
+    Enum.map_join(id_fields, ",", fn id_field -> Map.fetch!(item, id_field) end)
   end
 
   defp maybe_decode_compound_ids(encoded) do
-    encoded
-    |> Enum.map(fn encoded_ids ->
+    Enum.map(encoded, fn encoded_ids ->
       encoded_ids
       |> String.split(",")
       |> case do
-        [id] ->
-          id
-
-        [_ | _] = ids ->
-          List.to_tuple(ids)
+        [id] -> id
+        [_ | _] = ids -> List.to_tuple(ids)
       end
     end)
   end

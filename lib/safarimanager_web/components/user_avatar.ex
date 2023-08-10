@@ -25,8 +25,7 @@ defmodule SMWeb.Components.UserAvatar do
 
   defp avatar_text(%_{first_name: nil, last_name: nil}), do: "?"
 
-  defp avatar_text(%_{first_name: first_name, last_name: last_name}),
-    do: avatar_text("#{first_name} #{last_name}")
+  defp avatar_text(%_{first_name: first_name, last_name: last_name}), do: avatar_text("#{first_name} #{last_name}")
 
   defp avatar_text(name) do
     name

@@ -22,8 +22,7 @@ defmodule SMWeb.Live.Jury do
     _result = if connected?(socket), do: Slides.subscribe()
 
     socket =
-      socket
-      |> assign(
+      assign(socket,
         category: "all",
         curr_index: 0,
         image_count: 0,
@@ -37,11 +36,7 @@ defmodule SMWeb.Live.Jury do
   end
 
   @impl Phoenix.LiveView
-  def handle_params(
-        %{"competition_id" => competition_id, "slide_id" => slide_id} = params,
-        _url,
-        socket
-      ) do
+  def handle_params(%{"competition_id" => competition_id, "slide_id" => slide_id} = params, _url, socket) do
     category = Map.get(params, "category", "all")
 
     socket =
@@ -75,8 +70,7 @@ defmodule SMWeb.Live.Jury do
         curr_index: current_index,
         curr_slide: slide,
         category: category,
-        evaluations:
-          Enum.sort(socket.assigns.competition.allowed_evaluations, &(&1.value <= &2.value))
+        evaluations: Enum.sort(socket.assigns.competition.allowed_evaluations, &(&1.value <= &2.value))
       )
       |> assign(:jurors, socket.assigns.competition.jurors)
       # Note: remember events pushed from the server via push_event are global
@@ -99,12 +93,7 @@ defmodule SMWeb.Live.Jury do
     slides = Slides.list_for_jury(competition_id, category)
 
     socket =
-      socket
-      |> assign(
-        competition: competition,
-        slides: slides,
-        category: category
-      )
+      assign(socket, competition: competition, slides: slides, category: category)
 
     next_slide_id =
       case Cache.get("#{competition_id}_#{category}_current_jury_slide_id") do
@@ -355,9 +344,7 @@ defmodule SMWeb.Live.Jury do
 
     socket
     |> assign(:curr_index, index)
-    |> push_patch(
-      to: "#{full_path(socket)}?category=#{socket.assigns.category}&slide_id=#{next_slide.id}"
-    )
+    |> push_patch(to: "#{full_path(socket)}?category=#{socket.assigns.category}&slide_id=#{next_slide.id}")
   end
 
   defp full_path(socket) do

@@ -237,15 +237,12 @@ defmodule SM.Teams do
   """
   @spec change(Team.t(), %{String.t() => any()}) :: Ecto.Changeset.t()
   def change(%Team{} = team, params \\ %{}) do
-    team
-    |> Team.changeset(params)
+    Team.changeset(team, params)
   end
 
   @spec synthesize_team_name(Team.t()) :: String.t() | nil
   def synthesize_team_name(%Team{members: [_ | _] = members}) do
-    members
-    |> Enum.map(& &1.user.last_name)
-    |> Enum.join(" - ")
+    Enum.map_join(members, " - ", & &1.user.last_name)
   end
 
   def synthesize_team_name(_team), do: nil

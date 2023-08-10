@@ -52,11 +52,7 @@ defmodule SMWeb.Live.Slides do
   end
 
   @impl Phoenix.LiveView
-  def handle_event(
-        "validate",
-        %{"_target" => ["discovery_mode"], "discovery_mode" => values},
-        socket
-      ) do
+  def handle_event("validate", %{"_target" => ["discovery_mode"], "discovery_mode" => values}, socket) do
     if "true" in values do
       :ok = USBWatcherSupervisor.start_poller(self())
     else
@@ -73,9 +69,7 @@ defmodule SMWeb.Live.Slides do
 
         case Slides.get(assigns.competition_id, assigns.user.id, entry.client_name) do
           {:ok, result} ->
-            Logger.info(
-              "Cancelling upload of #{entry.client_name}: duplicate of Slide #{result.id}"
-            )
+            Logger.info("Cancelling upload of #{entry.client_name}: duplicate of Slide #{result.id}")
 
             LiveView.cancel_upload(socket_acc, :images, entry.ref)
 
@@ -254,11 +248,7 @@ defmodule SMWeb.Live.Slides do
     participants = Participants.list(socket.assigns.competition_id)
 
     socket =
-      socket
-      |> assign(
-        competition: competition,
-        participants: participants
-      )
+      assign(socket, competition: competition, participants: participants)
 
     {:noreply, socket}
   end
@@ -334,9 +324,7 @@ defmodule SMWeb.Live.Slides do
             :ok
 
           {:error, reason} = error ->
-            Logger.error(
-              "Failed to create Slide and/or store file #{file_name}: #{inspect(reason)}"
-            )
+            Logger.error("Failed to create Slide and/or store file #{file_name}: #{inspect(reason)}")
 
             error
         end
@@ -377,9 +365,7 @@ defmodule SMWeb.Live.Slides do
         :ok
 
       {:error, reason} = error ->
-        Logger.error(
-          "Unable to generate #{size_type} thumbnail for image #{file_name}: #{inspect(reason)}"
-        )
+        Logger.error("Unable to generate #{size_type} thumbnail for image #{file_name}: #{inspect(reason)}")
 
         error
     end

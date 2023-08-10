@@ -219,9 +219,7 @@ defmodule SM.Organizations do
         Multi.new()
         |> Multi.one(:organization, from(Organization, where: [id: ^dest_id]))
         |> Multi.update_all(:update_users, user_query, set: [organization_id: dest_id])
-        |> Multi.update_all(:update_competitions, competition_query,
-          set: [organization_id: dest_id]
-        )
+        |> Multi.update_all(:update_competitions, competition_query, set: [organization_id: dest_id])
         |> Multi.delete_all(:delete_organizations, organization_query)
         |> Repo.transaction()
         |> case do

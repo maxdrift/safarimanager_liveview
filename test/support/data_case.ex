@@ -20,12 +20,12 @@ defmodule SM.DataCase do
 
   using do
     quote do
-      alias SM.Repo
-
       import Ecto
       import Ecto.Changeset
       import Ecto.Query
       import SM.DataCase
+
+      alias SM.Repo
     end
   end
 

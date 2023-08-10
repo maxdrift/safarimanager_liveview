@@ -86,8 +86,7 @@ defmodule SM.Application do
     1
   end
 
-  defp determine_concurrency(number_of_schedulers)
-       when number_of_schedulers > 0 and rem(number_of_schedulers, 2) == 0 do
+  defp determine_concurrency(number_of_schedulers) when number_of_schedulers > 0 and rem(number_of_schedulers, 2) == 0 do
     div(number_of_schedulers, 2)
   end
 

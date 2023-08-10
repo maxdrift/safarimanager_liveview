@@ -30,8 +30,7 @@ defmodule SMWeb.Live.Participants do
   @impl Phoenix.LiveView
   def mount(_params, _session, socket) do
     socket =
-      socket
-      |> assign(
+      assign(socket,
         organizations: Organizations.list(),
         categories: Categories.list(),
         participants: [],
@@ -145,9 +144,7 @@ defmodule SMWeb.Live.Participants do
         {:noreply, socket}
 
       {:error, reason} ->
-        Logger.error(
-          "Error changing participant (user ID: #{user_id}) category during enrollment: #{inspect(reason)}"
-        )
+        Logger.error("Error changing participant (user ID: #{user_id}) category during enrollment: #{inspect(reason)}")
 
         socket = put_flash(socket, :error, gettext("Unable to change Category"))
 
@@ -157,10 +154,7 @@ defmodule SMWeb.Live.Participants do
 
   def handle_event(
         "change",
-        %{
-          "_target" => ["participants-list-selection"],
-          "participants-list-selection" => selection
-        },
+        %{"_target" => ["participants-list-selection"], "participants-list-selection" => selection},
         socket
       ) do
     socket =
@@ -210,8 +204,7 @@ defmodule SMWeb.Live.Participants do
     users = Accounts.list_enrollable(competition_id)
 
     socket =
-      socket
-      |> assign(
+      assign(socket,
         competition_id: competition_id,
         competition: competition,
         participants: Participants.list(competition_id),
@@ -229,12 +222,7 @@ defmodule SMWeb.Live.Participants do
     users = Accounts.list_enrollable(competition_id)
 
     socket =
-      socket
-      |> assign(
-        competition: competition,
-        participants: Participants.list(competition_id),
-        users: users
-      )
+      assign(socket, competition: competition, participants: Participants.list(competition_id), users: users)
 
     {:noreply, socket}
   end

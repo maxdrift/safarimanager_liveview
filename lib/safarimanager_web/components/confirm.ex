@@ -1,4 +1,5 @@
 defmodule SMWeb.Components.Confirm do
+  @moduledoc false
   use Phoenix.Component
 
   import Phoenix.LiveView

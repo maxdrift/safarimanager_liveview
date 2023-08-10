@@ -405,14 +405,11 @@ defmodule SM.Utils do
     apply_rewind(text, "", "")
   end
 
-  defp apply_rewind(<<?\n, rest::binary>>, acc, line),
-    do: apply_rewind(rest, <<acc::binary, line::binary, ?\n>>, "")
+  defp apply_rewind(<<?\n, rest::binary>>, acc, line), do: apply_rewind(rest, <<acc::binary, line::binary, ?\n>>, "")
 
-  defp apply_rewind(<<?\r, byte, rest::binary>>, acc, _line) when byte != ?\n,
-    do: apply_rewind(rest, acc, <<byte>>)
+  defp apply_rewind(<<?\r, byte, rest::binary>>, acc, _line) when byte != ?\n, do: apply_rewind(rest, acc, <<byte>>)
 
-  defp apply_rewind(<<byte, rest::binary>>, acc, line),
-    do: apply_rewind(rest, acc, <<line::binary, byte>>)
+  defp apply_rewind(<<byte, rest::binary>>, acc, line), do: apply_rewind(rest, acc, <<line::binary, byte>>)
 
   defp apply_rewind("", acc, line), do: acc <> line
 

@@ -99,7 +99,7 @@ msgstr ""
 msgid "You must log in to access this page."
 msgstr ""
 
-#: lib/safarimanager/teams/team.ex:49
+#: lib/safarimanager/teams/team.ex:48
 #, elixir-autogen, elixir-format
 msgid "is already a member of this team"
 msgstr ""

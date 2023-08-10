@@ -60,11 +60,7 @@ defmodule SMWeb.Live.Admin.Subjects.Index do
   end
 
   # Create/Edit dialog submit callback
-  def handle_event(
-        "submit",
-        %{"entity" => %{"_action" => "create"} = params},
-        socket
-      ) do
+  def handle_event("submit", %{"entity" => %{"_action" => "create"} = params}, socket) do
     case Subjects.create(params) do
       {:ok, _entity} ->
         socket =
@@ -80,11 +76,7 @@ defmodule SMWeb.Live.Admin.Subjects.Index do
     end
   end
 
-  def handle_event(
-        "submit",
-        %{"entity" => %{"_action" => "edit"} = params},
-        socket
-      ) do
+  def handle_event("submit", %{"entity" => %{"_action" => "edit"} = params}, socket) do
     case Subjects.update(socket.assigns.record, params) do
       {:ok, entity} ->
         socket =
@@ -137,12 +129,7 @@ defmodule SMWeb.Live.Admin.Subjects.Index do
             changeset = change(subject, %{})
 
             socket =
-              socket
-              |> assign(
-                record: subject,
-                changeset: changeset,
-                action: :edit
-              )
+              assign(socket, record: subject, changeset: changeset, action: :edit)
 
             {:noreply, socket}
         end
@@ -199,8 +186,7 @@ defmodule SMWeb.Live.Admin.Subjects.Index do
     {:noreply, put_flash(socket, :info, gettext("All subjects deleted successfully"))}
   end
 
-  def handle_info({Subjects, [:subject, :deleted], deleted_ids}, socket)
-      when is_list(deleted_ids) do
+  def handle_info({Subjects, [:subject, :deleted], deleted_ids}, socket) when is_list(deleted_ids) do
     socket =
       deleted_ids
       |> Stream.map(fn id -> "items-#{id}" end)
@@ -213,8 +199,7 @@ defmodule SMWeb.Live.Admin.Subjects.Index do
     {:noreply, socket}
   end
 
-  def handle_info({Subjects, [:subject, :deleted], deleted_count}, socket)
-      when is_integer(deleted_count) do
+  def handle_info({Subjects, [:subject, :deleted], deleted_count}, socket) when is_integer(deleted_count) do
     {:noreply, push_navigate(socket, to: "/admin/subjects")}
   end
 

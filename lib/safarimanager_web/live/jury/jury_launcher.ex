@@ -26,8 +26,7 @@ defmodule SMWeb.Live.JuryLauncher do
     {:ok, competition} = Competitions.get(competition_id)
 
     socket =
-      socket
-      |> assign(
+      assign(socket,
         competition_id: competition_id,
         competition: competition,
         stats: slides_count_and_stats(competition_id)
@@ -42,27 +41,14 @@ defmodule SMWeb.Live.JuryLauncher do
     {slides_count, species_count} = Slides.count_for_jury(competition_id)
 
     camera_type_stats =
-      Enum.map(slides_count_by_camera_type, fn {camera_type, {slides_count, species_count}} ->
-        {camera_type,
-         %{
-           name: camera_type_label(camera_type),
-           slides_count: slides_count,
-           species_count: species_count
-         }}
+      Map.new(slides_count_by_camera_type, fn {camera_type, {slides_count, species_count}} ->
+        {camera_type, %{name: camera_type_label(camera_type), slides_count: slides_count, species_count: species_count}}
       end)
-      |> Enum.into(%{})
 
     category_stats =
-      Enum.map(slides_count_by_category, fn {category_id,
-                                             {category_name, slides_count, species_count}} ->
-        {category_id,
-         %{
-           name: category_name,
-           slides_count: slides_count,
-           species_count: species_count
-         }}
+      Map.new(slides_count_by_category, fn {category_id, {category_name, slides_count, species_count}} ->
+        {category_id, %{name: category_name, slides_count: slides_count, species_count: species_count}}
       end)
-      |> Enum.into(%{})
 
     %{
       all: %{
