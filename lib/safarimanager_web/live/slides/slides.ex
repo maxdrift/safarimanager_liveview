@@ -9,6 +9,7 @@ defmodule SMWeb.Live.Slides do
   alias SM.Competitions
   alias SM.Participants
   alias SM.Slides
+  alias SM.Teams
   alias SM.USBWatcherSupervisor
   alias SMWeb.Components.CompetitionHeader
   alias SMWeb.Components.DirectUploadDialog
@@ -34,6 +35,7 @@ defmodule SMWeb.Live.Slides do
       |> assign(
         user: nil,
         participants: [],
+        teams: [],
         slides: [],
         direct_file_upload: Slides.direct_file_upload?(),
         discovery_mode: USBWatcherSupervisor.active?()
@@ -152,7 +154,8 @@ defmodule SMWeb.Live.Slides do
 
   def handle_event("direct-import", %{"cwd" => cwd, "items" => items}, socket) do
     pid = self()
-    assigns = socket.assigns
+    competition_id = socket.assigns.competition_id
+    user_id = socket.assigns.user && socket.assigns.user.id
 
     to_be_imported =
       items
@@ -170,8 +173,8 @@ defmodule SMWeb.Live.Slides do
 
             {:ok, _slide} =
               Slides.create_and_store_slide_file(
-                assigns.competition_id,
-                assigns.user.id,
+                competition_id,
+                user_id,
                 file_name,
                 file_size,
                 "image/jpeg",
@@ -180,8 +183,8 @@ defmodule SMWeb.Live.Slides do
 
             :ok =
               Slides.generate_thumbnail(
-                assigns.competition_id,
-                assigns.user.id,
+                competition_id,
+                user_id,
                 file_name,
                 :small
               )
@@ -195,7 +198,7 @@ defmodule SMWeb.Live.Slides do
         :ok = Process.send(pid, {:refresh, :participants}, [])
 
         Logger.info(
-          "Imported #{import_result}/#{to_be_imported_cnt} Slides for User #{assigns.user.id} in Competition #{assigns.competition_id}"
+          "Imported #{import_result}/#{to_be_imported_cnt} Slides for User #{user_id} in Competition #{competition_id}"
         )
       end)
 
@@ -218,6 +221,7 @@ defmodule SMWeb.Live.Slides do
 
     {:ok, competition} = Competitions.get(competition_id)
     participants = Participants.list(competition_id)
+    teams = Teams.list_by_competition(competition_id)
 
     socket =
       assign(
@@ -225,6 +229,7 @@ defmodule SMWeb.Live.Slides do
         competition_id: competition_id,
         competition: competition,
         participants: participants,
+        teams: teams,
         # FIXME: this way of selecting the user forces a re-query of Competition
         user: user_id && Accounts.get_user!(user_id),
         slides: user_id && Slides.list(user_id, competition_id)
@@ -246,17 +251,19 @@ defmodule SMWeb.Live.Slides do
   def handle_info({_context, [:competition, :updated], _result}, socket) do
     {:ok, competition} = Competitions.get(socket.assigns.competition_id)
     participants = Participants.list(socket.assigns.competition_id)
+    teams = Teams.list_by_competition(socket.assigns.competition_id)
 
     socket =
-      assign(socket, competition: competition, participants: participants)
+      assign(socket, competition: competition, participants: participants, teams: teams)
 
     {:noreply, socket}
   end
 
   def handle_info({:refresh, :participants}, socket) do
     participants = Participants.list(socket.assigns.competition_id)
+    teams = Teams.list_by_competition(socket.assigns.competition_id)
 
-    socket = assign(socket, participants: participants)
+    socket = assign(socket, participants: participants, teams: teams)
 
     {:noreply, socket}
   end

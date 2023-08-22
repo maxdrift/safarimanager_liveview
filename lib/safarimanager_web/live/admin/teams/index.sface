@@ -180,7 +180,7 @@
       {/if}
     </Column>
     <Column title={gettext("Members")}>
-      {Teams.synthesize_team_name(item) || gettext("N/A")}
+      {Teams.synthesize_members_names(item) || gettext("N/A")}
     </Column>
     <Column title={gettext("Actions")} class="w-4">
       <div class="overflow-x-auto">

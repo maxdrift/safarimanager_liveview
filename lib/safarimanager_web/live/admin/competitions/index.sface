@@ -29,6 +29,9 @@
               {Gettext.gettext(SMWeb.Gettext, Keyword.get(@competition_types, @record.type))}
             </span>
           </FieldsListItem>
+          <FieldsListItem label={gettext("For teams")}>
+            {(@record.for_teams && gettext("Yes")) || ""}
+          </FieldsListItem>
           <FieldsListItem label={gettext("Start")}>
             <DateTimeString value={@record.start_time} />
           </FieldsListItem>
@@ -137,6 +140,12 @@
                 prompt={[key: gettext("Select a type...")]}
                 class={input_state_class(@changeset, :type)}
               />
+            </SMField>
+            <SMField name={:for_teams} class="w-full">
+              <Label class="label cursor-pointer">
+                <span class="label-text">{gettext("For teams")}</span>
+                <Checkbox class={state_class("checkbox", @changeset, :for_teams)} opts={phx_debounce: "1000"} />
+              </Label>
             </SMField>
             <SMField name={:start_time} label={gettext("Start date/time")} class="w-1/2 pr-2">
               <DateTimeLocalInput
@@ -293,6 +302,9 @@
     </Column>
     <Column title={gettext("Name")}>
       {item.name}
+    </Column>
+    <Column title={gettext("For teams")} class="w-1/12">
+      {(item.for_teams && "✓") || ""}
     </Column>
     <Column title={gettext("Location")}>
       {"#{item.city || gettext("N/A")} (#{item.country || gettext("N/A")})"}

@@ -44,13 +44,15 @@ defmodule SMWeb.ErrorHelpers do
     end
   end
 
-  @spec input_state_class(Ecto.Changeset.t(), atom(), Keyword.t()) :: String.t()
-  def input_state_class(changeset, field, opts \\ []) do
-    state_class("input input-bordered", changeset, field, opts)
+  @spec input_state_class(Ecto.Changeset.t() | Phoenix.HTML.Form.t(), atom(), Keyword.t()) :: String.t()
+  def input_state_class(changeset_or_form, field, opts \\ []) do
+    state_class("input input-bordered", changeset_or_form, field, opts)
   end
 
-  @spec state_class(String.t(), Ecto.Changeset.t(), atom(), Keyword.t()) :: String.t()
-  def state_class(class, changeset, field, opts \\ []) do
+  @spec state_class(String.t(), Ecto.Changeset.t() | Phoenix.HTML.Form.t(), atom(), Keyword.t()) :: String.t()
+  def state_class(class, changeset, field, opts \\ [])
+
+  def state_class(class, %Ecto.Changeset{} = changeset, field, opts) do
     class =
       cond do
         # no state checking
@@ -64,8 +66,24 @@ defmodule SMWeb.ErrorHelpers do
     String.trim(class)
   end
 
-  @spec submit_state_class(String.t(), Ecto.Changeset.t(), Keyword.t()) :: String.t()
-  def submit_state_class(class \\ "btn btn-md", changeset, opts \\ []) do
+  def state_class(class, %Phoenix.HTML.Form{} = form, field, opts) do
+    class =
+      cond do
+        # no state checking
+        opts[:no_state] -> class
+        # The form was not yet submitted
+        !form.source.action -> class
+        form.errors[field] -> "#{class} input-error"
+        true -> "#{class} input-success"
+      end
+
+    String.trim(class)
+  end
+
+  @spec submit_state_class(String.t(), Ecto.Changeset.t() | Phoenix.HTML.Form.t(), Keyword.t()) :: String.t()
+  def submit_state_class(class \\ "btn btn-md", changeset, opts \\ [])
+
+  def submit_state_class(class, %Ecto.Changeset{} = changeset, opts) do
     class =
       cond do
         # no state checking
@@ -74,6 +92,21 @@ defmodule SMWeb.ErrorHelpers do
         changeset.action && changeset.valid? -> "#{class} btn-success"
         # The form was not yet submitted or is not valid
         !(changeset.action && changeset.valid?) -> "#{class} btn-disabled"
+        true -> class
+      end
+
+    String.trim(class)
+  end
+
+  def submit_state_class(class, %Phoenix.HTML.Form{} = form, opts) do
+    class =
+      cond do
+        # no state checking
+        opts[:no_state] -> class
+        # The form was submitted and is valid
+        form.source.action && form.source.valid? -> "#{class} btn-success"
+        # The form was not yet submitted or is not valid
+        !(form.source.action && form.source.valid?) -> "#{class} btn-disabled"
         true -> class
       end
 

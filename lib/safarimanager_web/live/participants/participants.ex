@@ -126,14 +126,7 @@ defmodule SMWeb.Live.Participants do
     {:noreply, assign(socket, :participants, participants)}
   end
 
-  def handle_event(
-        "change",
-        %{
-          "_target" => ["category-form", "category_id"],
-          "category-form" => %{"category_id" => new_category_id, "user_id" => user_id}
-        },
-        socket
-      ) do
+  def handle_event("category-change", %{"category" => %{"category_id" => new_category_id, "user_id" => user_id}}, socket) do
     {:ok, participant} = Participants.get(user_id, socket.assigns.competition_id)
 
     participant
@@ -150,46 +143,6 @@ defmodule SMWeb.Live.Participants do
 
         {:noreply, socket}
     end
-  end
-
-  def handle_event(
-        "change",
-        %{"_target" => ["participants-list-selection"], "participants-list-selection" => selection},
-        socket
-      ) do
-    socket =
-      assign(socket, participants_selection: MapSet.new(selection))
-
-    {:noreply, socket}
-  end
-
-  def handle_event("create-team", _params, socket) do
-    members =
-      socket.assigns.participants_selection
-      |> MapSet.to_list()
-      |> Enum.map(&%{"competition_id" => socket.assigns.competition.id, "user_id" => &1})
-
-    socket =
-      case Teams.create(%{"members" => members}) do
-        {:ok, team} ->
-          put_flash(
-            socket,
-            :info,
-            "#{gettext("Team created successfully")}: #{Teams.synthesize_team_name(team)}"
-          )
-
-        {:error, reason} ->
-          Logger.error("Unable to create team from selected participants: #{inspect(reason)}")
-          put_flash(socket, :error, gettext("Unable to create team"))
-      end
-
-    socket =
-      assign(socket,
-        participants_selection: MapSet.new(),
-        teamed_up_users: MapSet.new(Teams.list_member_users(socket.assigns.competition.id))
-      )
-
-    {:noreply, socket}
   end
 
   def handle_event(_event, _params, socket) do

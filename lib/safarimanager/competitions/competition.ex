@@ -26,6 +26,7 @@ defmodule SM.Competitions.Competition do
     field :state, :string
     field :country, :string
     field :type, Ecto.Enum, values: Keyword.keys(@types)
+    field :for_teams, :boolean, default: false
 
     belongs_to :organization, Organization
 
@@ -54,11 +55,13 @@ defmodule SM.Competitions.Competition do
       :state,
       :country,
       :type,
+      :for_teams,
       :organization_id
     ])
     |> validate_required([
       :name,
-      :organization_id
+      :organization_id,
+      :type
     ])
     |> cast_assoc(:settings, required: false)
     |> validate_dates()

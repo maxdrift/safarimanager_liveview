@@ -51,11 +51,36 @@ defmodule SM.Teams do
   end
 
   @doc """
+  Returns the list of teams for a competition.
+
+  ## Examples
+
+      iex> list_by_competition(123)
+      [%Team{}, ...]
+
+  """
+  @spec list_by_competition(String.t()) :: [Team.t()]
+  def list_by_competition(competition_id) do
+    query =
+      from(
+        t in Team,
+        join: tm in assoc(t, :members),
+        where: tm.competition_id == ^competition_id,
+        group_by: [:id],
+        order_by: [desc: :inserted_at]
+      )
+
+    query
+    |> Repo.all()
+    |> Repo.preload([:users, :competition])
+  end
+
+  @doc """
   Returns the list of member user IDs by competition ID.
 
   ## Examples
 
-      iex> list_member_users("123)
+      iex> list_member_users("123")
       [345, 678, ...]
 
   """
@@ -246,6 +271,13 @@ defmodule SM.Teams do
   end
 
   def synthesize_team_name(_team), do: nil
+
+  @spec synthesize_members_names(Team.t()) :: String.t() | nil
+  def synthesize_members_names(%Team{members: [_ | _] = members}) do
+    Enum.map_join(members, ", ", &"#{&1.user.last_name} #{String.first(&1.user.first_name)}.")
+  end
+
+  def synthesize_members_names(_team), do: nil
 
   @spec synthesize_org_name(Team.t()) :: String.t() | nil
   def synthesize_org_name(%Team{members: [first | _] = members}) do

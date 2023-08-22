@@ -3,8 +3,7 @@ defmodule SM.Repo.Migrations.AddNumberToParticipants do
 
   def change do
     alter table(:participants) do
-      # TODO: Switch 'null: true' to 'null: false' before release.
-      add :number, :integer, null: true
+      add :number, :integer, null: false
     end
 
     create unique_index(:participants, [:competition_id, :number])

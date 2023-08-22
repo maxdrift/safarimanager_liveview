@@ -6,6 +6,7 @@ defmodule SM.Participants do
 
   alias SM.Participants.Participant
   alias SM.Slides.Slide
+  alias SM.Teams.TeamMember
 
   @doc """
   Returns the list of participants.
@@ -58,6 +59,33 @@ defmodule SM.Participants do
         order_by: [asc: :number],
         preload: [category: c, user: {u, [organization: o]}],
         select: %Participant{p | slides_count: count(s.id)}
+      )
+
+    Repo.all(query)
+  end
+
+  @doc """
+  Returns the list of participants filtered by competition ID available for team creation.
+
+  ## Examples
+
+      iex> list_for_teams("123")
+      [%Participant{}, ...]
+  """
+  @spec list_for_teams(String.t()) :: [Participant.t()]
+  def list_for_teams(competition_id) do
+    query =
+      from(
+        p in Participant,
+        where: [competition_id: ^competition_id],
+        inner_join: u in assoc(p, :user),
+        left_join: tm in TeamMember,
+        on: tm.user_id == p.user_id and tm.competition_id == ^competition_id,
+        where: is_nil(tm.team_id),
+        left_join: o in assoc(u, :organization),
+        group_by: [p.user_id],
+        order_by: [asc: o.name, asc: :number],
+        preload: [:category, user: [:organization]]
       )
 
     Repo.all(query)

@@ -3,7 +3,7 @@
   current_user={@current_user}
 >
   <CompetitionHeader {=@competition} />
-  <StepsHeader current_step={5} competition_id={@competition.id} />
+  <StepsHeader current_step={:validation} competition={@competition} />
   <div class="mt-10 text-center">
     <Link to={"/organize/#{@competition_id}/validation"} class="btn btn-xl btn-primary">
       {gettext("Start Validation")}
@@ -234,14 +234,7 @@
           </tr>
         {#else}
           <tr>
-            <td>{gettext("There are no slides yet")}</td>
-            <td />
-            <td />
-            <td />
-            <td />
-            <td />
-            <td />
-            <td />
+            <td colspan="8">{gettext("There are no slides yet")}</td>
           </tr>
         {/for}
       </tbody>

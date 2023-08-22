@@ -11,6 +11,7 @@ defmodule SMWeb.Live.SlideSelection do
   alias SM.Slides
   alias SM.Slides.SelectionImport
   alias SM.Subjects
+  alias SM.Teams
   alias SMWeb.Components.CompetitionHeader
   alias SMWeb.Components.Layout
   alias SMWeb.Components.StepsHeader
@@ -35,14 +36,17 @@ defmodule SMWeb.Live.SlideSelection do
   def mount(_params, _session, socket) do
     socket =
       socket
-      |> assign(:user, nil)
-      |> assign(:participants, [])
-      |> assign(:slides, [])
-      |> assign(:slide_statuses, get_slide_statuses())
-      |> assign(:editing?, false)
-      |> assign(:editing_slide, nil)
-      |> assign(:editing_changeset, nil)
-      |> assign(:subjects, Subjects.list())
+      |> assign(
+        user: nil,
+        participants: [],
+        teams: [],
+        slides: [],
+        slide_statuses: get_slide_statuses(),
+        editing?: false,
+        editing_slide: nil,
+        editing_changeset: nil,
+        subjects: Subjects.list()
+      )
       |> allow_upload(:csv,
         accept: ~w(.csv),
         max_entries: 1,
@@ -139,16 +143,18 @@ defmodule SMWeb.Live.SlideSelection do
     grouped_slides = get_slides_by_status(user_id, competition_id)
 
     socket =
-      socket
-      |> assign(:competition_id, competition_id)
-      |> assign(:competition, competition)
-      |> assign(:participants, Participants.list(competition_id))
-      # FIXME: this way of selecting the user forces a re-query of Competition
-      |> assign(:user, user_id && Accounts.get_user!(user_id))
-      |> assign(:discarded_slides, user_id && Map.get(grouped_slides, :discarded, []))
-      |> assign(:jury_slides, user_id && Map.get(grouped_slides, :submitted_jury, []))
-      |> assign(:fixed_slides, user_id && Map.get(grouped_slides, :submitted_fixed, []))
+      assign(socket,
+        competition_id: competition_id,
+        competition: competition,
+        participants: Participants.list(competition_id),
+        teams: Teams.list_by_competition(competition_id),
+        user: user_id && Accounts.get_user!(user_id),
+        discarded_slides: user_id && Map.get(grouped_slides, :discarded, []),
+        jury_slides: user_id && Map.get(grouped_slides, :submitted_jury, []),
+        fixed_slides: user_id && Map.get(grouped_slides, :submitted_fixed, [])
+      )
 
+    # FIXME: this way of selecting the user forces a re-query of Competition
     {:noreply, socket}
   end
 
@@ -171,11 +177,10 @@ defmodule SMWeb.Live.SlideSelection do
   def handle_info({_context, [:competition, :updated], _result}, socket) do
     {:ok, competition} = Competitions.get(socket.assigns.competition_id)
     participants = Participants.list(socket.assigns.competition_id)
+    teams = Teams.list_by_competition(socket.assigns.competition_id)
 
     socket =
-      socket
-      |> assign(:competition, competition)
-      |> assign(:participants, participants)
+      assign(socket, competition: competition, participants: participants, teams: teams)
 
     {:noreply, socket}
   end

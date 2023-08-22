@@ -53,25 +53,30 @@ defmodule SMWeb.Live.Results do
 
   @impl Phoenix.LiveView
   def handle_params(%{"competition_id" => competition_id}, _uri, socket) do
-    {:ok, results} = Results.list(competition_id)
     {:ok, competition} = Competitions.get(competition_id)
-    subjects = Subjects.list_with_coefficients(competition_id)
-    slides_count = Slides.count_by_status(competition_id)
-    subjects_count = Enum.count(subjects)
 
-    socket =
-      assign(socket,
-        competition_id: competition_id,
-        category_id: nil,
-        competition: competition,
-        results: results,
-        subjects: subjects,
-        subjects_count: subjects_count,
-        slides_count: slides_count,
-        penalties_count: Slides.count_penalties(competition_id)
-      )
+    if competition.for_teams do
+      {:noreply, push_navigate(socket, to: ~p"/organize/#{competition_id}/team_results")}
+    else
+      {:ok, results} = Results.list(competition_id)
+      subjects = Subjects.list_with_coefficients(competition_id)
+      slides_count = Slides.count_by_status(competition_id)
+      subjects_count = Enum.count(subjects)
 
-    {:noreply, socket}
+      socket =
+        assign(socket,
+          competition_id: competition_id,
+          category_id: nil,
+          competition: competition,
+          results: results,
+          subjects: subjects,
+          subjects_count: subjects_count,
+          slides_count: slides_count,
+          penalties_count: Slides.count_penalties(competition_id)
+        )
+
+      {:noreply, socket}
+    end
   end
 
   @impl Phoenix.LiveView

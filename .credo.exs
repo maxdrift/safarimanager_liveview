@@ -213,7 +213,7 @@
           {Credo.Check.Refactor.PipeChainStart, []},
           {Credo.Check.Refactor.RejectFilter, []},
           {Credo.Check.Refactor.VariableRebinding, []},
-          {Credo.Check.Warning.LazyLogging, []},
+          {Credo.Check.Warning.LazyLogging, []}
 
           #
           # Custom checks can be created using `mix credo.gen.check`.

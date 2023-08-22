@@ -54,6 +54,7 @@ defmodule SMWeb.Router do
       scope "/organize" do
         live "/new", NewCompetition
         live "/:competition_id/participants", Participants
+        live "/:competition_id/teams", Teams
         live "/:competition_id/jurors", Jurors
         live "/:competition_id/slides", Slides
         live "/:competition_id/slide_selection", SlideSelection
@@ -62,6 +63,7 @@ defmodule SMWeb.Router do
         live "/:competition_id/jury_launcher", JuryLauncher
         live "/:competition_id/jury", Jury
         live "/:competition_id/results", Results
+        live "/:competition_id/team_results", TeamResults
       end
 
       scope "/admin", Admin do

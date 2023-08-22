@@ -1,61 +1,114 @@
 <Layout current_page={~p"/organize/#{@competition.id}/slides"} current_user={@current_user}>
   <CompetitionHeader {=@competition} />
-  <StepsHeader current_step={3} competition_id={@competition.id} />
+  <StepsHeader current_step={:slides} competition={@competition} />
   <div class="flex flex-col mt-5">
     <div class="rounded-lg bg-base-200 shadow-lg p-4">
-      <div class="text-2xl font-bold text-center pb-4">{gettext("Participants")}</div>
+      <div :if={!@competition.for_teams} class="text-2xl font-bold text-center pb-4">{gettext("Participants")}</div>
+      <div :if={@competition.for_teams} class="text-2xl font-bold text-center pb-4">{gettext("Teams")}</div>
       <div class="flex flex-row-reverse my-2">
         <Link to={~p"/csv_export?entity=slides"} method={:post} class="btn btn-sm btn-outline">
           {gettext("Export Slides to CSV")}
         </Link>
       </div>
-      <Form for={%{}} as={:participants_filter} change="filter-participants" opts={autocomplete: "off"}>
-        <TextInput
-          name={:value}
-          class="input input-bordered w-full mb-1"
-          opts={placeholder: gettext("Search for a participant..."), phx_debounce: "500", autocomplete: "nope"}
-        />
-      </Form>
-      <div class="max-h-48 overflow-y-auto tiny-scrollbar">
-        <table class="table table-zebra table-fixed w-full">
-          <thead>
-            <tr>
-              <th class="sticky top-0 w-1/12">{gettext("#")}</th>
-              <th class="sticky top-0 w-auto">{gettext("Last Name")}</th>
-              <th class="sticky top-0 w-auto">{gettext("First Name")}</th>
-              <th class="sticky top-0 w-auto">{gettext("Organization")}</th>
-              <th class="sticky top-0 w-auto">{gettext("Category")}</th>
-              <th class="sticky top-0 w-auto">{gettext("Slides")}</th>
-              <th class="sticky top-0 w-auto" />
-            </tr>
-          </thead>
-          <tbody>
-            {#for item <- @participants}
+      <div :if={!@competition.for_teams} id="participants-table">
+        <Form for={%{}} as={:participants_filter} change="filter-participants" opts={autocomplete: "off"}>
+          <TextInput
+            name={:value}
+            class="input input-bordered w-full mb-1"
+            opts={placeholder: gettext("Search for a participant..."), phx_debounce: "500", autocomplete: "nope"}
+          />
+        </Form>
+        <div class="max-h-48 overflow-y-auto tiny-scrollbar">
+          <table class="table table-zebra table-fixed w-full">
+            <thead>
               <tr>
-                <td class="truncate">{item.number}</td>
-                <td class="truncate">{item.user.last_name}</td>
-                <td class="truncate">{item.user.first_name}</td>
-                <td class="truncate">{(item.user.organization && item.user.organization.name) || gettext("N/A")}</td>
-                <td class="truncate">{(item.category && item.category.name) || gettext("N/A")}</td>
-                <td class="truncate">{item.slides_count}</td>
-                <td class="truncate">
-                  <LivePatch to={"?user_id=#{item.user_id}"} class="btn btn-xs">
-                    {gettext("Select")}
-                  </LivePatch>
-                </td>
+                <th class="sticky top-0 w-1/12">{gettext("#")}</th>
+                <th class="sticky top-0 w-auto">{gettext("Last Name")}</th>
+                <th class="sticky top-0 w-auto">{gettext("First Name")}</th>
+                <th class="sticky top-0 w-auto">{gettext("Organization")}</th>
+                <th class="sticky top-0 w-auto">{gettext("Category")}</th>
+                <th class="sticky top-0 w-auto">{gettext("Slides")}</th>
+                <th class="sticky top-0 w-auto" />
               </tr>
-            {#else}
+            </thead>
+            <tbody>
+              {#for item <- @participants}
+                <tr>
+                  <td class="truncate">{item.number}</td>
+                  <td class="truncate">{item.user.last_name}</td>
+                  <td class="truncate">{item.user.first_name}</td>
+                  <td class="truncate">{(item.user.organization && item.user.organization.name) || gettext("N/A")}</td>
+                  <td class="truncate">{(item.category && item.category.name) || gettext("N/A")}</td>
+                  <td class="truncate">{item.slides_count}</td>
+                  <td class="truncate">
+                    <LivePatch to={"?user_id=#{item.user_id}"} class="btn btn-xs">
+                      {gettext("Select")}
+                    </LivePatch>
+                  </td>
+                </tr>
+              {#else}
+                <tr>
+                  <td colspan="7">{gettext("No items yet!")}</td>
+                </tr>
+              {/for}
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div :if={@competition.for_teams} id="teams-table">
+        <Form for={%{}} as={:teams_filter} change="filter-teams" opts={autocomplete: "off"}>
+          <TextInput
+            name={:value}
+            class="input input-bordered w-full mb-1"
+            opts={placeholder: gettext("Search for a team..."), phx_debounce: "500", autocomplete: "nope"}
+          />
+        </Form>
+        <div class="max-h-48 overflow-y-auto tiny-scrollbar bg-base-100 rounded-md">
+          <table class="table table-xs table-fixed w-full">
+            <thead>
               <tr>
-                <td>{gettext("No items yet!")}</td>
-                <td />
-                <td />
-                <td />
-                <td />
-                <td />
+                <th class="sticky top-0 w-2">{gettext("#")}</th>
+                <th class="sticky top-0 w-auto">{gettext("Name")}</th>
+                <th class="sticky top-0 w-auto">{gettext("Organization")}</th>
+                <th class="sticky top-0 w-1/12" />
               </tr>
-            {/for}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {#for {item, index} <- Enum.with_index(@teams)}
+                <tr>
+                  <td>{index + 1}</td>
+                  <td class="truncate">{item.name || Teams.synthesize_team_name(item) || gettext("N/A")}</td>
+                  <td class="truncate">{item.organization_name || Teams.synthesize_org_name(item) || gettext("N/A")}</td>
+                  <td />
+                </tr>
+                <tr>
+                  <td />
+                  <td />
+                  <td colspan="2">
+                    <table class="table table-xs table-fixed w-full bg-base-300 rounded-md">
+                      <tbody>
+                        {#for member <- item.members}
+                          <tr class="border-b last:border-none border-neutral">
+                            <td class="truncate">{member.user.last_name} {member.user.first_name}</td>
+                            <td class="truncate">
+                              <LivePatch to={"?user_id=#{member.user.id}"} class="btn btn-xs btn-base-200">
+                                {gettext("Select")}
+                              </LivePatch>
+                            </td>
+                          </tr>
+                        {/for}
+                      </tbody>
+                    </table>
+                  </td>
+                </tr>
+              {#else}
+                <tr>
+                  <td colspan="7">{gettext("No items yet!")}</td>
+                </tr>
+              {/for}
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
     <div class="divider" />
@@ -179,11 +232,7 @@
                 {/if}
               {#else}
                 <tr>
-                  <td>{gettext("No items yet!")}</td>
-                  <td />
-                  <td />
-                  <td />
-                  <td />
+                  <td colspan="5">{gettext("No items yet!")}</td>
                 </tr>
               {/for}
             </tbody>

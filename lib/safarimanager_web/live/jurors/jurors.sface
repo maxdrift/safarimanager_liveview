@@ -1,6 +1,6 @@
 <Layout current_page={~p"/organize/#{@competition.id}/jurors"} current_user={@current_user}>
   <CompetitionHeader {=@competition} />
-  <StepsHeader current_step={2} competition_id={@competition.id} />
+  <StepsHeader current_step={:jurors} competition={@competition} />
 
   <div class="flex flex-col lg:flex-row mt-5">
     <div class="overflow-y-auto rounded-lg lg:w-1/2 bg-base-200 shadow-lg p-4">
@@ -34,10 +34,7 @@
               </tr>
             {#else}
               <tr>
-                <td>{gettext("No items yet!")}</td>
-                <td />
-                <td />
-                <td />
+                <td colspan="4">{gettext("No items yet!")}</td>
               </tr>
             {/for}
           </tbody>
@@ -68,10 +65,7 @@
             </tr>
           {#else}
             <tr>
-              <td>{gettext("No items yet!")}</td>
-              <td />
-              <td />
-              <td />
+              <td colspan="4">{gettext("No items yet!")}</td>
             </tr>
           {/for}
         </tbody>
@@ -79,7 +73,28 @@
     </div>
   </div>
   <div class="flex flex-row my-10 w-full">
-    <LiveRedirect to={"/organize/#{@competition_id}/participants"} class="flex-none btn gap-2">
+    <LiveRedirect
+      :if={@competition.for_teams}
+      to={"/organize/#{@competition_id}/teams"}
+      class="flex-none btn gap-2"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        class="h-6 w-6"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+        stroke-width="2"
+      >
+        <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+      </svg>
+      {gettext("Teams")}
+    </LiveRedirect>
+    <LiveRedirect
+      :if={!@competition.for_teams}
+      to={"/organize/#{@competition_id}/participants"}
+      class="flex-none btn gap-2"
+    >
       <svg
         xmlns="http://www.w3.org/2000/svg"
         class="h-6 w-6"
