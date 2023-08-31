@@ -230,7 +230,7 @@
             </tr>
           </tbody>
         {#else}
-          <td>{gettext("No results available yet")}</td>
+          <td colspan="7">{gettext("No results available yet")}</td>
         {/for}
       </tbody>
     </table>

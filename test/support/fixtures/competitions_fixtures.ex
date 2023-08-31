@@ -1,4 +1,5 @@
 defmodule SM.CompetitionsFixtures do
+  @moduledoc false
   alias SM.AccountsFixtures
   alias SM.Categories
   alias SM.Competitions
@@ -81,7 +82,7 @@ defmodule SM.CompetitionsFixtures do
 
   def create_slides(%{participants: participants}) do
     slides =
-      Enum.map(participants, fn participant ->
+      Map.new(participants, fn participant ->
         slides =
           for index <- 1..10 do
             {:ok, slide} =
@@ -97,21 +98,16 @@ defmodule SM.CompetitionsFixtures do
 
         {participant.user_id, slides}
       end)
-      |> Enum.into(%{})
 
     %{slides: slides}
   end
 
   def select_slides(%{slides: slides}) do
     slides =
-      Enum.map(slides, fn {user_id, slides} ->
+      Map.new(slides, fn {user_id, slides} ->
         all_subjects = Subjects.list()
 
-        {jury_subjects, fixed_subjects} =
-          all_subjects
-          |> Enum.shuffle()
-          |> Enum.take(8)
-          |> Enum.split(5)
+        {jury_subjects, fixed_subjects} = all_subjects |> Enum.shuffle() |> Enum.take(8) |> Enum.split(5)
 
         {submitted_slides, discarded_slides} = Enum.split(slides, 8)
         {jury_slides, fixed_slides} = Enum.split(submitted_slides, 5)
@@ -120,11 +116,7 @@ defmodule SM.CompetitionsFixtures do
           jury_slides
           |> Enum.zip(jury_subjects)
           |> Enum.map(fn {slide, subject} ->
-            {:ok, slide} =
-              Slides.update(slide, %{
-                subject_id: subject.id,
-                status: :submitted_jury
-              })
+            {:ok, slide} = Slides.update(slide, %{subject_id: subject.id, status: :submitted_jury})
 
             slide
           end)
@@ -133,18 +125,13 @@ defmodule SM.CompetitionsFixtures do
           fixed_slides
           |> Enum.zip(fixed_subjects)
           |> Enum.map(fn {slide, subject} ->
-            {:ok, slide} =
-              Slides.update(slide, %{
-                subject_id: subject.id,
-                status: :submitted_fixed
-              })
+            {:ok, slide} = Slides.update(slide, %{subject_id: subject.id, status: :submitted_fixed})
 
             slide
           end)
 
         {user_id, jury_slides ++ fixed_slides ++ discarded_slides}
       end)
-      |> Enum.into(%{})
 
     %{slides: slides}
   end
