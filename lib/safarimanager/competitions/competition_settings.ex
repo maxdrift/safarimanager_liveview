@@ -56,11 +56,11 @@ defmodule SM.Competitions.CompetitionSettings do
     field :number_of_jurors, :integer
     field :max_jury_slides, :integer
     field :max_submitted_slides, :integer
-    field :proportional_submission, :boolean
+    field :proportional_submission, :boolean, default: true
     field :submission_ratio, :decimal
     field :fixed_points_multiplier, :decimal
     field :penalty_amount, :decimal
-    field :dynamic_coefficients_enabled, :boolean
+    field :dynamic_coefficients_enabled, :boolean, default: false
 
     embeds_many :dynamic_coefficients, DynamicCoefficient, on_replace: :delete
 
@@ -89,11 +89,9 @@ defmodule SM.Competitions.CompetitionSettings do
       :number_of_jurors,
       :max_jury_slides,
       :max_submitted_slides,
-      :proportional_submission,
       :submission_ratio,
       :fixed_points_multiplier,
-      :penalty_amount,
-      :dynamic_coefficients_enabled
+      :penalty_amount
     ])
     |> cast_embed(:dynamic_coefficients)
   end

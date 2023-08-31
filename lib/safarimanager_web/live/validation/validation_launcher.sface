@@ -5,12 +5,16 @@
   <CompetitionHeader {=@competition} />
   <StepsHeader current_step={:validation} competition={@competition} />
   <div class="mt-10 text-center">
-    <Link to={"/organize/#{@competition_id}/validation"} class="btn btn-xl btn-primary">
+    <Link
+      id="start-validation-btn"
+      to={"/organize/#{@competition_id}/validation"}
+      class="btn btn-xl btn-primary"
+    >
       {gettext("Start Validation")}
     </Link>
   </div>
   <div class="mt-10">
-    <table class="table table-xs w-full text-center">
+    <table id="validation-results-table" class="table table-xs w-full text-center">
       <colgroup span="4" />
       <colgroup span="4" />
       <thead>
@@ -31,7 +35,7 @@
       </thead>
       <tbody>
         {#for {participant_number, stats} <- @stats}
-          <tr>
+          <tr id={"validation-summary-row-#{participant_number}"}>
             <th>{participant_number}</th>
             <td>{stats.submitted_jury}</td>
             <td>{stats.submitted_fixed}</td>
@@ -74,11 +78,20 @@
                 <tbody>
                   {#for slide <- stats.flagged_slides}
                     {#for slide_flags <- [Slides.slide_flags_by_types(slide)]}
-                      <tr>
-                        <td>{slide.file_name}</td>
-                        <td><span class="capitalize">{slide.subject.name}</span></td>
+                      <tr id={"validation-detail-row-#{slide.id}"}>
+                        <td>
+                          <span class="sm-file-name">
+                            {slide.file_name}
+                          </span>
+                        </td>
+                        <td>
+                          <span class="sm-subject-name capitalize">
+                            {slide.subject.name}
+                          </span>
+                        </td>
                         <td>
                           <div class={
+                            "sm-status",
                             "my-auto",
                             "badge",
                             "badge-success": slide.status == :submitted_jury,
@@ -87,20 +100,27 @@
                             {status_to_label(slide.status)}
                           </div>
                         </td>
-                        <td class="capitalize text-center">{(slide_flags.wrong_subject &&
-                             "#{subject_name(@subjects, slide.subject_id)} → #{subject_name(@subjects, slide_flags.wrong_subject.context["to"])}") ||
-                            "-"}
+                        <td class="capitalize text-center">
+                          <span class="sm-wrong-subject">
+                            {(slide_flags.wrong_subject &&
+                               "#{subject_name(@subjects, slide.subject_id)} → #{subject_name(@subjects, slide_flags.wrong_subject.context["to"])}") ||
+                              "-"}
+                          </span>
                         </td>
                         <td>
-                          {(slide_flags.unrecognizable && "✓") || "-"}
+                          <span class="sm-unrecognizable">
+                            {(slide_flags.unrecognizable && "✓") || "-"}
+                          </span>
                         </td>
                         <td>
-                          {(slide_flags.distinction && "✓") || "-"}
+                          <span class="sm-distinction">
+                            {(slide_flags.distinction && "✓") || "-"}
+                          </span>
                         </td>
                         <td>
                           {#if slide_flags.note}
                             <div class="tooltip" data-tip={slide_flags.note.context["message"]}>
-                              <div class="max-w-xs truncate">
+                              <div class="sm-note max-w-xs truncate">
                                 {(slide_flags.note && slide_flags.note.context["message"]) || "-"}
                               </div>
                             </div>
@@ -182,7 +202,7 @@
                 </thead>
                 <tbody>
                   {#for slide <- stats.duplicate_subjects}
-                    <tr>
+                    <tr id={"validation-duplicate-detail-row-#{participant_number}-#{slide.id}"}>
                       <td>{slide.file_name}</td>
                       <td><span class="capitalize">{slide.subject.name}</span></td>
                       <td>

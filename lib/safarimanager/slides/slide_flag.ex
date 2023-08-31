@@ -39,7 +39,7 @@ defmodule SM.Slides.SlideFlag do
     |> unique_constraint([:slide_id, :type])
   end
 
-  @spec get_types :: [{:duplicate_subject | :unrecognizable | :distinction | :note, String.t()}]
+  @spec get_types :: [{:wrong_subject | :unrecognizable | :distinction | :note, String.t()}]
   def get_types do
     @types
   end

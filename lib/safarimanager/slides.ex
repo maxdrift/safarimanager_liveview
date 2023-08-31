@@ -323,6 +323,7 @@ defmodule SM.Slides do
             dup.subject_id == sl.subject_id,
         join: p in Participant,
         on: p.user_id == sl.user_id and p.competition_id == ^competition_id,
+        where: sl.status in [:submitted_fixed, :submitted_jury],
         order_by: [asc: sl.id],
         preload: [:subject],
         select: {p.number, sl}
