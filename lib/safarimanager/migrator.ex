@@ -432,6 +432,8 @@ defmodule SM.Migrator do
               pspeciep = Map.get(row, :pspeciep) || 1
               moltpuntfisso = Map.get(row, :moltpuntfisso) || 5
 
+              all_evaluations = Enum.map(SM.Evaluations.list(), &%{evaluation_id: &1.id})
+
               {:ok, competition} =
                 SM.Competitions.create(%{
                   name: row.denom,
@@ -444,6 +446,7 @@ defmodule SM.Migrator do
                   state: nil,
                   country: "Italy",
                   organization_id: org_id,
+                  competitions_evaluations: all_evaluations,
                   settings: %{
                     evaluations_per_juror: 1,
                     number_of_jurors: 3,
@@ -458,12 +461,7 @@ defmodule SM.Migrator do
                   }
                 })
 
-              all_evaluations = Enum.map(SM.Evaluations.list(), & &1.id)
-
-              {:ok, new_record} =
-                SM.Competitions.update_allowed_evaluations(competition.id, all_evaluations)
-
-              new_record
+              competition
 
             {:ok, _existing} ->
               :skip

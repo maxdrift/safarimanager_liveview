@@ -68,14 +68,12 @@ defmodule SMWeb.Live.Admin.Competitions.Index do
 
   # Create/Edit dialog submit callback
   def handle_event("submit", %{"entity" => %{"_action" => "create"} = params}, socket) do
+    # TODO: Perform evaluations selection in the UI
+    all_evaluations = Enum.map(Evaluations.list(), &%{evaluation_id: &1.id})
+    params = Map.put(params, "competitions_evaluations", all_evaluations)
+
     case Competitions.create(params) do
-      {:ok, %Competition{id: competition_id}} ->
-        # TODO: Perform evaluations selection in the UI
-        all_evaluations = Enum.map(Evaluations.list(), & &1.id)
-
-        {:ok, _competition} =
-          Competitions.update_allowed_evaluations(competition_id, all_evaluations)
-
+      {:ok, %Competition{}} ->
         socket =
           socket
           |> reset_current_editing()

@@ -6,7 +6,6 @@ defmodule SM.Slides.Slide do
 
   alias SM.Accounts.User
   alias SM.Competitions.Competition
-  alias SM.Evaluations.Evaluation
   alias SM.Slides.SlideEvaluation
   alias SM.Slides.SlideFlag
   alias SM.Subjects.Subject
@@ -27,7 +26,8 @@ defmodule SM.Slides.Slide do
     belongs_to :user, User
     belongs_to :competition, Competition
     belongs_to :subject, Subject
-    many_to_many :evaluations, Evaluation, join_through: SlideEvaluation
+    has_many :votes, SlideEvaluation, on_replace: :delete
+    has_many :evaluations, through: [:votes, :evaluation]
 
     timestamps()
   end
@@ -51,6 +51,8 @@ defmodule SM.Slides.Slide do
       :subject_id
     ])
     |> validate_required([:file_name, :file_size, :user_id, :competition_id])
+    |> cast_assoc(:slide_flags, required: false)
+    |> cast_assoc(:votes, required: false)
     |> maybe_require_subject()
     |> foreign_key_constraint(:user_id)
     |> foreign_key_constraint(:competition_id)

@@ -4,7 +4,7 @@ defmodule SM.Competitions.Competition do
   """
   use SM, :schema
 
-  alias SM.Accounts.User
+  alias SM.Competitions.CompetitionEvaluation
   alias SM.Competitions.CompetitionSettings
   alias SM.Evaluations.Evaluation
   alias SM.Jurors.Juror
@@ -31,11 +31,12 @@ defmodule SM.Competitions.Competition do
     belongs_to :organization, Organization
 
     has_one :settings, CompetitionSettings, on_replace: :delete
-    many_to_many :allowed_evaluations, Evaluation, join_through: "competitions_evaluations"
-    many_to_many :participants, User, join_through: Participant
+    has_many :competitions_evaluations, CompetitionEvaluation, on_replace: :delete
+    has_many :allowed_evaluations, through: [:competitions_evaluations, :evaluation]
+    has_many :participants, Participant, preload_order: [asc: :number], on_replace: :delete
     has_many :team_members, TeamMember
     has_many :teams, through: [:team_members, :team]
-    many_to_many :jurors, User, join_through: Juror
+    has_many :jurors, Juror, preload_order: [asc: :inserted_at], on_replace: :delete
     has_many :slides, Slide
 
     timestamps()
@@ -64,6 +65,38 @@ defmodule SM.Competitions.Competition do
       :type
     ])
     |> cast_assoc(:settings, required: false)
+    |> cast_assoc(:competitions_evaluations, required: false)
+    |> validate_dates()
+  end
+
+  @spec duplication_changeset(t(), map()) :: Ecto.Changeset.t()
+  def duplication_changeset(struct, attrs) do
+    struct
+    |> cast(attrs, [
+      :name,
+      :start_time,
+      :end_time,
+      :street_name,
+      :street_number,
+      :postal_code,
+      :city,
+      :state,
+      :country,
+      :type,
+      :for_teams,
+      :organization_id
+    ])
+    |> validate_required([
+      :name,
+      :organization_id,
+      :type
+    ])
+    |> cast_assoc(:settings, required: false)
+    |> cast_assoc(:competitions_evaluations, required: false)
+    |> cast_assoc(:participants, required: false)
+    |> cast_assoc(:jurors, required: false)
+    |> cast_assoc(:slides, required: false)
+    |> cast_assoc(:team_members, required: false)
     |> validate_dates()
   end
 
@@ -76,14 +109,14 @@ defmodule SM.Competitions.Competition do
     |> unique_constraint(:id)
     |> foreign_key_constraint(:organization_id)
     |> put_assoc(:settings, settings_changeset)
-    |> put_assoc(:allowed_evaluations, allowed_evaluations)
+    |> put_assoc(:competitions_evaluations, allowed_evaluations)
   end
 
   @spec put_allowed_evaluations(t(), [Evaluation.t()]) :: Ecto.Changeset.t()
   def put_allowed_evaluations(struct, evaluations) do
     struct
     |> change()
-    |> put_assoc(:allowed_evaluations, evaluations)
+    |> put_assoc(:competitions_evaluations, evaluations)
   end
 
   @spec get_types :: [
@@ -109,7 +142,7 @@ defmodule SM.Competitions.Competition do
          :gt <- Date.compare(start_time, end_time) do
       add_error(changeset, :starts_on, "cannot be later than 'end_time'")
     else
-      _ -> changeset
+      _other -> changeset
     end
   end
 end

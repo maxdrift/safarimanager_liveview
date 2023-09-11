@@ -1,43 +1,163 @@
 <Layout current_page={~p"/organize/new"} current_user={@current_user}>
+  <div
+    id="duplicate-dialog"
+    class="modal"
+    :on-window-keydown={JS.remove_class("modal-open", to: "#duplicate-dialog") |> JS.push("reset-duplication-config")}
+    phx-key="Escape"
+  >
+    <div class="modal-box">
+      <div class="card-title">
+        {gettext("Duplicate competition")}
+      </div>
+      <Form for={@duplication_form} change="validate-duplicate" submit="submit-duplicate">
+        <div class="card-body">
+          <HiddenInput field={:competition_id} value={@duplication_form.params["competition_id"]} />
+          <HiddenInput field={:for_teams} value={@duplication_form.params["for_teams"]} />
+          <h3 class="text-lg">{gettext("New competition details")}</h3>
+          <div class="border rounded-md border-neutral-focus mb-4 p-2">
+            <Field name={:new_competition_name} class="form-control">
+              <Label class="label">
+                <span class="label-text">{gettext("Name")}</span>
+                <TextInput
+                  class="input input-bordered input-sm w-full ml-2"
+                  value={@duplication_form.params["new_competition_name"]}
+                />
+              </Label>
+            </Field>
+            <Field name={:new_for_teams} class="form-control">
+              <Label class="label cursor-pointer">
+                <span class="label-text">{gettext("For teams")}</span>
+                <Checkbox value={@duplication_form.params["new_for_teams"]} class="toggle toggle-primary" />
+              </Label>
+            </Field>
+          </div>
+          <Field name={:competition_details} class="form-control">
+            <Label class="label cursor-pointer">
+              <span class="label-text">{gettext("Competition details")}</span>
+              <Checkbox value="true" class="toggle toggle-primary" opts={disabled: true, checked: true} />
+            </Label>
+          </Field>
+          <Field name={:participants} class="form-control">
+            <Label class="label cursor-pointer">
+              <span class="label-text">{gettext("Participants")}</span>
+              <Checkbox class="toggle toggle-primary" />
+            </Label>
+          </Field>
+          <Field name={:jurors} class="form-control">
+            <Label class="label cursor-pointer">
+              <span class="label-text">{gettext("Jurors")}</span>
+              <Checkbox class="toggle toggle-primary" />
+            </Label>
+          </Field>
+          <Field name={:teams} class="form-control">
+            <Label class="label cursor-pointer">
+              <span class="label-text">{gettext("Teams")}</span>
+              <Checkbox
+                class="toggle toggle-primary"
+                opts={
+                  disabled:
+                    @duplication_form.params["participants"] != "true" or
+                      @duplication_form.params["for_teams"] != "true"
+                }
+              />
+            </Label>
+          </Field>
+          <Field name={:slides} class="form-control">
+            <Label class="label cursor-pointer">
+              <span class="label-text">{gettext("Slides")}</span>
+              <Checkbox
+                class="toggle toggle-primary"
+                opts={disabled: @duplication_form.params["participants"] != "true"}
+              />
+            </Label>
+          </Field>
+          <Field name={:selection} class="form-control">
+            <Label class="label cursor-pointer">
+              <span class="label-text">{gettext("Selection")}</span>
+              <Checkbox
+                class="toggle toggle-primary"
+                opts={disabled: @duplication_form.params["slides"] != "true"}
+              />
+            </Label>
+          </Field>
+          <Field name={:votes} class="form-control">
+            <Label class="label cursor-pointer">
+              <span class="label-text">{gettext("Jury votes")}</span>
+              <Checkbox
+                class="toggle toggle-primary"
+                opts={disabled: @duplication_form.params["selection"] != "true"}
+              />
+            </Label>
+          </Field>
+        </div>
+        <div class="modal-action">
+          <input
+            type="submit"
+            :on-click={JS.remove_class("modal-open", to: "#duplicate-dialog") |> JS.push("reset-duplication-config")}
+            class="btn btn-md btn-success"
+            value={gettext("Duplicate")}
+          />
+
+          <input
+            type="reset"
+            :on-click={JS.remove_class("modal-open", to: "#duplicate-dialog") |> JS.push("reset-duplication-config")}
+            class="btn btn-md btn-ghost"
+            value={gettext("Close")}
+          />
+        </div>
+      </Form>
+    </div>
+  </div>
   <div class="flex flex-col lg:flex-row mt-10">
-    <div class="overflow-y-auto rounded-lg lg:w-fit bg-base-200 shadow-lg">
-      <div class="text-2xl font-bold text-center py-4">{gettext("Select an existing competition")}</div>
-      <table class="table table-zebra table-fixed w-full">
-        <thead>
-          <tr>
-            <th class="w-auto">{gettext("Name")}</th>
-            <th class="w-auto">{gettext("Location")}</th>
-            <th class="w-auto">{gettext("Date")}</th>
-            <th class="w-1/12">{gettext("For teams")}</th>
-          </tr>
-        </thead>
-        <tbody>
-          {#for item <- @competitions}
-            <tr class="hover cursor-pointer" :on-click="open" :values={id: item.id}>
-              <td class="truncate">{item.name}</td>
-              <td class="truncate">{"#{value_or_na(item.city)} (#{value_or_na(item.country)})"}</td>
-              <td class="truncate">{format_date(item.start_time)}</td>
-              <td class="truncate">
-                {(item.for_teams && "✓") || ""}</td>
-            </tr>
-          {#else}
+    <div class="overflow-y-auto rounded-lg lg:w-1/2 bg-base-200 shadow-lg">
+      <div class="p-4">
+        <div class="text-2xl font-bold text-center py-4">{gettext("Select an existing competition")}</div>
+        <table class="table table-zebra table-xs table-fixed w-full">
+          <thead>
             <tr>
-              <td colspan="3">{gettext("No items yet!")}</td>
+              <th class="w-auto">{gettext("Name")}</th>
+              <th class="w-auto">{gettext("Location")}</th>
+              <th class="w-auto">{gettext("Date")}</th>
+              <th class="w-1/12">{gettext("For teams")}</th>
+              <th class="w-1/12" />
             </tr>
-          {/for}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {#for item <- @competitions}
+              <tr class="hover">
+                <td class="truncate cursor-pointer" :on-click="open" :values={id: item.id}>{item.name}</td>
+                <td class="truncate cursor-pointer" :on-click="open" :values={id: item.id}>{"#{value_or_na(item.city)} (#{value_or_na(item.country)})"}</td>
+                <td class="truncate cursor-pointer" :on-click="open" :values={id: item.id}>{format_date(item.start_time)}</td>
+                <td class="truncate cursor-pointer" :on-click="open" :values={id: item.id}>{(item.for_teams && "✓") || ""}</td>
+                <td class="text-center">
+                  <button
+                    class="btn btn-square btn-ghost btn-xs"
+                    :on-click={JS.push("duplication-config", value: %{competition_id: item.id})
+                    |> JS.add_class("modal-open", to: "#duplicate-dialog")}
+                  >
+                    <Heroicons.Surface.Icon name="document-duplicate" type="outline" class="w-4 h-4" />
+                  </button>
+                </td>
+              </tr>
+            {#else}
+              <tr>
+                <td colspan="5">{gettext("No items yet!")}</td>
+              </tr>
+            {/for}
+          </tbody>
+        </table>
+      </div>
     </div>
     <div class="divider lg:divider-horizontal px-4">{gettext("OR")}</div>
     <div class="overflow-y-auto rounded-lg lg:w-1/2 bg-base-200 shadow-lg">
       <div class="text-2xl font-bold text-center py-4">{gettext("Create a new one")}</div>
-      <Form
-        {=@action}
+      <CompetitionForm
+        action={:create}
         {=@competition_types}
         {=@entity}
         {=@changeset}
-        {=@validate}
-        {=@submit}
+        validate="validate"
+        submit="submit"
         {=@organizations}
       >
         <FormActions
@@ -45,7 +165,7 @@
           submit_enabled?={@changeset.action && @changeset.valid?}
           reset="reset"
         />
-      </Form>
+      </CompetitionForm>
     </div>
   </div>
 </Layout>

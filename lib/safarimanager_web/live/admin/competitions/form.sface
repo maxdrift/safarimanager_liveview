@@ -10,10 +10,7 @@
       <Label class="label">
         <span class="label-text">{gettext("Name")}</span>
       </Label>
-      <TextInput
-        class={state_class("input input-bordered", @changeset, :name, [])}
-        opts={phx_debounce: "1000"}
-      />
+      <TextInput class={input_state_class(@changeset, :name)} opts={phx_debounce: "1000"} />
       <Label class="label h-7">
         <ErrorTag />
       </Label>
@@ -26,13 +23,23 @@
         options={Enum.map(@organizations, &{&1.name, &1.id})}
         prompt={[key: gettext("Select an organization...")]}
         selected={@entity.organization_id}
-        class={state_class("input input-bordered", @changeset, :organization_id, [])}
+        class={input_state_class(@changeset, :organization_id)}
       />
       <Label class="label h-7">
         <ErrorTag />
       </Label>
     </Field>
-    <Field name={:type} class="form-control w-full px-3">
+    <Field name={:for_teams} class="form-control w-1/2 px-3">
+      <Label class="label cursor-pointer">
+        <span class="label-text">{gettext("For teams")}</span>
+        <Checkbox
+          class={state_class("checkbox", @changeset, :for_teams, [])}
+          opts={phx_debounce: "1000"}
+        />
+      </Label>
+      <Label class="label h-7"><ErrorTag /></Label>
+    </Field>
+    <Field name={:type} class="form-control w-1/2 px-3">
       <Label class="label">
         <span class="label-text">{gettext("Type")}</span>
       </Label>
@@ -42,19 +49,18 @@
         end)}
         selected={@entity.type}
         prompt={[key: gettext("Select a type...")]}
-        class={state_class("input input-bordered", @changeset, :type, [])}
+        class={input_state_class(@changeset, :type)}
       />
       <Label class="label h-7">
         <ErrorTag />
       </Label>
     </Field>
-
     <Field name={:start_time} class="form-control w-1/2 px-3">
       <Label class="label">
         <span class="label-text">{gettext("Start date/time")}</span>
       </Label>
       <DateTimeLocalInput
-        class={state_class("input input-bordered", @changeset, :start_time, [])}
+        class={input_state_class(@changeset, :start_time)}
         opts={phx_debounce: "1000"}
       />
       <Label class="label h-7">
@@ -66,7 +72,7 @@
         <span class="label-text">{gettext("End date/time")}</span>
       </Label>
       <DateTimeLocalInput
-        class={state_class("input input-bordered", @changeset, :end_time, [])}
+        class={input_state_class(@changeset, :end_time)}
         opts={phx_debounce: "1000"}
       />
       <Label class="label h-7">
@@ -77,10 +83,7 @@
       <Label class="label">
         <span class="label-text">{gettext("Street name")}</span>
       </Label>
-      <TextInput
-        class={state_class("input input-bordered", @changeset, :street_name, [])}
-        opts={phx_debounce: "1000"}
-      />
+      <TextInput class={input_state_class(@changeset, :street_name)} opts={phx_debounce: "1000"} />
       <Label class="label h-7">
         <ErrorTag />
       </Label>
@@ -89,10 +92,7 @@
       <Label class="label">
         <span class="label-text">{gettext("Number")}</span>
       </Label>
-      <TextInput
-        class={state_class("input input-bordered", @changeset, :street_number, [])}
-        opts={phx_debounce: "1000"}
-      />
+      <TextInput class={input_state_class(@changeset, :street_number)} opts={phx_debounce: "1000"} />
       <Label class="label h-7">
         <ErrorTag />
       </Label>
@@ -101,10 +101,7 @@
       <Label class="label">
         <span class="label-text">{gettext("Postal code")}</span>
       </Label>
-      <TextInput
-        class={state_class("input input-bordered", @changeset, :postal_code, [])}
-        opts={phx_debounce: "1000"}
-      />
+      <TextInput class={input_state_class(@changeset, :postal_code)} opts={phx_debounce: "1000"} />
       <Label class="label h-7">
         <ErrorTag />
       </Label>
@@ -113,10 +110,7 @@
       <Label class="label">
         <span class="label-text">{gettext("City")}</span>
       </Label>
-      <TextInput
-        class={state_class("input input-bordered", @changeset, :city, [])}
-        opts={phx_debounce: "1000"}
-      />
+      <TextInput class={input_state_class(@changeset, :city)} opts={phx_debounce: "1000"} />
       <Label class="label h-7">
         <ErrorTag />
       </Label>
@@ -125,10 +119,7 @@
       <Label class="label">
         <span class="label-text">{gettext("State/Province")}</span>
       </Label>
-      <TextInput
-        class={state_class("input input-bordered", @changeset, :state, [])}
-        opts={phx_debounce: "1000"}
-      />
+      <TextInput class={input_state_class(@changeset, :state)} opts={phx_debounce: "1000"} />
       <Label class="label h-7">
         <ErrorTag />
       </Label>
@@ -137,10 +128,7 @@
       <Label class="label">
         <span class="label-text">{gettext("Country")}</span>
       </Label>
-      <TextInput
-        class={state_class("input input-bordered", @changeset, :country, [])}
-        opts={phx_debounce: "1000"}
-      />
+      <TextInput class={input_state_class(@changeset, :country)} opts={phx_debounce: "1000"} />
       <Label class="label h-7"><ErrorTag /></Label>
     </Field>
     <Inputs for={:settings}>
@@ -150,7 +138,7 @@
             <span class="label-text">{gettext("Number of jurors")}</span>
           </Label>
           <NumberInput
-            class={state_class("input input-bordered", settings_form.source, :number_of_jurors, [])}
+            class={input_state_class(settings_form.source, :number_of_jurors)}
             opts={phx_debounce: "1000"}
           />
           <Label class="label h-7"><ErrorTag /></Label>
@@ -160,7 +148,7 @@
             <span class="label-text">{gettext("Evaluations per juror")}</span>
           </Label>
           <NumberInput
-            class={state_class("input input-bordered", settings_form.source, :evaluations_per_juror, [])}
+            class={input_state_class(settings_form.source, :evaluations_per_juror)}
             opts={phx_debounce: "1000"}
           />
           <Label class="label h-7"><ErrorTag /></Label>
@@ -170,7 +158,7 @@
             <span class="label-text">{gettext("Max slides for jury")}</span>
           </Label>
           <NumberInput
-            class={state_class("input input-bordered", settings_form.source, :max_jury_slides, [])}
+            class={input_state_class(settings_form.source, :max_jury_slides)}
             opts={phx_debounce: "1000"}
           />
           <Label class="label h-7"><ErrorTag /></Label>
@@ -180,7 +168,7 @@
             <span class="label-text">{gettext("Max submitted slides")}</span>
           </Label>
           <NumberInput
-            class={state_class("input input-bordered", settings_form.source, :max_submitted_slides, [])}
+            class={input_state_class(settings_form.source, :max_submitted_slides)}
             opts={phx_debounce: "1000"}
           />
           <Label class="label h-7"><ErrorTag /></Label>
@@ -200,7 +188,7 @@
             <span class="label-text">{gettext("Submission ratio")}</span>
           </Label>
           <NumberInput
-            class={state_class("input input-bordered", settings_form.source, :submission_ratio, [])}
+            class={input_state_class(settings_form.source, :submission_ratio)}
             opts={phx_debounce: "1000", step: "0.01"}
           />
           <Label class="label h-7"><ErrorTag /></Label>
@@ -210,7 +198,7 @@
             <span class="label-text">{gettext("Fixed points multiplier")}</span>
           </Label>
           <NumberInput
-            class={state_class("input input-bordered", settings_form.source, :fixed_points_multiplier, [])}
+            class={input_state_class(settings_form.source, :fixed_points_multiplier)}
             opts={phx_debounce: "1000", step: "0.01"}
           />
           <Label class="label h-7"><ErrorTag /></Label>
@@ -220,7 +208,7 @@
             <span class="label-text">{gettext("Penalty amount")}</span>
           </Label>
           <NumberInput
-            class={state_class("input input-bordered", settings_form.source, :penalty_amount, [])}
+            class={input_state_class(settings_form.source, :penalty_amount)}
             opts={phx_debounce: "1000", step: "0.01"}
           />
           <Label class="label h-7"><ErrorTag /></Label>

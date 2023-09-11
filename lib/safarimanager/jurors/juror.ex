@@ -19,7 +19,7 @@ defmodule SM.Jurors.Juror do
     struct
     |> cast(attrs, [:user_id, :competition_id])
     |> validate_required([:user_id, :competition_id])
-    |> unique_constraint(:user_id, name: :jurors_user_id_competition_id_index)
+    |> unique_constraint([:user, :competition], name: :jurors_user_id_competition_id_index)
   end
 
   @doc false
@@ -31,6 +31,6 @@ defmodule SM.Jurors.Juror do
     |> unique_constraint(:id)
     |> foreign_key_constraint(:user_id)
     |> foreign_key_constraint(:competition_id)
-    |> unique_constraint(:user_id, name: :jurors_user_id_competition_id_index)
+    |> unique_constraint([:user, :competition], name: :jurors_user_id_competition_id_index)
   end
 end

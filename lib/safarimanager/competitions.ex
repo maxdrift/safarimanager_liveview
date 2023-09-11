@@ -8,8 +8,6 @@ defmodule SM.Competitions do
   alias SM.Categories.Category
   alias SM.Competitions.Competition
   alias SM.Competitions.CompetitionSettings
-  alias SM.Evaluations
-  alias SM.Evaluations.Evaluation
   alias SM.Participants.Participant
   alias SM.Slides
 
@@ -158,8 +156,8 @@ defmodule SM.Competitions do
       result ->
         {:ok,
          Repo.preload(result, [
-           [participants: [:organization, :category]],
-           [jurors: :organization],
+           [participants: [:category, [user: :organization]]],
+           [jurors: [user: :organization]],
            :allowed_evaluations,
            :organization,
            :settings
@@ -196,6 +194,126 @@ defmodule SM.Competitions do
   end
 
   @doc """
+  Duplicate a competition.
+  """
+  @spec duplicate(String.t(), Map.t()) :: {:ok, Competition.t()} | {:error, any()}
+  def duplicate(id, config \\ %{}) do
+    with {:ok, existing_competition} <- get(id),
+         existing_competition <- Repo.preload(existing_competition, slides: [:slide_flags, :votes]) do
+      competition_params =
+        existing_competition
+        |> duplicate_competition_details(config)
+        |> maybe_duplicate_participants(existing_competition, config)
+        |> maybe_duplicate_teams(existing_competition, config)
+        |> maybe_duplicate_jurors(existing_competition, config)
+        |> maybe_duplicate_slides(existing_competition, config)
+
+      %Competition{}
+      |> Competition.duplication_changeset(competition_params)
+      |> Repo.insert()
+      |> case do
+        {:ok, new_competition} ->
+          notify_subscribers({:ok, Repo.preload(new_competition, :organization)}, [:competition, :created])
+
+        {:error, reason} ->
+          notify_subscribers({:error, reason}, [:competition, :created])
+      end
+    else
+      {:error, reason} ->
+        notify_subscribers({:error, reason}, [:competition, :created])
+    end
+  end
+
+  defp duplicate_competition_details(competition, config) do
+    competition_name =
+      if config["new_competition_name"] in [nil, ""], do: competition.name, else: config["new_competition_name"]
+
+    params =
+      competition
+      |> Map.from_struct()
+      |> Map.put(:name, competition_name)
+      |> Map.put(:for_teams, config["new_for_teams"])
+
+    competition_settings = Map.from_struct(competition.settings)
+    dynamic_coefficients = Enum.map(competition.settings.dynamic_coefficients, &Map.from_struct/1)
+    competitions_evaluations = Enum.map(competition.competitions_evaluations, &Map.from_struct/1)
+    competition_settings = Map.put(competition_settings, :dynamic_coefficients, dynamic_coefficients)
+
+    params
+    |> Map.put(:settings, competition_settings)
+    |> Map.put(:competitions_evaluations, competitions_evaluations)
+  end
+
+  defp maybe_duplicate_participants(params, competition, config) do
+    if Map.get(config, "participants") == "true" do
+      participants = Enum.map(competition.participants, &Map.from_struct/1)
+      Map.put(params, :participants, participants)
+    else
+      Map.put(params, :participants, [])
+    end
+  end
+
+  defp maybe_duplicate_teams(params, competition, config) do
+    if competition.for_teams and Map.get(config, "participants") == "true" and Map.get(config, "teams") == "true" do
+      competition = Repo.preload(competition, :team_members)
+      team_members = Enum.map(competition.team_members, &Map.from_struct/1)
+      Map.put(params, :team_members, team_members)
+    else
+      Map.put(params, :team_members, [])
+    end
+  end
+
+  defp maybe_duplicate_jurors(params, competition, config) do
+    if Map.get(config, "jurors") == "true" do
+      jurors = Enum.map(competition.jurors, &Map.from_struct/1)
+      Map.put(params, :jurors, jurors)
+    else
+      Map.put(params, :jurors, [])
+    end
+  end
+
+  defp maybe_duplicate_slides(params, competition, config) do
+    if Map.get(config, "slides") == "true" do
+      slides = maybe_duplicate_slide_selection(competition.slides, config)
+
+      Map.put(params, :slides, slides)
+    else
+      Map.put(params, :slides, [])
+    end
+  end
+
+  defp maybe_duplicate_slide_selection(slides, config) do
+    duplicate_selection? = Map.get(config, "selection") == "true"
+
+    Enum.map(slides, fn s ->
+      if duplicate_selection? do
+        flags = Enum.map(s.slide_flags, &Map.from_struct/1)
+        votes = maybe_duplicate_slide_votes(s.votes, config)
+
+        s
+        |> Map.put(:slide_flags, flags)
+        |> Map.put(:votes, votes)
+        |> Map.from_struct()
+      else
+        s
+        |> Map.put(:subject_id, nil)
+        |> Map.put(:status, :discarded)
+        |> Map.put(:slide_flags, [])
+        |> Map.put(:votes, [])
+        |> Map.from_struct()
+      end
+    end)
+  end
+
+  defp maybe_duplicate_slide_votes(votes, config) do
+    if Map.get(config, "votes") == "true" do
+      Enum.map(votes, &Map.from_struct/1)
+    else
+      []
+    end
+  end
+
+  @doc """
   Import a competition.
 
   ## Examples
@@ -214,14 +332,9 @@ defmodule SM.Competitions do
 
     allowed_evaluations =
       attrs
-      |> Map.get("allowed_evaluations", "[]")
+      |> Map.get("competitions_evaluations", "[]")
       |> Jason.decode!()
-      |> Enum.flat_map(fn e ->
-        case Repo.get(Evaluation, e) do
-          nil -> []
-          result -> [result]
-        end
-      end)
+      |> Enum.map(&%{"evaluation_id" => &1})
 
     %Competition{}
     |> Competition.import_changeset(attrs, settings_changeset, allowed_evaluations)
@@ -382,7 +495,7 @@ defmodule SM.Competitions do
   @spec update_allowed_evaluations(String.t(), [String.t()]) ::
           {:ok, Competition.t()} | {:error, any()}
   def update_allowed_evaluations(competition_id, evaluation_ids) do
-    evaluations = Evaluations.list_by_ids(evaluation_ids)
+    evaluations = Enum.map(evaluation_ids, &%{evaluation_id: &1.id})
 
     {:ok, competition} = get(competition_id)
 

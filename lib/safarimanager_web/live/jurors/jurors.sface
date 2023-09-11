@@ -56,9 +56,9 @@
         <tbody>
           {#for item <- @competition.jurors}
             <tr>
-              <td class="truncate">{item.last_name}</td>
-              <td class="truncate">{item.first_name}</td>
-              <td class="truncate">{(item.organization && item.organization.name) || gettext("N/A")}</td>
+              <td class="truncate">{item.user.last_name}</td>
+              <td class="truncate">{item.user.first_name}</td>
+              <td class="truncate">{(item.user.organization && item.user.organization.name) || gettext("N/A")}</td>
               <td>
                 <button class="btn btn-xs btn-error" :on-click="remove" :values={user_id: item.id}>{gettext("Remove")}</button>
               </td>

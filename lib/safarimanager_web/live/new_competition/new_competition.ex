@@ -10,29 +10,31 @@ defmodule SMWeb.Live.NewCompetition do
   alias SM.Organizations
   alias SMWeb.Components.FormActions
   alias SMWeb.Components.Layout
-  alias SMWeb.Live.Admin.Competitions.Form
+  alias SMWeb.Live.Admin.Competitions.Form, as: CompetitionForm
+  alias Surface.Components.Form
+  alias Surface.Components.Form.Checkbox
+  alias Surface.Components.Form.Field
+  alias Surface.Components.Form.HiddenInput
+  alias Surface.Components.Form.Label
+  alias Surface.Components.Form.TextInput
 
   require Logger
-
-  data action, :atom, values!: [:create, :edit], default: :create
-  data competition_types, :list, default: Competitions.list_competition_types()
-  data entity, :struct, default: %Competition{}
-  data changeset, :changeset
-  data validate, :event, default: "validate"
-  data submit, :event, default: "submit"
-  data redirect_to, :string
-  data entity_name, :string
-  data competitions, :list, default: []
 
   on_mount SMWeb.SidebarHook
 
   @impl Phoenix.LiveView
   def mount(_params, _session, socket) do
+    _result = if connected?(socket), do: Competitions.subscribe()
+
     socket =
-      socket
-      |> assign(:changeset, Competitions.change(%Competition{}))
-      |> assign(:competitions, Competitions.list())
-      |> assign(:organizations, Organizations.list())
+      assign(socket,
+        entity: %Competition{},
+        changeset: Competitions.change(%Competition{}),
+        competitions: Competitions.list(),
+        organizations: Organizations.list(),
+        competition_types: Competitions.list_competition_types(),
+        duplication_form: to_form(%{}, as: :duplicate_competition)
+      )
 
     {:ok, socket}
   end
@@ -48,23 +50,29 @@ defmodule SMWeb.Live.NewCompetition do
   end
 
   def handle_event("submit", %{"entity" => entity}, socket) do
+    # TODO: Perform evaluations selection in the UI
+    all_evaluations = Enum.map(Evaluations.list(), &%{evaluation_id: &1.id})
+    entity = Map.put(entity, "competitions_evaluations", all_evaluations)
+
     case Competitions.create(entity) do
       {:ok, %Competition{id: competition_id}} ->
-        # TODO: Perform evaluations selection in the UI
-        all_evaluations = Enum.map(Evaluations.list(), & &1.id)
-
-        {:ok, _competition} =
-          Competitions.update_allowed_evaluations(competition_id, all_evaluations)
-
         socket =
           socket
           |> assign(:entity, %Competition{})
           |> assign(:changeset, Competitions.change(socket.assigns.entity))
+          |> put_flash(:info, gettext("Competition created successfully"))
           |> push_navigate(to: "/organize/#{competition_id}/participants")
 
         {:noreply, socket}
 
       {:error, changeset} ->
+        Logger.error("Unable to create competition '#{entity["name"]}': #{inspect(changeset)}")
+
+        socket =
+          socket
+          |> put_flash(:error, gettext("Unable to create competition"))
+          |> assign(changeset: changeset)
+
         {:noreply, assign(socket, :changeset, changeset)}
     end
   end
@@ -84,12 +92,111 @@ defmodule SMWeb.Live.NewCompetition do
     {:noreply, socket}
   end
 
+  def handle_event("duplication-config", %{"competition_id" => competition_id}, socket) do
+    {:ok, competition} = Competitions.get(competition_id)
+
+    form =
+      to_form(
+        %{
+          "competition_id" => competition.id,
+          "new_competition_name" => competition.name,
+          "new_for_teams" => (competition.for_teams && "true") || "false",
+          "for_teams" => (competition.for_teams && "true") || "false",
+          "participants" => "false",
+          "teams" => "false",
+          "jurors" => "false",
+          "slides" => "false",
+          "selection" => "false",
+          "votes" => "false"
+        },
+        as: :duplicate_competition
+      )
+
+    socket = assign(socket, duplication_form: form)
+
+    {:noreply, socket}
+  end
+
+  def handle_event("reset-duplication-config", _params, socket) do
+    form =
+      to_form(
+        %{
+          "competition_id" => nil,
+          "new_competition_name" => "",
+          "new_for_teams" => "false",
+          "for_teams" => "false",
+          "participants" => "false",
+          "teams" => "false",
+          "jurors" => "false",
+          "slides" => "false",
+          "selection" => "false",
+          "votes" => "false"
+        },
+        as: :duplicate_competition
+      )
+
+    socket = assign(socket, duplication_form: form)
+
+    {:noreply, socket}
+  end
+
+  def handle_event("validate-duplicate", %{"duplicate_competition" => %{"competition_id" => ""}}, socket) do
+    {:noreply, socket}
+  end
+
+  def handle_event("validate-duplicate", %{"duplicate_competition" => params}, socket) do
+    form =
+      params
+      |> validate_duplication_params()
+      |> to_form(as: :duplicate_competition)
+
+    socket = assign(socket, :duplication_form, form)
+
+    {:noreply, socket}
+  end
+
+  def handle_event("submit-duplicate", %{"duplicate_competition" => params}, socket) do
+    case Competitions.duplicate(params["competition_id"], params) do
+      {:ok, _new_competition} ->
+        {:noreply, put_flash(socket, :info, gettext("Successfully duplicated competition"))}
+
+      {:error, changeset} ->
+        Ecto.Changeset.traverse_errors(changeset, fn _changeset, field, {error, _opts} ->
+          Logger.error("#{field} #{error}")
+        end)
+
+        {:noreply, put_flash(socket, :error, gettext("Error duplicating competition"))}
+    end
+  end
+
   # def handle_event(event_name, params, socket) do
   #   IO.inspect(event_name)
   #   IO.inspect(params)
 
   #   {:noreply, socket}
   # end
+
+  @impl Phoenix.LiveView
+  def handle_params(_params, _uri, socket) do
+    socket =
+      assign(socket,
+        changeset: Competitions.change(%Competition{}),
+        competitions: Competitions.list(),
+        organizations: Organizations.list()
+      )
+
+    {:noreply, socket}
+  end
+
+  @impl Phoenix.LiveView
+  def handle_info({Competitions, [:competition, _], _inserted_item}, socket) do
+    socket = assign(socket, competitions: Competitions.list())
+    {:noreply, socket}
+  end
+
+  def handle_info(_any, socket), do: {:noreply, socket}
+
+  # Internal
 
   defp value_or_na(nil), do: "N/A"
   defp value_or_na(value), do: value
@@ -98,5 +205,25 @@ defmodule SMWeb.Live.NewCompetition do
 
   defp format_date(datetime) do
     Calendar.strftime(datetime, "%d/%m/%Y %I:%M:%S %P %Z")
+  end
+
+  defp validate_duplication_params(params) do
+    teams = if params["participants"] == "true" and params["for_teams"] == "true", do: params["teams"], else: "false"
+    slides = if params["participants"] == "true", do: params["slides"], else: "false"
+    selection = if slides == "true", do: params["selection"], else: "false"
+    votes = if selection == "true", do: params["votes"], else: "false"
+
+    %{
+      "competition_id" => params["competition_id"],
+      "new_competition_name" => params["new_competition_name"],
+      "new_for_teams" => params["new_for_teams"],
+      "for_teams" => params["for_teams"],
+      "participants" => params["participants"],
+      "teams" => teams,
+      "jurors" => params["jurors"],
+      "slides" => slides,
+      "selection" => selection,
+      "votes" => votes
+    }
   end
 end
