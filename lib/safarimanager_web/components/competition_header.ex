@@ -6,6 +6,15 @@ defmodule SMWeb.Components.CompetitionHeader do
 
   prop competition, :struct, required: true
 
+  def render(assigns) do
+    ~F"""
+    <div class="pt-5 text-center">
+      <div class="text-2xl">{@competition.name}</div>
+      <div class="text-lg">{@competition.city || gettext("Somewhere...")} - {pretty_dates(@competition.start_time, @competition.end_time)}</div>
+    </div>
+    """
+  end
+
   defp pretty_dates(%DateTime{day: day, month: month, year: year} = start_time, %DateTime{
          day: day,
          month: month,
