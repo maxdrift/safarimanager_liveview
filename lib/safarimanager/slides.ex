@@ -218,9 +218,7 @@ defmodule SM.Slides do
     Repo.all(query)
   end
 
-  @spec count_for_jury_by_camera_type(String.t()) :: [
-          %{String.t() => {non_neg_integer(), non_neg_integer()}}
-        ]
+  @spec count_for_jury_by_camera_type(String.t()) :: map()
   def count_for_jury_by_camera_type(competition_id) do
     query =
       from(sl in Slide,
@@ -237,9 +235,7 @@ defmodule SM.Slides do
     |> Map.new()
   end
 
-  @spec count_for_jury_by_category(String.t()) :: [
-          %{String.t() => {String.t(), non_neg_integer(), non_neg_integer()}}
-        ]
+  @spec count_for_jury_by_category(String.t()) :: map()
   def count_for_jury_by_category(competition_id) do
     query =
       from(sl in Slide,
