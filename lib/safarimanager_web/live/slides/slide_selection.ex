@@ -14,6 +14,7 @@ defmodule SMWeb.Live.SlideSelection do
   alias SM.Teams
   alias SMWeb.Components.CompetitionHeader
   alias SMWeb.Components.Layout
+  alias SMWeb.Components.SlidesSelectionList
   alias SMWeb.Components.StepsHeader
   alias SMWeb.Components.UploadDropArea
   alias Surface.Components.Form
@@ -38,6 +39,7 @@ defmodule SMWeb.Live.SlideSelection do
       socket
       |> assign(
         user: nil,
+        team: nil,
         participants: [],
         teams: [],
         slides: [],
@@ -131,45 +133,85 @@ defmodule SMWeb.Live.SlideSelection do
   end
 
   @impl Phoenix.LiveView
-  def handle_params(%{"competition_id" => competition_id} = params, _uri, socket) do
+  def handle_params(params, _uri, socket) do
     _result =
       if connected?(socket),
         do: {Competitions.subscribe(), Accounts.subscribe(), Slides.subscribe()}
 
-    user_id = params["user_id"]
+    {:noreply, apply_action(socket, socket.assigns.live_action, params)}
+  end
 
+  defp apply_action(socket, :load_user, %{"competition_id" => competition_id, "user_id" => user_id}) do
     {:ok, competition} = Competitions.get(competition_id)
 
-    grouped_slides = get_slides_by_status(user_id, competition_id)
+    grouped_slides = get_user_slides_by_status(user_id, competition_id)
 
-    socket =
-      assign(socket,
-        competition_id: competition_id,
-        competition: competition,
-        participants: Participants.list(competition_id),
-        teams: Teams.list_by_competition(competition_id),
-        user: user_id && Accounts.get_user!(user_id),
-        discarded_slides: user_id && Map.get(grouped_slides, :discarded, []),
-        jury_slides: user_id && Map.get(grouped_slides, :submitted_jury, []),
-        fixed_slides: user_id && Map.get(grouped_slides, :submitted_fixed, [])
-      )
+    assign(socket,
+      competition_id: competition_id,
+      competition: competition,
+      participants: Participants.list(competition_id),
+      teams: Teams.list_by_competition(competition_id),
+      user: Accounts.get_user!(user_id),
+      team: nil,
+      discarded_slides: Map.get(grouped_slides, :discarded, []),
+      jury_slides: Map.get(grouped_slides, :submitted_jury, []),
+      fixed_slides: Map.get(grouped_slides, :submitted_fixed, [])
+    )
+  end
 
-    # FIXME: this way of selecting the user forces a re-query of Competition
-    {:noreply, socket}
+  defp apply_action(socket, :load_team, %{"competition_id" => competition_id, "team_id" => team_id}) do
+    {:ok, competition} = Competitions.get(competition_id)
+
+    grouped_slides = get_team_slides_by_status(team_id, competition_id)
+
+    {:ok, team} = Teams.get(team_id)
+
+    assign(socket,
+      competition_id: competition_id,
+      competition: competition,
+      participants: Participants.list(competition_id),
+      teams: Teams.list_by_competition(competition_id),
+      user: nil,
+      team: team,
+      discarded_slides: Map.get(grouped_slides, :discarded, []),
+      jury_slides: Map.get(grouped_slides, :submitted_jury, []),
+      fixed_slides: Map.get(grouped_slides, :submitted_fixed, [])
+    )
+  end
+
+  defp apply_action(socket, :index, %{"competition_id" => competition_id}) do
+    {:ok, competition} = Competitions.get(competition_id)
+
+    assign(socket,
+      competition_id: competition_id,
+      competition: competition,
+      participants: Participants.list(competition_id),
+      teams: Teams.list_by_competition(competition_id),
+      user: nil,
+      discarded_slides: [],
+      jury_slides: [],
+      fixed_slides: []
+    )
   end
 
   @impl Phoenix.LiveView
   def handle_info({Slides, [:slide, _], _result}, socket) do
-    user_id = socket.assigns.user.id
+    user = socket.assigns.user
+    team = socket.assigns.team
     competition_id = socket.assigns.competition_id
 
-    grouped_slides = get_slides_by_status(user_id, competition_id)
+    grouped_slides =
+      if user do
+        get_user_slides_by_status(user.id, competition_id)
+      else
+        get_team_slides_by_status(team.id, competition_id)
+      end
 
     socket =
       socket
-      |> assign(:discarded_slides, user_id && Map.get(grouped_slides, :discarded, []))
-      |> assign(:jury_slides, user_id && Map.get(grouped_slides, :submitted_jury, []))
-      |> assign(:fixed_slides, user_id && Map.get(grouped_slides, :submitted_fixed, []))
+      |> assign(:discarded_slides, Map.get(grouped_slides, :discarded, []))
+      |> assign(:jury_slides, Map.get(grouped_slides, :submitted_jury, []))
+      |> assign(:fixed_slides, Map.get(grouped_slides, :submitted_fixed, []))
 
     {:noreply, socket}
   end
@@ -187,11 +229,19 @@ defmodule SMWeb.Live.SlideSelection do
 
   # Internal
 
-  defp get_slides_by_status(nil, _competition_id), do: %{}
+  defp get_user_slides_by_status(nil, _competition_id), do: %{}
 
-  defp get_slides_by_status(user_id, competition_id) do
+  defp get_user_slides_by_status(user_id, competition_id) do
     user_id
     |> Slides.list(competition_id)
+    |> Enum.group_by(& &1.status)
+  end
+
+  defp get_team_slides_by_status(nil, _competition_id), do: %{}
+
+  defp get_team_slides_by_status(team_id, competition_id) do
+    team_id
+    |> Slides.list_by_team(competition_id)
     |> Enum.group_by(& &1.status)
   end
 
@@ -241,14 +291,14 @@ defmodule SMWeb.Live.SlideSelection do
   defp process_uploaded_csv(socket, %Phoenix.LiveView.UploadEntry{} = entry) do
     # lv = self()
     competition_id = socket.assigns.competition_id
-    user_id = socket.assigns.user.id
+    users = (socket.assigns.user && [socket.assigns.user]) || socket.assigns.team.users
 
     LiveView.consume_uploaded_entry(socket, entry, fn %{path: path} ->
       path
       |> SelectionImport.parse()
       |> Stream.map(fn row ->
         with {:ok, subject} <- find_subject(row.subject_num),
-             {:ok, slide} <- find_slide(competition_id, user_id, row.file_name),
+             {:ok, slide} <- find_slide(competition_id, users, row.file_name),
              {:ok, _slide} <-
                Slides.update(slide, %{
                  subject_id: subject.id,
@@ -285,11 +335,20 @@ defmodule SMWeb.Live.SlideSelection do
     end
   end
 
-  defp find_slide(competition_id, user_id, file_name) do
-    case Slides.get(competition_id, user_id, file_name) do
-      {:ok, slide} -> {:ok, slide}
-      {:error, :not_found} -> {:error, :slide_not_found}
-      {:error, {:multiple_results, file_name}} -> {:error, {:multiple_slides_found, file_name}}
+  defp find_slide(_competition_id, [], _file_name) do
+    {:error, :slide_not_found}
+  end
+
+  defp find_slide(competition_id, [user | rest], file_name) do
+    case Slides.get(competition_id, user.id, file_name) do
+      {:ok, slide} ->
+        {:ok, slide}
+
+      {:error, :not_found} ->
+        find_slide(competition_id, rest, file_name)
+
+      {:error, {:multiple_results, file_name}} ->
+        {:error, {:multiple_slides_found, file_name}}
     end
   end
 
@@ -305,43 +364,4 @@ defmodule SMWeb.Live.SlideSelection do
   defp status_to_label(:submitted_jury), do: gettext("Jury")
   # Gettext hack to reuse existing localization
   defp status_to_label(:discarded), do: ngettext("Discarded", "Discarded", 1)
-
-  defp pretty_size(byte_size) do
-    cond do
-      byte_size >= 1_000_000_000 ->
-        byte_size
-        |> Decimal.new()
-        |> Decimal.div(1_000_000_000)
-        |> Decimal.round(2)
-        |> Decimal.to_string(:normal)
-        |> Kernel.<>("GB")
-
-      byte_size >= 1_000_000 ->
-        byte_size
-        |> Decimal.new()
-        |> Decimal.div(1_000_000)
-        |> Decimal.round(2)
-        |> Decimal.to_string(:normal)
-        |> Kernel.<>("MB")
-
-      byte_size >= 1000 ->
-        byte_size
-        |> Decimal.new()
-        |> Decimal.div(1000)
-        |> Decimal.round(2)
-        |> Decimal.to_string(:normal)
-        |> Kernel.<>("KB")
-
-      true ->
-        byte_size
-        |> Decimal.new()
-        |> Decimal.round(2)
-        |> Decimal.to_string(:normal)
-        |> Kernel.<>("B")
-    end
-  end
-
-  defp thumbnail_path(slide) do
-    ~p"/uploads/#{slide.competition_id}/#{slide.user_id}/thumbnails/small/#{slide.file_name}"
-  end
 end

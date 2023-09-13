@@ -6,6 +6,51 @@ defmodule SM.Utils do
   @type id :: binary()
 
   @doc """
+  Prettifies file sizes
+  """
+  def pretty_size(byte_size) do
+    cond do
+      byte_size >= 1_000_000_000 ->
+        byte_size
+        |> Decimal.new()
+        |> Decimal.div(1_000_000_000)
+        |> Decimal.round(2)
+        |> Decimal.to_string(:normal)
+        |> Kernel.<>("GB")
+
+      byte_size >= 1_000_000 ->
+        byte_size
+        |> Decimal.new()
+        |> Decimal.div(1_000_000)
+        |> Decimal.round(2)
+        |> Decimal.to_string(:normal)
+        |> Kernel.<>("MB")
+
+      byte_size >= 1000 ->
+        byte_size
+        |> Decimal.new()
+        |> Decimal.div(1000)
+        |> Decimal.round(2)
+        |> Decimal.to_string(:normal)
+        |> Kernel.<>("KB")
+
+      true ->
+        byte_size
+        |> Decimal.new()
+        |> Decimal.round(2)
+        |> Decimal.to_string(:normal)
+        |> Kernel.<>("B")
+    end
+  end
+
+  @doc """
+  Returns a Slide's thumbnail public resource path
+  """
+  def slide_thumbnail_path(slide, size \\ :small) do
+    "/uploads/#{slide.competition_id}/#{slide.user_id}/thumbnails/#{size}/#{slide.file_name}"
+  end
+
+  @doc """
   Generates a random binary id.
   """
   @spec random_id() :: id()

@@ -24,6 +24,7 @@ defmodule SMWeb.Components.DirectUploadDialog do
   data user_id, :string, default: nil
   data progress, :decimal, default: Decimal.new(0)
   prop file_filter, :list, default: []
+  prop participants, :list, default: []
 
   def render(assigns) do
     ~F"""

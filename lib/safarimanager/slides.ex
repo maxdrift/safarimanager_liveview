@@ -13,6 +13,7 @@ defmodule SM.Slides do
   alias SM.Slides.SlideEvaluation
   alias SM.Slides.SlideFlag
   alias SM.Subjects.Subject
+  alias SM.Teams.TeamMember
 
   @doc """
   Returns the list of slide statuses.
@@ -146,6 +147,29 @@ defmodule SM.Slides do
     |> where(user_id: ^user_id)
     |> where(competition_id: ^competition_id)
     |> order_by(asc: :file_name)
+    |> Repo.all()
+    |> Repo.preload([:subject, :evaluations])
+  end
+
+  @spec list_by_team(String.t(), String.t()) :: [Slide.t()]
+  def list_by_team(team_id, competition_id) do
+    team_members_query =
+      from(
+        tm in TeamMember,
+        where: [team_id: ^team_id],
+        select: [:user_id, :competition_id]
+      )
+
+    query =
+      from(
+        s in Slide,
+        where: [competition_id: ^competition_id],
+        join: tm in subquery(team_members_query),
+        on: tm.user_id == s.user_id and tm.competition_id == ^competition_id,
+        order_by: [asc: :file_name]
+      )
+
+    query
     |> Repo.all()
     |> Repo.preload([:subject, :evaluations])
   end

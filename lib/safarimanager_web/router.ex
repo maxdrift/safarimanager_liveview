@@ -57,7 +57,9 @@ defmodule SMWeb.Router do
         live "/:competition_id/teams", Teams
         live "/:competition_id/jurors", Jurors
         live "/:competition_id/slides", Slides
-        live "/:competition_id/slide_selection", SlideSelection
+        live "/:competition_id/slide_selection", SlideSelection, :index
+        live "/:competition_id/slide_selection/users/:user_id", SlideSelection, :load_user
+        live "/:competition_id/slide_selection/teams/:team_id", SlideSelection, :load_team
         live "/:competition_id/validation_launcher", ValidationLauncher
         live "/:competition_id/validation", Validation
         live "/:competition_id/jury_launcher", JuryLauncher
