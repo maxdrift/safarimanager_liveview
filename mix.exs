@@ -58,7 +58,7 @@ defmodule SM.MixProject do
       {:dialyzex, "~> 1.3.0", only: :dev, runtime: false},
       {:ecto_cursor_based_stream, "~> 1.0"},
       {:ecto_sql, "~> 3.10"},
-      {:ecto_sqlite3, "~> 0.10.1"},
+      {:ecto_sqlite3, "~> 0.11.0"},
       {:esbuild, "~> 0.6", runtime: Mix.env() == :dev},
       {:ex_heroicons, "~> 2.0"},
       {:finch, "~> 0.16.0", override: true},
@@ -71,7 +71,8 @@ defmodule SM.MixProject do
       {:phoenix_ecto, "~> 4.4.0"},
       {:phoenix_html, "~> 3.3.0"},
       {:phoenix_live_reload, "~> 1.4.1", only: :dev},
-      {:phoenix_live_view, "~> 0.19.0"},
+      # overriding due to "surface" requirements
+      {:phoenix_live_view, "~> 0.20.0", override: true},
       {:phoenix_view, "~> 2.0"},
       {:phoenix, "~> 1.7.0"},
       {:plug_cowboy, "~> 2.6", override: true},
