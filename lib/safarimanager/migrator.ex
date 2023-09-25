@@ -284,7 +284,7 @@ defmodule SM.Migrator do
                   accumulator
                   |> Map.fetch!(:societa)
                   |> Enum.find_value(fn {pk, s} ->
-                    if s.nomes == row.nomes, do: pk, else: nil
+                    if s.nomes == row.nomes, do: pk
                   end)
 
                 org_id =
@@ -297,7 +297,7 @@ defmodule SM.Migrator do
                   accumulator
                   |> Map.fetch!(:categorie)
                   |> Enum.find_value(fn {pk, s} ->
-                    if s.categoria == row.categoria, do: pk, else: nil
+                    if s.categoria == row.categoria, do: pk
                   end)
 
                 category_id =
@@ -507,7 +507,7 @@ defmodule SM.Migrator do
                   accumulator
                   |> Map.fetch!(:categorie)
                   |> Enum.find_value(fn {pk, s} ->
-                    if s.categoria == row.categoria, do: pk, else: nil
+                    if s.categoria == row.categoria, do: pk
                   end)
 
                 category_id =
@@ -830,27 +830,28 @@ defmodule SM.Migrator do
     fields_fun = to_fields_fun(old_search_key)
     search_value = fields_fun.(old_row)
 
-    with [{dist, best} | _rest] <-
-           calculate_similarities(search_value, existing_rows, new_search_key) do
-      best_match_value = to_fields_fun(new_search_key).(best)
-      round_perc_dist = Float.round(dist, 2) * 100
+    case calculate_similarities(search_value, existing_rows, new_search_key) do
+      [{dist, best} | _rest] ->
+        best_match_value = to_fields_fun(new_search_key).(best)
+        round_perc_dist = Float.round(dist, 2) * 100
 
-      cond do
-        dist >= similarity_threshold ->
-          {:ok, best}
+        cond do
+          dist >= similarity_threshold ->
+            {:ok, best}
 
-        dist == 0.0 and best_match_value == nil and search_value == nil ->
-          {:ok, :create}
+          dist == 0.0 and best_match_value == nil and search_value == nil ->
+            {:ok, :create}
 
-        true ->
-          Logger.debug(
-            "Closest match '#{best_match_value}' (#{round_perc_dist}%) is less than #{similarity_threshold * 100}% similar to '#{search_value}'. Inserting a new record..."
-          )
+          true ->
+            Logger.debug(
+              "Closest match '#{best_match_value}' (#{round_perc_dist}%) is less than #{similarity_threshold * 100}% similar to '#{search_value}'. Inserting a new record..."
+            )
 
-          {:ok, :create}
-      end
-    else
-      [] -> {:ok, :create}
+            {:ok, :create}
+        end
+
+      [] ->
+        {:ok, :create}
     end
   end
 

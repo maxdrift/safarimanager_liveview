@@ -303,8 +303,6 @@ defmodule SM.Teams do
     if Enum.all?(members, &(&1.user.organization_id == first_org_id)) do
       {:ok, organization} = Organizations.get(first_org_id)
       organization.name
-    else
-      nil
     end
   end
 
