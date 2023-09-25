@@ -140,7 +140,7 @@
           {gettext("Teams")}
           <div class="badge badge-secondary ml-2">{Enum.count(@teams)}</div>
         </div>
-        <div class="invisible">
+        <div>
           <Link
             class="flex-none btn btn-outline btn-sm my-2"
             to={~p"/#{@competition.id}/teams_printout"}
@@ -166,9 +166,9 @@
               </tr>
             </thead>
             <tbody>
-              {#for {item, index} <- Enum.with_index(@teams)}
+              {#for item <- @teams}
                 <tr>
-                  <td>{index + 1}</td>
+                  <td>{item.number}</td>
                   <td class="truncate">{item.name || Teams.synthesize_team_name(item) || gettext("N/A")}</td>
                   <td class="truncate">{item.organization_name || Teams.synthesize_org_name(item) || gettext("N/A")}</td>
                   <td class="truncate">

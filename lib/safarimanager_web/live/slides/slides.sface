@@ -74,9 +74,9 @@
               </tr>
             </thead>
             <tbody>
-              {#for {item, index} <- Enum.with_index(@teams)}
+              {#for item <- @teams}
                 <tr>
-                  <td>{index + 1}</td>
+                  <td>{item.number}</td>
                   <td class="truncate">{item.name || Teams.synthesize_team_name(item) || gettext("N/A")}</td>
                   <td class="truncate">{item.organization_name || Teams.synthesize_org_name(item) || gettext("N/A")}</td>
                   <td />

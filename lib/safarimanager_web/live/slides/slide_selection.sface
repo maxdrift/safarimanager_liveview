@@ -82,9 +82,9 @@
               </tr>
             </thead>
             <tbody>
-              {#for {item, index} <- Enum.with_index(@teams)}
+              {#for item <- @teams}
                 <tr>
-                  <td>{index + 1}</td>
+                  <td>{item.number}</td>
                   <td class="truncate">{item.name || Teams.synthesize_team_name(item) || gettext("N/A")}</td>
                   <td class="truncate">{item.organization_name || Teams.synthesize_org_name(item) || gettext("N/A")}</td>
                   <td>
@@ -138,13 +138,13 @@
           <Link
             :if={@user}
             class="btn btn-outline btn-xs"
-            to={~p"/#{@competition.id}/#{@user.id}/selection_printout"}
+            to={~p"/#{@competition.id}/users/#{@user.id}/selection_printout"}
             opts={target: "_blank"}
           >{gettext("Print slides selection report")}</Link>
           <Link
             :if={@team}
             class="btn btn-outline btn-xs"
-            to={~p"/#{@competition.id}/#{@team.id}/selection_printout"}
+            to={~p"/#{@competition.id}/teams/#{@team.id}/selection_printout"}
             opts={target: "_blank"}
           >{gettext("Print slides selection report")}</Link>
         </div>

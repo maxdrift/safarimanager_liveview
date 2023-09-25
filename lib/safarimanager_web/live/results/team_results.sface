@@ -4,10 +4,10 @@
   <div class="pt-10 cursor-pointer" x-data="{ expanded: false }">
     <div class="mb-4">
       <Link
-        class="btn btn-outline btn-sm invisible"
+        class="btn btn-outline btn-sm"
         to={~p"/#{@competition.id}/slides_printout"}
         opts={target: "_blank"}
-      >{gettext("Print participants slides report")}</Link>
+      >{gettext("Print teams slides report")}</Link>
     </div>
     <div @click="expanded = ! expanded" class="text-xl bg-base-200 p-2 pl-4 rounded-xl shadow-lg">
       <span>
@@ -43,8 +43,8 @@
         <div class="text-lg text-center pb-4">{gettext("Stats")}</div>
         <table class="table table-xs table-fixed w-full">
           <tr>
-            <th class="bg-base-200 w-4/12">{gettext("Num. of participants")}</th>
-            <td class="truncate">{Enum.count(@competition.participants)}</td>
+            <th class="bg-base-200 w-4/12">{gettext("Num. of teams")}</th>
+            <td class="truncate">{Enum.count(@competition.teams)}</td>
           </tr>
           <tr>
             <th class="bg-base-200 w-4/12">{gettext("Num. of jurors")}</th>
@@ -122,7 +122,7 @@
       </div>
       <div class="grow" />
       <Link
-        class="flex-none btn btn-outline btn-sm mt-0.5 invisible"
+        class="flex-none btn btn-outline btn-sm mt-0.5"
         to={"/#{@competition.id}/results_printout"}
         opts={target: "_blank"}
       >{gettext("Print")}</Link>

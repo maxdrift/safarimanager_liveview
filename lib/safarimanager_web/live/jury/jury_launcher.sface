@@ -6,40 +6,42 @@
   <StepsHeader current_step={:jury} competition={@competition} />
   <div class="mt-20 text-center">
     <div class="stats stats-vertical lg:stats-horizontal shadow">
-      {#for {camera_type, stats} <- @stats.camera_type}
-        <div class="stat">
-          <div class="stat-value text-2xl capitalize">{stats.name}</div>
-          <div class="stat-title">{stats.slides_count} {gettext("slides")}</div>
-          <div class="stat-desc">{stats.species_count} {gettext("species")}</div>
-          <div class="stat-actions">
-            <Link
-              to={"/organize/#{@competition_id}/jury?category=#{camera_type}"}
-              class={"btn", "btn-xl", "btn-primary", "btn-disabled": stats.slides_count == 0}
-            >
-              {gettext("Start Jury")}
-            </Link>
+      {#if !@competition.for_teams}
+        {#for {camera_type, stats} <- @stats.camera_type}
+          <div class="stat">
+            <div class="stat-value text-2xl capitalize">{stats.name}</div>
+            <div class="stat-title">{stats.slides_count} {gettext("slides")}</div>
+            <div class="stat-desc">{stats.species_count} {gettext("species")}</div>
+            <div class="stat-actions">
+              <Link
+                to={"/organize/#{@competition_id}/jury?category=#{camera_type}"}
+                class={"btn", "btn-xl", "btn-primary", "btn-disabled": stats.slides_count == 0}
+              >
+                {gettext("Start Jury")}
+              </Link>
+            </div>
           </div>
-        </div>
-      {#else}
-        gettext("Jury is not yet available")
-      {/for}
-      {#for {category, stats} <- @stats.category}
-        <div class="stat">
-          <div class="stat-value text-2xl capitalize">{stats.name}</div>
-          <div class="stat-title">{stats.slides_count} {gettext("slides")}</div>
-          <div class="stat-desc">{stats.species_count} {gettext("species")}</div>
-          <div class="stat-actions">
-            <Link
-              to={"/organize/#{@competition_id}/jury?category=#{category}"}
-              class={"btn", "btn-xl", "btn-primary", "btn-disabled": stats.slides_count == 0}
-            >
-              {gettext("Start Jury")}
-            </Link>
+        {#else}
+          gettext("Jury is not yet available")
+        {/for}
+        {#for {category, stats} <- @stats.category}
+          <div class="stat">
+            <div class="stat-value text-2xl capitalize">{stats.name}</div>
+            <div class="stat-title">{stats.slides_count} {gettext("slides")}</div>
+            <div class="stat-desc">{stats.species_count} {gettext("species")}</div>
+            <div class="stat-actions">
+              <Link
+                to={"/organize/#{@competition_id}/jury?category=#{category}"}
+                class={"btn", "btn-xl", "btn-primary", "btn-disabled": stats.slides_count == 0}
+              >
+                {gettext("Start Jury")}
+              </Link>
+            </div>
           </div>
-        </div>
-      {#else}
-        gettext("Jury is not yet available")
-      {/for}
+        {#else}
+          gettext("Jury is not yet available")
+        {/for}
+      {/if}
       <div class="stat">
         <div class="stat-value text-2xl capitalize">{@stats.all.name}</div>
         <div class="stat-title">{@stats.all.slides_count} {gettext("slides")}</div>

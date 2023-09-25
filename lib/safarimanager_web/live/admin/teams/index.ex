@@ -24,6 +24,7 @@ defmodule SMWeb.Live.Admin.Teams.Index do
   alias Surface.Components.Form.HiddenInput
   alias Surface.Components.Form.Inputs
   alias Surface.Components.Form.Label
+  alias Surface.Components.Form.NumberInput
   alias Surface.Components.Form.Reset
   alias Surface.Components.Form.Select
   alias Surface.Components.Form.Submit
@@ -47,7 +48,6 @@ defmodule SMWeb.Live.Admin.Teams.Index do
       |> assign(
         action: changeset_action,
         competitions: Competitions.list(),
-        competition_id: nil,
         participants: []
       )
 
@@ -57,21 +57,13 @@ defmodule SMWeb.Live.Admin.Teams.Index do
   @impl Phoenix.LiveView
   # Create/Edit dialog validate callback
   def handle_event("validate", %{"entity" => params}, socket) do
-    competition_id = params["competition_id"]
-
-    members =
-      params
-      |> Map.get("members")
-      |> Map.new(fn {pos, member} -> {pos, Map.put(member, "competition_id", competition_id)} end)
-
-    params = Map.put(params, "members", members)
-
     changeset =
       socket.assigns.record
       |> change(params)
       |> assign_form()
       |> Map.put(:action, :validate)
 
+    competition_id = params["competition_id"]
     user_ids = unique_member_users(changeset, competition_id)
 
     socket =
@@ -144,14 +136,13 @@ defmodule SMWeb.Live.Admin.Teams.Index do
 
           :edit ->
             changeset = change(team, %{})
-            competition_id = team.members |> hd() |> Map.get(:competition_id)
+            competition_id = team.competition_id
             user_ids = unique_member_users(changeset, competition_id)
 
             socket =
               assign(socket,
                 record: team,
                 changeset: changeset,
-                competition_id: competition_id,
                 participants: get_participants_options(competition_id, user_ids),
                 action: :edit
               )
@@ -175,11 +166,7 @@ defmodule SMWeb.Live.Admin.Teams.Index do
         socket =
           socket
           |> reset_current_editing()
-          |> assign(
-            action: :create,
-            competition_id: nil,
-            participants: []
-          )
+          |> assign(action: :create, participants: [])
 
         {:noreply, socket}
     end

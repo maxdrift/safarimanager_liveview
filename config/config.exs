@@ -61,7 +61,8 @@ config :safarimanager, SM.Competitions.Competition,
     {:international_championship, "international championship"},
     {:local_event, "local event"},
     {:national_event, "national event"},
-    {:international_event, "international event"}
+    {:international_event, "international event"},
+    {:other, "other"}
   ]
 
 config :safarimanager, SM.Slides.Slide,

@@ -15,7 +15,7 @@
     </div>
     <div class="flex flex-row">
       <div class="mr-10">
-        <span class="text-sm"><%= gettext("Date") %>:&nbsp;</span><span class="text-sm font-bold"><%= @competition.start_time |> Calendar.strftime("%d/%m/%Y") %></span>
+        <span class="text-sm"><%= gettext("Date") %>:&nbsp;</span><span class="text-sm font-bold"><%= @competition.start_time && @competition.start_time |> Calendar.strftime("%d/%m/%Y") || gettext("N/A") %></span>
       </div>
       <div class="mr-10">
         <span class="text-sm"><%= gettext("Location") %>:&nbsp;</span><span class="text-sm font-bold"><%= @competition.city || gettext("N/A") %></span>

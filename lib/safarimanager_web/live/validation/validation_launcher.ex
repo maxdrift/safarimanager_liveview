@@ -111,66 +111,12 @@ defmodule SMWeb.Live.ValidationLauncher do
   def handle_params(%{"competition_id" => competition_id}, _uri, socket) do
     {:ok, competition} = Competitions.get(competition_id)
 
-    flagged_slides = Slides.list_flagged(competition_id)
-    duplicate_subjects = Slides.list_duplicate_subjects(competition_id)
-    over_submitted_threshold = Slides.list_over_submitted_threshold(competition_id)
-
-    over_jury_threshold =
-      if competition.settings.proportional_submission do
-        Slides.list_over_proportional_jury_threshold(competition_id)
-      else
-        Slides.list_over_static_jury_threshold(competition_id)
-      end
-
     stats =
-      competition_id
-      |> Slides.list_stats_by_participant()
-      |> Enum.reduce(%{}, fn {participant_number, p_stats}, acc ->
-        new_stats =
-          acc
-          |> Map.get(participant_number, %{})
-          |> Map.merge(p_stats)
-          |> Map.put_new(:submitted_jury, 0)
-          |> Map.put_new(:submitted_fixed, 0)
-
-        Map.put(acc, participant_number, new_stats)
-      end)
-      |> Enum.map(fn {participant_number, stats} ->
-        flagged_slides =
-          Enum.flat_map(flagged_slides, fn
-            {^participant_number, slide} -> [slide]
-            {_participant_number, _slide} -> []
-          end)
-
-        duplicate_subjects =
-          Enum.flat_map(duplicate_subjects, fn
-            {^participant_number, slide} -> [slide]
-            {_participant_number, _slide} -> []
-          end)
-
-        over_submitted_threshold =
-          Enum.flat_map(over_submitted_threshold, fn
-            {^participant_number, count} -> [count]
-            {_participant_number, _count} -> []
-          end)
-
-        over_jury_threshold =
-          Enum.flat_map(over_jury_threshold, fn
-            {^participant_number, count} -> [count]
-            {_participant_number, _count} -> []
-          end)
-
-        new_stats =
-          Map.merge(stats, %{
-            flagged_slides: flagged_slides,
-            duplicate_subjects: duplicate_subjects,
-            over_submitted_threshold: over_submitted_threshold,
-            over_jury_threshold: over_jury_threshold
-          })
-
-        {participant_number, new_stats}
-      end)
-      |> List.keysort(0)
+      if competition.for_teams do
+        get_teams_stats(competition)
+      else
+        get_participants_stats(competition)
+      end
 
     socket =
       socket
@@ -183,8 +129,126 @@ defmodule SMWeb.Live.ValidationLauncher do
 
   # Internal
 
+  defp get_participants_stats(competition) do
+    competition_id = competition.id
+
+    flagged_slides = Slides.list_flagged(competition_id)
+    duplicate_subjects = Slides.list_duplicate_subjects(competition_id)
+
+    # TODO: make jolly coefficient value customizable in Competition settings
+    jolly_coefficient = 2
+
+    low_coeff_slides_cnt =
+      competition_id
+      |> Slides.count_jury_slides_by_static_coefficient(jolly_coefficient)
+      |> Map.new()
+
+    competition_id
+    |> Slides.list_stats_by_participant()
+    |> Enum.reduce(%{}, fn {participant_number, p_stats}, acc ->
+      new_stats =
+        acc
+        |> Map.get(participant_number, %{})
+        |> Map.merge(p_stats)
+        |> Map.put_new(:submitted_jury, 0)
+        |> Map.put_new(:submitted_fixed, 0)
+
+      Map.put(acc, participant_number, new_stats)
+    end)
+    |> Enum.map(fn {participant_number, stats} ->
+      flagged_slides =
+        Enum.flat_map(flagged_slides, fn
+          {^participant_number, slide} -> [slide]
+          {_participant_number, _slide} -> []
+        end)
+
+      duplicate_subjects =
+        Enum.flat_map(duplicate_subjects, fn
+          {^participant_number, slide} -> [slide]
+          {_participant_number, _slide} -> []
+        end)
+
+      over_submitted_threshold = check_submitted_threshold(stats.submitted_fixed, stats.submitted_jury, competition)
+
+      low_coeff_slides_cnt = Map.get(low_coeff_slides_cnt, participant_number, 0)
+
+      over_jury_threshold =
+        check_jury_threshold(stats.submitted_fixed, stats.submitted_jury, competition, low_coeff_slides_cnt)
+
+      new_stats =
+        Map.merge(stats, %{
+          flagged_slides: flagged_slides,
+          duplicate_subjects: duplicate_subjects,
+          over_submitted_threshold: over_submitted_threshold,
+          over_jury_threshold: over_jury_threshold
+        })
+
+      {participant_number, new_stats}
+    end)
+    |> List.keysort(0)
+  end
+
+  defp get_teams_stats(competition) do
+    competition_id = competition.id
+
+    flagged_slides = Slides.list_teams_flagged(competition_id)
+    duplicate_subjects = Slides.list_teams_duplicate_subjects(competition_id)
+
+    # TODO: make jolly coefficient value customizable in Competition settings
+    jolly_coefficient = 2
+
+    low_coeff_slides_cnt =
+      competition_id
+      |> Slides.count_teams_jury_slides_by_static_coefficient(jolly_coefficient)
+      |> Map.new()
+
+    competition_id
+    |> Slides.list_stats_by_team()
+    |> Enum.reduce(%{}, fn {team_number, p_stats}, acc ->
+      new_stats =
+        acc
+        |> Map.get(team_number, %{})
+        |> Map.merge(p_stats)
+        |> Map.put_new(:submitted_jury, 0)
+        |> Map.put_new(:submitted_fixed, 0)
+
+      Map.put(acc, team_number, new_stats)
+    end)
+    |> Enum.map(fn {team_number, stats} ->
+      flagged_slides =
+        Enum.flat_map(flagged_slides, fn
+          {^team_number, _participant_number, slide} -> [slide]
+          {_team_number, _participant_number, _slide} -> []
+        end)
+
+      duplicate_subjects =
+        Enum.flat_map(duplicate_subjects, fn
+          {^team_number, _participant_number, slide} -> [slide]
+          {_team_number, _participant_number, _slide} -> []
+        end)
+
+      over_submitted_threshold = check_submitted_threshold(stats.submitted_fixed, stats.submitted_jury, competition)
+
+      low_coeff_slides_cnt = Map.get(low_coeff_slides_cnt, team_number, 0)
+
+      over_jury_threshold =
+        check_jury_threshold(stats.submitted_fixed, stats.submitted_jury, competition, low_coeff_slides_cnt)
+
+      new_stats =
+        Map.merge(stats, %{
+          flagged_slides: flagged_slides,
+          duplicate_subjects: duplicate_subjects,
+          over_submitted_threshold: over_submitted_threshold,
+          over_jury_threshold: over_jury_threshold
+        })
+
+      {team_number, new_stats}
+    end)
+    |> List.keysort(0)
+  end
+
   defp subject_name(subjects, subject_id) do
-    Enum.find_value(subjects, "N/A", fn s ->
+    Enum.find_value(subjects, gettext("N/A"), fn s ->
       if s.id == subject_id, do: s.name
     end)
   end
@@ -198,23 +262,59 @@ defmodule SMWeb.Live.ValidationLauncher do
   defp list_to_variant([]), do: :pass
   defp list_to_variant([_ | _]), do: :fail
 
-  defp over_jury_th_tooltip(%{over_jury_threshold: [value]} = stats, competition) do
-    if competition.settings.proportional_submission do
-      total = Decimal.add(stats.submitted_jury, stats.submitted_fixed)
-      threshold = Decimal.mult(total, competition.settings.submission_ratio)
-      "#{value}/#{threshold}"
-    else
-      "#{value}/#{competition.settings.max_jury_slides}"
-    end
+  defp submitted_threshold_tooltip({_result, submitted_slides_cnt, threshold}) do
+    "#{submitted_slides_cnt}/#{threshold}"
   end
 
-  defp over_jury_th_tooltip(%{} = stats, competition) do
-    if competition.settings.proportional_submission do
-      total = Decimal.add(stats.submitted_jury, stats.submitted_fixed)
-      threshold = Decimal.mult(total, competition.settings.submission_ratio)
-      "#{stats.submitted_jury}/#{threshold}"
-    else
-      "#{stats.submitted_jury}/#{competition.settings.max_jury_slides}"
-    end
+  defp jury_threshold_tooltip({_result, jury_slides_cnt, threshold, 0}) do
+    "#{jury_slides_cnt}/#{threshold}"
+  end
+
+  defp jury_threshold_tooltip({_result, jury_slides_cnt, threshold, jolly_slides}) do
+    "#{jury_slides_cnt}/#{threshold}+#{jolly_slides}"
+  end
+
+  defp check_submitted_threshold(fixed_slides_cnt, jury_slides_cnt, competition) do
+    submitted_slides_cnt = fixed_slides_cnt + jury_slides_cnt
+    submitted_threshold = competition.settings.max_submitted_slides
+
+    result = if submitted_slides_cnt <= submitted_threshold, do: :pass, else: :fail
+
+    {result, submitted_slides_cnt, submitted_threshold}
+  end
+
+  defp check_jury_threshold(fixed_slides_cnt, jury_slides_cnt, competition, low_coeff_slides_cnt) do
+    submitted_slides_cnt = fixed_slides_cnt + jury_slides_cnt
+
+    threshold =
+      if competition.settings.proportional_submission do
+        proportional_jury_threshold(submitted_slides_cnt, competition.settings.submission_ratio)
+      else
+        competition.settings.max_jury_slides
+      end
+
+    jolly? = jolly_slide?(competition, low_coeff_slides_cnt > 0)
+
+    rounded_threshold = Decimal.round(threshold)
+
+    # TODO: make number of jolly slides customizable in Competition settings
+    jolly_slides = 1
+    adj_threshold = if jolly?, do: Decimal.add(rounded_threshold, jolly_slides), else: rounded_threshold
+
+    result = if Decimal.compare(jury_slides_cnt, adj_threshold) in [:lt, :eq], do: :pass, else: :fail
+    {result, jury_slides_cnt, rounded_threshold, (jolly? && jolly_slides) || 0}
+  end
+
+  defp jolly_slide?(competition, has_lower_coeff_slide?) when is_boolean(has_lower_coeff_slide?) do
+    not competition.settings.dynamic_coefficients_enabled and has_lower_coeff_slide?
+  end
+
+  defp proportional_jury_threshold(submitted_slides_cnt, jury_ratio) do
+    # TODO: Make this limit configurable in Competition settings
+    jury_threshold_min_limit = 12
+
+    submitted_slides_cnt
+    |> Decimal.mult(jury_ratio)
+    |> Decimal.max(jury_threshold_min_limit)
   end
 end

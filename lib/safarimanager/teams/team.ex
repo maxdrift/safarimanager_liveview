@@ -6,15 +6,17 @@ defmodule SM.Teams.Team do
 
   import SMWeb.Gettext
 
+  alias SM.Competitions.Competition
   alias SM.Teams.TeamMember
 
   schema "teams" do
     field :name, :string
     field :organization_name, :string
+    field :number, :integer
+    belongs_to :competition, Competition
 
     has_many :members, TeamMember, preload_order: [asc: :position], on_replace: :delete
     has_many :users, through: [:members, :user]
-    has_one :competition, through: [:members, :competition]
 
     timestamps()
   end
@@ -23,7 +25,8 @@ defmodule SM.Teams.Team do
   @spec changeset(t(), map()) :: Ecto.Changeset.t()
   def changeset(struct, attrs) do
     struct
-    |> cast(attrs, [:name, :organization_name])
+    |> cast(attrs, [:name, :organization_name, :competition_id, :number])
+    |> validate_required([:competition_id, :number])
     |> cast_assoc(:members,
       with: &TeamMember.changeset/3,
       sort_param: :members_sort,
@@ -31,6 +34,11 @@ defmodule SM.Teams.Team do
       required: true
     )
     |> validate_team_member()
+    |> validate_number(:number, greater_than: 0)
+    |> foreign_key_constraint(:competition_id)
+    |> unique_constraint([:competition_id, :number],
+      name: :teams_competition_id_number_index
+    )
   end
 
   defp validate_team_member(changeset) do

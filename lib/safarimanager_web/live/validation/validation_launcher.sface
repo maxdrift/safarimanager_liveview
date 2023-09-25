@@ -23,7 +23,8 @@
           <th scope="colgroup" colspan="4" class="bg-base-200">{gettext("Checks")}</th>
         </tr>
         <tr>
-          <th scope="col">{gettext("Participant #")}</th>
+          <th :if={!@competition.for_teams} scope="col">{gettext("Participant #")}</th>
+          <th :if={@competition.for_teams} scope="col">{gettext("Team #")}</th>
           <th scope="col">{gettext("Jury")}</th>
           <th scope="col">{gettext("Fixed points")}</th>
           <th scope="col">{gettext("Total")}</th>
@@ -41,11 +42,13 @@
             <td>{stats.submitted_fixed}</td>
             <td>{stats.submitted_jury + stats.submitted_fixed}</td>
             <td>
-              <ValidationCheckmark variant={list_to_variant(stats.over_submitted_threshold)} />
+              <div class="tooltip" data-tip={submitted_threshold_tooltip(stats.over_submitted_threshold)}>
+                <ValidationCheckmark variant={elem(stats.over_submitted_threshold, 0)} />
+              </div>
             </td>
             <td>
-              <div class="tooltip" data-tip={over_jury_th_tooltip(stats, @competition)}>
-                <ValidationCheckmark variant={list_to_variant(stats.over_jury_threshold)} />
+              <div class="tooltip" data-tip={jury_threshold_tooltip(stats.over_jury_threshold)}>
+                <ValidationCheckmark variant={elem(stats.over_jury_threshold, 0)} />
               </div>
             </td>
             <td>

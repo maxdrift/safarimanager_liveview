@@ -11,7 +11,7 @@ defmodule SM.Competitions.Competition do
   alias SM.Organizations.Organization
   alias SM.Participants.Participant
   alias SM.Slides.Slide
-  alias SM.Teams.TeamMember
+  alias SM.Teams.Team
 
   @types Application.compile_env!(:safarimanager, [__MODULE__, :types])
 
@@ -34,8 +34,7 @@ defmodule SM.Competitions.Competition do
     has_many :competitions_evaluations, CompetitionEvaluation, on_replace: :delete
     has_many :allowed_evaluations, through: [:competitions_evaluations, :evaluation]
     has_many :participants, Participant, preload_order: [asc: :number], on_replace: :delete
-    has_many :team_members, TeamMember
-    has_many :teams, through: [:team_members, :team]
+    has_many :teams, Team
     has_many :jurors, Juror, preload_order: [asc: :inserted_at], on_replace: :delete
     has_many :slides, Slide
 
@@ -96,7 +95,7 @@ defmodule SM.Competitions.Competition do
     |> cast_assoc(:participants, required: false)
     |> cast_assoc(:jurors, required: false)
     |> cast_assoc(:slides, required: false)
-    |> cast_assoc(:team_members, required: false)
+    |> cast_assoc(:teams, required: false)
     |> validate_dates()
   end
 

@@ -19,6 +19,9 @@
           <FieldsListItem label={gettext("Competition")}>
             <span class="capitalize">{@record.competition.name || gettext("N/A")}</span>
           </FieldsListItem>
+          <FieldsListItem label={gettext("Number")}>
+            {@record.number}
+          </FieldsListItem>
           <FieldsListItem label={gettext("Name")}>
             <span class="capitalize">
               {#if @record.name}
@@ -81,16 +84,21 @@
             <SMField name={:competition_id} label={gettext("Competition")} class="w-full">
               <Select
                 options={Enum.map(@competitions, &{&1.name, &1.id})}
-                selected={@competition_id}
+                selected={@record.competition_id}
                 prompt={[key: gettext("Select a competition...")]}
                 class={input_state_class(@changeset, :competition_id)}
                 opts={phx_debounce: "1000"}
               />
             </SMField>
+            <SMField name={:number} label={gettext("Number")} class="w-full">
+              <NumberInput
+                class={input_state_class(@changeset, :number)}
+                opts={phx_debounce: "1000", min: "1", step: "1"}
+              />
+            </SMField>
             <Inputs for={:members}>
               <Context get={Form, form: members_form}>
                 <HiddenInput name="entity[members_sort][]" value={members_form.index} />
-                <HiddenInput field={:competition_id} value={@competition_id} />
                 <Field name={:user_id} class="form-control w-11/12">
                   <Label class="label">
                     <span class="label-text">{gettext("Member")} {members_form.index + 1}</span>

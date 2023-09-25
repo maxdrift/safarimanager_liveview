@@ -64,13 +64,17 @@ defmodule SMWeb.Live.Teams do
   end
 
   def handle_event("create-team", _params, socket) do
+    competition_id = socket.assigns.competition.id
+
     members =
       socket.assigns.participants_selection
       |> MapSet.to_list()
-      |> Enum.map(&%{"competition_id" => socket.assigns.competition.id, "user_id" => &1})
+      |> Enum.map(&%{"user_id" => &1})
+
+    next_team_number = Teams.get_next_team_number(competition_id)
 
     socket =
-      case Teams.create(%{"members" => members}) do
+      case Teams.create(%{"competition_id" => competition_id, "number" => next_team_number, "members" => members}) do
         {:ok, team} ->
           put_flash(
             socket,

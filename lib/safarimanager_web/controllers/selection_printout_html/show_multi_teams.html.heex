@@ -1,0 +1,69 @@
+<div class="font-sans">
+  <%= for team <- @teams do %>
+    <header class="relative mb-6">
+      <div class="absolute top-10 right-6 w-24">
+        <%= fipsas_logo() %>
+      </div>
+      <h4 class="text-center text-md font-semibold uppercase">
+        <%= @header_line %>
+      </h4>
+      <h5 class="text-center text-sm"><%= @sub_header_line %></h5>
+    </header>
+    <h1 class="my-4 text-center text-2xl font-bold uppercase tracking-widest">
+      <%= "#{Teams.synthesize_team_name(team)}" %>
+    </h1>
+    <ul>
+      <li>
+        <span class="font-bold"><%= gettext("Participant number") %>:</span>
+        <%= team.number %>
+      </li>
+      <li>
+        <span class="font-bold"><%= gettext("Organization") %>:</span>
+        <%= Teams.synthesize_org_name(team) || gettext("N/A") %>
+      </li>
+    </ul>
+    <table class="w-full mt-4 table-fixed table-zebra border-collapse text-sm">
+      <thead>
+        <tr class="uppercase text-xs">
+          <th class="w-6 border text-center"><%= gettext("#") %></th>
+          <th class="w-28 border text-center"><%= gettext("File name") %></th>
+          <th class="w-16 border text-center"><%= gettext("Sub. #") %></th>
+          <th class="w-auto border text-center"><%= gettext("Sub. name") %></th>
+          <th class="w-12 border text-center"><%= gettext("Coeff.") %></th>
+          <th class="w-12 border text-center"><%= gettext("Jury") %></th>
+          <th class="w-auto border text-center"><%= gettext("Notes") %></th>
+        </tr>
+      </thead>
+      <tbody>
+        <%= for {slide, index} <- Enum.with_index(Map.get(@slides, team.id, [])) do %>
+          <tr class="border">
+            <td class="border text-center font-mono"><%= index + 1 %></td>
+            <td class="border"><%= slide.file_name %></td>
+            <td class="border text-right font-mono"><%= slide.subject.numeric_id %></td>
+            <td class="border capitalize"><%= slide.subject.name %></td>
+            <td class="border text-center font-mono"><%= slide.subject.coefficient %></td>
+            <td class="border text-center">
+              <%= (slide.status == :submitted_jury && "✓") || "" %>
+            </td>
+            <td class="border"></td>
+          </tr>
+        <% end %>
+      </tbody>
+      <tfoot class="h-12">
+        <tr>
+          <td>
+            <div></div>
+          </td>
+        </tr>
+      </tfoot>
+    </table>
+    <div class="break-after-page last:break-after-avoid-page" />
+  <% end %>
+</div>
+<footer class="flex flex-row text-sm bg-white h-12 fixed bottom-0 w-full">
+  <div class="mx-10 text-center basis-1/3"></div>
+  <div class="mx-10 text-center basis-1/3"></div>
+  <div class="mx-10 border-2 border-x-0 border-t-0 border-solid border-gray-400 text-center basis-1/3">
+    <span class="capitalize"><%= gettext("The participant") %></span>
+  </div>
+</footer>

@@ -201,10 +201,15 @@ defmodule SMWeb.Live.SlideSelection do
     competition_id = socket.assigns.competition_id
 
     grouped_slides =
-      if user do
-        get_user_slides_by_status(user.id, competition_id)
-      else
-        get_team_slides_by_status(team.id, competition_id)
+      cond do
+        not is_nil(user) ->
+          get_user_slides_by_status(user.id, competition_id)
+
+        not is_nil(team) ->
+          get_team_slides_by_status(team.id, competition_id)
+
+        true ->
+          %{}
       end
 
     socket =
@@ -254,9 +259,9 @@ defmodule SMWeb.Live.SlideSelection do
       false ->
         {:noreply, socket}
 
-      {:error, :slide_not_found} ->
+      {:error, {:slide_not_found, file_name}} ->
         socket =
-          put_flash(socket, :error, gettext("Unable to import slide selection: slide not found"))
+          put_flash(socket, :error, gettext("Unable to import slide selection: slide not found") <> " '#{file_name}'")
 
         {:noreply, socket}
 
@@ -335,8 +340,8 @@ defmodule SMWeb.Live.SlideSelection do
     end
   end
 
-  defp find_slide(_competition_id, [], _file_name) do
-    {:error, :slide_not_found}
+  defp find_slide(_competition_id, [], file_name) do
+    {:error, {:slide_not_found, file_name}}
   end
 
   defp find_slide(competition_id, [user | rest], file_name) do

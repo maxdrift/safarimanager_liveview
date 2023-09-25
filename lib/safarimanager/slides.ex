@@ -153,19 +153,13 @@ defmodule SM.Slides do
 
   @spec list_by_team(String.t(), String.t()) :: [Slide.t()]
   def list_by_team(team_id, competition_id) do
-    team_members_query =
-      from(
-        tm in TeamMember,
-        where: [team_id: ^team_id],
-        select: [:user_id, :competition_id]
-      )
-
     query =
       from(
         s in Slide,
+        join: tm in TeamMember,
+        on: tm.user_id == s.user_id,
         where: [competition_id: ^competition_id],
-        join: tm in subquery(team_members_query),
-        on: tm.user_id == s.user_id and tm.competition_id == ^competition_id,
+        where: tm.team_id == ^team_id,
         order_by: [asc: :file_name]
       )
 
@@ -192,6 +186,41 @@ defmodule SM.Slides do
     |> where(competition_id: ^competition_id)
     |> where([sl], sl.status in [:submitted_jury, :submitted_fixed])
     |> order_by(asc: :file_name)
+    |> Repo.all()
+    |> Repo.preload([:subject, :evaluations])
+  end
+
+  @spec list_for_teams_printout(String.t()) :: [Slide.t()]
+  def list_for_teams_printout(competition_id) do
+    query =
+      from(
+        s in Slide,
+        join: tm in TeamMember,
+        on: tm.user_id == s.user_id,
+        where: [competition_id: ^competition_id],
+        where: s.status in [:submitted_jury, :submitted_fixed],
+        order_by: [asc: tm.team_id, asc: :file_name],
+        select: {tm.team_id, s},
+        preload: [:subject, :evaluations]
+      )
+
+    Repo.all(query)
+  end
+
+  @spec list_for_teams_printout(String.t(), String.t()) :: [Slide.t()]
+  def list_for_teams_printout(team_id, competition_id) do
+    query =
+      from(
+        s in Slide,
+        join: tm in TeamMember,
+        on: tm.user_id == s.user_id,
+        where: [competition_id: ^competition_id],
+        where: s.status in [:submitted_jury, :submitted_fixed],
+        where: tm.team_id == ^team_id,
+        order_by: [asc: :file_name]
+      )
+
+    query
     |> Repo.all()
     |> Repo.preload([:subject, :evaluations])
   end
@@ -303,7 +332,7 @@ defmodule SM.Slides do
     Repo.all(query)
   end
 
-  @spec list_flagged(String.t()) :: [{Slide.t(), Participant.t()}]
+  @spec list_flagged(String.t()) :: [{non_neg_integer(), Slide.t()}]
   def list_flagged(competition_id) do
     query =
       from(sl in Slide,
@@ -317,6 +346,28 @@ defmodule SM.Slides do
         order_by: [desc: sl.status, asc: su.numeric_id, asc: sl.id],
         preload: [:evaluations, :slide_flags, subject: su],
         select: {p.number, sl}
+      )
+
+    Repo.all(query)
+  end
+
+  @spec list_teams_flagged(String.t()) :: [{String.t(), non_neg_integer(), Slide.t()}]
+  def list_teams_flagged(competition_id) do
+    query =
+      from(sl in Slide,
+        join: su in assoc(sl, :subject),
+        join: tm in TeamMember,
+        on: tm.user_id == sl.user_id,
+        join: t in assoc(tm, :team),
+        join: p in Participant,
+        on: p.user_id == sl.user_id and p.competition_id == ^competition_id,
+        join: fl in assoc(sl, :slide_flags),
+        where: [competition_id: ^competition_id],
+        where: sl.status in [:submitted_fixed, :submitted_jury],
+        group_by: [sl.id, sl.subject_id, su.numeric_id],
+        order_by: [asc: t.number, asc: p.number, desc: sl.status, asc: su.numeric_id, asc: sl.id],
+        preload: [:evaluations, :slide_flags, subject: su],
+        select: {t.number, p.number, sl}
       )
 
     Repo.all(query)
@@ -352,79 +403,78 @@ defmodule SM.Slides do
     Repo.all(query)
   end
 
-  @spec list_over_submitted_threshold(String.t()) :: [{Participant.t(), non_neg_integer()}]
-  def list_over_submitted_threshold(competition_id) do
-    query =
+  @spec list_teams_duplicate_subjects(String.t()) :: [{Participant.t(), Subject.t(), non_neg_integer()}]
+  def list_teams_duplicate_subjects(competition_id) do
+    subquery =
       from(sl in Slide,
-        join: c in assoc(sl, :competition),
-        join: cs in assoc(c, :settings),
+        join: su in assoc(sl, :subject),
         join: p in Participant,
         on: p.user_id == sl.user_id and p.competition_id == ^competition_id,
         where: [competition_id: ^competition_id],
         where: sl.status in [:submitted_fixed, :submitted_jury],
-        group_by: [sl.user_id],
-        order_by: [desc: count(sl.subject_id)],
-        select: {p.number, count(sl.id)},
-        having: count(sl.id) > cs.max_submitted_slides
+        group_by: [sl.user_id, sl.subject_id],
+        having: count(sl.id) > 1
       )
 
-    Repo.all(query)
-  end
-
-  @spec list_over_static_jury_threshold(String.t()) :: [{Participant.t(), non_neg_integer()}]
-  def list_over_static_jury_threshold(competition_id) do
     query =
       from(sl in Slide,
-        join: c in assoc(sl, :competition),
-        join: cs in assoc(c, :settings),
+        join: dup in subquery(subquery),
+        on:
+          dup.competition_id == sl.competition_id and dup.user_id == sl.user_id and
+            dup.subject_id == sl.subject_id,
+        join: tm in TeamMember,
+        on: tm.user_id == sl.user_id,
+        join: t in assoc(tm, :team),
+        where: t.competition_id == ^competition_id,
         join: p in Participant,
         on: p.user_id == sl.user_id and p.competition_id == ^competition_id,
-        where: [competition_id: ^competition_id],
-        where: [status: :submitted_jury],
-        group_by: [sl.user_id],
-        order_by: [desc: count(sl.subject_id)],
-        select: {p.number, count(sl.id)},
-        having: count(sl.id) > cs.max_jury_slides
+        where: sl.status in [:submitted_fixed, :submitted_jury],
+        order_by: [asc: t.number, asc: p.number, asc: sl.id],
+        preload: [:subject],
+        select: {t.number, p.number, sl}
       )
 
     Repo.all(query)
   end
 
-  @doc """
-  SELECT s.ID_concorrente AS Conc, Count(s.id) AS [Num Slide]
-    FROM slide AS s
-    WHERE (((s.pres)=True))
-    GROUP BY s.ID_concorrente
-    HAVING (((Count(s.id))>Round(((SELECT Count(id) FROM slide WHERE ID_concorrente = s.ID_concorrente)*((SELECT pspeciep FROM gara)/100)),0)));
-  """
-  @spec list_over_proportional_jury_threshold(String.t()) :: [
-          {Participant.t(), non_neg_integer()}
-        ]
-  def list_over_proportional_jury_threshold(competition_id) do
+  @spec count_jury_slides_by_static_coefficient(String.t(), integer()) :: [{non_neg_integer(), non_neg_integer()}]
+  def count_jury_slides_by_static_coefficient(competition_id, coefficient) do
     query =
       from(sl in Slide,
-        join: c in assoc(sl, :competition),
-        join: cs in assoc(c, :settings),
         join: p in Participant,
         on: p.user_id == sl.user_id and p.competition_id == ^competition_id,
+        join: su in assoc(sl, :subject),
         where: [competition_id: ^competition_id],
         where: [status: :submitted_jury],
-        group_by: [sl.user_id],
-        order_by: [desc: count(sl.subject_id)],
+        group_by: [:user_id, su.coefficient],
+        order_by: [asc: p.number],
         select: {p.number, count(sl.id)},
-        having:
-          count(sl.id) >
-            fragment(
-              "SELECT count(s.id) from slides s where s.competition_id = ? and s.user_id = ? and s.status is not null",
-              ^competition_id,
-              sl.user_id
-            ) * cs.submission_ratio + 1
+        having: su.coefficient == ^coefficient
       )
 
     Repo.all(query)
   end
 
-  @spec list_stats_by_participant(String.t()) :: [{Participant.t(), map()}]
+  @spec count_teams_jury_slides_by_static_coefficient(String.t(), integer()) :: [{String.t(), non_neg_integer()}]
+  def count_teams_jury_slides_by_static_coefficient(competition_id, coefficient) do
+    query =
+      from(sl in Slide,
+        join: tm in TeamMember,
+        on: tm.user_id == sl.user_id,
+        join: t in assoc(tm, :team),
+        join: su in assoc(sl, :subject),
+        where: [competition_id: ^competition_id],
+        where: [status: :submitted_jury],
+        group_by: [:user_id, su.coefficient],
+        order_by: [asc: t.number],
+        select: {t.number, count(sl.id)},
+        having: su.coefficient == ^coefficient
+      )
+
+    Repo.all(query)
+  end
+
+  @spec list_stats_by_participant(String.t()) :: [{non_neg_integer(), map()}]
   def list_stats_by_participant(competition_id) do
     query =
       from(sl in Slide,
@@ -435,6 +485,24 @@ defmodule SM.Slides do
         group_by: [:user_id, :status],
         order_by: [asc: p.number],
         select: {p.number, %{sl.status => count(sl.status)}}
+      )
+
+    Repo.all(query)
+  end
+
+  @spec list_stats_by_team(String.t()) :: [{String.t(), map()}]
+  def list_stats_by_team(competition_id) do
+    query =
+      from(sl in Slide,
+        join: tm in TeamMember,
+        on: tm.user_id == sl.user_id,
+        join: t in assoc(tm, :team),
+        where: t.competition_id == ^competition_id,
+        where: [competition_id: ^competition_id],
+        where: sl.status in [:submitted_fixed, :submitted_jury],
+        group_by: [t.number, :status],
+        order_by: [asc: t.number],
+        select: {t.number, %{sl.status => count(sl.status)}}
       )
 
     Repo.all(query)
@@ -462,6 +530,8 @@ defmodule SM.Slides do
   """
   @spec count_submitting_participants(String.t()) :: Decimal.t()
   def count_submitting_participants(competition_id) do
+    # TODO: Rewrite this query in the Participants context querying by 'participants'
+    # this should avoid the DISTINCT count
     query =
       from(sl in Slide,
         where: [competition_id: ^competition_id],

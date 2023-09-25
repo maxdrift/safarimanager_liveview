@@ -158,6 +158,7 @@ defmodule SM.Competitions do
          Repo.preload(result, [
            [participants: [:category, [user: :organization]]],
            [jurors: [user: :organization]],
+           :teams,
            :allowed_evaluations,
            :organization,
            :settings
@@ -255,11 +256,20 @@ defmodule SM.Competitions do
 
   defp maybe_duplicate_teams(params, competition, config) do
     if competition.for_teams and Map.get(config, "participants") == "true" and Map.get(config, "teams") == "true" do
-      competition = Repo.preload(competition, :team_members)
-      team_members = Enum.map(competition.team_members, &Map.from_struct/1)
-      Map.put(params, :team_members, team_members)
+      competition = Repo.preload(competition, teams: :members)
+
+      teams =
+        Enum.map(competition.teams, fn t ->
+          members = Enum.map(t.members, &Map.from_struct/1)
+
+          t
+          |> Map.put(:members, members)
+          |> Map.from_struct()
+        end)
+
+      Map.put(params, :teams, teams)
     else
-      Map.put(params, :team_members, [])
+      Map.put(params, :teams, [])
     end
   end
 

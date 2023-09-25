@@ -393,7 +393,7 @@ defmodule SM.Migrator do
           row
           |> get_or_create(
             [:denom, :data],
-            [:name, fn r -> DateTime.to_date(r.start_time) end],
+            [:name, fn r -> r.start_time && DateTime.to_date(r.start_time) end],
             pre_existing,
             1.0
           )
@@ -446,6 +446,7 @@ defmodule SM.Migrator do
                   state: nil,
                   country: "Italy",
                   organization_id: org_id,
+                  type: :other,
                   competitions_evaluations: all_evaluations,
                   settings: %{
                     evaluations_per_juror: 1,
@@ -590,11 +591,17 @@ defmodule SM.Migrator do
 
   defp migrate_jurors(_conn, accumulator, _version) do
     for i <- 1..3 do
-      {:ok, _user} =
-        SM.Accounts.register_simplified_user(%{
-          first_name: "Giurato #{i}",
-          last_name: "Anonimo"
-        })
+      case SM.Accounts.register_simplified_user(%{first_name: "Giurato #{i}", last_name: "Anonimo"}) do
+        {:ok, _user} ->
+          :ok
+
+        {:error,
+         %Ecto.Changeset{
+           errors: [email: {"has already been taken", [constraint: :unique, constraint_name: "users_email_index"]}],
+           valid?: false
+         }} ->
+          :ok
+      end
     end
 
     competition_id =

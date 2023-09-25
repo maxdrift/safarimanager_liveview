@@ -74,14 +74,21 @@ defmodule SM.Participants do
   """
   @spec list_for_teams(String.t()) :: [Participant.t()]
   def list_for_teams(competition_id) do
+    teams_query =
+      from(
+        tm in TeamMember,
+        join: t in assoc(tm, :team),
+        where: t.competition_id == ^competition_id
+      )
+
     query =
       from(
         p in Participant,
         where: [competition_id: ^competition_id],
-        inner_join: u in assoc(p, :user),
-        left_join: tm in TeamMember,
-        on: tm.user_id == p.user_id and tm.competition_id == ^competition_id,
-        where: is_nil(tm.team_id),
+        join: u in assoc(p, :user),
+        left_join: tm in subquery(teams_query),
+        on: tm.user_id == p.user_id,
+        where: is_nil(tm.user_id),
         left_join: o in assoc(u, :organization),
         group_by: [p.user_id],
         order_by: [asc: o.name, asc: :number],

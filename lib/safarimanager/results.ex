@@ -64,17 +64,21 @@ defmodule SM.Results do
         competition_id
         |> Teams.list_by_competition()
         |> Stream.map(fn team ->
-          participants =
-            Enum.map(team.users, fn user ->
+          {slides, total_score} =
+            team.users
+            |> Enum.map(fn user ->
               {:ok, participant} = Participants.get(user.id, competition_id)
               participant
             end)
-
-          {slides, total_score} =
-            Enum.reduce(participants, {[], 0}, fn participant, {slides_acc, total_score_acc} ->
+            |> Enum.reduce({[], 0}, fn participant, {slides_acc, total_score_acc} ->
               {slides, total_score} = list_by_participant(competition_id, competition, participant.user.id, subjects_map)
               {slides_acc ++ slides, Decimal.add(total_score_acc, total_score)}
             end)
+
+          slides =
+            slides
+            |> Enum.sort_by(& &1.slide.file_name, :asc)
+            |> Enum.sort_by(& &1.slide.status, :desc)
 
           %{
             team: team,

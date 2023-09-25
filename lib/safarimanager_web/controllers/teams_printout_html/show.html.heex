@@ -25,32 +25,36 @@
       </div>
     </div>
     <h1 class="mt-4 text-center text-2xl font-bold uppercase tracking-widest">
-      <%= gettext("Participants list") %>
+      <%= gettext("Teams list") %>
     </h1>
   </header>
   <table class="w-full table-fixed border-collapse text-sm">
     <thead>
       <tr class="uppercase">
         <th class="w-14 border text-center"><%= gettext("Num.") %></th>
-        <th class="w-auto border text-center"><%= gettext("Name") %></th>
+        <th class="w-auto border text-center"><%= gettext("Team name") %></th>
         <th class="w-auto border text-center"><%= gettext("Organization") %></th>
-        <th class="w-28 border text-center"><%= gettext("Category") %></th>
+        <th class="w-auto border text-center"><%= gettext("Members") %></th>
       </tr>
     </thead>
     <tbody>
-      <%= for participant <- @participants do %>
+      <%= for team <- @teams do %>
         <tr class="border">
-          <td class="border pr-1 text-right font-semibold"><%= participant.number %></td>
+          <td class="border pr-1 text-right font-semibold"><%= team.number %></td>
           <td class="border font-bold uppercase truncate">
-            <%= "#{participant.user.last_name} #{participant.user.first_name}" %>
+            <%= "#{SM.Teams.synthesize_team_name(team)}" %>
           </td>
           <td class="border font-bold capitalize truncate">
-            <%= (participant.user.organization && participant.user.organization.name) ||
-              gettext("N/A") %>
+            <%= "#{SM.Teams.synthesize_org_name(team)}" %>
           </td>
           <td class="border capitalize truncate">
-            <%= (participant.category && participant.category.name) ||
-              gettext("N/A") %>
+            <ul class="list-disc">
+              <%= for user <- team.users do %>
+                <li>
+                  - <span class="font-bold"><%= "#{user.last_name} #{user.first_name}" %></span>
+                </li>
+              <% end %>
+            </ul>
           </td>
         </tr>
       <% end %>

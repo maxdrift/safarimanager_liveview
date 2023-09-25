@@ -1,12 +1,12 @@
-defmodule SMWeb.ParticipantsPrintoutController do
+defmodule SMWeb.TeamsPrintoutController do
   @moduledoc """
-  Controller to format competition participants for printing
+  Controller to format competition teams for printing
   """
   use SMWeb, :controller
 
   alias SM.Competitions
-  alias SM.Participants
   alias SM.Results
+  alias SM.Teams
 
   require Logger
 
@@ -17,16 +17,16 @@ defmodule SMWeb.ParticipantsPrintoutController do
     config = Results.get_printout_config()
 
     with {:ok, competition} <- Competitions.get(competition_id),
-         participants <- Participants.list(competition_id) do
+         teams <- Teams.list_by_competition(competition_id) do
       conn
       |> put_root_layout(html: :print)
       |> render(:show,
         header_line: config[:header_line],
         sub_header_line: config[:sub_header_line],
-        participants: participants,
+        teams: teams,
         competition: competition,
         competition_types: competition_types,
-        page_title: "#{competition.name} - #{gettext("Participants list")}"
+        page_title: "#{competition.name} - #{gettext("Teams list")}"
       )
     end
   end

@@ -20,7 +20,7 @@ defmodule SM.Teams do
   @spec list :: [Team.t()]
   def list do
     Team
-    |> order_by(desc: :inserted_at)
+    |> order_by(asc: :number)
     |> Repo.all()
     |> Repo.preload([:users, :competition])
   end
@@ -41,7 +41,7 @@ defmodule SM.Teams do
     query =
       from(
         t in Team,
-        order_by: [desc: :inserted_at],
+        order_by: [asc: :number],
         where: fragment(@like_fragment, t.name, ^pattern)
       )
 
@@ -63,11 +63,10 @@ defmodule SM.Teams do
   def list_by_competition(competition_id) do
     query =
       from(
-        t in Team,
-        join: tm in assoc(t, :members),
-        where: tm.competition_id == ^competition_id,
+        Team,
+        where: [competition_id: ^competition_id],
         group_by: [:id],
-        order_by: [desc: :inserted_at]
+        order_by: [asc: :number]
       )
 
     query
@@ -87,12 +86,30 @@ defmodule SM.Teams do
   @spec list_member_users(String.t()) :: [String.t()]
   def list_member_users(competition_id) do
     query =
-      from(tm in TeamMember,
-        where: [competition_id: ^competition_id],
+      from(
+        tm in TeamMember,
+        join: t in assoc(tm, :team),
+        where: t.competition_id == ^competition_id,
         select: tm.user_id
       )
 
     Repo.all(query)
+  end
+
+  @spec get_next_team_number(String.t()) :: integer()
+  def get_next_team_number(competition_id) do
+    query =
+      from(Team,
+        where: [competition_id: ^competition_id],
+        order_by: [desc: :number],
+        limit: 1,
+        select: [:number]
+      )
+
+    case Repo.one(query) do
+      %Team{number: number} -> number + 1
+      nil -> 1
+    end
   end
 
   @doc """
