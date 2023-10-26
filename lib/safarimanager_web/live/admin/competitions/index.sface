@@ -214,12 +214,12 @@
                   </div>
                 </Context>
               </Inputs>
-              <div class="form-control w-full">
-                <label class="btn btn-ghost btn-sm">
-                  <input type="checkbox" name="entity[evaluation_sort][]" class="hidden">
-                  <Heroicons.Surface.Icon name="plus-circle" type="solid" class="w-6 h-6" /> {gettext("add more")}
-                </label>
-              </div>
+            </div>
+            <div class="form-control w-full">
+              <label class="btn btn-ghost btn-sm">
+                <input type="checkbox" name="entity[evaluation_sort][]" class="hidden">
+                <Heroicons.Surface.Icon name="plus-circle" type="solid" class="w-6 h-6" /> {gettext("add more")}
+              </label>
             </div>
             <div class="text-lg w-full">{gettext("Settings")}:</div>
             <Inputs for={:settings}>

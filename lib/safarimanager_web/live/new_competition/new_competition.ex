@@ -6,6 +6,7 @@ defmodule SMWeb.Live.NewCompetition do
 
   alias SM.Competitions
   alias SM.Competitions.Competition
+  alias SM.Competitions.CompetitionEvaluation
   alias SM.Evaluations
   alias SM.Organizations
   alias SMWeb.Components.FormActions
@@ -32,6 +33,7 @@ defmodule SMWeb.Live.NewCompetition do
         changeset: Competitions.change(%Competition{}),
         competitions: Competitions.list(),
         organizations: Organizations.list(),
+        evaluations: Evaluations.list(),
         competition_types: Competitions.list_competition_types(),
         duplication_form: to_form(%{}, as: :duplicate_competition)
       )
@@ -45,15 +47,12 @@ defmodule SMWeb.Live.NewCompetition do
       socket.assigns.entity
       |> Competitions.change(entity)
       |> Map.put(:action, :validate)
+      |> assign_form()
 
     {:noreply, assign(socket, :changeset, changeset)}
   end
 
   def handle_event("submit", %{"entity" => entity}, socket) do
-    # TODO: Perform evaluations selection in the UI
-    all_evaluations = Enum.map(Evaluations.list(), &%{evaluation_id: &1.id})
-    entity = Map.put(entity, "competitions_evaluations", all_evaluations)
-
     case Competitions.create(entity) do
       {:ok, %Competition{id: competition_id}} ->
         socket =
@@ -173,7 +172,7 @@ defmodule SMWeb.Live.NewCompetition do
   def handle_params(_params, _uri, socket) do
     socket =
       assign(socket,
-        changeset: Competitions.change(%Competition{}),
+        changeset: %Competition{} |> Competitions.change() |> assign_form(),
         competitions: Competitions.list(),
         organizations: Organizations.list()
       )
@@ -218,5 +217,15 @@ defmodule SMWeb.Live.NewCompetition do
       "selection" => selection,
       "votes" => votes
     }
+  end
+
+  defp assign_form(%Ecto.Changeset{} = changeset) do
+    if Ecto.Changeset.get_field(changeset, :competitions_evaluations) == [] do
+      all_evaluation_ids = Enum.map(Evaluations.list(), &%CompetitionEvaluation{evaluation_id: &1.id})
+
+      changeset |> Ecto.Changeset.put_change(:competitions_evaluations, all_evaluation_ids) |> to_form()
+    else
+      to_form(changeset)
+    end
   end
 end

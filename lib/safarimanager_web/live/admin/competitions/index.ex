@@ -71,10 +71,6 @@ defmodule SMWeb.Live.Admin.Competitions.Index do
 
   # Create/Edit dialog submit callback
   def handle_event("submit", %{"entity" => %{"_action" => "create"} = params}, socket) do
-    # TODO: Perform evaluations selection in the UI
-    all_evaluations = Enum.map(Evaluations.list(), &%{evaluation_id: &1.id})
-    params = Map.put(params, "competitions_evaluations", all_evaluations)
-
     case Competitions.create(params) do
       {:ok, %Competition{}} ->
         socket =
@@ -116,7 +112,7 @@ defmodule SMWeb.Live.Admin.Competitions.Index do
             {:noreply, assign(socket, record: competition)}
 
           :edit ->
-            changeset = change(competition, %{})
+            changeset = competition |> change(%{}) |> assign_form()
 
             socket =
               assign(socket, record: competition, changeset: changeset, action: :edit)
@@ -267,7 +263,7 @@ defmodule SMWeb.Live.Admin.Competitions.Index do
 
   defp reset_current_editing(socket) do
     entity = %Competition{}
-    changeset = change(entity, %{})
+    changeset = entity |> change(%{}) |> assign_form()
 
     socket
     |> assign(:record, entity)
@@ -276,7 +272,9 @@ defmodule SMWeb.Live.Admin.Competitions.Index do
 
   defp assign_form(%Ecto.Changeset{} = changeset) do
     if Ecto.Changeset.get_field(changeset, :competitions_evaluations) == [] do
-      changeset |> Ecto.Changeset.put_change(:competitions_evaluations, [%CompetitionEvaluation{}]) |> to_form()
+      all_evaluation_ids = Enum.map(Evaluations.list(), &%CompetitionEvaluation{evaluation_id: &1.id})
+
+      changeset |> Ecto.Changeset.put_change(:competitions_evaluations, all_evaluation_ids) |> to_form()
     else
       to_form(changeset)
     end

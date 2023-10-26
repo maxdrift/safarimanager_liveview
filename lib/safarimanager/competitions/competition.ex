@@ -100,7 +100,7 @@ defmodule SM.Competitions.Competition do
       with: &CompetitionEvaluation.changeset/3,
       sort_param: :evaluation_sort,
       drop_param: :evaluation_drop,
-      required: false
+      required: true
     )
     |> cast_assoc(:participants, required: false)
     |> cast_assoc(:jurors, required: false)

@@ -25,6 +25,7 @@ defmodule SMWeb.Live.Admin.Competitions.Form do
   prop submit, :event, required: true
   prop redirect_to, :string
   prop organizations, :list, required: true
+  prop evaluations, :list, required: true
 
   slot default, required: true
 end

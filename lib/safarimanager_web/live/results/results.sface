@@ -207,7 +207,7 @@
                             <span class="badge badge-outline badge-sm font-mono">{vote.evaluation.name}</span>
                           {/for}
                         </td>
-                        <td>{(slide.penalty && "x") || "-"}</td>
+                        <td>{(slide.penalty && "✓") || "-"}</td>
                         <td>
                           <div class={
                             "my-auto",

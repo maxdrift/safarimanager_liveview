@@ -131,6 +131,53 @@
       <TextInput class={input_state_class(@changeset, :country)} opts={phx_debounce: "1000"} />
       <Label class="label h-7"><ErrorTag /></Label>
     </Field>
+    <div class="text-lg w-full px-3">{gettext("Allowed evaluations")}:</div>
+    <div
+      id="allowed-evaluations-inputs"
+      class="flex flex-col w-full px-3"
+      phx-hook="SortableInputsFor"
+    >
+      <Inputs for={:competitions_evaluations}>
+        <Context get={Form, form: allowed_evaluations_form}>
+          <div class="flex flex-row items-center gap-1 my-1 drag-item">
+            <span data-handle><Heroicons.Surface.Icon name="bars-4" type="solid" class="h-4 w-4" /></span>
+            <HiddenInput
+              id={"competitions_evaluations_evaluation_sort_#{allowed_evaluations_form.index}"}
+              name="entity[evaluation_sort][]"
+              value={allowed_evaluations_form.index}
+            />
+            <Field name={:evaluation_id} class="form-control">
+              <Select
+                options={Enum.map(@evaluations, &{&1.name, &1.id})}
+                prompt={[key: gettext("Select an evaluation...")]}
+                class={state_class("select select-sm select-bordered", allowed_evaluations_form, :evaluation_id,
+                  type: :select
+                )}
+                opts={disabled: !is_nil(allowed_evaluations_form.data.evaluation_id)}
+              />
+            </Field>
+            <label class="btn btn-ghost btn-square btn-sm">
+              <input
+                type="checkbox"
+                name="entity[evaluation_drop][]"
+                value={allowed_evaluations_form.index}
+                class="hidden"
+                title={gettext("remove")}
+              />
+              <Heroicons.Surface.Icon name="trash" type="outline" class="w-4 h-4" />
+            </label>
+          </div>
+        </Context>
+      </Inputs>
+    </div>
+    <div class="form-control w-full px-3">
+      <label class="btn btn-ghost btn-sm">
+        <input type="checkbox" name="entity[evaluation_sort][]" class="hidden">
+        <Heroicons.Surface.Icon name="plus-circle" type="solid" class="w-6 h-6" /> {gettext("add more")}
+      </label>
+    </div>
+    <div class="text-lg w-full px-3">{gettext("Settings")}:</div>
+
     <Inputs for={:settings}>
       <Context get={Form, form: settings_form}>
         <Field name={:number_of_jurors} class="form-control w-1/2 px-3">
