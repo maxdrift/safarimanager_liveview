@@ -58,7 +58,7 @@ defmodule SM.MixProject do
       {:dialyzex, "~> 1.3.0", only: :dev, runtime: false},
       {:ecto_cursor_based_stream, "~> 1.0"},
       {:ecto_sql, "~> 3.10"},
-      {:ecto_sqlite3, "~> 0.11.0"},
+      {:ecto_sqlite3, "~> 0.12.0"},
       {:esbuild, "~> 0.6", runtime: Mix.env() == :dev},
       {:ex_heroicons, "~> 2.0"},
       {:finch, "~> 0.16.0", override: true},
@@ -94,7 +94,7 @@ defmodule SM.MixProject do
       {:telemetry_metrics, "~> 0.6"},
       {:telemetry_poller, "~> 1.0"},
       {:telemetry, "~> 1.2", override: true},
-      {:tesla, "~> 1.7.0"}
+      {:tesla, "~> 1.8.0"}
     ]
   end
 
