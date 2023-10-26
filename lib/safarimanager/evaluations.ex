@@ -15,7 +15,7 @@ defmodule SM.Evaluations do
   [:numeric]
 
   """
-  @spec list_evaluation_types :: [:numeric, ...]
+  @spec list_evaluation_types :: [:numeric | :boolean, ...]
   def list_evaluation_types do
     Evaluation.get_types()
   end
@@ -32,7 +32,7 @@ defmodule SM.Evaluations do
   @spec list :: [Evaluation.t()]
   def list do
     Evaluation
-    |> order_by(desc: :value)
+    |> order_by(asc: :is_penalty, asc: :value)
     |> Repo.all()
   end
 
@@ -45,10 +45,18 @@ defmodule SM.Evaluations do
       [%Evaluation{}, ...]
 
   """
-  @spec list_by_value(Decimal.t()) :: [Evaluation.t()]
+  @spec list_by_value(String.t()) :: [Evaluation.t()]
   def list_by_value(value) do
     Evaluation
     |> where(value: ^value)
+    |> order_by(asc: :inserted_at)
+    |> Repo.all()
+  end
+
+  @spec list_by_name(String.t()) :: [Evaluation.t()]
+  def list_by_name(name) do
+    Evaluation
+    |> where(name: ^name)
     |> order_by(asc: :inserted_at)
     |> Repo.all()
   end

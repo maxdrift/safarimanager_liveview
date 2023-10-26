@@ -28,6 +28,6 @@ defmodule SM.Slides.SlideEvaluation do
     |> foreign_key_constraint(:user_id)
     |> foreign_key_constraint(:evaluation_id)
     |> unique_constraint([:slide, :user], name: :slides_evaluations_pkey)
-    |> unique_constraint([:slide, :user], name: :slides_evaluations_slide_user_index)
+    |> unique_constraint([:slide, :user], name: :slides_evaluations_slide_id_user_id_index)
   end
 end

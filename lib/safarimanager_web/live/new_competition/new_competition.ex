@@ -169,13 +169,6 @@ defmodule SMWeb.Live.NewCompetition do
     end
   end
 
-  # def handle_event(event_name, params, socket) do
-  #   IO.inspect(event_name)
-  #   IO.inspect(params)
-
-  #   {:noreply, socket}
-  # end
-
   @impl Phoenix.LiveView
   def handle_params(_params, _uri, socket) do
     socket =

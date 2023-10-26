@@ -16,8 +16,14 @@
           <FieldsListItem label={gettext("ID")}>
             <ShortUUID value={@record.id} />
           </FieldsListItem>
+          <FieldsListItem label={gettext("Name")}>
+            {@record.name}
+          </FieldsListItem>
           <FieldsListItem label={gettext("Value")}>
             {@record.value}
+          </FieldsListItem>
+          <FieldsListItem label={gettext("Penalty?")}>
+            {(@record.is_penalty && gettext("Yes")) || gettext("No")}
           </FieldsListItem>
           <FieldsListItem label={gettext("Type")}>
             {@record.type}
@@ -55,18 +61,27 @@
       </div>
       <Form for={@changeset} change="validate" submit="submit" as={:entity} opts={autocomplete: "off"}>
         <div class="card-body">
+          <SMField name={:name} label={gettext("Name")}>
+            <TextInput class={input_state_class(@changeset, :name)} opts={phx_debounce: "1000"} />
+          </SMField>
           <SMField name={:value} label={gettext("Value")}>
             <NumberInput
               class={input_state_class(@changeset, :value)}
               opts={phx_debounce: "1000", step: "0.01"}
             />
           </SMField>
+          <SMField name={:is_penalty} class="w-full">
+            <Label class="label cursor-pointer">
+              <span class="label-text">{gettext("Penalty?")}</span>
+              <Checkbox class={state_class("checkbox", @changeset, :is_penalty)} opts={phx_debounce: "1000"} />
+            </Label>
+          </SMField>
           <SMField name={:type} label={gettext("Type")}>
             <Select
               options={@evaluation_types}
               selected={@record.type}
               prompt={gettext("Select a type...")}
-              class={input_state_class(@changeset, :type)}
+              class={select_state_class(@changeset, :type)}
               opts={phx_debounce: "1000"}
             />
           </SMField>
@@ -98,8 +113,14 @@
     <Column title={gettext("ID")} class="w-1/12">
       <ShortUUID value={item.id} />
     </Column>
+    <Column title={gettext("Name")} class="w-1/12">
+      {item.name}
+    </Column>
     <Column title={gettext("Value")} class="w-1/12">
       {item.value}
+    </Column>
+    <Column title={gettext("Penalty?")} class="w-1/12">
+      {(item.is_penalty && "✓") || "✗"}
     </Column>
     <Column title={gettext("Type")} class="w-1/12">
       {item.type}

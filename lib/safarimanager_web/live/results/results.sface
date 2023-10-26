@@ -203,8 +203,8 @@
                           </span>
                         </td>
                         <td class="text-center">
-                          {#for evaluation <- slide.evaluations}
-                            <span class="badge badge-outline badge-sm font-mono">{evaluation.value}</span>
+                          {#for vote <- slide.votes}
+                            <span class="badge badge-outline badge-sm font-mono">{vote.evaluation.name}</span>
                           {/for}
                         </td>
                         <td>{(slide.penalty && "x") || "-"}</td>

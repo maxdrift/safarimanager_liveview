@@ -1,9 +1,39 @@
 <Layout current_page={~p"/organize/#{@competition.id}/jurors"} current_user={@current_user}>
   <CompetitionHeader {=@competition} />
   <StepsHeader current_step={:jurors} competition={@competition} />
-
-  <div class="flex flex-col lg:flex-row mt-5">
-    <div class="overflow-y-auto rounded-lg lg:w-1/2 bg-base-200 shadow-lg p-4">
+  <div
+    :if={@qr_code}
+    id="qr-code-dialog"
+    class="modal modal-open"
+    :on-window-keydown={JS.remove_class("modal-open", to: "#qr-code-dialog") |> JS.push("hide-qr-code")}
+    phx-key="Escape"
+  >
+    <div class="modal-box">
+      <div class="card-title">
+        <span>{gettext("Juror invite QR code")}</span>
+      </div>
+      <div class="card-body text-center">
+        <span class="text-xl font-bold">{@full_name}</span>
+        <div class="mx-auto">
+          {Phoenix.HTML.raw(@qr_code)}
+        </div>
+        <div>
+          <span>{gettext("Alternatively, paste this URL into the Jury's browser:")}</span>
+          <span class="font-mono text-xs">{@voting_url}</span>
+        </div>
+      </div>
+      <div class="card-actions justify-end">
+        <button
+          :on-click={JS.remove_class("modal-open", to: "#qr-code-dialog") |> JS.push("hide-qr-code")}
+          class="btn btn-md btn-ghost"
+        >
+          {gettext("Close")}
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class="flex flex-col xl:flex-row mt-5">
+    <div class="overflow-y-auto rounded-lg xl:w-1/2 bg-base-200 shadow-lg p-4">
       <div class="text-2xl font-bold text-center py-4">{gettext("Users")}</div>
       <Form for={%{}} as={:users_filter} change="filter-users" opts={autocomplete: "off"}>
         <TextInput
@@ -13,7 +43,7 @@
         />
       </Form>
       <div class="max-h-48 overflow-y-auto tiny-scrollbar">
-        <table class="table table-zebra table-fixed w-full">
+        <table class="table table-zebra table-sm">
           <thead>
             <tr>
               <th class="sticky top-0 w-auto">{gettext("Last Name")}</th>
@@ -41,35 +71,56 @@
         </table>
       </div>
     </div>
-    <div class="divider lg:divider-horizontal" />
-    <div class="overflow-y-auto rounded-lg lg:w-1/2 bg-base-200 shadow-lg p-4 tiny-scrollbar">
-      <div class="text-2xl font-bold text-center py-4">{gettext("Jurors")} (max: {@competition.settings.number_of_jurors})</div>
-      <!-- <input class="input input-bordered w-full mb-1" placeholder="Search for a juror..."> -->
-      <table class="table table-zebra table-fixed w-full">
-        <thead>
-          <tr>
-            <th class="w-auto">{gettext("Last Name")}</th>
-            <th class="w-auto">{gettext("First Name")}</th>
-            <th class="w-auto">{gettext("Organization")}</th>
-          </tr>
-        </thead>
-        <tbody>
-          {#for item <- @competition.jurors}
-            <tr>
-              <td class="truncate">{item.user.last_name}</td>
-              <td class="truncate">{item.user.first_name}</td>
-              <td class="truncate">{(item.user.organization && item.user.organization.name) || gettext("N/A")}</td>
-              <td>
-                <button class="btn btn-xs btn-error" :on-click="remove" :values={user_id: item.id}>{gettext("Remove")}</button>
-              </td>
-            </tr>
-          {#else}
-            <tr>
-              <td colspan="4">{gettext("No items yet!")}</td>
-            </tr>
-          {/for}
-        </tbody>
-      </table>
+    <div class="divider xl:divider-horizontal" />
+    <div class="overflow-y-auto rounded-lg xl:w-1/2 bg-base-200 shadow-lg">
+      <div class="p-4">
+        <div class="text-2xl font-bold text-center py-4">
+          {gettext("Jurors")} (max: {@competition.settings.number_of_jurors})
+        </div>
+        <div class="max-h-96 overflow-y-auto tiny-scrollbar">
+          <table class="table table-zebra table-sm">
+            <thead>
+              <tr>
+                <th class="sticky top-0 w-auto">{gettext("Last Name")}</th>
+                <th class="sticky top-0 w-auto">{gettext("First Name")}</th>
+                <th class="sticky top-0 w-auto">{gettext("Organization")}</th>
+                <th class="sticky top-0 w-1/12" />
+              </tr>
+            </thead>
+            <tbody>
+              {#for item <- @competition.jurors}
+                <tr>
+                  <td class="truncate">{item.user.last_name}</td>
+                  <td class="truncate">{item.user.first_name}</td>
+                  <td class="truncate">{(item.user.organization && item.user.organization.name) || gettext("N/A")}</td>
+                  <td class="flex flex-row gap-1">
+                    <button
+                      class="btn btn-square btn-xs btn-error"
+                      :on-click="remove"
+                      :values={user_id: item.id}
+                      title={gettext("Remove")}
+                    >
+                      <Heroicons.Surface.Icon name="trash" type="outline" class="w-4 h-4" />
+                    </button>
+                    <button
+                      class="btn btn-square btn-xs btn-secondary"
+                      :on-click="show-qr-code"
+                      :values={user_id: item.user_id}
+                      title={gettext("QR code")}
+                    >
+                      <Heroicons.Surface.Icon name="qr-code" type="solid" class="h-4 w-4" />
+                    </button>
+                  </td>
+                </tr>
+              {#else}
+                <tr>
+                  <td colspan="4">{gettext("No items yet!")}</td>
+                </tr>
+              {/for}
+            </tbody>
+          </table>
+        </div>
+      </div>
     </div>
   </div>
   <div class="flex flex-row my-10 w-full">

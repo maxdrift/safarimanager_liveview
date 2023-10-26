@@ -133,7 +133,7 @@
                   &{"#{&1.name} #{&1.location && ~s|(#{&1.location})|}", &1.id}
                 )}
                 prompt={[key: gettext("Select an organization...")]}
-                class={input_state_class(@changeset, :dest_id)}
+                class={select_state_class(@changeset, :dest_id)}
               />
             </SMField>
             <div class="modal-action">

@@ -6,10 +6,13 @@ defmodule SMWeb.Live.Jurors do
 
   alias SM.Accounts
   alias SM.Competitions
+  alias SM.Config
   alias SM.Jurors
+  alias SM.Utils
   alias SMWeb.Components.CompetitionHeader
   alias SMWeb.Components.Layout
   alias SMWeb.Components.StepsHeader
+  alias SMWeb.Endpoint
   alias Surface.Components.Form
   alias Surface.Components.Form.TextInput
   alias Surface.Components.LiveRedirect
@@ -61,6 +64,28 @@ defmodule SMWeb.Live.Jurors do
     {:noreply, assign(socket, :users, users)}
   end
 
+  def handle_event("show-qr-code", %{"user-id" => user_id}, socket) do
+    {:ok, user} = Accounts.get_user(user_id)
+    {:ok, address} = Config.get_private_network_address()
+    host = %{Endpoint.access_struct_url() | host: Utils.ip_to_host(address)}
+    voting_url = Utils.juror_voting_url(host, socket.assigns.competition_id, user_id)
+
+    qr_code =
+      voting_url
+      |> QRCodeEx.encode()
+      |> QRCodeEx.svg(shape: "circle", width: 300)
+
+    socket = assign(socket, qr_code: qr_code, full_name: "#{user.last_name} #{user.first_name}", voting_url: voting_url)
+
+    {:noreply, socket}
+  end
+
+  def handle_event("hide-qr-code", _params, socket) do
+    socket = assign(socket, qr_code: nil, full_name: "", voting_url: nil)
+
+    {:noreply, socket}
+  end
+
   @impl Phoenix.LiveView
   def handle_params(%{"competition_id" => competition_id}, _uri, socket) do
     _result = if connected?(socket), do: Jurors.subscribe()
@@ -69,10 +94,7 @@ defmodule SMWeb.Live.Jurors do
     users = Accounts.list_enrollable_jurors(competition_id)
 
     socket =
-      socket
-      |> assign(:competition_id, competition_id)
-      |> assign(:competition, competition)
-      |> assign(:users, users)
+      assign(socket, competition_id: competition_id, competition: competition, users: users, qr_code: nil)
 
     {:noreply, socket}
   end

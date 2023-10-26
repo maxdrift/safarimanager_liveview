@@ -15,7 +15,9 @@ defmodule SMWeb.Live.Admin.Evaluations.Index do
   alias SMWeb.Components.ShortUUID
   alias SMWeb.Components.SMField
   alias Surface.Components.Form
+  alias Surface.Components.Form.Checkbox
   alias Surface.Components.Form.HiddenInput
+  alias Surface.Components.Form.Label
   alias Surface.Components.Form.NumberInput
   alias Surface.Components.Form.Reset
   alias Surface.Components.Form.Select
@@ -86,7 +88,7 @@ defmodule SMWeb.Live.Admin.Evaluations.Index do
           put_flash(
             socket,
             :info,
-            ~s(#{gettext("Edited evaluation")} "#{entity.value}")
+            ~s(#{gettext("Edited evaluation")} "#{entity.name}")
           )
 
         {:noreply, socket}

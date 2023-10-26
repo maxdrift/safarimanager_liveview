@@ -525,6 +525,13 @@ defmodule SM.Utils do
     |> URI.to_string()
   end
 
+  def juror_voting_url(base_url \\ SMWeb.Endpoint.access_struct_url(), competition_id, user_id) do
+    base_url
+    |> URI.parse()
+    |> Map.replace!(:path, "/vote/#{competition_id}/#{user_id}")
+    |> URI.to_string()
+  end
+
   @doc """
   Formats the given number of bytes into a human-friendly text.
 

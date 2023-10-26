@@ -23,7 +23,7 @@
         options={Enum.map(@organizations, &{&1.name, &1.id})}
         prompt={[key: gettext("Select an organization...")]}
         selected={@entity.organization_id}
-        class={input_state_class(@changeset, :organization_id)}
+        class={select_state_class(@changeset, :organization_id)}
       />
       <Label class="label h-7">
         <ErrorTag />
@@ -49,7 +49,7 @@
         end)}
         selected={@entity.type}
         prompt={[key: gettext("Select a type...")]}
-        class={input_state_class(@changeset, :type)}
+        class={select_state_class(@changeset, :type)}
       />
       <Label class="label h-7">
         <ErrorTag />

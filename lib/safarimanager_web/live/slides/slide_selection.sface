@@ -177,7 +177,7 @@
                       disabled: true,
                       selected: is_nil(@editing_slide.subject_id)
                     }
-                    class={state_class("input input-bordered", @editing_changeset, :subject_id, [])}
+                    class={state_class("select select-bordered", @editing_changeset, :subject_id, [])}
                     opts={selected: @editing_slide.subject_id}
                   />
                   <Label class="label h-7">
@@ -190,7 +190,7 @@
                   </Label>
                   <Select
                     options={get_status_select_options()}
-                    class={state_class("input input-bordered", @editing_changeset, :status, [])}
+                    class={state_class("select select-bordered", @editing_changeset, :status, [])}
                     opts={selected: @editing_slide.status}
                   />
                   <Label class="label h-7">

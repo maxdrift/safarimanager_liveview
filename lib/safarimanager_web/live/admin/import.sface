@@ -14,7 +14,7 @@
       <Select
         options={@tables}
         prompt={[key: gettext("Select a table"), disabled: false, selected: true]}
-        class="input input-bordered"
+        class="select select-bordered"
       />
       <Label class="label h-7">
         <ErrorTag />

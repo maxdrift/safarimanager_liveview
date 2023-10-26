@@ -55,7 +55,7 @@ defmodule SM.Competitions do
     Competition
     |> order_by(desc: :inserted_at)
     |> Repo.all()
-    |> Repo.preload([:organization])
+    |> Repo.preload([:organization, :competitions_evaluations])
   end
 
   @doc """
@@ -159,6 +159,7 @@ defmodule SM.Competitions do
            [participants: [:category, [user: :organization]]],
            [jurors: [user: :organization]],
            :teams,
+           :competitions_evaluations,
            :allowed_evaluations,
            :organization,
            :settings
@@ -237,7 +238,13 @@ defmodule SM.Competitions do
 
     competition_settings = Map.from_struct(competition.settings)
     dynamic_coefficients = Enum.map(competition.settings.dynamic_coefficients, &Map.from_struct/1)
-    competitions_evaluations = Enum.map(competition.competitions_evaluations, &Map.from_struct/1)
+
+    competitions_evaluations =
+      competition.competitions_evaluations
+      |> Enum.map(&Map.from_struct/1)
+      |> Enum.with_index()
+      |> Map.new(fn {item, index} -> {index, item} end)
+
     competition_settings = Map.put(competition_settings, :dynamic_coefficients, dynamic_coefficients)
 
     params

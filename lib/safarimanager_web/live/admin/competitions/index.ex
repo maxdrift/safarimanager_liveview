@@ -6,6 +6,7 @@ defmodule SMWeb.Live.Admin.Competitions.Index do
 
   alias SM.Competitions
   alias SM.Competitions.Competition
+  alias SM.Competitions.CompetitionEvaluation
   alias SM.Evaluations
   alias SM.Organizations
   alias SMWeb.Components.Column
@@ -20,6 +21,7 @@ defmodule SMWeb.Live.Admin.Competitions.Index do
   alias Surface.Components.Form
   alias Surface.Components.Form.Checkbox
   alias Surface.Components.Form.DateTimeLocalInput
+  alias Surface.Components.Form.Field
   alias Surface.Components.Form.HiddenInput
   alias Surface.Components.Form.Inputs
   alias Surface.Components.Form.Label
@@ -61,6 +63,7 @@ defmodule SMWeb.Live.Admin.Competitions.Index do
       socket.assigns.record
       |> change(params)
       |> Map.put(:action, :validate)
+      |> assign_form()
 
     socket = assign(socket, :changeset, changeset)
     {:noreply, socket}
@@ -269,5 +272,13 @@ defmodule SMWeb.Live.Admin.Competitions.Index do
     socket
     |> assign(:record, entity)
     |> assign(:changeset, changeset)
+  end
+
+  defp assign_form(%Ecto.Changeset{} = changeset) do
+    if Ecto.Changeset.get_field(changeset, :competitions_evaluations) == [] do
+      changeset |> Ecto.Changeset.put_change(:competitions_evaluations, [%CompetitionEvaluation{}]) |> to_form()
+    else
+      to_form(changeset)
+    end
   end
 end

@@ -6,7 +6,7 @@ defmodule SM.MixProject do
   @description ~s(Application to manage "Underwater Photo Safari" competitions)
 
   @app_elixir_version "1.15.1"
-  @app_rebar3_version "3.22.0"
+  @app_rebar3_version "3.22.1"
 
   def project do
     [
@@ -79,12 +79,16 @@ defmodule SM.MixProject do
       {:postgrex, "~> 0.17.1"},
       {:progress_bar, "~> 3.0"},
       {:prom_ex, "~> 1.8"},
+      {:qrcode_ex, "~> 0.1.0"},
       {:random_password, "~> 1.0"},
       {:rexbug, "~> 1.0"},
       {:styler, "~> 0.8", only: [:dev, :test], runtime: false},
       {:surface_catalogue, "~> 0.6"},
       # overriding due to "surface_catalogue" requirements
-      {:surface, "~> 0.11.0", override: true},
+      # {:surface, "~> 0.11.0", override: true},
+      # Switching to the current `main` commit to improve (unreleased) support to Phoenix LV
+      {:surface,
+       git: "https://github.com/surface-ui/surface.git", ref: "aae0c0690d535cbe2760f003a544c8eff337bbc4", override: true},
       {:svadilfari, git: "https://github.com/maxdrift/svadilfari", branch: "main"},
       {:swoosh, "~> 1.11"},
       {:telemetry_metrics, "~> 0.6"},

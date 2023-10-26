@@ -15,6 +15,8 @@ defmodule SM.Slides do
   alias SM.Subjects.Subject
   alias SM.Teams.TeamMember
 
+  @penalty_quorum {:gt, "0.5"}
+
   @doc """
   Returns the list of slide statuses.
 
@@ -95,10 +97,6 @@ defmodule SM.Slides do
       |> get_uploads_path(user_id)
       |> Path.join(file_name)
 
-    # %{height: height, width: width, format: format} = ImageProcessing.get_info(orig_path)
-    # IO.inspect("running task for image #{file_name}:", label: __MODULE__)
-    # IO.inspect(%{height: height, width: width, format: format}, label: __MODULE__)
-
     thumbs_path = get_thumbnails_path(competition_id, user_id, size_type)
     File.mkdir_p!(thumbs_path)
 
@@ -148,7 +146,7 @@ defmodule SM.Slides do
     |> where(competition_id: ^competition_id)
     |> order_by(asc: :file_name)
     |> Repo.all()
-    |> Repo.preload([:subject, :evaluations])
+    |> Repo.preload([:subject, [votes: :evaluation]])
   end
 
   @spec list_by_team(String.t(), String.t()) :: [Slide.t()]
@@ -165,7 +163,7 @@ defmodule SM.Slides do
 
     query
     |> Repo.all()
-    |> Repo.preload([:subject, :evaluations])
+    |> Repo.preload([:subject, [votes: :evaluation]])
   end
 
   @spec list_for_results(String.t(), String.t()) :: [Slide.t()]
@@ -176,7 +174,7 @@ defmodule SM.Slides do
     |> where([sl], sl.status in [:submitted_jury, :submitted_fixed])
     |> order_by(desc: :status, asc: :file_name)
     |> Repo.all()
-    |> Repo.preload([:subject, :evaluations])
+    |> Repo.preload([:subject, [votes: :evaluation]])
   end
 
   @spec list_for_printout(String.t(), String.t()) :: [Slide.t()]
@@ -187,7 +185,7 @@ defmodule SM.Slides do
     |> where([sl], sl.status in [:submitted_jury, :submitted_fixed])
     |> order_by(asc: :file_name)
     |> Repo.all()
-    |> Repo.preload([:subject, :evaluations])
+    |> Repo.preload([:subject, [votes: :evaluation]])
   end
 
   @spec list_for_teams_printout(String.t()) :: [Slide.t()]
@@ -222,7 +220,7 @@ defmodule SM.Slides do
 
     query
     |> Repo.all()
-    |> Repo.preload([:subject, :evaluations])
+    |> Repo.preload([:subject, [votes: :evaluation]])
   end
 
   @doc """
@@ -891,30 +889,51 @@ defmodule SM.Slides do
       {:error, %Ecto.Changeset{}}
 
   """
-  @spec evaluate(String.t(), String.t(), String.t()) ::
-          {:ok, SlideEvaluation.t()} | {:error, any()}
+  @spec evaluate(String.t(), String.t(), String.t()) :: :ok | {:error, any()}
   def evaluate(competition_id, slide_id, evaluation_id) do
-    with false <- has_penalty?(slide_id),
-         [juror] <-
-           Repo.all(
-             from(
-               j in Juror,
-               left_join: se in SlideEvaluation,
-               on: se.user_id == j.user_id and se.slide_id == ^slide_id,
-               where: is_nil(se.user_id),
-               where: [competition_id: ^competition_id],
-               order_by: [asc: :inserted_at],
-               limit: 1
-             )
-           ) do
-      create_slide_evaluation(%{
-        slide_id: slide_id,
-        user_id: juror.user_id,
-        evaluation_id: evaluation_id
-      })
-    else
-      true -> {:error, :has_penalty}
+    case Repo.all(
+           from(
+             j in Juror,
+             left_join: se in SlideEvaluation,
+             on: se.user_id == j.user_id and se.slide_id == ^slide_id,
+             where: is_nil(se.user_id),
+             where: [competition_id: ^competition_id],
+             order_by: [asc: :inserted_at],
+             limit: 1
+           )
+         ) do
+      [juror] -> evaluate_by_juror(competition_id, slide_id, juror.user_id, evaluation_id)
       [] -> {:error, :already_evaluated}
+    end
+  end
+
+  @spec evaluate_by_juror(String.t(), String.t(), String.t(), String.t()) :: :ok | {:error, any()}
+  def evaluate_by_juror(competition_id, slide_id, user_id, evaluation_id) do
+    with [] <-
+           Repo.all(
+             from(se in SlideEvaluation,
+               where: [slide_id: ^slide_id, user_id: ^user_id, evaluation_id: ^evaluation_id]
+             )
+           ),
+         {:ok, _evaluation} <-
+           create_slide_evaluation(%{slide_id: slide_id, user_id: user_id, evaluation_id: evaluation_id}) do
+      :ok = maybe_apply_penalty(slide_id, competition_id)
+
+      :ok
+    else
+      [_head | _tail] ->
+        {:error, :already_evaluated}
+
+      {:error,
+       %Ecto.Changeset{
+         errors: [
+           slide:
+             {"has already been taken",
+              [constraint: :unique, constraint_name: "slides_evaluations_slide_id_user_id_index"]}
+         ],
+         valid?: false
+       }} ->
+        {:error, :already_evaluated}
     end
   end
 
@@ -1005,7 +1024,6 @@ defmodule SM.Slides do
   @spec apply_penalty(String.t()) :: {:ok, Slide.t()} | {:error, any()}
   def apply_penalty(slide_id) do
     Multi.new()
-    |> Multi.delete_all(:delete_evaluations, from(SlideEvaluation, where: [slide_id: ^slide_id]))
     |> Multi.update_all(:apply_penalty, from(Slide, where: [id: ^slide_id]), set: [penalty: true])
     |> Repo.transaction()
     |> case do
@@ -1282,5 +1300,27 @@ defmodule SM.Slides do
         evaluate(competition_id, slide.id, evaluation_id)
       end)
     end)
+  end
+
+  defp maybe_apply_penalty(slide_id, competition_id) do
+    {:ok, slide} = get(slide_id)
+    {:ok, competition} = Competitions.get(competition_id)
+    settings = competition.settings
+    # TODO: Maybe add `is_penalty` flag to Evaluation to make this filtering independent from names.
+    penalty_votes = Enum.count(slide.votes, fn vote -> vote.evaluation.name == "P" end)
+
+    {operator, threshold} = @penalty_quorum
+
+    max_votes = settings.number_of_jurors * settings.evaluations_per_juror
+
+    penalty_ratio = Decimal.div(penalty_votes, max_votes)
+
+    if Decimal.compare(penalty_ratio, threshold) == operator do
+      {:ok, _slide} = apply_penalty(slide_id)
+    else
+      {:ok, _slide} = clear_penalty(slide_id)
+    end
+
+    :ok
   end
 end

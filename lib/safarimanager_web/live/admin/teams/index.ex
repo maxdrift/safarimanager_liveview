@@ -57,14 +57,18 @@ defmodule SMWeb.Live.Admin.Teams.Index do
   @impl Phoenix.LiveView
   # Create/Edit dialog validate callback
   def handle_event("validate", %{"entity" => params}, socket) do
+    competition_id = params["competition_id"]
+
     changeset =
-      socket.assigns.record
-      |> change(params)
+      change(socket.assigns.record, params)
+
+    user_ids = unique_member_users(changeset, competition_id)
+
+    # TODO: Use `to_form/1` instead!
+    changeset =
+      changeset
       |> assign_form()
       |> Map.put(:action, :validate)
-
-    competition_id = params["competition_id"]
-    user_ids = unique_member_users(changeset, competition_id)
 
     socket =
       if competition_id != "" do
@@ -303,11 +307,16 @@ defmodule SMWeb.Live.Admin.Teams.Index do
 
   defp assign_form(%Ecto.Changeset{} = changeset) do
     if Ecto.Changeset.get_field(changeset, :members) == [] do
-      Ecto.Changeset.put_change(changeset, :members, [%TeamMember{}, %TeamMember{}])
+      Ecto.Changeset.put_change(changeset, :members, [%TeamMember{}])
+      # |> to_form()
     else
+      # to_form(changeset)
       changeset
     end
   end
+
+  defp unique_member_users(_changeset, nil), do: []
+  defp unique_member_users(_changeset, ""), do: []
 
   defp unique_member_users(changeset, competition_id) do
     changeset

@@ -86,7 +86,7 @@
                 options={Enum.map(@competitions, &{&1.name, &1.id})}
                 selected={@record.competition_id}
                 prompt={[key: gettext("Select a competition...")]}
-                class={input_state_class(@changeset, :competition_id)}
+                class={select_state_class(@changeset, :competition_id)}
                 opts={phx_debounce: "1000"}
               />
             </SMField>
@@ -107,8 +107,11 @@
                     options={@participants}
                     selected={members_form.data.user_id}
                     prompt={[key: gettext("Select a user...")]}
-                    class={state_class("input input-bordered mr-2", members_form.source, :user_id, [])}
-                    opts={phx_debounce: "1000", disabled: @participants == []}
+                    class={select_state_class(members_form, :user_id)}
+                    opts={
+                      phx_debounce: "1000",
+                      disabled: @participants == [] or is_nil(Map.get(@changeset.changes, :competition_id))
+                    }
                   />
                   <Label class="label h-7">
                     <ErrorTag />
@@ -116,7 +119,10 @@
                   </Label>
                 </Field>
                 <div class="w-1/12 my-auto">
-                  <label class="btn btn-ghost btn-square btn-sm">
+                  <label class={
+                    "btn btn-ghost btn-square btn-sm",
+                    "btn-disabled": is_nil(Map.get(@changeset.changes, :competition_id))
+                  }>
                     <input
                       type="checkbox"
                       name="entity[members_drop][]"
@@ -131,7 +137,10 @@
             </Inputs>
             <Label class="label h-7"><ErrorTag field={:members} /></Label>
             <div class="form-control w-full">
-              <label class="btn btn-ghost btn-sm">
+              <label class={
+                "btn btn-ghost btn-sm",
+                "btn-disabled": is_nil(Map.get(@changeset.changes, :competition_id))
+              }>
                 <input type="checkbox" name="entity[members_sort][]" class="hidden">
                 <Heroicons.Surface.Icon name="plus-circle" type="solid" class="w-6 h-6" /> {gettext("add more")}
               </label>

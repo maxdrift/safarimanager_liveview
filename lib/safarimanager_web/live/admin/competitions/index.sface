@@ -7,7 +7,7 @@
     :on-window-keydown={JS.patch("/admin/competitions")}
     phx-key="Escape"
   >
-    <div class="modal-box">
+    <div class="modal-box w-11/12 max-w-5xl">
       <div class="card-title">
         {gettext("Competition details")}
       </div>
@@ -58,8 +58,8 @@
           </FieldsListItem>
           <FieldsListItem label={gettext("Allowed evaluations")}>
             <ul class="list-disc list-inside">
-              {#for e <- Enum.sort(@record.allowed_evaluations, &(&1.value <= &2.value))}
-                <li>{e.value}</li>
+              {#for e <- @record.allowed_evaluations}
+                <li>{e.name}</li>
               {#else}
                 <li>{gettext("N/A")}</li>
               {/for}
@@ -112,7 +112,7 @@
     :on-window-keydown={JS.patch("/admin/competitions")}
     phx-key="Escape"
   >
-    <div class="modal-box">
+    <div class="modal-box w-11/12 max-w-5xl">
       <div class="card-title">
         <span :if={@live_action == :new}>{gettext("New competition")}</span>
         <span :if={@live_action == :edit}>{gettext("Edit competition")}</span>
@@ -126,9 +126,9 @@
             <SMField name={:organization_id} label={gettext("Organization")} class="w-full">
               <Select
                 options={Enum.map(@organizations, &{&1.name, &1.id})}
-                prompt={[key: gettext("Select an organization")]}
+                prompt={[key: gettext("Select an organization...")]}
                 selected={@record.organization_id}
-                class={input_state_class(@changeset, :organization_id)}
+                class={select_state_class(@changeset, :organization_id)}
               />
             </SMField>
             <SMField name={:type} label={gettext("Type")} class="w-full">
@@ -138,13 +138,16 @@
                 end)}
                 selected={@record.type}
                 prompt={[key: gettext("Select a type...")]}
-                class={input_state_class(@changeset, :type)}
+                class={select_state_class(@changeset, :type)}
               />
             </SMField>
             <SMField name={:for_teams} class="w-full">
               <Label class="label cursor-pointer">
                 <span class="label-text">{gettext("For teams")}</span>
-                <Checkbox class={state_class("checkbox", @changeset, :for_teams)} opts={phx_debounce: "1000"} />
+                <Checkbox
+                  class={state_class("checkbox", @changeset, :for_teams, type: :checkbox)}
+                  opts={phx_debounce: "1000"}
+                />
               </Label>
             </SMField>
             <SMField name={:start_time} label={gettext("Start date/time")} class="w-1/2 pr-2">
@@ -177,6 +180,48 @@
             <SMField name={:country} label={gettext("Country")} class="w-1/2">
               <TextInput class={input_state_class(@changeset, :country)} opts={phx_debounce: "1000"} />
             </SMField>
+            <div class="text-lg w-full">{gettext("Allowed evaluations")}:</div>
+            <div id="allowed-evaluations-inputs" class="flex flex-col w-full" phx-hook="SortableInputsFor">
+              <Inputs for={:competitions_evaluations}>
+                <Context get={Form, form: allowed_evaluations_form}>
+                  <div class="flex flex-row items-center gap-1 my-1 drag-item">
+                    <span data-handle><Heroicons.Surface.Icon name="bars-4" type="solid" class="h-4 w-4" /></span>
+                    <HiddenInput
+                      id={"competitions_evaluations_evaluation_sort_#{allowed_evaluations_form.index}"}
+                      name="entity[evaluation_sort][]"
+                      value={allowed_evaluations_form.index}
+                    />
+                    <Field name={:evaluation_id} class="form-control">
+                      <Select
+                        options={Enum.map(@evaluations, &{&1.name, &1.id})}
+                        prompt={[key: gettext("Select an evaluation...")]}
+                        class={state_class("select select-sm select-bordered", allowed_evaluations_form, :evaluation_id,
+                          type: :select
+                        )}
+                        opts={disabled: !is_nil(allowed_evaluations_form.data.evaluation_id)}
+                      />
+                    </Field>
+                    <label class="btn btn-ghost btn-square btn-sm">
+                      <input
+                        type="checkbox"
+                        name="entity[evaluation_drop][]"
+                        value={allowed_evaluations_form.index}
+                        class="hidden"
+                        title={gettext("remove")}
+                      />
+                      <Heroicons.Surface.Icon name="trash" type="outline" class="w-4 h-4" />
+                    </label>
+                  </div>
+                </Context>
+              </Inputs>
+              <div class="form-control w-full">
+                <label class="btn btn-ghost btn-sm">
+                  <input type="checkbox" name="entity[evaluation_sort][]" class="hidden">
+                  <Heroicons.Surface.Icon name="plus-circle" type="solid" class="w-6 h-6" /> {gettext("add more")}
+                </label>
+              </div>
+            </div>
+            <div class="text-lg w-full">{gettext("Settings")}:</div>
             <Inputs for={:settings}>
               <Context get={Form, form: settings_form}>
                 <SMField name={:number_of_jurors} label={gettext("Number of jurors")} class="w-1/2 pr-2">
@@ -207,7 +252,7 @@
                   <Label class="label cursor-pointer">
                     <span class="label-text">{gettext("Proportional submission")}</span>
                     <Checkbox
-                      class={state_class("checkbox", settings_form.source, :proportional_submission)}
+                      class={state_class("checkbox", settings_form.source, :proportional_submission, type: :checkbox)}
                       opts={phx_debounce: "1000"}
                     />
                   </Label>
@@ -238,7 +283,7 @@
                   <Label class="label cursor-pointer">
                     <span class="label-text">{gettext("Dynamic coefficients")}</span>
                     <Checkbox
-                      class={state_class("checkbox", settings_form.source, :dynamic_coefficients_enabled)}
+                      class={state_class("checkbox", settings_form.source, :dynamic_coefficients_enabled, type: :checkbox)}
                       opts={phx_debounce: "1000"}
                     />
                   </Label>

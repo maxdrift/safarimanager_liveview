@@ -169,7 +169,7 @@ defmodule SM.Results do
 
     slide_score =
       Decimal.mult(
-        Enum.reduce(slide.evaluations, Decimal.new(0), &Decimal.add(&2, &1.value)),
+        Enum.reduce(slide.votes, Decimal.new(0), &Decimal.add(&2, &1.evaluation.value)),
         subject.coefficient
       )
 

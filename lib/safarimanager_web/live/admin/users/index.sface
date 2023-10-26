@@ -75,7 +75,7 @@
               options={Enum.map(@organizations, &{&1.name, &1.id})}
               prompt={[key: gettext("Select an organization...")]}
               selected={@record.organization_id}
-              class={input_state_class(@changeset, :organization_id)}
+              class={select_state_class(@changeset, :organization_id)}
             />
           </SMField>
           <SMField name={:category_id} label={gettext("Category")}>
@@ -83,7 +83,7 @@
               options={Enum.map(@categories, &{&1.name, &1.id})}
               prompt={[key: gettext("Select a category...")]}
               selected={@record.category_id}
-              class={input_state_class(@changeset, :category_id)}
+              class={select_state_class(@changeset, :category_id)}
             />
           </SMField>
           <HiddenInput field={:_action} value={@action} />
@@ -157,7 +157,7 @@
                   &{"#{&1.last_name} #{&1.first_name} #{&1.organization && ~s|(#{&1.organization.name})|}", &1.id}
                 )}
                 prompt={[key: gettext("Select a user...")]}
-                class={input_state_class(@changeset, :dest_id)}
+                class={select_state_class(@changeset, :dest_id)}
               />
             </SMField>
             <div class="modal-action">

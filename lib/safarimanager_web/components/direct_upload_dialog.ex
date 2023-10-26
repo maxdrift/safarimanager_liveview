@@ -46,7 +46,7 @@ defmodule SMWeb.Components.DirectUploadDialog do
               options={Enum.map(@participants, &{participant_select_option_txt(&1), &1.user_id})}
               prompt={[key: gettext("Select a participant...")]}
               selected={@user_id}
-              class="input input-bordered"
+              class="select select-bordered"
             />
             <Label class="label h-7">
               <ErrorTag />

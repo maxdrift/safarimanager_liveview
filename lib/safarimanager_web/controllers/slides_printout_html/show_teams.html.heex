@@ -51,9 +51,9 @@
               </span>
             </td>
             <td class="border text-center font-mono">
-              <%= for evaluation <- slide.evaluations do %>
+              <%= for vote <- slide.votes do %>
                 <span>
-                  <%= evaluation.value %>
+                  <%= vote.evaluation.name %>
                 </span>
                 <span class="last:hidden text-xs">-</span>
               <% end %>

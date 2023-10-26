@@ -46,35 +46,46 @@ defmodule SMWeb.ErrorHelpers do
 
   @spec input_state_class(Ecto.Changeset.t() | Phoenix.HTML.Form.t(), atom(), Keyword.t()) :: String.t()
   def input_state_class(changeset_or_form, field, opts \\ []) do
+    opts = Keyword.merge(opts, type: :input)
     state_class("input input-bordered", changeset_or_form, field, opts)
+  end
+
+  @spec select_state_class(Ecto.Changeset.t() | Phoenix.HTML.Form.t(), atom(), Keyword.t()) :: String.t()
+  def select_state_class(changeset_or_form, field, opts \\ []) do
+    opts = Keyword.merge(opts, type: :select)
+    state_class("select select-bordered", changeset_or_form, field, opts)
   end
 
   @spec state_class(String.t(), Ecto.Changeset.t() | Phoenix.HTML.Form.t(), atom(), Keyword.t()) :: String.t()
   def state_class(class, changeset, field, opts \\ [])
 
   def state_class(class, %Ecto.Changeset{} = changeset, field, opts) do
+    input_type = Keyword.get(opts, :type, :input)
+
     class =
       cond do
         # no state checking
         opts[:no_state] -> class
         # The form was not yet submitted
         !changeset.action -> class
-        changeset.errors[field] -> "#{class} input-error"
-        true -> "#{class} input-success"
+        changeset.errors[field] -> "#{class} #{input_type}-error"
+        true -> "#{class} #{input_type}-success"
       end
 
     String.trim(class)
   end
 
   def state_class(class, %Phoenix.HTML.Form{} = form, field, opts) do
+    input_type = Keyword.get(opts, :type, :input)
+
     class =
       cond do
         # no state checking
         opts[:no_state] -> class
         # The form was not yet submitted
-        !form.source.action -> class
-        form.errors[field] -> "#{class} input-error"
-        true -> "#{class} input-success"
+        !form.source.action && !form.action -> class
+        form.source.errors[field] -> "#{class} #{input_type}-error"
+        true -> "#{class} #{input_type}-success"
       end
 
     String.trim(class)

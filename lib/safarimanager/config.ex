@@ -269,4 +269,20 @@ defmodule SM.Config do
     IO.puts("\nERROR!!! [SafariManager] " <> message)
     System.halt(1)
   end
+
+  @spec get_private_network_address :: {:error, :address_not_found} | {:ok, tuple()}
+  def get_private_network_address do
+    with {:ok, ifaddrs} <- :inet.getifaddrs() do
+      ifaddrs
+      |> Enum.flat_map(fn {_name, opts} -> Keyword.get_values(opts, :addr) end)
+      |> Enum.filter(fn
+        {first, _sec, _third, _fourth} when first in [10, 172, 192] -> true
+        _addr -> false
+      end)
+      |> case do
+        [first | _rest] -> {:ok, first}
+        [] -> {:error, :address_not_found}
+      end
+    end
+  end
 end

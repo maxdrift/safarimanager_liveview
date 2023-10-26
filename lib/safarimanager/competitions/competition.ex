@@ -31,7 +31,7 @@ defmodule SM.Competitions.Competition do
     belongs_to :organization, Organization
 
     has_one :settings, CompetitionSettings, on_replace: :delete
-    has_many :competitions_evaluations, CompetitionEvaluation, on_replace: :delete
+    has_many :competitions_evaluations, CompetitionEvaluation, preload_order: [asc: :position], on_replace: :delete
     has_many :allowed_evaluations, through: [:competitions_evaluations, :evaluation]
     has_many :participants, Participant, preload_order: [asc: :number], on_replace: :delete
     has_many :teams, Team
@@ -64,7 +64,12 @@ defmodule SM.Competitions.Competition do
       :type
     ])
     |> cast_assoc(:settings, required: false)
-    |> cast_assoc(:competitions_evaluations, required: false)
+    |> cast_assoc(:competitions_evaluations,
+      with: &CompetitionEvaluation.changeset/3,
+      sort_param: :evaluation_sort,
+      drop_param: :evaluation_drop,
+      required: true
+    )
     |> validate_dates()
   end
 
@@ -91,7 +96,12 @@ defmodule SM.Competitions.Competition do
       :type
     ])
     |> cast_assoc(:settings, required: false)
-    |> cast_assoc(:competitions_evaluations, required: false)
+    |> cast_assoc(:competitions_evaluations,
+      with: &CompetitionEvaluation.changeset/3,
+      sort_param: :evaluation_sort,
+      drop_param: :evaluation_drop,
+      required: false
+    )
     |> cast_assoc(:participants, required: false)
     |> cast_assoc(:jurors, required: false)
     |> cast_assoc(:slides, required: false)

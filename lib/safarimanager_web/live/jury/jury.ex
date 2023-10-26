@@ -15,6 +15,8 @@ defmodule SMWeb.Live.Jury do
     prizes: ["distinguish"]
   }
 
+  @jurors_ping_interval 5
+
   on_mount SMWeb.SidebarHook
 
   @impl Phoenix.LiveView
@@ -29,7 +31,8 @@ defmodule SMWeb.Live.Jury do
         flash_eval: nil,
         prizes: @evaluations.prizes,
         curr_slide: nil,
-        evaluations: []
+        evaluations: [],
+        ping_reference: nil
       )
 
     {:ok, socket}
@@ -37,6 +40,7 @@ defmodule SMWeb.Live.Jury do
 
   @impl Phoenix.LiveView
   def handle_params(%{"competition_id" => competition_id, "slide_id" => slide_id} = params, _url, socket) do
+    :ok = Phoenix.PubSub.subscribe(SM.PubSub, "#{competition_id}-jury")
     category = Map.get(params, "category", "all")
 
     socket =
@@ -62,15 +66,17 @@ defmodule SMWeb.Live.Jury do
     slide = Enum.find(slides, &(&1.id == slide_id))
     current_index = Enum.find_index(slides, &(&1.id == slide_id))
     file_path = image_path(slide)
+    image_count = Enum.count(slides)
 
     socket =
       socket
       |> assign(
-        image_count: Enum.count(slides),
+        image_count: image_count,
         curr_index: current_index,
         curr_slide: slide,
         category: category,
-        evaluations: Enum.sort(socket.assigns.competition.allowed_evaluations, &(&1.value <= &2.value))
+        evaluations: socket.assigns.competition.allowed_evaluations,
+        penalty_votes: MapSet.new()
       )
       |> assign(:jurors, socket.assigns.competition.jurors)
       # Note: remember events pushed from the server via push_event are global
@@ -78,6 +84,13 @@ defmodule SMWeb.Live.Jury do
       |> push_event("new-image", %{options: %{image_url: file_path}})
 
     Cache.put("#{competition_id}_#{category}_current_jury_slide_id", slide_id)
+
+    :ok = broadcast_current_slide(competition_id, slide_id, image_count, current_index)
+
+    ping_reference =
+      socket.assigns.ping_reference || Process.send_after(self(), :ping_remote_juror, @jurors_ping_interval * 1000)
+
+    socket = assign(socket, ping_reference: ping_reference)
 
     # schedule_next_image(5)
 
@@ -198,16 +211,12 @@ defmodule SMWeb.Live.Jury do
   end
 
   def handle_event("evaluation-key", %{"key" => evaluation}, socket) do
-    with {int_evaluation, ""} <- Integer.parse(evaluation),
-         %_evaluation{} = match <-
-           Enum.find(
-             socket.assigns.evaluations,
-             &Decimal.equal?(&1.value, Decimal.new(int_evaluation))
-           ) do
-      socket = evaluate(socket, match.id)
-      Logger.debug("Evaluation value #{match.value} with ID #{match.id}")
-      {:noreply, socket}
-    else
+    case Enum.find(socket.assigns.evaluations, &(&1.name == evaluation)) do
+      %_evaluation{} = match ->
+        socket = evaluate(socket, match.id)
+        Logger.debug("Evaluation #{match.name} with value #{match.value} and ID #{match.id}")
+        {:noreply, socket}
+
       :error ->
         Logger.info("Invalid key: #{evaluation}")
         {:noreply, socket}
@@ -222,7 +231,9 @@ defmodule SMWeb.Live.Jury do
   end
 
   def handle_event("clear-evaluations", %{}, socket) do
-    {:ok, _cleared} = Slides.clear_evaluations(socket.assigns.curr_slide.id)
+    {:ok, _slide} = Slides.clear_evaluations(socket.assigns.curr_slide.id)
+    {:ok, _slide} = Slides.clear_penalty(socket.assigns.curr_slide.id)
+
     {:noreply, socket}
   end
 
@@ -237,10 +248,20 @@ defmodule SMWeb.Live.Jury do
     {:ok, updated_slide} = Slides.get(curr_slide_id)
     slides = Slides.list_for_jury(socket.assigns.competition.id, socket.assigns.category)
 
+    socket = set_flash_evaluation(socket, updated_slide)
+
     socket =
       socket
       |> assign(:curr_slide, updated_slide)
       |> assign(:slides, slides)
+
+    :ok =
+      broadcast_current_slide(
+        socket.assigns.competition.id,
+        socket.assigns.curr_slide.id,
+        socket.assigns.image_count,
+        socket.assigns.curr_index
+      )
 
     {:noreply, socket}
   end
@@ -257,32 +278,50 @@ defmodule SMWeb.Live.Jury do
     {:noreply, socket}
   end
 
+  def handle_info(:ping_remote_juror, socket) do
+    Logger.debug("Sending ping to remote jurors...")
+
+    :ok =
+      broadcast_current_slide(
+        socket.assigns.competition.id,
+        socket.assigns.curr_slide.id,
+        socket.assigns.image_count,
+        socket.assigns.curr_index
+      )
+
+    Process.send_after(self(), :ping_remote_juror, @jurors_ping_interval * 1000)
+
+    {:noreply, socket}
+  end
+
+  def handle_info({:evaluate_slide, slide_id, user_id, evaluation_id}, socket) do
+    _result = Slides.evaluate_by_juror(socket.assigns.competition.id, slide_id, user_id, evaluation_id)
+    {:noreply, socket}
+  end
+
+  def handle_info(_message, socket) do
+    {:noreply, socket}
+  end
+
   # Internal
 
-  defp set_flash_evaluation(socket, value) do
-    socket = assign(socket, :flash_eval, value)
+  defp set_flash_evaluation(socket, slide) do
+    evaluations_str = Enum.map_join(slide.votes, "-", & &1.evaluation.name)
+    socket = assign(socket, :flash_eval, evaluations_str)
     {:ok, _tref} = :timer.send_after(5000, :unset_flash_eval)
 
     socket
   end
 
   defp evaluate(socket, evaluation_id) do
-    case Slides.evaluate(
-           socket.assigns.competition.id,
-           socket.assigns.curr_slide.id,
-           evaluation_id
-         ) do
-      {:ok, slide_evaluation} ->
-        evaluations_str = Enum.map_join(slide_evaluation.slide.evaluations, "-", & &1.value)
+    slide_id = socket.assigns.curr_slide.id
 
-        set_flash_evaluation(socket, evaluations_str)
+    case Slides.evaluate(socket.assigns.competition.id, slide_id, evaluation_id) do
+      :ok ->
+        socket
 
       {:error, :already_evaluated} ->
         socket
-
-      {:error, :has_penalty} ->
-        Logger.error("Error saving evaluation: :has_penalty")
-        put_flash(socket, :error, gettext("Error saving evaluation: slide has a penalty"))
 
       {:error, reason} ->
         Logger.error("Error saving evaluation: #{inspect(reason)}")
@@ -378,6 +417,15 @@ defmodule SMWeb.Live.Jury do
   defp can_evaluate?(competition, slide) do
     Enum.count(slide.evaluations) <
       Enum.count(competition.jurors) * competition.settings.evaluations_per_juror
+  end
+
+  defp broadcast_current_slide(competition_id, slide_id, image_count, curr_index) do
+    Phoenix.PubSub.broadcast(SM.PubSub, "#{competition_id}-jury", %{
+      curr_slide: slide_id,
+      image_count: image_count,
+      curr_index: curr_index,
+      jury_pid: self()
+    })
   end
 
   # defp schedule_next_image(seconds) do

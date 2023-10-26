@@ -52,7 +52,7 @@ config :safarimanager, SM.Subjects.Subject,
 
 config :safarimanager, SM.Categories.Category, camera_types: [:any, :compact, :reflex]
 
-config :safarimanager, SM.Evaluations.Evaluation, types: [:numeric]
+config :safarimanager, SM.Evaluations.Evaluation, types: [:numeric, :boolean]
 
 config :safarimanager, SM.Competitions.Competition,
   types: [

@@ -77,11 +77,21 @@ defmodule SM.Seeds do
     |> Stream.map(fn e ->
       {:ok, _result} =
         Evaluations.create(%{
+          name: to_string(e),
           value: Decimal.new(e),
           type: "numeric"
         })
     end)
     |> Stream.run()
+
+    {:ok, _result} =
+      Evaluations.create(%{
+        name: "P",
+        value: Decimal.new("0"),
+        is_penalty: true,
+        type: "boolean",
+        description: "Penalty"
+      })
   end
 
   def insert_categories do

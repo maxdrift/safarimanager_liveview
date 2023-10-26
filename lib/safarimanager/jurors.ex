@@ -5,6 +5,7 @@ defmodule SM.Jurors do
   use SM, :context
 
   alias SM.Jurors.Juror
+  alias SM.Slides.SlideEvaluation
 
   @doc """
   Returns the list of jurors.
@@ -158,5 +159,15 @@ defmodule SM.Jurors do
   @spec change(Juror.t(), %{String.t() => any()}) :: Ecto.Changeset.t()
   def change(%Juror{} = juror, params \\ %{}) do
     Juror.changeset(juror, params)
+  end
+
+  def can_vote_slide?(user_id, slide_id) do
+    query =
+      from(
+        se in SlideEvaluation,
+        where: [slide_id: ^slide_id, user_id: ^user_id]
+      )
+
+    not Repo.exists?(query)
   end
 end

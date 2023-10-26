@@ -8,9 +8,9 @@
         <span :if={@curr_slide} class="inline-block align-sub p-1 pl-3 font-bold">{@curr_index + 1} {gettext("of")} {@image_count}</span>
         <span :if={!@curr_slide} class="inline-block align-sub p-1 pl-3 font-bold">0 {gettext("of")} {@image_count}</span>
         <span
-          :if={@curr_slide && @curr_slide.evaluations != []}
+          :if={@curr_slide && @curr_slide.votes != []}
           class="inline-block align-sub p-1 pl-3 font-bold"
-        >{gettext("Evaluations")}: {Enum.map_join(@curr_slide.evaluations, " | ", & &1.value)}</span>
+        >{gettext("Evaluations")}: {Enum.map_join(@curr_slide.votes, " | ", & &1.evaluation.name)}</span>
       </div>
       <div class="my-auto">
         <span class="inline-block align-sub p-1 pl-3 font-bold">{@curr_slide && String.capitalize(@curr_slide.subject.name)}</span>
@@ -154,7 +154,8 @@
               click="evaluate"
               click_key="evaluation-id"
               click_value={evaluation.id}
-            >{evaluation.value}</JuryToolbarButton>
+              title={evaluation.description && Gettext.gettext(SMWeb.Gettext, evaluation.description)}
+            >{evaluation.name}</JuryToolbarButton>
           {#else}
             {gettext("No evaluations available")}
           {/for}

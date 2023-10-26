@@ -25,6 +25,7 @@ import { Socket } from "phoenix"
 import { LiveSocket } from "phoenix_live_view"
 import { themeChange } from 'theme-change'
 import topbar from "../vendor/topbar"
+import Sortable from "../vendor/sortable"
 import Hooks from "./_hooks"
 
 window.Alpine = Alpine
@@ -33,6 +34,43 @@ Alpine.plugin(collapse)
 Alpine.start()
 
 themeChange()
+
+
+Hooks.Sortable = {
+  mounted() {
+    let group = this.el.dataset.group
+    let sorter = new Sortable(this.el, {
+      group: group ? { name: group, pull: true, put: true } : undefined,
+      animation: 150,
+      delay: 100,
+      dragClass: "drag-item",
+      ghostClass: "drag-ghost",
+      forceFallback: true,
+      onEnd: e => {
+        let params = { old: e.oldIndex, new: e.newIndex, to: e.to.dataset, ...e.item.dataset }
+        this.pushEventTo(this.el, "reposition", params)
+      }
+    })
+  }
+}
+
+Hooks.SortableInputsFor = {
+  mounted() {
+    let group = this.el.dataset.group
+    let sorter = new Sortable(this.el, {
+      group: group ? { name: group, pull: true, put: true } : undefined,
+      animation: 150,
+      dragClass: "drag-item",
+      ghostClass: "drag-ghost",
+      handle: "[data-handle]",
+      forceFallback: true,
+      fallbackOnBody: true,
+      onEnd: e => {
+        this.el.closest("form").querySelector("input").dispatchEvent(new Event("input", { bubbles: true }))
+      }
+    })
+  }
+}
 
 let csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute("content")
 let liveSocket = new LiveSocket("/live", Socket, {

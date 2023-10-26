@@ -297,7 +297,6 @@ defmodule SMWeb.Live.Slides do
   # end
 
   defp handle_progress(:images, entry, socket) do
-    # IO.inspect(entry, label: __MODULE__)
     # SongEntryComponent.send_progress(entry)
 
     if entry.done? do

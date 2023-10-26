@@ -1,5 +1,8 @@
 // See the Tailwind configuration guide for advanced usage
 // https://tailwindcss.com/docs/configuration
+
+const plugin = require("tailwindcss/plugin")
+
 module.exports = {
     content: [
         './js/**/*.js',
@@ -13,6 +16,9 @@ module.exports = {
     plugins: [
         require('@tailwindcss/typography'),
         require('daisyui'),
+        plugin(({ addVariant }) => addVariant("drag-item", [".drag-item&", ".drag-item &"])),
+        plugin(({ addVariant }) => addVariant("drag-ghost", [".drag-ghost&", ".drag-ghost &"])),
+
     ],
     daisyui: {
         styled: true,

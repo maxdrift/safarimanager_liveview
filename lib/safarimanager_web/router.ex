@@ -33,10 +33,9 @@ defmodule SMWeb.Router do
   # end
 
   scope "/", SMWeb do
-    pipe_through [:browser]
+    pipe_through [:browser, :require_authenticated_user]
 
     get "/", HomeController, :new
-    # TODO: Move under authenticated routes
     post "/csv_export", CSVExportController, :create
     post "/image_export", ImageExportController, :create
     get "/:competition_id/results_printout", ResultsPrintoutController, :show
@@ -69,6 +68,8 @@ defmodule SMWeb.Router do
         live "/:competition_id/results", Results
         live "/:competition_id/team_results", TeamResults
       end
+
+      live "/vote/:competition_id/:user_id", BallotBox
 
       scope "/admin", Admin do
         live "/organizations", Organizations.Index, :index
