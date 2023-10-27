@@ -1306,8 +1306,7 @@ defmodule SM.Slides do
     {:ok, slide} = get(slide_id)
     {:ok, competition} = Competitions.get(competition_id)
     settings = competition.settings
-    # TODO: Maybe add `is_penalty` flag to Evaluation to make this filtering independent from names.
-    penalty_votes = Enum.count(slide.votes, fn vote -> vote.evaluation.name == "P" end)
+    penalty_votes = Enum.count(slide.votes, fn vote -> vote.evaluation.is_penalty end)
 
     {operator, threshold} = @penalty_quorum
 
