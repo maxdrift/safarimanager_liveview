@@ -283,11 +283,11 @@ defmodule SM.Teams do
   end
 
   @spec synthesize_team_name(Team.t()) :: String.t() | nil
-  def synthesize_team_name(%Team{members: [_ | _] = members}) do
-    Enum.map_join(members, " - ", & &1.user.last_name)
+  def synthesize_team_name(%Team{members: [_ | _] = members} = team) do
+    team.name || Enum.map_join(members, " - ", & &1.user.last_name)
   end
 
-  def synthesize_team_name(_team), do: nil
+  def synthesize_team_name(team), do: team.name || nil
 
   @spec synthesize_members_names(Team.t()) :: String.t() | nil
   def synthesize_members_names(%Team{members: [_ | _] = members}) do
@@ -297,14 +297,17 @@ defmodule SM.Teams do
   def synthesize_members_names(_team), do: nil
 
   @spec synthesize_org_name(Team.t()) :: String.t() | nil
-  def synthesize_org_name(%Team{members: [first | _] = members}) do
+  def synthesize_org_name(%Team{members: [first | _] = members} = team) do
     first_org_id = first.user.organization_id
 
-    if Enum.all?(members, &(&1.user.organization_id == first_org_id)) do
-      {:ok, organization} = Organizations.get(first_org_id)
-      organization.name
-    end
+    derived_org_name =
+      if Enum.all?(members, &(&1.user.organization_id == first_org_id)) do
+        {:ok, organization} = Organizations.get(first_org_id)
+        organization.name
+      end
+
+    team.organization_name || derived_org_name
   end
 
-  def synthesize_org_name(_team), do: nil
+  def synthesize_org_name(team), do: team.organization_name || nil
 end

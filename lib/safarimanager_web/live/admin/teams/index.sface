@@ -24,20 +24,12 @@
           </FieldsListItem>
           <FieldsListItem label={gettext("Name")}>
             <span class="capitalize">
-              {#if @record.name}
-                {@record.name}
-              {#else}
-                {Teams.synthesize_team_name(@record) || gettext("N/A")}
-              {/if}
+              {Teams.synthesize_team_name(@record) || gettext("N/A")}
             </span>
           </FieldsListItem>
           <FieldsListItem label={gettext("Organization name")}>
             <span class="capitalize">
-              {#if @record.organization_name}
-                {@record.organization_name}
-              {#else}
-                {Teams.synthesize_org_name(@record) || gettext("N/A")}
-              {/if}
+              {Teams.synthesize_org_name(@record) || gettext("N/A")}
             </span>
           </FieldsListItem>
           <FieldsListItem label={gettext("Members")}>
@@ -183,18 +175,10 @@
       {item.competition.name || gettext("N/A")}
     </Column>
     <Column title={gettext("Name")}>
-      {#if item.name}
-        {item.name}
-      {#else}
-        {Teams.synthesize_team_name(item) || gettext("N/A")}
-      {/if}
+      {Teams.synthesize_team_name(item) || gettext("N/A")}
     </Column>
     <Column title={gettext("Org. name")}>
-      {#if item.organization_name}
-        {item.organization_name}
-      {#else}
-        {Teams.synthesize_org_name(item) || gettext("N/A")}
-      {/if}
+      {Teams.synthesize_org_name(item) || gettext("N/A")}
     </Column>
     <Column title={gettext("Members")}>
       {Teams.synthesize_members_names(item) || gettext("N/A")}

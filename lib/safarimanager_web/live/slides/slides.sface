@@ -77,8 +77,8 @@
               {#for item <- @teams}
                 <tr>
                   <td>{item.number}</td>
-                  <td class="truncate">{item.name || Teams.synthesize_team_name(item) || gettext("N/A")}</td>
-                  <td class="truncate">{item.organization_name || Teams.synthesize_org_name(item) || gettext("N/A")}</td>
+                  <td class="truncate">{Teams.synthesize_team_name(item) || gettext("N/A")}</td>
+                  <td class="truncate">{Teams.synthesize_org_name(item) || gettext("N/A")}</td>
                   <td />
                 </tr>
                 <tr>

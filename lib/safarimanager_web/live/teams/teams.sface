@@ -76,7 +76,7 @@
               "btn-sm",
               "btn-primary",
               "my-2",
-              "btn-disabled": MapSet.size(@participants_selection) < 2
+              "btn-disabled": MapSet.size(@participants_selection) < 1
             }
             :on-click="create-team"
           >
@@ -169,8 +169,8 @@
               {#for item <- @teams}
                 <tr>
                   <td>{item.number}</td>
-                  <td class="truncate">{item.name || Teams.synthesize_team_name(item) || gettext("N/A")}</td>
-                  <td class="truncate">{item.organization_name || Teams.synthesize_org_name(item) || gettext("N/A")}</td>
+                  <td class="truncate">{Teams.synthesize_team_name(item) || gettext("N/A")}</td>
+                  <td class="truncate">{Teams.synthesize_org_name(item) || gettext("N/A")}</td>
                   <td class="truncate">
                     {Teams.synthesize_members_names(item) || gettext("N/A")}
                   </td>
