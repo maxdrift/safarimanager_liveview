@@ -54,7 +54,11 @@ defmodule SMWeb.Live.BallotBox do
         </div>
       </div>
     {/if}
-    <div class={"blur-sm": is_nil(@slide) || @selected_evaluation || !@can_vote_slide}>
+    <div
+      id="voting-pad"
+      class={"blur-sm": is_nil(@slide) || @selected_evaluation || !@can_vote_slide}
+      phx-hook="NoSleep"
+    >
       <div class="my-4 text-center min-h-6">
         {#if @slide}
           <span class="capitalize">{@slide && @slide.subject.name}</span> - {gettext("slide")} {@curr_index + 1} {gettext("of")} {@image_count}

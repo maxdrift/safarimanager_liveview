@@ -27,6 +27,7 @@ import { themeChange } from 'theme-change'
 import topbar from "../vendor/topbar"
 import Sortable from "../vendor/sortable"
 import Hooks from "./_hooks"
+import NoSleep from "nosleep.js"
 
 window.Alpine = Alpine
 
@@ -69,6 +70,19 @@ Hooks.SortableInputsFor = {
         this.el.closest("form").querySelector("input").dispatchEvent(new Event("input", { bubbles: true }))
       }
     })
+  }
+}
+
+Hooks.NoSleep = {
+  mounted() {
+    var noSleep = new NoSleep();
+    var wakeLockEnabled = false;
+    window.addEventListener('click', function () {
+      if (!wakeLockEnabled) {
+        noSleep.enable(); // keep the screen on!
+        wakeLockEnabled = true;
+      }
+    }, false);
   }
 }
 
