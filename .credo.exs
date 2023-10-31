@@ -173,7 +173,11 @@
           {Credo.Check.Warning.LeakyEnvironment, []},
           {Credo.Check.Warning.MapGetUnsafePass, []},
           {Credo.Check.Warning.MixEnv, []},
-          {Credo.Check.Warning.UnsafeToAtom, []}
+          {Credo.Check.Warning.UnsafeToAtom, []},
+
+          # Custom
+          # ExcellentMigrations (see: https://hexdocs.pm/excellent_migrations)
+          {ExcellentMigrations.CredoCheck.MigrationsSafety, []}
         ],
         disabled: [
           #

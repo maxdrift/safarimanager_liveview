@@ -61,6 +61,7 @@ defmodule SM.MixProject do
       {:ecto_sqlite3, "~> 0.12.0"},
       {:esbuild, "~> 0.6", runtime: Mix.env() == :dev},
       {:ex_heroicons, "~> 2.0"},
+      {:excellent_migrations, "~> 0.1.6", only: [:dev, :test], runtime: false},
       {:finch, "~> 0.16.0", override: true},
       {:floki, "~> 0.34", only: :test},
       {:gettext, "~> 0.23"},
