@@ -608,6 +608,20 @@ defmodule SM.Slides do
     Repo.all(query)
   end
 
+  @spec get_max_evaluations_slide(String.t()) :: Slide.t() | nil
+  def get_max_evaluations_slide(competition_id) do
+    query =
+      from(sl in Slide,
+        where: [competition_id: ^competition_id, status: :submitted_jury],
+        join: vo in assoc(sl, :votes),
+        join: e in assoc(vo, :evaluation),
+        group_by: sl.id,
+        order_by: [desc: sum(e.value)]
+      )
+
+    Repo.one(first(query))
+  end
+
   @doc """
   Gets a single Slide.
 

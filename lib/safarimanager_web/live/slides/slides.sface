@@ -172,12 +172,12 @@
                     <td class="truncate">
                       <div>
                         <div class="w-20">
-                          <img src={thumbnail_path(image)} class="rounded-md border">
+                          <img src={Utils.slide_thumbnail_path(image)} class="rounded-md border">
                         </div>
                       </div>
                     </td>
                     <td class="truncate">{image.file_name}</td>
-                    <td class="truncate">{pretty_size(image.file_size)}</td>
+                    <td class="truncate">{Utils.format_bytes(image.file_size)}</td>
                     <td class="truncate">{(image.width && "#{image.width}x#{image.height}") || gettext("N/A")}</td>
                     <td class="truncate">
                       <button :on-click="delete-slide" :values={id: image.id} class="btn btn-xs btn-error">
@@ -211,7 +211,7 @@
                       </div>
                     </td>
                     <td class="truncate">{image.client_name}</td>
-                    <td class="truncate">{pretty_size(image.client_size)}</td>
+                    <td class="truncate">{Utils.format_bytes(image.client_size)}</td>
                     <td class="truncate">{gettext("N/A")}</td>
                     <td class="truncate">
                       <button :on-click="cancel-upload" :values={ref: image.ref} class="btn btn-xs btn-error">

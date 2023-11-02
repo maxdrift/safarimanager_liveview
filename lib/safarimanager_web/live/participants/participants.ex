@@ -10,7 +10,6 @@ defmodule SMWeb.Live.Participants do
   alias SM.Competitions
   alias SM.Organizations
   alias SM.Participants
-  alias SM.Teams
   alias SMWeb.Components.CompetitionHeader
   alias SMWeb.Components.FormActions
   alias SMWeb.Components.Layout
@@ -36,8 +35,7 @@ defmodule SMWeb.Live.Participants do
         participants: [],
         entity: %User{},
         changeset: Accounts.change_for_competition_registration(%User{}),
-        participants_selection: MapSet.new(),
-        teamed_up_users: MapSet.new()
+        participants_selection: MapSet.new()
       )
 
     {:ok, socket}
@@ -161,8 +159,7 @@ defmodule SMWeb.Live.Participants do
         competition_id: competition_id,
         competition: competition,
         participants: Participants.list(competition_id),
-        users: users,
-        teamed_up_users: MapSet.new(Teams.list_member_users(competition_id))
+        users: users
       )
 
     {:noreply, socket}

@@ -8,6 +8,7 @@ defmodule SMWeb.Live.Validation do
   alias SM.Competitions
   alias SM.Slides
   alias SM.Subjects
+  alias SM.Utils
   alias SMWeb.Components.JuryToolbarButton
   alias Surface.Components.Form
   alias Surface.Components.Form.HiddenInput
@@ -58,7 +59,7 @@ defmodule SMWeb.Live.Validation do
 
     slide = Enum.find(slides, &(&1.id == slide_id))
     current_index = Enum.find_index(slides, &(&1.id == slide_id))
-    file_path = image_path(slide)
+    file_path = Utils.slide_path(slide)
 
     socket =
       socket
@@ -417,10 +418,6 @@ defmodule SMWeb.Live.Validation do
 
   defp full_path(socket) do
     "/organize/#{socket.assigns.competition.id}/validation"
-  end
-
-  defp image_path(slide) do
-    ~p"/uploads/#{slide.competition_id}/#{slide.user_id}/#{slide.file_name}"
   end
 
   defp status_to_label(:submitted_fixed), do: gettext("Fixed points")

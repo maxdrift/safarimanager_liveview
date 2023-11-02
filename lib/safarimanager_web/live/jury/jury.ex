@@ -7,6 +7,7 @@ defmodule SMWeb.Live.Jury do
   alias SM.Cache
   alias SM.Competitions
   alias SM.Slides
+  alias SM.Utils
   alias SMWeb.Components.JuryToolbarButton
 
   require Logger
@@ -65,7 +66,7 @@ defmodule SMWeb.Live.Jury do
 
     slide = Enum.find(slides, &(&1.id == slide_id))
     current_index = Enum.find_index(slides, &(&1.id == slide_id))
-    file_path = image_path(slide)
+    file_path = Utils.slide_path(slide)
     image_count = Enum.count(slides)
 
     socket =
@@ -406,10 +407,6 @@ defmodule SMWeb.Live.Jury do
 
   defp full_path(socket) do
     "/organize/#{socket.assigns.competition.id}/jury"
-  end
-
-  defp image_path(slide) do
-    ~p"/uploads/#{slide.competition_id}/#{slide.user_id}/#{slide.file_name}"
   end
 
   defp can_evaluate?(_competition, nil), do: false

@@ -11,6 +11,7 @@ defmodule SMWeb.Live.Slides do
   alias SM.Slides
   alias SM.Teams
   alias SM.USBWatcherSupervisor
+  alias SM.Utils
   alias SMWeb.Components.CompetitionHeader
   alias SMWeb.Components.DirectUploadDialog
   alias SMWeb.Components.FileBrowser
@@ -377,41 +378,6 @@ defmodule SMWeb.Live.Slides do
     end
   end
 
-  defp pretty_size(byte_size) do
-    cond do
-      byte_size >= 1_000_000_000 ->
-        byte_size
-        |> Decimal.new()
-        |> Decimal.div(1_000_000_000)
-        |> Decimal.round(2)
-        |> Decimal.to_string(:normal)
-        |> Kernel.<>("GB")
-
-      byte_size >= 1_000_000 ->
-        byte_size
-        |> Decimal.new()
-        |> Decimal.div(1_000_000)
-        |> Decimal.round(2)
-        |> Decimal.to_string(:normal)
-        |> Kernel.<>("MB")
-
-      byte_size >= 1000 ->
-        byte_size
-        |> Decimal.new()
-        |> Decimal.div(1000)
-        |> Decimal.round(2)
-        |> Decimal.to_string(:normal)
-        |> Kernel.<>("KB")
-
-      true ->
-        byte_size
-        |> Decimal.new()
-        |> Decimal.round(2)
-        |> Decimal.to_string(:normal)
-        |> Kernel.<>("B")
-    end
-  end
-
   defp sorted_images(entries, slides) do
     Enum.sort(entries ++ slides, fn left, right ->
       get_file_name(left) <= get_file_name(right)
@@ -428,9 +394,5 @@ defmodule SMWeb.Live.Slides do
 
   defp is_slide?(item) do
     Map.has_key?(item, :id)
-  end
-
-  defp thumbnail_path(slide) do
-    ~p"/uploads/#{slide.competition_id}/#{slide.user_id}/thumbnails/small/#{slide.file_name}"
   end
 end

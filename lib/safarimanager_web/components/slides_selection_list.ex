@@ -65,7 +65,7 @@ defmodule SMWeb.Components.SlidesSelectionList do
                   </div>
                 </td>
                 <td class="truncate">{slide.file_name}</td>
-                <td class="truncate">{Utils.pretty_size(slide.file_size)}</td>
+                <td class="truncate">{Utils.format_bytes(slide.file_size)}</td>
                 <td>
                   <span class="capitalize">{(slide.subject && slide.subject.name) || gettext("N/A")}</span>
                   <br>
@@ -137,7 +137,7 @@ defmodule SMWeb.Components.SlidesSelectionList do
                   </div>
                 </td>
                 <td class="truncate">{slide.file_name}</td>
-                <td class="truncate">{Utils.pretty_size(slide.file_size)}</td>
+                <td class="truncate">{Utils.format_bytes(slide.file_size)}</td>
                 <td>
                   <span class="capitalize">{(slide.subject && slide.subject.name) || gettext("N/A")}</span>
                   <br>
@@ -209,7 +209,7 @@ defmodule SMWeb.Components.SlidesSelectionList do
                   </div>
                 </td>
                 <td class="truncate">{slide.file_name}</td>
-                <td class="truncate">{Utils.pretty_size(slide.file_size)}</td>
+                <td class="truncate">{Utils.format_bytes(slide.file_size)}</td>
                 <td>
                   <span class="capitalize">{(slide.subject && slide.subject.name) || gettext("N/A")}</span>
                   <br>

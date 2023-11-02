@@ -1,53 +1,57 @@
 defmodule SM.Utils do
   @moduledoc false
 
+  import SMWeb.Gettext
+
+  alias SM.Slides.Slide
+
   require Logger
 
   @type id :: binary()
 
   @doc """
-  Prettifies file sizes
+  Returns a Slide's thumbnail public resource path
   """
-  def pretty_size(byte_size) do
-    cond do
-      byte_size >= 1_000_000_000 ->
-        byte_size
-        |> Decimal.new()
-        |> Decimal.div(1_000_000_000)
-        |> Decimal.round(2)
-        |> Decimal.to_string(:normal)
-        |> Kernel.<>("GB")
-
-      byte_size >= 1_000_000 ->
-        byte_size
-        |> Decimal.new()
-        |> Decimal.div(1_000_000)
-        |> Decimal.round(2)
-        |> Decimal.to_string(:normal)
-        |> Kernel.<>("MB")
-
-      byte_size >= 1000 ->
-        byte_size
-        |> Decimal.new()
-        |> Decimal.div(1000)
-        |> Decimal.round(2)
-        |> Decimal.to_string(:normal)
-        |> Kernel.<>("KB")
-
-      true ->
-        byte_size
-        |> Decimal.new()
-        |> Decimal.round(2)
-        |> Decimal.to_string(:normal)
-        |> Kernel.<>("B")
-    end
+  @spec slide_thumbnail_path(Slide.t(), atom()) :: String.t()
+  def slide_thumbnail_path(slide, size \\ :small) do
+    "/uploads/#{slide.competition_id}/#{slide.user_id}/thumbnails/#{size}/#{slide.file_name}"
   end
 
   @doc """
-  Returns a Slide's thumbnail public resource path
+  Returns a Slide's public resource path
   """
-  def slide_thumbnail_path(slide, size \\ :small) do
-    "/uploads/#{slide.competition_id}/#{slide.user_id}/thumbnails/#{size}/#{slide.file_name}"
+  @spec slide_path(Slide.t()) :: String.t()
+  def slide_path(slide) do
+    "/uploads/#{slide.competition_id}/#{slide.user_id}/#{slide.file_name}"
+  end
+
+  @spec pretty_dates(nil | DateTime.t(), any()) :: String.t()
+  def pretty_dates(%DateTime{day: day, month: month, year: year} = start_time, %DateTime{
+        day: day,
+        month: month,
+        year: year
+      }) do
+    Calendar.strftime(start_time, "%d %b %Y")
+  end
+
+  def pretty_dates(%DateTime{month: month, year: year} = start_time, %DateTime{month: month, year: year} = end_time) do
+    Calendar.strftime(start_time, "%d → ") <> Calendar.strftime(end_time, "%d %b %Y")
+  end
+
+  def pretty_dates(%DateTime{year: year} = start_time, %DateTime{year: year} = end_time) do
+    Calendar.strftime(start_time, "%d %b → ") <> Calendar.strftime(end_time, "%d %b %Y")
+  end
+
+  def pretty_dates(%DateTime{year: _year1} = start_time, %DateTime{year: _year2} = end_time) do
+    Calendar.strftime(start_time, "%d %b %Y → ") <> Calendar.strftime(end_time, "%d %b %Y")
+  end
+
+  def pretty_dates(%DateTime{} = start_time, nil) do
+    Calendar.strftime(start_time, "%d %b %Y")
+  end
+
+  def pretty_dates(nil, _nil) do
+    gettext("Sometime...")
   end
 
   @doc """
@@ -198,7 +202,7 @@ defmodule SM.Utils do
                 {item, prev ++ cons}
             end
 
-          _ ->
+          _other ->
             {nil, data}
         end
 
@@ -249,7 +253,7 @@ defmodule SM.Utils do
     _result = OptionParser.split(flags)
     true
   rescue
-    _ -> false
+    _exception -> false
   end
 
   @doc """
@@ -489,42 +493,7 @@ defmodule SM.Utils do
     end
   end
 
-  @doc """
-  Returns a URL (including localhost) to import the given `url` as a notebook.
-
-      iex> SM.Utils.notebook_import_url("https://example.com/foo.smgr")
-      "http://localhost:4002/import?url=https%3A%2F%2Fexample.com%2Ffoo.smgr"
-
-      iex> SM.Utils.notebook_import_url("https://my_host", "https://example.com/foo.smgr")
-      "https://my_host/import?url=https%3A%2F%2Fexample.com%2Ffoo.smgr"
-
-  """
-  def notebook_import_url(base_url \\ SMWeb.Endpoint.access_struct_url(), url) do
-    base_url
-    |> URI.parse()
-    |> Map.replace!(:path, "/import")
-    |> URI.append_query("url=#{URI.encode_www_form(url)}")
-    |> URI.to_string()
-  end
-
-  @doc """
-  Returns a URL (including localhost) to open the given `path` as a notebook
-
-      iex> SM.Utils.notebook_open_url("/data/foo.smgr")
-      "http://localhost:4002/open?path=%2Fdata%2Ffoo.smgr"
-
-      iex> SM.Utils.notebook_open_url("https://my_host", "/data/foo.smgr")
-      "https://my_host/open?path=%2Fdata%2Ffoo.smgr"
-
-  """
-  def notebook_open_url(base_url \\ SMWeb.Endpoint.access_struct_url(), path) do
-    base_url
-    |> URI.parse()
-    |> Map.replace!(:path, "/open")
-    |> URI.append_query("path=#{URI.encode_www_form(path)}")
-    |> URI.to_string()
-  end
-
+  @spec juror_voting_url(String.t() | URI.t(), String.t(), String.t()) :: String.t()
   def juror_voting_url(base_url \\ SMWeb.Endpoint.access_struct_url(), competition_id, user_id) do
     base_url
     |> URI.parse()
@@ -555,6 +524,7 @@ defmodule SM.Utils do
       iex> SM.Utils.format_bytes(1_503_238_553_600)
       "1.4 TB"
   """
+  @spec format_bytes(integer()) :: nonempty_binary()
   def format_bytes(bytes) when is_integer(bytes) do
     cond do
       bytes >= memory_unit(:TB) -> format_bytes(bytes, :TB)
@@ -569,7 +539,7 @@ defmodule SM.Utils do
 
   defp format_bytes(bytes, unit) when is_integer(bytes) do
     value = bytes / memory_unit(unit)
-    "#{:erlang.float_to_binary(value, decimals: 1)} #{unit}"
+    "#{:erlang.float_to_binary(value, decimals: 2)} #{unit}"
   end
 
   defp memory_unit(:TB), do: 1024 * 1024 * 1024 * 1024
@@ -587,10 +557,10 @@ defmodule SM.Utils do
   def get_port(ref, default) do
     :ranch.get_addr(ref)
   rescue
-    _ -> default
+    _exception -> default
   else
     {_, port} when is_integer(port) -> port
-    _ -> default
+    _other -> default
   end
 
   @doc """

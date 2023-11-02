@@ -9,7 +9,8 @@ defmodule SMWeb.Live.NewCompetition do
   alias SM.Competitions.CompetitionEvaluation
   alias SM.Evaluations
   alias SM.Organizations
-  alias SMWeb.Components.FormActions
+  alias SM.Slides
+  alias SM.Utils
   alias SMWeb.Components.Layout
   alias SMWeb.Live.Admin.Competitions.Form, as: CompetitionForm
   alias Surface.Components.Form
@@ -17,6 +18,8 @@ defmodule SMWeb.Live.NewCompetition do
   alias Surface.Components.Form.Field
   alias Surface.Components.Form.HiddenInput
   alias Surface.Components.Form.Label
+  alias Surface.Components.Form.Reset
+  alias Surface.Components.Form.Submit
   alias Surface.Components.Form.TextInput
 
   require Logger
@@ -190,15 +193,6 @@ defmodule SMWeb.Live.NewCompetition do
 
   # Internal
 
-  defp value_or_na(nil), do: "N/A"
-  defp value_or_na(value), do: value
-
-  defp format_date(nil), do: "N/A"
-
-  defp format_date(datetime) do
-    Calendar.strftime(datetime, "%d/%m/%Y %I:%M:%S %P %Z")
-  end
-
   defp validate_duplication_params(params) do
     teams = if params["participants"] == "true" and params["for_teams"] == "true", do: params["teams"], else: "false"
     slides = if params["participants"] == "true", do: params["slides"], else: "false"
@@ -226,6 +220,13 @@ defmodule SMWeb.Live.NewCompetition do
       changeset |> Ecto.Changeset.put_change(:competitions_evaluations, all_evaluation_ids) |> to_form()
     else
       to_form(changeset)
+    end
+  end
+
+  defp get_competition_background_img(competition_id) do
+    case Slides.get_max_evaluations_slide(competition_id) do
+      nil -> nil
+      slide -> Utils.slide_path(slide)
     end
   end
 end
