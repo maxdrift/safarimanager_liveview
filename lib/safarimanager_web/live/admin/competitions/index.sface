@@ -219,7 +219,6 @@
                         class={state_class("select select-sm select-bordered", allowed_evaluations_form, :evaluation_id,
                           type: :select
                         )}
-                        opts={disabled: !is_nil(allowed_evaluations_form.data.evaluation_id)}
                       />
                     </Field>
                     <label class="btn btn-ghost btn-square btn-sm">
