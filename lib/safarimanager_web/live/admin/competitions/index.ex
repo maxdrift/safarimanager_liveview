@@ -9,6 +9,8 @@ defmodule SMWeb.Live.Admin.Competitions.Index do
   alias SM.Competitions.CompetitionEvaluation
   alias SM.Evaluations
   alias SM.Organizations
+  alias SM.Slides
+  alias SM.Utils
   alias SMWeb.Components.Column
   alias SMWeb.Components.DateTimeString
   alias SMWeb.Components.FieldsList
@@ -101,6 +103,32 @@ defmodule SMWeb.Live.Admin.Competitions.Index do
       {:error, changeset} ->
         {:noreply, assign(socket, :changeset, changeset)}
     end
+  end
+
+  def handle_event("erase-discarded-slides", _params, socket) do
+    on_confirm = fn socket ->
+      socket.assigns.record.id
+      |> Slides.list_by_status(:discarded)
+      |> Enum.map(& &1.id)
+      |> Slides.delete_many()
+      |> case do
+        {:ok, deleted} ->
+          Logger.info("Deleted #{deleted} discarded slides")
+          put_flash(socket, :info, gettext("Deleted all discarded slides"))
+
+        {:error, reason} ->
+          Logger.error("Unable to delete discarded slides: #{inspect(reason)}")
+          put_flash(socket, :error, gettext("Error deleting discarded slides"))
+      end
+    end
+
+    {:noreply,
+     confirm(socket, on_confirm,
+       title: gettext("Erase discarded slides"),
+       description: gettext("Are you sure you want to delete all discarded slides?"),
+       confirm_text: gettext("Delete"),
+       confirm_icon: "trash"
+     )}
   end
 
   @impl Phoenix.LiveView
@@ -279,4 +307,9 @@ defmodule SMWeb.Live.Admin.Competitions.Index do
       to_form(changeset)
     end
   end
+
+  defp slide_status_to_label(:submitted_jury), do: gettext("submitted_jury")
+  defp slide_status_to_label(:submitted_fixed), do: gettext("submitted_fixed")
+  defp slide_status_to_label(:discarded), do: gettext("discarded")
+  defp slide_status_to_label(status), do: status
 end

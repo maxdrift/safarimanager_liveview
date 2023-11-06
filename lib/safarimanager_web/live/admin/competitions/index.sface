@@ -89,6 +89,27 @@
               {/if}
             </ul>
           </FieldsListItem>
+          <FieldsListItem label={gettext("Slides size")}>
+            <ul class="list-disc list-inside ml-6">
+              {#for status <- Slides.list_slide_statuses() |> Enum.sort(:desc)}
+                <li>
+                  <b class="capitalize">{slide_status_to_label(status)}:</b>
+                  {Utils.format_bytes(Slides.get_slides_size_by_status(@record.id, status) || 0)}
+                  <button
+                    :if={status == :discarded}
+                    class={
+                      "btn btn-xs btn-error ml-2",
+                      "btn-disabled": is_nil(Slides.get_slides_size_by_status(@record.id, status))
+                    }
+                    :on-click="erase-discarded-slides"
+                  >
+                    {gettext("Erase")}
+                  </button>
+                </li>
+              {/for}
+              <li><b>{gettext("Total")}:</b> {Utils.format_bytes(Slides.get_slides_total_size(@record.id) || 0)}</li>
+            </ul>
+          </FieldsListItem>
           <FieldsListItem label={gettext("Inserted")}>
             <DateTimeString value={@record.inserted_at} />
           </FieldsListItem>

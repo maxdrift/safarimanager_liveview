@@ -166,6 +166,13 @@ defmodule SM.Slides do
     |> Repo.preload([:subject, [votes: :evaluation]])
   end
 
+  @spec list_by_status(String.t(), :discarded | :submitted_fixed | :submitted_jury) :: [Slide.t()]
+  def list_by_status(competition_id, status) when status in [:submitted_jury, :submitted_fixed, :discarded] do
+    query = from(s in Slide, where: [competition_id: ^competition_id, status: ^status])
+
+    Repo.all(query)
+  end
+
   @spec list_for_results(String.t(), String.t()) :: [Slide.t()]
   def list_for_results(user_id, competition_id) do
     Slide
@@ -1082,9 +1089,10 @@ defmodule SM.Slides do
     Multi.new()
     |> Multi.delete(:delete, slide)
     |> Multi.run(:delete_files, fn _repo, %{delete: slide} ->
-      :ok = delete_files(slide.competition_id, slide.user_id, slide.file_name)
-
-      {:ok, :deleted}
+      case delete_files(slide.competition_id, slide.user_id, slide.file_name) do
+        :ok -> {:ok, :deleted}
+        {:error, _reason} = error -> error
+      end
     end)
     |> Repo.transaction()
     |> case do
@@ -1119,25 +1127,37 @@ defmodule SM.Slides do
     end)
     |> Multi.delete_all(:delete_many, from(entity in Slide, where: entity.id in ^ids))
     |> Multi.run(:delete_files, fn _repo, %{slides: slides} ->
-      Enum.each(slides, &delete_files(&1.competition_id, &1.user_id, &1.file_name))
+      slides
+      |> Enum.map(fn slide ->
+        Task.async(fn ->
+          delete_files(slide.competition_id, slide.user_id, slide.file_name)
+        end)
+      end)
+      |> Task.await_many(30_000)
+      |> Enum.reduce_while({:ok, :deleted}, fn
+        :ok, acc ->
+          {:cont, acc}
 
-      {:ok, :deleted}
+        {:error, reason} = error, _acc ->
+          Logger.error("Unable to delete slide file: #{inspect(reason)}")
+          {:halt, error}
+      end)
     end)
     |> Repo.transaction()
     |> case do
-      {:ok, %{delete_many: deleted}} ->
+      {:ok, %{delete_many: {deleted, _result}}} ->
         if deleted == Enum.count(ids) do
           Logger.info("Deleted #{deleted} slide(s)")
           notify_subscribers({:ok, deleted}, [:slide, :deleted])
         else
           Logger.warning("Not all slides could be deleted")
-          notify_subscribers(:error, [:slide, :deleted])
+          notify_subscribers({:error, {:incomplete, deleted}}, [:slide, :deleted])
         end
 
       {:error, failed_operation, failed_value, _changes_so_far} ->
         Logger.error("Failed to delete multiple slides. #{failed_operation}: #{inspect(failed_value)}")
 
-        notify_subscribers(:error, [:slide, :deleted])
+        notify_subscribers({:error, {failed_operation, failed_value}}, [:slide, :deleted])
     end
   end
 
@@ -1165,32 +1185,80 @@ defmodule SM.Slides do
     end
   end
 
-  @spec delete_files(String.t(), String.t(), String.t()) :: :ok
+  @spec delete_files(String.t(), String.t(), String.t()) :: :ok | {:error, any()}
   def delete_files(competition_id, user_id, file_name) do
+    Logger.debug("Deleting slide file #{Path.join([competition_id, user_id, file_name])}")
     uploads_path = get_uploads_path(competition_id, user_id)
     thumbnails_path = Path.join(uploads_path, "thumbnails")
-
-    _result =
-      [uploads_path, file_name]
-      |> Path.join()
-      |> File.rm()
-
-    [_head | _tail] =
-      for size_type <- [:small, :medium, :large] do
-        _result =
-          [thumbnails_path, Atom.to_string(size_type), file_name]
-          |> Path.join()
-          |> File.rm()
-      end
-
     # Remove the entire participant directory if empty
-    :ok =
-      if Path.wildcard(Path.join(uploads_path, "/*.*")) == [] do
-        _result = File.rm_rf(uploads_path)
-        :ok
-      else
-        :ok
+    with :ok <- delete_file(uploads_path, file_name),
+         :ok <- delete_thumbnails(thumbnails_path, file_name) do
+      delete_empty_participant_dir(uploads_path)
+    end
+  end
+
+  defp delete_file(uploads_path, file_name) do
+    [uploads_path, file_name]
+    |> Path.join()
+    |> tap(&Logger.debug("Deleting file #{&1}"))
+    |> File.rm()
+    |> case do
+      :ok -> :ok
+      {:error, :enoent} -> :ok
+      {:error, _reason} = error -> error
+    end
+  end
+
+  defp delete_thumbnails(thumbnails_path, file_name) do
+    Enum.reduce_while([:small, :medium, :large], :ok, fn size_type, acc ->
+      case delete_thumbnail(thumbnails_path, size_type, file_name) do
+        :ok -> {:cont, acc}
+        {:error, :enoent} -> {:cont, acc}
+        {:error, _reason} = error -> {:halt, error}
       end
+    end)
+  end
+
+  defp delete_thumbnail(thumbnails_path, size_type, file_name) do
+    [thumbnails_path, Atom.to_string(size_type), file_name]
+    |> Path.join()
+    |> tap(&Logger.debug("Deleting thumbnail #{&1}"))
+    |> File.rm()
+  end
+
+  defp delete_empty_participant_dir(uploads_path) do
+    with [] <- Path.wildcard(Path.join(uploads_path, "/*.*")),
+         {:ok, _removed} <- File.rm_rf(uploads_path) do
+      :ok
+    else
+      [_head | _tail] -> :ok
+      {:error, reason, file} -> {:error, {reason, file}}
+    end
+  end
+
+  @spec get_slides_total_size(String.t()) :: non_neg_integer()
+  def get_slides_total_size(competition_id) do
+    query =
+      from(
+        sl in Slide,
+        where: [competition_id: ^competition_id],
+        select: sum(sl.file_size)
+      )
+
+    Repo.one!(query)
+  end
+
+  @spec get_slides_size_by_status(String.t(), :submitted_jury | :submitted_fixed | :discarded) :: non_neg_integer()
+  def get_slides_size_by_status(competition_id, status) when status in [:submitted_jury, :submitted_fixed, :discarded] do
+    query =
+      from(
+        sl in Slide,
+        where: [competition_id: ^competition_id],
+        where: [status: ^status],
+        select: sum(sl.file_size)
+      )
+
+    Repo.one!(query)
   end
 
   # Slide Flags
