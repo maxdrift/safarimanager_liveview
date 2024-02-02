@@ -17,6 +17,7 @@ defmodule SMWeb.Live.Admin.Competitions.Form do
   alias Surface.Components.Form.Select
   alias Surface.Components.Form.TextInput
 
+  prop id, :string, required: true
   prop action, :atom, values!: [:create, :edit]
   prop competition_types, :list, required: true
   prop entity, :struct, required: true

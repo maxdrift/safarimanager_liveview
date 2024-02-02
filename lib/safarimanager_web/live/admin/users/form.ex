@@ -12,6 +12,7 @@ defmodule SMWeb.Live.Admin.Users.Form do
   alias Surface.Components.Form.Select
   alias Surface.Components.Form.TextInput
 
+  prop id, :string, required: true
   prop action, :atom, values!: [:create, :edit]
   prop entity, :struct, required: true
   prop changeset, :changeset, required: true

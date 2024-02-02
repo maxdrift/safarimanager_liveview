@@ -11,6 +11,7 @@
         <span>{gettext("New competition")}</span>
       </div>
       <CompetitionForm
+        id="new-competition-form"
         action={:create}
         {=@competition_types}
         {=@entity}
@@ -43,7 +44,12 @@
       <div class="card-title">
         {gettext("Duplicate competition")}
       </div>
-      <Form for={@duplication_form} change="validate-duplicate" submit="submit-duplicate">
+      <Form
+        id="duplication-form"
+        for={@duplication_form}
+        change="validate-duplicate"
+        submit="submit-duplicate"
+      >
         <div class="card-body">
           <HiddenInput field={:competition_id} value={@duplication_form.params["competition_id"]} />
           <HiddenInput field={:for_teams} value={@duplication_form.params["for_teams"]} />
@@ -142,8 +148,12 @@
       </Form>
     </div>
   </div>
-  <div class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-4 gap-2 lg:gap-2 xl:gap-4">
+  <div
+    id="competitions-grid"
+    class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-4 gap-2 lg:gap-2 xl:gap-4"
+  >
     <div
+      id="new-competition-button"
       class="card card-compact bg-base-100 shadow-xl border-solid border-2 border-base-content cursor-pointer"
       phx-click={JS.add_class("modal-open", to: "#new-competition-dialog")}
     >
@@ -155,6 +165,7 @@
     </div>
     {#for competition <- @competitions}
       <div
+        id={"#{competition.id}-competition-tile"}
         class="card card-compact bg-base-100 shadow-xl image-full cursor-pointer"
         :on-click="open"
         :values={id: competition.id}

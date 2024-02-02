@@ -19,13 +19,15 @@ uploads_path =
   |> System.get_env(priv_dir_uploads)
   |> Path.expand()
 
-unless File.exists?(uploads_path) do
-  File.mkdir_p!(uploads_path)
+unless config_env() == :test do
+  unless File.exists?(uploads_path) do
+    File.mkdir_p!(uploads_path)
+  end
+
+  config :safarimanager, SM.Slides.Slide, uploads_base_path: uploads_path
 end
 
-config :safarimanager, SM.Slides.Slide,
-  direct_file_upload: System.get_env("DIRECT_FILE_UPLOAD", "true") == "true",
-  uploads_base_path: uploads_path
+config :safarimanager, SM.Slides.Slide, direct_file_upload: System.get_env("DIRECT_FILE_UPLOAD", "true") == "true"
 
 db_path =
   "DATABASE_PATH"
@@ -33,12 +35,14 @@ db_path =
   |> Path.expand()
   |> Path.join("safarimanager.db")
 
-unless File.exists?(db_path) do
-  File.mkdir_p!(Path.dirname(db_path))
-  File.touch!(db_path)
-end
+unless config_env() == :test do
+  unless File.exists?(db_path) do
+    File.mkdir_p!(Path.dirname(db_path))
+    File.touch!(db_path)
+  end
 
-config :safarimanager, SM.Repo, database: db_path
+  config :safarimanager, SM.Repo, database: db_path
+end
 
 config :logger, level: String.to_atom(System.get_env("LOG_LEVEL", "info"))
 
