@@ -3,6 +3,7 @@ defmodule SM.CompetitionsFixtures do
   alias SM.AccountsFixtures
   alias SM.Categories
   alias SM.Competitions
+  alias SM.Evaluations
   alias SM.Jurors
   alias SM.Organizations
   alias SM.Participants
@@ -16,15 +17,39 @@ defmodule SM.CompetitionsFixtures do
     %{organization: organization}
   end
 
-  def create_competition(%{organization: organization}) do
+  def create_competition(%{organization: organization} = context) do
+    %{evaluation: evaluation} = create_evaluation(context)
+
     {:ok, competition} =
       Competitions.create(%{
-        "name" => "Test Competition",
+        "name" => Map.get(context, :competition_name, "Test Competition"),
         "type" => :qualification,
-        "organization_id" => organization.id
+        "organization_id" => organization.id,
+        "competitions_evaluations" => [%{"evaluation_id" => evaluation.id}]
       })
 
     %{competition: competition}
+  end
+
+  def create_three_competitions(context) do
+    %{evaluation: evaluation} = create_evaluation(context)
+
+    competitions =
+      Enum.map(1..3, fn index ->
+        %{organization: org} = create_organization(context)
+
+        {:ok, competition} =
+          Competitions.create(%{
+            "name" => "Test Competition #{index}",
+            "type" => :qualification,
+            "organization_id" => org.id,
+            "competitions_evaluations" => [%{"evaluation_id" => evaluation.id}]
+          })
+
+        competition
+      end)
+
+    %{competitions: competitions}
   end
 
   def create_category(_context) do
@@ -32,6 +57,16 @@ defmodule SM.CompetitionsFixtures do
       Categories.create(%{"name" => "Apnea Master", "camera_type" => :reflex})
 
     %{category: category}
+  end
+
+  def create_evaluation(_context) do
+    {:ok, evaluation} =
+      Evaluations.create(%{
+        "value" => 0,
+        "name" => "0"
+      })
+
+    %{evaluation: evaluation}
   end
 
   def register_users(%{category: category, organization: organization}) do
