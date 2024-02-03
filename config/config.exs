@@ -26,6 +26,7 @@ config :safarimanager, SM.Repo,
 
 # Configures the endpoint
 config :safarimanager, SMWeb.Endpoint,
+  adapter: Bandit.PhoenixAdapter,
   url: [host: "localhost"],
   render_errors: [
     formats: [

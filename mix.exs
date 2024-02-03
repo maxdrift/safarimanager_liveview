@@ -53,6 +53,7 @@ defmodule SM.MixProject do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
+      {:bandit, "~> 1.2.0"},
       {:bcrypt_elixir, "~> 3.0"},
       {:credo, "~> 1.7", only: [:dev, :test], runtime: false},
       {:dialyzex, "~> 1.3.0", only: :dev, runtime: false},
@@ -75,7 +76,6 @@ defmodule SM.MixProject do
       {:phoenix_live_view, "0.20.1"},
       {:phoenix_view, "~> 2.0"},
       {:phoenix, "~> 1.7.0"},
-      {:plug_cowboy, "~> 2.6", override: true},
       {:postgrex, "~> 0.17.1"},
       {:progress_bar, "~> 3.0"},
       {:prom_ex, "~> 1.8"},
