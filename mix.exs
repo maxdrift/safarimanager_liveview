@@ -63,7 +63,7 @@ defmodule SM.MixProject do
       {:esbuild, "~> 0.6", runtime: Mix.env() == :dev},
       {:ex_heroicons, "~> 2.0"},
       {:excellent_migrations, "~> 0.1.6", only: [:dev, :test], runtime: false},
-      {:finch, "~> 0.17.0", override: true},
+      {:finch, "~> 0.17.0"},
       {:floki, "~> 0.34", only: :test},
       {:gettext, "~> 0.24"},
       {:image, "~> 0.33"},
@@ -93,7 +93,7 @@ defmodule SM.MixProject do
       {:swoosh, "~> 1.11"},
       {:telemetry_metrics, "~> 0.6"},
       {:telemetry_poller, "~> 1.0"},
-      {:telemetry, "~> 1.2", override: true},
+      {:telemetry, "~> 1.2"},
       {:tesla, "~> 1.8.0"}
     ]
   end
