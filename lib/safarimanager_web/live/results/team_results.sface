@@ -87,6 +87,7 @@
               <th class="sticky top-0 w-auto">{gettext("Count")}</th>
               <th class="sticky top-0 w-auto">{gettext("Distribution")}</th>
               <th class="sticky top-0 w-auto">{gettext("Coefficient")}</th>
+              <th class="sticky top-0 w-auto">{gettext("Dynamic coeff.")}</th>
             </tr>
           </thead>
           <tbody>
@@ -98,8 +99,11 @@
                 <td>{(subject.distribution && "#{Decimal.mult(subject.distribution, 100) |> Decimal.round(2)}%") ||
                     gettext("N/A")}</td>
                 <td>
-                  <span class="font-mono" title="dynamic coefficient">{subject.coefficient}</span>
-                  <span :if={subject.dynamic_coefficient} title="dynamic coefficient">
+                  <span class="font-mono">{subject.coefficient}</span>
+                </td>
+                <td>
+                  <span class="font-mono" title={gettext("dynamic coefficient")}>{subject.dynamic_coefficient}</span>
+                  <span title={gettext("dynamic coefficient")}>
                     <Heroicons.Surface.Icon
                       name="scale"
                       type="solid"
@@ -168,7 +172,8 @@
                     </tr>
                   </thead>
                   <tbody>
-                    {#for %{slide: slide, slide_score: score, coefficient: coefficient} <- result.slides}
+                    {#for %{slide: slide, slide_score: score, coefficient: coefficient, use_dynamic?: use_dynamic?} <-
+                        result.slides}
                       <tr>
                         <td>{slide.file_name}</td>
                         <td>
@@ -176,8 +181,8 @@
                         </td>
                         <td><span class="capitalize">{slide.subject.name}</span></td>
                         <td>
-                          <span class="font-mono" title="dynamic coefficient">{coefficient}</span>
-                          <span :if={@competition.settings.dynamic_coefficients_enabled} title="dynamic coefficient">
+                          <span class="font-mono" title={(use_dynamic? && gettext("dynamic coefficient")) || ""}>{coefficient}</span>
+                          <span :if={use_dynamic?} title={gettext("dynamic coefficient")}>
                             <Heroicons.Surface.Icon
                               name="scale"
                               type="solid"

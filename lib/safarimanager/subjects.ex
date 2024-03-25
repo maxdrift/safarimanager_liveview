@@ -274,14 +274,7 @@ defmodule SM.Subjects do
     {:ok, competition} = Competitions.get(competition_id)
     slides_subjects = Slides.subjects_distribution(competition_id)
 
-    competition
-    |> Map.fetch!(:settings)
-    |> Map.fetch!(:dynamic_coefficients_enabled)
-    |> if do
-      list_with_dynamic_coefficients(competition, slides_subjects)
-    else
-      slides_subjects
-    end
+    list_with_dynamic_coefficients(competition, slides_subjects)
   end
 
   # Internal
@@ -321,8 +314,7 @@ defmodule SM.Subjects do
 
       subject
       |> Map.put(:distribution, distribution)
-      |> Map.put(:coefficient, coeff)
-      |> Map.put(:dynamic_coefficient, true)
+      |> Map.put(:dynamic_coefficient, coeff)
     end)
   end
 

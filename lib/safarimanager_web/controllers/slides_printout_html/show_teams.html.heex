@@ -32,17 +32,19 @@
         </tr>
       </thead>
       <tbody>
-        <%= for %{slide: slide, slide_score: score, coefficient: coefficient} <- result.slides do %>
+        <%= for %{slide: slide, slide_score: score, coefficient: coefficient, use_dynamic?: use_dynamic?} <- result.slides do %>
           <tr class="border">
             <td class="border"><%= slide.file_name %></td>
             <td class="border text-right font-mono"><%= slide.subject.numeric_id %></td>
             <td class="border capitalize"><%= slide.subject.name %></td>
             <td class="border text-center">
-              <span class="font-mono" title="dynamic coefficient"><%= coefficient %></span>
               <span
-                :if={@competition.settings.dynamic_coefficients_enabled}
-                title="dynamic coefficient"
+                class="font-mono"
+                title={(use_dynamic? && gettext("dynamic coefficient")) || ""}
               >
+                <%= coefficient %>
+              </span>
+              <span :if={use_dynamic?} title={gettext("dynamic coefficient")}>
                 <Heroicons.LiveView.icon
                   name="scale"
                   type="solid"

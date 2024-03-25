@@ -157,23 +157,40 @@ defmodule SM.Results do
   defp slide_score(%Slide{penalty: true} = slide, total_score, competition, subjects_map) do
     subject = Map.fetch!(subjects_map, slide.subject_id)
 
+    use_dynamic? = competition.settings.dynamic_coefficients_enabled
+
+    coefficient =
+      if use_dynamic? do
+        subject.dynamic_coefficient
+      else
+        subject.coefficient
+      end
+
     slide_score = competition.settings.penalty_amount
 
-    {[%{slide: slide, slide_score: slide_score, coefficient: subject.coefficient}], Decimal.add(total_score, slide_score)}
+    {[%{slide: slide, slide_score: slide_score, coefficient: coefficient, use_dynamic?: use_dynamic?}],
+     Decimal.add(total_score, slide_score)}
   end
 
   # If a slide is submitted to Jury its score is the sum of the evaluation values multiplied by
   # its coefficient (static or dynamic that is)
-  defp slide_score(%Slide{status: :submitted_jury} = slide, total_score, _competition, subjects_map) do
+  defp slide_score(%Slide{status: :submitted_jury} = slide, total_score, competition, subjects_map) do
     subject = Map.fetch!(subjects_map, slide.subject_id)
 
-    slide_score =
-      Decimal.mult(
-        Enum.reduce(slide.votes, Decimal.new(0), &Decimal.add(&2, &1.evaluation.value)),
-        subject.coefficient
-      )
+    use_dynamic? = competition.settings.dynamic_coefficients_enabled
 
-    {[%{slide: slide, slide_score: slide_score, coefficient: subject.coefficient}], Decimal.add(total_score, slide_score)}
+    coefficient =
+      if use_dynamic? do
+        subject.dynamic_coefficient
+      else
+        subject.coefficient
+      end
+
+    slide_score =
+      Decimal.mult(Enum.reduce(slide.votes, Decimal.new(0), &Decimal.add(&2, &1.evaluation.value)), coefficient)
+
+    {[%{slide: slide, slide_score: slide_score, coefficient: coefficient, use_dynamic?: use_dynamic?}],
+     Decimal.add(total_score, slide_score)}
   end
 
   # If a slide is submitted with fixed points its score is its coefficient multiplied by
@@ -181,10 +198,19 @@ defmodule SM.Results do
   defp slide_score(%Slide{status: :submitted_fixed} = slide, total_score, competition, subjects_map) do
     subject = Map.fetch!(subjects_map, slide.subject_id)
 
-    slide_score =
-      Decimal.mult(competition.settings.fixed_points_multiplier, subject.coefficient)
+    use_dynamic? = competition.settings.dynamic_coefficients_enabled
 
-    {[%{slide: slide, slide_score: slide_score, coefficient: subject.coefficient}], Decimal.add(total_score, slide_score)}
+    coefficient =
+      if use_dynamic? do
+        subject.dynamic_coefficient
+      else
+        subject.coefficient
+      end
+
+    slide_score = Decimal.mult(competition.settings.fixed_points_multiplier, coefficient)
+
+    {[%{slide: slide, slide_score: slide_score, coefficient: coefficient, use_dynamic?: use_dynamic?}],
+     Decimal.add(total_score, slide_score)}
   end
 
   defp slide_score(%Slide{}, total_score, _competition, _subjects_map) do
