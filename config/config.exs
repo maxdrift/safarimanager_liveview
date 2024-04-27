@@ -47,9 +47,7 @@ config :safarimanager, SMWeb.Endpoint,
 # at the `config/runtime.exs`.
 config :safarimanager, SM.Mailer, adapter: Swoosh.Adapters.Local
 
-config :safarimanager, SM.Subjects.Subject,
-  types: [:fish, :macro, :fish_macro, :ambient],
-  coefficients: [2, 4, 6]
+config :safarimanager, SM.Subjects.Subject, types: [:fish, :macro, :fish_macro, :ambient]
 
 config :safarimanager, SM.Categories.Category, camera_types: [:any, :compact, :reflex]
 

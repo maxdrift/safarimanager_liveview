@@ -68,13 +68,7 @@
             <TextInput class={input_state_class(@changeset, :scientific_name)} opts={phx_debounce: "1000"} />
           </SMField>
           <SMField name={:coefficient} label={gettext("Coefficient")}>
-            <Select
-              options={@coefficients}
-              selected={@record.coefficient}
-              prompt={gettext("Select a coefficient")}
-              class={select_state_class(@changeset, :coefficient)}
-              opts={phx_debounce: "1000"}
-            />
+            <NumberInput class={input_state_class(@changeset, :coefficient)} opts={phx_debounce: "1000"} />
           </SMField>
           <SMField name={:type} label={gettext("Type")}>
             <Select

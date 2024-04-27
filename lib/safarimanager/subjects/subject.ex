@@ -5,7 +5,6 @@ defmodule SM.Subjects.Subject do
   use SM, :schema
 
   @types Application.compile_env!(:safarimanager, [__MODULE__, :types])
-  @coefficients Application.compile_env!(:safarimanager, [__MODULE__, :coefficients])
 
   schema "subjects" do
     field :name, :string
@@ -26,7 +25,7 @@ defmodule SM.Subjects.Subject do
     struct
     |> cast(attrs, [:name, :coefficient, :numeric_id, :scientific_name, :type])
     |> validate_required([:name, :numeric_id, :type])
-    |> validate_inclusion(:coefficient, @coefficients)
+    |> validate_number(:coefficient, greater_than_or_equal_to: 0)
     |> unique_constraint(:numeric_id)
   end
 
@@ -36,7 +35,6 @@ defmodule SM.Subjects.Subject do
     struct
     |> cast(attrs, __MODULE__.__schema__(:fields))
     |> validate_required(__MODULE__.__schema__(:fields))
-    |> validate_inclusion(:coefficient, @coefficients)
     |> unique_constraint(:id)
     |> unique_constraint(:numeric_id)
   end
@@ -44,10 +42,5 @@ defmodule SM.Subjects.Subject do
   @spec get_types :: [:ambient | :fish | :fish_macro | :macro, ...]
   def get_types do
     @types
-  end
-
-  @spec get_coefficients :: [2 | 4 | 6, ...]
-  def get_coefficients do
-    @coefficients
   end
 end

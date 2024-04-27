@@ -24,7 +24,9 @@ defmodule SMWeb.Live.Admin.Subjects.Index do
 
   require Logger
 
-  @page_size 50
+  # @page_size 50
+  # Disabling pagination for now
+  @page_size 500
 
   on_mount SMWeb.SidebarHook
 
@@ -40,8 +42,7 @@ defmodule SMWeb.Live.Admin.Subjects.Index do
       |> reset_current_editing()
       |> assign(
         action: changeset_action,
-        subject_types: Subjects.list_subject_types(),
-        coefficients: Subjects.list_subject_coefficients()
+        subject_types: Subjects.list_subject_types()
       )
 
     {:ok, socket}

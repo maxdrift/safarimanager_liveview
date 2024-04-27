@@ -23,20 +23,6 @@ defmodule SM.Subjects do
   end
 
   @doc """
-  Returns the list of subject coefficients.
-
-  ## Examples
-
-  iex> list_subject_coefficients()
-  [2, 4, 6]
-
-  """
-  @spec list_subject_coefficients :: [2 | 4 | 6, ...]
-  def list_subject_coefficients do
-    Subject.get_coefficients()
-  end
-
-  @doc """
   Returns the list of subjects.
 
   ## Examples
