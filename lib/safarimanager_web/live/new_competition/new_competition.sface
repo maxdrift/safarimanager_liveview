@@ -20,6 +20,8 @@
         submit="submit"
         {=@organizations}
         {=@evaluations}
+        {=@coefficient_modes}
+        {=@dynamic_coefficient_modes}
       >
         <div class="modal-action">
           <Submit values={[action: :create]} class={submit_state_class(@changeset)}>

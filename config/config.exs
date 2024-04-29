@@ -82,6 +82,18 @@ config :safarimanager, SM.Slides.SlideFlag,
   ]
 
 config :safarimanager, SM.Competitions.CompetitionSettings,
+  coefficient_modes: [
+    {:disabled, "disabled"},
+    {:all, "all"},
+    {:submitted_jury, "submitted jury"},
+    {:submitted_fixed, "submitted fixed"}
+  ],
+  dynamic_coefficient_modes: [
+    {:disabled, "disabled"},
+    {:all, "all"},
+    {:submitted_jury, "submitted jury"},
+    {:submitted_fixed, "submitted fixed"}
+  ],
   defaults: [
     evaluations_per_juror: 1,
     number_of_jurors: 3,

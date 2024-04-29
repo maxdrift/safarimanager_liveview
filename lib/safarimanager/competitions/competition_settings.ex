@@ -6,6 +6,9 @@ defmodule SM.Competitions.CompetitionSettings do
 
   alias SM.Competitions.Competition
 
+  @coefficient_modes Application.compile_env!(:safarimanager, [__MODULE__, :coefficient_modes])
+  @dynamic_coefficient_modes Application.compile_env!(:safarimanager, [__MODULE__, :dynamic_coefficient_modes])
+
   defmodule DynamicCoefficient do
     @moduledoc """
     Dynamic coefficient model
@@ -44,7 +47,8 @@ defmodule SM.Competitions.CompetitionSettings do
              :submission_ratio,
              :fixed_points_multiplier,
              :penalty_amount,
-             :dynamic_coefficients_enabled,
+             :coefficient_mode,
+             :dynamic_coefficient_mode,
              :dynamic_coefficients,
              :competition_id,
              :inserted_at,
@@ -60,7 +64,8 @@ defmodule SM.Competitions.CompetitionSettings do
     field :submission_ratio, :decimal
     field :fixed_points_multiplier, :decimal
     field :penalty_amount, :decimal
-    field :dynamic_coefficients_enabled, :boolean, default: false
+    field :coefficient_mode, Ecto.Enum, values: Keyword.keys(@coefficient_modes), default: :all
+    field :dynamic_coefficient_mode, Ecto.Enum, values: Keyword.keys(@coefficient_modes), default: :disabled
 
     embeds_many :dynamic_coefficients, DynamicCoefficient, on_replace: :delete
 
@@ -82,7 +87,8 @@ defmodule SM.Competitions.CompetitionSettings do
       :submission_ratio,
       :fixed_points_multiplier,
       :penalty_amount,
-      :dynamic_coefficients_enabled
+      :coefficient_mode,
+      :dynamic_coefficient_mode
     ])
     |> validate_required([
       :evaluations_per_juror,
@@ -94,5 +100,15 @@ defmodule SM.Competitions.CompetitionSettings do
       :penalty_amount
     ])
     |> cast_embed(:dynamic_coefficients)
+  end
+
+  @spec get_coefficient_modes :: [{atom(), String.t()}]
+  def get_coefficient_modes do
+    @coefficient_modes
+  end
+
+  @spec get_dynamic_coefficient_modes :: [{atom(), String.t()}]
+  def get_dynamic_coefficient_modes do
+    @dynamic_coefficient_modes
   end
 end

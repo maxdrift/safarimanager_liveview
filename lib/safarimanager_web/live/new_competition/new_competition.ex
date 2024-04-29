@@ -7,6 +7,7 @@ defmodule SMWeb.Live.NewCompetition do
   alias SM.Competitions
   alias SM.Competitions.Competition
   alias SM.Competitions.CompetitionEvaluation
+  alias SM.Competitions.CompetitionSettings
   alias SM.Evaluations
   alias SM.Organizations
   alias SM.Slides
@@ -37,6 +38,8 @@ defmodule SMWeb.Live.NewCompetition do
         competitions: Competitions.list(),
         organizations: Organizations.list(),
         evaluations: Evaluations.list(),
+        coefficient_modes: CompetitionSettings.get_coefficient_modes(),
+        dynamic_coefficient_modes: CompetitionSettings.get_dynamic_coefficient_modes(),
         competition_types: Competitions.list_competition_types(),
         duplication_form: to_form(%{}, as: :duplicate_competition)
       )

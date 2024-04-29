@@ -260,15 +260,35 @@
           />
           <Label class="label h-7"><ErrorTag /></Label>
         </Field>
-        <Field name={:dynamic_coefficients_enabled} class="form-control w-1/2 px-3">
-          <Label class="label cursor-pointer">
-            <span class="label-text">{gettext("Dynamic coefficients")}</span>
-            <Checkbox
-              class={state_class("checkbox", settings_form.source, :dynamic_coefficients_enabled, [])}
-              opts={phx_debounce: "1000"}
-            />
+        <Field name={:coefficient_mode} class="form-control w-1/2 px-3">
+          <Label class="label">
+            <span class="label-text">{gettext("Coefficient mode")}</span>
           </Label>
-          <Label class="label h-7"><ErrorTag /></Label>
+          <Select
+            options={Enum.map(@coefficient_modes, fn {value, label} ->
+              {String.capitalize(Gettext.gettext(SMWeb.Gettext, label)), value}
+            end)}
+            prompt={[key: gettext("Select a coefficient mode...")]}
+            class={select_state_class(settings_form.source, :coefficient_mode)}
+          />
+          <Label class="label h-7">
+            <ErrorTag />
+          </Label>
+        </Field>
+        <Field name={:dynamic_coefficient_mode} class="form-control w-1/2 px-3">
+          <Label class="label">
+            <span class="label-text">{gettext("Dynamic coefficient mode")}</span>
+          </Label>
+          <Select
+            options={Enum.map(@dynamic_coefficient_modes, fn {value, label} ->
+              {String.capitalize(Gettext.gettext(SMWeb.Gettext, label)), value}
+            end)}
+            prompt={[key: gettext("Select a dynamic coefficient mode...")]}
+            class={select_state_class(settings_form.source, :dynamic_coefficient_mode)}
+          />
+          <Label class="label h-7">
+            <ErrorTag />
+          </Label>
         </Field>
         <div class="text-lg w-full px-3">{gettext("Dynamic coefficients")}:</div>
         <Inputs for={:dynamic_coefficients}>

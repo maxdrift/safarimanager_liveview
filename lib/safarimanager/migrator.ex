@@ -87,18 +87,13 @@ defmodule SM.Migrator do
       pre_existing = SM.Organizations.list()
 
       organizations =
-        societa
-        |> Stream.map(fn {key, row} ->
+        Map.new(societa, fn {key, row} ->
           new_row =
             row
             |> get_or_create(:nomes, :name, pre_existing, @similarity_threshold)
             |> case do
               {:ok, :create} ->
-                {:ok, new_record} =
-                  SM.Organizations.create(%{
-                    name: row.nomes,
-                    location: row.luogos
-                  })
+                {:ok, new_record} = SM.Organizations.create(%{name: row.nomes, location: row.luogos})
 
                 new_record
 
@@ -108,7 +103,6 @@ defmodule SM.Migrator do
 
           {key, new_row}
         end)
-        |> Map.new()
 
       accumulator = Map.put(accumulator, :societa, Map.new(societa))
       accumulator = Map.put(accumulator, :organizations, organizations)
@@ -126,8 +120,7 @@ defmodule SM.Migrator do
         |> Map.fetch!(:numeric_id)
 
       subjects =
-        pesci
-        |> Stream.map(fn {key, row} ->
+        Map.new(pesci, fn {key, row} ->
           new_row =
             row
             |> get_or_create(:nomep, :name, pre_existing, @similarity_threshold)
@@ -150,7 +143,6 @@ defmodule SM.Migrator do
 
           {key, new_row}
         end)
-        |> Map.new()
 
       accumulator = Map.put(accumulator, :pesci, Map.new(pesci))
       accumulator = Map.put(accumulator, :subjects, subjects)
@@ -163,8 +155,7 @@ defmodule SM.Migrator do
       pre_existing = SM.Subjects.list()
 
       subjects =
-        pesci
-        |> Stream.map(fn {key, row} ->
+        Map.new(pesci, fn {key, row} ->
           new_row =
             row
             |> get_or_create(:nome, :name, pre_existing, @similarity_threshold)
@@ -187,7 +178,6 @@ defmodule SM.Migrator do
 
           {key, new_row}
         end)
-        |> Map.new()
 
       accumulator = Map.put(accumulator, :pesci, Map.new(pesci))
       accumulator = Map.put(accumulator, :subjects, subjects)
@@ -200,8 +190,7 @@ defmodule SM.Migrator do
       pre_existing = SM.Categories.list()
 
       categories =
-        categorie
-        |> Stream.map(fn {key, row} ->
+        Map.new(categorie, fn {key, row} ->
           new_row =
             row
             |> get_or_create(:categoria, :name, pre_existing, @similarity_threshold)
@@ -217,7 +206,6 @@ defmodule SM.Migrator do
 
           {key, new_row}
         end)
-        |> Map.new()
 
       accumulator = Map.put(accumulator, :categorie, Map.new(categorie))
       accumulator = Map.put(accumulator, :categories, categories)
@@ -230,7 +218,7 @@ defmodule SM.Migrator do
       coefficients =
         coefficienti
         |> Stream.reject(fn {_key, coeff} -> coeff.grado == "null" end)
-        |> Stream.map(fn {key, row} ->
+        |> Map.new(fn {key, row} ->
           new_row =
             row
             |> get_or_create(nil, nil, [], @similarity_threshold)
@@ -249,7 +237,6 @@ defmodule SM.Migrator do
 
           {key, new_row}
         end)
-        |> Map.new()
 
       accumulator = Map.put(accumulator, :coefficienti, Map.new(coefficienti))
       accumulator = Map.put(accumulator, :coefficients, coefficients)
@@ -268,43 +255,25 @@ defmodule SM.Migrator do
       pre_existing = SM.Accounts.list()
 
       users =
-        iscritti
-        |> Stream.map(fn {key, row} ->
+        Map.new(iscritti, fn {key, row} ->
           new_row =
             row
-            |> get_or_create(
-              [:cognomec, :nomec],
-              [:last_name, :first_name],
-              pre_existing,
-              0.9
-            )
+            |> get_or_create([:cognomec, :nomec], [:last_name, :first_name], pre_existing, 0.9)
             |> case do
               {:ok, :create} ->
                 org_old_id =
                   accumulator
                   |> Map.fetch!(:societa)
-                  |> Enum.find_value(fn {pk, s} ->
-                    if s.nomes == row.nomes, do: pk
-                  end)
+                  |> Enum.find_value(fn {pk, s} -> if s.nomes == row.nomes, do: pk end)
 
-                org_id =
-                  accumulator
-                  |> Map.fetch!(:organizations)
-                  |> Map.fetch!(org_old_id)
-                  |> Map.fetch!(:id)
+                org_id = accumulator |> Map.fetch!(:organizations) |> Map.fetch!(org_old_id) |> Map.fetch!(:id)
 
                 category_old_id =
                   accumulator
                   |> Map.fetch!(:categorie)
-                  |> Enum.find_value(fn {pk, s} ->
-                    if s.categoria == row.categoria, do: pk
-                  end)
+                  |> Enum.find_value(fn {pk, s} -> if s.categoria == row.categoria, do: pk end)
 
-                category_id =
-                  accumulator
-                  |> Map.fetch!(:categories)
-                  |> Map.fetch!(category_old_id)
-                  |> Map.fetch!(:id)
+                category_id = accumulator |> Map.fetch!(:categories) |> Map.fetch!(category_old_id) |> Map.fetch!(:id)
 
                 {:ok, new_record} =
                   SM.Accounts.register_simplified_user(%{
@@ -322,7 +291,6 @@ defmodule SM.Migrator do
 
           {key, new_row}
         end)
-        |> Map.new()
 
       accumulator = Map.put(accumulator, :iscritti, Map.new(iscritti))
       accumulator = Map.put(accumulator, :users, users)
@@ -335,29 +303,15 @@ defmodule SM.Migrator do
       pre_existing = SM.Accounts.list()
 
       users =
-        iscritti
-        |> Stream.map(fn {key, row} ->
+        Map.new(iscritti, fn {key, row} ->
           new_row =
             row
-            |> get_or_create(
-              [:cognome, :nome],
-              [:last_name, :first_name],
-              pre_existing,
-              0.9
-            )
+            |> get_or_create([:cognome, :nome], [:last_name, :first_name], pre_existing, 0.9)
             |> case do
               {:ok, :create} ->
-                org_id =
-                  accumulator
-                  |> Map.fetch!(:organizations)
-                  |> Map.fetch!(row."ID_societa")
-                  |> Map.fetch!(:id)
+                org_id = accumulator |> Map.fetch!(:organizations) |> Map.fetch!(row."ID_societa") |> Map.fetch!(:id)
 
-                category_id =
-                  accumulator
-                  |> Map.fetch!(:categories)
-                  |> Map.fetch!(row."ID_categoria")
-                  |> Map.fetch!(:id)
+                category_id = accumulator |> Map.fetch!(:categories) |> Map.fetch!(row."ID_categoria") |> Map.fetch!(:id)
 
                 {:ok, new_record} =
                   SM.Accounts.register_simplified_user(%{
@@ -375,7 +329,6 @@ defmodule SM.Migrator do
 
           {key, new_row}
         end)
-        |> Map.new()
 
       accumulator = Map.put(accumulator, :iscritti, Map.new(iscritti))
       accumulator = Map.put(accumulator, :users, users)
@@ -458,6 +411,8 @@ defmodule SM.Migrator do
                     fixed_points_multiplier: Decimal.new(moltpuntfisso),
                     penalty_amount: Decimal.negate(Decimal.new(row.penalty)),
                     dynamic_coefficients_enabled: dynamic_coefficients_enabled?,
+                    coefficient_mode: :all_slides,
+                    dynamic_coefficient_mode: (dynamic_coefficients_enabled? && :all) || :disabled,
                     dynamic_coefficients: dynamic_coefficients
                   }
                 })
@@ -485,36 +440,22 @@ defmodule SM.Migrator do
   defp migrate_participants(conn, accumulator, :v1) do
     with {:ok, iscritti} <- get_table_data(conn, :iscritti, [:*], :letterac) do
       participants =
-        iscritti
-        |> Stream.map(fn {key, row} ->
+        Map.new(iscritti, fn {key, row} ->
           new_row =
             row
             |> get_or_create(nil, nil, [], @similarity_threshold)
             |> case do
               {:ok, :create} ->
-                user_id =
-                  accumulator
-                  |> Map.fetch!(:users)
-                  |> Map.fetch!(row.letterac)
-                  |> Map.fetch!(:id)
+                user_id = accumulator |> Map.fetch!(:users) |> Map.fetch!(row.letterac) |> Map.fetch!(:id)
 
-                competition_id =
-                  accumulator
-                  |> Map.fetch!(:competition)
-                  |> Map.fetch!(:id)
+                competition_id = accumulator |> Map.fetch!(:competition) |> Map.fetch!(:id)
 
                 category_old_id =
                   accumulator
                   |> Map.fetch!(:categorie)
-                  |> Enum.find_value(fn {pk, s} ->
-                    if s.categoria == row.categoria, do: pk
-                  end)
+                  |> Enum.find_value(fn {pk, s} -> if s.categoria == row.categoria, do: pk end)
 
-                category_id =
-                  accumulator
-                  |> Map.fetch!(:categories)
-                  |> Map.fetch!(category_old_id)
-                  |> Map.fetch!(:id)
+                category_id = accumulator |> Map.fetch!(:categories) |> Map.fetch!(category_old_id) |> Map.fetch!(:id)
 
                 {:ok, new_record} =
                   SM.Participants.create(%{
@@ -532,7 +473,6 @@ defmodule SM.Migrator do
 
           {key, new_row}
         end)
-        |> Map.new()
 
       accumulator = Map.put(accumulator, :participants, participants)
       {:ok, accumulator}
@@ -542,29 +482,17 @@ defmodule SM.Migrator do
   defp migrate_participants(conn, accumulator, _version) do
     with {:ok, iscritti} <- get_table_data(conn, :iscritti, [:*], :ID) do
       participants =
-        iscritti
-        |> Stream.map(fn {key, row} ->
+        Map.new(iscritti, fn {key, row} ->
           new_row =
             row
             |> get_or_create(nil, nil, [], @similarity_threshold)
             |> case do
               {:ok, :create} ->
-                user_id =
-                  accumulator
-                  |> Map.fetch!(:users)
-                  |> Map.fetch!(row."ID")
-                  |> Map.fetch!(:id)
+                user_id = accumulator |> Map.fetch!(:users) |> Map.fetch!(row."ID") |> Map.fetch!(:id)
 
-                competition_id =
-                  accumulator
-                  |> Map.fetch!(:competition)
-                  |> Map.fetch!(:id)
+                competition_id = accumulator |> Map.fetch!(:competition) |> Map.fetch!(:id)
 
-                category_id =
-                  accumulator
-                  |> Map.fetch!(:categories)
-                  |> Map.fetch!(row."ID_categoria")
-                  |> Map.fetch!(:id)
+                category_id = accumulator |> Map.fetch!(:categories) |> Map.fetch!(row."ID_categoria") |> Map.fetch!(:id)
 
                 {:ok, _participant} =
                   SM.Participants.create(%{
@@ -582,7 +510,6 @@ defmodule SM.Migrator do
 
           {key, new_row}
         end)
-        |> Map.new()
 
       accumulator = Map.put(accumulator, :participants, participants)
       {:ok, accumulator}
@@ -630,29 +557,17 @@ defmodule SM.Migrator do
   defp migrate_slides(conn, accumulator, :v1) do
     with {:ok, slide} <- get_table_data(conn, :slide, [:*], :id) do
       slides =
-        slide
-        |> Stream.map(fn {key, row} ->
+        Map.new(slide, fn {key, row} ->
           new_row =
             row
             |> get_or_create(nil, nil, [], @similarity_threshold)
             |> case do
               {:ok, :create} ->
-                user_id =
-                  accumulator
-                  |> Map.fetch!(:users)
-                  |> Map.fetch!(row.letterac)
-                  |> Map.fetch!(:id)
+                user_id = accumulator |> Map.fetch!(:users) |> Map.fetch!(row.letterac) |> Map.fetch!(:id)
 
-                competition_id =
-                  accumulator
-                  |> Map.fetch!(:competition)
-                  |> Map.fetch!(:id)
+                competition_id = accumulator |> Map.fetch!(:competition) |> Map.fetch!(:id)
 
-                source_path =
-                  conn
-                  |> Map.fetch!(:directory)
-                  |> Path.join(row.path)
-                  |> String.replace("\\", "/")
+                source_path = conn |> Map.fetch!(:directory) |> Path.join(row.path) |> String.replace("\\", "/")
 
                 file_name = Path.basename(source_path)
                 %File.Stat{size: file_size} = File.stat!(source_path)
@@ -667,19 +582,12 @@ defmodule SM.Migrator do
                     source_path
                   )
 
-                subject_id =
-                  accumulator
-                  |> Map.fetch!(:subjects)
-                  |> Map.fetch!(row.nump)
-                  |> Map.fetch!(:id)
+                subject_id = accumulator |> Map.fetch!(:subjects) |> Map.fetch!(row.nump) |> Map.fetch!(:id)
 
                 jury? = if row.pres == -1, do: true, else: false
 
                 {:ok, slide} =
-                  SM.Slides.update(slide, %{
-                    subject_id: subject_id,
-                    status: SM.Slides.jury_bool_to_status(jury?)
-                  })
+                  SM.Slides.update(slide, %{subject_id: subject_id, status: SM.Slides.jury_bool_to_status(jury?)})
 
                 [v1] = SM.Evaluations.list_by_value(row.v1)
                 [v2] = SM.Evaluations.list_by_value(row.v2)
@@ -707,7 +615,6 @@ defmodule SM.Migrator do
 
           {key, new_row}
         end)
-        |> Map.new()
 
       accumulator = Map.put(accumulator, :slide, Map.new(slide))
       accumulator = Map.put(accumulator, :slides, slides)
@@ -718,35 +625,20 @@ defmodule SM.Migrator do
   defp migrate_slides(conn, accumulator, _version) do
     with {:ok, slide} <- get_table_data(conn, :slide, [:*], :id) do
       slides =
-        slide
-        |> Stream.map(fn {key, row} ->
+        Map.new(slide, fn {key, row} ->
           new_row =
             row
             |> get_or_create(nil, nil, [], @similarity_threshold)
             |> case do
               {:ok, :create} ->
-                user_id =
-                  accumulator
-                  |> Map.fetch!(:users)
-                  |> Map.fetch!(row."ID_concorrente")
-                  |> Map.fetch!(:id)
+                user_id = accumulator |> Map.fetch!(:users) |> Map.fetch!(row."ID_concorrente") |> Map.fetch!(:id)
 
-                competition_id =
-                  accumulator
-                  |> Map.fetch!(:competition)
-                  |> Map.fetch!(:id)
+                competition_id = accumulator |> Map.fetch!(:competition) |> Map.fetch!(:id)
 
                 participant_dir =
-                  accumulator
-                  |> Map.fetch!(:participants)
-                  |> Map.fetch!(row."ID_concorrente")
-                  |> String.trim(".")
+                  accumulator |> Map.fetch!(:participants) |> Map.fetch!(row."ID_concorrente") |> String.trim(".")
 
-                source_path =
-                  conn
-                  |> Map.fetch!(:directory)
-                  |> Path.join(participant_dir)
-                  |> Path.join(row.nomefile)
+                source_path = conn |> Map.fetch!(:directory) |> Path.join(participant_dir) |> Path.join(row.nomefile)
 
                 file_name = Path.basename(source_path)
                 %File.Stat{size: file_size} = File.stat!(source_path)
@@ -761,19 +653,12 @@ defmodule SM.Migrator do
                     source_path
                   )
 
-                subject_id =
-                  accumulator
-                  |> Map.fetch!(:subjects)
-                  |> Map.fetch!(row."ID_pesce")
-                  |> Map.fetch!(:id)
+                subject_id = accumulator |> Map.fetch!(:subjects) |> Map.fetch!(row."ID_pesce") |> Map.fetch!(:id)
 
                 jury? = if row.pres == -1, do: true, else: false
 
                 {:ok, slide} =
-                  SM.Slides.update(slide, %{
-                    subject_id: subject_id,
-                    status: SM.Slides.jury_bool_to_status(jury?)
-                  })
+                  SM.Slides.update(slide, %{subject_id: subject_id, status: SM.Slides.jury_bool_to_status(jury?)})
 
                 [v1] = SM.Evaluations.list_by_value(row.v1)
                 [v2] = SM.Evaluations.list_by_value(row.v2)
@@ -801,7 +686,6 @@ defmodule SM.Migrator do
 
           {key, new_row}
         end)
-        |> Map.new()
 
       accumulator = Map.put(accumulator, :slide, Map.new(slide))
       accumulator = Map.put(accumulator, :slides, slides)

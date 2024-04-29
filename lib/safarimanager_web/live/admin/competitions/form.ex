@@ -27,6 +27,8 @@ defmodule SMWeb.Live.Admin.Competitions.Form do
   prop redirect_to, :string
   prop organizations, :list, required: true
   prop evaluations, :list, required: true
+  prop coefficient_modes, :list, required: true
+  prop dynamic_coefficient_modes, :list, required: true
 
   slot default, required: true
 end

@@ -7,6 +7,7 @@ defmodule SMWeb.Live.Admin.Competitions.Index do
   alias SM.Competitions
   alias SM.Competitions.Competition
   alias SM.Competitions.CompetitionEvaluation
+  alias SM.Competitions.CompetitionSettings
   alias SM.Evaluations
   alias SM.Organizations
   alias SM.Slides
@@ -52,7 +53,9 @@ defmodule SMWeb.Live.Admin.Competitions.Index do
         action: changeset_action,
         competition_types: Competitions.list_competition_types(),
         organizations: Organizations.list(),
-        evaluations: Evaluations.list()
+        evaluations: Evaluations.list(),
+        coefficient_modes: CompetitionSettings.get_coefficient_modes(),
+        dynamic_coefficient_modes: CompetitionSettings.get_dynamic_coefficient_modes()
       )
 
     {:ok, socket}

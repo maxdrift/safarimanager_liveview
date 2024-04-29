@@ -306,7 +306,7 @@ defmodule SMWeb.Live.ValidationLauncher do
   end
 
   defp jolly_slide?(competition, has_lower_coeff_slide?) when is_boolean(has_lower_coeff_slide?) do
-    not competition.settings.dynamic_coefficients_enabled and has_lower_coeff_slide?
+    not (competition.settings.dynamic_coefficient_mode != :disabled) and has_lower_coeff_slide?
   end
 
   defp proportional_jury_threshold(submitted_slides_cnt, jury_ratio) do
