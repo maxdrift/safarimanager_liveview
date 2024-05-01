@@ -553,13 +553,14 @@ defmodule SM.Utils do
   The listener references usually follow the pattern `plug.HTTP`
   and `plug.HTTPS`.
   """
-  @spec get_port(:ranch.ref(), :inet.port_number()) :: :inet.port_number()
-  def get_port(ref, default) do
-    :ranch.get_addr(ref)
+  @spec get_port(module, :http | :https, :inet.port_number()) :: :inet.port_number()
+  def get_port(endpoint, scheme, default) do
+    {:ok, pid} = Bandit.PhoenixAdapter.bandit_pid(endpoint, scheme)
+    ThousandIsland.listener_info(pid)
   rescue
     _exception -> default
   else
-    {_, port} when is_integer(port) -> port
+    {:ok, {_, port}} when is_integer(port) -> port
     _other -> default
   end
 
@@ -575,11 +576,12 @@ defmodule SM.Utils do
       "localhost"
 
       iex> SM.Utils.ip_to_host({0, 0, 0, 0})
-      "0.0.0.0"
+      "localhost"
   """
   @spec ip_to_host(:inet.ip_address()) :: String.t()
   def ip_to_host(ip)
 
+  def ip_to_host({0, 0, 0, 0}), do: "localhost"
   def ip_to_host({127, 0, 0, 1}), do: "localhost"
 
   def ip_to_host(ip) do

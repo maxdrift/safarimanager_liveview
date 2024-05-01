@@ -60,7 +60,7 @@ lv_signing_salt =
     You can generate one by calling: mix phx.gen.secret 32
     """
 
-http_ip = {0, 0, 0, 0, 0, 0, 0, 0}
+http_ip = {0, 0, 0, 0}
 http_port = "SAFARIMANAGER_PORT" |> System.get_env("4000") |> String.to_integer()
 
 url_host = System.get_env("SAFARIMANAGER_HOST", "localhost")
@@ -79,6 +79,12 @@ config :safarimanager, SMWeb.Endpoint,
     # for details about using IPv6 vs IPv4 and loopback vs public addresses.
     ip: http_ip,
     port: http_port
+  ],
+  http: [
+    ip: http_ip,
+    port: http_port,
+    http_1_options: [max_header_length: 32_768],
+    http_2_options: [max_header_value_length: 32_768]
   ],
   check_origin: false,
   secret_key_base: secret_key_base,
