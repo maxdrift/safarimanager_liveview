@@ -53,27 +53,27 @@ defmodule SM.MixProject do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
-      {:bandit, "~> 1.2.0"},
+      {:bandit, "~> 1.5.0"},
       {:bcrypt_elixir, "~> 3.0"},
       {:credo, "~> 1.7", only: [:dev, :test], runtime: false},
       {:dialyzex, "~> 1.3.0", only: :dev, runtime: false},
       {:ecto_cursor_based_stream, "~> 1.0"},
       {:ecto_sql, "~> 3.10"},
-      {:ecto_sqlite3, "~> 0.12.0"},
+      {:ecto_sqlite3, "~> 0.15.1"},
       {:esbuild, "~> 0.6", runtime: Mix.env() == :dev},
       {:ex_heroicons, "~> 2.0"},
       {:excellent_migrations, "~> 0.1.6", only: [:dev, :test], runtime: false},
-      {:finch, "~> 0.17.0"},
+      {:finch, "~> 0.18.0"},
       {:floki, "~> 0.34", only: :test},
       {:gettext, "~> 0.24"},
       {:image, "~> 0.33"},
       {:jason, "~> 1.2"},
       {:nebulex, "~> 2.5"},
       {:nimble_csv, "~> 1.2"},
-      {:phoenix_ecto, "~> 4.4.0"},
-      {:phoenix_html, "~> 3.3.0"},
-      {:phoenix_live_reload, "~> 1.4.1", only: :dev},
-      {:phoenix_live_view, "0.20.1"},
+      {:phoenix_ecto, "~> 4.5.1"},
+      {:phoenix_html, "~> 3.3.3"},
+      {:phoenix_live_reload, "~> 1.5.3", only: :dev},
+      {:phoenix_live_view, "0.20.10"},
       {:phoenix_view, "~> 2.0"},
       {:phoenix, "~> 1.7.0"},
       {:postgrex, "~> 0.17.1"},
@@ -84,17 +84,14 @@ defmodule SM.MixProject do
       {:rexbug, "~> 1.0"},
       {:styler, "~> 0.8", only: [:dev, :test], runtime: false},
       {:surface_catalogue, "~> 0.6"},
-      # overriding due to "surface_catalogue" requirements
-      # {:surface, "~> 0.11.0", override: true},
-      # Switching to the current `main` commit to improve (unreleased) support to Phoenix LV
-      {:surface,
-       git: "https://github.com/surface-ui/surface.git", ref: "88fc41b1d2993f2c63f674be3490f4922faff30f", override: true},
+      {:surface, "~> 0.11.4"},
       {:svadilfari, git: "https://github.com/maxdrift/svadilfari", branch: "main"},
       {:swoosh, "~> 1.11"},
-      {:telemetry_metrics, "~> 0.6"},
+      # overriding because of the "prom_ex" dependency requiring telemetry_metrics 0.6
+      {:telemetry_metrics, "~> 1.0.0", override: true},
       {:telemetry_poller, "~> 1.0"},
       {:telemetry, "~> 1.2"},
-      {:tesla, "~> 1.8.0"}
+      {:tesla, "~> 1.9.0"}
     ]
   end
 
