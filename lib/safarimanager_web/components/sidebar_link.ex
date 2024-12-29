@@ -4,8 +4,6 @@ defmodule SMWeb.Components.SidebarLink do
   """
   use SMWeb, :surface_component
 
-  alias Surface.Components.LiveRedirect
-
   prop label, :string, required: true
   prop hero_icon, :string, required: true
   prop to, :string, required: true
@@ -13,8 +11,8 @@ defmodule SMWeb.Components.SidebarLink do
 
   def render(assigns) do
     ~F"""
-    <LiveRedirect
-      to={@to}
+    <.link
+      navigate={@to}
       class={
         "h-7",
         "flex",
@@ -37,7 +35,7 @@ defmodule SMWeb.Components.SidebarLink do
       <span class="text-sm font-medium">
         {@label}
       </span>
-    </LiveRedirect>
+    </.link>
     """
   end
 end

@@ -4,8 +4,6 @@ defmodule SMWeb.Components.Thumbnail do
   """
   use SMWeb, :surface_component
 
-  alias Surface.Components.LiveRedirect
-
   prop click, :event
   prop url, :string, required: true
   prop width, :integer, required: true
@@ -18,13 +16,13 @@ defmodule SMWeb.Components.Thumbnail do
       class="photo-grid-div"
       style={"width:#{@width * 200 / @height}px;grow:#{@width * 200 / @height}"}
     >
-      <LiveRedirect
-        to="/jury_viewer"
+      <.link
+        navigate="/jury_viewer"
         class="photo-grid-i"
         opts={[style: "padding-bottom:#{@height / @width * 100}%"]}
       >
         <img class="photo-grid-img" src={@url} alt="">
-      </LiveRedirect>
+      </.link>
     </div>
     """
   end

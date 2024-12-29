@@ -15,7 +15,6 @@ defmodule SMWeb.Live.Jurors do
   alias SMWeb.Endpoint
   alias Surface.Components.Form
   alias Surface.Components.Form.TextInput
-  alias Surface.Components.LiveRedirect
 
   require Logger
 

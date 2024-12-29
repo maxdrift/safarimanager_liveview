@@ -6,9 +6,9 @@
       <div :if={!@competition.for_teams} class="text-2xl font-bold text-center pb-4">{gettext("Participants")}</div>
       <div :if={@competition.for_teams} class="text-2xl font-bold text-center pb-4">{gettext("Teams")}</div>
       <div class="flex flex-row-reverse my-2">
-        <Link to={~p"/csv_export?entity=slides"} method={:post} class="btn btn-sm btn-outline">
+        <.link href={~p"/csv_export?entity=slides"} method={:post} class="btn btn-sm btn-outline">
           {gettext("Export Slides to CSV")}
-        </Link>
+        </.link>
       </div>
       <div :if={!@competition.for_teams} id="participants-table">
         <Form for={%{}} as={:participants_filter} change="filter-participants" opts={autocomplete: "off"}>
@@ -41,9 +41,9 @@
                   <td class="truncate">{(item.category && item.category.name) || gettext("N/A")}</td>
                   <td class="truncate">{item.slides_count}</td>
                   <td class="truncate">
-                    <LivePatch to={"?user_id=#{item.user_id}"} class="btn btn-xs">
+                    <.link patch={"?user_id=#{item.user_id}"} class="btn btn-xs">
                       {gettext("Select")}
-                    </LivePatch>
+                    </.link>
                   </td>
                 </tr>
               {#else}
@@ -91,9 +91,9 @@
                           <tr class="border-b last:border-none border-neutral">
                             <td class="truncate">{member.user.last_name} {member.user.first_name}</td>
                             <td class="truncate">
-                              <LivePatch to={"?user_id=#{member.user.id}"} class="btn btn-xs btn-base-200">
+                              <.link patch={"?user_id=#{member.user.id}"} class="btn btn-xs btn-base-200">
                                 {gettext("Select")}
-                              </LivePatch>
+                              </.link>
                             </td>
                           </tr>
                         {/for}
@@ -246,7 +246,7 @@
     </div>
   </div>
   <div class="flex flex-row my-10 w-full">
-    <LiveRedirect to={"/organize/#{@competition_id}/jurors"} class="flex-none btn gap-2">
+    <.link navigate={"/organize/#{@competition_id}/jurors"} class="flex-none btn gap-2">
       <svg
         xmlns="http://www.w3.org/2000/svg"
         class="h-6 w-6"
@@ -258,10 +258,10 @@
         <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
       </svg>
       {gettext("Jurors")}
-    </LiveRedirect>
+    </.link>
     <div class="grow" />
-    <LiveRedirect
-      to={"/organize/#{@competition_id}/slide_selection"}
+    <.link
+      navigate={"/organize/#{@competition_id}/slide_selection"}
       class="flex-none btn btn-primary gap-2"
     >
       {gettext("Selection")}
@@ -275,6 +275,6 @@
       >
         <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
       </svg>
-    </LiveRedirect>
+    </.link>
   </div>
 </Layout>

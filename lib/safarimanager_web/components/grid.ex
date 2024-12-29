@@ -7,8 +7,6 @@ defmodule SMWeb.Components.Grid do
   alias Surface.Components.Form
   alias Surface.Components.Form.HiddenInput
   alias Surface.Components.Form.Submit
-  alias Surface.Components.Link
-  alias Surface.Components.LivePatch
 
   prop entity_name, :string
 
@@ -35,10 +33,10 @@ defmodule SMWeb.Components.Grid do
       >
         <div class="flex flex-row-reverse my-2 min-h-8">
           <div>
-            <LivePatch :if={@create_path} to={@create_path} class="btn btn-sm btn-success">{gettext("Create")}</LivePatch>
-            <Link :if={@export_path} to={@export_path} method={:post} class="btn btn-sm btn-outline">
+            <.link :if={@create_path} patch={@create_path} class="btn btn-sm btn-success">{gettext("Create")}</.link>
+            <.link :if={@export_path} href={@export_path} method={:post} class="btn btn-sm btn-outline">
               {gettext("Export to CSV")}
-            </Link>
+            </.link>
             <button
               type="submit"
               :if={@merge_path}

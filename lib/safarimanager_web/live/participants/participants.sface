@@ -65,11 +65,11 @@
     <div class="overflow-y-auto rounded-lg xl:w-1/2 bg-base-200 shadow-lg">
       <div class="p-4">
         <div class="text-2xl font-bold text-center py-4">{gettext("Participants")}</div>
-        <Link
+        <.link
           class="btn btn-outline btn-sm mb-2"
-          to={~p"/#{@competition.id}/participants_printout"}
-          opts={target: "_blank"}
-        >{gettext("Print")}</Link>
+          href={~p"/#{@competition.id}/participants_printout"}
+          target="_blank"
+        >{gettext("Print")}</.link>
         <Form for={%{}} as={:participants_filter} change="filter-participants" opts={autocomplete: "off"}>
           <TextInput
             name={:value}
@@ -130,7 +130,7 @@
     </div>
   </div>
   <div class="flex flex-row my-10 w-full">
-    <LiveRedirect to="/organize/new" class="flex-none btn gap-2">
+    <.link navigate="/organize/new" class="flex-none btn gap-2">
       <svg
         xmlns="http://www.w3.org/2000/svg"
         class="h-6 w-6"
@@ -142,11 +142,11 @@
         <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
       </svg>
       {gettext("Competition")}
-    </LiveRedirect>
+    </.link>
     <div class="grow" />
-    <LiveRedirect
+    <.link
       :if={@competition.for_teams}
-      to={"/organize/#{@competition_id}/teams"}
+      navigate={"/organize/#{@competition_id}/teams"}
       class="flex-none btn btn-primary gap-2"
     >
       {gettext("Teams")}
@@ -160,10 +160,10 @@
       >
         <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
       </svg>
-    </LiveRedirect>
-    <LiveRedirect
+    </.link>
+    <.link
       :if={!@competition.for_teams}
-      to={"/organize/#{@competition_id}/jurors"}
+      navigate={"/organize/#{@competition_id}/jurors"}
       class="flex-none btn btn-primary gap-2"
     >
       {gettext("Jurors")}
@@ -177,6 +177,6 @@
       >
         <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
       </svg>
-    </LiveRedirect>
+    </.link>
   </div>
 </Layout>

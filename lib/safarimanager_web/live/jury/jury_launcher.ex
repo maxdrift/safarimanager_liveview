@@ -9,8 +9,6 @@ defmodule SMWeb.Live.JuryLauncher do
   alias SMWeb.Components.CompetitionHeader
   alias SMWeb.Components.Layout
   alias SMWeb.Components.StepsHeader
-  alias Surface.Components.Link
-  alias Surface.Components.LiveRedirect
 
   require Logger
 

@@ -13,8 +13,6 @@ defmodule SMWeb.Live.Results do
   alias SMWeb.Components.StepsHeader
   alias Surface.Components.Form
   alias Surface.Components.Form.Select
-  alias Surface.Components.Link
-  alias Surface.Components.LiveRedirect
 
   require Logger
 

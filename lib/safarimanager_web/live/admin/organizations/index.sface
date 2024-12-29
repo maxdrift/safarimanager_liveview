@@ -174,16 +174,16 @@
     </Column>
     <Column title={gettext("Actions")} class="w-4">
       <div class="overflow-x-auto">
-        <LivePatch
-          to={~p"/admin/organizations/#{item.id}"}
+        <.link
+          patch={~p"/admin/organizations/#{item.id}"}
           class="btn btn-square btn-sm btn-info"
-          opts={title: gettext("Show")}
-        ><Heroicons.icon name="eye" type="outline" class="w-4 h-4" /></LivePatch>
-        <LivePatch
-          to={~p"/admin/organizations/#{item.id}/edit"}
+          title={gettext("Show")}
+        ><Heroicons.icon name="eye" type="outline" class="w-4 h-4" /></.link>
+        <.link
+          patch={~p"/admin/organizations/#{item.id}/edit"}
           class="btn btn-square btn-sm btn-warning"
-          opts={title: gettext("Edit")}
-        ><Heroicons.icon name="pencil-square" type="solid" class="w-4 h-4" /></LivePatch>
+          title={gettext("Edit")}
+        ><Heroicons.icon name="pencil-square" type="solid" class="w-4 h-4" /></.link>
         <button
           class="btn btn-square btn-sm btn-error"
           :on-click={"delete-one", target: "#organizations-list"}

@@ -14,8 +14,6 @@ defmodule SMWeb.Live.ValidationLauncher do
   alias Surface.Components.Form
   alias Surface.Components.Form.HiddenInput
   alias Surface.Components.Form.Submit
-  alias Surface.Components.Link
-  alias Surface.Components.LiveRedirect
 
   require Logger
 

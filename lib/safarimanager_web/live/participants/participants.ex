@@ -19,8 +19,6 @@ defmodule SMWeb.Live.Participants do
   alias Surface.Components.Form.HiddenInput
   alias Surface.Components.Form.Select
   alias Surface.Components.Form.TextInput
-  alias Surface.Components.Link
-  alias Surface.Components.LiveRedirect
 
   require Logger
 

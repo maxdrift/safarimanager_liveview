@@ -20,8 +20,6 @@ defmodule SMWeb.Live.Teams do
   alias Surface.Components.Form.Reset
   alias Surface.Components.Form.Submit
   alias Surface.Components.Form.TextInput
-  alias Surface.Components.Link
-  alias Surface.Components.LiveRedirect
 
   require Logger
 

@@ -124,9 +124,9 @@
     </div>
   </div>
   <div class="flex flex-row my-10 w-full">
-    <LiveRedirect
+    <.link
       :if={@competition.for_teams}
-      to={"/organize/#{@competition_id}/teams"}
+      navigate={"/organize/#{@competition_id}/teams"}
       class="flex-none btn gap-2"
     >
       <svg
@@ -140,10 +140,10 @@
         <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
       </svg>
       {gettext("Teams")}
-    </LiveRedirect>
-    <LiveRedirect
+    </.link>
+    <.link
       :if={!@competition.for_teams}
-      to={"/organize/#{@competition_id}/participants"}
+      navigate={"/organize/#{@competition_id}/participants"}
       class="flex-none btn gap-2"
     >
       <svg
@@ -157,9 +157,9 @@
         <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
       </svg>
       {gettext("Participants")}
-    </LiveRedirect>
+    </.link>
     <div class="grow" />
-    <LiveRedirect to={"/organize/#{@competition_id}/slides"} class="flex-none btn btn-primary gap-2">
+    <.link navigate={"/organize/#{@competition_id}/slides"} class="flex-none btn btn-primary gap-2">
       {gettext("Slides")}
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -171,6 +171,6 @@
       >
         <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
       </svg>
-    </LiveRedirect>
+    </.link>
   </div>
 </Layout>

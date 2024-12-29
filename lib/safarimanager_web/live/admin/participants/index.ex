@@ -22,7 +22,6 @@ defmodule SMWeb.Live.Admin.Participants.Index do
   alias Surface.Components.Form.Reset
   alias Surface.Components.Form.Select
   alias Surface.Components.Form.Submit
-  alias Surface.Components.LivePatch
 
   require Logger
 

@@ -3,11 +3,11 @@
   <StepsHeader current_step={:results} competition={@competition} />
   <div class="pt-10 cursor-pointer" x-data="{ expanded: false }">
     <div class="mb-4">
-      <Link
+      <.link
         class="btn btn-outline btn-sm"
-        to={~p"/#{@competition.id}/slides_printout"}
-        opts={target: "_blank"}
-      >{gettext("Print participants slides report")}</Link>
+        href={~p"/#{@competition.id}/slides_printout"}
+        target="_blank"
+      >{gettext("Print participants slides report")}</.link>
     </div>
     <div @click="expanded = ! expanded" class="text-xl bg-base-200 p-2 pl-4 rounded-xl shadow-lg">
       <span>
@@ -136,11 +136,11 @@
         </Form>
       </div>
       <div class="grow" />
-      <Link
+      <.link
         class="flex-none btn btn-outline btn-sm mt-0.5"
-        to={"/#{@competition.id}/results_printout#{(@category_id && "?category_id=#{@category_id}") || ""}"}
-        opts={target: "_blank"}
-      >{gettext("Print")}</Link>
+        href={"/#{@competition.id}/results_printout#{(@category_id && "?category_id=#{@category_id}") || ""}"}
+        target="_blank"
+      >{gettext("Print")}</.link>
     </div>
     <table class="table table-sm table-fixed w-full">
       <thead>
@@ -233,7 +233,7 @@
     </table>
   </div>
   <div class="flex flex-row my-10 w-full">
-    <LiveRedirect to={"/organize/#{@competition_id}/jury_launcher"} class="flex-none btn gap-2">
+    <.link navigate={"/organize/#{@competition_id}/jury_launcher"} class="flex-none btn gap-2">
       <svg
         xmlns="http://www.w3.org/2000/svg"
         class="h-6 w-6"
@@ -245,7 +245,7 @@
         <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
       </svg>
       {gettext("Jury")}
-    </LiveRedirect>
+    </.link>
     <div class="grow" />
   </div>
 </Layout>

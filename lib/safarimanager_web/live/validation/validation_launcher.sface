@@ -5,13 +5,13 @@
   <CompetitionHeader {=@competition} />
   <StepsHeader current_step={:validation} competition={@competition} />
   <div class="mt-10 text-center">
-    <Link
+    <.link
       id="start-validation-btn"
-      to={"/organize/#{@competition_id}/validation"}
+      navigate={"/organize/#{@competition_id}/validation"}
       class="btn btn-xl btn-primary"
     >
       {gettext("Start Validation")}
-    </Link>
+    </.link>
   </div>
   <div class="mt-10">
     <table id="validation-results-table" class="table table-xs w-full text-center">
@@ -132,12 +132,12 @@
                           {/if}
                         </td>
                         <td class="flex flex-row">
-                          <Link
-                            to={"/organize/#{@competition_id}/validation?slide_id=#{slide.id}"}
+                          <.link
+                            navigate={"/organize/#{@competition_id}/validation?slide_id=#{slide.id}"}
                             class="flex-none btn btn-xs"
                           >
                             {gettext("Open")}
-                          </Link>
+                          </.link>
                           <div class="flex-none mx-1.5 dropdown">
                             <label tabindex="0" class="btn btn-xs">
                               {gettext("Actions")}
@@ -219,9 +219,12 @@
                         </div>
                       </td>
                       <td>
-                        <Link to={"/organize/#{@competition_id}/validation?slide_id=#{slide.id}"} class="btn btn-xs">
+                        <.link
+                          navigate={"/organize/#{@competition_id}/validation?slide_id=#{slide.id}"}
+                          class="btn btn-xs"
+                        >
                           {gettext("Open")}
-                        </Link>
+                        </.link>
                         <div class="dropdown mx-auto">
                           <label tabindex="0" class="btn btn-xs">
                             {gettext("Actions")}
@@ -264,7 +267,7 @@
     </table>
   </div>
   <div class="flex flex-row my-10 w-full">
-    <LiveRedirect to={"/organize/#{@competition_id}/slide_selection"} class="flex-none btn gap-2">
+    <.link navigate={"/organize/#{@competition_id}/slide_selection"} class="flex-none btn gap-2">
       <svg
         xmlns="http://www.w3.org/2000/svg"
         class="h-6 w-6"
@@ -276,10 +279,10 @@
         <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
       </svg>
       {gettext("Selection")}
-    </LiveRedirect>
+    </.link>
     <div class="grow" />
-    <LiveRedirect
-      to={"/organize/#{@competition_id}/jury_launcher"}
+    <.link
+      navigate={"/organize/#{@competition_id}/jury_launcher"}
       class="flex-none btn btn-primary gap-2"
     >
       {gettext("Jury")}
@@ -293,6 +296,6 @@
       >
         <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
       </svg>
-    </LiveRedirect>
+    </.link>
   </div>
 </Layout>

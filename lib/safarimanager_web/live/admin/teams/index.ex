@@ -29,7 +29,6 @@ defmodule SMWeb.Live.Admin.Teams.Index do
   alias Surface.Components.Form.Select
   alias Surface.Components.Form.Submit
   alias Surface.Components.Form.TextInput
-  alias Surface.Components.LivePatch
 
   require Logger
 
@@ -71,13 +70,13 @@ defmodule SMWeb.Live.Admin.Teams.Index do
       |> Map.put(:action, :validate)
 
     socket =
-      if competition_id != "" do
+      if competition_id == "" do
+        socket
+      else
         assign(socket,
           participants: get_participants_options(competition_id, user_ids),
           competition_id: competition_id
         )
-      else
-        socket
       end
 
     socket = assign(socket, :changeset, changeset)

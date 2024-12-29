@@ -20,7 +20,6 @@ defmodule SMWeb.Live.Admin.Categories.Index do
   alias Surface.Components.Form.Select
   alias Surface.Components.Form.Submit
   alias Surface.Components.Form.TextInput
-  alias Surface.Components.LivePatch
 
   require Logger
 

@@ -5,8 +5,6 @@ defmodule SMWeb.Components.UserDropdown do
   use SMWeb, :surface_component
 
   alias SMWeb.Components.UserAvatar
-  # alias Surface.Components.Link
-  alias Surface.Components.LiveRedirect
 
   prop user, :struct
 
@@ -32,14 +30,14 @@ defmodule SMWeb.Components.UserDropdown do
       </label>
       <ul class="menu dropdown-content bg-base-200 text-base-content rounded-t rounded-b top-px w-52 overflow-y-auto shadow-2xl ml-[-3em]">
         <li>
-          <LiveRedirect to={~p"/users/settings"}>
+          <.link navigate={~p"/users/settings"}>
             {gettext("Settings")}
-          </LiveRedirect>
+          </.link>
         </li>
         {!-- <li>
-          <Link to={~p"/users/log_out"} method={:delete}>
+          <.link href={~p"/users/log_out"} method={:delete}>
             {gettext("Log out")}
-          </Link>
+          </.link>
         </li> --}
       </ul>
     </div>

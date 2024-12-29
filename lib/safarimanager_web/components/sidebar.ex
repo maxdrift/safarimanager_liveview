@@ -7,7 +7,6 @@ defmodule SMWeb.Components.Sidebar do
   alias SMWeb.Components.SidebarLink
   alias SMWeb.Components.ThemeChangeDropdown
   alias SMWeb.Components.UserDropdown
-  alias Surface.Components.LiveRedirect
 
   prop current_page, :string, required: true
   prop current_user, :struct
@@ -33,12 +32,12 @@ defmodule SMWeb.Components.Sidebar do
         <div class="flex flex-col">
           <div class="space-y-3">
             <div class="flex flex-col items-center">
-              <LiveRedirect to={~p"/"} class="flex items-center group">
+              <.link navigate={~p"/"} class="flex items-center group">
                 <img src={~p"/images/logo.png"} class="mx-2" height="40" width="40" alt="logo safari manager">
                 <span class="text-base-content text-lg font-logo ml-[-1px] group-hover:text-white pt-1">
                   Safari Manager
                 </span>
-              </LiveRedirect>
+              </.link>
               <span class="text-base-content text-xs font-normal font-sans cursor-default w-full text-right">
                 v{Application.spec(:safarimanager, :vsn)}
               </span>
