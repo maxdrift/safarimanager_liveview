@@ -181,7 +181,7 @@
                           <Form for={%{}} method="post" action={~p"/image_export"} class="flex-none">
                             <HiddenInput field={:slide_id} value={slide.id} />
                             <Submit class="btn btn-square btn-xs">
-                              <Heroicons.Surface.Icon name="arrow-down-tray" type="outline" class="h-4 w-4" />
+                              <Heroicons.icon name="arrow-down-tray" type="outline" class="h-4 w-4" />
                             </Submit>
                           </Form>
                         </td>

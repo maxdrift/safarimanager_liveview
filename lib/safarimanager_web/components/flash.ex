@@ -41,19 +41,19 @@ defmodule SMWeb.Components.Flash do
       ]}
     >
       <div>
-        <Heroicons.LiveView.icon
+        <Heroicons.icon
           :if={@kind == :info}
           name="information-circle"
           type="outline"
           class="stroke-current flex-shrink-0 h-6 w-6"
         />
-        <Heroicons.LiveView.icon
+        <Heroicons.icon
           :if={@kind == :warning}
           name="exclamation-triangle"
           type="outline"
           class="stroke-current flex-shrink-0 h-6 w-6"
         />
-        <Heroicons.LiveView.icon
+        <Heroicons.icon
           :if={@kind == :error}
           name="x-circle"
           type="outline"
@@ -75,7 +75,7 @@ defmodule SMWeb.Components.Flash do
           class="group absolute top-2 right-1 p-2"
           aria-label={gettext("close")}
         >
-          <Heroicons.LiveView.icon
+          <Heroicons.icon
             name="x-mark"
             type="solid"
             class="h-5 w-5 stroke-current opacity-40 group-hover:opacity-70"

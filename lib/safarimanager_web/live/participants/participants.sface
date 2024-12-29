@@ -115,7 +115,7 @@
                       :on-click="remove"
                       :values={user_id: item.user.id}
                       title={gettext("Remove")}
-                    ><Heroicons.Surface.Icon name="trash" type="outline" class="w-4 h-4" /></button>
+                    ><Heroicons.icon name="trash" type="outline" class="w-4 h-4" /></button>
                   </td>
                 </tr>
               {#else}

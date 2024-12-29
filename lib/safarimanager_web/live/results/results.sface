@@ -104,11 +104,7 @@
                 <td>
                   <span class="font-mono" title={gettext("dynamic coefficient")}>{subject.dynamic_coefficient}</span>
                   <span title={gettext("dynamic coefficient")}>
-                    <Heroicons.Surface.Icon
-                      name="scale"
-                      type="solid"
-                      class="h-4 w-4 inline-block py-auto align-middle"
-                    />
+                    <Heroicons.icon name="scale" type="solid" class="h-4 w-4 inline-block py-auto align-middle" />
                   </span>
                 </td>
               </tr>
@@ -200,11 +196,7 @@
                         <td>
                           <span class="font-mono" title={(use_dynamic? && gettext("dynamic coefficient")) || ""}>{coefficient}</span>
                           <span :if={use_dynamic?} title={gettext("dynamic coefficient")}>
-                            <Heroicons.Surface.Icon
-                              name="scale"
-                              type="solid"
-                              class="h-4 w-4 inline-block py-auto align-middle"
-                            />
+                            <Heroicons.icon name="scale" type="solid" class="h-4 w-4 inline-block py-auto align-middle" />
                           </span>
                         </td>
                         <td class="text-center">

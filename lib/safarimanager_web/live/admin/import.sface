@@ -27,7 +27,7 @@
         </UploadDropArea>
         {#for entry <- @uploads.csv.entries}
           <div class="mt-3 ml-5 flex items-center">
-            <Heroicons.Surface.Icon name="document-arrow-up" type="outline" class="w-5 h-5 mr-2" />
+            <Heroicons.icon name="document-arrow-up" type="outline" class="w-5 h-5 mr-2" />
             <span class="font-mono">
               {entry.client_name}
             </span>
@@ -38,7 +38,7 @@
               :values={ref: entry.ref}
               aria-label="cancel"
             >
-              <Heroicons.Surface.Icon name="trash" type="outline" class="h-4 w-4" />
+              <Heroicons.icon name="trash" type="outline" class="h-4 w-4" />
             </button>
           </div>
           <progress value={entry.progress} max="100" class="progress progress-primary">

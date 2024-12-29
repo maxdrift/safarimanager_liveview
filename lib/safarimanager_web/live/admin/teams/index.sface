@@ -122,7 +122,7 @@
                       class="hidden"
                       title={gettext("remove")}
                     />
-                    <Heroicons.Surface.Icon name="trash" type="outline" class="w-4 h-4" />
+                    <Heroicons.icon name="trash" type="outline" class="w-4 h-4" />
                   </label>
                 </div>
               </Context>
@@ -134,7 +134,7 @@
                 "btn-disabled": is_nil(Map.get(@changeset.changes, :competition_id))
               }>
                 <input type="checkbox" name="entity[members_sort][]" class="hidden">
-                <Heroicons.Surface.Icon name="plus-circle" type="solid" class="w-6 h-6" /> {gettext("add more")}
+                <Heroicons.icon name="plus-circle" type="solid" class="w-6 h-6" /> {gettext("add more")}
               </label>
             </div>
             <SMField name={:name} label={gettext("Name")} class="w-full">
@@ -189,18 +189,18 @@
           to={~p"/admin/teams/#{item.id}"}
           class="btn btn-square btn-sm btn-info"
           opts={title: gettext("Show")}
-        ><Heroicons.Surface.Icon name="eye" type="outline" class="w-4 h-4" /></LivePatch>
+        ><Heroicons.icon name="eye" type="outline" class="w-4 h-4" /></LivePatch>
         <LivePatch
           to={~p"/admin/teams/#{item.id}/edit"}
           class="btn btn-square btn-sm btn-warning"
           opts={title: gettext("Edit")}
-        ><Heroicons.Surface.Icon name="pencil-square" type="solid" class="w-4 h-4" /></LivePatch>
+        ><Heroicons.icon name="pencil-square" type="solid" class="w-4 h-4" /></LivePatch>
         <button
           class="btn btn-square btn-sm btn-error"
           :on-click={"delete-one", target: "#teams-list"}
           :values={id: item.id}
           title={gettext("Delete")}
-        ><Heroicons.Surface.Icon name="trash" type="outline" class="w-4 h-4" /></button>
+        ><Heroicons.icon name="trash" type="outline" class="w-4 h-4" /></button>
       </div>
     </Column>
   </Grid>

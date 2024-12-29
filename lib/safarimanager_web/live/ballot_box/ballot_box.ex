@@ -36,7 +36,7 @@ defmodule SMWeb.Live.BallotBox do
           <span class="text-lg mx-4">{gettext("Please wait for the next slide.")}</span>
         </div>
         <div>
-          <Heroicons.Surface.Icon name="check-circle" type="outline" class="h-20 w-20 stroke-success" />
+          <Heroicons.icon name="check-circle" type="outline" class="h-20 w-20 stroke-success" />
         </div>
       </div>
     {#elseif @selected_evaluation}
@@ -161,7 +161,7 @@ defmodule SMWeb.Live.BallotBox do
           assign(socket, slide: nil)
       end
 
-    unless is_nil(socket.assigns.watchdog_ref) do
+    if !is_nil(socket.assigns.watchdog_ref) do
       :ok = Process.cancel_timer(socket.assigns.watchdog_ref, info: false)
     end
 

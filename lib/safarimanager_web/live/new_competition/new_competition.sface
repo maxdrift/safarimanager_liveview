@@ -161,7 +161,7 @@
     >
       <div class="card-body">
         <div class="mx-auto my-auto">
-          <Heroicons.Surface.Icon name="plus" type="solid" class="w-32 h-32 base-content" />
+          <Heroicons.icon name="plus" type="solid" class="w-32 h-32 base-content" />
         </div>
       </div>
     </div>
@@ -192,7 +192,7 @@
                 |> JS.add_class("modal-open", to: "#duplicate-dialog")}
                 title={gettext("Duplicate competition")}
               >
-                <Heroicons.Surface.Icon name="document-duplicate" type="outline" class="w-4 h-4" />
+                <Heroicons.icon name="document-duplicate" type="outline" class="w-4 h-4" />
               </button>
             </div>
             <div class="grow" />

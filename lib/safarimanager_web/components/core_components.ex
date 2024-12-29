@@ -73,7 +73,7 @@ defmodule SMWeb.Components.CoreComponents do
             phx-click={hide_modal(@id)}
           >
             <span class="text-sm">(esc)</span>
-            <Heroicons.LiveView.icon name="x-mark" type="solid" class="h-5 w-5 stroke-current" />
+            <Heroicons.icon name="x-mark" type="solid" class="h-5 w-5 stroke-current" />
           </button>
           <%= render_slot(@inner_block) %>
         </.focus_wrap>
@@ -122,19 +122,19 @@ defmodule SMWeb.Components.CoreComponents do
       {@rest}
     >
       <div class="flex flex-row">
-        <Heroicons.LiveView.icon
+        <Heroicons.icon
           :if={@kind == :info}
           name="information-circle"
           type="outline"
           class="flex-none stroke-current flex-shrink-0 h-6 w-6"
         />
-        <Heroicons.LiveView.icon
+        <Heroicons.icon
           :if={@kind == :warning}
           name="exclamation-triangle"
           type="outline"
           class="flex-none stroke-current flex-shrink-0 h-6 w-6"
         />
-        <Heroicons.LiveView.icon
+        <Heroicons.icon
           :if={@kind == :error}
           name="x-circle"
           type="outline"
@@ -152,7 +152,7 @@ defmodule SMWeb.Components.CoreComponents do
           class="group absolute top-2 right-1 p-2"
           aria-label={gettext("close")}
         >
-          <Heroicons.LiveView.icon
+          <Heroicons.icon
             name="x-mark"
             type="solid"
             class="h-5 w-5 stroke-current opacity-40 group-hover:opacity-70"
@@ -383,7 +383,7 @@ defmodule SMWeb.Components.CoreComponents do
   def error(assigns) do
     ~H"""
     <p class="phx-no-feedback:hidden mt-3 flex gap-3 text-sm leading-6 text-rose-600">
-      <Heroicons.LiveView.icon
+      <Heroicons.icon
         name="exclamation-circle"
         type="mini"
         class="mt-0.5 h-5 w-5 flex-none fill-rose-500"
@@ -530,7 +530,7 @@ defmodule SMWeb.Components.CoreComponents do
         navigate={@navigate}
         class="text-sm font-semibold leading-6 text-zinc-900 hover:text-zinc-700"
       >
-        <Heroicons.LiveView.icon name="arrow-left" type="solid" class="w-3 h-3 stroke-current inline" />
+        <Heroicons.icon name="arrow-left" type="solid" class="w-3 h-3 stroke-current inline" />
         <%= render_slot(@inner_block) %>
       </.link>
     </div>

@@ -53,17 +53,19 @@ defmodule SM.MixProject do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
-      {:bandit, "~> 1.5.0"},
-      {:bcrypt_elixir, "~> 3.0"},
+      {:bandit, "~> 1.6"},
+      {:bcrypt_elixir, "~> 3.2"},
       {:credo, "~> 1.7", only: [:dev, :test], runtime: false},
       {:dialyzex, "~> 1.3.0", only: :dev, runtime: false},
-      {:ecto_cursor_based_stream, "~> 1.0"},
-      {:ecto_sql, "~> 3.10"},
-      {:ecto_sqlite3, "~> 0.15.1"},
+      {:ecto_cursor_based_stream, "~> 1.2"},
+      {:ecto_sql, "~> 3.12"},
+      {:ecto_sqlite3, "~> 0.18"},
       {:esbuild, "~> 0.6", runtime: Mix.env() == :dev},
-      {:ex_heroicons, "~> 2.0"},
+      {:ex_heroicons, "~> 3.1"},
+      {:heroicons,
+       github: "tailwindlabs/heroicons", tag: "v2.1.5", sparse: "optimized", app: false, compile: false, depth: 1},
       {:excellent_migrations, "~> 0.1.6", only: [:dev, :test], runtime: false},
-      {:finch, "~> 0.18.0"},
+      {:finch, "~> 0.19.0"},
       {:floki, "~> 0.34", only: :test},
       {:gettext, "~> 0.24"},
       {:image, "~> 0.33"},
@@ -76,13 +78,13 @@ defmodule SM.MixProject do
       {:phoenix_live_view, "0.20.10"},
       {:phoenix_view, "~> 2.0"},
       {:phoenix, "~> 1.7.0"},
-      {:postgrex, "~> 0.17.1"},
+      {:postgrex, "~> 0.19.3"},
       {:progress_bar, "~> 3.0"},
       {:prom_ex, "~> 1.8"},
       {:qrcode_ex, "~> 0.1.0"},
       {:random_password, "~> 1.0"},
       {:rexbug, "~> 1.0"},
-      {:styler, "~> 0.8", only: [:dev, :test], runtime: false},
+      {:styler, "~> 1.2", only: [:dev, :test], runtime: false},
       {:surface_catalogue, "~> 0.6"},
       {:surface, "~> 0.11.4"},
       {:svadilfari, git: "https://github.com/maxdrift/svadilfari", branch: "main"},
@@ -91,7 +93,7 @@ defmodule SM.MixProject do
       {:telemetry_metrics, "~> 1.0.0", override: true},
       {:telemetry_poller, "~> 1.0"},
       {:telemetry, "~> 1.2"},
-      {:tesla, "~> 1.9.0"}
+      {:tesla, "~> 1.13.2"}
     ]
   end
 

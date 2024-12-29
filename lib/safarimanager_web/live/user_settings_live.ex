@@ -29,7 +29,7 @@ defmodule SMWeb.Live.UserSettingsLive do
           class="phx-no-feedback:hidden alert alert-error shadow-lg"
         >
           <div>
-            <Heroicons.Surface.Icon name="exclamation-circle" type="outline" class="h-6 w-6" />
+            <Heroicons.icon name="exclamation-circle" type="outline" class="h-6 w-6" />
             <span>{gettext("Oops, something went wrong! Please check the errors below.")}</span>
           </div>
         </div>
@@ -80,7 +80,7 @@ defmodule SMWeb.Live.UserSettingsLive do
           class="phx-no-feedback:hidden alert alert-error shadow-lg"
         >
           <div>
-            <Heroicons.Surface.Icon name="exclamation-circle" type="outline" class="h-6 w-6" />
+            <Heroicons.icon name="exclamation-circle" type="outline" class="h-6 w-6" />
             <span>{gettext("Oops, something went wrong! Please check the errors below.")}</span>
           </div>
         </div>

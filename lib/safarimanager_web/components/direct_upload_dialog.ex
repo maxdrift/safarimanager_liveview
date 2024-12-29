@@ -28,105 +28,107 @@ defmodule SMWeb.Components.DirectUploadDialog do
 
   def render(assigns) do
     ~F"""
-    <Dialog {=@id} {=@show}>
-      <div class="text-xl font-bold text-center">
-        {gettext("Image import")}
-      </div>
-      <div class="my-2">
-        <progress
-          class={"progress", "progress-secondary", invisible: Decimal.equal?(@progress, 0)}
-          value={Decimal.mult(@progress, 100) |> Decimal.round()}
-          max="100"
-        />
-      </div>
-      <div class="mb-4">
-        <Form for={%{}} as={:slide_import} change="validate">
-          <Field name={:user_id} class="form-control">
-            <Select
-              options={Enum.map(@participants, &{participant_select_option_txt(&1), &1.user_id})}
-              prompt={[key: gettext("Select a participant...")]}
-              selected={@user_id}
-              class="select select-bordered"
-            />
-            <Label class="label h-7">
-              <ErrorTag />
-            </Label>
-          </Field>
-        </Form>
-      </div>
-      <div class="my-6">
-        <div>
-          <button :on-click="level-up" class="btn btn-outline btn-xs gap-1">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              class="h-4 w-4"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              stroke-width="2"
-            >
-              <path stroke-linecap="round" stroke-linejoin="round" d="M7 11l5-5m0 0l5 5m-5-5v12" />
-            </svg>
-            {gettext("Level up")}
-          </button>
+    <div>
+      <Dialog {=@id} {=@show}>
+        <div class="text-xl font-bold text-center">
+          {gettext("Image import")}
         </div>
-        <div class="flex flex-col mt-4 max-h-60 overflow-y-auto tiny-scrollbar">
-          {#for %{type: type, name: item} <- @items}
-            <div>
-              <button
-                :if={type == :dir}
-                :on-click="level-down"
-                :values={item: item}
-                class="btn btn-ghost btn-xs gap-1"
+        <div class="my-2">
+          <progress
+            class={"progress", "progress-secondary", invisible: Decimal.equal?(@progress, 0)}
+            value={Decimal.mult(@progress, 100) |> Decimal.round()}
+            max="100"
+          />
+        </div>
+        <div class="mb-4">
+          <Form for={%{}} as={:slide_import} change="validate">
+            <Field name={:user_id} class="form-control">
+              <Select
+                options={Enum.map(@participants, &{participant_select_option_txt(&1), &1.user_id})}
+                prompt={[key: gettext("Select a participant...")]}
+                selected={@user_id}
+                class="select select-bordered"
+              />
+              <Label class="label h-7">
+                <ErrorTag />
+              </Label>
+            </Field>
+          </Form>
+        </div>
+        <div class="my-6">
+          <div>
+            <button :on-click="level-up" class="btn btn-outline btn-xs gap-1">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-4 w-4"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                stroke-width="2"
               >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  class="h-4 w-4"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  stroke-width="2"
+                <path stroke-linecap="round" stroke-linejoin="round" d="M7 11l5-5m0 0l5 5m-5-5v12" />
+              </svg>
+              {gettext("Level up")}
+            </button>
+          </div>
+          <div class="flex flex-col mt-4 max-h-60 overflow-y-auto tiny-scrollbar">
+            {#for %{type: type, name: item} <- @items}
+              <div>
+                <button
+                  :if={type == :dir}
+                  :on-click="level-down"
+                  :values={item: item}
+                  class="btn btn-ghost btn-xs gap-1"
                 >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"
-                  />
-                </svg>
-                {Path.basename(item)}
-              </button>
-              <button :if={type == :img} class="btn btn-link btn-xs btn-disabled gap-1">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  class="h-4 w-4"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  stroke-width="2"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
-                  />
-                </svg>
-                {Path.basename(item)}
-              </button>
-            </div>
-          {/for}
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="h-4 w-4"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    stroke-width="2"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"
+                    />
+                  </svg>
+                  {Path.basename(item)}
+                </button>
+                <button :if={type == :img} class="btn btn-link btn-xs btn-disabled gap-1">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="h-4 w-4"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    stroke-width="2"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+                    />
+                  </svg>
+                  {Path.basename(item)}
+                </button>
+              </div>
+            {/for}
+          </div>
         </div>
-      </div>
-      <div class="flex flex-row w-full">
-        <button
-          class={"flex-none", "btn", "btn-primary", "btn-disabled": not can_import?(@user_id, @items)}
-          :on-click="import"
-        >
-          {gettext("Import")}<span :if={can_import?(@user_id, @items)}>&nbsp;{count_image_type(@items)} {gettext("images")}</span>
-        </button>
-        <div class="grow" />
-        <button class="flex-none btn btn-error" :on-click="hide">{gettext("Close")}</button>
-      </div>
-    </Dialog>
+        <div class="flex flex-row w-full">
+          <button
+            class={"flex-none", "btn", "btn-primary", "btn-disabled": not can_import?(@user_id, @items)}
+            :on-click="import"
+          >
+            {gettext("Import")}<span :if={can_import?(@user_id, @items)}>&nbsp;{count_image_type(@items)} {gettext("images")}</span>
+          </button>
+          <div class="grow" />
+          <button class="flex-none btn btn-error" :on-click="hide">{gettext("Close")}</button>
+        </div>
+      </Dialog>
+    </div>
     """
   end
 

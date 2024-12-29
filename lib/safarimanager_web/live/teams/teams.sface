@@ -180,13 +180,13 @@
                       :on-click="edit-team"
                       :values={id: item.id}
                       title={gettext("Edit")}
-                    ><Heroicons.Surface.Icon name="pencil-square" type="solid" class="w-4 h-4" /></button>
+                    ><Heroicons.icon name="pencil-square" type="solid" class="w-4 h-4" /></button>
                     <button
                       class="btn btn-square btn-xs btn-error"
                       :on-click="remove-team"
                       :values={id: item.id}
                       title={gettext("Remove")}
-                    ><Heroicons.Surface.Icon name="trash" type="outline" class="w-4 h-4" /></button>
+                    ><Heroicons.icon name="trash" type="outline" class="w-4 h-4" /></button>
                   </td>
                 </tr>
               {#else}

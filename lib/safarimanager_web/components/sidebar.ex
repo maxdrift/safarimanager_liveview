@@ -26,7 +26,7 @@ defmodule SMWeb.Components.Sidebar do
         phx-click={JS.add_class("hidden", to: "[data-el-sidebar]")
         |> JS.toggle(to: "[data-el-toggle-sidebar]")}
       >
-        <Heroicons.Surface.Icon name="bars-3" type="solid" />
+        <Heroicons.icon name="bars-3" type="solid" />
       </button>
 
       <div class="flex flex-col justify-between h-full">
@@ -124,7 +124,7 @@ defmodule SMWeb.Components.Sidebar do
               confirm_icon: "shut-down-line"
             )}
           >
-            <Heroicons.Surface.Icon
+            <Heroicons.icon
               name="power"
               type="solid"
               class="h-6 text-md leading-6 w-[56px] flex justify-center"

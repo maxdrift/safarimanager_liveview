@@ -30,7 +30,7 @@
             }
             :on-click={unless @slide_flags.wrong_subject, do: JS.hide() |> JS.show(to: "#wrong-subject-select")}
           >{@curr_slide && String.capitalize(@curr_slide.subject.name)}</button>
-          <Heroicons.Surface.Icon
+          <Heroicons.icon
             :if={@slide_flags.wrong_subject}
             name="arrow-long-right"
             type="solid"
@@ -147,7 +147,7 @@
         </div>
         <div class="join">
           <JuryToolbarButton class="btn btn-sm join-item" id="zoom-out" title={gettext("Zoom out")}>
-            <Heroicons.Surface.Icon name="magnifying-glass-minus" type="outline" class="w-6 h-6" />
+            <Heroicons.icon name="magnifying-glass-minus" type="outline" class="w-6 h-6" />
           </JuryToolbarButton>
           <JuryToolbarButton class="btn btn-sm join-item" id="zoom-100" title={gettext("Zoom 100%")}>
             <svg
@@ -194,19 +194,19 @@
             </svg>
           </JuryToolbarButton>
           <JuryToolbarButton class="btn btn-sm join-item" id="zoom-in" title={gettext("Zoom in")}>
-            <Heroicons.Surface.Icon name="magnifying-glass-plus" type="outline" class="w-6 h-6" />
+            <Heroicons.icon name="magnifying-glass-plus" type="outline" class="w-6 h-6" />
           </JuryToolbarButton>
         </div>
         <div class="join">
           <JuryToolbarButton class="btn btn-sm join-item" id="rotate-left" title={gettext("Rotate left")}>
-            <Heroicons.Surface.Icon name="arrow-uturn-left" type="solid" class="w-6 h-6" />
+            <Heroicons.icon name="arrow-uturn-left" type="solid" class="w-6 h-6" />
           </JuryToolbarButton>
           <JuryToolbarButton class="btn btn-sm join-item" id="rotate-right" title={gettext("Rotate right")}>
-            <Heroicons.Surface.Icon name="arrow-uturn-right" type="solid" class="w-6 h-6" />
+            <Heroicons.icon name="arrow-uturn-right" type="solid" class="w-6 h-6" />
           </JuryToolbarButton>
         </div>
         <JuryToolbarButton class="btn btn-square btn-sm" id="full-page" title={gettext("Fullscreen")}>
-          <Heroicons.Surface.Icon name="arrows-pointing-out" type="solid" class="w-6 h-6 mx-auto" />
+          <Heroicons.icon name="arrows-pointing-out" type="solid" class="w-6 h-6 mx-auto" />
         </JuryToolbarButton>
         <a href={"/organize/#{@competition.id}/validation_launcher"} class="btn btn-sm">
           {gettext("Exit")}

@@ -29,14 +29,14 @@ defmodule SMWeb.Components.Layout do
               phx-click={JS.remove_class("hidden", to: "[data-el-sidebar]")
               |> JS.toggle(to: "[data-el-toggle-sidebar]")}
             >
-              <Heroicons.Surface.Icon name="bars-3" type="solid" />
+              <Heroicons.icon name="bars-3" type="solid" />
             </button>
           </div>
 
           <div class="text-gray-400 hover:text-gray-600 focus:text-gray-600">
             <#slot {@topbar_action}>
               <LiveRedirect to={~p"/"} class="flex items-center">
-                <Heroicons.Surface.Icon name="home" type="solid" />
+                <Heroicons.icon name="home" type="solid" />
                 <span class="pl-2">Home</span>
               </LiveRedirect>
             </#slot>

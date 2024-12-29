@@ -18,7 +18,7 @@ defmodule SMWeb.Components.ThemeChangeDropdown do
         aria-label="change theme"
         class="mt-2 h-7 flex items-center text-base-content hover:text-primary-content border-l-4 border-transparent hover:bg-primary"
       >
-        <Heroicons.Surface.Icon
+        <Heroicons.icon
           name="swatch"
           type="outline"
           class="h-6 text-md leading-6 w-[56px] flex justify-center"
@@ -26,11 +26,7 @@ defmodule SMWeb.Components.ThemeChangeDropdown do
         <span class="text-sm font-medium">
           {gettext("Theme")}
         </span>
-        <Heroicons.Surface.Icon
-          name="chevron-down"
-          type="outline"
-          class="ml-3 hidden h-4 w-4 sm:inline-block"
-        />
+        <Heroicons.icon name="chevron-down" type="outline" class="ml-3 hidden h-4 w-4 sm:inline-block" />
       </label>
       <div class="dropdown-content bg-base-100 text-base-content rounded-t rounded-b top-px max-h-96 h-[70vh] w-52 overflow-y-auto shadow-2xl ml-[1em]">
         <div class="grid grid-cols-1 gap-3 p-3" tabindex="0">

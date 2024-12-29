@@ -91,11 +91,7 @@ defmodule SMWeb.Components.Confirm do
               <%= gettext("Cancel") %>
             </button>
             <button class={["btn", if(@danger, do: "btn-error", else: "btn-info")]} type="submit">
-              <Heroicons.LiveView.icon
-                name={@confirm_icon}
-                type="solid"
-                class="align-middle mr-1 h-6"
-              />
+              <Heroicons.icon name={@confirm_icon} type="solid" class="align-middle mr-1 h-6" />
               <span><%= @confirm_text %></span>
             </button>
           </div>

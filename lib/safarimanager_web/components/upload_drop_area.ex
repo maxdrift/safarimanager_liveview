@@ -21,7 +21,7 @@ defmodule SMWeb.Components.UploadDropArea do
     >
       <FieldContext name={@field}>
         <label class="w-full flex flex-col items-center px-4 py-6 rounded-lg shadow-inner tracking-wide uppercase border-dashed border-2 cursor-pointer hover:text-info hover:border-info">
-          <Heroicons.Surface.Icon name="arrow-up-tray" type="outline" class="h-8 w-8" />
+          <Heroicons.icon name="arrow-up-tray" type="outline" class="h-8 w-8" />
           <#slot>
             <span class="mt-2 text-base leading-normal">
               {gettext("Click or drop files in this box")}

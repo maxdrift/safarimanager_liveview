@@ -29,7 +29,7 @@ defmodule SMWeb.Components.SidebarLink do
         "border-transparent": @to != @current
       }
     >
-      <Heroicons.Surface.Icon
+      <Heroicons.icon
         name={@hero_icon}
         type="outline"
         class="h-6 text-md leading-6 w-[56px] flex justify-center"
