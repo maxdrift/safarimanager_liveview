@@ -45,7 +45,7 @@ defmodule SM.MixProject do
 
   # Specifies which paths to compile per environment.
   defp elixirc_paths(:test), do: ["lib", "test/support"]
-  defp elixirc_paths(:dev), do: ["lib"] ++ catalogues()
+  defp elixirc_paths(:dev), do: ["lib"]
   defp elixirc_paths(_), do: ["lib"]
 
   # Specifies your project dependencies.
@@ -85,8 +85,8 @@ defmodule SM.MixProject do
       {:random_password, "~> 1.0"},
       {:rexbug, "~> 1.0"},
       {:styler, "~> 1.2", only: [:dev, :test], runtime: false},
-      {:surface_catalogue, "~> 0.6"},
-      {:surface, "~> 0.11.4"},
+      {:surface, "~> 0.12.0"},
+      {:surface_form_helpers, "~> 0.1"},
       {:svadilfari, git: "https://github.com/maxdrift/svadilfari", branch: "main"},
       {:swoosh, "~> 1.11"},
       # overriding because of the "prom_ex" dependency requiring telemetry_metrics 0.6
@@ -138,12 +138,6 @@ defmodule SM.MixProject do
         "release",
         "phx.digest.clean --all"
       ]
-    ]
-  end
-
-  def catalogues do
-    [
-      "priv/catalogue"
     ]
   end
 

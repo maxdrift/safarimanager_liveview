@@ -11,7 +11,7 @@ defmodule SMWeb.Components.CoreComponents do
   """
   use Phoenix.Component
 
-  import SMWeb.Gettext
+  use Gettext, backend: SMWeb.Gettext
 
   alias Phoenix.HTML
   alias Phoenix.LiveView.JS

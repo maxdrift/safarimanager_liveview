@@ -29,7 +29,7 @@ defmodule SMWeb do
         layouts: [html: SMWeb.Layouts]
 
       import Plug.Conn
-      import SMWeb.Gettext
+      use Gettext, backend: SMWeb.Gettext
 
       unquote(verified_routes())
     end
@@ -78,7 +78,7 @@ defmodule SMWeb do
       use Surface.Component
 
       import SMWeb.ErrorHelpers
-      import SMWeb.Gettext
+      use Gettext, backend: SMWeb.Gettext
 
       # Shortcut for generating JS commands
       alias Phoenix.LiveView.JS
@@ -112,7 +112,7 @@ defmodule SMWeb do
     quote do
       use Phoenix.Channel
 
-      import SMWeb.Gettext
+      use Gettext, backend: SMWeb.Gettext
     end
   end
 
@@ -124,7 +124,7 @@ defmodule SMWeb do
         # credo:disable-for-next-line
         statics: SMWeb.static_paths() ++ ["uploads"]
 
-      import SMWeb.Gettext
+      use Gettext, backend: SMWeb.Gettext
     end
   end
 

@@ -4,7 +4,7 @@ defmodule SMWeb.Components.Confirm do
 
   import Phoenix.LiveView
   import SMWeb.Components.CoreComponents
-  import SMWeb.Gettext
+  use Gettext, backend: SMWeb.Gettext
 
   alias Phoenix.LiveView.JS
 

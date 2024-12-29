@@ -4,7 +4,7 @@ defmodule SM.Accounts.User do
   """
   use SM, :schema
 
-  import SMWeb.Gettext
+  use Gettext, backend: SMWeb.Gettext
 
   alias SM.Categories.Category
   alias SM.Competitions.Competition

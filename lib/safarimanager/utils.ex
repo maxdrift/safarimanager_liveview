@@ -1,7 +1,7 @@
 defmodule SM.Utils do
   @moduledoc false
 
-  import SMWeb.Gettext
+  use Gettext, backend: SMWeb.Gettext
 
   alias SM.Slides.Slide
 

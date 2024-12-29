@@ -4,7 +4,7 @@ defmodule SM.Teams.Team do
   """
   use SM, :schema
 
-  import SMWeb.Gettext
+  use Gettext, backend: SMWeb.Gettext
 
   alias SM.Competitions.Competition
   alias SM.Teams.TeamMember

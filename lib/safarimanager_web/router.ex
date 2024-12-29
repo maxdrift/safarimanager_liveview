@@ -2,7 +2,8 @@ defmodule SMWeb.Router do
   use SMWeb, :router
 
   import SMWeb.UserAuth
-  import Surface.Catalogue.Router
+
+  alias SMWeb.Components.Confirm
 
   pipeline :browser do
     plug :accepts, ["html"]
@@ -51,7 +52,7 @@ defmodule SMWeb.Router do
     pipe_through [:browser, :require_authenticated_user]
 
     live_session :require_authenticated_user,
-      on_mount: [{SMWeb.UserAuth, :ensure_authenticated}, SMWeb.Components.Confirm] do
+      on_mount: [{SMWeb.UserAuth, :ensure_authenticated}, Confirm] do
       scope "/organize" do
         live "/new", NewCompetition
         live "/:competition_id/participants", Participants
@@ -129,21 +130,13 @@ defmodule SMWeb.Router do
     end
   end
 
-  # credo:disable-for-next-line Credo.Check.Warning.MixEnv
-  if Mix.env() == :dev do
-    scope "/" do
-      pipe_through :browser
-      surface_catalogue("/catalogue")
-    end
-  end
-
   ## Authentication routes
 
   scope "/", SMWeb do
     pipe_through [:browser, :redirect_if_user_is_authenticated]
 
     live_session :redirect_if_user_is_authenticated,
-      on_mount: [{SMWeb.UserAuth, :redirect_if_user_is_authenticated}, SMWeb.Components.Confirm] do
+      on_mount: [{SMWeb.UserAuth, :redirect_if_user_is_authenticated}, Confirm] do
       live "/users/register", Live.UserRegistrationLive, :new
       live "/users/log_in", Live.UserLoginLive, :new
       live "/users/reset_password", Live.UserForgotPasswordLive, :new
@@ -159,7 +152,7 @@ defmodule SMWeb.Router do
     delete "/users/log_out", UserSessionController, :delete
 
     live_session :current_user,
-      on_mount: [{SMWeb.UserAuth, :mount_current_user}, SMWeb.Components.Confirm] do
+      on_mount: [{SMWeb.UserAuth, :mount_current_user}, Confirm] do
       live "/users/confirm/:token", Live.UserConfirmationLive, :edit
       live "/users/confirm", Live.UserConfirmationInstructionsLive, :new
     end
