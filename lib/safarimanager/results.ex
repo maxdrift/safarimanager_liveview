@@ -199,7 +199,7 @@ defmodule SM.Results do
   defp select_coefficient(%Slide{status: status}, subject, settings) when status in [:submitted_jury, :submitted_fixed] do
     cond do
       settings.dynamic_coefficient_mode in [:all, status] ->
-        {subject.dynamic_coefficient, true}
+        {subject.coefficient + subject.dynamic_coefficient, true}
 
       settings.coefficient_mode in [:all, status] ->
         {subject.coefficient, false}
