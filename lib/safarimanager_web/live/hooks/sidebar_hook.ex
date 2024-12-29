@@ -1,8 +1,9 @@
 defmodule SMWeb.SidebarHook do
   @moduledoc false
+  use Gettext, backend: SMWeb.Gettext
+
   import Phoenix.LiveView
   import SMWeb.Components.Confirm
-  use Gettext, backend: SMWeb.Gettext
 
   require Logger
 

@@ -16,8 +16,9 @@ defmodule SMWeb.TeamsPrintoutController do
 
     config = Results.get_printout_config()
 
-    with {:ok, competition} <- Competitions.get(competition_id),
-         teams <- Teams.list_by_competition(competition_id) do
+    with {:ok, competition} <- Competitions.get(competition_id) do
+      teams = Teams.list_by_competition(competition_id)
+
       conn
       |> put_root_layout(html: :print)
       |> render(:show,

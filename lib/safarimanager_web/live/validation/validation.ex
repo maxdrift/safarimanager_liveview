@@ -146,7 +146,16 @@ defmodule SMWeb.Live.Validation do
     old_subject_id = socket.assigns.curr_slide.subject_id
 
     socket =
-      if new_subject_id != old_subject_id do
+      if new_subject_id == old_subject_id do
+        if flag_id do
+          {:ok, slide_flag} = Slides.get_slide_flag(flag_id)
+          {:ok, _slide_flag} = Slides.remove_slide_flag(slide_flag)
+          # TODO: Remove in favor of handle_info callback
+          assign(socket, slide_flags: Map.put(socket.assigns.slide_flags, :wrong_subject, nil))
+        else
+          socket
+        end
+      else
         if flag_id == "" do
           {:ok, slide_flag} =
             Slides.add_slide_flag(%{
@@ -169,15 +178,6 @@ defmodule SMWeb.Live.Validation do
           assign(socket,
             slide_flags: Map.put(socket.assigns.slide_flags, :wrong_subject, slide_flag)
           )
-        end
-      else
-        if flag_id do
-          {:ok, slide_flag} = Slides.get_slide_flag(flag_id)
-          {:ok, _slide_flag} = Slides.remove_slide_flag(slide_flag)
-          # TODO: Remove in favor of handle_info callback
-          assign(socket, slide_flags: Map.put(socket.assigns.slide_flags, :wrong_subject, nil))
-        else
-          socket
         end
       end
 
@@ -238,18 +238,18 @@ defmodule SMWeb.Live.Validation do
       else
         {:ok, slide_flag} = Slides.get_slide_flag(flag_id)
 
-        if String.trim(value) != "" do
+        if String.trim(value) == "" do
+          {:ok, _slide_flag} =
+            Slides.remove_slide_flag(slide_flag)
+
+          nil
+        else
           {:ok, slide_flag} =
             Slides.update_slide_flag(slide_flag, %{
               "context" => %{"message" => String.trim(value)}
             })
 
           slide_flag
-        else
-          {:ok, _slide_flag} =
-            Slides.remove_slide_flag(slide_flag)
-
-          nil
         end
       end
 

@@ -11,13 +11,13 @@ defmodule SMWeb.Live.UserRegistrationLive do
     ~H"""
     <div class="mx-auto max-w-sm">
       <.header class="text-center">
-        <%= gettext("Register for an account") %>
+        {gettext("Register for an account")}
         <:subtitle>
-          <%= gettext("Already registered?") %>
+          {gettext("Already registered?")}
           <.link navigate={~p"/users/log_in"} class="font-semibold text-brand hover:underline">
-            <%= gettext("Sign in") %>
+            {gettext("Sign in")}
           </.link>
-          <%= gettext("to your account now.") %>
+          {gettext("to your account now.")}
         </:subtitle>
       </.header>
 
@@ -33,7 +33,7 @@ defmodule SMWeb.Live.UserRegistrationLive do
         as={:user}
       >
         <.error :if={@changeset.action == :insert}>
-          <%= gettext("Oops, something went wrong! Please check the errors below.") %>
+          {gettext("Oops, something went wrong! Please check the errors below.")}
         </.error>
 
         <.input field={{f, :email}} type="email" label={gettext("Email")} required />
@@ -41,7 +41,7 @@ defmodule SMWeb.Live.UserRegistrationLive do
 
         <:actions>
           <.button phx-disable-with={gettext("Creating account...")} class="w-full">
-            <%= gettext("Create an account") %>
+            {gettext("Create an account")}
           </.button>
         </:actions>
       </.simple_form>

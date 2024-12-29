@@ -80,10 +80,10 @@ defmodule SM.Slides.Slide do
   # Internal
 
   defp maybe_require_subject(changeset) do
-    if get_field(changeset, :status) != :discarded do
-      validate_required(changeset, [:subject_id])
-    else
+    if get_field(changeset, :status) == :discarded do
       changeset
+    else
+      validate_required(changeset, [:subject_id])
     end
   end
 end

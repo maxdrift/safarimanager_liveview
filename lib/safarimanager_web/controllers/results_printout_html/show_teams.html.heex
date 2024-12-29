@@ -1,52 +1,52 @@
 <div class="font-sans">
   <header class="relative mb-6">
     <div class="absolute top-10 right-6 w-24">
-      <%= fipsas_logo() %>
+      {fipsas_logo()}
     </div>
     <h4 class="text-center text-md font-semibold uppercase">
-      <%= @header_line %>
+      {@header_line}
     </h4>
-    <h5 class="text-center text-sm"><%= @sub_header_line %></h5>
+    <h5 class="text-center text-sm">{@sub_header_line}</h5>
     <div class="my-3">
-      <span class="text-sm"><%= gettext("Denomination") %>:&nbsp;</span><span class="text-md font-bold uppercase"><%= @competition.name %></span>
+      <span class="text-sm">{gettext("Denomination")}:&nbsp;</span><span class="text-md font-bold uppercase"><%= @competition.name %></span>
     </div>
     <div class="my-3">
-      <span class="text-sm"><%= gettext("Organizing organization") %>:&nbsp;</span><span class="text-md font-bold uppercase"><%= @competition.organization.name %></span>
+      <span class="text-sm">{gettext("Organizing organization")}:&nbsp;</span><span class="text-md font-bold uppercase"><%= @competition.organization.name %></span>
     </div>
     <div class="flex flex-row">
       <div class="mr-10">
-        <span class="text-sm"><%= gettext("Date") %>:&nbsp;</span><span class="text-sm font-bold"><%= @competition.start_time && @competition.start_time |> Calendar.strftime("%d/%m/%Y") || gettext("N/A") %></span>
+        <span class="text-sm">{gettext("Date")}:&nbsp;</span><span class="text-sm font-bold"><%= @competition.start_time && @competition.start_time |> Calendar.strftime("%d/%m/%Y") || gettext("N/A") %></span>
       </div>
       <div class="mr-10">
-        <span class="text-sm"><%= gettext("Location") %>:&nbsp;</span><span class="text-sm font-bold"><%= @competition.city || gettext("N/A") %></span>
+        <span class="text-sm">{gettext("Location")}:&nbsp;</span><span class="text-sm font-bold"><%= @competition.city || gettext("N/A") %></span>
       </div>
       <div>
-        <span class="text-sm"><%= gettext("Type") %>:&nbsp;</span><span class="text-sm font-bold"><%= Gettext.gettext(SMWeb.Gettext, Keyword.get(@competition_types, @competition.type)) |> String.capitalize() || gettext("N/A") %></span>
+        <span class="text-sm">{gettext("Type")}:&nbsp;</span><span class="text-sm font-bold"><%= Gettext.gettext(SMWeb.Gettext, Keyword.get(@competition_types, @competition.type)) |> String.capitalize() || gettext("N/A") %></span>
       </div>
     </div>
   </header>
   <table class="w-full table-fixed border-collapse text-sm">
     <thead>
       <tr class="uppercase">
-        <th class="w-14 border text-center"><%= gettext("Rank") %></th>
-        <th class="w-auto border text-center"><%= gettext("Full name") %></th>
-        <th class="w-auto border text-center"><%= gettext("Organization") %></th>
-        <th class="w-20 border text-center"><%= gettext("Points") %></th>
-        <th class="w-16 border text-center"><%= gettext("Species") %></th>
+        <th class="w-14 border text-center">{gettext("Rank")}</th>
+        <th class="w-auto border text-center">{gettext("Full name")}</th>
+        <th class="w-auto border text-center">{gettext("Organization")}</th>
+        <th class="w-20 border text-center">{gettext("Points")}</th>
+        <th class="w-16 border text-center">{gettext("Species")}</th>
       </tr>
     </thead>
     <tbody>
       <%= for result <- @results do %>
         <tr class="border">
-          <td class="border pr-1 text-right font-semibold"><%= result.rank %>º</td>
+          <td class="border pr-1 text-right font-semibold">{result.rank}º</td>
           <td class="border font-bold uppercase truncate">
-            <%= Teams.synthesize_team_name(result.team) %>
+            {Teams.synthesize_team_name(result.team)}
           </td>
           <td class="border font-bold capitalize truncate">
-            <%= Teams.synthesize_org_name(result.team) || gettext("N/A") %>
+            {Teams.synthesize_org_name(result.team) || gettext("N/A")}
           </td>
-          <td class="border pr-1 text-right font-bold"><%= result.total_score %></td>
-          <td class="border pr-1 text-right"><%= Enum.count(result.slides) %></td>
+          <td class="border pr-1 text-right font-bold">{result.total_score}</td>
+          <td class="border pr-1 text-right">{Enum.count(result.slides)}</td>
         </tr>
       <% end %>
     </tbody>
@@ -61,12 +61,12 @@
 </div>
 <footer class="flex flex-row text-sm bg-white h-20 pt-4 fixed bottom-0 w-full">
   <div class="mx-10 border-2 border-x-0 border-t-0 border-solid border-gray-400 pb-12 text-center basis-1/3">
-    <span class="uppercase"><%= gettext("The referee") %></span>
+    <span class="uppercase">{gettext("The referee")}</span>
   </div>
   <div class="mx-10 border-2 border-x-0 border-t-0 border-solid border-gray-400 text-center basis-1/3">
-    <span class="uppercase"><%= gettext("Pubblication time") %></span>
+    <span class="uppercase">{gettext("Pubblication time")}</span>
   </div>
   <div class="mx-10 border-2 border-x-0 border-t-0 border-solid border-gray-400 text-center basis-1/3">
-    <span class="uppercase"><%= gettext("The director") %></span>
+    <span class="uppercase">{gettext("The director")}</span>
   </div>
 </footer>

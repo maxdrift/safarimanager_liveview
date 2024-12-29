@@ -8,18 +8,18 @@ defmodule SMWeb.Live.UserConfirmationLive do
 
   def render(%{live_action: :edit} = assigns) do
     ~H"""
-    <.header><%= gettext("Confirm Account") %></.header>
+    <.header>{gettext("Confirm Account")}</.header>
 
     <.simple_form :let={f} for={%{}} as={:user} id="confirmation_form" phx-submit="confirm_account">
       <.input field={{f, :token}} type="hidden" value={@token} />
       <:actions>
-        <.button phx-disable-with="Confirming..."><%= gettext("Confirm my account") %></.button>
+        <.button phx-disable-with="Confirming...">{gettext("Confirm my account")}</.button>
       </:actions>
     </.simple_form>
 
     <p>
-      <.link href={~p"/users/register"}><%= gettext("Register") %></.link>
-      | <.link href={~p"/users/log_in"}><%= gettext("Log in") %></.link>
+      <.link href={~p"/users/register"}>{gettext("Register")}</.link>
+      | <.link href={~p"/users/log_in"}>{gettext("Log in")}</.link>
     </p>
     """
   end

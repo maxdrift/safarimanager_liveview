@@ -2,55 +2,55 @@
   <%= for result <- @results do %>
     <header class="relative mb-6">
       <div class="absolute top-10 right-6 w-24">
-        <%= fipsas_logo() %>
+        {fipsas_logo()}
       </div>
       <h4 class="text-center text-md font-semibold uppercase">
-        <%= @header_line %>
+        {@header_line}
       </h4>
-      <h5 class="text-center text-sm"><%= @sub_header_line %></h5>
+      <h5 class="text-center text-sm">{@sub_header_line}</h5>
     </header>
     <h1 class="my-4 text-center text-2xl font-bold uppercase tracking-widest">
-      <%= "#{result.user.last_name} #{result.user.first_name}" %>
+      {"#{result.user.last_name} #{result.user.first_name}"}
     </h1>
     <ul>
       <li>
-        <span class="font-bold"><%= gettext("Organization") %>:</span>
-        <%= (result.user.organization && result.user.organization.name) || gettext("N/A") %>
+        <span class="font-bold">{gettext("Organization")}:</span>
+        {(result.user.organization && result.user.organization.name) || gettext("N/A")}
       </li>
       <li>
-        <span class="font-bold"><%= gettext("Location") %>:</span>
-        <%= (result.user.organization && result.user.organization.location) || gettext("N/A") %>
+        <span class="font-bold">{gettext("Location")}:</span>
+        {(result.user.organization && result.user.organization.location) || gettext("N/A")}
       </li>
       <li>
-        <span class="font-bold"><%= gettext("Category") %>:</span>
-        <%= (result.participant.category && result.participant.category.name) || gettext("N/A") %>
+        <span class="font-bold">{gettext("Category")}:</span>
+        {(result.participant.category && result.participant.category.name) || gettext("N/A")}
       </li>
     </ul>
     <table class="w-full mt-4 table-fixed table-zebra border-collapse text-sm">
       <thead>
         <tr class="uppercase text-xs">
-          <th class="w-28 border text-center"><%= gettext("File name") %></th>
-          <th class="w-16 border text-center"><%= gettext("Sub. #") %></th>
-          <th class="w-auto border text-center"><%= gettext("Sub. name") %></th>
-          <th class="w-12 border text-center"><%= gettext("Coeff.") %></th>
-          <th class="w-auto border text-center"><%= gettext("Votes") %></th>
-          <th class="w-12 border text-center"><%= gettext("Pen.") %></th>
-          <th class="w-12 border text-center"><%= gettext("Jury") %></th>
-          <th class="w-14 border text-center"><%= gettext("Score") %></th>
+          <th class="w-28 border text-center">{gettext("File name")}</th>
+          <th class="w-16 border text-center">{gettext("Sub. #")}</th>
+          <th class="w-auto border text-center">{gettext("Sub. name")}</th>
+          <th class="w-12 border text-center">{gettext("Coeff.")}</th>
+          <th class="w-auto border text-center">{gettext("Votes")}</th>
+          <th class="w-12 border text-center">{gettext("Pen.")}</th>
+          <th class="w-12 border text-center">{gettext("Jury")}</th>
+          <th class="w-14 border text-center">{gettext("Score")}</th>
         </tr>
       </thead>
       <tbody>
         <%= for %{slide: slide, slide_score: score, coefficient: coefficient, use_dynamic?: use_dynamic?} <- result.slides do %>
           <tr class="border">
-            <td class="border"><%= slide.file_name %></td>
-            <td class="border text-right font-mono"><%= slide.subject.numeric_id %></td>
-            <td class="border capitalize"><%= slide.subject.name %></td>
+            <td class="border">{slide.file_name}</td>
+            <td class="border text-right font-mono">{slide.subject.numeric_id}</td>
+            <td class="border capitalize">{slide.subject.name}</td>
             <td class="border text-center">
               <span
                 class="font-mono"
                 title={(use_dynamic? && gettext("dynamic coefficient")) || ""}
               >
-                <%= coefficient %>
+                {coefficient}
               </span>
               <span :if={use_dynamic?} title={gettext("dynamic coefficient")}>
                 <Heroicons.icon
@@ -63,18 +63,18 @@
             <td class="border text-center font-mono">
               <%= for vote <- slide.votes do %>
                 <span>
-                  <%= vote.evaluation.name %>
+                  {vote.evaluation.name}
                 </span>
                 <span class="last:hidden text-xs">-</span>
               <% end %>
             </td>
             <td class="border text-center">
-              <%= (slide.penalty && "✓") || "" %>
+              {(slide.penalty && "✓") || ""}
             </td>
             <td class="border text-center">
-              <%= (slide.status == :submitted_jury && "✓") || "" %>
+              {(slide.status == :submitted_jury && "✓") || ""}
             </td>
-            <td class="border text-right font-mono"><%= score %></td>
+            <td class="border text-right font-mono">{score}</td>
           </tr>
         <% end %>
       </tbody>
@@ -82,12 +82,12 @@
     <div class="flex flex-row w-full">
       <div class="flex-none">
         <span class="font-bold"><%= gettext("Number of subjects captured") %></span>:
-        <span class="font-mono text-right"><%= result.slides_count %></span>
+        <span class="font-mono text-right">{result.slides_count}</span>
       </div>
       <div class="grow" />
       <div class="flex-none">
         <span class="font-bold"><%= gettext("Total score") %></span>:
-        <span class="font-mono text-right"><%= result.total_score %></span>
+        <span class="font-mono text-right">{result.total_score}</span>
       </div>
     </div>
     <div class="break-after-page last:break-after-avoid-page" />

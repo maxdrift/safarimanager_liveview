@@ -200,27 +200,29 @@ defmodule SM.Competitions do
   """
   @spec duplicate(String.t(), Map.t()) :: {:ok, Competition.t()} | {:error, any()}
   def duplicate(id, config \\ %{}) do
-    with {:ok, existing_competition} <- get(id),
-         existing_competition <- Repo.preload(existing_competition, slides: [:slide_flags, :votes]) do
-      competition_params =
-        existing_competition
-        |> duplicate_competition_details(config)
-        |> maybe_duplicate_participants(existing_competition, config)
-        |> maybe_duplicate_teams(existing_competition, config)
-        |> maybe_duplicate_jurors(existing_competition, config)
-        |> maybe_duplicate_slides(existing_competition, config)
+    case get(id) do
+      {:ok, existing_competition} ->
+        existing_competition = Repo.preload(existing_competition, slides: [:slide_flags, :votes])
 
-      %Competition{}
-      |> Competition.duplication_changeset(competition_params)
-      |> Repo.insert()
-      |> case do
-        {:ok, new_competition} ->
-          notify_subscribers({:ok, Repo.preload(new_competition, :organization)}, [:competition, :created])
+        competition_params =
+          existing_competition
+          |> duplicate_competition_details(config)
+          |> maybe_duplicate_participants(existing_competition, config)
+          |> maybe_duplicate_teams(existing_competition, config)
+          |> maybe_duplicate_jurors(existing_competition, config)
+          |> maybe_duplicate_slides(existing_competition, config)
 
-        {:error, reason} ->
-          notify_subscribers({:error, reason}, [:competition, :created])
-      end
-    else
+        %Competition{}
+        |> Competition.duplication_changeset(competition_params)
+        |> Repo.insert()
+        |> case do
+          {:ok, new_competition} ->
+            notify_subscribers({:ok, Repo.preload(new_competition, :organization)}, [:competition, :created])
+
+          {:error, reason} ->
+            notify_subscribers({:error, reason}, [:competition, :created])
+        end
+
       {:error, reason} ->
         notify_subscribers({:error, reason}, [:competition, :created])
     end

@@ -18,11 +18,12 @@ defmodule SM.ImageProcessing do
     # and optimise memory usage more effectively. However :sequential also means that
     # some operations cannot be completed because they would require non-sequential
     # access to the image. In these cases, :random access is required.
-    with {:ok, image} <- Image.open(path, access: :sequential),
-         width <- Image.width(image),
-         height <- Image.height(image),
-         metadata <- maybe_get_exif(image),
-         do: {:ok, width, height, metadata}
+    with {:ok, image} <- Image.open(path, access: :sequential) do
+      width = Image.width(image)
+      height = Image.height(image)
+      metadata = maybe_get_exif(image)
+      {:ok, width, height, metadata}
+    end
   end
 
   # Internal

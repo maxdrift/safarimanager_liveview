@@ -31,7 +31,7 @@ defmodule SM.Seeds do
     |> Path.join()
     |> File.stream!()
     |> SeedsCSV.parse_stream(skip_headers: false)
-    |> Stream.map(fn [numeric_id, name, scientific_name, coefficient] ->
+    |> Enum.each(fn [numeric_id, name, scientific_name, coefficient] ->
       {:ok, _result} =
         Subjects.create(%{
           name: String.downcase(name),
@@ -41,7 +41,6 @@ defmodule SM.Seeds do
           type: :fish
         })
     end)
-    |> Stream.run()
   end
 
   @spec upsert_subjects :: :ok
@@ -52,7 +51,7 @@ defmodule SM.Seeds do
     |> Path.join()
     |> File.stream!()
     |> SeedsCSV.parse_stream(skip_headers: false)
-    |> Stream.map(fn [numeric_id, name, scientific_name, coefficient] ->
+    |> Enum.each(fn [numeric_id, name, scientific_name, coefficient] ->
       data = %{
         name: String.downcase(name),
         coefficient: String.to_integer(coefficient),
@@ -69,12 +68,10 @@ defmodule SM.Seeds do
           {:ok, _result} = Subjects.create(data)
       end
     end)
-    |> Stream.run()
   end
 
   def insert_evaluations do
-    0..10
-    |> Stream.map(fn e ->
+    Enum.each(0..10, fn e ->
       {:ok, _result} =
         Evaluations.create(%{
           name: to_string(e),
@@ -82,7 +79,6 @@ defmodule SM.Seeds do
           type: "numeric"
         })
     end)
-    |> Stream.run()
 
     {:ok, _result} =
       Evaluations.create(%{
@@ -96,10 +92,8 @@ defmodule SM.Seeds do
 
   def insert_categories do
     :ok =
-      @default_categories
-      |> Stream.map(fn name ->
+      Enum.each(@default_categories, fn name ->
         {:ok, _result} = Categories.create(%{name: name})
       end)
-      |> Stream.run()
   end
 end

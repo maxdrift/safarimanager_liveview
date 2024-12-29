@@ -16,8 +16,9 @@ defmodule SMWeb.ParticipantsPrintoutController do
 
     config = Results.get_printout_config()
 
-    with {:ok, competition} <- Competitions.get(competition_id),
-         participants <- Participants.list(competition_id) do
+    with {:ok, competition} <- Competitions.get(competition_id) do
+      participants = Participants.list(competition_id)
+
       conn
       |> put_root_layout(html: :print)
       |> render(:show,

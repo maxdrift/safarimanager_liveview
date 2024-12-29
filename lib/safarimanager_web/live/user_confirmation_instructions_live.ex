@@ -9,7 +9,7 @@ defmodule SMWeb.Live.UserConfirmationInstructionsLive do
   @impl Phoenix.LiveView
   def render(assigns) do
     ~H"""
-    <.header><%= gettext("Resend confirmation instructions") %></.header>
+    <.header>{gettext("Resend confirmation instructions")}</.header>
 
     <.simple_form
       :let={f}
@@ -21,14 +21,14 @@ defmodule SMWeb.Live.UserConfirmationInstructionsLive do
       <.input field={{f, :email}} type="email" label="Email" required />
       <:actions>
         <.button phx-disable-with={gettext("Sending...")}>
-          <%= gettext("Resend confirmation instructions") %>
+          {gettext("Resend confirmation instructions")}
         </.button>
       </:actions>
     </.simple_form>
 
     <p>
-      <.link href={~p"/users/register"}><%= gettext("Register") %></.link>
-      | <.link href={~p"/users/log_in"}><%= gettext("Log in") %></.link>
+      <.link href={~p"/users/register"}>{gettext("Register")}</.link>
+      | <.link href={~p"/users/log_in"}>{gettext("Log in")}</.link>
     </p>
     """
   end

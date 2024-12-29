@@ -28,8 +28,9 @@ defmodule SMWeb do
         formats: [:html, :json],
         layouts: [html: SMWeb.Layouts]
 
-      import Plug.Conn
       use Gettext, backend: SMWeb.Gettext
+
+      import Plug.Conn
 
       unquote(verified_routes())
     end
@@ -76,9 +77,9 @@ defmodule SMWeb do
   def surface_component do
     quote do
       use Surface.Component
+      use Gettext, backend: SMWeb.Gettext
 
       import SMWeb.ErrorHelpers
-      use Gettext, backend: SMWeb.Gettext
 
       # Shortcut for generating JS commands
       alias Phoenix.LiveView.JS
@@ -111,7 +112,6 @@ defmodule SMWeb do
   def channel do
     quote do
       use Phoenix.Channel
-
       use Gettext, backend: SMWeb.Gettext
     end
   end

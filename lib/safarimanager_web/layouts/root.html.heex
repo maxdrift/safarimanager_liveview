@@ -7,7 +7,7 @@
     <meta name="csrf-token" content={get_csrf_token()} />
     <link rel="icon" type="image/x-icon" href={~p"/images/favicon.ico"} />
     <.live_title>
-      <%= assigns[:page_title] || "Safari Manager" %>
+      {assigns[:page_title] || "Safari Manager"}
     </.live_title>
     <link phx-track-static rel="stylesheet" href={~p"/assets/app.css"} />
     <script defer phx-track-static type="text/javascript" src={~p"/assets/app.js"}>
@@ -15,6 +15,6 @@
   </head>
 
   <body>
-    <%= @inner_content %>
+    {@inner_content}
   </body>
 </html>

@@ -3,7 +3,6 @@ defmodule SM.Teams.Team do
   Team schema
   """
   use SM, :schema
-
   use Gettext, backend: SMWeb.Gettext
 
   alias SM.Competitions.Competition
@@ -51,12 +50,12 @@ defmodule SM.Teams.Team do
       unique_user_ids = Enum.uniq(user_ids)
       duplicates = Enum.uniq(user_ids -- unique_user_ids)
 
-      if duplicates != [] do
+      if duplicates == [] do
+        []
+      else
         [
           members: {dgettext("errors", "is already a member of this team"), user_id: hd(duplicates)}
         ]
-      else
-        []
       end
     end)
   end

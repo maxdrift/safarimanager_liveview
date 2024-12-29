@@ -1,57 +1,57 @@
 <div class="font-sans">
   <header class="relative mb-6">
     <div class="absolute top-10 right-6 w-24">
-      <%= fipsas_logo() %>
+      {fipsas_logo()}
     </div>
     <h4 class="text-center text-md font-semibold uppercase">
-      <%= @header_line %>
+      {@header_line}
     </h4>
-    <h5 class="text-center text-sm"><%= @sub_header_line %></h5>
+    <h5 class="text-center text-sm">{@sub_header_line}</h5>
     <div class="my-3">
-      <span class="text-sm"><%= gettext("Denomination") %>:&nbsp;</span><span class="text-md font-bold uppercase"><%= @competition.name %></span>
+      <span class="text-sm">{gettext("Denomination")}:&nbsp;</span><span class="text-md font-bold uppercase"><%= @competition.name %></span>
     </div>
     <div class="my-3">
-      <span class="text-sm"><%= gettext("Organizing organization") %>:&nbsp;</span><span class="text-md font-bold uppercase"><%= @competition.organization.name %></span>
+      <span class="text-sm">{gettext("Organizing organization")}:&nbsp;</span><span class="text-md font-bold uppercase"><%= @competition.organization.name %></span>
     </div>
     <div class="flex flex-row">
       <div class="mr-10">
-        <span class="text-sm"><%= gettext("Date") %>:&nbsp;</span><span class="text-sm font-bold"><%= @competition.start_time && @competition.start_time |> Calendar.strftime("%d/%m/%Y") || gettext("N/A") %></span>
+        <span class="text-sm">{gettext("Date")}:&nbsp;</span><span class="text-sm font-bold"><%= @competition.start_time && @competition.start_time |> Calendar.strftime("%d/%m/%Y") || gettext("N/A") %></span>
       </div>
       <div class="mr-10">
-        <span class="text-sm"><%= gettext("Location") %>:&nbsp;</span><span class="text-sm font-bold"><%= @competition.city || gettext("N/A") %></span>
+        <span class="text-sm">{gettext("Location")}:&nbsp;</span><span class="text-sm font-bold"><%= @competition.city || gettext("N/A") %></span>
       </div>
       <div>
-        <span class="text-sm"><%= gettext("Type") %>:&nbsp;</span><span class="text-sm font-bold"><%= Gettext.gettext(SMWeb.Gettext, Keyword.get(@competition_types, @competition.type)) |> String.capitalize() || gettext("N/A") %></span>
+        <span class="text-sm">{gettext("Type")}:&nbsp;</span><span class="text-sm font-bold"><%= Gettext.gettext(SMWeb.Gettext, Keyword.get(@competition_types, @competition.type)) |> String.capitalize() || gettext("N/A") %></span>
       </div>
     </div>
     <h1 class="mt-4 text-center text-2xl font-bold uppercase tracking-widest">
-      <%= gettext("Teams list") %>
+      {gettext("Teams list")}
     </h1>
   </header>
   <table class="w-full table-fixed border-collapse text-sm">
     <thead>
       <tr class="uppercase">
-        <th class="w-14 border text-center"><%= gettext("Num.") %></th>
-        <th class="w-auto border text-center"><%= gettext("Team name") %></th>
-        <th class="w-auto border text-center"><%= gettext("Organization") %></th>
-        <th class="w-auto border text-center"><%= gettext("Members") %></th>
+        <th class="w-14 border text-center">{gettext("Num.")}</th>
+        <th class="w-auto border text-center">{gettext("Team name")}</th>
+        <th class="w-auto border text-center">{gettext("Organization")}</th>
+        <th class="w-auto border text-center">{gettext("Members")}</th>
       </tr>
     </thead>
     <tbody>
       <%= for team <- @teams do %>
         <tr class="border">
-          <td class="border pr-1 text-right font-semibold"><%= team.number %></td>
+          <td class="border pr-1 text-right font-semibold">{team.number}</td>
           <td class="border font-bold uppercase truncate">
-            <%= SM.Teams.synthesize_team_name(team) %>
+            {SM.Teams.synthesize_team_name(team)}
           </td>
           <td class="border font-bold capitalize truncate">
-            <%= SM.Teams.synthesize_org_name(team) %>
+            {SM.Teams.synthesize_org_name(team)}
           </td>
           <td class="border capitalize truncate">
             <ul class="list-disc">
               <%= for user <- team.users do %>
                 <li>
-                  - <span class="font-bold"><%= "#{user.last_name} #{user.first_name}" %></span>
+                  - <span class="font-bold">{"#{user.last_name} #{user.first_name}"}</span>
                 </li>
               <% end %>
             </ul>
@@ -72,6 +72,6 @@
   <div class="mx-10 text-center basis-1/3"></div>
   <div class="mx-10 text-center basis-1/3"></div>
   <div class="mx-10 border-2 border-x-0 border-t-0 border-solid border-gray-400 text-center basis-1/3">
-    <span class="capitalize"><%= gettext("The referee") %></span>
+    <span class="capitalize">{gettext("The referee")}</span>
   </div>
 </footer>

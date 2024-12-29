@@ -8,13 +8,13 @@ defmodule SMWeb.Live.UserLoginLive do
     ~H"""
     <div class="mx-auto max-w-sm">
       <.header class="text-center">
-        <%= gettext("Sign in to account") %>
+        {gettext("Sign in to account")}
         <:subtitle>
-          <%= gettext("Don't have an account?") %>
+          {gettext("Don't have an account?")}
           <.link navigate={~p"/users/register"} class="font-semibold text-brand hover:underline">
-            <%= gettext("Sign up") %>
+            {gettext("Sign up")}
           </.link>
-          <%= gettext("for an account now.") %>
+          {gettext("for an account now.")}
         </:subtitle>
       </.header>
 
@@ -32,12 +32,12 @@ defmodule SMWeb.Live.UserLoginLive do
         <:actions :let={f}>
           <.input field={{f, :remember_me}} type="checkbox" label={gettext("Keep me logged in")} />
           <.link href={~p"/users/reset_password"} class="text-sm font-semibold">
-            <%= gettext("Forgot your password?") %>
+            {gettext("Forgot your password?")}
           </.link>
         </:actions>
         <:actions>
           <.button phx-disable-with={gettext("Sigining in...")} class="w-full">
-            <%= gettext("Sign in") %> <span aria-hidden="true">→</span>
+            {gettext("Sign in")} <span aria-hidden="true">→</span>
           </.button>
         </:actions>
       </.simple_form>

@@ -1,10 +1,10 @@
 defmodule SMWeb.Components.Confirm do
   @moduledoc false
   use Phoenix.Component
+  use Gettext, backend: SMWeb.Gettext
 
   import Phoenix.LiveView
   import SMWeb.Components.CoreComponents
-  use Gettext, backend: SMWeb.Gettext
 
   alias Phoenix.LiveView.JS
 
@@ -74,25 +74,25 @@ defmodule SMWeb.Components.Confirm do
         data-el-confirm-form
       >
         <h3 class="text-2xl font-semibold">
-          <%= @title %>
+          {@title}
         </h3>
         <p class="mt-8">
-          <%= @description %>
+          {@description}
         </p>
         <label :if={@opt_out_id} class="mt-6 flex items-center">
           <input class="checkbox mr-3" type="checkbox" name="opt_out_id" value={@opt_out_id} />
           <span class="text-sm">
-            <%= gettext("Don't show this message again") %>
+            {gettext("Don't show this message again")}
           </span>
         </label>
         <div class="mt-8 flex justify-end">
           <div class={["flex gap-2", @danger && "flex-row-reverse"]}>
             <button class="btn" type="button" phx-click={hide_modal(@id)}>
-              <%= gettext("Cancel") %>
+              {gettext("Cancel")}
             </button>
             <button class={["btn", if(@danger, do: "btn-error", else: "btn-info")]} type="submit">
               <Heroicons.icon name={@confirm_icon} type="solid" class="align-middle mr-1 h-6" />
-              <span><%= @confirm_text %></span>
+              <span>{@confirm_text}</span>
             </button>
           </div>
         </div>

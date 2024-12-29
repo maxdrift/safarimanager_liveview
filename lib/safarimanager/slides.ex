@@ -826,7 +826,7 @@ defmodule SM.Slides do
     metadata =
       attrs
       |> Map.get("metadata")
-      |> then(&(&1 || "{}"))
+      |> Kernel.||("{}")
       |> Jason.decode!()
 
     attrs = Map.put(attrs, "metadata", metadata)

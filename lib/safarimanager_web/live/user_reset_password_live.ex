@@ -8,7 +8,7 @@ defmodule SMWeb.Live.UserResetPasswordLive do
 
   def render(assigns) do
     ~H"""
-    <.header><%= gettext("Reset Password") %></.header>
+    <.header>{gettext("Reset Password")}</.header>
 
     <.simple_form
       :let={f}
@@ -18,7 +18,7 @@ defmodule SMWeb.Live.UserResetPasswordLive do
       phx-change="validate"
     >
       <.error :if={@changeset.action == :insert}>
-        <%= gettext("Oops, something went wrong! Please check the errors below.") %>
+        {gettext("Oops, something went wrong! Please check the errors below.")}
       </.error>
 
       <.input field={{f, :password}} type="password" label={gettext("New password")} required />
@@ -30,14 +30,14 @@ defmodule SMWeb.Live.UserResetPasswordLive do
       />
       <:actions>
         <.button phx-disable-with={gettext("Resetting...")}>
-          <%= gettext("Reset Password") %>
+          {gettext("Reset Password")}
         </.button>
       </:actions>
     </.simple_form>
 
     <p>
-      <.link href={~p"/users/register"}><%= gettext("Register") %></.link>
-      | <.link href={~p"/users/log_in"}><%= gettext("Log in") %></.link>
+      <.link href={~p"/users/register"}>{gettext("Register")}</.link>
+      | <.link href={~p"/users/log_in"}>{gettext("Log in")}</.link>
     </p>
     """
   end
