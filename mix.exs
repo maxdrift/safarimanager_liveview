@@ -90,8 +90,7 @@ defmodule SM.MixProject do
       {:surface_form_helpers, "~> 0.2"},
       {:svadilfari, git: "https://github.com/maxdrift/svadilfari", branch: "main"},
       {:swoosh, "~> 1.11"},
-      # overriding because of the "prom_ex" dependency requiring telemetry_metrics 0.6
-      {:telemetry_metrics, "~> 1.0.0", override: true},
+      {:telemetry_metrics, "~> 1.0.0"},
       {:telemetry_poller, "~> 1.0"},
       {:telemetry, "~> 1.2"},
       {:tesla, "~> 1.13.2"}
