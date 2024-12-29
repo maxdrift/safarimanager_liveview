@@ -3,12 +3,14 @@ defmodule SMWeb.ErrorHelpers do
   Conveniences for translating and building error messages.
   """
 
-  use Phoenix.HTML
+  use PhoenixHTMLHelpers
+
+  alias Phoenix.HTML.Form
 
   @doc """
   Generates tag for inlined form input errors.
   """
-  @spec error_tag(Phoenix.HTML.Form.t(), atom(), Keyword.t()) :: {:safe, list()}
+  @spec error_tag(Form.t(), atom(), Keyword.t()) :: {:safe, list()}
   def error_tag(form, field, opts \\ []) do
     if error = form.errors[field] do
       content_tag(:span, translate_error(error), opts)
@@ -44,19 +46,19 @@ defmodule SMWeb.ErrorHelpers do
     end
   end
 
-  @spec input_state_class(Ecto.Changeset.t() | Phoenix.HTML.Form.t(), atom(), Keyword.t()) :: String.t()
+  @spec input_state_class(Ecto.Changeset.t() | Form.t(), atom(), Keyword.t()) :: String.t()
   def input_state_class(changeset_or_form, field, opts \\ []) do
-    opts = Keyword.merge(opts, type: :input)
+    opts = Keyword.put(opts, :type, :input)
     state_class("input input-bordered", changeset_or_form, field, opts)
   end
 
-  @spec select_state_class(Ecto.Changeset.t() | Phoenix.HTML.Form.t(), atom(), Keyword.t()) :: String.t()
+  @spec select_state_class(Ecto.Changeset.t() | Form.t(), atom(), Keyword.t()) :: String.t()
   def select_state_class(changeset_or_form, field, opts \\ []) do
-    opts = Keyword.merge(opts, type: :select)
+    opts = Keyword.put(opts, :type, :select)
     state_class("select select-bordered", changeset_or_form, field, opts)
   end
 
-  @spec state_class(String.t(), Ecto.Changeset.t() | Phoenix.HTML.Form.t(), atom(), Keyword.t()) :: String.t()
+  @spec state_class(String.t(), Ecto.Changeset.t() | Form.t(), atom(), Keyword.t()) :: String.t()
   def state_class(class, changeset, field, opts \\ [])
 
   def state_class(class, %Ecto.Changeset{} = changeset, field, opts) do
@@ -75,7 +77,7 @@ defmodule SMWeb.ErrorHelpers do
     String.trim(class)
   end
 
-  def state_class(class, %Phoenix.HTML.Form{} = form, field, opts) do
+  def state_class(class, %Form{} = form, field, opts) do
     input_type = Keyword.get(opts, :type, :input)
 
     class =
@@ -91,7 +93,7 @@ defmodule SMWeb.ErrorHelpers do
     String.trim(class)
   end
 
-  @spec submit_state_class(String.t(), Ecto.Changeset.t() | Phoenix.HTML.Form.t(), Keyword.t()) :: String.t()
+  @spec submit_state_class(String.t(), Ecto.Changeset.t() | Form.t(), Keyword.t()) :: String.t()
   def submit_state_class(class \\ "btn btn-md", changeset, opts \\ [])
 
   def submit_state_class(class, %Ecto.Changeset{} = changeset, opts) do
@@ -109,7 +111,7 @@ defmodule SMWeb.ErrorHelpers do
     String.trim(class)
   end
 
-  def submit_state_class(class, %Phoenix.HTML.Form{} = form, opts) do
+  def submit_state_class(class, %Form{} = form, opts) do
     class =
       cond do
         # no state checking

@@ -3,7 +3,6 @@ defmodule SM.Accounts.User do
   User account schema
   """
   use SM, :schema
-
   use Gettext, backend: SMWeb.Gettext
 
   alias SM.Categories.Category
@@ -26,6 +25,8 @@ defmodule SM.Accounts.User do
     has_many :slides, Slide
     has_many :team_members, TeamMember
     has_many :teams, through: [:team_members, :team]
+
+    field :current_password, :string, virtual: true, redact: true
 
     timestamps()
   end
@@ -205,6 +206,8 @@ defmodule SM.Accounts.User do
   """
   @spec validate_current_password(Ecto.Changeset.t(), String.t()) :: Ecto.Changeset.t()
   def validate_current_password(changeset, password) do
+    changeset = cast(changeset, %{current_password: password}, [:current_password])
+
     if valid_password?(changeset.data, password) do
       changeset
     else

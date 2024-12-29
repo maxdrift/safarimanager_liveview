@@ -24,10 +24,7 @@ defmodule SMWeb.Live.UserSettingsLive do
       </header>
 
       <Form id="email_form" for={@email_changeset} submit="update_email" change="validate_email">
-        <div
-          :if={@email_changeset.action == :insert}
-          class="phx-no-feedback:hidden alert alert-error shadow-lg"
-        >
+        <div :if={@email_changeset.action == :insert} class="alert alert-error shadow-lg">
           <div>
             <Heroicons.icon name="exclamation-circle" type="outline" class="h-6 w-6" />
             <span>{gettext("Oops, something went wrong! Please check the errors below.")}</span>
@@ -75,10 +72,7 @@ defmodule SMWeb.Live.UserSettingsLive do
         submit="update_password"
         trigger_action={@trigger_submit}
       >
-        <div
-          :if={@password_changeset.action == :insert}
-          class="phx-no-feedback:hidden alert alert-error shadow-lg"
-        >
+        <div :if={@password_changeset.action == :insert} class="alert alert-error shadow-lg">
           <div>
             <Heroicons.icon name="exclamation-circle" type="outline" class="h-6 w-6" />
             <span>{gettext("Oops, something went wrong! Please check the errors below.")}</span>
