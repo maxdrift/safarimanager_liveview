@@ -32,7 +32,7 @@ defmodule SMWeb.Components.Sidebar do
         <div class="flex flex-col">
           <div class="space-y-3">
             <div class="flex flex-col items-center">
-              <.link navigate={~p"/"} class="flex items-center group">
+              <.link href={~p"/"} class="flex items-center group">
                 <img src={~p"/images/logo.png"} class="mx-2" height="40" width="40" alt="logo safari manager">
                 <span class="text-base-content text-lg font-logo ml-[-1px] group-hover:text-white pt-1">
                   Safari Manager

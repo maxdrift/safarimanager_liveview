@@ -34,7 +34,7 @@ defmodule SMWeb.Components.Layout do
 
           <div class="text-gray-400 hover:text-gray-600 focus:text-gray-600">
             <#slot {@topbar_action}>
-              <.link navigate={~p"/"} class="flex items-center">
+              <.link href={~p"/"} class="flex items-center">
                 <Heroicons.icon name="home" type="solid" />
                 <span class="pl-2">Home</span>
               </.link>

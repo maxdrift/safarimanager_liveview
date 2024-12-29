@@ -74,7 +74,7 @@ defmodule SMWeb.Components.CoreComponents do
             <span class="text-sm">(esc)</span>
             <Heroicons.icon name="x-mark" type="solid" class="h-5 w-5 stroke-current" />
           </button>
-          <%= render_slot(@inner_block) %>
+          {render_slot(@inner_block)}
         </.focus_wrap>
       </div>
     </div>
@@ -140,8 +140,8 @@ defmodule SMWeb.Components.CoreComponents do
           class="flex-none stroke-current flex-shrink-0 h-6 w-6"
         />
         <div class="flex-none my-auto pl-2 w-80">
-          <h3 :if={@title} class="font-bold"><%= @title %></h3>
-          <div class="text-xs"><%= msg %></div>
+          <h3 :if={@title} class="font-bold">{@title}</h3>
+          <div class="text-xs">{msg}</div>
         </div>
       </div>
       <div class="flex-none">
@@ -189,9 +189,9 @@ defmodule SMWeb.Components.CoreComponents do
     ~H"""
     <.form :let={f} for={@for} as={@as} {@rest}>
       <div class="space-y-8 mt-10">
-        <%= render_slot(@inner_block, f) %>
+        {render_slot(@inner_block, f)}
         <div :for={action <- @actions} class="mt-2 flex items-center justify-between gap-6">
-          <%= render_slot(action, f) %>
+          {render_slot(action, f)}
         </div>
       </div>
     </.form>
@@ -223,7 +223,7 @@ defmodule SMWeb.Components.CoreComponents do
       ]}
       {@rest}
     >
-      <%= render_slot(@inner_block) %>
+      {render_slot(@inner_block)}
     </button>
     """
   end
@@ -260,12 +260,12 @@ defmodule SMWeb.Components.CoreComponents do
                                    pattern placeholder readonly required size step)
   slot :inner_block
 
-  def input(%{field: {f, field}} = assigns) do
+  def input(%{field: {_f, field}} = assigns) do
     errors = if Phoenix.Component.used_input?(field), do: field.errors, else: []
 
     assigns
     |> assign(field: nil)
-    |> assign_new(:id, fn -> HTML.Form.input_id(f, field) end)
+    |> assign_new(:id, fn -> field.id end)
     |> assign(:errors, Enum.map(errors, &translate_error(&1)))
     |> assign_new(:name, fn -> if assigns.multiple, do: field.name <> "[]", else: field.name end)
     |> assign_new(:value, fn -> field.value end)
@@ -287,7 +287,7 @@ defmodule SMWeb.Components.CoreComponents do
         class="rounded border-zinc-300 text-zinc-900 focus:ring-zinc-900"
         {@rest}
       />
-      <%= @label %>
+      {@label}
     </label>
     """
   end
@@ -295,7 +295,7 @@ defmodule SMWeb.Components.CoreComponents do
   def input(%{type: "select"} = assigns) do
     ~H"""
     <div>
-      <.label for={@id}><%= @label %></.label>
+      <.label for={@id}>{@label}</.label>
       <select
         id={@id}
         name={@name}
@@ -303,10 +303,10 @@ defmodule SMWeb.Components.CoreComponents do
         multiple={@multiple}
         {@rest}
       >
-        <option :if={@prompt}><%= @prompt %></option>
-        <%= HTML.Form.options_for_select(@options, @value) %>
+        <option :if={@prompt}>{@prompt}</option>
+        {HTML.Form.options_for_select(@options, @value)}
       </select>
-      <.error :for={msg <- @errors}><%= msg %></.error>
+      <.error :for={msg <- @errors}>{msg}</.error>
     </div>
     """
   end
@@ -314,7 +314,7 @@ defmodule SMWeb.Components.CoreComponents do
   def input(%{type: "textarea"} = assigns) do
     ~H"""
     <div>
-      <.label for={@id}><%= @label %></.label>
+      <.label for={@id}>{@label}</.label>
       <textarea
         id={@id || @name}
         name={@name}
@@ -326,7 +326,7 @@ defmodule SMWeb.Components.CoreComponents do
       >
 
     <%= @value %></textarea>
-      <.error :for={msg <- @errors}><%= msg %></.error>
+      <.error :for={msg <- @errors}>{msg}</.error>
     </div>
     """
   end
@@ -334,7 +334,7 @@ defmodule SMWeb.Components.CoreComponents do
   def input(assigns) do
     ~H"""
     <div>
-      <.label for={@id}><%= @label %></.label>
+      <.label for={@id}>{@label}</.label>
       <input
         type={@type}
         name={@name}
@@ -347,7 +347,7 @@ defmodule SMWeb.Components.CoreComponents do
         ]}
         {@rest}
       />
-      <.error :for={msg <- @errors}><%= msg %></.error>
+      <.error :for={msg <- @errors}>{msg}</.error>
     </div>
     """
   end
@@ -365,7 +365,7 @@ defmodule SMWeb.Components.CoreComponents do
   def label(assigns) do
     ~H"""
     <label for={@for} class="block text-sm font-semibold leading-6 text-zinc-800">
-      <%= render_slot(@inner_block) %>
+      {render_slot(@inner_block)}
     </label>
     """
   end
@@ -383,7 +383,7 @@ defmodule SMWeb.Components.CoreComponents do
         type="mini"
         class="mt-0.5 h-5 w-5 flex-none fill-rose-500"
       />
-      <%= render_slot(@inner_block) %>
+      {render_slot(@inner_block)}
     </p>
     """
   end
@@ -402,13 +402,13 @@ defmodule SMWeb.Components.CoreComponents do
     <header class={[@actions != [] && "flex items-center justify-between gap-6", @class]}>
       <div>
         <h1 class="text-lg font-semibold leading-8 text-zinc-800">
-          <%= render_slot(@inner_block) %>
+          {render_slot(@inner_block)}
         </h1>
         <p :if={@subtitle != []} class="mt-2 text-sm leading-6 text-zinc-600">
-          <%= render_slot(@subtitle) %>
+          {render_slot(@subtitle)}
         </p>
       </div>
-      <div class="flex-none"><%= render_slot(@actions) %></div>
+      <div class="flex-none">{render_slot(@actions)}</div>
     </header>
     """
   end
@@ -439,8 +439,8 @@ defmodule SMWeb.Components.CoreComponents do
       <table class="mt-11 w-[40rem] sm:w-full">
         <thead class="text-left text-[0.8125rem] leading-6 text-zinc-500">
           <tr>
-            <th :for={col <- @col} class="p-0 pb-4 pr-6 font-normal"><%= col[:label] %></th>
-            <th class="relative p-0 pb-4"><span class="sr-only"><%= gettext("Actions") %></span></th>
+            <th :for={col <- @col} class="p-0 pb-4 pr-6 font-normal">{col[:label]}</th>
+            <th class="relative p-0 pb-4"><span class="sr-only">{gettext("Actions")}</span></th>
           </tr>
         </thead>
         <tbody class="relative divide-y divide-zinc-100 border-t border-zinc-200 text-sm leading-6 text-zinc-700">
@@ -460,7 +460,7 @@ defmodule SMWeb.Components.CoreComponents do
               </div>
               <div class="block py-4 pr-6">
                 <span class={["relative", i == 0 && "font-semibold text-zinc-900"]}>
-                  <%= render_slot(col, row) %>
+                  {render_slot(col, row)}
                 </span>
               </div>
             </td>
@@ -470,7 +470,7 @@ defmodule SMWeb.Components.CoreComponents do
                   :for={action <- @action}
                   class="relative ml-4 font-semibold leading-6 text-zinc-900 hover:text-zinc-700"
                 >
-                  <%= render_slot(action, row) %>
+                  {render_slot(action, row)}
                 </span>
               </div>
             </td>
@@ -500,8 +500,8 @@ defmodule SMWeb.Components.CoreComponents do
     <div class="mt-14">
       <dl class="-my-4 divide-y divide-zinc-100">
         <div :for={item <- @item} class="flex gap-4 py-4 sm:gap-8">
-          <dt class="w-1/4 flex-none text-[0.8125rem] leading-6 text-zinc-500"><%= item.title %></dt>
-          <dd class="text-sm leading-6 text-zinc-700"><%= render_slot(item) %></dd>
+          <dt class="w-1/4 flex-none text-[0.8125rem] leading-6 text-zinc-500">{item.title}</dt>
+          <dd class="text-sm leading-6 text-zinc-700">{render_slot(item)}</dd>
         </div>
       </dl>
     </div>
@@ -526,7 +526,7 @@ defmodule SMWeb.Components.CoreComponents do
         class="text-sm font-semibold leading-6 text-zinc-900 hover:text-zinc-700"
       >
         <Heroicons.icon name="arrow-left" type="solid" class="w-3 h-3 stroke-current inline" />
-        <%= render_slot(@inner_block) %>
+        {render_slot(@inner_block)}
       </.link>
     </div>
     """
