@@ -2,6 +2,10 @@
 set -euo pipefail
 
 app_name=$ELIXIRKIT_APP_NAME
+# Begin Custom
+app_version=$APP_VERSION
+arch=$TARGET_ARCH
+# End Custom
 app_dir=$PWD/.build/${app_name}.app
 
 identity="${ELIXIRKIT_CODESIGN_IDENTITY:-}"
@@ -18,7 +22,10 @@ else
   echo "[warning] skipping codesign. Please set ELIXIRKIT_CODESIGN_IDENTITY environment variable"
 fi
 
-dmg_path=$PWD/.build/${app_name}Install.dmg
+# dmg_path=$PWD/.build/${app_name}Install.dmg
+# Begin Custom
+dmg_path=$PWD/.build/${app_name}Install-v${app_version}-${arch}.dmg
+# End Custom
 dmg_dir=$PWD/.build/dmg
 rm -rf $dmg_dir
 mkdir $dmg_dir

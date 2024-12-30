@@ -72,6 +72,15 @@ defmodule SM.Config do
     Application.fetch_env!(:safarimanager, :update_instructions_url)
   end
 
+  @doc """
+  Returns the application cacertfile if any.
+  """
+  # TODO: Remove env var once support is added either to Erlang/OTP 28 or Elixir v1.18
+  @spec cacertfile() :: String.t() | nil
+  def cacertfile do
+    Application.get_env(:safarimanager, :cacertfile)
+  end
+
   @feature_flags Application.compile_env(:safarimanager, :feature_flags)
 
   @doc """

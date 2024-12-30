@@ -5,9 +5,6 @@ defmodule SM.MixProject do
   @version "2024.12.1"
   @description ~s(Application to manage "Underwater Photo Safari" competitions)
 
-  @app_elixir_version "1.18.1"
-  @app_rebar3_version "3.22.1"
-
   def project do
     [
       app: :safarimanager,
@@ -84,6 +81,7 @@ defmodule SM.MixProject do
       {:prom_ex, "~> 1.8"},
       {:qrcode_ex, "~> 0.1.0"},
       {:random_password, "~> 1.0"},
+      {:req, "~> 0.5.8"},
       {:rexbug, "~> 1.0"},
       {:styler, "~> 1.2", only: [:dev, :test], runtime: false},
       {:surface_form_helpers, "~> 0.2"},
@@ -181,14 +179,19 @@ defmodule SM.MixProject do
   end
 
   defp standalone_erlang_elixir(release) do
+    {_, bindings} = Code.eval_file("versions")
+    elixir_version = bindings[:elixir]
+    rebar3_version = bindings[:rebar3]
+
     Code.require_file("rel/app/standalone.exs")
 
     release
     |> Standalone.copy_otp()
-    |> Standalone.copy_elixir(@app_elixir_version)
+    |> Standalone.copy_elixir(elixir_version)
     |> Standalone.copy_hex()
-    |> Standalone.copy_rebar3(@app_rebar3_version)
-    |> Standalone.bundle_dylibs()
+    |> Standalone.copy_rebar3(rebar3_version)
+
+    # |> Standalone.bundle_dylibs()
   end
 
   defp preferred_cli_env do

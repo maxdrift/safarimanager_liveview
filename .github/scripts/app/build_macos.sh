@@ -13,6 +13,11 @@
 set -euo pipefail
 
 main() {
+  . versions
+  OTP_VERSION="${OTP_VERSION:-$otp}"
+  ELIXIR_VERSION="${ELIXIR_VERSION:-$elixir}"
+  OPENSSL_VERSION="${OPENSSL_VERSION:-$openssl}"
+
   bootstrap_otp
   download_elixir
   build_app
@@ -21,13 +26,13 @@ main() {
 bootstrap_otp() {
   dir=$PWD
   cd elixirkit/otp_bootstrap
-  . ./build_macos_universal.sh $OTP_VERSION "1.1.1s"
+  . ./build_macos_universal.sh "$OTP_VERSION" "$OPENSSL_VERSION"
   cd $dir
 }
 
 download_elixir() {
   dir=$PWD
-  elixir_dir=$PWD/_build/elixir-$ELIXIR_VERSION
+  elixir_dir=$PWD/_build/elixir-"$ELIXIR_VERSION"
 
   if [ ! -d $elixir_dir ]; then
     otp_release=$(erl -noshell -eval 'io:format("~s", [erlang:system_info(otp_release)]), halt().')
@@ -45,12 +50,27 @@ download_elixir() {
 }
 
 build_app() {
+  # Begin Custom
+  target="macos-$(uname -m | sed 's/x86_64/x86_64/;s/arm64/aarch64/')"
+  app_version=$(MIX_QUIET=1 mix eval "IO.puts Mix.Project.config()[:version]" \
+    | tr -d '[:space:]' \
+    | grep -E '[0-9]{4}\.[0-9]{2}\.[0-9]+$' \
+    | tail -n 1)
+
+  echo "Building app version $app_version for $target..."
+  # End Custom
+
   mix local.hex --force --if-missing
   mix local.rebar --force --if-missing
 
   export MIX_ENV=prod
   export MIX_TARGET=app
   export ELIXIRKIT_BUILD_ARGS="--configuration release --arch x86_64 --arch arm64"
+
+  # Begin Custom
+  export TARGET_ARCH=$target
+  export APP_VERSION=$app_version
+  # End Custom
 
   mix deps.get --only prod
   yarn --cwd assets
@@ -61,4 +81,4 @@ build_app() {
   ./build_dmg.sh
 }
 
-main
+main "$@"
