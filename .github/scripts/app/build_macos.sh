@@ -52,12 +52,6 @@ download_elixir() {
 build_app() {
   # Begin Custom
   target="macos-$(uname -m | sed 's/x86_64/x86_64/;s/arm64/aarch64/')"
-  app_version=$(MIX_QUIET=1 mix eval "IO.puts Mix.Project.config()[:version]" \
-    | tr -d '[:space:]' \
-    | grep -E '[0-9]{4}\.[0-9]{2}\.[0-9]+$' \
-    | tail -n 1)
-
-  echo "Building app version $app_version for $target..."
   # End Custom
 
   mix local.hex --force --if-missing
@@ -76,6 +70,15 @@ build_app() {
   yarn --cwd assets
   mix compile
   yarn --cwd assets run deploy
+
+  # Begin Custom
+  app_version=$(MIX_QUIET=1 mix eval "IO.puts Mix.Project.config()[:version]" \
+    | tr -d '[:space:]' \
+    | grep -E '[0-9]{4}\.[0-9]{2}\.[0-9]+$' \
+    | tail -n 1)
+
+  echo "Building app version $app_version for $target..."
+  # End Custom
 
   cd rel/app/macos
   ./build_dmg.sh
