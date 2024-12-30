@@ -79,3 +79,7 @@ jobs:
           ELIXIR_VERSION: ${{ env.elixir }}
           SECRET_KEY_BASE: ${{ secrets.SECRET_KEY_BASE }}
           LV_SIGNING_SALT: ${{ secrets.LV_SIGNING_SALT }}
+          PROMETHEUS_PUSH_GW_USER: ${{ secrets.PROMETHEUS_PUSH_GW_USER }}
+          PROMETHEUS_PUSH_GW_PASSWORD: ${{ secrets.PROMETHEUS_PUSH_GW_PASSWORD }}
+          ELIXIRKIT_CODESIGN_IDENTITY: ${{ secrets.ELIXIRKIT_CODESIGN_IDENTITY }}
+          SM_LOCALE: it
