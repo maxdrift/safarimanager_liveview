@@ -20,7 +20,7 @@ main() {
 
   bootstrap_otp
   download_elixir
-  # build_app
+  build_app
 }
 
 bootstrap_otp() {
