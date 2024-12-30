@@ -61,10 +61,6 @@ build_app() {
   export MIX_TARGET=app
   export ELIXIRKIT_BUILD_ARGS="--configuration release --arch x86_64 --arch arm64"
 
-  # Begin Custom
-  export TARGET_ARCH=$target
-  export APP_VERSION=$app_version
-  # End Custom
 
   mix deps.get --only prod
   yarn --cwd assets
@@ -78,6 +74,9 @@ build_app() {
     | tail -n 1)
 
   echo "Building app version $app_version for $target..."
+
+  export TARGET_ARCH=$target
+  export APP_VERSION=$app_version
   # End Custom
 
   cd rel/app/macos
