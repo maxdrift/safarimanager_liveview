@@ -19,8 +19,8 @@ main() {
   OPENSSL_VERSION="${OPENSSL_VERSION:-$openssl}"
 
   bootstrap_otp
-  download_elixir
-  build_app
+  # download_elixir
+  # build_app
 }
 
 bootstrap_otp() {
