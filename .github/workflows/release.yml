@@ -54,7 +54,12 @@ jobs:
   #       shell: msys2 {0}
 
   macos-arm64:
-    runs-on: [self-hosted, macOS, ARM64]
+    strategy:
+      matrix:
+        os: [macOS]
+        # target: [ARM64, X64]
+        target: [X64]
+    runs-on: [self-hosted, "${{ matrix.os }}", "${{ matrix.target }}"]
     steps:
       - uses: actions/checkout@v4
       - name: Cache Mix Deps
