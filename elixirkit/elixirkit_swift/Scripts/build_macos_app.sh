@@ -3,7 +3,7 @@ set -euo pipefail
 
 app_name=$ELIXIRKIT_APP_NAME
 app_dir=$PWD/.build/${app_name}.app
-app_version=$(cd "${ELIXIRKIT_PROJECT_DIR}" && MIX_QUIET=1 mix eval "IO.puts Mix.Project.config()[:version]")
+app_version=$(cd "${ELIXIRKIT_PROJECT_DIR}" && MIX_QUIET=1 mix eval "IO.puts Mix.Project.config()[:version]" | grep -E '^[0-9]{4}\.[0-9]{2}\.[0-9]+$' | head -n 1 | tr -d '\n')
 release_name="${ELIXIRKIT_RELEASE_NAME:-}"
 build_args="${ELIXIRKIT_BUILD_ARGS:-}"
 

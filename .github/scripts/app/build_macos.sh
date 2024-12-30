@@ -68,10 +68,7 @@ build_app() {
   yarn --cwd assets run deploy
 
   # Begin Custom
-  app_version=$(MIX_QUIET=1 mix eval "IO.puts Mix.Project.config()[:version]" \
-    | tr -d '[:space:]' \
-    | grep -E '[0-9]{4}\.[0-9]{2}\.[0-9]+$' \
-    | tail -n 1)
+  app_version=$(MIX_QUIET=1 mix eval "IO.puts Mix.Project.config()[:version]" | grep -E '^[0-9]{4}\.[0-9]{2}\.[0-9]+$' | head -n 1 | tr -d '\n')
 
   echo "Building app version $app_version for $target..."
 
