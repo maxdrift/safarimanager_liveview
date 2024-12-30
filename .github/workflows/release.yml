@@ -77,3 +77,5 @@ jobs:
         env:
           OTP_VERSION: ${{ env.otp }}
           ELIXIR_VERSION: ${{ env.elixir }}
+          SECRET_KEY_BASE: ${{ secrets.SECRET_KEY_BASE }}
+          LV_SIGNING_SALT: ${{ secrets.LV_SIGNING_SALT }}
