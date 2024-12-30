@@ -66,17 +66,17 @@ jobs:
         uses: actions/cache@v4
         with:
           path: deps
-          key: ${{ runner.os }}-mix-${{ hashFiles('**/mix.lock') }}
+          key: ${{ runner.os }}-${{ matrix.target }}-mix-${{ hashFiles('**/mix.lock') }}
       - name: Cache Bootstrap OTP
         uses: actions/cache@v4
         with:
           path: elixirkit/otp_bootstrap/_build/otp-rel-${{ env.otp }}-openssl-1.1.1s-macos-universal
-          key: ${{ runner.os }}-bootstrap-${{ env.otp }}-${{ hashFiles('elixirkit/otp_bootstrap/build.sh') }}
+          key: ${{ runner.os }}-${{ matrix.target }}-bootstrap-${{ env.otp }}-${{ hashFiles('elixirkit/otp_bootstrap/build.sh') }}
       - name: Cache Elixir
         uses: actions/cache@v4
         with:
           path: _build/elixir-${{ env.elixir }}
-          key: ${{ runner.os }}-elixir-${{ env.elixir }}
+          key: ${{ runner.os }}-${{ matrix.target }}-elixir-${{ env.elixir }}
       - name: Build the app
         run: .github/scripts/app/build_macos.sh
         env:
