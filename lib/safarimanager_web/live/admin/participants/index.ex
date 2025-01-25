@@ -4,18 +4,18 @@ defmodule SMWeb.Live.Admin.Participants.Index do
   """
   use SMWeb, :surface_view
 
+  import SMWeb.Components.DateTimeString
+  import SMWeb.Components.FieldsList
+  import SMWeb.Components.Layout
+  import SMWeb.Components.SMField
+
   alias SM.Accounts
   alias SM.Categories
   alias SM.Competitions
   alias SM.Participants
   alias SM.Participants.Participant
   alias SMWeb.Components.Column
-  alias SMWeb.Components.DateTimeString
-  alias SMWeb.Components.FieldsList
-  alias SMWeb.Components.FieldsListItem
   alias SMWeb.Components.Grid
-  alias SMWeb.Components.Layout
-  alias SMWeb.Components.SMField
   alias Surface.Components.Form
   alias Surface.Components.Form.HiddenInput
   alias Surface.Components.Form.NumberInput

@@ -4,6 +4,11 @@ defmodule SMWeb.Live.Slides do
   """
   use SMWeb, :surface_view
 
+  import SMWeb.Components.CompetitionHeader
+  import SMWeb.Components.Layout
+  import SMWeb.Components.StepsHeader
+  import SMWeb.Components.UploadDropArea
+
   alias Phoenix.LiveView
   alias SM.Accounts
   alias SM.Competitions
@@ -12,12 +17,8 @@ defmodule SMWeb.Live.Slides do
   alias SM.Teams
   alias SM.USBWatcherSupervisor
   alias SM.Utils
-  alias SMWeb.Components.CompetitionHeader
   alias SMWeb.Components.DirectUploadDialog
   alias SMWeb.Components.FileBrowser
-  alias SMWeb.Components.Layout
-  alias SMWeb.Components.StepsHeader
-  alias SMWeb.Components.UploadDropArea
   alias Surface.Components.Form
   alias Surface.Components.Form.Checkbox
   alias Surface.Components.Form.TextInput

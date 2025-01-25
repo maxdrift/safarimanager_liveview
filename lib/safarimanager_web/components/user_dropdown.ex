@@ -2,14 +2,14 @@ defmodule SMWeb.Components.UserDropdown do
   @moduledoc """
   User dropdown component.
   """
-  use SMWeb, :surface_component
+  use SMWeb, :component
 
-  alias SMWeb.Components.UserAvatar
+  import SMWeb.Components.UserAvatar
 
-  prop user, :struct
+  attr :user, SM.Accounts.User
 
-  def render(assigns) do
-    ~F"""
+  def user_dropdown(assigns) do
+    ~H"""
     <div title={gettext("User options")} class="dropdown dropdown-right dropdown-end">
       <label
         tabindex="0"
@@ -18,10 +18,10 @@ defmodule SMWeb.Components.UserDropdown do
         phx-click={show_current_user_modal()}
       >
         <div class="w-[56px] flex justify-center">
-          <UserAvatar
+          <.user_avatar
             user={@user}
-            class="w-8 h-8 group-hover:ring-primary group-hover:ring-2"
-            text_class="text-xs"
+            class={["w-8 h-8 group-hover:ring-primary group-hover:ring-2"]}
+            text_class={["text-xs"]}
           />
         </div>
         <span class="text-sm text-base-content font-medium group-hover:text-primary">
@@ -34,11 +34,11 @@ defmodule SMWeb.Components.UserDropdown do
             {gettext("Settings")}
           </.link>
         </li>
-        {!-- <li>
+        <%!-- <li>
           <.link href={~p"/users/log_out"} method={:delete}>
             {gettext("Log out")}
           </.link>
-        </li> --}
+        </li> --%>
       </ul>
     </div>
     """

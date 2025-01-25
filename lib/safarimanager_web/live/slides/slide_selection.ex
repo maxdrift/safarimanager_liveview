@@ -4,6 +4,12 @@ defmodule SMWeb.Live.SlideSelection do
   """
   use SMWeb, :surface_view
 
+  import SMWeb.Components.CompetitionHeader
+  import SMWeb.Components.Layout
+  import SMWeb.Components.SlidesSelectionList
+  import SMWeb.Components.StepsHeader
+  import SMWeb.Components.UploadDropArea
+
   alias Phoenix.LiveView
   alias SM.Accounts
   alias SM.Competitions
@@ -12,11 +18,6 @@ defmodule SMWeb.Live.SlideSelection do
   alias SM.Slides.SelectionImport
   alias SM.Subjects
   alias SM.Teams
-  alias SMWeb.Components.CompetitionHeader
-  alias SMWeb.Components.Layout
-  alias SMWeb.Components.SlidesSelectionList
-  alias SMWeb.Components.StepsHeader
-  alias SMWeb.Components.UploadDropArea
   alias Surface.Components.Form
   alias Surface.Components.Form.ErrorTag
   alias Surface.Components.Form.Field

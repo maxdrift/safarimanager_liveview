@@ -4,11 +4,12 @@ defmodule SMWeb.Live.Jury do
   """
   use SMWeb, :surface_view
 
+  import SMWeb.Components.JuryToolbarButton
+
   alias SM.Cache
   alias SM.Competitions
   alias SM.Slides
   alias SM.Utils
-  alias SMWeb.Components.JuryToolbarButton
 
   require Logger
 

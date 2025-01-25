@@ -4,11 +4,12 @@ defmodule SMWeb.Components.DirectUploadDialog do
   """
   use SMWeb, :surface_live_component
 
+  import SMWeb.Components.Dialog
+
   alias SM.FileBrowser
   alias SM.Participants.Participant
   alias SM.Slides
   alias SM.USBWatcherSupervisor
-  alias SMWeb.Components.Dialog
   alias SMWeb.Components.DirectUploadDialog
   alias Surface.Components.Form
   alias Surface.Components.Form.ErrorTag
@@ -29,7 +30,7 @@ defmodule SMWeb.Components.DirectUploadDialog do
   def render(assigns) do
     ~F"""
     <div>
-      <Dialog {=@id} {=@show}>
+      <.dialog {=@id} {=@show}>
         <div class="text-xl font-bold text-center">
           {gettext("Image import")}
         </div>
@@ -127,7 +128,7 @@ defmodule SMWeb.Components.DirectUploadDialog do
           <div class="grow" />
           <button class="flex-none btn btn-error" :on-click="hide">{gettext("Close")}</button>
         </div>
-      </Dialog>
+      </.dialog>
     </div>
     """
   end

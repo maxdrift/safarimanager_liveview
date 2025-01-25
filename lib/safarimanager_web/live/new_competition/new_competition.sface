@@ -1,4 +1,4 @@
-<Layout current_page={~p"/organize/new"} current_user={@current_user}>
+<.layout current_page={~p"/organize/new"} current_user={@current_user}>
   <div
     :if={@changeset}
     id="new-competition-dialog"
@@ -202,4 +202,4 @@
       </div>
     {/for}
   </div>
-</Layout>
+</.layout>

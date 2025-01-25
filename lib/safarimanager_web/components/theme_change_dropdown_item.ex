@@ -2,12 +2,12 @@ defmodule SMWeb.Components.ThemeChangeDropdownItem do
   @moduledoc """
   Theme change dropdown item component.
   """
-  use SMWeb, :surface_component
+  use SMWeb, :component
 
-  prop theme, :string, required: true
+  attr :theme, :string, required: true
 
-  def render(assigns) do
-    ~F"""
+  def theme_change_dropdown_item(assigns) do
+    ~H"""
     <div
       class="outline-base-content overflow-hidden rounded outline-2 outline-offset-2"
       data-set-theme={@theme}

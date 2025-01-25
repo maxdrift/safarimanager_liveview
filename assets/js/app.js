@@ -88,6 +88,7 @@ Hooks.NoSleep = {
 
 let csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute("content")
 let liveSocket = new LiveSocket("/live", Socket, {
+  longPollFallbackMs: 2500,
   dom: {
     // make LiveView work nicely with alpinejs
     onBeforeElUpdated(from, to) {

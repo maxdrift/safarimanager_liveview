@@ -2,17 +2,17 @@ defmodule SMWeb.Components.Sidebar do
   @moduledoc """
   Sidebar component.
   """
-  use SMWeb, :surface_component
+  use SMWeb, :component
 
-  alias SMWeb.Components.SidebarLink
-  alias SMWeb.Components.ThemeChangeDropdown
-  alias SMWeb.Components.UserDropdown
+  import SMWeb.Components.SidebarLink
+  import SMWeb.Components.ThemeChangeDropdown
+  import SMWeb.Components.UserDropdown
 
-  prop current_page, :string, required: true
-  prop current_user, :struct
+  attr :current_page, :string, required: true
+  attr :current_user, SM.Accounts.User
 
-  def render(assigns) do
-    ~F"""
+  def sidebar(assigns) do
+    ~H"""
     <nav
       class="hidden md:flex w-[12rem] h-full py-2 md:py-5 base-300 border-r border-gray-600"
       aria-label="sidebar"
@@ -22,8 +22,10 @@ defmodule SMWeb.Components.Sidebar do
         class="hidden text-xl text-base-content hover:text-white focus:text-white absolute top-4 right-3"
         aria-label="hide sidebar"
         data-el-toggle-sidebar
-        phx-click={JS.add_class("hidden", to: "[data-el-sidebar]")
-        |> JS.toggle(to: "[data-el-toggle-sidebar]")}
+        phx-click={
+          JS.add_class("hidden", to: "[data-el-sidebar]")
+          |> JS.toggle(to: "[data-el-toggle-sidebar]")
+        }
       >
         <Heroicons.icon name="bars-3" type="solid" />
       </button>
@@ -33,7 +35,13 @@ defmodule SMWeb.Components.Sidebar do
           <div class="space-y-3">
             <div class="flex flex-col items-center">
               <.link href={~p"/"} class="flex items-center group">
-                <img src={~p"/images/logo.png"} class="mx-2" height="40" width="40" alt="logo safari manager">
+                <img
+                  src={~p"/images/logo.png"}
+                  class="mx-2"
+                  height="40"
+                  width="40"
+                  alt="logo safari manager"
+                />
                 <span class="text-base-content text-lg font-logo ml-[-1px] group-hover:text-white pt-1">
                   Safari Manager
                 </span>
@@ -42,7 +50,7 @@ defmodule SMWeb.Components.Sidebar do
                 v{Application.spec(:safarimanager, :vsn)}
               </span>
             </div>
-            <SidebarLink
+            <.sidebar_link
               label={gettext("Home")}
               hero_icon="home"
               to={~p"/organize/new"}
@@ -54,55 +62,55 @@ defmodule SMWeb.Components.Sidebar do
                 {gettext("Admin")}
               </span>
             </div>
-            <SidebarLink
+            <.sidebar_link
               label={gettext("Organizations")}
               hero_icon="user-group"
               to={~p"/admin/organizations"}
               current={@current_page}
             />
-            <SidebarLink
+            <.sidebar_link
               label={gettext("Subjects")}
               hero_icon="viewfinder-circle"
               to={~p"/admin/subjects"}
               current={@current_page}
             />
-            <SidebarLink
+            <.sidebar_link
               label={gettext("Competitions")}
               hero_icon="trophy"
               to={~p"/admin/competitions"}
               current={@current_page}
             />
-            <SidebarLink
+            <.sidebar_link
               label={gettext("Evaluations")}
               hero_icon="hand-thumb-up"
               to={~p"/admin/evaluations"}
               current={@current_page}
             />
-            <SidebarLink
+            <.sidebar_link
               label={gettext("Users")}
               hero_icon="user"
               to={~p"/admin/users"}
               current={@current_page}
             />
-            <SidebarLink
+            <.sidebar_link
               label={gettext("Categories")}
               hero_icon="tag"
               to={~p"/admin/categories"}
               current={@current_page}
             />
-            <SidebarLink
+            <.sidebar_link
               label={gettext("Participants")}
               hero_icon="ticket"
               to={~p"/admin/participants"}
               current={@current_page}
             />
-            <SidebarLink
+            <.sidebar_link
               label={gettext("Teams")}
               hero_icon="users"
               to={~p"/admin/teams"}
               current={@current_page}
             />
-            <SidebarLink
+            <.sidebar_link
               label={gettext("Import")}
               hero_icon="arrows-up-down"
               to={~p"/admin/import"}
@@ -115,13 +123,15 @@ defmodule SMWeb.Components.Sidebar do
           <button
             class="h-7 flex items-center text-base-content hover:text-primary-content border-l-4 border-transparent hover:bg-primary"
             aria-label="shutdown"
-            phx-click={with_confirm(
-              JS.push("shutdown"),
-              title: gettext("Shut Down"),
-              description: gettext("Are you sure you want to shut down Safari Manager now?"),
-              confirm_text: gettext("Shut Down"),
-              confirm_icon: "shut-down-line"
-            )}
+            phx-click={
+              with_confirm(
+                JS.push("shutdown"),
+                title: gettext("Shut Down"),
+                description: gettext("Are you sure you want to shut down Safari Manager now?"),
+                confirm_text: gettext("Shut Down"),
+                confirm_icon: "shut-down-line"
+              )
+            }
           >
             <Heroicons.icon
               name="power"
@@ -132,8 +142,8 @@ defmodule SMWeb.Components.Sidebar do
               {gettext("Shut Down")}
             </span>
           </button>
-          <ThemeChangeDropdown />
-          <UserDropdown user={@current_user} />
+          <.theme_change_dropdown />
+          <.user_dropdown user={@current_user} />
         </div>
       </div>
     </nav>

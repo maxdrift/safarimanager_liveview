@@ -3,12 +3,12 @@ defmodule SMWeb.Components.DateTimeString do
   Datetime representation static component
   """
 
-  use SMWeb, :surface_component
+  use SMWeb, :component
 
-  prop value, :struct, required: true
+  attr :value, :any, required: true
 
-  def render(assigns) do
-    ~F"""
+  def datetime_string(assigns) do
+    ~H"""
     {format_date(@value)}
     """
   end

@@ -4,13 +4,14 @@ defmodule SMWeb.Live.ValidationLauncher do
   """
   use SMWeb, :surface_view
 
+  import SMWeb.Components.CompetitionHeader
+  import SMWeb.Components.Layout
+  import SMWeb.Components.StepsHeader
+  import SMWeb.Components.ValidationCheckmark
+
   alias SM.Competitions
   alias SM.Slides
   alias SM.Subjects
-  alias SMWeb.Components.CompetitionHeader
-  alias SMWeb.Components.Layout
-  alias SMWeb.Components.StepsHeader
-  alias SMWeb.Components.ValidationCheckmark
   alias Surface.Components.Form
   alias Surface.Components.Form.HiddenInput
   alias Surface.Components.Form.Submit

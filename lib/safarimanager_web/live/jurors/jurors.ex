@@ -4,14 +4,15 @@ defmodule SMWeb.Live.Jurors do
   """
   use SMWeb, :surface_view
 
+  import SMWeb.Components.CompetitionHeader
+  import SMWeb.Components.Layout
+  import SMWeb.Components.StepsHeader
+
   alias SM.Accounts
   alias SM.Competitions
   alias SM.Config
   alias SM.Jurors
   alias SM.Utils
-  alias SMWeb.Components.CompetitionHeader
-  alias SMWeb.Components.Layout
-  alias SMWeb.Components.StepsHeader
   alias SMWeb.Endpoint
   alias Surface.Components.Form
   alias Surface.Components.Form.TextInput

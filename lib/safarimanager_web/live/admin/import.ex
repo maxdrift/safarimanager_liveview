@@ -4,12 +4,13 @@ defmodule SMWeb.Live.Admin.Import do
   """
   use SMWeb, :surface_view
 
+  import SMWeb.Components.Layout
+  import SMWeb.Components.UploadDropArea
+
   alias Ecto.Changeset
   alias Phoenix.Component
   alias Phoenix.LiveView
   alias SM.CSVImport
-  alias SMWeb.Components.Layout
-  alias SMWeb.Components.UploadDropArea
   alias Surface.Components.Form
   alias Surface.Components.Form.ErrorTag
   alias Surface.Components.Form.Field

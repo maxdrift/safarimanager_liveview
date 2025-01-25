@@ -1,4 +1,4 @@
-<Layout current_page={~p"/admin/users"} current_user={@current_user}>
+<.layout current_page={~p"/admin/users"} current_user={@current_user}>
   {!-- Show dialog --}
   <div
     :if={@live_action == :show}
@@ -12,32 +12,32 @@
         {gettext("User details")}
       </div>
       <div class="card-body">
-        <FieldsList>
-          <FieldsListItem label={gettext("ID")}>
-            <ShortUUID value={@record.id} />
-          </FieldsListItem>
-          <FieldsListItem label={gettext("First name")}>
+        <.fields_list>
+          <:fields_list_item label={gettext("ID")}>
+            <.short_uuid value={@record.id} />
+          </:fields_list_item>
+          <:fields_list_item label={gettext("First name")}>
             <span class="capitalize">{@record.first_name}</span>
-          </FieldsListItem>
-          <FieldsListItem label={gettext("Last name")}>
+          </:fields_list_item>
+          <:fields_list_item label={gettext("Last name")}>
             <span class="capitalize">{@record.last_name}</span>
-          </FieldsListItem>
-          <FieldsListItem label={gettext("Email")}>
+          </:fields_list_item>
+          <:fields_list_item label={gettext("Email")}>
             {@record.email}
-          </FieldsListItem>
-          <FieldsListItem label={gettext("Organization")}>
+          </:fields_list_item>
+          <:fields_list_item label={gettext("Organization")}>
             {(@record.organization && @record.organization.name) || gettext("N/A")}
-          </FieldsListItem>
-          <FieldsListItem label={gettext("Category")}>
+          </:fields_list_item>
+          <:fields_list_item label={gettext("Category")}>
             {(@record.category && @record.category.name) || gettext("N/A")}
-          </FieldsListItem>
-          <FieldsListItem label={gettext("Inserted")}>
-            <DateTimeString value={@record.inserted_at} />
-          </FieldsListItem>
-          <FieldsListItem label={gettext("Updated")}>
-            <DateTimeString value={@record.updated_at} />
-          </FieldsListItem>
-        </FieldsList>
+          </:fields_list_item>
+          <:fields_list_item label={gettext("Inserted")}>
+            <.datetime_string value={@record.inserted_at} />
+          </:fields_list_item>
+          <:fields_list_item label={gettext("Updated")}>
+            <.datetime_string value={@record.updated_at} />
+          </:fields_list_item>
+        </.fields_list>
       </div>
       <div class="modal-action">
         <button :on-click={JS.patch("/admin/users")} class="btn btn-md btn-ghost">
@@ -61,31 +61,31 @@
       </div>
       <Form for={@changeset} change="validate" submit="submit" as={:entity} opts={autocomplete: "off"}>
         <div class="card-body">
-          <SMField name={:last_name} label={gettext("Last name")}>
+          <.sm_field name={:last_name} label={gettext("Last name")}>
             <TextInput class={input_state_class(@changeset, :last_name)} opts={phx_debounce: "1000"} />
-          </SMField>
-          <SMField name={:first_name} label={gettext("First name")}>
+          </.sm_field>
+          <.sm_field name={:first_name} label={gettext("First name")}>
             <TextInput class={input_state_class(@changeset, :first_name)} opts={phx_debounce: "1000"} />
-          </SMField>
-          <SMField name={:email} label={gettext("Email")}>
+          </.sm_field>
+          <.sm_field name={:email} label={gettext("Email")}>
             <TextInput class={input_state_class(@changeset, :email)} opts={phx_debounce: "1000"} />
-          </SMField>
-          <SMField name={:organization_id} label={gettext("Organization")}>
+          </.sm_field>
+          <.sm_field name={:organization_id} label={gettext("Organization")}>
             <Select
               options={Enum.map(@organizations, &{&1.name, &1.id})}
               prompt={[key: gettext("Select an organization...")]}
               selected={@record.organization_id}
               class={select_state_class(@changeset, :organization_id)}
             />
-          </SMField>
-          <SMField name={:category_id} label={gettext("Category")}>
+          </.sm_field>
+          <.sm_field name={:category_id} label={gettext("Category")}>
             <Select
               options={Enum.map(@categories, &{&1.name, &1.id})}
               prompt={[key: gettext("Select a category...")]}
               selected={@record.category_id}
               class={select_state_class(@changeset, :category_id)}
             />
-          </SMField>
+          </.sm_field>
           <HiddenInput field={:_action} value={@action} />
         </div>
         <div class="modal-action">
@@ -150,7 +150,7 @@
             opts={autocomplete: "off"}
             class="w-full px-auto"
           >
-            <SMField name={:dest_id}>
+            <.sm_field name={:dest_id}>
               <Select
                 options={Enum.map(
                   @merge_selection,
@@ -159,7 +159,7 @@
                 prompt={[key: gettext("Select a user...")]}
                 class={select_state_class(@changeset, :dest_id)}
               />
-            </SMField>
+            </.sm_field>
             <div class="modal-action">
               <Submit class={submit_state_class(@changeset)}>{gettext("Merge")}</Submit>
               <Reset
@@ -182,7 +182,7 @@
     export_path={~p"/csv_export?entity=users"}
   >
     <Column title={gettext("ID")} class="w-1/12">
-      <ShortUUID value={item.id} />
+      <.short_uuid value={item.id} />
     </Column>
     <Column title={gettext("Last name")}>
       <span class="capitalize">{item.last_name}</span>
@@ -217,4 +217,4 @@
       </div>
     </Column>
   </Grid>
-</Layout>
+</.layout>

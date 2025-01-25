@@ -1,9 +1,9 @@
-<Layout
+<.layout
   current_page={~p"/organize/#{@competition.id}/slide_selection"}
   current_user={@current_user}
 >
-  <CompetitionHeader {=@competition} />
-  <StepsHeader current_step={:selection} competition={@competition} />
+  <.competition_header {=@competition} />
+  <.steps_header current_step={:selection} competition={@competition} />
   <div class="flex flex-col mt-5">
     <div class="rounded-lg bg-base-200 shadow-lg p-4">
       <div :if={!@competition.for_teams} class="text-2xl font-bold text-center pb-4">{gettext("Participants")}</div>
@@ -148,11 +148,11 @@
             target="_blank"
           >{gettext("Print slides selection report")}</.link>
         </div>
-        <Form id="upload-drop-area-form" for={%{}} as={:slides} change="validate" submit="submit">
-          <UploadDropArea field={:csv} uploads={@uploads}>
+        <form id="upload-drop-area-form" phx-submit="submit" phx-change="validate">
+          <.upload_drop_area field={:csv} uploads={@uploads}>
             {gettext("Click or drop CSV files in this box")}
-          </UploadDropArea>
-        </Form>
+          </.upload_drop_area>
+        </form>
         <!-- Edit dialog start -->
         <input type="checkbox" id="edit-selection" class="modal-toggle" checked={@editing?}>
         <div class="modal">
@@ -210,7 +210,11 @@
           </div>
         </div>
         <!-- Edit dialog end -->
-        <SlidesSelectionList {=@jury_slides} {=@fixed_slides} {=@discarded_slides} />
+        <.slides_selection_list
+          jury_slides={@jury_slides}
+          fixed_slides={@fixed_slides}
+          discarded_slides={@discarded_slides}
+        />
       {#else}
         <div class="mt-2 text-center align-middle">
           {gettext("Select a participant from the top")}.
@@ -250,4 +254,4 @@
       </svg>
     </.link>
   </div>
-</Layout>
+</.layout>

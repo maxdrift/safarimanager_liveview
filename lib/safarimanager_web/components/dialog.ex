@@ -2,25 +2,24 @@ defmodule SMWeb.Components.Dialog do
   @moduledoc """
   Dialog component
   """
-  use SMWeb, :surface_component
+  use SMWeb, :component
 
-  prop id, :string, required: true
+  attr :id, :string, required: true
+  attr :show, :boolean, default: false
 
-  prop show, :boolean, default: false
+  slot :default, required: true
 
-  slot default, required: true
-
-  def render(assigns) do
-    ~F"""
+  def dialog(assigns) do
+    ~H"""
     <div
       id={@id}
-      class={"modal", "modal-open": @show}
-      :on-window-keydown="hide"
+      class={["modal", @show && "modal-open"]}
+      phx-window-keydown="hide"
       phx-key="Escape"
       phx-target={"#" <> @id}
     >
       <div :if={@show} class="modal-box">
-        <#slot />
+        {render_slot(@default)}
       </div>
     </div>
     """

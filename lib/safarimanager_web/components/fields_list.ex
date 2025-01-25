@@ -3,17 +3,18 @@ defmodule SMWeb.Components.FieldsList do
   Fields list static component
   """
 
-  use SMWeb, :surface_component
+  use SMWeb, :component
 
-  slot list_items
+  slot :fields_list_item, doc: "Fields list item" do
+    attr :label, :string, required: true
+  end
 
-  def render(assigns) do
-    ~F"""
+  def fields_list(assigns) do
+    ~H"""
     <ul class="leading-loose">
-      <li>
-        {#for list_item <- @list_items}
-          <#slot {list_item} />
-        {/for}
+      <li :for={list_item <- @fields_list_item}>
+        <b>{list_item.label}:</b>
+        {render_slot(list_item)}
       </li>
     </ul>
     """

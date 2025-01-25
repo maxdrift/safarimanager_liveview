@@ -1,4 +1,4 @@
-<Layout current_page={~p"/admin/evaluations"} current_user={@current_user}>
+<.layout current_page={~p"/admin/evaluations"} current_user={@current_user}>
   {!-- Show dialog --}
   <div
     :if={@live_action == :show}
@@ -12,32 +12,32 @@
         {gettext("Evaluation details")}
       </div>
       <div class="card-body">
-        <FieldsList>
-          <FieldsListItem label={gettext("ID")}>
-            <ShortUUID value={@record.id} />
-          </FieldsListItem>
-          <FieldsListItem label={gettext("Name")}>
+        <.fields_list>
+          <:fields_list_item label={gettext("ID")}>
+            <.short_uuid value={@record.id} />
+          </:fields_list_item>
+          <:fields_list_item label={gettext("Name")}>
             {@record.name}
-          </FieldsListItem>
-          <FieldsListItem label={gettext("Value")}>
+          </:fields_list_item>
+          <:fields_list_item label={gettext("Value")}>
             {@record.value}
-          </FieldsListItem>
-          <FieldsListItem label={gettext("Penalty?")}>
+          </:fields_list_item>
+          <:fields_list_item label={gettext("Penalty?")}>
             {(@record.is_penalty && gettext("Yes")) || gettext("No")}
-          </FieldsListItem>
-          <FieldsListItem label={gettext("Type")}>
+          </:fields_list_item>
+          <:fields_list_item label={gettext("Type")}>
             {@record.type}
-          </FieldsListItem>
-          <FieldsListItem label={gettext("Description")}>
+          </:fields_list_item>
+          <:fields_list_item label={gettext("Description")}>
             {@record.description}
-          </FieldsListItem>
-          <FieldsListItem label={gettext("Inserted")}>
-            <DateTimeString value={@record.inserted_at} />
-          </FieldsListItem>
-          <FieldsListItem label={gettext("Updated")}>
-            <DateTimeString value={@record.updated_at} />
-          </FieldsListItem>
-        </FieldsList>
+          </:fields_list_item>
+          <:fields_list_item label={gettext("Inserted")}>
+            <.datetime_string value={@record.inserted_at} />
+          </:fields_list_item>
+          <:fields_list_item label={gettext("Updated")}>
+            <.datetime_string value={@record.updated_at} />
+          </:fields_list_item>
+        </.fields_list>
       </div>
       <div class="modal-action">
         <button :on-click={JS.patch("/admin/evaluations")} class="btn btn-md btn-ghost">
@@ -61,22 +61,22 @@
       </div>
       <Form for={@changeset} change="validate" submit="submit" as={:entity} opts={autocomplete: "off"}>
         <div class="card-body">
-          <SMField name={:name} label={gettext("Name")}>
+          <.sm_field name={:name} label={gettext("Name")}>
             <TextInput class={input_state_class(@changeset, :name)} opts={phx_debounce: "1000"} />
-          </SMField>
-          <SMField name={:value} label={gettext("Value")}>
+          </.sm_field>
+          <.sm_field name={:value} label={gettext("Value")}>
             <NumberInput
               class={input_state_class(@changeset, :value)}
               opts={phx_debounce: "1000", step: "0.01"}
             />
-          </SMField>
-          <SMField name={:is_penalty} class="w-full">
+          </.sm_field>
+          <.sm_field name={:is_penalty} class="w-full">
             <Label class="label cursor-pointer">
               <span class="label-text">{gettext("Penalty?")}</span>
               <Checkbox class={state_class("checkbox", @changeset, :is_penalty)} opts={phx_debounce: "1000"} />
             </Label>
-          </SMField>
-          <SMField name={:type} label={gettext("Type")}>
+          </.sm_field>
+          <.sm_field name={:type} label={gettext("Type")}>
             <Select
               options={@evaluation_types}
               selected={@record.type}
@@ -84,10 +84,10 @@
               class={select_state_class(@changeset, :type)}
               opts={phx_debounce: "1000"}
             />
-          </SMField>
-          <SMField name={:description} label={gettext("Description")}>
+          </.sm_field>
+          <.sm_field name={:description} label={gettext("Description")}>
             <TextInput class={input_state_class(@changeset, :description)} opts={phx_debounce: "1000"} />
-          </SMField>
+          </.sm_field>
           <HiddenInput field={:_action} value={@action} />
         </div>
         <div class="modal-action">
@@ -111,7 +111,7 @@
     export_path={~p"/csv_export?entity=evaluations"}
   >
     <Column title={gettext("ID")} class="w-1/12">
-      <ShortUUID value={item.id} />
+      <.short_uuid value={item.id} />
     </Column>
     <Column title={gettext("Name")} class="w-1/12">
       {item.name}
@@ -129,10 +129,10 @@
       {item.description}
     </Column>
     <Column title={gettext("Created")} class="w-2/12">
-      <DateTimeString value={item.inserted_at} />
+      <.datetime_string value={item.inserted_at} />
     </Column>
     <Column title={gettext("Modified")} class="w-2/12">
-      <DateTimeString value={item.updated_at} />
+      <.datetime_string value={item.updated_at} />
     </Column>
     <Column title={gettext("Actions")} class="w-4">
       <div class="overflow-x-auto">
@@ -155,4 +155,4 @@
       </div>
     </Column>
   </Grid>
-</Layout>
+</.layout>

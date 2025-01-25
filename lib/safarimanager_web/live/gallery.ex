@@ -4,7 +4,7 @@ defmodule SMWeb.Live.Gallery do
   """
   use SMWeb, :surface_view
 
-  alias SMWeb.Components.Thumbnail
+  import SMWeb.Components.Thumbnail
 
   @lorempicsum_url "https://picsum.photos"
 

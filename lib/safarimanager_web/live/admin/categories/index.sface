@@ -1,4 +1,4 @@
-<Layout current_page={~p"/admin/categories"} current_user={@current_user}>
+<.layout current_page={~p"/admin/categories"} current_user={@current_user}>
   {!-- Show dialog --}
   <div
     :if={@live_action == :show}
@@ -12,23 +12,23 @@
         {gettext("Category details")}
       </div>
       <div class="card-body">
-        <FieldsList>
-          <FieldsListItem label={gettext("ID")}>
+        <.fields_list>
+          <:fields_list_item label={gettext("ID")}>
             {@record.id}
-          </FieldsListItem>
-          <FieldsListItem label={gettext("Name")}>
+          </:fields_list_item>
+          <:fields_list_item label={gettext("Name")}>
             {@record.name}
-          </FieldsListItem>
-          <FieldsListItem label={gettext("Camera type")}>
+          </:fields_list_item>
+          <:fields_list_item label={gettext("Camera type")}>
             {camera_type_option_label(@record.camera_type)}
-          </FieldsListItem>
-          <FieldsListItem label={gettext("Inserted")}>
-            <DateTimeString value={@record.inserted_at} />
-          </FieldsListItem>
-          <FieldsListItem label={gettext("Updated")}>
-            <DateTimeString value={@record.updated_at} />
-          </FieldsListItem>
-        </FieldsList>
+          </:fields_list_item>
+          <:fields_list_item label={gettext("Inserted")}>
+            <.datetime_string value={@record.inserted_at} />
+          </:fields_list_item>
+          <:fields_list_item label={gettext("Updated")}>
+            <.datetime_string value={@record.updated_at} />
+          </:fields_list_item>
+        </.fields_list>
       </div>
       <div class="modal-action">
         <button :on-click={JS.patch("/admin/categories")} class="btn btn-md btn-ghost">
@@ -52,10 +52,10 @@
       </div>
       <Form for={@changeset} change="validate" submit="submit" as={:entity} opts={autocomplete: "off"}>
         <div class="card-body">
-          <SMField name={:name} label={gettext("Name")}>
+          <.sm_field name={:name} label={gettext("Name")}>
             <TextInput class={input_state_class(@changeset, :name)} opts={phx_debounce: "1000"} />
-          </SMField>
-          <SMField name={:camera_type} label={gettext("Camera type")}>
+          </.sm_field>
+          <.sm_field name={:camera_type} label={gettext("Camera type")}>
             <Select
               options={Enum.map(@camera_types, &{String.capitalize(camera_type_option_label(&1)), &1})}
               selected={@record.camera_type}
@@ -63,7 +63,7 @@
               class={select_state_class(@changeset, :camera_type)}
               opts={phx_debounce: "1000"}
             />
-          </SMField>
+          </.sm_field>
           <HiddenInput field={:_action} value={@action} />
         </div>
         <div class="modal-action">
@@ -87,7 +87,7 @@
     export_path={~p"/csv_export?entity=categories"}
   >
     <Column title={gettext("ID")} class="w-1/12">
-      <ShortUUID value={item.id} />
+      <.short_uuid value={item.id} />
     </Column>
     <Column title={gettext("Name")}>
       <span class="capitalize">{item.name}</span>
@@ -96,10 +96,10 @@
       <span class="capitalize">{camera_type_option_label(item.camera_type)}</span>
     </Column>
     <Column title={gettext("Created")} class="w-2/12">
-      <DateTimeString value={item.inserted_at} />
+      <.datetime_string value={item.inserted_at} />
     </Column>
     <Column title={gettext("Modified")} class="w-2/12">
-      <DateTimeString value={item.updated_at} />
+      <.datetime_string value={item.updated_at} />
     </Column>
     <Column title={gettext("Actions")} class="w-4">
       <div class="overflow-x-auto">
@@ -122,4 +122,4 @@
       </div>
     </Column>
   </Grid>
-</Layout>
+</.layout>

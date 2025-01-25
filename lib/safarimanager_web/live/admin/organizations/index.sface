@@ -1,4 +1,4 @@
-<Layout current_page={~p"/admin/organizations"} current_user={@current_user}>
+<.layout current_page={~p"/admin/organizations"} current_user={@current_user}>
   {!-- Show dialog --}
   <div
     :if={@live_action == :show}
@@ -12,23 +12,23 @@
         {gettext("Organization details")}
       </div>
       <div class="card-body">
-        <FieldsList>
-          <FieldsListItem label={gettext("ID")}>
-            <ShortUUID value={@record.id} />
-          </FieldsListItem>
-          <FieldsListItem label={gettext("Name")}>
+        <.fields_list>
+          <:fields_list_item label={gettext("ID")}>
+            <.short_uuid value={@record.id} />
+          </:fields_list_item>
+          <:fields_list_item label={gettext("Name")}>
             {@record.name}
-          </FieldsListItem>
-          <FieldsListItem label={gettext("Location")}>
+          </:fields_list_item>
+          <:fields_list_item label={gettext("Location")}>
             {@record.location}
-          </FieldsListItem>
-          <FieldsListItem label={gettext("Inserted")}>
-            <DateTimeString value={@record.inserted_at} />
-          </FieldsListItem>
-          <FieldsListItem label={gettext("Updated")}>
-            <DateTimeString value={@record.updated_at} />
-          </FieldsListItem>
-        </FieldsList>
+          </:fields_list_item>
+          <:fields_list_item label={gettext("Inserted")}>
+            <.datetime_string value={@record.inserted_at} />
+          </:fields_list_item>
+          <:fields_list_item label={gettext("Updated")}>
+            <.datetime_string value={@record.updated_at} />
+          </:fields_list_item>
+        </.fields_list>
       </div>
       <div class="modal-action">
         <button :on-click={JS.patch("/admin/organizations")} class="btn btn-md btn-ghost">
@@ -52,12 +52,12 @@
       </div>
       <Form for={@changeset} change="validate" submit="submit" as={:entity} opts={autocomplete: "off"}>
         <div class="card-body">
-          <SMField name={:name} label={gettext("Name")}>
+          <.sm_field field={@changeset[:name]} name={:name} label={gettext("Name")}>
             <TextInput class={input_state_class(@changeset, :name)} opts={phx_debounce: "1000"} />
-          </SMField>
-          <SMField name={:location} label={gettext("Location")}>
+          </.sm_field>
+          <.sm_field field={@changeset[:location]} name={:location} label={gettext("Location")}>
             <TextInput class={input_state_class(@changeset, :location)} opts={phx_debounce: "1000"} />
-          </SMField>
+          </.sm_field>
           <HiddenInput field={:_action} value={@action} />
         </div>
         <div class="modal-action">
@@ -126,7 +126,7 @@
             opts={autocomplete: "off"}
             class="w-full px-auto"
           >
-            <SMField name={:dest_id}>
+            <.sm_field name={:dest_id}>
               <Select
                 options={Enum.map(
                   @merge_selection,
@@ -135,7 +135,7 @@
                 prompt={[key: gettext("Select an organization...")]}
                 class={select_state_class(@changeset, :dest_id)}
               />
-            </SMField>
+            </.sm_field>
             <div class="modal-action">
               <Submit class={submit_state_class(@changeset)}>{gettext("Merge")}</Submit>
               <Reset
@@ -158,7 +158,7 @@
     export_path={~p"/csv_export?entity=organizations"}
   >
     <Column title={gettext("ID")} class="w-1/12">
-      <ShortUUID value={item.id} />
+      <.short_uuid value={item.id} />
     </Column>
     <Column title={gettext("Name")}>
       <span class="capitalize">{item.name}</span>
@@ -167,10 +167,10 @@
       <span class="capitalize">{item.location}</span>
     </Column>
     <Column title={gettext("Created")} class="w-2/12">
-      <DateTimeString value={item.inserted_at} />
+      <.datetime_string value={item.inserted_at} />
     </Column>
     <Column title={gettext("Modified")} class="w-2/12">
-      <DateTimeString value={item.updated_at} />
+      <.datetime_string value={item.updated_at} />
     </Column>
     <Column title={gettext("Actions")} class="w-4">
       <div class="overflow-x-auto">
@@ -193,4 +193,4 @@
       </div>
     </Column>
   </Grid>
-</Layout>
+</.layout>

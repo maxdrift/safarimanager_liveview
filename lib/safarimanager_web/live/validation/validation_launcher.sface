@@ -1,9 +1,9 @@
-<Layout
+<.layout
   current_page={~p"/organize/#{@competition.id}/validation_launcher"}
   current_user={@current_user}
 >
-  <CompetitionHeader {=@competition} />
-  <StepsHeader current_step={:validation} competition={@competition} />
+  <.competition_header {=@competition} />
+  <.steps_header current_step={:validation} competition={@competition} />
   <div class="mt-10 text-center">
     <.link
       id="start-validation-btn"
@@ -43,19 +43,19 @@
             <td>{stats.submitted_jury + stats.submitted_fixed}</td>
             <td>
               <div class="tooltip" data-tip={submitted_threshold_tooltip(stats.over_submitted_threshold)}>
-                <ValidationCheckmark variant={elem(stats.over_submitted_threshold, 0)} />
+                <.validation_checkmark variant={elem(stats.over_submitted_threshold, 0)} />
               </div>
             </td>
             <td>
               <div class="tooltip" data-tip={jury_threshold_tooltip(stats.over_jury_threshold)}>
-                <ValidationCheckmark variant={elem(stats.over_jury_threshold, 0)} />
+                <.validation_checkmark variant={elem(stats.over_jury_threshold, 0)} />
               </div>
             </td>
             <td>
-              <ValidationCheckmark variant={list_to_variant(stats.duplicate_subjects)} />
+              <.validation_checkmark variant={list_to_variant(stats.duplicate_subjects)} />
             </td>
             <td>
-              <ValidationCheckmark variant={list_to_variant(stats.flagged_slides)} />
+              <.validation_checkmark variant={list_to_variant(stats.flagged_slides)} />
             </td>
           </tr>
           <tr :if={list_to_boolean(stats.flagged_slides ++ stats.duplicate_subjects)}>
@@ -298,4 +298,4 @@
       </svg>
     </.link>
   </div>
-</Layout>
+</.layout>

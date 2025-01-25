@@ -1,6 +1,6 @@
-<Layout current_page={~p"/organize/#{@competition.id}/teams"} current_user={@current_user}>
-  <CompetitionHeader {=@competition} />
-  <StepsHeader current_step={:teams} competition={@competition} />
+<.layout current_page={~p"/organize/#{@competition.id}/teams"} current_user={@current_user}>
+  <.competition_header {=@competition} />
+  <.steps_header current_step={:teams} competition={@competition} />
   <div
     :if={@changeset}
     id="edit-dialog"
@@ -22,21 +22,21 @@
         <div class="card-body">
           <div class="flex flex-wrap">
             <HiddenInput field={:id} value={@changeset.data.id} />
-            <SMField name={:name} label={gettext("Name")} class="w-full">
+            <.sm_field name={:name} label={gettext("Name")} class="w-full">
               <TextInput
                 class={input_state_class(@changeset, :name)}
                 opts={placeholder: Teams.synthesize_team_name(@changeset.data), phx_debounce: "1000"}
               />
-            </SMField>
-            <SMField name={:organization_name} label={gettext("Org. name")} class="w-full">
+            </.sm_field>
+            <.sm_field name={:organization_name} label={gettext("Org. name")} class="w-full">
               <TextInput
                 class={input_state_class(@changeset, :organization_name)}
                 opts={placeholder: Teams.synthesize_org_name(@changeset.data), phx_debounce: "1000"}
               />
-            </SMField>
+            </.sm_field>
           </div>
-          <FieldsList>
-            <FieldsListItem label={gettext("Members")}>
+          <.fields_list>
+            <:fields_list_item label={gettext("Members")}>
               <ul class="list-disc list-inside">
                 {#for u <- @changeset.data.users}
                   <li>{u.last_name} {u.first_name}</li>
@@ -44,8 +44,8 @@
                   <li>{gettext("N/A")}</li>
                 {/for}
               </ul>
-            </FieldsListItem>
-          </FieldsList>
+            </:fields_list_item>
+          </.fields_list>
         </div>
         <div class="modal-action">
           <Submit values={[action: :edit]} class={submit_state_class(@changeset)}>
@@ -231,4 +231,4 @@
       </svg>
     </.link>
   </div>
-</Layout>
+</.layout>

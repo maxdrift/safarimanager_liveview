@@ -1,4 +1,4 @@
-<Layout current_page={~p"/admin/teams"} current_user={@current_user}>
+<.layout current_page={~p"/admin/teams"} current_user={@current_user}>
   {!-- Show dialog --}
   <div
     :if={@live_action == :show}
@@ -12,27 +12,27 @@
         {gettext("Team details")}
       </div>
       <div class="card-body">
-        <FieldsList>
-          <FieldsListItem label={gettext("ID")}>
+        <.fields_list>
+          <:fields_list_item label={gettext("ID")}>
             {@record.id}
-          </FieldsListItem>
-          <FieldsListItem label={gettext("Competition")}>
+          </:fields_list_item>
+          <:fields_list_item label={gettext("Competition")}>
             <span class="capitalize">{@record.competition.name || gettext("N/A")}</span>
-          </FieldsListItem>
-          <FieldsListItem label={gettext("Number")}>
+          </:fields_list_item>
+          <:fields_list_item label={gettext("Number")}>
             {@record.number}
-          </FieldsListItem>
-          <FieldsListItem label={gettext("Name")}>
+          </:fields_list_item>
+          <:fields_list_item label={gettext("Name")}>
             <span class="capitalize">
               {Teams.synthesize_team_name(@record) || gettext("N/A")}
             </span>
-          </FieldsListItem>
-          <FieldsListItem label={gettext("Organization name")}>
+          </:fields_list_item>
+          <:fields_list_item label={gettext("Organization name")}>
             <span class="capitalize">
               {Teams.synthesize_org_name(@record) || gettext("N/A")}
             </span>
-          </FieldsListItem>
-          <FieldsListItem label={gettext("Members")}>
+          </:fields_list_item>
+          <:fields_list_item label={gettext("Members")}>
             <ul class="list-disc list-inside">
               {#for u <- @record.users}
                 <li>{u.last_name} {u.first_name}</li>
@@ -40,15 +40,15 @@
                 <li>{gettext("N/A")}</li>
               {/for}
             </ul>
-          </FieldsListItem>
+          </:fields_list_item>
 
-          <FieldsListItem label={gettext("Inserted")}>
-            <DateTimeString value={@record.inserted_at} />
-          </FieldsListItem>
-          <FieldsListItem label={gettext("Updated")}>
-            <DateTimeString value={@record.updated_at} />
-          </FieldsListItem>
-        </FieldsList>
+          <:fields_list_item label={gettext("Inserted")}>
+            <.datetime_string value={@record.inserted_at} />
+          </:fields_list_item>
+          <:fields_list_item label={gettext("Updated")}>
+            <.datetime_string value={@record.updated_at} />
+          </:fields_list_item>
+        </.fields_list>
       </div>
       <div class="modal-action">
         <button :on-click={JS.patch("/admin/teams")} class="btn btn-md btn-ghost">
@@ -73,7 +73,7 @@
       <Form for={@changeset} change="validate" submit="submit" as={:entity} opts={autocomplete: "off"}>
         <div class="card-body">
           <div class="flex flex-wrap">
-            <SMField name={:competition_id} label={gettext("Competition")} class="w-full">
+            <.sm_field name={:competition_id} label={gettext("Competition")} class="w-full">
               <Select
                 options={Enum.map(@competitions, &{&1.name, &1.id})}
                 selected={@record.competition_id}
@@ -81,13 +81,13 @@
                 class={select_state_class(@changeset, :competition_id)}
                 opts={phx_debounce: "1000"}
               />
-            </SMField>
-            <SMField name={:number} label={gettext("Number")} class="w-full">
+            </.sm_field>
+            <.sm_field name={:number} label={gettext("Number")} class="w-full">
               <NumberInput
                 class={input_state_class(@changeset, :number)}
                 opts={phx_debounce: "1000", min: "1", step: "1"}
               />
-            </SMField>
+            </.sm_field>
             <Inputs for={:members}>
               <Context get={Form, form: members_form}>
                 <HiddenInput name="entity[members_sort][]" value={members_form.index} />
@@ -137,18 +137,18 @@
                 <Heroicons.icon name="plus-circle" type="solid" class="w-6 h-6" /> {gettext("add more")}
               </label>
             </div>
-            <SMField name={:name} label={gettext("Name")} class="w-full">
+            <.sm_field name={:name} label={gettext("Name")} class="w-full">
               <TextInput
                 class={input_state_class(@changeset, :name)}
                 opts={placeholder: Teams.synthesize_team_name(@changeset.data), phx_debounce: "1000"}
               />
-            </SMField>
-            <SMField name={:organization_name} label={gettext("Org. name")} class="w-full">
+            </.sm_field>
+            <.sm_field name={:organization_name} label={gettext("Org. name")} class="w-full">
               <TextInput
                 class={input_state_class(@changeset, :organization_name)}
                 opts={placeholder: Teams.synthesize_org_name(@changeset.data), phx_debounce: "1000"}
               />
-            </SMField>
+            </.sm_field>
             <HiddenInput field={:_action} value={@action} />
           </div>
         </div>
@@ -169,7 +169,7 @@
     export_path={~p"/csv_export?entity=teams"}
   >
     <Column title={gettext("ID")} class="w-1/12">
-      <ShortUUID value={item.id} />
+      <.short_uuid value={item.id} />
     </Column>
     <Column title={gettext("Competition")}>
       {item.competition.name || gettext("N/A")}
@@ -204,4 +204,4 @@
       </div>
     </Column>
   </Grid>
-</Layout>
+</.layout>

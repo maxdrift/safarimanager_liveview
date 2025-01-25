@@ -2,26 +2,27 @@ defmodule SMWeb.Components.FormActions do
   @moduledoc """
   Form actions component.
   """
-  use SMWeb, :surface_component
+  use SMWeb, :component
 
-  alias Surface.Components.Form.Reset
-  alias Surface.Components.Form.Submit
+  import PhoenixHTMLHelpers.Form, only: [reset: 2, submit: 2]
 
-  prop container_class, :css_class
-  prop submit_enabled?, :boolean, required: true
-  prop reset, :event, required: true
-  prop reset_label, :string, default: gettext("Reset")
-  prop submit_label, :string, default: gettext("Save")
+  attr :container_class, :string
+  attr :enable_submit, :boolean, default: true
+  attr :reset, :string, required: true
+  attr :reset_label, :string, default: gettext("Reset")
+  attr :submit_label, :string, default: gettext("Save")
 
-  def render(assigns) do
-    ~F"""
+  def form_actions(assigns) do
+    ~H"""
     <div class={@container_class}>
-      <Submit class={
-        "btn btn-md",
-        "btn-success": @submit_enabled?,
-        "btn-disabled": not @submit_enabled?
-      }>{@submit_label}</Submit>
-      <Reset click={@reset} class="btn btn-md btn-ghost" value={@reset_label} />
+      {submit(@submit_label,
+        class: [
+          "btn btn-md",
+          @enable_submit && "btn-success",
+          !@enable_submit && "btn-disabled"
+        ]
+      )}
+      {reset(@reset_label, class: "btn btn-md btn-ghost", phx_click: @reset)}
     </div>
     """
   end

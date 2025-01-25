@@ -4,12 +4,13 @@ defmodule SMWeb.Live.Validation do
   """
   use SMWeb, :surface_view
 
+  import SMWeb.Components.JuryToolbarButton
+
   alias SM.Cache
   alias SM.Competitions
   alias SM.Slides
   alias SM.Subjects
   alias SM.Utils
-  alias SMWeb.Components.JuryToolbarButton
   alias Surface.Components.Form
   alias Surface.Components.Form.HiddenInput
   alias Surface.Components.Form.Label

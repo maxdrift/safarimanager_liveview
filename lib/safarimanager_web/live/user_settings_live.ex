@@ -2,8 +2,9 @@ defmodule SMWeb.Live.UserSettingsLive do
   @moduledoc false
   use SMWeb, :surface_view
 
+  import SMWeb.Components.Layout
+
   alias SM.Accounts
-  alias SMWeb.Components.Layout
   alias Surface.Components.Form
   alias Surface.Components.Form.EmailInput
   alias Surface.Components.Form.ErrorTag
@@ -16,7 +17,7 @@ defmodule SMWeb.Live.UserSettingsLive do
 
   def render(assigns) do
     ~F"""
-    <Layout current_user={@current_user} current_page={~p"/users/settings"}>
+    <.layout current_user={@current_user} current_page={~p"/users/settings"}>
       <header>
         <h1 class="text-lg font-semibold leading-8">
           {gettext("Change Email")}
@@ -114,7 +115,7 @@ defmodule SMWeb.Live.UserSettingsLive do
           {gettext("Change Password")}
         </Submit>
       </Form>
-    </Layout>
+    </.layout>
     """
   end
 

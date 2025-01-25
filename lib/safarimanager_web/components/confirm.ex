@@ -1,12 +1,9 @@
 defmodule SMWeb.Components.Confirm do
   @moduledoc false
-  use Phoenix.Component
-  use Gettext, backend: SMWeb.Gettext
+  use SMWeb, :component
 
   import Phoenix.LiveView
   import SMWeb.Components.CoreComponents
-
-  alias Phoenix.LiveView.JS
 
   @doc """
   Shows a confirmation modal.

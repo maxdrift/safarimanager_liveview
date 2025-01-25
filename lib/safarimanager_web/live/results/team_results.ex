@@ -4,14 +4,15 @@ defmodule SMWeb.Live.TeamResults do
   """
   use SMWeb, :surface_view
 
+  import SMWeb.Components.CompetitionHeader
+  import SMWeb.Components.Layout
+  import SMWeb.Components.StepsHeader
+
   alias SM.Competitions
   alias SM.Results
   alias SM.Slides
   alias SM.Subjects
   alias SM.Teams
-  alias SMWeb.Components.CompetitionHeader
-  alias SMWeb.Components.Layout
-  alias SMWeb.Components.StepsHeader
 
   require Logger
 

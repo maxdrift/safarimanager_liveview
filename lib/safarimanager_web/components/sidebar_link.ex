@@ -2,18 +2,18 @@ defmodule SMWeb.Components.SidebarLink do
   @moduledoc """
   Sidebar link component.
   """
-  use SMWeb, :surface_component
+  use SMWeb, :component
 
-  prop label, :string, required: true
-  prop hero_icon, :string, required: true
-  prop to, :string, required: true
-  prop current, :string, required: true
+  attr :label, :string, required: true
+  attr :hero_icon, :string, required: true
+  attr :to, :string, required: true
+  attr :current, :string, required: true
 
-  def render(assigns) do
-    ~F"""
+  def sidebar_link(assigns) do
+    ~H"""
     <.link
       navigate={@to}
-      class={
+      class={[
         "h-7",
         "flex",
         "items-center",
@@ -21,11 +21,11 @@ defmodule SMWeb.Components.SidebarLink do
         "hover:text-primary-content",
         "hover:primary-content",
         "border-l-4",
-        "text-primary": @to == @current,
-        "border-primary": @to == @current,
-        "text-base-content": @to != @current,
-        "border-transparent": @to != @current
-      }
+        @to == @current && "text-primary",
+        @to == @current && "border-primary",
+        @to != @current && "text-base-content",
+        @to != @current && "border-transparent"
+      ]}
     >
       <Heroicons.icon
         name={@hero_icon}

@@ -2,14 +2,14 @@ defmodule SMWeb.Components.UserAvatar do
   @moduledoc """
   User avatar component.
   """
-  use SMWeb, :surface_component
+  use SMWeb, :component
 
-  prop user, :struct
-  prop class, :css_class, default: ["w-full", "h-full"]
-  prop text_class, :css_class, default: []
+  attr :user, SM.Accounts.User
+  attr :class, :list, default: ["w-full", "h-full"]
+  attr :text_class, :list, default: []
 
-  def render(assigns) do
-    ~F"""
+  def user_avatar(assigns) do
+    ~H"""
     <div
       class={@class ++ ~w(rounded-full flex items-center justify-center bg-blue-300)}
       aria-hidden="true"

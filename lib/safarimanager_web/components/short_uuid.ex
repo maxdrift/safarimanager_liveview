@@ -3,12 +3,12 @@ defmodule SMWeb.Components.ShortUUID do
   Short UUID representation static component
   """
 
-  use SMWeb, :surface_component
+  use SMWeb, :component
 
-  prop value, :string, required: true
+  attr :value, :string, required: true
 
-  def render(assigns) do
-    ~F"""
+  def short_uuid(assigns) do
+    ~H"""
     {format_id(@value)}
     """
   end

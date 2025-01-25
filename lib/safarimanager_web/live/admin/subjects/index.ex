@@ -4,15 +4,15 @@ defmodule SMWeb.Live.Admin.Subjects.Index do
   """
   use SMWeb, :surface_view
 
+  import SMWeb.Components.DateTimeString
+  import SMWeb.Components.FieldsList
+  import SMWeb.Components.Layout
+  import SMWeb.Components.SMField
+
   alias SM.Subjects
   alias SM.Subjects.Subject
   alias SMWeb.Components.Column
-  alias SMWeb.Components.DateTimeString
-  alias SMWeb.Components.FieldsList
-  alias SMWeb.Components.FieldsListItem
   alias SMWeb.Components.Grid
-  alias SMWeb.Components.Layout
-  alias SMWeb.Components.SMField
   alias Surface.Components.Form
   alias Surface.Components.Form.HiddenInput
   alias Surface.Components.Form.NumberInput

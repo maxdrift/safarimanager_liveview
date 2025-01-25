@@ -4,6 +4,8 @@ defmodule SMWeb.Live.NewCompetition do
   """
   use SMWeb, :surface_view
 
+  import SMWeb.Components.Layout
+
   alias SM.Competitions
   alias SM.Competitions.Competition
   alias SM.Competitions.CompetitionEvaluation
@@ -12,7 +14,6 @@ defmodule SMWeb.Live.NewCompetition do
   alias SM.Organizations
   alias SM.Slides
   alias SM.Utils
-  alias SMWeb.Components.Layout
   alias SMWeb.Live.Admin.Competitions.Form, as: CompetitionForm
   alias Surface.Components.Form
   alias Surface.Components.Form.Checkbox

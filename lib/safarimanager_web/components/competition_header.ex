@@ -2,15 +2,20 @@ defmodule SMWeb.Components.CompetitionHeader do
   @moduledoc """
   Competition Header component.
   """
-  use SMWeb, :surface_component
+  use SMWeb, :component
 
-  prop competition, :struct, required: true
+  attr :competition, SM.Competitions.Competition, required: true
 
-  def render(assigns) do
-    ~F"""
+  def competition_header(assigns) do
+    ~H"""
     <div class="pt-5 text-center">
       <div class="text-2xl">{@competition.name}</div>
-      <div class="text-lg">{@competition.city || gettext("Somewhere...")} - {pretty_dates(@competition.start_time, @competition.end_time)}</div>
+      <div class="text-lg">
+        {@competition.city || gettext("Somewhere...")} - {pretty_dates(
+          @competition.start_time,
+          @competition.end_time
+        )}
+      </div>
     </div>
     """
   end

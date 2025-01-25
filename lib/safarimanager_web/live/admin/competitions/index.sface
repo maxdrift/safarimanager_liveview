@@ -1,4 +1,4 @@
-<Layout current_page={~p"/admin/competitions"} current_user={@current_user}>
+<.layout current_page={~p"/admin/competitions"} current_user={@current_user}>
   {!-- Show dialog --}
   <div
     :if={@live_action == :show}
@@ -12,51 +12,51 @@
         {gettext("Competition details")}
       </div>
       <div class="card-body">
-        <FieldsList>
-          <FieldsListItem label={gettext("ID")}>
+        <.fields_list>
+          <:fields_list_item label={gettext("ID")}>
             {@record.id}
-          </FieldsListItem>
-          <FieldsListItem label={gettext("Name")}>
+          </:fields_list_item>
+          <:fields_list_item label={gettext("Name")}>
             <span class="capitalize">{@record.name}</span>
-          </FieldsListItem>
-          <FieldsListItem label={gettext("Organizer")}>
+          </:fields_list_item>
+          <:fields_list_item label={gettext("Organizer")}>
             <span class="capitalize">
               {(@record.organization && @record.organization.name) || gettext("N/A")}
             </span>
-          </FieldsListItem>
-          <FieldsListItem label={gettext("Type")}>
+          </:fields_list_item>
+          <:fields_list_item label={gettext("Type")}>
             <span class="capitalize">
               {Gettext.gettext(SMWeb.Gettext, Keyword.get(@competition_types, @record.type))}
             </span>
-          </FieldsListItem>
-          <FieldsListItem label={gettext("For teams")}>
+          </:fields_list_item>
+          <:fields_list_item label={gettext("For teams")}>
             {(@record.for_teams && gettext("Yes")) || gettext("No")}
-          </FieldsListItem>
-          <FieldsListItem label={gettext("Start")}>
-            <DateTimeString value={@record.start_time} />
-          </FieldsListItem>
-          <FieldsListItem label={gettext("End")}>
-            <DateTimeString value={@record.end_time} />
-          </FieldsListItem>
-          <FieldsListItem label={gettext("Street name")}>
+          </:fields_list_item>
+          <:fields_list_item label={gettext("Start")}>
+            <.datetime_string value={@record.start_time} />
+          </:fields_list_item>
+          <:fields_list_item label={gettext("End")}>
+            <.datetime_string value={@record.end_time} />
+          </:fields_list_item>
+          <:fields_list_item label={gettext("Street name")}>
             {@record.street_name}
-          </FieldsListItem>
-          <FieldsListItem label={gettext("Street number")}>
+          </:fields_list_item>
+          <:fields_list_item label={gettext("Street number")}>
             {@record.street_number}
-          </FieldsListItem>
-          <FieldsListItem label={gettext("Postal code")}>
+          </:fields_list_item>
+          <:fields_list_item label={gettext("Postal code")}>
             {@record.postal_code}
-          </FieldsListItem>
-          <FieldsListItem label={gettext("City")}>
+          </:fields_list_item>
+          <:fields_list_item label={gettext("City")}>
             {@record.city}
-          </FieldsListItem>
-          <FieldsListItem label={gettext("State/Province")}>
+          </:fields_list_item>
+          <:fields_list_item label={gettext("State/Province")}>
             {@record.state}
-          </FieldsListItem>
-          <FieldsListItem label={gettext("Country")}>
+          </:fields_list_item>
+          <:fields_list_item label={gettext("Country")}>
             {@record.country}
-          </FieldsListItem>
-          <FieldsListItem label={gettext("Allowed evaluations")}>
+          </:fields_list_item>
+          <:fields_list_item label={gettext("Allowed evaluations")}>
             <ul class="list-disc list-inside">
               {#for e <- @record.allowed_evaluations}
                 <li>{e.name}</li>
@@ -64,8 +64,8 @@
                 <li>{gettext("N/A")}</li>
               {/for}
             </ul>
-          </FieldsListItem>
-          <FieldsListItem label={gettext("Settings")}>
+          </:fields_list_item>
+          <:fields_list_item label={gettext("Settings")}>
             <ul class="list-disc list-inside">
               {#if not is_nil(@record.settings)}
                 <li><b>{gettext("Number of jurors")}:</b> {@record.settings.number_of_jurors}</li>
@@ -96,8 +96,8 @@
                 <li>{gettext("N/A")}</li>
               {/if}
             </ul>
-          </FieldsListItem>
-          <FieldsListItem label={gettext("Slides size")}>
+          </:fields_list_item>
+          <:fields_list_item label={gettext("Slides size")}>
             <ul class="list-disc list-inside ml-6">
               {#for status <- Slides.list_slide_statuses() |> Enum.sort(:desc)}
                 <li>
@@ -117,14 +117,14 @@
               {/for}
               <li><b>{gettext("Total")}:</b> {Utils.format_bytes(Slides.get_slides_total_size(@record.id) || 0)}</li>
             </ul>
-          </FieldsListItem>
-          <FieldsListItem label={gettext("Inserted")}>
-            <DateTimeString value={@record.inserted_at} />
-          </FieldsListItem>
-          <FieldsListItem label={gettext("Updated")}>
-            <DateTimeString value={@record.updated_at} />
-          </FieldsListItem>
-        </FieldsList>
+          </:fields_list_item>
+          <:fields_list_item label={gettext("Inserted")}>
+            <.datetime_string value={@record.inserted_at} />
+          </:fields_list_item>
+          <:fields_list_item label={gettext("Updated")}>
+            <.datetime_string value={@record.updated_at} />
+          </:fields_list_item>
+        </.fields_list>
       </div>
       <div class="modal-action">
         <button :on-click={JS.patch("/admin/competitions")} class="btn btn-md btn-ghost">
@@ -149,18 +149,18 @@
       <Form for={@changeset} change="validate" submit="submit" as={:entity} opts={autocomplete: "off"}>
         <div class="card-body">
           <div class="flex flex-wrap">
-            <SMField name={:name} label={gettext("Name")} class="w-full">
+            <.sm_field name={:name} label={gettext("Name")} class="w-full">
               <TextInput class={input_state_class(@changeset, :name)} opts={phx_debounce: "1000"} />
-            </SMField>
-            <SMField name={:organization_id} label={gettext("Organization")} class="w-full">
+            </.sm_field>
+            <.sm_field name={:organization_id} label={gettext("Organization")} class="w-full">
               <Select
                 options={Enum.map(@organizations, &{&1.name, &1.id})}
                 prompt={[key: gettext("Select an organization...")]}
                 selected={@record.organization_id}
                 class={select_state_class(@changeset, :organization_id)}
               />
-            </SMField>
-            <SMField name={:type} label={gettext("Type")} class="w-full">
+            </.sm_field>
+            <.sm_field name={:type} label={gettext("Type")} class="w-full">
               <Select
                 options={Enum.map(@competition_types, fn {value, label} ->
                   {String.capitalize(Gettext.gettext(SMWeb.Gettext, label)), value}
@@ -169,8 +169,8 @@
                 prompt={[key: gettext("Select a type...")]}
                 class={select_state_class(@changeset, :type)}
               />
-            </SMField>
-            <SMField name={:for_teams} class="w-full">
+            </.sm_field>
+            <.sm_field name={:for_teams} class="w-full">
               <Label class="label cursor-pointer">
                 <span class="label-text">{gettext("For teams")}</span>
                 <Checkbox
@@ -178,37 +178,37 @@
                   opts={phx_debounce: "1000"}
                 />
               </Label>
-            </SMField>
-            <SMField name={:start_time} label={gettext("Start date/time")} class="w-1/2 pr-2">
+            </.sm_field>
+            <.sm_field name={:start_time} label={gettext("Start date/time")} class="w-1/2 pr-2">
               <DateTimeLocalInput
                 class={input_state_class(@changeset, :start_time)}
                 opts={phx_debounce: "1000"}
               />
-            </SMField>
-            <SMField name={:end_time} label={gettext("End date/time")} class="w-1/2">
+            </.sm_field>
+            <.sm_field name={:end_time} label={gettext("End date/time")} class="w-1/2">
               <DateTimeLocalInput
                 class={input_state_class(@changeset, :end_time)}
                 opts={phx_debounce: "1000"}
               />
-            </SMField>
-            <SMField name={:street_name} label={gettext("Street name")} class="w-4/5 pr-2">
+            </.sm_field>
+            <.sm_field name={:street_name} label={gettext("Street name")} class="w-4/5 pr-2">
               <TextInput class={input_state_class(@changeset, :street_name)} opts={phx_debounce: "1000"} />
-            </SMField>
-            <SMField name={:street_number} label={gettext("Number")} class="w-1/5">
+            </.sm_field>
+            <.sm_field name={:street_number} label={gettext("Number")} class="w-1/5">
               <TextInput class={input_state_class(@changeset, :street_number)} opts={phx_debounce: "1000"} />
-            </SMField>
-            <SMField name={:postal_code} label={gettext("Postal code")} class="w-1/2 pr-2">
+            </.sm_field>
+            <.sm_field name={:postal_code} label={gettext("Postal code")} class="w-1/2 pr-2">
               <TextInput class={input_state_class(@changeset, :postal_code)} opts={phx_debounce: "1000"} />
-            </SMField>
-            <SMField name={:city} label={gettext("City")} class="w-1/2">
+            </.sm_field>
+            <.sm_field name={:city} label={gettext("City")} class="w-1/2">
               <TextInput class={input_state_class(@changeset, :city)} opts={phx_debounce: "1000"} />
-            </SMField>
-            <SMField name={:state} label={gettext("State/Province")} class="w-1/2 pr-2">
+            </.sm_field>
+            <.sm_field name={:state} label={gettext("State/Province")} class="w-1/2 pr-2">
               <TextInput class={input_state_class(@changeset, :state)} opts={phx_debounce: "1000"} />
-            </SMField>
-            <SMField name={:country} label={gettext("Country")} class="w-1/2">
+            </.sm_field>
+            <.sm_field name={:country} label={gettext("Country")} class="w-1/2">
               <TextInput class={input_state_class(@changeset, :country)} opts={phx_debounce: "1000"} />
-            </SMField>
+            </.sm_field>
             <div class="text-lg w-full">{gettext("Allowed evaluations")}:</div>
             <div id="allowed-evaluations-inputs" class="flex flex-col w-full" phx-hook="SortableInputsFor">
               <Inputs for={:competitions_evaluations}>
@@ -252,31 +252,31 @@
             <div class="text-lg w-full">{gettext("Settings")}:</div>
             <Inputs for={:settings}>
               <Context get={Form, form: settings_form}>
-                <SMField name={:number_of_jurors} label={gettext("Number of jurors")} class="w-1/2 pr-2">
+                <.sm_field name={:number_of_jurors} label={gettext("Number of jurors")} class="w-1/2 pr-2">
                   <NumberInput
                     class={input_state_class(settings_form.source, :number_of_jurors)}
                     opts={phx_debounce: "1000"}
                   />
-                </SMField>
-                <SMField name={:evaluations_per_juror} label={gettext("Evaluations per juror")} class="w-1/2">
+                </.sm_field>
+                <.sm_field name={:evaluations_per_juror} label={gettext("Evaluations per juror")} class="w-1/2">
                   <NumberInput
                     class={input_state_class(settings_form.source, :evaluations_per_juror)}
                     opts={phx_debounce: "1000"}
                   />
-                </SMField>
-                <SMField name={:max_jury_slides} label={gettext("Max slides for jury")} class="w-1/2 pr-2">
+                </.sm_field>
+                <.sm_field name={:max_jury_slides} label={gettext("Max slides for jury")} class="w-1/2 pr-2">
                   <NumberInput
                     class={input_state_class(settings_form.source, :max_jury_slides)}
                     opts={phx_debounce: "1000"}
                   />
-                </SMField>
-                <SMField name={:max_submitted_slides} label={gettext("Max submitted slides")} class="w-1/2">
+                </.sm_field>
+                <.sm_field name={:max_submitted_slides} label={gettext("Max submitted slides")} class="w-1/2">
                   <NumberInput
                     class={input_state_class(settings_form.source, :max_submitted_slides)}
                     opts={phx_debounce: "1000"}
                   />
-                </SMField>
-                <SMField name={:proportional_submission} class="w-1/2 pr-2">
+                </.sm_field>
+                <.sm_field name={:proportional_submission} class="w-1/2 pr-2">
                   <Label class="label cursor-pointer">
                     <span class="label-text">{gettext("Proportional submission")}</span>
                     <Checkbox
@@ -284,14 +284,14 @@
                       opts={phx_debounce: "1000"}
                     />
                   </Label>
-                </SMField>
-                <SMField name={:submission_ratio} label={gettext("Submission ratio")} class="w-1/2">
+                </.sm_field>
+                <.sm_field name={:submission_ratio} label={gettext("Submission ratio")} class="w-1/2">
                   <NumberInput
                     class={input_state_class(settings_form.source, :submission_ratio)}
                     opts={phx_debounce: "1000", step: "0.01"}
                   />
-                </SMField>
-                <SMField
+                </.sm_field>
+                <.sm_field
                   name={:fixed_points_multiplier}
                   label={gettext("Fixed points multiplier")}
                   class="w-1/2 pr-2"
@@ -300,14 +300,14 @@
                     class={input_state_class(settings_form.source, :fixed_points_multiplier)}
                     opts={phx_debounce: "1000", step: "0.01"}
                   />
-                </SMField>
-                <SMField name={:penalty_amount} label={gettext("Penalty amount")} class="w-1/2">
+                </.sm_field>
+                <.sm_field name={:penalty_amount} label={gettext("Penalty amount")} class="w-1/2">
                   <NumberInput
                     class={input_state_class(settings_form.source, :penalty_amount)}
                     opts={phx_debounce: "1000", step: "0.01"}
                   />
-                </SMField>
-                <SMField name={:coefficient_mode} label={gettext("Coefficient mode")} class="w-1/2  pr-2">
+                </.sm_field>
+                <.sm_field name={:coefficient_mode} label={gettext("Coefficient mode")} class="w-1/2  pr-2">
                   <Select
                     options={Enum.map(@coefficient_modes, fn {value, label} ->
                       {String.capitalize(Gettext.gettext(SMWeb.Gettext, label)), value}
@@ -315,8 +315,8 @@
                     prompt={[key: gettext("Select a coefficient mode...")]}
                     class={select_state_class(settings_form.source, :coefficient_mode)}
                   />
-                </SMField>
-                <SMField
+                </.sm_field>
+                <.sm_field
                   name={:dynamic_coefficient_mode}
                   label={gettext("Dynamic coefficient mode")}
                   class="w-1/2"
@@ -328,34 +328,34 @@
                     prompt={[key: gettext("Select a dynamic coefficient mode...")]}
                     class={select_state_class(settings_form.source, :dynamic_coefficient_mode)}
                   />
-                </SMField>
+                </.sm_field>
                 <div class="text-lg w-full">{gettext("Dynamic coefficients")}:</div>
                 <Inputs for={:dynamic_coefficients}>
                   <Context get={Form, form: dynamic_coefficients_form}>
-                    <SMField name={:name} label={gettext("Name")} class="w-1/2 pr-2">
+                    <.sm_field name={:name} label={gettext("Name")} class="w-1/2 pr-2">
                       <TextInput
                         class={input_state_class(dynamic_coefficients_form.source, :name)}
                         opts={phx_debounce: "1000"}
                       />
-                    </SMField>
-                    <SMField name={:value} label={gettext("Value")} class="w-1/2">
+                    </.sm_field>
+                    <.sm_field name={:value} label={gettext("Value")} class="w-1/2">
                       <NumberInput
                         class={input_state_class(dynamic_coefficients_form.source, :value)}
                         opts={phx_debounce: "1000", step: "0.01"}
                       />
-                    </SMField>
-                    <SMField name={:from} label={gettext("From")} class="w-1/2 pr-2">
+                    </.sm_field>
+                    <.sm_field name={:from} label={gettext("From")} class="w-1/2 pr-2">
                       <NumberInput
                         class={input_state_class(dynamic_coefficients_form.source, :from)}
                         opts={phx_debounce: "1000", step: "0.01"}
                       />
-                    </SMField>
-                    <SMField name={:to} label={gettext("To")} class="w-1/2">
+                    </.sm_field>
+                    <.sm_field name={:to} label={gettext("To")} class="w-1/2">
                       <NumberInput
                         class={input_state_class(dynamic_coefficients_form.source, :to)}
                         opts={phx_debounce: "1000", step: "0.01"}
                       />
-                    </SMField>
+                    </.sm_field>
                   </Context>
                 </Inputs>
               </Context>
@@ -384,7 +384,7 @@
     export_path={~p"/csv_export?entity=competitions"}
   >
     <Column title={gettext("ID")} class="w-1/12">
-      <ShortUUID value={item.id} />
+      <.short_uuid value={item.id} />
     </Column>
     <Column title={gettext("Name")}>
       {item.name}
@@ -396,7 +396,7 @@
       {"#{item.city || gettext("N/A")} (#{item.country || gettext("N/A")})"}
     </Column>
     <Column title={gettext("Date (start)")} class="w-2/12">
-      <DateTimeString value={item.start_time} />
+      <.datetime_string value={item.start_time} />
     </Column>
     <Column title={gettext("Organizer")} class="w-2/12">
       {(item.organization && item.organization.name) || gettext("N/A")}
@@ -422,4 +422,4 @@
       </div>
     </Column>
   </Grid>
-</Layout>
+</.layout>

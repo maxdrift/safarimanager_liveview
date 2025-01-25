@@ -1,6 +1,9 @@
-<Layout current_page={~p"/organize/#{@competition.id}/participants"} current_user={@current_user}>
-  <CompetitionHeader {=@competition} />
-  <StepsHeader current_step={:participants} competition={@competition} />
+<.layout
+  current_page={~p"/organize/#{@competition.id}/participants"}
+  current_user={@current_user}
+>
+  <.competition_header {=@competition} />
+  <.steps_header current_step={:participants} competition={@competition} />
   <div class="flex flex-col xl:flex-row mt-5">
     <div class="overflow-y-auto rounded-lg xl:w-1/2 bg-base-200 shadow-lg">
       <div class="p-4">
@@ -54,9 +57,9 @@
         validate="validate-new-user"
         submit="submit-new-user"
       >
-        <FormActions
+        <.form_actions
           container_class="modal-action"
-          submit_enabled?={@changeset.action && @changeset.valid?}
+          enable_submit={@changeset.action && @changeset.valid?}
           reset="reset-new-user"
         />
       </UsersForm>
@@ -179,4 +182,4 @@
       </svg>
     </.link>
   </div>
-</Layout>
+</.layout>

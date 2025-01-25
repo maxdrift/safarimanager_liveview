@@ -2,16 +2,16 @@ defmodule SMWeb.Components.ThemeChangeDropdown do
   @moduledoc """
   Theme change dropdown component.
   """
-  use SMWeb, :surface_component
+  use SMWeb, :component
 
-  alias SMWeb.Components.ThemeChangeDropdownItem
+  import SMWeb.Components.ThemeChangeDropdownItem
 
-  prop themes, :list,
+  attr :themes, :list,
     default:
       ~w(light dark cupcake bumblebee emerald corporate synthwave retro cyberpunk valentine halloween garden forest aqua lofi pastel fantasy wireframe black luxury dracula cmyk autumn business acid lemonade night coffee winter)
 
-  def render(assigns) do
-    ~F"""
+  def theme_change_dropdown(assigns) do
+    ~H"""
     <div title={gettext("Change theme")} class="dropdown dropdown-right dropdown-end">
       <label
         tabindex="0"
@@ -26,13 +26,15 @@ defmodule SMWeb.Components.ThemeChangeDropdown do
         <span class="text-sm font-medium">
           {gettext("Theme")}
         </span>
-        <Heroicons.icon name="chevron-down" type="outline" class="ml-3 hidden h-4 w-4 sm:inline-block" />
+        <Heroicons.icon
+          name="chevron-down"
+          type="outline"
+          class="ml-3 hidden h-4 w-4 sm:inline-block"
+        />
       </label>
       <div class="dropdown-content bg-base-100 text-base-content rounded-t rounded-b top-px max-h-96 h-[70vh] w-52 overflow-y-auto shadow-2xl ml-[1em]">
         <div class="grid grid-cols-1 gap-3 p-3" tabindex="0">
-          {#for theme <- @themes}
-            <ThemeChangeDropdownItem theme={theme} />
-          {/for}
+          <.theme_change_dropdown_item :for={theme <- @themes} theme={theme} />
         </div>
       </div>
     </div>

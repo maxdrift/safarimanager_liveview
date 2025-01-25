@@ -1,9 +1,9 @@
-<Layout
+<.layout
   current_page={~p"/organize/#{@competition.id}/jury_launcher"}
   current_user={@current_user}
 >
-  <CompetitionHeader {=@competition} />
-  <StepsHeader current_step={:jury} competition={@competition} />
+  <.competition_header {=@competition} />
+  <.steps_header current_step={:jury} competition={@competition} />
   <div class="mt-20 text-center">
     <div class="stats stats-vertical lg:stats-horizontal shadow">
       {#if !@competition.for_teams}
@@ -107,4 +107,4 @@
       </svg>
     </.link>
   </div>
-</Layout>
+</.layout>

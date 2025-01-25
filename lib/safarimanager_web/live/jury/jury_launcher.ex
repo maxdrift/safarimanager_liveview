@@ -4,11 +4,12 @@ defmodule SMWeb.Live.JuryLauncher do
   """
   use SMWeb, :surface_view
 
+  import SMWeb.Components.CompetitionHeader
+  import SMWeb.Components.Layout
+  import SMWeb.Components.StepsHeader
+
   alias SM.Competitions
   alias SM.Slides
-  alias SMWeb.Components.CompetitionHeader
-  alias SMWeb.Components.Layout
-  alias SMWeb.Components.StepsHeader
 
   require Logger
 

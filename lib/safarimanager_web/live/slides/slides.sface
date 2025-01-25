@@ -1,6 +1,6 @@
-<Layout current_page={~p"/organize/#{@competition.id}/slides"} current_user={@current_user}>
-  <CompetitionHeader {=@competition} />
-  <StepsHeader current_step={:slides} competition={@competition} />
+<.layout current_page={~p"/organize/#{@competition.id}/slides"} current_user={@current_user}>
+  <.competition_header {=@competition} />
+  <.steps_header current_step={:slides} competition={@competition} />
   <div class="flex flex-col mt-5">
     <div class="rounded-lg bg-base-200 shadow-lg p-4">
       <div :if={!@competition.for_teams} class="text-2xl font-bold text-center pb-4">{gettext("Participants")}</div>
@@ -127,7 +127,6 @@
         <div class="text-lg text-center pb-4">
           {gettext("Currently")} {Enum.count(@slides || [])} {gettext("slides")} - {Enum.count(@uploads.images.entries || [])} {gettext("uploading")}
         </div>
-
         {#if @direct_file_upload}
           <FileBrowser
             id="file-browser"
@@ -136,11 +135,11 @@
             user_id={@user.id}
           />
         {#else}
-          <Form id="upload-drop-area-form" for={%{}} as={:slides} change="validate" submit="submit">
-            <UploadDropArea field={:images} uploads={@uploads}>
+          <form id="upload-drop-area-form" phx-submit="submit" phx-change="validate">
+            <.upload_drop_area field={:images} uploads={@uploads}>
               {gettext("Click or drop some images in this box")}
-            </UploadDropArea>
-          </Form>
+            </.upload_drop_area>
+          </form>
         {/if}
         <div class="max-h-96 overflow-y-auto mt-2 tiny-scrollbar">
           <table class="table table-zebra table-fixed w-full">
@@ -277,4 +276,4 @@
       </svg>
     </.link>
   </div>
-</Layout>
+</.layout>

@@ -1,6 +1,6 @@
-<Layout current_page={~p"/organize/#{@competition.id}/results"} current_user={@current_user}>
-  <CompetitionHeader {=@competition} />
-  <StepsHeader current_step={:results} competition={@competition} />
+<.layout current_page={~p"/organize/#{@competition.id}/results"} current_user={@current_user}>
+  <.competition_header {=@competition} />
+  <.steps_header current_step={:results} competition={@competition} />
   <div class="pt-10 cursor-pointer" x-data="{ expanded: false }">
     <div class="mb-4">
       <.link
@@ -231,4 +231,4 @@
     </.link>
     <div class="grow" />
   </div>
-</Layout>
+</.layout>

@@ -2,15 +2,15 @@ defmodule SMWeb.Components.Thumbnail do
   @moduledoc """
   A single gallery image.
   """
-  use SMWeb, :surface_component
+  use SMWeb, :component
 
-  prop click, :event
-  prop url, :string, required: true
-  prop width, :integer, required: true
-  prop height, :integer, required: true
+  attr :click, :string
+  attr :url, :string, required: true
+  attr :width, :integer, required: true
+  attr :height, :integer, required: true
 
-  def render(assigns) do
-    ~F"""
+  def thumbnail(assigns) do
+    ~H"""
     <div
       id={@url}
       class="photo-grid-div"
@@ -19,9 +19,9 @@ defmodule SMWeb.Components.Thumbnail do
       <.link
         navigate="/jury_viewer"
         class="photo-grid-i"
-        opts={[style: "padding-bottom:#{@height / @width * 100}%"]}
+        style={"padding-bottom:#{@height / @width * 100}%"}
       >
-        <img class="photo-grid-img" src={@url} alt="">
+        <img class="photo-grid-img" src={@url} alt="" />
       </.link>
     </div>
     """

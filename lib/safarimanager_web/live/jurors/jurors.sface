@@ -1,6 +1,6 @@
-<Layout current_page={~p"/organize/#{@competition.id}/jurors"} current_user={@current_user}>
-  <CompetitionHeader {=@competition} />
-  <StepsHeader current_step={:jurors} competition={@competition} />
+<.layout current_page={~p"/organize/#{@competition.id}/jurors"} current_user={@current_user}>
+  <.competition_header {=@competition} />
+  <.steps_header current_step={:jurors} competition={@competition} />
   <div
     :if={@qr_code}
     id="qr-code-dialog"
@@ -173,4 +173,4 @@
       </svg>
     </.link>
   </div>
-</Layout>
+</.layout>

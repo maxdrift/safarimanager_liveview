@@ -1,4 +1,4 @@
-<Layout current_page={~p"/admin/participants"} current_user={@current_user}>
+<.layout current_page={~p"/admin/participants"} current_user={@current_user}>
   {!-- Show dialog --}
   <div
     :if={@live_action == :show}
@@ -12,26 +12,26 @@
         {gettext("Participant details")}
       </div>
       <div class="card-body">
-        <FieldsList>
-          <FieldsListItem label={gettext("Number")}>
+        <.fields_list>
+          <:fields_list_item label={gettext("Number")}>
             {@record.number}
-          </FieldsListItem>
-          <FieldsListItem label={gettext("Competition")}>
+          </:fields_list_item>
+          <:fields_list_item label={gettext("Competition")}>
             {@record.competition.name}
-          </FieldsListItem>
-          <FieldsListItem label={gettext("User")}>
+          </:fields_list_item>
+          <:fields_list_item label={gettext("User")}>
             {@record.user.first_name} {@record.user.last_name}
-          </FieldsListItem>
-          <FieldsListItem label={gettext("Category")}>
+          </:fields_list_item>
+          <:fields_list_item label={gettext("Category")}>
             {(@record.category && @record.category.name) || gettext("N/A")}
-          </FieldsListItem>
-          <FieldsListItem label={gettext("Inserted")}>
-            <DateTimeString value={@record.inserted_at} />
-          </FieldsListItem>
-          <FieldsListItem label={gettext("Updated")}>
-            <DateTimeString value={@record.updated_at} />
-          </FieldsListItem>
-        </FieldsList>
+          </:fields_list_item>
+          <:fields_list_item label={gettext("Inserted")}>
+            <.datetime_string value={@record.inserted_at} />
+          </:fields_list_item>
+          <:fields_list_item label={gettext("Updated")}>
+            <.datetime_string value={@record.updated_at} />
+          </:fields_list_item>
+        </.fields_list>
       </div>
       <div class="modal-action">
         <button :on-click={JS.patch("/admin/participants")} class="btn btn-md btn-ghost">
@@ -55,10 +55,10 @@
       </div>
       <Form for={@changeset} change="validate" submit="submit" as={:entity} opts={autocomplete: "off"}>
         <div class="card-body">
-          <SMField name={:number} label={gettext("Number")}>
+          <.sm_field name={:number} label={gettext("Number")}>
             <NumberInput class={input_state_class(@changeset, :number)} opts={phx_debounce: "1000"} />
-          </SMField>
-          <SMField name={:competition_id} label={gettext("Competition")}>
+          </.sm_field>
+          <.sm_field name={:competition_id} label={gettext("Competition")}>
             <Select
               options={Enum.map(@competitions, &{&1.name, &1.id})}
               selected={@record.competition_id}
@@ -66,8 +66,8 @@
               class={select_state_class(@changeset, :competition_id)}
               opts={phx_debounce: "1000"}
             />
-          </SMField>
-          <SMField name={:user_id} label={gettext("User")}>
+          </.sm_field>
+          <.sm_field name={:user_id} label={gettext("User")}>
             <Select
               options={Enum.map(@users, &{"#{&1.first_name} #{&1.last_name}", &1.id})}
               selected={@record.user_id}
@@ -75,8 +75,8 @@
               class={select_state_class(@changeset, :user_id)}
               opts={phx_debounce: "1000"}
             />
-          </SMField>
-          <SMField name={:category_id} label={gettext("Category")}>
+          </.sm_field>
+          <.sm_field name={:category_id} label={gettext("Category")}>
             <Select
               options={Enum.map(@categories, &{&1.name, &1.id})}
               selected={@record.category_id}
@@ -84,7 +84,7 @@
               class={select_state_class(@changeset, :category_id)}
               opts={phx_debounce: "1000"}
             />
-          </SMField>
+          </.sm_field>
           <HiddenInput field={:_action} value={@action} />
         </div>
         <div class="modal-action">
@@ -121,7 +121,7 @@
       {(item.category && item.category.name) || gettext("N/A")}
     </Column>
     <Column title={gettext("Created")} class="w-2/12">
-      <DateTimeString value={item.inserted_at} />
+      <.datetime_string value={item.inserted_at} />
     </Column>
     <Column title={gettext("Actions")} class="w-4">
       <div class="overflow-x-auto">
@@ -144,4 +144,4 @@
       </div>
     </Column>
   </Grid>
-</Layout>
+</.layout>

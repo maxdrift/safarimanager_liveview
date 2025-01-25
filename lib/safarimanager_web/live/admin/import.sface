@@ -1,4 +1,4 @@
-<Layout current_page={~p"/admin/import"} current_user={@current_user}>
+<.layout current_page={~p"/admin/import"} current_user={@current_user}>
   <div class="py-4 text-center">
     <div class="text-2xl">{gettext("Import from CSV")}</div>
   </div>
@@ -22,9 +22,13 @@
     </Field>
     <div class="flex flex-row">
       <div class="grow">
-        <UploadDropArea field={:csv} uploads={@uploads} class={hidden: @uploads.csv.entries != []}>
+        <.upload_drop_area
+          field={:csv}
+          uploads={@uploads}
+          class={[@uploads.csv.entries != [] && "hidden"]}
+        >
           {gettext("Click or drop a CSV file in this box")}
-        </UploadDropArea>
+        </.upload_drop_area>
         {#for entry <- @uploads.csv.entries}
           <div class="mt-3 ml-5 flex items-center">
             <Heroicons.icon name="document-arrow-up" type="outline" class="w-5 h-5 mr-2" />
@@ -79,4 +83,4 @@
       </Reset>
     </div>
   </Form>
-</Layout>
+</.layout>

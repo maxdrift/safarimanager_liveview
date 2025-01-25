@@ -83,8 +83,9 @@
       </div>
       <div class="flex flex-row justify-between gap-2">
         <div class="join">
-          <JuryToolbarButton
+          <.jury_toolbar_button
             :if={false}
+            id="first-image"
             class="btn btn-sm join-item"
             click="prev-image"
             title={gettext("First")}
@@ -98,8 +99,13 @@
             >
               <path d="M11.92,19.92L4,12L11.92,4.08L13.33,5.5L7.83,11H22V13H7.83L13.34,18.5L11.92,19.92M4,12V2H2V22H4V12Z" />
             </svg>
-          </JuryToolbarButton>
-          <JuryToolbarButton class="btn btn-sm join-item" click="prev-image" title={gettext("Prev")}>
+          </.jury_toolbar_button>
+          <.jury_toolbar_button
+            id="prev-image"
+            class="btn btn-sm join-item"
+            click="prev-image"
+            title={gettext("Prev")}
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 24 24"
@@ -109,7 +115,7 @@
             >
               <path d="M19,13H6.75L12,18.25L11.34,19L4.84,12.5L11.34,6L12,6.75L6.75,12H19V13Z" />
             </svg>
-          </JuryToolbarButton>
+          </.jury_toolbar_button>
           <Form for={%{}} as={:go_to} change="go-to-change" submit="go-to-submit">
             <NumberInput
               class="join-item input input-sm w-24 mx-0.5"
@@ -117,7 +123,12 @@
               opts={placeholder: gettext("Go to..."), phx_debounce: "1000"}
             />
           </Form>
-          <JuryToolbarButton class="btn btn-sm join-item" click="next-image" title={gettext("Next")}>
+          <.jury_toolbar_button
+            id="next-image"
+            class="btn btn-sm join-item"
+            click="next-image"
+            title={gettext("Next")}
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 24 24"
@@ -127,9 +138,10 @@
             >
               <path d="M4,12H16.25L11,6.75L11.66,6L18.16,12.5L11.66,19L11,18.25L16.25,13H4V12Z" />
             </svg>
-          </JuryToolbarButton>
-          <JuryToolbarButton
+          </.jury_toolbar_button>
+          <.jury_toolbar_button
             :if={false}
+            id="last-image"
             class="btn btn-sm join-item"
             click="next-image"
             title={gettext("Last")}
@@ -143,13 +155,13 @@
             >
               <path d="M12.08,4.08L20,12L12.08,19.92L10.67,18.5L16.17,13H2V11H16.17L10.67,5.5L12.08,4.08M20,12V22H22V2H20V12Z" />
             </svg>
-          </JuryToolbarButton>
+          </.jury_toolbar_button>
         </div>
         <div class="join">
-          <JuryToolbarButton class="btn btn-sm join-item" id="zoom-out" title={gettext("Zoom out")}>
+          <.jury_toolbar_button id="zoom-out" class="btn btn-sm join-item" title={gettext("Zoom out")}>
             <Heroicons.icon name="magnifying-glass-minus" type="outline" class="w-6 h-6" />
-          </JuryToolbarButton>
-          <JuryToolbarButton class="btn btn-sm join-item" id="zoom-100" title={gettext("Zoom 100%")}>
+          </.jury_toolbar_button>
+          <.jury_toolbar_button id="zoom-100" class="btn btn-sm join-item" title={gettext("Zoom 100%")}>
             <svg
               stroke-miterlimit="10"
               style="fill-rule:nonzero;clip-rule:evenodd;stroke-linecap:round;stroke-linejoin:round;"
@@ -187,27 +199,35 @@
                 stroke="none"
               />
             </svg>
-          </JuryToolbarButton>
-          <JuryToolbarButton class="btn btn-sm join-item" id="home" title={gettext("Fit to window")}>
+          </.jury_toolbar_button>
+          <.jury_toolbar_button id="home" class="btn btn-sm join-item" title={gettext("Fit to window")}>
             <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="h-6 w-6" viewBox="0 0 16 16">
               <path d="M0 3.5A1.5 1.5 0 0 1 1.5 2h13A1.5 1.5 0 0 1 16 3.5v9a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 0 12.5v-9zM1.5 3a.5.5 0 0 0-.5.5v9a.5.5 0 0 0 .5.5h13a.5.5 0 0 0 .5-.5v-9a.5.5 0 0 0-.5-.5h-13z" /> <path d="M2 4.5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 0 1H3v2.5a.5.5 0 0 1-1 0v-3zm12 7a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1 0-1H13V8.5a.5.5 0 0 1 1 0v3z" />
             </svg>
-          </JuryToolbarButton>
-          <JuryToolbarButton class="btn btn-sm join-item" id="zoom-in" title={gettext("Zoom in")}>
+          </.jury_toolbar_button>
+          <.jury_toolbar_button id="zoom-in" class="btn btn-sm join-item" title={gettext("Zoom in")}>
             <Heroicons.icon name="magnifying-glass-plus" type="outline" class="w-6 h-6" />
-          </JuryToolbarButton>
+          </.jury_toolbar_button>
         </div>
         <div class="join">
-          <JuryToolbarButton class="btn btn-sm join-item" id="rotate-left" title={gettext("Rotate left")}>
+          <.jury_toolbar_button
+            class="btn btn-sm join-item"
+            id="rotate-left"
+            title={gettext("Rotate left")}
+          >
             <Heroicons.icon name="arrow-uturn-left" type="solid" class="w-6 h-6" />
-          </JuryToolbarButton>
-          <JuryToolbarButton class="btn btn-sm join-item" id="rotate-right" title={gettext("Rotate right")}>
+          </.jury_toolbar_button>
+          <.jury_toolbar_button
+            class="btn btn-sm join-item"
+            id="rotate-right"
+            title={gettext("Rotate right")}
+          >
             <Heroicons.icon name="arrow-uturn-right" type="solid" class="w-6 h-6" />
-          </JuryToolbarButton>
+          </.jury_toolbar_button>
         </div>
-        <JuryToolbarButton class="btn btn-square btn-sm" id="full-page" title={gettext("Fullscreen")}>
+        <.jury_toolbar_button class="btn btn-square btn-sm" id="full-page" title={gettext("Fullscreen")}>
           <Heroicons.icon name="arrows-pointing-out" type="solid" class="w-6 h-6 mx-auto" />
-        </JuryToolbarButton>
+        </.jury_toolbar_button>
         <a href={"/organize/#{@competition.id}/validation_launcher"} class="btn btn-sm">
           {gettext("Exit")}
         </a>

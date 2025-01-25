@@ -4,17 +4,17 @@ defmodule SMWeb.Live.Teams do
   """
   use SMWeb, :surface_view
 
+  import SMWeb.Components.CompetitionHeader
+  import SMWeb.Components.FieldsList
+  import SMWeb.Components.Layout
+  import SMWeb.Components.SMField
+  import SMWeb.Components.StepsHeader
+
   alias SM.Accounts
   alias SM.Accounts.User
   alias SM.Competitions
   alias SM.Participants
   alias SM.Teams
-  alias SMWeb.Components.CompetitionHeader
-  alias SMWeb.Components.FieldsList
-  alias SMWeb.Components.FieldsListItem
-  alias SMWeb.Components.Layout
-  alias SMWeb.Components.SMField
-  alias SMWeb.Components.StepsHeader
   alias Surface.Components.Form
   alias Surface.Components.Form.HiddenInput
   alias Surface.Components.Form.Reset

@@ -4,16 +4,16 @@ defmodule SMWeb.Live.Admin.Organizations.Index do
   """
   use SMWeb, :surface_view
 
+  import SMWeb.Components.DateTimeString
+  import SMWeb.Components.FieldsList
+  import SMWeb.Components.Layout
+  import SMWeb.Components.ShortUUID
+  import SMWeb.Components.SMField
+
   alias SM.Organizations
   alias SM.Organizations.Organization
   alias SMWeb.Components.Column
-  alias SMWeb.Components.DateTimeString
-  alias SMWeb.Components.FieldsList
-  alias SMWeb.Components.FieldsListItem
   alias SMWeb.Components.Grid
-  alias SMWeb.Components.Layout
-  alias SMWeb.Components.ShortUUID
-  alias SMWeb.Components.SMField
   alias Surface.Components.Form
   alias Surface.Components.Form.HiddenInput
   alias Surface.Components.Form.Reset
@@ -46,7 +46,9 @@ defmodule SMWeb.Live.Admin.Organizations.Index do
     changeset =
       socket.assigns.record
       |> change(params)
-      |> Map.put(:action, :validate)
+      |> to_form(action: :validate)
+
+    # |> Map.put(:action, :validate)
 
     socket = assign(socket, :changeset, changeset)
     {:noreply, socket}
@@ -57,7 +59,9 @@ defmodule SMWeb.Live.Admin.Organizations.Index do
       socket.assigns.merge_selection
       |> Enum.map(& &1.id)
       |> Organizations.merge_changeset(dest_id)
-      |> Map.put(:action, :validate)
+      |> to_form(action: :validate)
+
+    # |> Map.put(:action, :validate)
 
     socket = assign(socket, :changeset, changeset)
     {:noreply, socket}
@@ -76,7 +80,7 @@ defmodule SMWeb.Live.Admin.Organizations.Index do
         {:noreply, socket}
 
       {:error, changeset} ->
-        {:noreply, assign(socket, :changeset, changeset)}
+        {:noreply, assign(socket, :changeset, to_form(changeset))}
     end
   end
 
@@ -93,7 +97,7 @@ defmodule SMWeb.Live.Admin.Organizations.Index do
         {:noreply, socket}
 
       {:error, changeset} ->
-        {:noreply, assign(socket, :changeset, changeset)}
+        {:noreply, assign(socket, :changeset, to_form(changeset))}
     end
   end
 
@@ -145,7 +149,7 @@ defmodule SMWeb.Live.Admin.Organizations.Index do
             changeset = change(organization, %{})
 
             socket =
-              assign(socket, record: organization, changeset: changeset, action: :edit)
+              assign(socket, record: organization, changeset: to_form(changeset), action: :edit)
 
             {:noreply, socket}
         end
@@ -304,6 +308,6 @@ defmodule SMWeb.Live.Admin.Organizations.Index do
 
     socket
     |> assign(:record, entity)
-    |> assign(:changeset, changeset)
+    |> assign(:changeset, to_form(changeset))
   end
 end

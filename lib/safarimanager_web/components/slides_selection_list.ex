@@ -2,16 +2,16 @@ defmodule SMWeb.Components.SlidesSelectionList do
   @moduledoc """
   Slides selection list component.
   """
-  use SMWeb, :surface_component
+  use SMWeb, :component
 
   alias SM.Utils
 
-  prop jury_slides, :list, default: []
-  prop fixed_slides, :list, default: []
-  prop discarded_slides, :list, default: []
+  attr :jury_slides, :list, default: []
+  attr :fixed_slides, :list, default: []
+  attr :discarded_slides, :list, default: []
 
-  def render(assigns) do
-    ~F"""
+  def slides_selection_list(assigns) do
+    ~H"""
     <div x-data="{ expanded: true }">
       <div class="alert alert-success alert-sm my-2" @click="expanded = ! expanded">
         <span class="text-xl mx-auto">
@@ -55,31 +55,39 @@ defmodule SMWeb.Components.SlidesSelectionList do
             </tr>
           </thead>
           <tbody>
-            {#for slide <- @jury_slides}
-              <tr>
-                <td class="truncate">
-                  <div>
-                    <div class="w-20">
-                      <img src={Utils.slide_thumbnail_path(slide)} class="rounded-md border">
-                    </div>
+            <tr :if={@jury_slides == []}>
+              <td colspan="5">{gettext("No slides selected for Jury")}.</td>
+            </tr>
+
+            <tr :for={slide <- @jury_slides}>
+              <td class="truncate">
+                <div>
+                  <div class="w-20">
+                    <img src={Utils.slide_thumbnail_path(slide)} class="rounded-md border" />
                   </div>
-                </td>
-                <td class="truncate">{slide.file_name}</td>
-                <td class="truncate">{Utils.format_bytes(slide.file_size)}</td>
-                <td>
-                  <span class="capitalize">{(slide.subject && slide.subject.name) || gettext("N/A")}</span>
-                  <br>
-                  <span class="text-xs italic">{(slide.subject && slide.subject.scientific_name) || gettext("N/A")}</span>
-                </td>
-                <td>
-                  <button class="btn btn-secondary btn-xs" :on-click="start-editing" :values={id: slide.id}>{gettext("Edit")}</button>
-                </td>
-              </tr>
-            {#else}
-              <tr>
-                <td colspan="5">{gettext("No slides selected for Jury")}.</td>
-              </tr>
-            {/for}
+                </div>
+              </td>
+              <td class="truncate">{slide.file_name}</td>
+              <td class="truncate">{Utils.format_bytes(slide.file_size)}</td>
+              <td>
+                <span class="capitalize">
+                  {(slide.subject && slide.subject.name) || gettext("N/A")}
+                </span>
+                <br />
+                <span class="text-xs italic">
+                  {(slide.subject && slide.subject.scientific_name) || gettext("N/A")}
+                </span>
+              </td>
+              <td>
+                <button
+                  class="btn btn-secondary btn-xs"
+                  phx-click="start-editing"
+                  phx-value-id={slide.id}
+                >
+                  {gettext("Edit")}
+                </button>
+              </td>
+            </tr>
           </tbody>
         </table>
       </div>
@@ -127,31 +135,38 @@ defmodule SMWeb.Components.SlidesSelectionList do
             </tr>
           </thead>
           <tbody>
-            {#for slide <- @fixed_slides}
-              <tr>
-                <td class="truncate">
-                  <div>
-                    <div class="w-20">
-                      <img src={Utils.slide_thumbnail_path(slide)} class="rounded-md border">
-                    </div>
+            <tr :if={@fixed_slides == []}>
+              <td colspan="5">{gettext("No slides selected for fixed points")}.</td>
+            </tr>
+            <tr :for={slide <- @fixed_slides}>
+              <td class="truncate">
+                <div>
+                  <div class="w-20">
+                    <img src={Utils.slide_thumbnail_path(slide)} class="rounded-md border" />
                   </div>
-                </td>
-                <td class="truncate">{slide.file_name}</td>
-                <td class="truncate">{Utils.format_bytes(slide.file_size)}</td>
-                <td>
-                  <span class="capitalize">{(slide.subject && slide.subject.name) || gettext("N/A")}</span>
-                  <br>
-                  <span class="text-xs italic">{(slide.subject && slide.subject.scientific_name) || gettext("N/A")}</span>
-                </td>
-                <td>
-                  <button class="btn btn-secondary btn-xs" :on-click="start-editing" :values={id: slide.id}>{gettext("Edit")}</button>
-                </td>
-              </tr>
-            {#else}
-              <tr>
-                <td colspan="5">{gettext("No slides selected for fixed points")}.</td>
-              </tr>
-            {/for}
+                </div>
+              </td>
+              <td class="truncate">{slide.file_name}</td>
+              <td class="truncate">{Utils.format_bytes(slide.file_size)}</td>
+              <td>
+                <span class="capitalize">
+                  {(slide.subject && slide.subject.name) || gettext("N/A")}
+                </span>
+                <br />
+                <span class="text-xs italic">
+                  {(slide.subject && slide.subject.scientific_name) || gettext("N/A")}
+                </span>
+              </td>
+              <td>
+                <button
+                  class="btn btn-secondary btn-xs"
+                  phx-click="start-editing"
+                  phx-value-id={slide.id}
+                >
+                  {gettext("Edit")}
+                </button>
+              </td>
+            </tr>
           </tbody>
         </table>
       </div>
@@ -159,7 +174,9 @@ defmodule SMWeb.Components.SlidesSelectionList do
     <div x-data="{ expanded: false }">
       <div class="alert alert-error alert-sm my-2" @click="expanded = ! expanded">
         <span class="text-xl mx-auto">
-          {ngettext("Discarded", "Discarded", Enum.count(@discarded_slides))} ({Enum.count(@discarded_slides)})
+          {ngettext("Discarded", "Discarded", Enum.count(@discarded_slides))} ({Enum.count(
+            @discarded_slides
+          )})
         </span>
         <span>
           <svg
@@ -199,31 +216,38 @@ defmodule SMWeb.Components.SlidesSelectionList do
             </tr>
           </thead>
           <tbody>
-            {#for slide <- @discarded_slides}
-              <tr>
-                <td class="truncate">
-                  <div>
-                    <div class="w-20">
-                      <img src={Utils.slide_thumbnail_path(slide)} class="rounded-md border">
-                    </div>
+            <tr :if={@discarded_slides == []}>
+              <td colspan="5">{gettext("No slides selected to be discarded.")}</td>
+            </tr>
+            <tr :for={slide <- @discarded_slides}>
+              <td class="truncate">
+                <div>
+                  <div class="w-20">
+                    <img src={Utils.slide_thumbnail_path(slide)} class="rounded-md border" />
                   </div>
-                </td>
-                <td class="truncate">{slide.file_name}</td>
-                <td class="truncate">{Utils.format_bytes(slide.file_size)}</td>
-                <td>
-                  <span class="capitalize">{(slide.subject && slide.subject.name) || gettext("N/A")}</span>
-                  <br>
-                  <span class="text-xs italic">{(slide.subject && slide.subject.scientific_name) || gettext("N/A")}</span>
-                </td>
-                <td>
-                  <button class="btn btn-secondary btn-xs" :on-click="start-editing" :values={id: slide.id}>{gettext("Edit")}</button>
-                </td>
-              </tr>
-            {#else}
-              <tr>
-                <td colspan="5">{gettext("No slides selected to be discarded.")}</td>
-              </tr>
-            {/for}
+                </div>
+              </td>
+              <td class="truncate">{slide.file_name}</td>
+              <td class="truncate">{Utils.format_bytes(slide.file_size)}</td>
+              <td>
+                <span class="capitalize">
+                  {(slide.subject && slide.subject.name) || gettext("N/A")}
+                </span>
+                <br />
+                <span class="text-xs italic">
+                  {(slide.subject && slide.subject.scientific_name) || gettext("N/A")}
+                </span>
+              </td>
+              <td>
+                <button
+                  class="btn btn-secondary btn-xs"
+                  phx-click="start-editing"
+                  phx-value-id{slide.id}
+                >
+                  {gettext("Edit")}
+                </button>
+              </td>
+            </tr>
           </tbody>
         </table>
       </div>
