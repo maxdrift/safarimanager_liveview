@@ -9,7 +9,7 @@ defmodule SMWeb.Components.SMField do
 
   attr :id, :any, default: nil
   attr :name, :string
-  attr :label, :string
+  attr :label, :string, default: nil
   attr :field, FormField, doc: "a form field struct retrieved from the form, for example: @form[:email]"
   attr :class, :list, default: []
   attr :errors, :list, default: []
@@ -31,7 +31,7 @@ defmodule SMWeb.Components.SMField do
     ~H"""
     <div name={@name} class={["form-control" | @class]}>
       <.label for={@name} class={["label"]}>
-        <span class="label-text">{@label}</span>
+        <span :if={@label} class="label-text">{@label}</span>
       </.label>
       {render_slot(@inner_block)}
       <.label class={["label h-7"]}>

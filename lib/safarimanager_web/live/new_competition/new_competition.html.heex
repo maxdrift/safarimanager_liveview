@@ -1,0 +1,210 @@
+<.layout current_page={~p"/organize/new"} current_user={@current_user}>
+  <div
+    :if={@changeset}
+    id="new-competition-dialog"
+    class="modal"
+    phx-window-keydown={JS.remove_class("modal-open", to: "#new-competition-dialog")}
+    phx-key="Escape"
+  >
+    <div class="modal-box w-11/12 max-w-5xl">
+      <div class="card-title">
+        <span>{gettext("New competition")}</span>
+      </div>
+      <.live_component
+        module={SMWeb.Live.Admin.Competitions.Form}
+        id="new-competition-form"
+        action={:create}
+        competition_types={@competition_types}
+        entity={@entity}
+        changeset={@changeset}
+        validate="validate"
+        submit="submit"
+        organizations={@organizations}
+        evaluations={@evaluations}
+        coefficient_modes={@coefficient_modes}
+        dynamic_coefficient_modes={@dynamic_coefficient_modes}
+      />
+    </div>
+  </div>
+  <div
+    id="duplicate-dialog"
+    class="modal"
+    phx-window-keydown={
+      JS.remove_class("modal-open", to: "#duplicate-dialog")
+      |> JS.push("reset-duplication-config")
+    }
+    phx-key="Escape"
+  >
+    <div class="modal-box">
+      <div class="card-title">
+        {gettext("Duplicate competition")}
+      </div>
+      <.form
+        id="duplication-form"
+        for={@duplication_form}
+        change="validate-duplicate"
+        submit="submit-duplicate"
+      >
+        <div class="card-body">
+          <.hidden_input
+            name={:competition_id}
+            value={@duplication_form.params["competition_id"]}
+          />
+          <.hidden_input name={:for_teams} value={@duplication_form.params["for_teams"]} />
+          <h3 class="text-lg">{gettext("New competition details")}</h3>
+          <div class="border rounded-md border-neutral-focus mb-4 p-2">
+            <.input
+              field={@duplication_form[:new_competition_name]}
+              type="text"
+              label={gettext("Name")}
+              class="input input-bordered input-sm w-full ml-2"
+              value={@duplication_form.params["new_competition_name"]}
+            />
+            <.input
+              field={@duplication_form[:new_for_teams]}
+              type="checkbox"
+              label={gettext("For teams")}
+              class="toggle toggle-primary"
+              value={@duplication_form.params["new_for_teams"]}
+            />
+          </div>
+          <.input
+            field={@duplication_form[:competition_details]}
+            type="checkbox"
+            label={gettext("Competition details")}
+            class="toggle toggle-primary"
+            value="true"
+            disabled
+            checked
+          />
+          <.input
+            field={@duplication_form[:participants]}
+            type="checkbox"
+            label={gettext("Participants")}
+            class="toggle toggle-primary"
+            value="true"
+          />
+          <.input
+            field={@duplication_form[:jurors]}
+            type="checkbox"
+            label={gettext("Jurors")}
+            class="toggle toggle-primary"
+            value="true"
+          />
+          <.input
+            field={@duplication_form[:teams]}
+            type="checkbox"
+            label={gettext("Teams")}
+            class="toggle toggle-primary"
+            value="true"
+            disabled={
+              @duplication_form.params["participants"] != "true" or
+                @duplication_form.params["for_teams"] != "true"
+            }
+          />
+          <.input
+            field={@duplication_form[:slides]}
+            type="checkbox"
+            label={gettext("Slides")}
+            class="toggle toggle-primary"
+            value="true"
+            disabled={@duplication_form.params["participants"] != "true"}
+          />
+          <.input
+            field={@duplication_form[:selection]}
+            type="checkbox"
+            label={gettext("Selection")}
+            class="toggle toggle-primary"
+            value="true"
+            disabled={@duplication_form.params["slides"] != "true"}
+          />
+          <.input
+            field={@duplication_form[:votes]}
+            type="checkbox"
+            label={gettext("Jury votes")}
+            class="toggle toggle-primary"
+            value="true"
+            disabled={@duplication_form.params["selection"] != "true"}
+          />
+        </div>
+        <div class="modal-action">
+          <input
+            type="submit"
+            phx-click={
+              JS.remove_class("modal-open", to: "#duplicate-dialog")
+              |> JS.push("reset-duplication-config")
+            }
+            class="btn btn-md btn-success"
+            value={gettext("Duplicate")}
+          />
+
+          <input
+            type="reset"
+            phx-click={
+              JS.remove_class("modal-open", to: "#duplicate-dialog")
+              |> JS.push("reset-duplication-config")
+            }
+            class="btn btn-md btn-ghost"
+            value={gettext("Close")}
+          />
+        </div>
+      </.form>
+    </div>
+  </div>
+  <div
+    id="competitions-grid"
+    class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-4 gap-2 lg:gap-2 xl:gap-4"
+  >
+    <div
+      id="new-competition-button"
+      class="card card-compact bg-base-100 shadow-xl border-solid border-2 border-base-content cursor-pointer"
+      phx-click={JS.add_class("modal-open", to: "#new-competition-dialog")}
+    >
+      <div class="card-body">
+        <div class="mx-auto my-auto">
+          <Heroicons.icon name="plus" type="solid" class="w-32 h-32 base-content" />
+        </div>
+      </div>
+    </div>
+    <%= for competition <- @competitions do %>
+      <div
+        id={"#{competition.id}-competition-tile"}
+        class="card card-compact bg-base-100 shadow-xl image-full cursor-pointer"
+        phx-click="open"
+        phx-value-id={competition.id}
+      >
+        <figure :if={get_competition_background_img(competition.id)}>
+          <img
+            src={get_competition_background_img(competition.id)}
+            alt={gettext("Highest votes image")}
+          />
+        </figure>
+        <div class="card-body">
+          <h2 class="card-title">
+            {competition.name}
+          </h2>
+          <p>
+            <div><span>{competition.city || gettext("Somewhere...")}</span></div>
+            <div>{Utils.pretty_dates(competition.start_time, competition.end_time)}</div>
+          </p>
+          <div class="card-actions">
+            <div>
+              <button
+                class="btn btn-square btn-xs btn-outline btn-warning"
+                phx-click={
+                  JS.push("duplication-config", value: %{competition_id: competition.id})
+                  |> JS.add_class("modal-open", to: "#duplicate-dialog")
+                }
+                title={gettext("Duplicate competition")}
+              >
+                <Heroicons.icon name="document-duplicate" type="outline" class="w-4 h-4" />
+              </button>
+            </div>
+            <div class="grow" />
+            <div :if={competition.for_teams} class="badge badge-outline">{gettext("Teams")}</div>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</.layout>

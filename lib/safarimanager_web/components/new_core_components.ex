@@ -596,6 +596,32 @@ defmodule SMWeb.Components.NewCoreComponents do
     """
   end
 
+  # Begin Custom Components
+
+  attr :id, :any, default: nil
+  attr :name, :any
+  attr :value, :any
+
+  attr :field, FormField
+
+  def hidden_input(%{field: %FormField{} = field} = assigns) do
+    assigns
+    |> assign(field: nil, id: assigns.id || field.id)
+    |> assign_new(:name, fn -> field.name end)
+    |> assign_new(:value, fn -> field.value end)
+    |> hidden_input()
+  end
+
+  def hidden_input(assigns) do
+    ~H"""
+    <div>
+      <input type="hidden" name={@name} id={@id} value={@value} />
+    </div>
+    """
+  end
+
+  # End Custom Components
+
   ## JS Commands
 
   def show(js \\ %JS{}, selector) do

@@ -157,7 +157,7 @@ defmodule SMWeb do
       import Phoenix.HTML
       import SMWeb.Components.Confirm
       # Core UI components and translation
-      import SMWeb.Components.CoreComponents
+      import SMWeb.Components.NewCoreComponents
       import SMWeb.ErrorHelpers
 
       # Shortcut for generating JS commands
