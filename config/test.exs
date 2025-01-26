@@ -1,6 +1,7 @@
 import Config
 
-database_path = Path.join(System.tmp_dir!(), "safarimanager/#{System.unique_integer()}-test-database.db")
+database_path =
+  Path.join(System.tmp_dir!(), "safarimanager/#{System.unique_integer()}-test-database.db")
 
 uploads_path =
   Path.join(System.tmp_dir!(), "safarimanager/uploads")

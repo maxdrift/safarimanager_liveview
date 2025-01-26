@@ -4,9 +4,6 @@ defmodule SMWeb.Components.UploadDropArea do
   """
   use SMWeb, :component
 
-  # alias Surface.Components.Form.FieldContext
-  # alias Surface.Components.LiveFileInput
-
   attr :field, :atom, required: true
   attr :uploads, :map, required: true
   attr :class, :list, default: []

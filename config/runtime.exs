@@ -34,7 +34,8 @@ db_path =
   |> Path.expand()
   |> Path.join("safarimanager.db")
 
-config :safarimanager, Slide, direct_file_upload: System.get_env("DIRECT_FILE_UPLOAD", "true") == "true"
+config :safarimanager, Slide,
+  direct_file_upload: System.get_env("DIRECT_FILE_UPLOAD", "true") == "true"
 
 if config_env() != :test do
   if !File.exists?(db_path) do
@@ -136,7 +137,8 @@ config :safarimanager, SMWeb.PrometheusPush,
     password: System.get_env("PROMETHEUS_PUSH_GW_PASSWORD")
   ]
 
-config :safarimanager, SMWeb.TelemetryPusher, instance_id: System.get_env("INSTANCE_ID", to_string(hostname))
+config :safarimanager, SMWeb.TelemetryPusher,
+  instance_id: System.get_env("INSTANCE_ID", to_string(hostname))
 
 # end
 
