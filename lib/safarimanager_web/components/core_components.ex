@@ -8,9 +8,10 @@ defmodule SMWeb.Components.CoreComponents do
   with doc strings and declarative assigns. You may customize and style
   them in any way you want, based on your application growth and needs.
 
-  The default components use Tailwind CSS, a utility-first CSS framework.
-  See the [Tailwind CSS documentation](https://tailwindcss.com) to learn
-  how to customize them or feel free to swap in another framework altogether.
+  The components use DaisyUI, a component library built on top of Tailwind CSS.
+  See the [DaisyUI documentation](https://daisyui.com/) for available components and classes.
+  Where needed, Tailwind CSS utility classes are used to enhance the components.
+  See the [Tailwind CSS documentation](https://tailwindcss.com) for utility classes.
 
   Icons are provided by [heroicons](https://heroicons.com). See `icon/1` for usage.
   """
@@ -116,20 +117,24 @@ defmodule SMWeb.Components.CoreComponents do
       phx-click={JS.push("lv:clear-flash", value: %{key: @kind}) |> hide("##{@id}")}
       role="alert"
       class={[
-        "fixed top-2 right-2 mr-2 w-80 sm:w-96 z-50 rounded-lg p-3 ring-1",
-        @kind == :info && "bg-emerald-50 text-emerald-800 ring-emerald-500 fill-cyan-900",
-        @kind == :error && "bg-rose-50 text-rose-900 shadow-md ring-rose-500 fill-rose-900"
+        "alert fixed top-2 right-2 mr-2 w-80 sm:w-96 z-50",
+        @kind == :info && "alert-info",
+        @kind == :error && "alert-error"
       ]}
       {@rest}
     >
-      <p :if={@title} class="flex items-center gap-1.5 text-sm font-semibold leading-6">
+      <div :if={@title} class="flex items-center gap-1.5">
         <.icon :if={@kind == :info} name="hero-information-circle-mini" class="h-4 w-4" />
         <.icon :if={@kind == :error} name="hero-exclamation-circle-mini" class="h-4 w-4" />
-        {@title}
-      </p>
-      <p class="mt-2 text-sm leading-5">{msg}</p>
-      <button type="button" class="group absolute top-1 right-1 p-2" aria-label={gettext("close")}>
-        <.icon name="hero-x-mark-solid" class="h-5 w-5 opacity-40 group-hover:opacity-70" />
+        <span class="font-semibold">{@title}</span>
+      </div>
+      <p class="mt-2 text-sm">{msg}</p>
+      <button
+        type="button"
+        class="btn btn-ghost btn-xs absolute top-1 right-1"
+        aria-label={gettext("close")}
+      >
+        <.icon name="hero-x-mark-solid" class="h-5 w-5" />
       </button>
     </div>
     """
@@ -203,7 +208,7 @@ defmodule SMWeb.Components.CoreComponents do
   def simple_form(assigns) do
     ~H"""
     <.form :let={f} for={@for} as={@as} {@rest}>
-      <div class="mt-10 space-y-8 bg-white">
+      <div class="form-control space-y-8 bg-base-100">
         {render_slot(@inner_block, f)}
         <div :for={action <- @actions} class="mt-2 flex items-center justify-between gap-6">
           {render_slot(action, f)}
@@ -232,8 +237,7 @@ defmodule SMWeb.Components.CoreComponents do
     <button
       type={@type}
       class={[
-        "phx-submit-loading:opacity-75 rounded-lg bg-zinc-900 hover:bg-zinc-700 py-2 px-3",
-        "text-sm font-semibold leading-6 text-white active:text-white/80",
+        "btn",
         @class
       ]}
       {@rest}
@@ -261,13 +265,7 @@ defmodule SMWeb.Components.CoreComponents do
     * For live file uploads, see `Phoenix.Component.live_file_input/1`
 
   See https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input
-  for more information. Unsupported types, such as hidden and radio,
-  are best written directly in your templates.
-
-  ## Examples
-
-      <.input field={@form[:email]} type="email" />
-      <.input name="my-input" errors={["oh no!"]} />
+  for more information.
   """
   attr :id, :any, default: nil
   attr :name, :any
@@ -308,19 +306,19 @@ defmodule SMWeb.Components.CoreComponents do
       end)
 
     ~H"""
-    <div>
-      <label class="flex items-center gap-4 text-sm leading-6 text-zinc-600">
+    <div class="form-control">
+      <label class="label cursor-pointer">
         <input type="hidden" name={@name} value="false" disabled={@rest[:disabled]} />
+        <span class="label-text">{@label}</span>
         <input
           type="checkbox"
           id={@id}
           name={@name}
           value="true"
           checked={@checked}
-          class="rounded border-zinc-300 text-zinc-900 focus:ring-0"
+          class="checkbox"
           {@rest}
         />
-        {@label}
       </label>
       <.error :for={msg <- @errors}>{msg}</.error>
     </div>
@@ -329,15 +327,9 @@ defmodule SMWeb.Components.CoreComponents do
 
   def input(%{type: "select"} = assigns) do
     ~H"""
-    <div>
+    <div class="form-control w-full">
       <.label for={@id}>{@label}</.label>
-      <select
-        id={@id}
-        name={@name}
-        class="mt-2 block w-full rounded-md border border-gray-300 bg-white shadow-sm focus:border-zinc-400 focus:ring-0 sm:text-sm"
-        multiple={@multiple}
-        {@rest}
-      >
+      <select id={@id} name={@name} class="select select-bordered w-full" multiple={@multiple} {@rest}>
         <option :if={@prompt} value="">{@prompt}</option>
         {Phoenix.HTML.Form.options_for_select(@options, @value)}
       </select>
@@ -348,15 +340,14 @@ defmodule SMWeb.Components.CoreComponents do
 
   def input(%{type: "textarea"} = assigns) do
     ~H"""
-    <div>
+    <div class="form-control w-full">
       <.label for={@id}>{@label}</.label>
       <textarea
         id={@id}
         name={@name}
         class={[
-          "mt-2 block w-full rounded-lg text-zinc-900 focus:ring-0 sm:text-sm sm:leading-6 min-h-[6rem]",
-          @errors == [] && "border-zinc-300 focus:border-zinc-400",
-          @errors != [] && "border-rose-400 focus:border-rose-400"
+          "textarea textarea-bordered min-h-[6rem]",
+          @errors != [] && "textarea-error"
         ]}
         {@rest}
       >{Phoenix.HTML.Form.normalize_value("textarea", @value)}</textarea>
@@ -368,7 +359,7 @@ defmodule SMWeb.Components.CoreComponents do
   # All other inputs text, datetime-local, url, password, etc. are handled here...
   def input(assigns) do
     ~H"""
-    <div>
+    <div class="form-control w-full">
       <.label for={@id}>{@label}</.label>
       <input
         type={@type}
@@ -376,9 +367,8 @@ defmodule SMWeb.Components.CoreComponents do
         id={@id}
         value={Phoenix.HTML.Form.normalize_value(@type, @value)}
         class={[
-          "mt-2 block w-full rounded-lg text-zinc-900 focus:ring-0 sm:text-sm sm:leading-6",
-          @errors == [] && "border-zinc-300 focus:border-zinc-400",
-          @errors != [] && "border-rose-400 focus:border-rose-400"
+          "input input-bordered w-full",
+          @errors != [] && "input-error"
         ]}
         {@rest}
       />
@@ -395,8 +385,8 @@ defmodule SMWeb.Components.CoreComponents do
 
   def label(assigns) do
     ~H"""
-    <label for={@for} class="block text-sm font-semibold leading-6 text-zinc-800">
-      {render_slot(@inner_block)}
+    <label for={@for} class="label">
+      <span class="label-text">{render_slot(@inner_block)}</span>
     </label>
     """
   end
@@ -408,10 +398,12 @@ defmodule SMWeb.Components.CoreComponents do
 
   def error(assigns) do
     ~H"""
-    <p class="mt-3 flex gap-3 text-sm leading-6 text-rose-600">
-      <.icon name="hero-exclamation-circle-mini" class="mt-0.5 h-5 w-5 flex-none" />
-      {render_slot(@inner_block)}
-    </p>
+    <label class="label">
+      <span class="label-text-alt text-error flex gap-3">
+        <.icon name="hero-exclamation-circle-mini" class="h-5 w-5 flex-none" />
+        {render_slot(@inner_block)}
+      </span>
+    </label>
     """
   end
 
@@ -428,10 +420,10 @@ defmodule SMWeb.Components.CoreComponents do
     ~H"""
     <header class={[@actions != [] && "flex items-center justify-between gap-6", @class]}>
       <div>
-        <h1 class="text-lg font-semibold leading-8 text-zinc-800">
+        <h1 class="text-2xl font-bold">
           {render_slot(@inner_block)}
         </h1>
-        <p :if={@subtitle != []} class="mt-2 text-sm leading-6 text-zinc-600">
+        <p :if={@subtitle != []} class="mt-2 text-base-content/70">
           {render_slot(@subtitle)}
         </p>
       </div>
@@ -472,41 +464,30 @@ defmodule SMWeb.Components.CoreComponents do
       end
 
     ~H"""
-    <div class="overflow-y-auto px-4 sm:overflow-visible sm:px-0">
-      <table class="w-[40rem] mt-11 sm:w-full">
-        <thead class="text-sm text-left leading-6 text-zinc-500">
+    <div class="overflow-x-auto">
+      <table class="table table-zebra w-full">
+        <thead>
           <tr>
-            <th :for={col <- @col} class="p-0 pb-4 pr-6 font-normal">{col[:label]}</th>
-            <th :if={@action != []} class="relative p-0 pb-4">
+            <th :for={col <- @col}>{col[:label]}</th>
+            <th :if={@action != []} class="relative">
               <span class="sr-only">{gettext("Actions")}</span>
             </th>
           </tr>
         </thead>
-        <tbody
-          id={@id}
-          phx-update={match?(%Phoenix.LiveView.LiveStream{}, @rows) && "stream"}
-          class="relative divide-y divide-zinc-100 border-t border-zinc-200 text-sm leading-6 text-zinc-700"
-        >
-          <tr :for={row <- @rows} id={@row_id && @row_id.(row)} class="group hover:bg-zinc-50">
+        <tbody id={@id} phx-update={match?(%Phoenix.LiveView.LiveStream{}, @rows) && "stream"}>
+          <tr :for={row <- @rows} id={@row_id && @row_id.(row)} class="hover">
             <td
               :for={{col, i} <- Enum.with_index(@col)}
               phx-click={@row_click && @row_click.(row)}
-              class={["relative p-0", @row_click && "hover:cursor-pointer"]}
+              class={[@row_click && "hover:cursor-pointer"]}
             >
-              <div class="block py-4 pr-6">
-                <span class="absolute -inset-y-px right-0 -left-4 group-hover:bg-zinc-50 sm:rounded-l-xl" />
-                <span class={["relative", i == 0 && "font-semibold text-zinc-900"]}>
-                  {render_slot(col, @row_item.(row))}
-                </span>
-              </div>
+              <span class={[i == 0 && "font-medium"]}>
+                {render_slot(col, @row_item.(row))}
+              </span>
             </td>
-            <td :if={@action != []} class="relative w-14 p-0">
-              <div class="relative whitespace-nowrap py-4 text-right text-sm font-medium">
-                <span class="absolute -inset-y-px -right-4 left-0 group-hover:bg-zinc-50 sm:rounded-r-xl" />
-                <span
-                  :for={action <- @action}
-                  class="relative ml-4 font-semibold leading-6 text-zinc-900 hover:text-zinc-700"
-                >
+            <td :if={@action != []} class="relative">
+              <div class="flex justify-end gap-3">
+                <span :for={action <- @action} class="link link-hover">
                   {render_slot(action, @row_item.(row))}
                 </span>
               </div>
@@ -535,10 +516,10 @@ defmodule SMWeb.Components.CoreComponents do
   def list(assigns) do
     ~H"""
     <div class="mt-14">
-      <dl class="-my-4 divide-y divide-zinc-100">
-        <div :for={item <- @item} class="flex gap-4 py-4 text-sm leading-6 sm:gap-8">
-          <dt class="w-1/4 flex-none text-zinc-500">{item.title}</dt>
-          <dd class="text-zinc-700">{render_slot(item)}</dd>
+      <dl class="divide-y">
+        <div :for={item <- @item} class="flex gap-4 py-4 text-sm sm:gap-8">
+          <dt class="w-1/4 flex-none text-base-content/70">{item.title}</dt>
+          <dd class="text-base-content">{render_slot(item)}</dd>
         </div>
       </dl>
     </div>
@@ -558,10 +539,7 @@ defmodule SMWeb.Components.CoreComponents do
   def back(assigns) do
     ~H"""
     <div class="mt-16">
-      <.link
-        navigate={@navigate}
-        class="text-sm font-semibold leading-6 text-zinc-900 hover:text-zinc-700"
-      >
+      <.link navigate={@navigate} class="btn btn-ghost btn-sm gap-2">
         <.icon name="hero-arrow-left-solid" class="h-3 w-3" />
         {render_slot(@inner_block)}
       </.link>
@@ -673,16 +651,6 @@ defmodule SMWeb.Components.CoreComponents do
   Translates an error message using gettext.
   """
   def translate_error({msg, opts}) do
-    # When using gettext, we typically pass the strings we want
-    # to translate as a static argument:
-    #
-    #     # Translate the number of files with plural rules
-    #     dngettext("errors", "1 file", "%{count} files", count)
-    #
-    # However the error messages in our forms and APIs are generated
-    # dynamically, so we need to translate them by calling Gettext
-    # with our gettext backend as first argument. Translations are
-    # available in the errors.po file (as we use the "errors" domain).
     if count = opts[:count] do
       Gettext.dngettext(SMWeb.Gettext, "errors", msg, msg, count, opts)
     else
