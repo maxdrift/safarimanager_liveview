@@ -162,28 +162,29 @@
     </div>
   </div>
   {!-- Index table --}
-  <Grid
+  <.live_component
+    module={SMWeb.Components.Grid}
     id="teams-list"
-    items={item <- @streams.items}
+    items={@streams.items}
     create_path={~p"/admin/teams/new"}
     export_path={~p"/csv_export?entity=teams"}
   >
-    <Column title={gettext("ID")} class="w-1/12">
+    <:col :let={item} title={gettext("ID")} class="w-1/12">
       <.short_uuid value={item.id} />
-    </Column>
-    <Column title={gettext("Competition")}>
+    </:col>
+    <:col :let={item} title={gettext("Competition")}>
       {item.competition.name || gettext("N/A")}
-    </Column>
-    <Column title={gettext("Name")}>
+    </:col>
+    <:col :let={item} title={gettext("Name")}>
       {Teams.synthesize_team_name(item) || gettext("N/A")}
-    </Column>
-    <Column title={gettext("Org. name")}>
+    </:col>
+    <:col :let={item} title={gettext("Org. name")}>
       {Teams.synthesize_org_name(item) || gettext("N/A")}
-    </Column>
-    <Column title={gettext("Members")}>
+    </:col>
+    <:col :let={item} title={gettext("Members")}>
       {Teams.synthesize_members_names(item) || gettext("N/A")}
-    </Column>
-    <Column title={gettext("Actions")} class="w-4">
+    </:col>
+    <:col :let={item} title={gettext("Actions")} class="w-4">
       <div class="overflow-x-auto">
         <.link
           patch={~p"/admin/teams/#{item.id}"}
@@ -202,6 +203,6 @@
           title={gettext("Delete")}
         ><Heroicons.icon name="trash" type="outline" class="w-4 h-4" /></button>
       </div>
-    </Column>
-  </Grid>
+    </:col>
+  </.live_component>
 </.layout>

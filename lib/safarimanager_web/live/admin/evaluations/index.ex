@@ -2,27 +2,15 @@ defmodule SMWeb.Live.Admin.Evaluations.Index do
   @moduledoc """
   Evaluations live view
   """
-  use SMWeb, :surface_view
+  use SMWeb, :live_view
 
   import SMWeb.Components.DateTimeString
   import SMWeb.Components.FieldsList
   import SMWeb.Components.Layout
   import SMWeb.Components.ShortUUID
-  import SMWeb.Components.SMField
 
   alias SM.Evaluations
   alias SM.Evaluations.Evaluation
-  alias SMWeb.Components.Column
-  alias SMWeb.Components.Grid
-  alias Surface.Components.Form
-  alias Surface.Components.Form.Checkbox
-  alias Surface.Components.Form.HiddenInput
-  alias Surface.Components.Form.Label
-  alias Surface.Components.Form.NumberInput
-  alias Surface.Components.Form.Reset
-  alias Surface.Components.Form.Select
-  alias Surface.Components.Form.Submit
-  alias Surface.Components.Form.TextInput
 
   require Logger
 
@@ -49,17 +37,17 @@ defmodule SMWeb.Live.Admin.Evaluations.Index do
   @impl Phoenix.LiveView
   # Create/Edit dialog validate callback
   def handle_event("validate", %{"entity" => params}, socket) do
-    changeset =
+    form =
       socket.assigns.record
       |> change(params)
-      |> Map.put(:action, :validate)
+      |> to_form(action: :validate, as: :entity)
 
-    socket = assign(socket, :changeset, changeset)
+    socket = assign(socket, :form, form)
     {:noreply, socket}
   end
 
   # Create/Edit dialog submit callback
-  def handle_event("submit", %{"entity" => %{"_action" => "create"} = params}, socket) do
+  def handle_event("submit", %{"_action" => "create", "entity" => params}, socket) do
     case Evaluations.create(params) do
       {:ok, _entity} ->
         socket =
@@ -71,11 +59,11 @@ defmodule SMWeb.Live.Admin.Evaluations.Index do
         {:noreply, socket}
 
       {:error, changeset} ->
-        {:noreply, assign(socket, :changeset, changeset)}
+        {:noreply, assign(socket, :form, to_form(changeset, as: :entity))}
     end
   end
 
-  def handle_event("submit", %{"entity" => %{"_action" => "edit"} = params}, socket) do
+  def handle_event("submit", %{"_action" => "edit", "entity" => params}, socket) do
     case Evaluations.update(socket.assigns.record, params) do
       {:ok, entity} ->
         socket =
@@ -93,7 +81,7 @@ defmodule SMWeb.Live.Admin.Evaluations.Index do
         {:noreply, socket}
 
       {:error, changeset} ->
-        {:noreply, assign(socket, :changeset, changeset)}
+        {:noreply, assign(socket, :form, to_form(changeset, as: :entity))}
     end
   end
 
@@ -109,7 +97,7 @@ defmodule SMWeb.Live.Admin.Evaluations.Index do
             changeset = change(evaluation, %{})
 
             socket =
-              assign(socket, record: evaluation, changeset: changeset, action: :edit)
+              assign(socket, record: evaluation, form: to_form(changeset, as: :entity), action: :edit)
 
             {:noreply, socket}
         end
@@ -262,6 +250,6 @@ defmodule SMWeb.Live.Admin.Evaluations.Index do
 
     socket
     |> assign(:record, entity)
-    |> assign(:changeset, changeset)
+    |> assign(:form, to_form(changeset, as: :entity))
   end
 end

@@ -2,44 +2,44 @@ defmodule SMWeb.Components.Grid do
   @moduledoc """
   Grid component
   """
-  use SMWeb, :surface_live_component
+  use SMWeb, :live_component
 
-  alias Surface.Components.Form
-  alias Surface.Components.Form.HiddenInput
-  alias Surface.Components.Form.Submit
+  attr :entity_name, :string
 
-  prop entity_name, :string
+  attr :items, :list, required: true
+  attr :create_path, :string
+  attr :export_path, :string
+  attr :merge_path, :string, default: nil
+  attr :infinite_scroll, :boolean, default: false
+  attr :id_fields, :list, default: [:id]
 
-  @doc "The list of items to be rendered"
-  prop items, :generator, required: true
-  prop create_path, :string
-  prop export_path, :string
-  prop merge_path, :string
-  prop infinite_scroll, :boolean, default: false
-  prop id_fields, :list, default: [:id]
-
-  @doc "The list of columns defining the Grid"
-  slot cols, required: true, generator_prop: :items
+  slot :col, required: true do
+    attr :title, :string
+    attr :class, :string
+  end
 
   def render(assigns) do
-    ~F"""
-    <div {=@id}>
-      <Form
+    ~H"""
+    <div id={@id}>
+      <.form
         id={"#{@id}-grid-form"}
         for={%{}}
         as={:grid_form}
-        change="grid-selection-change"
-        submit="grid-selection-submit"
+        phx-change="grid-selection-change"
+        phx-submit="grid-selection-submit"
+        phx-target={@myself}
       >
         <div class="flex flex-row-reverse my-2 min-h-8">
           <div>
-            <.link :if={@create_path} patch={@create_path} class="btn btn-sm btn-success">{gettext("Create")}</.link>
-            <.link :if={@export_path} href={@export_path} method={:post} class="btn btn-sm btn-outline">
+            <.link :if={@create_path} patch={@create_path} class="btn btn-sm btn-success">
+              {gettext("Create")}
+            </.link>
+            <.link :if={@export_path} href={@export_path} method="post" class="btn btn-sm btn-outline">
               {gettext("Export to CSV")}
             </.link>
             <button
-              type="submit"
               :if={@merge_path}
+              type="submit"
               name={"#{@id}-selection-merge"}
               class="btn btn-sm btn-secondary"
               phx-click={JS.set_attribute({"value", "merge"}, to: "##{@id}-selection-action-field")}
@@ -47,14 +47,21 @@ defmodule SMWeb.Components.Grid do
             >
               {gettext("Merge into")}
             </button>
-            <Submit class="btn btn-sm btn-error" opts={disabled: true, name: "#{@id}-selection-delete"}>{gettext("Delete")}</Submit>
+            <button
+              type="submit"
+              class="btn btn-sm btn-error"
+              disabled="true"
+              name={"#{@id}-selection-delete"}
+            >
+              {gettext("Delete")}
+            </button>
           </div>
         </div>
         <div class="max-h-full overflow-y-auto tiny-scrollbar">
           <table
             id={"#{@id}-table"}
             class="table table-zebra table-sm table-fixed w-full"
-            :hook="GridSelection"
+            phx-hook="GridSelection"
           >
             <thead>
               <tr>
@@ -68,37 +75,33 @@ defmodule SMWeb.Components.Grid do
                     />
                   </label>
                 </th>
-                {#for col <- @cols}
-                  <th class={["sticky", "top-0", "w-auto" | col.class]}>{col.title}</th>
-                {/for}
+                <th :for={col <- @col} class={["sticky", "top-0", "w-auto", Map.get(col, :class)]}>
+                  {col.title}
+                </th>
               </tr>
             </thead>
-            <tbody phx-update="stream">
-              {#for {dom_id, item} <- @items}
-                <tr id={dom_id}>
-                  <td>
-                    <label>
-                      <input
-                        type="checkbox"
-                        name={"#{@id}-selection[]"}
-                        value={maybe_encode_compound_ids(item, @id_fields)}
-                        class="checkbox checkbox-sm mt-2"
-                      />
-                    </label>
-                  </td>
-                  {#for col <- @cols}
-                    <td class="truncate">
-                      <#slot {col} generator_value={item} />
-                    </td>
-                  {/for}
-                </tr>
-              {/for}
+            <tbody id={"#{@id}-table-body"} phx-update="stream">
+              <tr :for={{dom_id, item} <- @items} id={dom_id}>
+                <td>
+                  <label>
+                    <input
+                      type="checkbox"
+                      name={"#{@id}-selection[]"}
+                      value={maybe_encode_compound_ids(item, @id_fields)}
+                      class="checkbox checkbox-sm mt-2"
+                    />
+                  </label>
+                </td>
+                <td :for={col <- @col} class="truncate">
+                  {render_slot(col, item)}
+                </td>
+              </tr>
             </tbody>
           </table>
-          <div :if={@infinite_scroll} id="infinite-scroll-marker" :hook="InfiniteScroll" />
+          <div :if={@infinite_scroll} id="infinite-scroll-marker" phx-hook="InfiniteScroll" />
         </div>
-        <HiddenInput id={"#{@id}-selection-action-field"} field={:action} value={:delete} />
-      </Form>
+        <.hidden_input id={"#{@id}-selection-action-field"} name={:action} value={:delete} />
+      </.form>
     </div>
     """
   end
@@ -123,7 +126,7 @@ defmodule SMWeb.Components.Grid do
     {:noreply, socket}
   end
 
-  def handle_event("grid-selection-submit", %{"grid_form" => %{"action" => "delete"}} = params, socket) do
+  def handle_event("grid-selection-submit", %{"action" => "delete"} = params, socket) do
     grid_id = socket.assigns.id
 
     select_all = Map.get(params, "#{grid_id}-select-all", false) && true
@@ -148,7 +151,7 @@ defmodule SMWeb.Components.Grid do
     {:noreply, push_event(socket, "smgr:reset-selection", %{gridId: grid_id})}
   end
 
-  def handle_event("grid-selection-submit", %{"grid_form" => %{"action" => "merge"}} = params, socket) do
+  def handle_event("grid-selection-submit", %{"action" => "merge"} = params, socket) do
     grid_id = socket.assigns.id
 
     selected =
@@ -197,6 +200,8 @@ defmodule SMWeb.Components.Grid do
   end
 
   defp do_delete_some(socket, [_one_item] = selected) do
+    IO.inspect(selected, label: "Deleting selected items")
+
     on_confirm = fn socket ->
       send(self(), {"delete-selected", selected})
 

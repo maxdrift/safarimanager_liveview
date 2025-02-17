@@ -12,7 +12,6 @@ defmodule SMWeb.Live.Admin.Subjects.Index do
   alias SM.Subjects
   alias SM.Subjects.Subject
   alias SMWeb.Components.Column
-  alias SMWeb.Components.Grid
   alias Surface.Components.Form
   alias Surface.Components.Form.HiddenInput
   alias Surface.Components.Form.NumberInput

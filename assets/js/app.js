@@ -28,6 +28,7 @@ import topbar from "../vendor/topbar"
 import Sortable from "../vendor/sortable"
 import Hooks from "./_hooks"
 import NoSleep from "nosleep.js"
+import { GridSelection, InfiniteScroll } from "../../lib/safarimanager_web/components/grid.hooks"
 
 window.Alpine = Alpine
 
@@ -85,6 +86,9 @@ Hooks.NoSleep = {
     }, false);
   }
 }
+
+Hooks.GridSelection = GridSelection
+Hooks.InfiniteScroll = InfiniteScroll
 
 let csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute("content")
 let liveSocket = new LiveSocket("/live", Socket, {

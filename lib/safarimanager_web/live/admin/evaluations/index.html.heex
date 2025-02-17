@@ -1,0 +1,182 @@
+<.layout current_page={~p"/admin/evaluations"} current_user={@current_user}>
+  <!-- Show dialog -->
+  <div
+    :if={@live_action == :show}
+    id="show-dialog"
+    class="modal modal-open"
+    phx-window-keydown={JS.patch("/admin/evaluations")}
+    phx-key="Escape"
+  >
+    <div class="modal-box">
+      <div class="card-title">
+        {gettext("Evaluation details")}
+      </div>
+      <div class="card-body">
+        <.fields_list>
+          <:fields_list_item label={gettext("ID")}>
+            <.short_uuid value={@record.id} />
+          </:fields_list_item>
+          <:fields_list_item label={gettext("Name")}>
+            {@record.name}
+          </:fields_list_item>
+          <:fields_list_item label={gettext("Value")}>
+            {@record.value}
+          </:fields_list_item>
+          <:fields_list_item label={gettext("Penalty?")}>
+            {(@record.is_penalty && gettext("Yes")) || gettext("No")}
+          </:fields_list_item>
+          <:fields_list_item label={gettext("Type")}>
+            {@record.type}
+          </:fields_list_item>
+          <:fields_list_item label={gettext("Description")}>
+            {@record.description}
+          </:fields_list_item>
+          <:fields_list_item label={gettext("Inserted")}>
+            <.datetime_string value={@record.inserted_at} />
+          </:fields_list_item>
+          <:fields_list_item label={gettext("Updated")}>
+            <.datetime_string value={@record.updated_at} />
+          </:fields_list_item>
+        </.fields_list>
+      </div>
+      <div class="modal-action">
+        <button phx-click={JS.patch("/admin/evaluations")} class="btn btn-md btn-ghost">
+          {gettext("Close")}
+        </button>
+      </div>
+    </div>
+  </div>
+  <!-- New-edit dialog -->
+  <div
+    :if={@live_action in [:new, :edit]}
+    id="edit-dialog"
+    class="modal modal-open"
+    phx-window-keydown={JS.patch("/admin/evaluations")}
+    phx-key="Escape"
+  >
+    <div class="modal-box">
+      <div class="card-title">
+        <span :if={@live_action == :new}>{gettext("New evaluation")}</span>
+        <span :if={@live_action == :edit}>{gettext("Edit evaluation")}</span>
+      </div>
+      <.form for={@form} phx-change="validate" phx-submit="submit" autocomplete="off">
+        <div class="card-body">
+          <.input
+            type="text"
+            label={gettext("Name")}
+            field={@form[:name]}
+            class={input_state_class(@form, :name)}
+            phx-debounce="1000"
+          />
+          <.input
+            type="number"
+            label={gettext("Value")}
+            field={@form[:value]}
+            class={input_state_class(@form, :value)}
+            phx-debounce="1000"
+            step="0.01"
+          />
+          <div class={["w-full"]}>
+            <label class="label cursor-pointer">
+              <span class="label-text">{gettext("Penalty?")}</span>
+              <.input
+                type="checkbox"
+                field={@form[:is_penalty]}
+                class={state_class("checkbox", @form, :is_penalty)}
+                phx-debounce="1000"
+              />
+            </label>
+          </div>
+          <.input
+            type="select"
+            label={gettext("Type")}
+            field={@form[:type]}
+            options={@evaluation_types}
+            prompt={gettext("Select a type...")}
+            class={select_state_class(@form, :type)}
+            phx-debounce="1000"
+          />
+          <.input
+            type="text"
+            label={gettext("Description")}
+            field={@form[:description]}
+            class={input_state_class(@form, :description)}
+            phx-debounce="1000"
+          />
+          <.hidden_input name={:_action} value={@action} />
+        </div>
+        <div class="modal-action">
+          <button type="submit" phx-value-action={@action} class={submit_state_class(@form)}>
+            {gettext("Save")}
+          </button>
+          <input
+            type="reset"
+            phx-click={JS.patch("/admin/evaluations")}
+            class="btn btn-md btn-ghost"
+            value={gettext("Cancel")}
+          />
+        </div>
+      </.form>
+    </div>
+  </div>
+  <!-- Index table -->
+  <.live_component
+    module={SMWeb.Components.Grid}
+    id="evaluations-list"
+    items={@streams.items}
+    create_path={~p"/admin/evaluations/new"}
+    export_path={~p"/csv_export?entity=evaluations"}
+  >
+    <:col :let={item} title={gettext("ID")} class="w-1/12">
+      <.short_uuid value={item.id} />
+    </:col>
+    <:col :let={item} title={gettext("Name")} class="w-1/12">
+      {item.name}
+    </:col>
+    <:col :let={item} title={gettext("Value")} class="w-1/12">
+      {item.value}
+    </:col>
+    <:col :let={item} title={gettext("Penalty?")} class="w-1/12">
+      {(item.is_penalty && "✓") || "✗"}
+    </:col>
+    <:col :let={item} title={gettext("Type")} class="w-1/12">
+      {item.type}
+    </:col>
+    <:col :let={item} title={gettext("Description")}>
+      {item.description}
+    </:col>
+    <:col :let={item} title={gettext("Created")} class="w-2/12">
+      <.datetime_string value={item.inserted_at} />
+    </:col>
+    <:col :let={item} title={gettext("Modified")} class="w-2/12">
+      <.datetime_string value={item.updated_at} />
+    </:col>
+    <:col :let={item} title={gettext("Actions")} class="w-4">
+      <div class="overflow-x-auto">
+        <.link
+          patch={~p"/admin/evaluations/#{item.id}"}
+          class="btn btn-square btn-sm btn-info"
+          title={gettext("Show")}
+        >
+          <Heroicons.icon name="eye" type="outline" class="w-4 h-4" />
+        </.link>
+        <.link
+          patch={~p"/admin/evaluations/#{item.id}/edit"}
+          class="btn btn-square btn-sm btn-warning"
+          title={gettext("Edit")}
+        >
+          <Heroicons.icon name="pencil-square" type="solid" class="w-4 h-4" />
+        </.link>
+        <button
+          class="btn btn-square btn-sm btn-error"
+          phx-click="delete-one"
+          phx-target="#evaluations-list"
+          phx-value-id={item.id}
+          title={gettext("Delete")}
+        >
+          <Heroicons.icon name="trash" type="outline" class="w-4 h-4" />
+        </button>
+      </div>
+    </:col>
+  </.live_component>
+</.layout>

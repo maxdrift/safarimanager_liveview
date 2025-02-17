@@ -15,7 +15,6 @@ defmodule SMWeb.Live.Admin.Users.Index do
   alias SM.Categories
   alias SM.Organizations
   alias SMWeb.Components.Column
-  alias SMWeb.Components.Grid
   alias Surface.Components.Form
   alias Surface.Components.Form.HiddenInput
   alias Surface.Components.Form.Reset

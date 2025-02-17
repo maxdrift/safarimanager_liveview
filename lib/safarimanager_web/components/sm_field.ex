@@ -13,6 +13,7 @@ defmodule SMWeb.Components.SMField do
   attr :field, FormField, doc: "a form field struct retrieved from the form, for example: @form[:email]"
   attr :class, :list, default: []
   attr :errors, :list, default: []
+  attr :multiple, :boolean, default: false
 
   slot :inner_block, required: true
 

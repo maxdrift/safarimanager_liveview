@@ -138,8 +138,6 @@ defmodule SMWeb do
         router: SMWeb.Router,
         # credo:disable-for-next-line
         statics: SMWeb.static_paths() ++ ["uploads"]
-
-      use Gettext, backend: SMWeb.Gettext
     end
   end
 

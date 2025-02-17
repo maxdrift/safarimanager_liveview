@@ -101,29 +101,30 @@
     </div>
   </div>
   {!-- Index table --}
-  <Grid
+  <.live_component
+    module={SMWeb.Components.Grid}
     id="participants-list"
-    items={item <- @streams.items}
+    items={@streams.items}
     create_path={~p"/admin/participants/new"}
     export_path={~p"/csv_export?entity=participants"}
     id_fields={[:user_id, :competition_id]}
   >
-    <Column title={gettext("#")} class="w-1/12">
+    <:col :let={item} title={gettext("#")} class="w-1/12">
       {item.number}
-    </Column>
-    <Column title={gettext("Competition")}>
+    </:col>
+    <:col :let={item} title={gettext("Competition")}>
       {item.competition.name}
-    </Column>
-    <Column title={gettext("User")}>
+    </:col>
+    <:col :let={item} title={gettext("User")}>
       {item.user.first_name} {item.user.last_name}
-    </Column>
-    <Column title={gettext("Category")}>
+    </:col>
+    <:col :let={item} title={gettext("Category")}>
       {(item.category && item.category.name) || gettext("N/A")}
-    </Column>
-    <Column title={gettext("Created")} class="w-2/12">
+    </:col>
+    <:col :let={item} title={gettext("Created")} class="w-2/12">
       <.datetime_string value={item.inserted_at} />
-    </Column>
-    <Column title={gettext("Actions")} class="w-4">
+    </:col>
+    <:col :let={item} title={gettext("Actions")} class="w-4">
       <div class="overflow-x-auto">
         <.link
           patch={~p"/admin/participants/#{item.user_id}/#{item.competition_id}"}
@@ -142,6 +143,6 @@
           title={gettext("Delete")}
         ><Heroicons.icon name="trash" type="outline" class="w-4 h-4" /></button>
       </div>
-    </Column>
-  </Grid>
+    </:col>
+  </.live_component>
 </.layout>

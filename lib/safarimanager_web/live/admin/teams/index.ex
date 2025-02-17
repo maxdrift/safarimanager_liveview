@@ -16,7 +16,6 @@ defmodule SMWeb.Live.Admin.Teams.Index do
   alias SM.Teams.Team
   alias SM.Teams.TeamMember
   alias SMWeb.Components.Column
-  alias SMWeb.Components.Grid
   alias Surface.Components.Context
   alias Surface.Components.Form
   alias Surface.Components.Form.ErrorTag

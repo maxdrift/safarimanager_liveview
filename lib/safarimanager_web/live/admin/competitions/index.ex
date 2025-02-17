@@ -2,13 +2,12 @@ defmodule SMWeb.Live.Admin.Competitions.Index do
   @moduledoc """
   Competitions live view
   """
-  use SMWeb, :surface_view
+  use SMWeb, :live_view
 
   import SMWeb.Components.DateTimeString
   import SMWeb.Components.FieldsList
   import SMWeb.Components.Layout
   import SMWeb.Components.ShortUUID
-  import SMWeb.Components.SMField
 
   alias SM.Competitions
   alias SM.Competitions.Competition
@@ -18,21 +17,6 @@ defmodule SMWeb.Live.Admin.Competitions.Index do
   alias SM.Organizations
   alias SM.Slides
   alias SM.Utils
-  alias SMWeb.Components.Column
-  alias SMWeb.Components.Grid
-  alias Surface.Components.Context
-  alias Surface.Components.Form
-  alias Surface.Components.Form.Checkbox
-  alias Surface.Components.Form.DateTimeLocalInput
-  alias Surface.Components.Form.Field
-  alias Surface.Components.Form.HiddenInput
-  alias Surface.Components.Form.Inputs
-  alias Surface.Components.Form.Label
-  alias Surface.Components.Form.NumberInput
-  alias Surface.Components.Form.Reset
-  alias Surface.Components.Form.Select
-  alias Surface.Components.Form.Submit
-  alias Surface.Components.Form.TextInput
 
   require Logger
 

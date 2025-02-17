@@ -15,7 +15,6 @@ defmodule SMWeb.Live.Admin.Participants.Index do
   alias SM.Participants
   alias SM.Participants.Participant
   alias SMWeb.Components.Column
-  alias SMWeb.Components.Grid
   alias Surface.Components.Form
   alias Surface.Components.Form.HiddenInput
   alias Surface.Components.Form.NumberInput

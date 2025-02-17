@@ -95,33 +95,34 @@
     </div>
   </div>
   {!-- Index table --}
-  <Grid
+  <.live_component
+    module={SMWeb.Components.Grid}
     id="subjects-list"
-    items={item <- @streams.items}
+    items={@streams.items}
     create_path={~p"/admin/subjects/new"}
     export_path={~p"/csv_export?entity=subjects"}
     infinite_scroll="true"
   >
-    <Column title={gettext("Num.")} class="w-1/12">
+    <:col :let={item} title={gettext("Num.")} class="w-1/12">
       {item.numeric_id}
-    </Column>
-    <Column title={gettext("Name")}>
+    </:col>
+    <:col :let={item} title={gettext("Name")}>
       <div class="capitalize">{item.name}</div>
       <div class="text-sm italic capitalize opacity-50">{item.scientific_name}</div>
-    </Column>
-    <Column title={gettext("Coeff.")} class="w-1/12">
+    </:col>
+    <:col :let={item} title={gettext("Coeff.")} class="w-1/12">
       {item.coefficient}
-    </Column>
-    <Column title={gettext("Type")} class="w-1/12">
+    </:col>
+    <:col :let={item} title={gettext("Type")} class="w-1/12">
       {item.type}
-    </Column>
-    <Column title={gettext("Created")} class="w-2/12">
+    </:col>
+    <:col :let={item} title={gettext("Created")} class="w-2/12">
       <.datetime_string value={item.inserted_at} />
-    </Column>
-    <Column title={gettext("Modified")} class="w-2/12">
+    </:col>
+    <:col :let={item} title={gettext("Modified")} class="w-2/12">
       <.datetime_string value={item.updated_at} />
-    </Column>
-    <Column title={gettext("Actions")} class="w-4">
+    </:col>
+    <:col :let={item} title={gettext("Actions")} class="w-4">
       <div class="overflow-x-auto">
         <.link
           patch={~p"/admin/subjects/#{item.id}"}
@@ -140,6 +141,6 @@
           title={gettext("Delete")}
         ><Heroicons.icon name="trash" type="outline" class="w-4 h-4" /></button>
       </div>
-    </Column>
-  </Grid>
+    </:col>
+  </.live_component>
 </.layout>

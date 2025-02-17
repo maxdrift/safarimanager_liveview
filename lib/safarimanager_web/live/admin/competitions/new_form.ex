@@ -5,7 +5,7 @@ defmodule SMWeb.Live.Admin.Competitions.Form do
   use SMWeb, :live_component
   use Gettext, backend: SMWeb.Gettext
 
-  import PhoenixHTMLHelpers.Form, only: [reset: 2, submit: 2]
+  alias SM.Competitions
 
   @impl true
   def render(assigns) do
@@ -136,60 +136,60 @@ defmodule SMWeb.Live.Admin.Competitions.Form do
         </div>
 
         <div class="text-lg w-full px-3">{gettext("Settings")}:</div>
-        <.inputs_for :let={setting} field={@form[:settings]}>
+        <.inputs_for :let={settings} field={@form[:settings]}>
           <.input
-            field={setting[:number_of_jurors]}
+            field={settings[:number_of_jurors]}
             type="number"
             label={gettext("Number of jurors")}
             class="form-control w-1/2 px-3"
           />
           <.input
-            field={setting[:evaluations_per_juror]}
+            field={settings[:evaluations_per_juror]}
             type="number"
             label={gettext("Evaluations per juror")}
             class="form-control w-1/2 px-3"
           />
           <.input
-            field={setting[:max_jury_slides]}
+            field={settings[:max_jury_slides]}
             type="number"
             label={gettext("Max slides for jury")}
             class="form-control w-1/2 px-3"
           />
           <.input
-            field={setting[:max_submitted_slides]}
+            field={settings[:max_submitted_slides]}
             type="number"
             label={gettext("Max submitted slides")}
             class="form-control w-1/2 px-3"
           />
           <.input
-            field={setting[:proportional_submission]}
+            field={settings[:proportional_submission]}
             type="checkbox"
             label={gettext("Proportional submission")}
             class="form-control w-1/2 px-3"
           />
           <.input
-            field={setting[:submission_ratio]}
+            field={settings[:submission_ratio]}
             type="number"
             step="0.01"
             label={gettext("Submission ratio")}
             class="form-control w-1/2 px-3"
           />
           <.input
-            field={setting[:fixed_points_multiplier]}
+            field={settings[:fixed_points_multiplier]}
             type="number"
             step="0.01"
             label={gettext("Fixed points multiplier")}
             class="form-control w-1/2 px-3"
           />
           <.input
-            field={setting[:penalty_amount]}
+            field={settings[:penalty_amount]}
             type="number"
             step="0.01"
             label={gettext("Penalty amount")}
             class="form-control w-1/2 px-3"
           />
           <.input
-            field={setting[:coefficient_mode]}
+            field={settings[:coefficient_mode]}
             type="select"
             options={
               Enum.map(@coefficient_modes, fn {value, label} ->
@@ -200,7 +200,7 @@ defmodule SMWeb.Live.Admin.Competitions.Form do
             class="form-control w-1/2 px-3"
           />
           <.input
-            field={setting[:dynamic_coefficient_mode]}
+            field={settings[:dynamic_coefficient_mode]}
             type="select"
             options={
               Enum.map(@dynamic_coefficient_modes, fn {value, label} ->
@@ -210,10 +210,8 @@ defmodule SMWeb.Live.Admin.Competitions.Form do
             label={gettext("Dynamic coefficient mode")}
             class="form-control w-1/2 px-3"
           />
-        </.inputs_for>
 
-        <div class="text-lg w-full px-3">{gettext("Dynamic coefficients")}:</div>
-        <.inputs_for :let={settings} field={@form[:settings]}>
+          <div class="text-lg w-full px-3">{gettext("Dynamic coefficients")}:</div>
           <.inputs_for :let={dynamic_coefficient} field={settings[:dynamic_coefficients]}>
             <.input
               field={dynamic_coefficient[:name]}
@@ -262,11 +260,7 @@ defmodule SMWeb.Live.Admin.Competitions.Form do
           </.button>
         </div>
         <div class="modal-action">
-          {submit(gettext("Save"),
-            class: submit_state_class(@changeset)
-          )}
-          {reset(gettext("Cancel"), class: "btn btn-md btn-ghost", phx_click: "reset")}
-          <button type="submit" phx-value-action={:create} class={submit_state_class(@changeset)}>
+          <button type="submit" phx-value-action={@action} class={submit_state_class(@form)}>
             {gettext("Save")}
           </button>
           <input
@@ -293,7 +287,7 @@ defmodule SMWeb.Live.Admin.Competitions.Form do
 
   @impl true
   def handle_event("validate", %{} = competition_params, socket) do
-    changeset = Competitions.change_competition(socket.assigns.competition, competition_params)
+    changeset = Competitions.change(socket.assigns.competition, competition_params)
     {:noreply, assign(socket, form: to_form(changeset, action: :validate))}
   end
 
@@ -302,7 +296,7 @@ defmodule SMWeb.Live.Admin.Competitions.Form do
   end
 
   defp save_competition(socket, :edit_competition, competition_params) do
-    case Competitions.update_competition(socket.assigns.competition, competition_params) do
+    case Competitions.update(socket.assigns.competition, competition_params) do
       {:ok, competition} ->
         notify_parent({:saved, competition})
 
@@ -317,7 +311,7 @@ defmodule SMWeb.Live.Admin.Competitions.Form do
   end
 
   defp save_competition(socket, :new_competition, competition_params) do
-    case Competitions.create_competition(competition_params) do
+    case Competitions.create(competition_params) do
       {:ok, competition} ->
         notify_parent({:saved, competition})
 

@@ -2,24 +2,15 @@ defmodule SMWeb.Live.Admin.Organizations.Index do
   @moduledoc """
   Organizations live view
   """
-  use SMWeb, :surface_view
+  use SMWeb, :live_view
 
   import SMWeb.Components.DateTimeString
   import SMWeb.Components.FieldsList
   import SMWeb.Components.Layout
   import SMWeb.Components.ShortUUID
-  import SMWeb.Components.SMField
 
   alias SM.Organizations
   alias SM.Organizations.Organization
-  alias SMWeb.Components.Column
-  alias SMWeb.Components.Grid
-  alias Surface.Components.Form
-  alias Surface.Components.Form.HiddenInput
-  alias Surface.Components.Form.Reset
-  alias Surface.Components.Form.Select
-  alias Surface.Components.Form.Submit
-  alias Surface.Components.Form.TextInput
 
   require Logger
 
@@ -43,32 +34,28 @@ defmodule SMWeb.Live.Admin.Organizations.Index do
   @impl Phoenix.LiveView
   # Create/Edit dialog validate callback
   def handle_event("validate", %{"entity" => params}, socket) do
-    changeset =
+    form =
       socket.assigns.record
       |> change(params)
-      |> to_form(action: :validate)
+      |> to_form(action: :validate, as: :entity)
 
-    # |> Map.put(:action, :validate)
-
-    socket = assign(socket, :changeset, changeset)
+    socket = assign(socket, :form, form)
     {:noreply, socket}
   end
 
   def handle_event("validate", %{"merge" => %{"dest_id" => dest_id}}, socket) do
-    changeset =
+    form =
       socket.assigns.merge_selection
       |> Enum.map(& &1.id)
       |> Organizations.merge_changeset(dest_id)
-      |> to_form(action: :validate)
+      |> to_form(action: :validate, as: :merge)
 
-    # |> Map.put(:action, :validate)
-
-    socket = assign(socket, :changeset, changeset)
+    socket = assign(socket, :form, form)
     {:noreply, socket}
   end
 
   # Create/Edit dialog submit callback
-  def handle_event("submit", %{"entity" => %{"_action" => "create"} = params}, socket) do
+  def handle_event("submit", %{"_action" => "create", "entity" => params}, socket) do
     case Organizations.create(params) do
       {:ok, _entity} ->
         socket =
@@ -80,11 +67,11 @@ defmodule SMWeb.Live.Admin.Organizations.Index do
         {:noreply, socket}
 
       {:error, changeset} ->
-        {:noreply, assign(socket, :changeset, to_form(changeset))}
+        {:noreply, assign(socket, :form, to_form(changeset, as: :entity))}
     end
   end
 
-  def handle_event("submit", %{"entity" => %{"_action" => "edit"} = params}, socket) do
+  def handle_event("submit", %{"_action" => "edit", "entity" => params}, socket) do
     case Organizations.update(socket.assigns.record, params) do
       {:ok, entity} ->
         socket =
@@ -97,7 +84,7 @@ defmodule SMWeb.Live.Admin.Organizations.Index do
         {:noreply, socket}
 
       {:error, changeset} ->
-        {:noreply, assign(socket, :changeset, to_form(changeset))}
+        {:noreply, assign(socket, :form, to_form(changeset, as: :entity))}
     end
   end
 
@@ -107,7 +94,10 @@ defmodule SMWeb.Live.Admin.Organizations.Index do
     socket =
       case Organizations.merge(selected_ids, dest_id) do
         {:ok, _organization} ->
-          put_flash(socket, :info, gettext("Successfully merged organizations"))
+          socket
+          |> reset_current_editing()
+          |> assign(merge_selection: [])
+          |> put_flash(:info, gettext("Successfully merged organizations"))
 
         {:error,
          %Ecto.Changeset{
@@ -149,7 +139,7 @@ defmodule SMWeb.Live.Admin.Organizations.Index do
             changeset = change(organization, %{})
 
             socket =
-              assign(socket, record: organization, changeset: to_form(changeset), action: :edit)
+              assign(socket, record: organization, form: to_form(changeset, as: :entity), action: :edit)
 
             {:noreply, socket}
         end
@@ -308,6 +298,6 @@ defmodule SMWeb.Live.Admin.Organizations.Index do
 
     socket
     |> assign(:record, entity)
-    |> assign(:changeset, to_form(changeset))
+    |> assign(:form, to_form(changeset, as: :entity))
   end
 end

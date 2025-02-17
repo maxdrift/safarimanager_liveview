@@ -1,10 +1,10 @@
 <.layout current_page={~p"/admin/categories"} current_user={@current_user}>
-  {!-- Show dialog --}
+  <!-- Show dialog -->
   <div
     :if={@live_action == :show}
     id="show-dialog"
     class="modal modal-open"
-    :on-window-keydown={JS.patch("/admin/categories")}
+    phx-window-keydown={JS.patch("/admin/categories")}
     phx-key="Escape"
   >
     <div class="modal-box">
@@ -31,18 +31,18 @@
         </.fields_list>
       </div>
       <div class="modal-action">
-        <button :on-click={JS.patch("/admin/categories")} class="btn btn-md btn-ghost">
+        <button phx-click={JS.patch("/admin/categories")} class="btn btn-md btn-ghost">
           {gettext("Close")}
         </button>
       </div>
     </div>
   </div>
-  {!-- New-edit dialog --}
+  <!-- New-edit dialog -->
   <div
     :if={@live_action in [:new, :edit]}
     id="edit-dialog"
     class="modal modal-open"
-    :on-window-keydown={JS.patch("/admin/categories")}
+    phx-window-keydown={JS.patch("/admin/categories")}
     phx-key="Escape"
   >
     <div class="modal-box">
@@ -50,76 +50,91 @@
         <span :if={@live_action == :new}>{gettext("New category")}</span>
         <span :if={@live_action == :edit}>{gettext("Edit category")}</span>
       </div>
-      <Form for={@changeset} change="validate" submit="submit" as={:entity} opts={autocomplete: "off"}>
+      <.form for={@form} phx-change="validate" phx-submit="submit" autocomplete="off">
         <div class="card-body">
-          <.sm_field name={:name} label={gettext("Name")}>
-            <TextInput class={input_state_class(@changeset, :name)} opts={phx_debounce: "1000"} />
-          </.sm_field>
-          <.sm_field name={:camera_type} label={gettext("Camera type")}>
-            <Select
-              options={Enum.map(@camera_types, &{String.capitalize(camera_type_option_label(&1)), &1})}
-              selected={@record.camera_type}
-              prompt={gettext("Select a camera type...")}
-              class={select_state_class(@changeset, :camera_type)}
-              opts={phx_debounce: "1000"}
-            />
-          </.sm_field>
-          <HiddenInput field={:_action} value={@action} />
+          <.input
+            label={gettext("Name")}
+            type="text"
+            field={@form[:name]}
+            class={input_state_class(@form, :name)}
+            phx-debounce="1000"
+          />
+          <.input
+            label={gettext("Camera type")}
+            type="select"
+            field={@form[:camera_type]}
+            options={
+              Enum.map(@camera_types, &{String.capitalize(camera_type_option_label(&1)), &1})
+            }
+            prompt={gettext("Select a camera type...")}
+            class={select_state_class(@form, :camera_type)}
+            phx-debounce="1000"
+          />
+          <.hidden_input name={:_action} value={@action} />
         </div>
         <div class="modal-action">
-          <Submit values={[action: @action]} class={submit_state_class(@changeset)}>
+          <button type="submit" phx-value-action={@action} class={submit_state_class(@form)}>
             {gettext("Save")}
-          </Submit>
-          <Reset
-            click={JS.patch("/admin/categories")}
+          </button>
+          <input
+            type="reset"
+            phx-click={JS.patch("/admin/categories")}
             class="btn btn-md btn-ghost"
             value={gettext("Cancel")}
           />
         </div>
-      </Form>
+      </.form>
     </div>
   </div>
-  {!-- Index table --}
-  <Grid
+  <!-- Index table -->
+  <.live_component
+    module={SMWeb.Components.Grid}
     id="categories-list"
-    items={item <- @streams.items}
+    items={@streams.items}
     create_path={~p"/admin/categories/new"}
     export_path={~p"/csv_export?entity=categories"}
   >
-    <Column title={gettext("ID")} class="w-1/12">
+    <:col :let={item} title={gettext("ID")} class="w-1/12">
       <.short_uuid value={item.id} />
-    </Column>
-    <Column title={gettext("Name")}>
+    </:col>
+    <:col :let={item} title={gettext("Name")}>
       <span class="capitalize">{item.name}</span>
-    </Column>
-    <Column title={gettext("Camera type")}>
+    </:col>
+    <:col :let={item} title={gettext("Camera type")}>
       <span class="capitalize">{camera_type_option_label(item.camera_type)}</span>
-    </Column>
-    <Column title={gettext("Created")} class="w-2/12">
+    </:col>
+    <:col :let={item} title={gettext("Created")} class="w-2/12">
       <.datetime_string value={item.inserted_at} />
-    </Column>
-    <Column title={gettext("Modified")} class="w-2/12">
+    </:col>
+    <:col :let={item} title={gettext("Modified")} class="w-2/12">
       <.datetime_string value={item.updated_at} />
-    </Column>
-    <Column title={gettext("Actions")} class="w-4">
+    </:col>
+    <:col :let={item} title={gettext("Actions")} class="w-4">
       <div class="overflow-x-auto">
         <.link
           patch={~p"/admin/categories/#{item.id}"}
           class="btn btn-square btn-sm btn-info"
           title={gettext("Show")}
-        ><Heroicons.icon name="eye" type="outline" class="w-4 h-4" /></.link>
+        >
+          <Heroicons.icon name="eye" type="outline" class="w-4 h-4" />
+        </.link>
         <.link
           patch={~p"/admin/categories/#{item.id}/edit"}
           class="btn btn-square btn-sm btn-warning"
           title={gettext("Edit")}
-        ><Heroicons.icon name="pencil-square" type="solid" class="w-4 h-4" /></.link>
+        >
+          <Heroicons.icon name="pencil-square" type="solid" class="w-4 h-4" />
+        </.link>
         <button
           class="btn btn-square btn-sm btn-error"
-          :on-click={"delete-one", target: "#categories-list"}
-          :values={id: item.id}
+          phx-click="delete-one"
+          phx-target="#categories-list"
+          phx-value-id={item.id}
           title={gettext("Delete")}
-        ><Heroicons.icon name="trash" type="outline" class="w-4 h-4" /></button>
+        >
+          <Heroicons.icon name="trash" type="outline" class="w-4 h-4" />
+        </button>
       </div>
-    </Column>
-  </Grid>
+    </:col>
+  </.live_component>
 </.layout>

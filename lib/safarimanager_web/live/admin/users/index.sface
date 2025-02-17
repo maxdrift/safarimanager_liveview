@@ -113,11 +113,12 @@
         <div class="flex flex-col place-items-center">
           <div class="w-full text-center">
             <div class="flex flex-col">
-              {#for record <- @merge_selection}
-                <div class="border border-solid border-base-content rounded my-1">
-                  {record.last_name} {record.first_name}{record.organization && " (#{record.organization.name})"}
-                </div>
-              {/for}
+              <div
+                :for={record <- @merge_selection}
+                class="border border-solid border-base-content rounded my-1"
+              >
+                {record.last_name} {record.first_name}{record.organization && " (#{record.organization.name})"}
+              </div>
             </div>
           </div>
           <div class="uppercase text-lg font-bold my-4">
@@ -174,29 +175,30 @@
     </div>
   </div>
   {!-- Index table --}
-  <Grid
+  <.live_component
+    module={SMWeb.Components.Grid}
     id="users-list"
-    items={item <- @streams.items}
+    items={@streams.items}
     create_path={~p"/admin/users/new"}
     merge_path={~p"/admin/users/merge"}
     export_path={~p"/csv_export?entity=users"}
   >
-    <Column title={gettext("ID")} class="w-1/12">
+    <:col :let={item} title={gettext("ID")} class="w-1/12">
       <.short_uuid value={item.id} />
-    </Column>
-    <Column title={gettext("Last name")}>
+    </:col>
+    <:col :let={item} title={gettext("Last name")}>
       <span class="capitalize">{item.last_name}</span>
-    </Column>
-    <Column title={gettext("First name")}>
+    </:col>
+    <:col :let={item} title={gettext("First name")}>
       <span class="capitalize">{item.first_name}</span>
-    </Column>
-    <Column title={gettext("Organization")}>
+    </:col>
+    <:col :let={item} title={gettext("Organization")}>
       {(item.organization && item.organization.name) || gettext("N/A")}
-    </Column>
-    <Column title={gettext("Category")} class="w-2/12">
+    </:col>
+    <:col :let={item} title={gettext("Category")} class="w-2/12">
       {(item.category && item.category.name) || gettext("N/A")}
-    </Column>
-    <Column title={gettext("Actions")} class="w-4">
+    </:col>
+    <:col :let={item} title={gettext("Actions")} class="w-4">
       <div class="overflow-x-auto">
         <.link
           patch={~p"/admin/users/#{item.id}"}
@@ -215,6 +217,6 @@
           title={gettext("Delete")}
         ><Heroicons.icon name="trash" type="outline" class="w-4 h-4" /></button>
       </div>
-    </Column>
-  </Grid>
+    </:col>
+  </.live_component>
 </.layout>

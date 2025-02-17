@@ -1,0 +1,564 @@
+<.layout current_page={~p"/admin/competitions"} current_user={@current_user}>
+  <!-- Show dialog -->
+  <div
+    :if={@live_action == :show}
+    id="show-dialog"
+    class="modal modal-open"
+    phx-window-keydown={JS.patch("/admin/competitions")}
+    phx-key="Escape"
+  >
+    <div class="modal-box w-11/12 max-w-5xl">
+      <div class="card-title">
+        {gettext("Competition details")}
+      </div>
+      <div class="card-body">
+        <.fields_list>
+          <:fields_list_item label={gettext("ID")}>
+            {@record.id}
+          </:fields_list_item>
+          <:fields_list_item label={gettext("Name")}>
+            <span class="capitalize">{@record.name}</span>
+          </:fields_list_item>
+          <:fields_list_item label={gettext("Organizer")}>
+            <span class="capitalize">
+              {(@record.organization && @record.organization.name) || gettext("N/A")}
+            </span>
+          </:fields_list_item>
+          <:fields_list_item label={gettext("Type")}>
+            <span class="capitalize">
+              {Gettext.gettext(SMWeb.Gettext, Keyword.get(@competition_types, @record.type))}
+            </span>
+          </:fields_list_item>
+          <:fields_list_item label={gettext("For teams")}>
+            {(@record.for_teams && gettext("Yes")) || gettext("No")}
+          </:fields_list_item>
+          <:fields_list_item label={gettext("Start")}>
+            <.datetime_string value={@record.start_time} />
+          </:fields_list_item>
+          <:fields_list_item label={gettext("End")}>
+            <.datetime_string value={@record.end_time} />
+          </:fields_list_item>
+          <:fields_list_item label={gettext("Street name")}>
+            {@record.street_name}
+          </:fields_list_item>
+          <:fields_list_item label={gettext("Street number")}>
+            {@record.street_number}
+          </:fields_list_item>
+          <:fields_list_item label={gettext("Postal code")}>
+            {@record.postal_code}
+          </:fields_list_item>
+          <:fields_list_item label={gettext("City")}>
+            {@record.city}
+          </:fields_list_item>
+          <:fields_list_item label={gettext("State/Province")}>
+            {@record.state}
+          </:fields_list_item>
+          <:fields_list_item label={gettext("Country")}>
+            {@record.country}
+          </:fields_list_item>
+          <:fields_list_item label={gettext("Allowed evaluations")}>
+            <ul class="list-disc list-inside">
+              <li :for={e <- @record.allowed_evaluations}>{e.name}</li>
+              <li :if={is_nil(@record.allowed_evaluations) || @record.allowed_evaluations == []}>
+                {gettext("N/A")}
+              </li>
+            </ul>
+          </:fields_list_item>
+          <:fields_list_item label={gettext("Settings")}>
+            <ul class="list-disc list-inside">
+              <%= if not is_nil(@record.settings) do %>
+                <li><b>{gettext("Number of jurors")}:</b> {@record.settings.number_of_jurors}</li>
+                <li>
+                  <b>{gettext("Evaluations per juror")}:</b> {@record.settings.evaluations_per_juror}
+                </li>
+                <li><b>{gettext("Max jury slides")}:</b> {@record.settings.max_jury_slides}</li>
+                <li>
+                  <b>{gettext("Max submitted slides")}:</b> {@record.settings.max_submitted_slides}
+                </li>
+                <li>
+                  <b>{gettext("Proportional submission")}:</b> {@record.settings.proportional_submission}
+                </li>
+                <li><b>{gettext("Submission ratio")}:</b> {@record.settings.submission_ratio}</li>
+                <li>
+                  <b>{gettext("Fixed points multiplier")}:</b> {@record.settings.fixed_points_multiplier}
+                </li>
+                <li><b>{gettext("Penalty amount")}:</b> {@record.settings.penalty_amount}</li>
+                <li>
+                  <b>{gettext("Coefficient mode")}:</b>
+                  <span class="capitalize">
+                    {Gettext.gettext(
+                      SMWeb.Gettext,
+                      Keyword.get(@coefficient_modes, @record.settings.coefficient_mode)
+                    )}
+                  </span>
+                </li>
+                <li>
+                  <b>{gettext("Dynamic coefficient mode")}:</b>
+                  <span class="capitalize">
+                    {Gettext.gettext(
+                      SMWeb.Gettext,
+                      Keyword.get(
+                        @dynamic_coefficient_modes,
+                        @record.settings.dynamic_coefficient_mode
+                      )
+                    )}
+                  </span>
+                </li>
+                <li>
+                  <b>{gettext("Dynamic coefficients")}:</b>
+                  <ul class="list-disc list-inside pl-6">
+                    <li :for={dc <- @record.settings.dynamic_coefficients}>
+                      <b>{dc.name}:</b> {dc.value} ({gettext("from")} {dc.from} {gettext("to")} {dc.to})
+                    </li>
+                  </ul>
+                </li>
+              <% else %>
+                <li>{gettext("N/A")}</li>
+              <% end %>
+            </ul>
+          </:fields_list_item>
+          <:fields_list_item label={gettext("Slides size")}>
+            <ul class="list-disc list-inside ml-6">
+              <li :for={status <- Slides.list_slide_statuses() |> Enum.sort(:desc)}>
+                <b class="capitalize">{slide_status_to_label(status)}:</b>
+                {Utils.format_bytes(Slides.get_slides_size_by_status(@record.id, status) || 0)}
+                <button
+                  :if={status == :discarded}
+                  class={[
+                    "btn btn-xs btn-error ml-2",
+                    is_nil(Slides.get_slides_size_by_status(@record.id, status)) && "btn-disabled"
+                  ]}
+                  phx-click="erase-discarded-slides"
+                >
+                  {gettext("Erase")}
+                </button>
+              </li>
+              <li>
+                <b>{gettext("Total")}:</b> {Utils.format_bytes(
+                  Slides.get_slides_total_size(@record.id) || 0
+                )}
+              </li>
+            </ul>
+          </:fields_list_item>
+          <:fields_list_item label={gettext("Inserted")}>
+            <.datetime_string value={@record.inserted_at} />
+          </:fields_list_item>
+          <:fields_list_item label={gettext("Updated")}>
+            <.datetime_string value={@record.updated_at} />
+          </:fields_list_item>
+        </.fields_list>
+      </div>
+      <div class="modal-action">
+        <button phx-click={JS.patch("/admin/competitions")} class="btn btn-md btn-ghost">
+          {gettext("Close")}
+        </button>
+      </div>
+    </div>
+  </div>
+  <!-- New-edit dialog -->
+  <div
+    :if={@live_action in [:new, :edit]}
+    id="edit-dialog"
+    class="modal modal-open"
+    phx-window-keydown={JS.patch("/admin/competitions")}
+    phx-key="Escape"
+  >
+    <div class="modal-box w-11/12 max-w-5xl">
+      <div class="card-title">
+        <span :if={@live_action == :new}>{gettext("New competition")}</span>
+        <span :if={@live_action == :edit}>{gettext("Edit competition")}</span>
+      </div>
+      <.form for={@changeset} phx-change="validate" phx-submit="submit" autocomplete="off">
+        <div class="card-body">
+          <div class="flex flex-wrap">
+            <div class="w-full">
+              <.input
+                type="text"
+                label={gettext("Name")}
+                field={@changeset[:name]}
+                class={input_state_class(@changeset, :name)}
+                phx-debounce="1000"
+              />
+            </div>
+            <div class="w-full">
+              <.input
+                type="select"
+                label={gettext("Organization")}
+                field={@changeset[:organization_id]}
+                options={Enum.map(@organizations, &{&1.name, &1.id})}
+                prompt={gettext("Select an organization...")}
+                class={select_state_class(@changeset, :organization_id)}
+              />
+            </div>
+            <div class="w-full">
+              <.input
+                type="select"
+                label={gettext("Type")}
+                field={@changeset[:type]}
+                options={
+                  Enum.map(@competition_types, fn {value, label} ->
+                    {String.capitalize(Gettext.gettext(SMWeb.Gettext, label)), value}
+                  end)
+                }
+                prompt={gettext("Select a type...")}
+                class={select_state_class(@changeset, :type)}
+              />
+            </div>
+            <div class="w-full">
+              <label class="label cursor-pointer">
+                <span class="label-text">{gettext("For teams")}</span>
+                <.input
+                  type="checkbox"
+                  field={@changeset[:for_teams]}
+                  class={state_class("checkbox", @changeset, :for_teams, type: :checkbox)}
+                  phx-debounce="1000"
+                />
+              </label>
+            </div>
+            <div class="w-1/2 pr-2">
+              <.input
+                type="datetime-local"
+                label={gettext("Start date/time")}
+                field={@changeset[:start_time]}
+                class={input_state_class(@changeset, :start_time)}
+                phx-debounce="1000"
+              />
+            </div>
+            <div class="w-1/2">
+              <.input
+                type="datetime-local"
+                label={gettext("End date/time")}
+                field={@changeset[:end_time]}
+                class={input_state_class(@changeset, :end_time)}
+                phx-debounce="1000"
+              />
+            </div>
+            <div class="w-4/5 pr-2">
+              <.input
+                type="text"
+                label={gettext("Street name")}
+                field={@changeset[:street_name]}
+                class={input_state_class(@changeset, :street_name)}
+                phx-debounce="1000"
+              />
+            </div>
+            <div class="w-1/5">
+              <.input
+                type="text"
+                label={gettext("Number")}
+                field={@changeset[:street_number]}
+                class={input_state_class(@changeset, :street_number)}
+                phx-debounce="1000"
+              />
+            </div>
+            <div class="w-1/2 pr-2">
+              <.input
+                type="text"
+                label={gettext("Postal code")}
+                field={@changeset[:postal_code]}
+                class={input_state_class(@changeset, :postal_code)}
+                phx-debounce="1000"
+              />
+            </div>
+            <div class="w-1/2">
+              <.input
+                type="text"
+                label={gettext("City")}
+                field={@changeset[:city]}
+                class={input_state_class(@changeset, :city)}
+                phx-debounce="1000"
+              />
+            </div>
+            <div class="w-1/2 pr-2">
+              <.input
+                type="text"
+                label={gettext("State/Province")}
+                field={@changeset[:state]}
+                class={input_state_class(@changeset, :state)}
+                phx-debounce="1000"
+              />
+            </div>
+            <div class="w-1/2">
+              <.input
+                type="text"
+                label={gettext("Country")}
+                field={@changeset[:country]}
+                class={input_state_class(@changeset, :country)}
+                phx-debounce="1000"
+              />
+            </div>
+            <div class="text-lg w-full">{gettext("Allowed evaluations")}:</div>
+            <div
+              id="allowed-evaluations-inputs"
+              class="flex flex-col w-full"
+              phx-hook="SortableInputsFor"
+            >
+              <.inputs_for :let={evaluation} field={@changeset[:competitions_evaluations]}>
+                <div class="flex flex-row items-center gap-1 my-1 drag-item">
+                  <span data-handle>
+                    <Heroicons.icon name="bars-4" type="solid" class="h-4 w-4" />
+                  </span>
+                  <.hidden_input
+                    id={"competitions_evaluations_evaluation_sort_#{evaluation.index}"}
+                    name="entity[evaluation_sort][]"
+                    value={evaluation.index}
+                  />
+                  <.input
+                    type="select"
+                    label={gettext("Evaluation")}
+                    field={evaluation[:evaluation_id]}
+                    options={Enum.map(@evaluations, &{&1.name, &1.id})}
+                    prompt={gettext("Select an evaluation...")}
+                    class={
+                      state_class("select select-sm select-bordered", evaluation, :evaluation_id,
+                        type: :select
+                      )
+                    }
+                  />
+                  <label class="btn btn-ghost btn-square btn-sm">
+                    <input
+                      type="checkbox"
+                      name="entity[evaluation_drop][]"
+                      value={evaluation.index}
+                      class="hidden"
+                      title={gettext("remove")}
+                    />
+                    <Heroicons.icon name="trash" type="outline" class="w-4 h-4" />
+                  </label>
+                </div>
+              </.inputs_for>
+            </div>
+            <div class="form-control w-full">
+              <label class="btn btn-ghost btn-sm">
+                <input type="checkbox" name="entity[evaluation_sort][]" class="hidden" />
+                <Heroicons.icon name="plus-circle" type="solid" class="w-6 h-6" /> {gettext(
+                  "add more"
+                )}
+              </label>
+            </div>
+            <div class="text-lg w-full">{gettext("Settings")}:</div>
+            <.inputs_for :let={settings} field={@changeset[:settings]}>
+              <div class="w-1/2 pr-2">
+                <.input
+                  type="number"
+                  label={gettext("Number of jurors")}
+                  field={settings[:number_of_jurors]}
+                  class={input_state_class(settings.source, :number_of_jurors)}
+                  phx-debounce="1000"
+                />
+              </div>
+              <div class="w-1/2">
+                <.input
+                  type="number"
+                  label={gettext("Evaluations per juror")}
+                  field={settings[:evaluations_per_juror]}
+                  class={input_state_class(settings.source, :evaluations_per_juror)}
+                  phx-debounce="1000"
+                />
+              </div>
+              <div class="w-1/2 pr-2">
+                <.input
+                  type="number"
+                  label={gettext("Max slides for jury")}
+                  field={settings[:max_jury_slides]}
+                  class={input_state_class(settings.source, :max_jury_slides)}
+                  phx-debounce="1000"
+                />
+              </div>
+              <div class="w-1/2">
+                <.input
+                  type="number"
+                  label={gettext("Max submitted slides")}
+                  field={settings[:max_submitted_slides]}
+                  class={input_state_class(settings.source, :max_submitted_slides)}
+                  phx-debounce="1000"
+                />
+              </div>
+              <div class="w-1/2 pr-2">
+                <label class="label cursor-pointer">
+                  <span class="label-text">{gettext("Proportional submission")}</span>
+                  <.input
+                    type="checkbox"
+                    field={settings[:proportional_submission]}
+                    class={
+                      state_class("checkbox", settings.source, :proportional_submission,
+                        type: :checkbox
+                      )
+                    }
+                    phx-debounce="1000"
+                  />
+                </label>
+              </div>
+              <div class="w-1/2">
+                <.input
+                  type="number"
+                  label={gettext("Submission ratio")}
+                  field={settings[:submission_ratio]}
+                  class={input_state_class(settings.source, :submission_ratio)}
+                  phx-debounce="1000"
+                  step="0.01"
+                />
+              </div>
+              <div class="w-1/2 pr-2">
+                <.input
+                  type="number"
+                  label={gettext("Fixed points multiplier")}
+                  field={settings[:fixed_points_multiplier]}
+                  class={input_state_class(settings.source, :fixed_points_multiplier)}
+                  phx-debounce="1000"
+                  step="0.01"
+                />
+              </div>
+              <div class="w-1/2">
+                <.input
+                  type="number"
+                  label={gettext("Penalty amount")}
+                  field={settings[:penalty_amount]}
+                  class={input_state_class(settings.source, :penalty_amount)}
+                  phx-debounce="1000"
+                  step="0.01"
+                />
+              </div>
+              <div class="w-1/2  pr-2">
+                <.input
+                  type="select"
+                  label={gettext("Coefficient mode")}
+                  field={settings[:coefficient_mode]}
+                  options={
+                    Enum.map(@coefficient_modes, fn {value, label} ->
+                      {String.capitalize(Gettext.gettext(SMWeb.Gettext, label)), value}
+                    end)
+                  }
+                  prompt={gettext("Select a coefficient mode...")}
+                  class={select_state_class(settings.source, :coefficient_mode)}
+                />
+              </div>
+              <div class="w-1/2">
+                <.input
+                  type="select"
+                  label={gettext("Dynamic coefficient mode")}
+                  field={settings[:dynamic_coefficient_mode]}
+                  options={
+                    Enum.map(@dynamic_coefficient_modes, fn {value, label} ->
+                      {String.capitalize(Gettext.gettext(SMWeb.Gettext, label)), value}
+                    end)
+                  }
+                  prompt={gettext("Select a dynamic coefficient mode...")}
+                  class={select_state_class(settings.source, :dynamic_coefficient_mode)}
+                />
+              </div>
+              <div class="text-lg w-full">{gettext("Dynamic coefficients")}:</div>
+              <.inputs_for :let={dynamic_coefficient} field={settings[:dynamic_coefficients]}>
+                <div class="w-1/2 pr-2">
+                  <.input
+                    type="text"
+                    label={gettext("Name")}
+                    field={dynamic_coefficient[:name]}
+                    class={input_state_class(dynamic_coefficient.source, :name)}
+                    phx-debounce="1000"
+                  />
+                </div>
+                <div class="w-1/2">
+                  <.input
+                    type="number"
+                    label={gettext("Value")}
+                    field={dynamic_coefficient[:value]}
+                    class={input_state_class(dynamic_coefficient.source, :value)}
+                    phx-debounce="1000"
+                    step="0.01"
+                  />
+                </div>
+                <div class="w-1/2 pr-2">
+                  <.input
+                    type="number"
+                    label={gettext("From")}
+                    field={dynamic_coefficient[:from]}
+                    class={input_state_class(dynamic_coefficient.source, :from)}
+                    phx-debounce="1000"
+                    step="0.01"
+                  />
+                </div>
+                <div class="w-1/2">
+                  <.input
+                    type="number"
+                    label={gettext("To")}
+                    field={dynamic_coefficient[:to]}
+                    class={input_state_class(dynamic_coefficient.source, :to)}
+                    phx-debounce="1000"
+                    step="0.01"
+                  />
+                </div>
+              </.inputs_for>
+            </.inputs_for>
+            <.hidden_input name={:_action} value={@action} />
+          </div>
+        </div>
+        <div class="modal-action">
+          <button type="submit" phx-value-action={@action} class={submit_state_class(@changeset)}>
+            {gettext("Save")}
+          </button>
+          <input
+            type="reset"
+            phx-click={JS.patch("/admin/competitions")}
+            class="btn btn-md btn-ghost"
+            value={gettext("Cancel")}
+          />
+        </div>
+      </.form>
+    </div>
+  </div>
+  <!-- Index table -->
+  <.live_component
+    module={SMWeb.Components.Grid}
+    id="competitions-list"
+    items={@streams.items}
+    create_path={~p"/admin/competitions/new"}
+    export_path={~p"/csv_export?entity=competitions"}
+  >
+    <:col :let={item} title={gettext("ID")} class="w-1/12">
+      <.short_uuid value={item.id} />
+    </:col>
+    <:col :let={item} title={gettext("Name")}>
+      {item.name}
+    </:col>
+    <:col :let={item} title={gettext("For teams")} class="w-1/12">
+      {(item.for_teams && "✓") || ""}
+    </:col>
+    <:col :let={item} title={gettext("Location")}>
+      {"#{item.city || gettext("N/A")} (#{item.country || gettext("N/A")})"}
+    </:col>
+    <:col :let={item} title={gettext("Date (start)")} class="w-2/12">
+      <.datetime_string value={item.start_time} />
+    </:col>
+    <:col :let={item} title={gettext("Organizer")} class="w-2/12">
+      {(item.organization && item.organization.name) || gettext("N/A")}
+    </:col>
+    <:col :let={item} title={gettext("Actions")} class="w-4">
+      <div class="overflow-x-auto">
+        <.link
+          patch={~p"/admin/competitions/#{item.id}"}
+          class="btn btn-square btn-sm btn-info"
+          title={gettext("Show")}
+        >
+          <Heroicons.icon name="eye" type="outline" class="w-4 h-4" />
+        </.link>
+        <.link
+          patch={~p"/admin/competitions/#{item.id}/edit"}
+          class="btn btn-square btn-sm btn-warning"
+          title={gettext("Edit")}
+        >
+          <Heroicons.icon name="pencil-square" type="solid" class="w-4 h-4" />
+        </.link>
+        <button
+          class="btn btn-square btn-sm btn-error"
+          phx-click="delete-one"
+          phx-target="#competitions-list"
+          phx-value-id={item.id}
+          title={gettext("Delete")}
+        >
+          <Heroicons.icon name="trash" type="outline" class="w-4 h-4" />
+        </button>
+      </div>
+    </:col>
+  </.live_component>
+</.layout>
