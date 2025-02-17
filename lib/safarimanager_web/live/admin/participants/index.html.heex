@@ -1,10 +1,10 @@
 <.layout current_page={~p"/admin/participants"} current_user={@current_user}>
-  {!-- Show dialog --}
+  <!-- Show dialog -->
   <div
     :if={@live_action == :show}
     id="show-dialog"
     class="modal modal-open"
-    :on-window-keydown={JS.patch("/admin/participants")}
+    phx-window-keydown={JS.patch("/admin/participants")}
     phx-key="Escape"
   >
     <div class="modal-box">
@@ -34,18 +34,18 @@
         </.fields_list>
       </div>
       <div class="modal-action">
-        <button :on-click={JS.patch("/admin/participants")} class="btn btn-md btn-ghost">
+        <button phx-click={JS.patch("/admin/participants")} class="btn btn-md btn-ghost">
           {gettext("Close")}
         </button>
       </div>
     </div>
   </div>
-  {!-- New-edit dialog --}
+  <!-- New-edit dialog -->
   <div
     :if={@live_action in [:new, :edit]}
     id="edit-dialog"
     class="modal modal-open"
-    :on-window-keydown={JS.patch("/admin/participants")}
+    phx-window-keydown={JS.patch("/admin/participants")}
     phx-key="Escape"
   >
     <div class="modal-box">
@@ -53,54 +53,59 @@
         <span :if={@live_action == :new}>{gettext("New participant")}</span>
         <span :if={@live_action == :edit}>{gettext("Edit participant")}</span>
       </div>
-      <Form for={@changeset} change="validate" submit="submit" as={:entity} opts={autocomplete: "off"}>
+      <.form for={@form} phx-change="validate" phx-submit="submit" autocomplete="off">
         <div class="card-body">
-          <.sm_field name={:number} label={gettext("Number")}>
-            <NumberInput class={input_state_class(@changeset, :number)} opts={phx_debounce: "1000"} />
-          </.sm_field>
-          <.sm_field name={:competition_id} label={gettext("Competition")}>
-            <Select
-              options={Enum.map(@competitions, &{&1.name, &1.id})}
-              selected={@record.competition_id}
-              prompt={[key: gettext("Select a competition...")]}
-              class={select_state_class(@changeset, :competition_id)}
-              opts={phx_debounce: "1000"}
-            />
-          </.sm_field>
-          <.sm_field name={:user_id} label={gettext("User")}>
-            <Select
-              options={Enum.map(@users, &{"#{&1.first_name} #{&1.last_name}", &1.id})}
-              selected={@record.user_id}
-              prompt={[key: gettext("Select a user...")]}
-              class={select_state_class(@changeset, :user_id)}
-              opts={phx_debounce: "1000"}
-            />
-          </.sm_field>
-          <.sm_field name={:category_id} label={gettext("Category")}>
-            <Select
-              options={Enum.map(@categories, &{&1.name, &1.id})}
-              selected={@record.category_id}
-              prompt={[key: gettext("Select a category...")]}
-              class={select_state_class(@changeset, :category_id)}
-              opts={phx_debounce: "1000"}
-            />
-          </.sm_field>
-          <HiddenInput field={:_action} value={@action} />
+          <.input
+            label={gettext("Number")}
+            type="number"
+            field={@form[:number]}
+            class={input_state_class(@form, :number)}
+            phx-debounce="1000"
+          />
+          <.input
+            type="select"
+            label={gettext("Competition")}
+            field={@form[:competition_id]}
+            options={Enum.map(@competitions, &{&1.name, &1.id})}
+            prompt={gettext("Select a competition...")}
+            class={select_state_class(@form, :competition_id)}
+            phx-debounce="1000"
+          />
+          <.input
+            type="select"
+            label={gettext("User")}
+            field={@form[:user_id]}
+            options={Enum.map(@users, &{"#{&1.first_name} #{&1.last_name}", &1.id})}
+            prompt={gettext("Select a user...")}
+            class={select_state_class(@form, :user_id)}
+            phx-debounce="1000"
+          />
+          <.input
+            type="select"
+            label={gettext("Category")}
+            field={@form[:category_id]}
+            options={Enum.map(@categories, &{&1.name, &1.id})}
+            prompt={gettext("Select a category...")}
+            class={select_state_class(@form, :category_id)}
+            phx-debounce="1000"
+          />
+          <.hidden_input name={:_action} value={@action} />
         </div>
         <div class="modal-action">
-          <Submit values={[action: @action]} class={submit_state_class(@changeset)}>
+          <button type="submit" phx-value-action={@action} class={submit_state_class(@form)}>
             {gettext("Save")}
-          </Submit>
-          <Reset
-            click={JS.patch("/admin/participants")}
+          </button>
+          <input
+            type="reset"
+            phx-click={JS.patch("/admin/participants")}
             class="btn btn-md btn-ghost"
             value={gettext("Cancel")}
           />
         </div>
-      </Form>
+      </.form>
     </div>
   </div>
-  {!-- Index table --}
+  <!-- Index table -->
   <.live_component
     module={SMWeb.Components.Grid}
     id="participants-list"
@@ -135,13 +140,18 @@
           patch={~p"/admin/participants/#{item.user_id}/#{item.competition_id}/edit"}
           class="btn btn-square btn-sm btn-warning"
           title={gettext("Edit")}
-        ><Heroicons.icon name="pencil-square" type="solid" class="w-4 h-4" /></.link>
+        >
+          <Heroicons.icon name="pencil-square" type="solid" class="w-4 h-4" />
+        </.link>
         <button
           class="btn btn-square btn-sm btn-error"
-          :on-click={"delete-one", target: "#participants-list"}
-          :values={id: "#{item.user_id},#{item.competition_id}"}
+          phx-click="delete-one"
+          phx-target="#participants-list"
+          phx-value-id={"#{item.user_id},#{item.competition_id}"}
           title={gettext("Delete")}
-        ><Heroicons.icon name="trash" type="outline" class="w-4 h-4" /></button>
+        >
+          <Heroicons.icon name="trash" type="outline" class="w-4 h-4" />
+        </button>
       </div>
     </:col>
   </.live_component>
