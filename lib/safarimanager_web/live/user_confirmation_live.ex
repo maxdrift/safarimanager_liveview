@@ -1,6 +1,7 @@
 defmodule SMWeb.Live.UserConfirmationLive do
   @moduledoc false
   use SMWeb, :live_view
+  use Gettext, backend: SMWeb.Gettext
 
   alias SM.Accounts
 

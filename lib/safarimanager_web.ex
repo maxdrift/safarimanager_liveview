@@ -151,6 +151,8 @@ defmodule SMWeb do
 
   defp html_helpers do
     quote do
+      use Gettext, backend: SMWeb.Gettext
+
       # HTML escaping functionality
       import Phoenix.HTML
       import SMWeb.Components.Confirm

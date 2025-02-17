@@ -4,6 +4,7 @@ defmodule SMWeb.UserAuth do
   """
 
   use SMWeb, :verified_routes
+  use Gettext, backend: SMWeb.Gettext
 
   import Phoenix.Controller
   import Plug.Conn
