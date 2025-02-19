@@ -2,23 +2,14 @@ defmodule SMWeb.Live.Admin.Subjects.Index do
   @moduledoc """
   Subjects live view
   """
-  use SMWeb, :surface_view
+  use SMWeb, :live_view
 
   import SMWeb.Components.DateTimeString
   import SMWeb.Components.FieldsList
   import SMWeb.Components.Layout
-  import SMWeb.Components.SMField
 
   alias SM.Subjects
   alias SM.Subjects.Subject
-  alias SMWeb.Components.Column
-  alias Surface.Components.Form
-  alias Surface.Components.Form.HiddenInput
-  alias Surface.Components.Form.NumberInput
-  alias Surface.Components.Form.Reset
-  alias Surface.Components.Form.Select
-  alias Surface.Components.Form.Submit
-  alias Surface.Components.Form.TextInput
 
   require Logger
 
@@ -52,14 +43,14 @@ defmodule SMWeb.Live.Admin.Subjects.Index do
     changeset =
       socket.assigns.record
       |> change(params)
-      |> Map.put(:action, :validate)
+      |> to_form(action: :validate, as: :entity)
 
-    socket = assign(socket, :changeset, changeset)
+    socket = assign(socket, :form, changeset)
     {:noreply, socket}
   end
 
   # Create/Edit dialog submit callback
-  def handle_event("submit", %{"entity" => %{"_action" => "create"} = params}, socket) do
+  def handle_event("submit", %{"_action" => "create", "entity" => params}, socket) do
     case Subjects.create(params) do
       {:ok, _entity} ->
         socket =
@@ -71,11 +62,11 @@ defmodule SMWeb.Live.Admin.Subjects.Index do
         {:noreply, socket}
 
       {:error, changeset} ->
-        {:noreply, assign(socket, :changeset, changeset)}
+        {:noreply, assign(socket, :form, to_form(changeset, as: :entity))}
     end
   end
 
-  def handle_event("submit", %{"entity" => %{"_action" => "edit"} = params}, socket) do
+  def handle_event("submit", %{"_action" => "edit", "entity" => params}, socket) do
     case Subjects.update(socket.assigns.record, params) do
       {:ok, entity} ->
         socket =
@@ -88,7 +79,7 @@ defmodule SMWeb.Live.Admin.Subjects.Index do
         {:noreply, socket}
 
       {:error, changeset} ->
-        {:noreply, assign(socket, :changeset, changeset)}
+        {:noreply, assign(socket, :form, to_form(changeset, as: :entity))}
     end
   end
 
@@ -128,7 +119,7 @@ defmodule SMWeb.Live.Admin.Subjects.Index do
             changeset = change(subject, %{})
 
             socket =
-              assign(socket, record: subject, changeset: changeset, action: :edit)
+              assign(socket, record: subject, form: to_form(changeset, as: :entity), action: :edit)
 
             {:noreply, socket}
         end
@@ -287,7 +278,7 @@ defmodule SMWeb.Live.Admin.Subjects.Index do
 
     socket
     |> assign(:record, entity)
-    |> assign(:changeset, changeset)
+    |> assign(:form, to_form(changeset, as: :entity))
   end
 
   defp last_entity_id(items, opts) do

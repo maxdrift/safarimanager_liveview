@@ -4,11 +4,9 @@ defmodule SMWeb.Live.Admin.Participants.Index do
   """
   use SMWeb, :live_view
 
-  import SMWeb.Components.Column
   import SMWeb.Components.DateTimeString
   import SMWeb.Components.FieldsList
   import SMWeb.Components.Layout
-  import SMWeb.Components.SMField
 
   alias SM.Accounts
   alias SM.Categories

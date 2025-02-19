@@ -1,10 +1,10 @@
 <.layout current_page={~p"/admin/subjects"} current_user={@current_user}>
-  {!-- Show dialog --}
+  <!-- Show dialog -->
   <div
     :if={@live_action == :show}
     id="show-dialog"
     class="modal modal-open"
-    :on-window-keydown={JS.patch("/admin/subjects")}
+    phx-window-keydown={JS.patch("/admin/subjects")}
     phx-key="Escape"
   >
     <div class="modal-box">
@@ -37,18 +37,18 @@
         </.fields_list>
       </div>
       <div class="modal-action">
-        <button :on-click={JS.patch("/admin/subjects")} class="btn btn-md btn-ghost">
+        <button phx-click={JS.patch("/admin/subjects")} class="btn btn-md btn-ghost">
           {gettext("Close")}
         </button>
       </div>
     </div>
   </div>
-  {!-- New-edit dialog --}
+  <!-- New-edit dialog -->
   <div
     :if={@live_action in [:new, :edit]}
     id="edit-dialog"
     class="modal modal-open"
-    :on-window-keydown={JS.patch("/admin/subjects")}
+    phx-window-keydown={JS.patch("/admin/subjects")}
     phx-key="Escape"
   >
     <div class="modal-box">
@@ -56,45 +56,62 @@
         <span :if={@live_action == :new}>{gettext("New subject")}</span>
         <span :if={@live_action == :edit}>{gettext("Edit subject")}</span>
       </div>
-      <Form for={@changeset} change="validate" submit="submit" as={:entity} opts={autocomplete: "off"}>
+      <.form for={@form} phx-change="validate" phx-submit="submit" autocomplete="off">
         <div class="card-body">
-          <.sm_field name={:numeric_id} label={gettext("Numeric ID")}>
-            <NumberInput class={input_state_class(@changeset, :numeric_id)} opts={phx_debounce: "1000"} />
-          </.sm_field>
-          <.sm_field name={:name} label={gettext("Name")}>
-            <TextInput class={input_state_class(@changeset, :name)} opts={phx_debounce: "1000"} />
-          </.sm_field>
-          <.sm_field name={:scientific_name} label={gettext("Scientific Name")}>
-            <TextInput class={input_state_class(@changeset, :scientific_name)} opts={phx_debounce: "1000"} />
-          </.sm_field>
-          <.sm_field name={:coefficient} label={gettext("Coefficient")}>
-            <NumberInput class={input_state_class(@changeset, :coefficient)} opts={phx_debounce: "1000"} />
-          </.sm_field>
-          <.sm_field name={:type} label={gettext("Type")}>
-            <Select
-              options={@subject_types}
-              selected={@record.type}
-              prompt={gettext("Select a type...")}
-              class={select_state_class(@changeset, :type)}
-              opts={phx_debounce: "1000"}
-            />
-          </.sm_field>
-          <HiddenInput field={:_action} value={@action} />
+          <.input
+            type="number"
+            label={gettext("Numeric ID")}
+            field={@form[:numeric_id]}
+            class={input_state_class(@form, :numeric_id)}
+            phx-debounce="1000"
+          />
+          <.input
+            type="text"
+            label={gettext("Name")}
+            field={@form[:name]}
+            class={input_state_class(@form, :name)}
+            phx-debounce="1000"
+          />
+          <.input
+            type="text"
+            label={gettext("Scientific Name")}
+            field={@form[:scientific_name]}
+            class={input_state_class(@form, :scientific_name)}
+            phx-debounce="1000"
+          />
+          <.input
+            type="number"
+            label={gettext("Coefficient")}
+            field={@form[:coefficient]}
+            class={input_state_class(@form, :coefficient)}
+            phx-debounce="1000"
+          />
+          <.input
+            type="select"
+            label={gettext("Type")}
+            field={@form[:type]}
+            class={select_state_class(@form, :type)}
+            options={@subject_types}
+            prompt={gettext("Select a type...")}
+            phx-debounce="1000"
+          />
+          <.hidden_input name={:_action} value={@action} />
         </div>
         <div class="modal-action">
-          <Submit values={[action: @action]} class={submit_state_class(@changeset)}>
+          <button type="submit" phx-value-action={@action} class={submit_state_class(@form)}>
             {gettext("Save")}
-          </Submit>
-          <Reset
-            click={JS.patch("/admin/subjects")}
+          </button>
+          <input
+            type="reset"
+            phx-click={JS.patch("/admin/subjects")}
             class="btn btn-md btn-ghost"
             value={gettext("Cancel")}
           />
         </div>
-      </Form>
+      </.form>
     </div>
   </div>
-  {!-- Index table --}
+  <!-- Index table -->
   <.live_component
     module={SMWeb.Components.Grid}
     id="subjects-list"
@@ -128,18 +145,25 @@
           patch={~p"/admin/subjects/#{item.id}"}
           class="btn btn-square btn-sm btn-info"
           title={gettext("Show")}
-        ><Heroicons.icon name="eye" type="outline" class="w-4 h-4" /></.link>
+        >
+          <Heroicons.icon name="eye" type="outline" class="w-4 h-4" />
+        </.link>
         <.link
           patch={~p"/admin/subjects/#{item.id}/edit"}
           class="btn btn-square btn-sm btn-warning"
           title={gettext("Edit")}
-        ><Heroicons.icon name="pencil-square" type="solid" class="w-4 h-4" /></.link>
+        >
+          <Heroicons.icon name="pencil-square" type="solid" class="w-4 h-4" />
+        </.link>
         <button
           class="btn btn-square btn-sm btn-error"
-          :on-click={"delete-one", target: "#subjects-list"}
-          :values={id: item.id}
+          phx-click="delete-one"
+          phx-target="#subjects-list"
+          phx-value-id={item.id}
           title={gettext("Delete")}
-        ><Heroicons.icon name="trash" type="outline" class="w-4 h-4" /></button>
+        >
+          <Heroicons.icon name="trash" type="outline" class="w-4 h-4" />
+        </button>
       </div>
     </:col>
   </.live_component>
