@@ -2,32 +2,18 @@ defmodule SMWeb.Live.Admin.Teams.Index do
   @moduledoc """
   Teams live view
   """
-  use SMWeb, :surface_view
+  use SMWeb, :live_view
 
   import SMWeb.Components.DateTimeString
   import SMWeb.Components.FieldsList
   import SMWeb.Components.Layout
   import SMWeb.Components.ShortUUID
-  import SMWeb.Components.SMField
 
   alias SM.Competitions
   alias SM.Participants
   alias SM.Teams
   alias SM.Teams.Team
   alias SM.Teams.TeamMember
-  alias SMWeb.Components.Column
-  alias Surface.Components.Context
-  alias Surface.Components.Form
-  alias Surface.Components.Form.ErrorTag
-  alias Surface.Components.Form.Field
-  alias Surface.Components.Form.HiddenInput
-  alias Surface.Components.Form.Inputs
-  alias Surface.Components.Form.Label
-  alias Surface.Components.Form.NumberInput
-  alias Surface.Components.Form.Reset
-  alias Surface.Components.Form.Select
-  alias Surface.Components.Form.Submit
-  alias Surface.Components.Form.TextInput
 
   require Logger
 
@@ -62,14 +48,13 @@ defmodule SMWeb.Live.Admin.Teams.Index do
 
     user_ids = unique_member_users(changeset, competition_id)
 
-    # TODO: Use `to_form/1` instead!
-    changeset =
+    form =
       changeset
       |> assign_form()
-      |> Map.put(:action, :validate)
+      |> to_form(action: :validate, as: :entity)
 
     socket =
-      if competition_id == "" do
+      if competition_id in ["", nil] do
         socket
       else
         assign(socket,
@@ -78,12 +63,12 @@ defmodule SMWeb.Live.Admin.Teams.Index do
         )
       end
 
-    socket = assign(socket, :changeset, changeset)
+    socket = assign(socket, :form, form)
     {:noreply, socket}
   end
 
   # Create/Edit dialog submit callback
-  def handle_event("submit", %{"entity" => %{"_action" => "create"} = params}, socket) do
+  def handle_event("submit", %{"_action" => "create", "entity" => params}, socket) do
     case Teams.create(params) do
       {:ok, _entity} ->
         socket =
@@ -99,14 +84,14 @@ defmodule SMWeb.Live.Admin.Teams.Index do
 
         socket =
           socket
-          |> assign(:changeset, changeset)
+          |> assign(:form, to_form(changeset, as: :entity))
           |> put_flash(:error, gettext("Unable to create the team"))
 
         {:noreply, socket}
     end
   end
 
-  def handle_event("submit", %{"entity" => %{"_action" => "edit"} = params}, socket) do
+  def handle_event("submit", %{"_action" => "edit", "entity" => params}, socket) do
     case Teams.update(socket.assigns.record, params) do
       {:ok, entity} ->
         socket =
@@ -124,7 +109,7 @@ defmodule SMWeb.Live.Admin.Teams.Index do
         {:noreply, socket}
 
       {:error, changeset} ->
-        {:noreply, assign(socket, :changeset, changeset)}
+        {:noreply, assign(socket, :form, to_form(changeset, as: :entity))}
     end
   end
 
@@ -144,7 +129,7 @@ defmodule SMWeb.Live.Admin.Teams.Index do
             socket =
               assign(socket,
                 record: team,
-                changeset: changeset,
+                form: to_form(changeset, as: :entity),
                 participants: get_participants_options(competition_id, user_ids),
                 action: :edit
               )
@@ -296,20 +281,20 @@ defmodule SMWeb.Live.Admin.Teams.Index do
   defp reset_current_editing(socket) do
     entity = %Team{}
     changeset = change(entity, %{})
-    changeset = assign_form(changeset)
+    form = assign_form(changeset)
 
     socket
     |> assign(:record, entity)
-    |> assign(:changeset, changeset)
+    |> assign(:form, form)
   end
 
   defp assign_form(%Ecto.Changeset{} = changeset) do
     if Ecto.Changeset.get_field(changeset, :members) == [] do
-      Ecto.Changeset.put_change(changeset, :members, [%TeamMember{}])
-      # |> to_form()
-    else
-      # to_form(changeset)
       changeset
+      |> Ecto.Changeset.put_change(:members, [%TeamMember{}])
+      |> to_form()
+    else
+      to_form(changeset)
     end
   end
 

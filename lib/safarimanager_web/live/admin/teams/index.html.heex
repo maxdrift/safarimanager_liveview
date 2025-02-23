@@ -1,0 +1,218 @@
+<.layout current_page={~p"/admin/teams"} current_user={@current_user}>
+  <!-- Show dialog -->
+  <div
+    :if={@live_action == :show}
+    id="show-dialog"
+    class="modal modal-open"
+    phx-window-keydown={JS.patch("/admin/teams")}
+    phx-key="Escape"
+  >
+    <div class="modal-box">
+      <div class="card-title">
+        {gettext("Team details")}
+      </div>
+      <div class="card-body">
+        <.fields_list>
+          <:fields_list_item label={gettext("ID")}>
+            {@record.id}
+          </:fields_list_item>
+          <:fields_list_item label={gettext("Competition")}>
+            <span class="capitalize">{@record.competition.name || gettext("N/A")}</span>
+          </:fields_list_item>
+          <:fields_list_item label={gettext("Number")}>
+            {@record.number}
+          </:fields_list_item>
+          <:fields_list_item label={gettext("Name")}>
+            <span class="capitalize">
+              {Teams.synthesize_team_name(@record) || gettext("N/A")}
+            </span>
+          </:fields_list_item>
+          <:fields_list_item label={gettext("Organization name")}>
+            <span class="capitalize">
+              {Teams.synthesize_org_name(@record) || gettext("N/A")}
+            </span>
+          </:fields_list_item>
+          <:fields_list_item label={gettext("Members")}>
+            <ul class="list-disc list-inside">
+              <li :for={u <- @record.users}>{u.last_name} {u.first_name}</li>
+              <li :if={@record.users == []}>{gettext("N/A")}</li>
+            </ul>
+          </:fields_list_item>
+
+          <:fields_list_item label={gettext("Inserted")}>
+            <.datetime_string value={@record.inserted_at} />
+          </:fields_list_item>
+          <:fields_list_item label={gettext("Updated")}>
+            <.datetime_string value={@record.updated_at} />
+          </:fields_list_item>
+        </.fields_list>
+      </div>
+      <div class="modal-action">
+        <button phx-click={JS.patch("/admin/teams")} class="btn btn-md btn-ghost">
+          {gettext("Close")}
+        </button>
+      </div>
+    </div>
+  </div>
+  <!-- New-edit dialog -->
+  <div
+    :if={@live_action in [:new, :edit]}
+    id="edit-dialog"
+    class="modal modal-open"
+    phx-window-keydown={JS.patch("/admin/teams")}
+    phx-key="Escape"
+  >
+    <div class="modal-box">
+      <div class="card-title">
+        <span :if={@live_action == :new}>{gettext("New team")}</span>
+        <span :if={@live_action == :edit}>{gettext("Edit team")}</span>
+      </div>
+      <.form for={@form} phx-change="validate" phx-submit="submit" autocomplete="off">
+        <div class="card-body">
+          <div class="flex flex-wrap">
+            <.input
+              type="select"
+              label={gettext("Competition")}
+              field={@form[:competition_id]}
+              options={Enum.map(@competitions, &{&1.name, &1.id})}
+              prompt={gettext("Select a competition...")}
+              class={select_state_class(@form, :competition_id)}
+              phx-debounce="1000"
+            />
+            <.input
+              type="number"
+              label={gettext("Number")}
+              field={@form[:number]}
+              min="1"
+              step="1"
+              class={input_state_class(@form, :number)}
+              phx-debounce="1000"
+            />
+            <.inputs_for :let={members_form} field={@form[:members]}>
+              <.hidden_input name="entity[members_sort][]" value={members_form.index} />
+              <.input
+                type="select"
+                label={gettext("Member")}
+                field={members_form[:user_id]}
+                options={@participants}
+                prompt={gettext("Select a user...")}
+                class={select_state_class(members_form, :user_id)}
+                phx-debounce="1000"
+                disabled={
+                  @participants == [] or is_nil(Map.get(@form.source.changes, :competition_id))
+                }
+              />
+              <div class="w-1/12 my-auto">
+                <label class={[
+                  "btn btn-ghost btn-square btn-sm",
+                  is_nil(Map.get(@form.source.changes, :competition_id)) && "btn-disabled"
+                ]}>
+                  <input
+                    type="checkbox"
+                    name="entity[members_drop][]"
+                    value={members_form.index}
+                    class="hidden"
+                    title={gettext("remove")}
+                  />
+                  <Heroicons.icon name="trash" type="outline" class="w-4 h-4" />
+                </label>
+              </div>
+            </.inputs_for>
+            <div class="form-control w-full">
+              <label class={[
+                "btn btn-ghost btn-sm",
+                is_nil(Map.get(@form.source.changes, :competition_id)) && "btn-disabled"
+              ]}>
+                <input type="checkbox" name="entity[members_sort][]" class="hidden" />
+                <Heroicons.icon name="plus-circle" type="solid" class="w-6 h-6" /> {gettext(
+                  "add more"
+                )}
+              </label>
+            </div>
+            <.input
+              type="text"
+              label={gettext("Name")}
+              field={@form[:name]}
+              class={input_state_class(@form, :name)}
+              placeholder={Teams.synthesize_team_name(@form.data)}
+              phx-debounce="1000"
+            />
+            <div class="w-full">
+              <.input
+                type="text"
+                label={gettext("Org. name")}
+                field={@form[:organization_name]}
+                class={input_state_class(@form, :organization_name)}
+                placeholder={Teams.synthesize_org_name(@form.data)}
+                phx-debounce="1000"
+              />
+            </div>
+            <.hidden_input name={:_action} value={@action} />
+          </div>
+        </div>
+        <div class="modal-action">
+          <button type="submit" phx-value-action={@action} class={submit_state_class(@form)}>
+            {gettext("Save")}
+          </button>
+          <input
+            type="reset"
+            phx-click={JS.patch("/admin/teams")}
+            class="btn btn-md btn-ghost"
+            value={gettext("Cancel")}
+          />
+        </div>
+      </.form>
+    </div>
+  </div>
+  <!-- Index table -->
+  <.live_component
+    module={SMWeb.Components.Grid}
+    id="teams-list"
+    items={@streams.items}
+    create_path={~p"/admin/teams/new"}
+    export_path={~p"/csv_export?entity=teams"}
+  >
+    <:col :let={item} title={gettext("ID")} class="w-1/12">
+      <.short_uuid value={item.id} />
+    </:col>
+    <:col :let={item} title={gettext("Competition")}>
+      {item.competition.name || gettext("N/A")}
+    </:col>
+    <:col :let={item} title={gettext("Name")}>
+      {Teams.synthesize_team_name(item) || gettext("N/A")}
+    </:col>
+    <:col :let={item} title={gettext("Org. name")}>
+      {Teams.synthesize_org_name(item) || gettext("N/A")}
+    </:col>
+    <:col :let={item} title={gettext("Members")}>
+      {Teams.synthesize_members_names(item) || gettext("N/A")}
+    </:col>
+    <:col :let={item} title={gettext("Actions")} class="w-4">
+      <div class="overflow-x-auto">
+        <.link
+          patch={~p"/admin/teams/#{item.id}"}
+          class="btn btn-square btn-sm btn-info"
+          title={gettext("Show")}
+        >
+          <Heroicons.icon name="eye" type="outline" class="w-4 h-4" />
+        </.link>
+        <.link
+          patch={~p"/admin/teams/#{item.id}/edit"}
+          class="btn btn-square btn-sm btn-warning"
+          title={gettext("Edit")}
+        >
+          <Heroicons.icon name="pencil-square" type="solid" class="w-4 h-4" />
+        </.link>
+        <button
+          class="btn btn-square btn-sm btn-error"
+          phx-click="delete-one"
+          phx-target="#teams-list"
+          phx-value-id={item.id}
+          title={gettext("Delete")}
+        >
+          <Heroicons.icon name="trash" type="outline" class="w-4 h-4" />
+        </button>
+      </div>
+    </:col>
+  </.live_component>
+</.layout>
