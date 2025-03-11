@@ -121,6 +121,7 @@ defmodule SMWeb.Components.CoreComponents do
         @kind == :info && "alert-info",
         @kind == :error && "alert-error"
       ]}
+      phx-hook="AutoClearFlash"
       {@rest}
     >
       <div :if={@title} class="flex items-center gap-1.5">
