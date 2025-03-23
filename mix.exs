@@ -64,7 +64,12 @@ defmodule SM.MixProject do
       {:floki, "~> 0.34", only: :test},
       {:gettext, "~> 0.24"},
       {:heroicons,
-       github: "tailwindlabs/heroicons", tag: "v2.1.5", sparse: "optimized", app: false, compile: false, depth: 1},
+       github: "tailwindlabs/heroicons",
+       tag: "v2.1.5",
+       sparse: "optimized",
+       app: false,
+       compile: false,
+       depth: 1},
       {:image, "~> 0.33"},
       {:jason, "~> 1.2"},
       {:nebulex, "~> 2.5"},
@@ -76,7 +81,7 @@ defmodule SM.MixProject do
       {:phoenix_live_view, "~> 1.0.1", override: true},
       {:phoenix_view, "~> 2.0"},
       {:phoenix, "~> 1.7.0"},
-      {:postgrex, "~> 0.19.3"},
+      {:postgrex, "~> 0.20.0"},
       {:progress_bar, "~> 3.0"},
       {:prom_ex, "~> 1.8"},
       {:qrcode_ex, "~> 0.1.0"},
@@ -87,10 +92,10 @@ defmodule SM.MixProject do
       {:surface, "~> 0.12.0"},
       {:svadilfari, git: "https://github.com/maxdrift/svadilfari", branch: "main"},
       {:swoosh, "~> 1.11"},
-      {:telemetry_metrics, "~> 1.0.0"},
+      {:telemetry_metrics, "~> 1.1.0"},
       {:telemetry_poller, "~> 1.0"},
       {:telemetry, "~> 1.2"},
-      {:tesla, "~> 1.13.2"}
+      {:tesla, "~> 1.14.1"}
     ]
   end
 
@@ -98,7 +103,11 @@ defmodule SM.MixProject do
   defp target_deps(_), do: []
 
   @lock (with {:ok, contents} <- File.read("mix.lock"),
-              {:ok, quoted} <- Code.string_to_quoted(contents, emit_warnings: false, warn_on_unnecessary_quotes: false),
+              {:ok, quoted} <-
+                Code.string_to_quoted(contents,
+                  emit_warnings: false,
+                  warn_on_unnecessary_quotes: false
+                ),
               {%{} = lock, _binding} <- Code.eval_quoted(quoted, []) do
            for {dep, hex} when elem(hex, 0) == :hex <- lock,
                do: {dep, elem(hex, 2)},
