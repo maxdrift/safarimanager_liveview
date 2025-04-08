@@ -1,0 +1,272 @@
+<.layout current_page={~p"/organize/#{@competition.id}/teams"} current_user={@current_user}>
+  <.competition_header competition={@competition} />
+  <.steps_header current_step={:teams} competition={@competition} />
+  <div
+    :if={@form}
+    id="edit-dialog"
+    class="modal modal-open"
+    phx-window-keydown={
+      JS.remove_class("modal-open", to: "#edit-dialog") |> JS.push("stop-editing-team")
+    }
+    phx-key="Escape"
+  >
+    <div class="modal-box">
+      <div class="card-title">
+        <span>{gettext("Edit team")}</span>
+      </div>
+      <.form
+        for={@form}
+        phx-change="validate-team"
+        phx-submit="submit-team"
+        as={:entity}
+        autocomplete="off"
+      >
+        <div class="card-body">
+          <div class="flex flex-wrap">
+            <.hidden_input name={:id} value={@form.data.id} />
+            <div class="w-full">
+              <.input
+                type="text"
+                field={@form[:name]}
+                label={gettext("Name")}
+                class={input_state_class(@form, :name)}
+                placeholder={Teams.synthesize_team_name(@form.data)}
+                phx-debounce="1000"
+              />
+            </div>
+            <div class="w-full">
+              <.input
+                type="text"
+                field={@form[:organization_name]}
+                label={gettext("Org. name")}
+                class={input_state_class(@form, :organization_name)}
+                placeholder={Teams.synthesize_org_name(@form.data)}
+                phx-debounce="1000"
+              />
+            </div>
+          </div>
+          <.fields_list>
+            <:fields_list_item label={gettext("Members")}>
+              <ul class="list-disc list-inside">
+                <li :for={u <- @form.data.users}>{u.last_name} {u.first_name}</li>
+                <li :if={@form.data.users == []}>{gettext("N/A")}</li>
+              </ul>
+            </:fields_list_item>
+          </.fields_list>
+        </div>
+        <div class="modal-action">
+          <button type="submit" phx-value-action={:edit} class={submit_state_class(@form)}>
+            {gettext("Save")}
+          </button>
+          <input
+            type="reset"
+            phx-click={
+              JS.remove_class("modal-open", to: "#edit-dialog") |> JS.push("stop-editing-team")
+            }
+            class="btn btn-md btn-ghost"
+            value={gettext("Cancel")}
+          />
+        </div>
+      </.form>
+    </div>
+  </div>
+  <div class="flex flex-col xl:flex-row mt-5">
+    <div class="overflow-y-auto rounded-lg xl:w-1/2 bg-base-200 shadow-lg">
+      <div class="p-4">
+        <div class="text-2xl font-bold text-center">
+          {gettext("Participants")}
+          <div class="badge badge-secondary ml-2">{Enum.count(@participants)}</div>
+        </div>
+        <div class="flex flex-row">
+          <div class="grow" />
+          <button
+            class={[
+              "flex-none",
+              "btn",
+              "btn-sm",
+              "btn-primary",
+              "my-2",
+              MapSet.size(@participants_selection) < 1 && "btn-disabled"
+            ]}
+            phx-click="create-team"
+          >
+            {gettext("Create team")}
+          </button>
+        </div>
+        <.form
+          for={%{}}
+          as={:participants_filter}
+          phx-change="filter-participants"
+          autocomplete="off"
+        >
+          <.input
+            type="text"
+            name={:value}
+            value=""
+            class="input input-bordered w-full mb-1"
+            placeholder={gettext("Search for a participant...")}
+            phx-debounce="500"
+            autocomplete="nope"
+          />
+        </.form>
+        <div class="max-h-96 overflow-y-auto tiny-scrollbar">
+          <table class="table table-zebra table-fixed w-full">
+            <thead>
+              <tr>
+                <th class="sticky top-0 w-1" />
+                <th class="sticky top-0 w-auto">{gettext("Last Name")}</th>
+                <th class="sticky top-0 w-auto">{gettext("First Name")}</th>
+                <th class="sticky top-0 w-auto">{gettext("Organization")}</th>
+                <th class="sticky top-0 w-3/12">{gettext("Category")}</th>
+              </tr>
+            </thead>
+            <tbody>
+              <.form
+                id="participants-selection-form"
+                for={%{}}
+                as={:participants_selection}
+                phx-change="change"
+              >
+                <tr :for={item <- @participants}>
+                  <td>
+                    <label>
+                      <input
+                        form="participants-selection-form"
+                        type="checkbox"
+                        name="participants-list-selection[]"
+                        value={item.user_id}
+                        checked={MapSet.member?(@participants_selection, item.user_id)}
+                        class="checkbox checkbox-sm mt-2"
+                      />
+                    </label>
+                  </td>
+                  <td class="truncate">{item.user.last_name}</td>
+                  <td class="truncate">{item.user.first_name}</td>
+                  <td class="truncate">
+                    {(item.user.organization && item.user.organization.name) || gettext("N/A")}
+                  </td>
+                  <td class="truncate">
+                    {(item.category && item.category.name) || gettext("N/A")}
+                  </td>
+                </tr>
+                <tr :if={@participants == []}>
+                  <td colspan="6">{gettext("No items yet!")}</td>
+                </tr>
+              </.form>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div class="divider xl:divider-horizontal" />
+    <div class="overflow-y-auto rounded-lg xl:w-1/2 bg-base-200 shadow-lg">
+      <div class="p-4">
+        <div class="text-2xl font-bold text-center">
+          {gettext("Teams")}
+          <div class="badge badge-secondary ml-2">{Enum.count(@teams)}</div>
+        </div>
+        <div>
+          <.link
+            class="flex-none btn btn-outline btn-sm my-2"
+            href={~p"/#{@competition.id}/teams_printout"}
+            target="_blank"
+          >
+            {gettext("Print")}
+          </.link>
+        </div>
+        <.form
+          for={%{}}
+          as={:participants_filter}
+          phx-change="filter-participants"
+          autocomplete="off"
+        >
+          <.input
+            type="text"
+            name={:value}
+            value=""
+            class="input input-bordered w-full mb-1"
+            placeholder={gettext("Search for a team...")}
+            phx-debounce="500"
+            autocomplete="nope"
+          />
+        </.form>
+        <div class="max-h-96 overflow-y-auto tiny-scrollbar">
+          <table class="table table-zebra table-fixed w-full">
+            <thead>
+              <tr>
+                <th class="sticky top-0 w-2">{gettext("#")}</th>
+                <th class="sticky top-0 w-auto">{gettext("Name")}</th>
+                <th class="sticky top-0 w-auto">{gettext("Organization")}</th>
+                <th class="sticky top-0 w-auto">{gettext("Members")}</th>
+                <th class="sticky top-0 w-2/12" />
+              </tr>
+            </thead>
+            <tbody>
+              <tr :for={item <- @teams}>
+                <td>{item.number}</td>
+                <td class="truncate">{Teams.synthesize_team_name(item) || gettext("N/A")}</td>
+                <td class="truncate">{Teams.synthesize_org_name(item) || gettext("N/A")}</td>
+                <td class="truncate">
+                  {Teams.synthesize_members_names(item) || gettext("N/A")}
+                </td>
+                <td>
+                  <button
+                    class="btn btn-square btn-xs btn-warning"
+                    phx-click="edit-team"
+                    phx-value-id={item.id}
+                    title={gettext("Edit")}
+                  >
+                    <Heroicons.icon name="pencil-square" type="solid" class="w-4 h-4" />
+                  </button>
+                  <button
+                    class="btn btn-square btn-xs btn-error"
+                    phx-click="remove-team"
+                    phx-value-id={item.id}
+                    title={gettext("Remove")}
+                  >
+                    <Heroicons.icon name="trash" type="outline" class="w-4 h-4" />
+                  </button>
+                </td>
+              </tr>
+              <tr :if={@teams == []}>
+                <td colspan="4">{gettext("No items yet!")}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="flex flex-row my-10 w-full">
+    <.link navigate={"/organize/#{@competition_id}/participants"} class="flex-none btn gap-2">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        class="h-6 w-6"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+        stroke-width="2"
+      >
+        <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+      </svg>
+      {gettext("Participants")}
+    </.link>
+    <div class="grow" />
+    <.link
+      navigate={"/organize/#{@competition_id}/jurors"}
+      class="flex-none btn btn-primary gap-2"
+    >
+      {gettext("Jurors")}
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        class="h-6 w-6"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+        stroke-width="2"
+      >
+        <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+      </svg>
+    </.link>
+  </div>
+</.layout>

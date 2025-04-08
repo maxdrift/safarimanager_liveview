@@ -26,9 +26,9 @@ import { LiveSocket } from "phoenix_live_view"
 import { themeChange } from 'theme-change'
 import topbar from "../vendor/topbar"
 import Sortable from "../vendor/sortable"
-import Hooks from "./_hooks"
 import NoSleep from "nosleep.js"
 import { GridSelection, InfiniteScroll } from "../../lib/safarimanager_web/components/grid.hooks"
+import { Lightbox } from "../vendor/lightbox"
 
 window.Alpine = Alpine
 
@@ -38,7 +38,7 @@ Alpine.start()
 themeChange()
 
 
-Hooks.Sortable = {
+let sortable = {
   mounted() {
     let group = this.el.dataset.group
     let sorter = new Sortable(this.el, {
@@ -56,7 +56,7 @@ Hooks.Sortable = {
   }
 }
 
-Hooks.SortableInputsFor = {
+let sortableInputsFor = {
   mounted() {
     let group = this.el.dataset.group
     let sorter = new Sortable(this.el, {
@@ -74,7 +74,7 @@ Hooks.SortableInputsFor = {
   }
 }
 
-Hooks.NoSleep = {
+let noSleep = {
   mounted() {
     var noSleep = new NoSleep();
     var wakeLockEnabled = false;
@@ -87,7 +87,7 @@ Hooks.NoSleep = {
   }
 }
 
-Hooks.AutoClearFlash = {
+let autoClearFlash = {
   mounted() {
     let ignoredIDs = ["client-error", "server-error"];
     if (ignoredIDs.includes(this.el.id)) return;
@@ -107,8 +107,17 @@ Hooks.AutoClearFlash = {
   },
 }
 
-Hooks.GridSelection = GridSelection
-Hooks.InfiniteScroll = InfiniteScroll
+const hooks = {
+  GridSelection: GridSelection,
+  InfiniteScroll: InfiniteScroll,
+  Lightbox: Lightbox,
+  AutoClearFlash: autoClearFlash,
+  Sortable: sortable,
+  SortableInputsFor: sortableInputsFor,
+  NoSleep: noSleep
+}
+
+console.log("hooks", hooks)
 
 let csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute("content")
 let liveSocket = new LiveSocket("/live", Socket, {
@@ -125,7 +134,7 @@ let liveSocket = new LiveSocket("/live", Socket, {
     },
   },
   params: { _csrf_token: csrfToken },
-  hooks: Hooks
+  hooks: hooks
 })
 
 
@@ -133,6 +142,12 @@ let liveSocket = new LiveSocket("/live", Socket, {
 topbar.config({ barColors: { 0: "#29d" }, shadowColor: "rgba(0, 0, 0, .3)" })
 window.addEventListener("phx:page-loading-start", info => topbar.show())
 window.addEventListener("phx:page-loading-stop", info => topbar.hide())
+window.addEventListener("phx:live_reload:attached", ({ detail: reloader }) => {
+  // Enable server log streaming to client.
+  // Disable with reloader.disableServerLogs()
+  reloader.enableServerLogs()
+  window.liveReloader = reloader
+})
 
 // connect if there are any LiveViews on the page
 liveSocket.connect()
@@ -143,3 +158,24 @@ liveSocket.connect()
 // liveSocket.enableLatencySim(1000)  // enabled for duration of browser session
 // liveSocket.disableLatencySim()
 window.liveSocket = liveSocket
+
+// Mutation observer to highlight changed elements
+new MutationObserver((mutations) => {
+  mutations.forEach((mutation) => {
+    if (mutation.type === 'childList') {
+      mutation.addedNodes.forEach((node) => {
+        if (node.nodeType === Node.ELEMENT_NODE) {
+          node.style.transition = 'outline 0.3s ease-in-out';
+          node.style.outline = '2px solid red';
+          setTimeout(() => {
+            node.style.outline = 'none';
+            node.style.transition = '';
+          }, 1000);
+        }
+      });
+    }
+  });
+}).observe(document.body, {
+  childList: true,
+  subtree: true,
+});

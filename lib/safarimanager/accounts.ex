@@ -535,7 +535,7 @@ defmodule SM.Accounts do
     notify_subscribers({:ok, deleted}, [:user, :deleted])
   end
 
-  @spec merge_changeset([String.t()], String.t()) :: Ecto.Changeset.t()
+  @spec merge_changeset([String.t()], String.t() | nil) :: Ecto.Changeset.t()
   def merge_changeset(source_ids, dest_id) when is_list(source_ids) do
     User.merge_changeset(source_ids, dest_id)
   end

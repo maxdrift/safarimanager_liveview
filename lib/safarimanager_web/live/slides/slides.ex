@@ -2,7 +2,7 @@ defmodule SMWeb.Live.Slides do
   @moduledoc """
   Slides live view
   """
-  use SMWeb, :surface_view
+  use SMWeb, :live_view
 
   import SMWeb.Components.CompetitionHeader
   import SMWeb.Components.Layout
@@ -17,11 +17,9 @@ defmodule SMWeb.Live.Slides do
   alias SM.Teams
   alias SM.USBWatcherSupervisor
   alias SM.Utils
+  alias SMWeb.Components.Confirm
   alias SMWeb.Components.DirectUploadDialog
   alias SMWeb.Components.FileBrowser
-  alias Surface.Components.Form
-  alias Surface.Components.Form.Checkbox
-  alias Surface.Components.Form.TextInput
 
   require Logger
 
@@ -53,8 +51,8 @@ defmodule SMWeb.Live.Slides do
   end
 
   @impl Phoenix.LiveView
-  def handle_event("validate", %{"_target" => ["discovery_mode"], "discovery_mode" => values}, socket) do
-    if "true" in values do
+  def handle_event("validate", %{"_target" => ["discovery_mode"], "discovery_mode" => value}, socket) do
+    if value == "true" do
       :ok = USBWatcherSupervisor.start_poller(self())
     else
       :ok = USBWatcherSupervisor.stop_poller()
@@ -97,7 +95,7 @@ defmodule SMWeb.Live.Slides do
     end
 
     {:noreply,
-     confirm(socket, on_confirm,
+     Confirm.confirm(socket, on_confirm,
        title: gettext("Delete slide"),
        description: gettext("Are you sure you want to delete this slide?"),
        confirm_text: gettext("Delete"),
@@ -122,7 +120,7 @@ defmodule SMWeb.Live.Slides do
     end
 
     {:noreply,
-     confirm(socket, on_confirm,
+     Confirm.confirm(socket, on_confirm,
        title: gettext("Delete all slides"),
        description: gettext("Are you sure you want to delete all slides?"),
        confirm_text: gettext("Delete"),

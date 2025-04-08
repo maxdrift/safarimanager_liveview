@@ -138,7 +138,8 @@ config :safarimanager, SMWeb.PrometheusPush,
   ]
 
 config :safarimanager, SMWeb.TelemetryPusher,
-  instance_id: System.get_env("INSTANCE_ID", to_string(hostname))
+  instance_id: System.get_env("INSTANCE_ID", to_string(hostname)),
+  push_interval: System.get_env("TELEMETRY_PUSH_INTERVAL", "10000") |> String.to_integer()
 
 # end
 

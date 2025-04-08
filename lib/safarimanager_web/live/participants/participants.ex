@@ -2,12 +2,13 @@ defmodule SMWeb.Live.Participants do
   @moduledoc """
   Participants live view
   """
-  use SMWeb, :surface_view
+  use SMWeb, :live_view
 
   import SMWeb.Components.CompetitionHeader
   import SMWeb.Components.FormActions
   import SMWeb.Components.Layout
   import SMWeb.Components.StepsHeader
+  import SMWeb.Components.UserForm
 
   alias SM.Accounts
   alias SM.Accounts.User
@@ -15,11 +16,6 @@ defmodule SMWeb.Live.Participants do
   alias SM.Competitions
   alias SM.Organizations
   alias SM.Participants
-  alias SMWeb.Live.Admin.Users.Form, as: UsersForm
-  alias Surface.Components.Form
-  alias Surface.Components.Form.HiddenInput
-  alias Surface.Components.Form.Select
-  alias Surface.Components.Form.TextInput
 
   require Logger
 
@@ -33,7 +29,7 @@ defmodule SMWeb.Live.Participants do
         categories: Categories.list(),
         participants: [],
         entity: %User{},
-        changeset: Accounts.change_for_competition_registration(%User{}),
+        form: to_form(Accounts.change_for_competition_registration(%User{})),
         participants_selection: MapSet.new()
       )
 
@@ -65,12 +61,12 @@ defmodule SMWeb.Live.Participants do
   end
 
   def handle_event("validate-new-user", %{"entity" => entity}, socket) do
-    changeset =
+    form =
       socket.assigns.entity
       |> Accounts.change_for_competition_registration(entity)
-      |> Map.put(:action, :validate)
+      |> to_form(action: :validate, as: :entity)
 
-    {:noreply, assign(socket, :changeset, changeset)}
+    {:noreply, assign(socket, :form, form)}
   end
 
   def handle_event("submit-new-user", %{"entity" => entity}, socket) do
@@ -80,8 +76,8 @@ defmodule SMWeb.Live.Participants do
           socket
           |> assign(:entity, %User{})
           |> assign(
-            :changeset,
-            Accounts.change_for_competition_registration(socket.assigns.entity)
+            :form,
+            to_form(Accounts.change_for_competition_registration(socket.assigns.entity))
           )
           # Note: remember events pushed from the server via push_event are global
           # and will be dispatched to all active hooks on the client who are handling that event.
@@ -90,7 +86,7 @@ defmodule SMWeb.Live.Participants do
         {:noreply, socket}
 
       {:error, changeset} ->
-        {:noreply, assign(socket, :changeset, changeset)}
+        {:noreply, assign(socket, :form, to_form(changeset))}
     end
   end
 
@@ -98,7 +94,10 @@ defmodule SMWeb.Live.Participants do
     socket =
       socket
       |> assign(:entity, %User{})
-      |> assign(:changeset, Accounts.change_for_competition_registration(socket.assigns.entity))
+      |> assign(
+        :form,
+        to_form(Accounts.change_for_competition_registration(socket.assigns.entity))
+      )
 
     {:noreply, socket}
   end
@@ -123,7 +122,11 @@ defmodule SMWeb.Live.Participants do
     {:noreply, assign(socket, :participants, participants)}
   end
 
-  def handle_event("category-change", %{"category" => %{"category_id" => new_category_id, "user_id" => user_id}}, socket) do
+  def handle_event(
+        "category-change",
+        %{"category" => %{"category_id" => new_category_id, "user_id" => user_id}},
+        socket
+      ) do
     {:ok, participant} = Participants.get(user_id, socket.assigns.competition_id)
 
     participant
@@ -134,7 +137,9 @@ defmodule SMWeb.Live.Participants do
         {:noreply, socket}
 
       {:error, reason} ->
-        Logger.error("Error changing participant (user ID: #{user_id}) category during enrollment: #{inspect(reason)}")
+        Logger.error(
+          "Error changing participant (user ID: #{user_id}) category during enrollment: #{inspect(reason)}"
+        )
 
         socket = put_flash(socket, :error, gettext("Unable to change Category"))
 
@@ -171,7 +176,11 @@ defmodule SMWeb.Live.Participants do
     users = Accounts.list_enrollable(competition_id)
 
     socket =
-      assign(socket, competition: competition, participants: Participants.list(competition_id), users: users)
+      assign(socket,
+        competition: competition,
+        participants: Participants.list(competition_id),
+        users: users
+      )
 
     {:noreply, socket}
   end

@@ -26,7 +26,7 @@ defmodule SMWeb.Live.NewCompetition do
     socket =
       assign(socket,
         entity: %Competition{},
-        changeset: Competitions.change(%Competition{}),
+        form: %Competition{} |> Competitions.change() |> to_form(),
         competitions: Competitions.list(),
         organizations: Organizations.list(),
         evaluations: Evaluations.list(),
@@ -41,13 +41,13 @@ defmodule SMWeb.Live.NewCompetition do
 
   @impl Phoenix.LiveView
   def handle_event("validate", %{"entity" => entity}, socket) do
-    changeset =
+    form =
       socket.assigns.entity
       |> Competitions.change(entity)
-      |> Map.put(:action, :validate)
       |> assign_form()
+      |> IO.inspect()
 
-    {:noreply, assign(socket, :changeset, changeset)}
+    {:noreply, assign(socket, :form, form)}
   end
 
   def handle_event("submit", %{"entity" => entity}, socket) do
@@ -56,7 +56,7 @@ defmodule SMWeb.Live.NewCompetition do
         socket =
           socket
           |> assign(:entity, %Competition{})
-          |> assign(:changeset, Competitions.change(socket.assigns.entity))
+          |> assign(:form, Competitions.change(socket.assigns.entity))
           |> put_flash(:info, gettext("Competition created successfully"))
           |> push_navigate(to: "/organize/#{competition_id}/participants")
 
@@ -68,9 +68,9 @@ defmodule SMWeb.Live.NewCompetition do
         socket =
           socket
           |> put_flash(:error, gettext("Unable to create competition"))
-          |> assign(changeset: changeset)
+          |> assign(form: to_form(changeset))
 
-        {:noreply, assign(socket, :changeset, changeset)}
+        {:noreply, socket}
     end
   end
 
@@ -78,7 +78,7 @@ defmodule SMWeb.Live.NewCompetition do
     socket =
       socket
       |> assign(:entity, %Competition{})
-      |> assign(:changeset, Competitions.change(socket.assigns.entity))
+      |> assign(:form, socket.assigns.entity |> Competitions.change() |> to_form())
 
     {:noreply, socket}
   end
@@ -137,7 +137,11 @@ defmodule SMWeb.Live.NewCompetition do
     {:noreply, socket}
   end
 
-  def handle_event("validate-duplicate", %{"duplicate_competition" => %{"competition_id" => ""}}, socket) do
+  def handle_event(
+        "validate-duplicate",
+        %{"duplicate_competition" => %{"competition_id" => ""}},
+        socket
+      ) do
     {:noreply, socket}
   end
 
@@ -170,7 +174,7 @@ defmodule SMWeb.Live.NewCompetition do
   def handle_params(_params, _uri, socket) do
     socket =
       assign(socket,
-        changeset: %Competition{} |> Competitions.change() |> assign_form(),
+        form: %Competition{} |> Competitions.change() |> assign_form(),
         competitions: Competitions.list(),
         organizations: Organizations.list()
       )
@@ -189,7 +193,11 @@ defmodule SMWeb.Live.NewCompetition do
   # Internal
 
   defp validate_duplication_params(params) do
-    teams = if params["participants"] == "true" and params["for_teams"] == "true", do: params["teams"], else: "false"
+    teams =
+      if params["participants"] == "true" and params["for_teams"] == "true",
+        do: params["teams"],
+        else: "false"
+
     slides = if params["participants"] == "true", do: params["slides"], else: "false"
     selection = if slides == "true", do: params["selection"], else: "false"
     votes = if selection == "true", do: params["votes"], else: "false"
@@ -210,9 +218,12 @@ defmodule SMWeb.Live.NewCompetition do
 
   defp assign_form(%Ecto.Changeset{} = changeset) do
     if Ecto.Changeset.get_field(changeset, :competitions_evaluations) == [] do
-      all_evaluation_ids = Enum.map(Evaluations.list(), &%CompetitionEvaluation{evaluation_id: &1.id})
+      all_evaluation_ids =
+        Enum.map(Evaluations.list(), &%CompetitionEvaluation{evaluation_id: &1.id})
 
-      changeset |> Ecto.Changeset.put_change(:competitions_evaluations, all_evaluation_ids) |> to_form()
+      changeset
+      |> Ecto.Changeset.put_change(:competitions_evaluations, all_evaluation_ids)
+      |> to_form()
     else
       to_form(changeset)
     end

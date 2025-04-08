@@ -276,7 +276,7 @@ defmodule SMWeb.Live.Admin.Competitions.Form do
   end
 
   @impl true
-  def update(%{changeset: changeset} = assigns, socket) do
+  def update(%{form: changeset} = assigns, socket) do
     {:ok,
      socket
      |> assign(assigns)

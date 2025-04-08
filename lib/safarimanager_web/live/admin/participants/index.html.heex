@@ -135,7 +135,9 @@
           patch={~p"/admin/participants/#{item.user_id}/#{item.competition_id}"}
           class="btn btn-square btn-sm btn-info"
           title={gettext("Show")}
-        ><Heroicons.icon name="eye" type="outline" class="w-4 h-4" /></.link>
+        >
+          <Heroicons.icon name="eye" type="outline" class="w-4 h-4" />
+        </.link>
         <.link
           patch={~p"/admin/participants/#{item.user_id}/#{item.competition_id}/edit"}
           class="btn btn-square btn-sm btn-warning"

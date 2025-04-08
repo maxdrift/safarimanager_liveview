@@ -42,8 +42,9 @@ defmodule SMWeb.TelemetryPusher do
     PrometheusPush.push(%{job: "push-metrics", grouping_key: [{"instance", hostname}]})
   end
 
-  defp schedule_work(delay_sec \\ 10) do
-    _ref = Process.send_after(self(), :push, :timer.seconds(delay_sec))
+  defp schedule_work do
+    delay_msec = get_config!(:push_interval)
+    _ref = Process.send_after(self(), :push, to_timeout(millisecond: delay_msec))
     :ok
   end
 

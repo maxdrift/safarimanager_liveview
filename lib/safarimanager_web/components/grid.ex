@@ -174,7 +174,7 @@ defmodule SMWeb.Components.Grid do
     end
 
     {:noreply,
-     confirm(socket, on_confirm,
+     SMWeb.Components.Confirm.confirm(socket, on_confirm,
        title: gettext("Delete record"),
        description: gettext("Are you sure you want to delete this record?"),
        confirm_text: gettext("Delete"),
@@ -191,7 +191,7 @@ defmodule SMWeb.Components.Grid do
       socket
     end
 
-    confirm(socket, on_confirm,
+    SMWeb.Components.Confirm.confirm(socket, on_confirm,
       title: gettext("Delete all records"),
       description: gettext("Are you sure you want to delete all records?"),
       confirm_text: gettext("Delete"),
@@ -208,7 +208,7 @@ defmodule SMWeb.Components.Grid do
       socket
     end
 
-    confirm(socket, on_confirm,
+    SMWeb.Components.Confirm.confirm(socket, on_confirm,
       title: gettext("Delete record"),
       description: gettext("Are you sure you want to delete 1 record?"),
       confirm_text: gettext("Delete"),
@@ -223,7 +223,7 @@ defmodule SMWeb.Components.Grid do
       socket
     end
 
-    confirm(socket, on_confirm,
+    SMWeb.Components.Confirm.confirm(socket, on_confirm,
       title: gettext("Delete records"),
       description:
         Gettext.gettext(

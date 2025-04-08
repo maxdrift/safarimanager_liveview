@@ -2,7 +2,7 @@ defmodule SMWeb.Live.Admin.Import do
   @moduledoc """
   Import live view
   """
-  use SMWeb, :surface_view
+  use SMWeb, :live_view
 
   import SMWeb.Components.Layout
   import SMWeb.Components.UploadDropArea
@@ -11,13 +11,6 @@ defmodule SMWeb.Live.Admin.Import do
   alias Phoenix.Component
   alias Phoenix.LiveView
   alias SM.CSVImport
-  alias Surface.Components.Form
-  alias Surface.Components.Form.ErrorTag
-  alias Surface.Components.Form.Field
-  alias Surface.Components.Form.Label
-  alias Surface.Components.Form.Reset
-  alias Surface.Components.Form.Select
-  alias Surface.Components.Form.Submit
 
   require Logger
 
@@ -52,7 +45,7 @@ defmodule SMWeb.Live.Admin.Import do
         {gettext("Subjects"), "subjects"},
         {gettext("Users"), "users"}
       ])
-      |> assign(:import_changeset, reset_changes())
+      |> assign(:import_form, reset_changes())
       |> allow_upload(:csv,
         accept: ~w(.csv),
         max_entries: 1,
@@ -64,14 +57,15 @@ defmodule SMWeb.Live.Admin.Import do
 
   @impl Phoenix.LiveView
   def handle_event("validate", %{"import" => form_data}, socket) do
-    changeset =
+    form =
       {%{}, @form_schema}
       |> Changeset.cast(form_data, [:table])
       |> Changeset.validate_required([:table])
       |> Changeset.validate_inclusion(:table, @tables)
-      |> Map.put(:action, :validate)
+      |> to_form(action: :validate, as: :import)
+      |> IO.inspect()
 
-    {:noreply, assign(socket, :import_changeset, changeset)}
+    {:noreply, assign(socket, :import_form, form)}
   end
 
   def handle_event("cancel-upload", %{"ref" => ref}, socket) do
@@ -79,7 +73,7 @@ defmodule SMWeb.Live.Admin.Import do
   end
 
   def handle_event("submit", _params, socket) do
-    table = Changeset.fetch_field!(socket.assigns.import_changeset, :table)
+    table = Changeset.fetch_field!(socket.assigns.import_form, :table)
 
     # Expect a single entry based on the allow_upload/3 'max_entries' configuration
     [%{success: success, failure: failure}] =
@@ -89,7 +83,7 @@ defmodule SMWeb.Live.Admin.Import do
 
     socket =
       socket
-      |> assign(:import_changeset, reset_changes())
+      |> assign(:import_form, reset_changes())
       |> put_flash(
         :info,
         gettext("Imported %{success} of %{total} entries in %{table}",
@@ -108,7 +102,7 @@ defmodule SMWeb.Live.Admin.Import do
         LiveView.cancel_upload(acc, :csv, entry.ref)
       end)
 
-    {:noreply, assign(socket, :import_changeset, reset_changes())}
+    {:noreply, assign(socket, :import_form, reset_changes())}
   end
 
   defp error_to_string(:too_large), do: gettext("Too large")
@@ -116,6 +110,8 @@ defmodule SMWeb.Live.Admin.Import do
   defp error_to_string(:not_accepted), do: gettext("You have selected an unacceptable file type")
 
   defp reset_changes do
-    Changeset.change({%{}, @form_schema}, %{})
+    {%{}, @form_schema}
+    |> Changeset.change(%{})
+    |> to_form(as: :import)
   end
 end

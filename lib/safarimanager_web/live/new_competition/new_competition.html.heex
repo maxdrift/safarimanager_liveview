@@ -1,6 +1,6 @@
 <.layout current_page={~p"/organize/new"} current_user={@current_user}>
   <div
-    :if={@changeset}
+    :if={@form}
     id="new-competition-dialog"
     class="modal"
     phx-window-keydown={JS.remove_class("modal-open", to: "#new-competition-dialog")}
@@ -16,7 +16,7 @@
         action={:create}
         competition_types={@competition_types}
         entity={@entity}
-        changeset={@changeset}
+        form={@form}
         validate="validate"
         submit="submit"
         organizations={@organizations}
@@ -166,8 +166,8 @@
         </div>
       </div>
     </div>
-    <%= for competition <- @competitions do %>
       <div
+        :for={competition <- @competitions}
         id={"#{competition.id}-competition-tile"}
         class="card card-compact bg-base-100 shadow-xl image-full cursor-pointer"
         phx-click="open"
@@ -205,6 +205,5 @@
           </div>
         </div>
       </div>
-    <% end %>
   </div>
 </.layout>

@@ -6,7 +6,7 @@ defmodule SM.USBWatcher do
 
   require Logger
 
-  @poll_interval :timer.seconds(5)
+  @poll_interval to_timeout(second: 5)
 
   @spec start_link(any()) :: GenServer.on_start()
   def start_link(args) do

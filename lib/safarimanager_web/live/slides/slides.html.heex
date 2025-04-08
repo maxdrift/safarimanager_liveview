@@ -1,0 +1,325 @@
+<.layout current_page={~p"/organize/#{@competition.id}/slides"} current_user={@current_user}>
+  <.competition_header competition={@competition} />
+  <.steps_header current_step={:slides} competition={@competition} />
+  <div class="flex flex-col mt-5">
+    <div class="rounded-lg bg-base-200 shadow-lg p-4">
+      <div :if={!@competition.for_teams} class="text-2xl font-bold text-center pb-4">
+        {gettext("Participants")}
+      </div>
+      <div :if={@competition.for_teams} class="text-2xl font-bold text-center pb-4">
+        {gettext("Teams")}
+      </div>
+      <div class="flex flex-row-reverse my-2">
+        <.link href={~p"/csv_export?entity=slides"} method="post" class="btn btn-sm btn-outline">
+          {gettext("Export Slides to CSV")}
+        </.link>
+      </div>
+      <div :if={!@competition.for_teams} id="participants-table">
+        <.form
+          for={%{}}
+          as={:participants_filter}
+          phx-change="filter-participants"
+          autocomplete="off"
+        >
+          <.input
+            type="text"
+            name={:value}
+            value=""
+            class="input input-bordered w-full mb-1"
+            placeholder={gettext("Search for a participant...")}
+            phx-debounce="500"
+            autocomplete="nope"
+          />
+        </.form>
+        <div class="max-h-48 overflow-y-auto tiny-scrollbar">
+          <table class="table table-zebra table-fixed w-full">
+            <thead>
+              <tr>
+                <th class="sticky top-0 w-1/12">{gettext("#")}</th>
+                <th class="sticky top-0 w-auto">{gettext("Last Name")}</th>
+                <th class="sticky top-0 w-auto">{gettext("First Name")}</th>
+                <th class="sticky top-0 w-auto">{gettext("Organization")}</th>
+                <th class="sticky top-0 w-auto">{gettext("Category")}</th>
+                <th class="sticky top-0 w-auto">{gettext("Slides")}</th>
+                <th class="sticky top-0 w-auto" />
+              </tr>
+            </thead>
+            <tbody>
+              <tr :for={item <- @participants}>
+                <td class="truncate">{item.number}</td>
+                <td class="truncate">{item.user.last_name}</td>
+                <td class="truncate">{item.user.first_name}</td>
+                <td class="truncate">
+                  {(item.user.organization && item.user.organization.name) || gettext("N/A")}
+                </td>
+                <td class="truncate">
+                  {(item.category && item.category.name) || gettext("N/A")}
+                </td>
+                <td class="truncate">{item.slides_count}</td>
+                <td class="truncate">
+                  <.link patch={"?user_id=#{item.user_id}"} class="btn btn-xs">
+                    {gettext("Select")}
+                  </.link>
+                </td>
+              </tr>
+              <tr :if={Enum.empty?(@participants)}>
+                <td colspan="7">{gettext("No items yet!")}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div :if={@competition.for_teams} id="teams-table">
+        <.form for={%{}} as={:teams_filter} phx-change="filter-teams" autocomplete="off">
+          <.input
+            type="text"
+            name={:value}
+            value=""
+            class="input input-bordered w-full mb-1"
+            placeholder={gettext("Search for a team...")}
+            phx-debounce="500"
+            autocomplete="nope"
+          />
+        </.form>
+        <div class="max-h-48 overflow-y-auto tiny-scrollbar bg-base-100 rounded-md">
+          <table class="table table-xs table-fixed w-full">
+            <thead>
+              <tr>
+                <th class="sticky top-0 w-2">{gettext("#")}</th>
+                <th class="sticky top-0 w-auto">{gettext("Name")}</th>
+                <th class="sticky top-0 w-auto">{gettext("Organization")}</th>
+                <th class="sticky top-0 w-1/12" />
+              </tr>
+            </thead>
+            <tbody>
+              <div :for={item <- @teams}>
+                <tr>
+                  <td>{item.number}</td>
+                  <td class="truncate">{Teams.synthesize_team_name(item) || gettext("N/A")}</td>
+                  <td class="truncate">{Teams.synthesize_org_name(item) || gettext("N/A")}</td>
+                  <td />
+                </tr>
+                <tr>
+                  <td />
+                  <td />
+                  <td colspan="2">
+                    <table class="table table-xs table-fixed w-full bg-base-300 rounded-md">
+                      <tbody>
+                        <tr
+                          :for={member <- item.members}
+                          class="border-b last:border-none border-neutral"
+                        >
+                          <td class="truncate">
+                            {member.user.last_name} {member.user.first_name}
+                          </td>
+                          <td class="truncate">
+                            <.link
+                              patch={"?user_id=#{member.user.id}"}
+                              class="btn btn-xs btn-base-200"
+                            >
+                              {gettext("Select")}
+                            </.link>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </td>
+                </tr>
+              </div>
+              <tr :if={Enum.empty?(@teams)}>
+                <td colspan="7">{gettext("No items yet!")}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div class="divider" />
+    <.live_component module={DirectUploadDialog} id="auto-upload-dialog" />
+    <div class="form-control w-44">
+      <.form for={%{}} as={:discovery_mode} phx-change="validate">
+        <.input
+          type="checkbox"
+          name="discovery_mode"
+          label={gettext("Auto discovery")}
+          class="toggle toggle-primary"
+        />
+      </.form>
+    </div>
+    <div class="overflow-y-auto rounded-lg bg-base-200 shadow-lg p-4">
+      <div :if={@user}>
+        <div class="text-2xl font-bold text-center py-4">
+          {gettext("Load slides for")} {@user.last_name} {@user.first_name}
+        </div>
+        <div class="text-lg text-center pb-4">
+          {gettext("Currently")} {Enum.count(@slides || [])} {gettext("slides")} - {Enum.count(
+            @uploads.images.entries || []
+          )} {gettext("uploading")}
+        </div>
+        <.live_component
+          :if={@direct_file_upload}
+          module={FileBrowser}
+          id="file-browser"
+          file_filter={[:jpg]}
+          import_click="direct-import"
+          user_id={@user.id}
+        />
+        <form
+          :if={!@direct_file_upload}
+          id="upload-drop-area-form"
+          phx-submit="submit"
+          phx-change="validate"
+        >
+          <.upload_drop_area field={:images} uploads={@uploads}>
+            {gettext("Click or drop some images in this box")}
+          </.upload_drop_area>
+        </form>
+        <div class="max-h-96 overflow-y-auto mt-2 tiny-scrollbar">
+          <table class="table table-zebra table-fixed w-full">
+            <thead>
+              <tr>
+                <th class="sticky top-0 w-1/12" />
+                <th class="sticky top-0 w-auto">{gettext("Name")}</th>
+                <th class="sticky top-0 w-auto">{gettext("Size")}</th>
+                <th class="sticky top-0 w-auto">{gettext("Dimensions")}</th>
+                <th class="sticky top-0 w-auto">
+                  <button
+                    phx-click="delete-all-slides"
+                    class={[
+                      "btn",
+                      "btn-xs",
+                      @slides != [] && "btn-error",
+                      @slides == [] && "btn-disabled"
+                    ]}
+                  >
+                    {gettext("Delete all")}
+                  </button>
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <%= for image <- sorted_images(@uploads.images.entries, @slides) do %>
+                <tr :if={is_slide?(image)}>
+                  <td class="truncate">
+                    <div>
+                      <div class="w-20">
+                        <img src={Utils.slide_thumbnail_path(image)} class="rounded-md border" />
+                      </div>
+                    </div>
+                  </td>
+                  <td class="truncate">{image.file_name}</td>
+                  <td class="truncate">{Utils.format_bytes(image.file_size)}</td>
+                  <td class="truncate">
+                    {(image.width && "#{image.width}x#{image.height}") || gettext("N/A")}
+                  </td>
+                  <td class="truncate">
+                    <button
+                      phx-click="delete-slide"
+                      phx-value-id={image.id}
+                      class="btn btn-xs btn-error"
+                    >
+                      {gettext("Delete")}
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        class="h-4 w-4"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                        stroke-width="2"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          d="M6 18L18 6M6 6l12 12"
+                        />
+                      </svg>
+                    </button>
+                  </td>
+                </tr>
+                <tr :if={!is_slide?(image)}>
+                  <td class="truncate">
+                    <div>
+                      <div class="relative w-20">
+                        <.live_img_preview entry={image} width="100" class="rounded-md border" />
+                        <div class="absolute w-full text-xs text-center">{image.progress}%</div>
+                        <progress
+                          class="absolute bottom-1 px-1 progress progress-secondary w-full"
+                          value={image.progress}
+                          max="100"
+                        />
+                      </div>
+                    </div>
+                  </td>
+                  <td class="truncate">{image.client_name}</td>
+                  <td class="truncate">{Utils.format_bytes(image.client_size)}</td>
+                  <td class="truncate">{gettext("N/A")}</td>
+                  <td class="truncate">
+                    <button
+                      phx-click="cancel-upload"
+                      phx-value-ref={image.ref}
+                      class="btn btn-xs btn-error"
+                    >
+                      {gettext("Cancel")}
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        class="h-4 w-4"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                        stroke-width="2"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          d="M6 18L18 6M6 6l12 12"
+                        />
+                      </svg>
+                    </button>
+                  </td>
+                </tr>
+              <% end %>
+              <tr :if={Enum.empty?(sorted_images(@uploads.images.entries, @slides))}>
+                <td colspan="5">{gettext("No items yet!")}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div :if={!@user} class="mt-2 text-center align-middle">
+        {gettext("Select a participant from the top")}.
+      </div>
+    </div>
+  </div>
+  <div class="flex flex-row my-10 w-full">
+    <.link navigate={"/organize/#{@competition_id}/jurors"} class="flex-none btn gap-2">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        class="h-6 w-6"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+        stroke-width="2"
+      >
+        <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+      </svg>
+      {gettext("Jurors")}
+    </.link>
+    <div class="grow" />
+    <.link
+      navigate={"/organize/#{@competition_id}/slide_selection"}
+      class="flex-none btn btn-primary gap-2"
+    >
+      {gettext("Selection")}
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        class="h-6 w-6"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+        stroke-width="2"
+      >
+        <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+      </svg>
+    </.link>
+  </div>
+</.layout>

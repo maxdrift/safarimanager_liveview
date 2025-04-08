@@ -1,19 +1,27 @@
-<div class="flex flex-col flex-nowrap h-screen" :on-window-keyup="evaluation-key">
+<div class="flex flex-col flex-nowrap h-screen" phx-window-keyup="evaluation-key">
   <div :if={@flash_eval} class="fixed bottom-10 left-10 z-10">
     <span class="text-9xl text-red-600">{@flash_eval}</span>
   </div>
   <div class="flex-initial">
     <div class="flex flex-row justify-between">
       <div class="join">
-        <span :if={@curr_slide} class="inline-block align-sub p-1 pl-3 font-bold">{@curr_index + 1} {gettext("of")} {@image_count}</span>
-        <span :if={!@curr_slide} class="inline-block align-sub p-1 pl-3 font-bold">0 {gettext("of")} {@image_count}</span>
+        <span :if={@curr_slide} class="inline-block align-sub p-1 pl-3 font-bold">
+          {@curr_index + 1} {gettext("of")} {@image_count}
+        </span>
+        <span :if={!@curr_slide} class="inline-block align-sub p-1 pl-3 font-bold">
+          0 {gettext("of")} {@image_count}
+        </span>
         <span
           :if={@curr_slide && @curr_slide.votes != []}
           class="inline-block align-sub p-1 pl-3 font-bold"
-        >{gettext("Evaluations")}: {Enum.map_join(@curr_slide.votes, " | ", & &1.evaluation.name)}</span>
+        >
+          {gettext("Evaluations")}: {Enum.map_join(@curr_slide.votes, " | ", & &1.evaluation.name)}
+        </span>
       </div>
       <div class="my-auto">
-        <span class="inline-block align-sub p-1 pl-3 font-bold">{@curr_slide && String.capitalize(@curr_slide.subject.name)}</span>
+        <span class="inline-block align-sub p-1 pl-3 font-bold">
+          {@curr_slide && String.capitalize(@curr_slide.subject.name)}
+        </span>
       </div>
       <div class="flex flex-row justify-between gap-2">
         <div class="join">
@@ -85,10 +93,18 @@
           </.jury_toolbar_button>
         </div>
         <div class="join">
-          <.jury_toolbar_button class="btn btn-sm join-item" id="zoom-out" title={gettext("Zoom out")}>
+          <.jury_toolbar_button
+            class="btn btn-sm join-item"
+            id="zoom-out"
+            title={gettext("Zoom out")}
+          >
             <Heroicons.icon name="magnifying-glass-minus" type="outline" class="w-6 h-6" />
           </.jury_toolbar_button>
-          <.jury_toolbar_button class="btn btn-sm join-item" id="zoom-100" title={gettext("Zoom 100%")}>
+          <.jury_toolbar_button
+            class="btn btn-sm join-item"
+            id="zoom-100"
+            title={gettext("Zoom 100%")}
+          >
             <svg
               stroke-miterlimit="10"
               style="fill-rule:nonzero;clip-rule:evenodd;stroke-linecap:round;stroke-linejoin:round;"
@@ -127,12 +143,26 @@
               />
             </svg>
           </.jury_toolbar_button>
-          <.jury_toolbar_button id="home" class="btn btn-sm join-item" title={gettext("Fit to window")}>
-            <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="h-6 w-6" viewBox="0 0 16 16">
-              <path d="M0 3.5A1.5 1.5 0 0 1 1.5 2h13A1.5 1.5 0 0 1 16 3.5v9a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 0 12.5v-9zM1.5 3a.5.5 0 0 0-.5.5v9a.5.5 0 0 0 .5.5h13a.5.5 0 0 0 .5-.5v-9a.5.5 0 0 0-.5-.5h-13z" /> <path d="M2 4.5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 0 1H3v2.5a.5.5 0 0 1-1 0v-3zm12 7a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1 0-1H13V8.5a.5.5 0 0 1 1 0v3z" />
+          <.jury_toolbar_button
+            id="home"
+            class="btn btn-sm join-item"
+            title={gettext("Fit to window")}
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="currentColor"
+              class="h-6 w-6"
+              viewBox="0 0 16 16"
+            >
+              <path d="M0 3.5A1.5 1.5 0 0 1 1.5 2h13A1.5 1.5 0 0 1 16 3.5v9a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 0 12.5v-9zM1.5 3a.5.5 0 0 0-.5.5v9a.5.5 0 0 0 .5.5h13a.5.5 0 0 0 .5-.5v-9a.5.5 0 0 0-.5-.5h-13z" />
+              <path d="M2 4.5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 0 1H3v2.5a.5.5 0 0 1-1 0v-3zm12 7a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1 0-1H13V8.5a.5.5 0 0 1 1 0v3z" />
             </svg>
           </.jury_toolbar_button>
-          <.jury_toolbar_button id="zoom-in" class="btn btn-sm join-item" title={gettext("Zoom in")}>
+          <.jury_toolbar_button
+            id="zoom-in"
+            class="btn btn-sm join-item"
+            title={gettext("Zoom in")}
+          >
             <Heroicons.icon name="magnifying-glass-plus" type="outline" class="w-6 h-6" />
           </.jury_toolbar_button>
         </div>
@@ -159,33 +189,45 @@
         >
           <Heroicons.icon name="arrows-pointing-out" type="solid" class="w-6 h-6 mx-auto" />
         </.jury_toolbar_button>
-        <a href={"/organize/#{@competition.id}/jury_launcher"} class="btn btn-sm" title={gettext("Exit")}>
+        <a
+          href={"/organize/#{@competition.id}/jury_launcher"}
+          class="btn btn-sm"
+          title={gettext("Exit")}
+        >
           {gettext("Exit")}
         </a>
       </div>
     </div>
   </div>
-  {!-- phx-update="ignore" is VERY VERY important!
-  It prevents the viewer from being replaced during LV updates. --}
-  <div id="openseadragon-viewer" class="flex-1" :hook="Lightbox" phx-update="ignore"> </div>
+  <!-- phx-update="ignore" is VERY VERY important!
+  It prevents the viewer from being replaced during LV updates. -->
+  <div id="openseadragon-viewer" class="flex-1" phx-hook="Lightbox" phx-update="ignore"></div>
   <div class="flex-initial">
     <div class="flex flex-row justify-between">
       <div class={["flex", "flex-row", "justify-between", "gap-2"]}>
-        <div class={["join", "btn-disabled": !can_evaluate?(@competition, @curr_slide)]}>
-          {#for evaluation <- @evaluations}
-            <.jury_toolbar_button
-              id={"evaluate-#{evaluation.id}"}
-              class="btn btn-sm join-item"
-              click="evaluate"
-              click_key="evaluation-id"
-              click_value={evaluation.id}
-              title={evaluation.description && Gettext.gettext(SMWeb.Gettext, evaluation.description)}
-            >{evaluation.name}</.jury_toolbar_button>
-          {#else}
-            {gettext("No evaluations available")}
-          {/for}
+        <div class={["join", !can_evaluate?(@competition, @curr_slide) && "btn-disabled"]}>
+          <.jury_toolbar_button
+            :for={evaluation <- @evaluations}
+            id={"evaluate-#{evaluation.id}"}
+            class="btn btn-sm join-item"
+            click="evaluate"
+            click_key="evaluation-id"
+            click_value={evaluation.id}
+            title={
+              evaluation.description && Gettext.gettext(SMWeb.Gettext, evaluation.description)
+            }
+          >
+            {evaluation.name}
+          </.jury_toolbar_button>
+          <span :if={Enum.empty?(@evaluations)}>{gettext("No evaluations available")}</span>
         </div>
-        <.jury_toolbar_button id="clear-evaluations" click="clear-evaluations" title={gettext("Clear")}>{gettext("Clear")}</.jury_toolbar_button>
+        <.jury_toolbar_button
+          id="clear-evaluations"
+          click="clear-evaluations"
+          title={gettext("Clear")}
+        >
+          {gettext("Clear")}
+        </.jury_toolbar_button>
       </div>
       <div class="join">
         <.jury_toolbar_button
@@ -193,9 +235,16 @@
           click="penalty"
           click_key="penalty"
           click_value="penalty"
-          class={"btn", "btn-sm", "btn-error": @curr_slide && @curr_slide.penalty}
+          class={[
+            "btn",
+            "btn-sm",
+            "btn-error",
+            @curr_slide && @curr_slide.penalty && "btn-disabled"
+          ]}
           title={gettext("Penalty")}
-        >{gettext("Penalty")}</.jury_toolbar_button>
+        >
+          {gettext("Penalty")}
+        </.jury_toolbar_button>
       </div>
       <div class="join">
         <!-- {#for prize <- @prizes}

@@ -2,7 +2,7 @@ defmodule SMWeb.Live.ValidationLauncher do
   @moduledoc """
   Validation launcher live view
   """
-  use SMWeb, :surface_view
+  use SMWeb, :live_view
 
   import SMWeb.Components.CompetitionHeader
   import SMWeb.Components.Layout
@@ -12,9 +12,6 @@ defmodule SMWeb.Live.ValidationLauncher do
   alias SM.Competitions
   alias SM.Slides
   alias SM.Subjects
-  alias Surface.Components.Form
-  alias Surface.Components.Form.HiddenInput
-  alias Surface.Components.Form.Submit
 
   require Logger
 

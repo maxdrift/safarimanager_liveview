@@ -9,7 +9,7 @@ defmodule SMWeb.Components.JuryToolbarButton do
   attr :click_key, :string
   attr :click_value, :string
   attr :title, :string
-  attr :class, :string, default: "btn btn-sm"
+  attr :class, :any, default: "btn btn-sm"
 
   slot :inner_block
 

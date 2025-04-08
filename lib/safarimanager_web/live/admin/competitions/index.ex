@@ -109,7 +109,7 @@ defmodule SMWeb.Live.Admin.Competitions.Index do
     end
 
     {:noreply,
-     confirm(socket, on_confirm,
+     SMWeb.Components.Confirm.confirm(socket, on_confirm,
        title: gettext("Erase discarded slides"),
        description: gettext("Are you sure you want to delete all discarded slides?"),
        confirm_text: gettext("Delete"),
@@ -186,7 +186,8 @@ defmodule SMWeb.Live.Admin.Competitions.Index do
     {:noreply, put_flash(socket, :info, gettext("All competitions deleted successfully"))}
   end
 
-  def handle_info({Competitions, [:competition, :deleted], deleted_ids}, socket) when is_list(deleted_ids) do
+  def handle_info({Competitions, [:competition, :deleted], deleted_ids}, socket)
+      when is_list(deleted_ids) do
     socket =
       deleted_ids
       |> Stream.map(fn id -> "items-#{id}" end)
@@ -199,7 +200,8 @@ defmodule SMWeb.Live.Admin.Competitions.Index do
     {:noreply, socket}
   end
 
-  def handle_info({Competitions, [:competition, :deleted], deleted_count}, socket) when is_integer(deleted_count) do
+  def handle_info({Competitions, [:competition, :deleted], deleted_count}, socket)
+      when is_integer(deleted_count) do
     {:noreply, push_navigate(socket, to: "/admin/competitions")}
   end
 
@@ -286,9 +288,12 @@ defmodule SMWeb.Live.Admin.Competitions.Index do
 
   defp assign_form(%Ecto.Changeset{} = changeset) do
     if Ecto.Changeset.get_field(changeset, :competitions_evaluations) == [] do
-      all_evaluation_ids = Enum.map(Evaluations.list(), &%CompetitionEvaluation{evaluation_id: &1.id})
+      all_evaluation_ids =
+        Enum.map(Evaluations.list(), &%CompetitionEvaluation{evaluation_id: &1.id})
 
-      changeset |> Ecto.Changeset.put_change(:competitions_evaluations, all_evaluation_ids) |> to_form()
+      changeset
+      |> Ecto.Changeset.put_change(:competitions_evaluations, all_evaluation_ids)
+      |> to_form()
     else
       to_form(changeset)
     end

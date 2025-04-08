@@ -2,7 +2,7 @@ defmodule SMWeb.Live.Validation do
   @moduledoc """
   Live view to handle Validation operations
   """
-  use SMWeb, :surface_view
+  use SMWeb, :live_view
 
   import SMWeb.Components.JuryToolbarButton
 
@@ -11,12 +11,6 @@ defmodule SMWeb.Live.Validation do
   alias SM.Slides
   alias SM.Subjects
   alias SM.Utils
-  alias Surface.Components.Form
-  alias Surface.Components.Form.HiddenInput
-  alias Surface.Components.Form.Label
-  alias Surface.Components.Form.NumberInput
-  alias Surface.Components.Form.Select
-  alias Surface.Components.Form.TextInput
 
   require Logger
 
@@ -139,11 +133,7 @@ defmodule SMWeb.Live.Validation do
     {:noreply, to_prev_image(socket)}
   end
 
-  def handle_event(
-        "wrong-subject-change",
-        %{"wrong_subject_flag" => %{"new_subject" => new_subject_id, "flag_id" => flag_id}},
-        socket
-      ) do
+  def handle_event("wrong-subject-change", %{"new_subject" => new_subject_id, "flag_id" => flag_id}, socket) do
     old_subject_id = socket.assigns.curr_slide.subject_id
 
     socket =
@@ -185,7 +175,7 @@ defmodule SMWeb.Live.Validation do
     {:noreply, socket}
   end
 
-  def handle_event("unrecognizable-submit", %{"unrecognizable" => %{"flag_id" => flag_id}}, socket) do
+  def handle_event("unrecognizable-submit", %{"flag_id" => flag_id}, socket) do
     slide_flag =
       if flag_id == "" do
         {:ok, slide_flag} =
@@ -205,7 +195,7 @@ defmodule SMWeb.Live.Validation do
     {:noreply, assign(socket, slide_flags: Map.put(socket.assigns.slide_flags, :unrecognizable, slide_flag))}
   end
 
-  def handle_event("distinction-submit", %{"distinction" => %{"flag_id" => flag_id}}, socket) do
+  def handle_event("distinction-submit", %{"flag_id" => flag_id}, socket) do
     slide_flag =
       if flag_id == "" do
         {:ok, slide_flag} =
@@ -225,7 +215,7 @@ defmodule SMWeb.Live.Validation do
     {:noreply, assign(socket, slide_flags: Map.put(socket.assigns.slide_flags, :distinction, slide_flag))}
   end
 
-  def handle_event("note-change", %{"note" => %{"value" => value, "flag_id" => flag_id}}, socket) do
+  def handle_event("note-change", %{"value" => value, "flag_id" => flag_id}, socket) do
     slide_flag =
       if flag_id == "" do
         {:ok, slide_flag} =
@@ -257,7 +247,7 @@ defmodule SMWeb.Live.Validation do
     {:noreply, assign(socket, slide_flags: Map.put(socket.assigns.slide_flags, :note, slide_flag))}
   end
 
-  def handle_event("go-to-change", %{"go_to" => %{"go_to" => index}}, socket) do
+  def handle_event("go-to-change", %{"go_to" => index}, socket) do
     case String.to_integer(index) do
       new_index when new_index >= 1 and new_index <= socket.assigns.image_count ->
         {:noreply, to_image_index(socket, new_index - 1)}

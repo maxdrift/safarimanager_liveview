@@ -2,7 +2,7 @@ defmodule SMWeb.Live.BallotBox do
   @moduledoc """
   Ballot box live view
   """
-  use SMWeb, :surface_view
+  use SMWeb, :live_view
 
   alias SM.Competitions
   alias SM.Evaluations
@@ -17,65 +17,72 @@ defmodule SMWeb.Live.BallotBox do
 
   @impl Phoenix.LiveView
   def render(assigns) do
-    ~F"""
-    {#if is_nil(@slide)}
-      <div class="fixed top-0 bottom-0 left-0 right-0 z-50 bg-base-300/60 text-center flex justify-center items-center">
-        <div>
-          <span class="text-lg mx-4">{gettext("Voting not available yet. Wait for the Jury session to start!")}</span>
-          <div class="mt-4">
-            <span class="loading loading-spinner loading-lg" />
-          </div>
+    ~H"""
+    <div
+      :if={is_nil(@slide)}
+      class="fixed top-0 bottom-0 left-0 right-0 z-50 bg-base-300/60 text-center flex justify-center items-center"
+    >
+      <div>
+        <span class="text-lg mx-4">
+          {gettext("Voting not available yet. Wait for the Jury session to start!")}
+        </span>
+        <div class="mt-4">
+          <span class="loading loading-spinner loading-lg" />
         </div>
       </div>
-    {#elseif !@can_vote_slide}
-      <div class="fixed top-0 bottom-0 left-0 right-0 z-50 bg-base-300/60 text-center flex flex-col justify-center items-center">
+    </div>
+    <div
+      :if={!@can_vote_slide}
+      class="fixed top-0 bottom-0 left-0 right-0 z-50 bg-base-300/60 text-center flex flex-col justify-center items-center"
+    >
+      <div>
+        <span class="text-lg mx-4">
+          {gettext("You have voted on slide") <> " #{@curr_index + 1}"}
+        </span>
+      </div>
+      <div>
+        <span class="text-lg mx-4">{gettext("Please wait for the next slide.")}</span>
+      </div>
+      <div>
+        <Heroicons.icon name="check-circle" type="outline" class="h-20 w-20 stroke-success" />
+      </div>
+    </div>
+    <div
+      :if={@selected_evaluation}
+      class="fixed top-0 bottom-0 left-0 right-0 z-50 bg-base-300/60 text-center flex justify-center items-center"
+    >
+      <div class="flex flex-col gap-1">
+        <span>{gettext("Selected vote:")}</span>
+        <span class="text-2xl bold mb-2">{@selected_evaluation.name}</span>
         <div>
-          <span class="text-lg mx-4">{gettext("You have voted on slide") <> " #{@curr_index + 1}"}</span>
-        </div>
-        <div>
-          <span class="text-lg mx-4">{gettext("Please wait for the next slide.")}</span>
-        </div>
-        <div>
-          <Heroicons.icon name="check-circle" type="outline" class="h-20 w-20 stroke-success" />
+          <button class="btn btn-primary" phx-click="confirm-vote">
+            <span>{gettext("Confirm")}</span>
+          </button>
+          <button class="btn btn-error" phx-click="dismiss-vote">
+            <span>{gettext("Cancel")}</span>
+          </button>
         </div>
       </div>
-    {#elseif @selected_evaluation}
-      <div class="fixed top-0 bottom-0 left-0 right-0 z-50 bg-base-300/60 text-center flex justify-center items-center">
-        <div class="flex flex-col gap-1">
-          <span>{gettext("Selected vote:")}</span> <span class="text-2xl bold mb-2">{@selected_evaluation.name}</span>
-          <div>
-            <button class="btn btn-primary" :on-click="confirm-vote">
-              <span>{gettext("Confirm")}</span>
-            </button>
-            <button class="btn btn-error" :on-click="dismiss-vote">
-              <span>{gettext("Cancel")}</span>
-            </button>
-          </div>
-        </div>
-      </div>
-    {/if}
+    </div>
     <div
       id="voting-pad"
-      class={"blur-sm": is_nil(@slide) || @selected_evaluation || !@can_vote_slide}
+      class={[(is_nil(@slide) || @selected_evaluation || !@can_vote_slide) && "blur-sm"]}
       phx-hook="NoSleep"
     >
       <div class="my-4 text-center min-h-6">
-        {#if @slide}
-          <span class="capitalize">{@slide && @slide.subject.name}</span> - {gettext("slide")} {@curr_index + 1} {gettext("of")} {@image_count}
-        {/if}
+        <span :if={@slide} class="capitalize">{@slide && @slide.subject.name}</span>
+        - {gettext("slide")} {@curr_index + 1} {gettext("of")} {@image_count}
       </div>
       <div class="grid grid-cols-3 grid-rows-4 gap-1">
-        {#for evaluation <- @evaluations}
-          <button
-            class="btn btn-lg btn-neutral"
-            :on-click="select-vote"
-            :values={evaluation_id: evaluation.id}
-          >
-            <span>{evaluation.name}</span>
-          </button>
-        {#else}
-          <span>{gettext("No evaluations available")}</span>
-        {/for}
+        <button
+          :for={evaluation <- @evaluations}
+          class="btn btn-lg btn-neutral"
+          phx-click="select-vote"
+          phx-value-evaluation-id={evaluation.id}
+        >
+          <span>{evaluation.name}</span>
+        </button>
+        <span :if={Enum.empty?(@evaluations)}>{gettext("No evaluations available")}</span>
       </div>
     </div>
     """

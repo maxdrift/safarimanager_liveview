@@ -65,8 +65,8 @@ defmodule SM.PromEx do
       {Plugins.Phoenix, router: SMWeb.Router, endpoint: SMWeb.Endpoint},
       Plugins.Ecto,
       # Plugins.Oban,
-      Plugins.PhoenixLiveView,
-      SM.PromEx.Plugins.TablesSize
+      Plugins.PhoenixLiveView
+      # SM.PromEx.Plugins.TablesSize
       # Plugins.Absinthe,
       # Plugins.Broadway,
 

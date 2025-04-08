@@ -2,7 +2,7 @@ defmodule SMWeb.Live.TeamResults do
   @moduledoc """
   Results live view
   """
-  use SMWeb, :surface_view
+  use SMWeb, :live_view
 
   import SMWeb.Components.CompetitionHeader
   import SMWeb.Components.Layout

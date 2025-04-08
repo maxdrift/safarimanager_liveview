@@ -2,7 +2,7 @@ defmodule SMWeb.Live.Results do
   @moduledoc """
   Results live view
   """
-  use SMWeb, :surface_view
+  use SMWeb, :live_view
 
   import SMWeb.Components.CompetitionHeader
   import SMWeb.Components.Layout
@@ -12,8 +12,6 @@ defmodule SMWeb.Live.Results do
   alias SM.Results
   alias SM.Slides
   alias SM.Subjects
-  alias Surface.Components.Form
-  alias Surface.Components.Form.Select
 
   require Logger
 
@@ -26,8 +24,7 @@ defmodule SMWeb.Live.Results do
   end
 
   @impl Phoenix.LiveView
-  def handle_event("results-type-change", params, socket) do
-    %{"results_type_change" => %{"results_type" => type}} = params
+  def handle_event("results-type-change", %{"results_type" => type}, socket) do
     competition_id = socket.assigns.competition_id
 
     socket =

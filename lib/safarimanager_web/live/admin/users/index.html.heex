@@ -1,10 +1,10 @@
 <.layout current_page={~p"/admin/users"} current_user={@current_user}>
-  {!-- Show dialog --}
+  <!-- Show dialog -->
   <div
     :if={@live_action == :show}
     id="show-dialog"
     class="modal modal-open"
-    :on-window-keydown={JS.patch("/admin/users")}
+    phx-window-keydown={JS.patch("/admin/users")}
     phx-key="Escape"
   >
     <div class="modal-box">
@@ -40,18 +40,18 @@
         </.fields_list>
       </div>
       <div class="modal-action">
-        <button :on-click={JS.patch("/admin/users")} class="btn btn-md btn-ghost">
+        <button phx-click={JS.patch("/admin/users")} class="btn btn-md btn-ghost">
           {gettext("Close")}
         </button>
       </div>
     </div>
   </div>
-  {!-- New-edit dialog --}
+  <!-- New-edit dialog -->
   <div
     :if={@live_action in [:new, :edit]}
     id="edit-dialog"
     class="modal modal-open"
-    :on-window-keydown={JS.patch("/admin/users")}
+    phx-window-keydown={JS.patch("/admin/users")}
     phx-key="Escape"
   >
     <div class="modal-box">
@@ -59,50 +59,67 @@
         <span :if={@live_action == :new}>{gettext("New user")}</span>
         <span :if={@live_action == :edit}>{gettext("Edit user")}</span>
       </div>
-      <Form for={@changeset} change="validate" submit="submit" as={:entity} opts={autocomplete: "off"}>
+      <.form for={@form} phx-change="validate" phx-submit="submit" as={:entity} autocomplete="off">
         <div class="card-body">
-          <.sm_field name={:last_name} label={gettext("Last name")}>
-            <TextInput class={input_state_class(@changeset, :last_name)} opts={phx_debounce: "1000"} />
-          </.sm_field>
-          <.sm_field name={:first_name} label={gettext("First name")}>
-            <TextInput class={input_state_class(@changeset, :first_name)} opts={phx_debounce: "1000"} />
-          </.sm_field>
-          <.sm_field name={:email} label={gettext("Email")}>
-            <TextInput class={input_state_class(@changeset, :email)} opts={phx_debounce: "1000"} />
-          </.sm_field>
-          <.sm_field name={:organization_id} label={gettext("Organization")}>
-            <Select
-              options={Enum.map(@organizations, &{&1.name, &1.id})}
-              prompt={[key: gettext("Select an organization...")]}
-              selected={@record.organization_id}
-              class={select_state_class(@changeset, :organization_id)}
-            />
-          </.sm_field>
-          <.sm_field name={:category_id} label={gettext("Category")}>
-            <Select
-              options={Enum.map(@categories, &{&1.name, &1.id})}
-              prompt={[key: gettext("Select a category...")]}
-              selected={@record.category_id}
-              class={select_state_class(@changeset, :category_id)}
-            />
-          </.sm_field>
-          <HiddenInput field={:_action} value={@action} />
+          <.input
+            type="text"
+            label={gettext("Last name")}
+            field={@form[:last_name]}
+            class={input_state_class(@form, :last_name)}
+            phx-debounce="1000"
+          />
+          <.input
+            type="text"
+            label={gettext("First name")}
+            field={@form[:first_name]}
+            class={input_state_class(@form, :first_name)}
+            phx-debounce="1000"
+          />
+          <.input
+            type="email"
+            label={gettext("Email")}
+            field={@form[:email]}
+            class={input_state_class(@form, :email)}
+            phx-debounce="1000"
+          />
+          <.input
+            type="select"
+            label={gettext("Organization")}
+            field={@form[:organization_id]}
+            options={Enum.map(@organizations, &{&1.name, &1.id})}
+            prompt={gettext("Select an organization...")}
+            class={select_state_class(@form, :organization_id)}
+          />
+          <.input
+            type="select"
+            label={gettext("Category")}
+            field={@form[:category_id]}
+            options={Enum.map(@categories, &{&1.name, &1.id})}
+            prompt={gettext("Select a category...")}
+            class={select_state_class(@form, :category_id)}
+          />
+          <.hidden_input name={:_action} value={@action} />
         </div>
         <div class="modal-action">
-          <Submit values={[action: @action]} class={submit_state_class(@changeset)}>
+          <button type="submit" phx-value-action={@action} class={submit_state_class(@form)}>
             {gettext("Save")}
-          </Submit>
-          <Reset click={JS.patch("/admin/users")} class="btn btn-md btn-ghost" value={gettext("Cancel")} />
+          </button>
+          <input
+            type="reset"
+            phx-click={JS.patch("/admin/users")}
+            class="btn btn-md btn-ghost"
+            value={gettext("Cancel")}
+          />
         </div>
-      </Form>
+      </.form>
     </div>
   </div>
-  {!-- Merge dialog --}
+  <!-- Merge dialog -->
   <div
     :if={@merge_selection != []}
     id="merge-dialog"
     class="modal modal-open"
-    :on-window-keydown={JS.navigate("/admin/users")}
+    phx-window-keydown={JS.navigate("/admin/users")}
     phx-key="Escape"
   >
     <div class="modal-box">
@@ -117,7 +134,8 @@
                 :for={record <- @merge_selection}
                 class="border border-solid border-base-content rounded my-1"
               >
-                {record.last_name} {record.first_name}{record.organization && " (#{record.organization.name})"}
+                {record.last_name} {record.first_name}{record.organization &&
+                  " (#{record.organization.name})"}
               </div>
             </div>
           </div>
@@ -143,38 +161,47 @@
               />
             </svg>
           </div>
-          <Form
-            for={@changeset}
-            change="validate"
-            submit="submit"
-            as={:merge}
-            opts={autocomplete: "off"}
+          <.form
+            for={@merge_form}
+            phx-change="validate"
+            phx-submit="submit"
+            autocomplete="off"
             class="w-full px-auto"
           >
-            <.sm_field name={:dest_id}>
-              <Select
-                options={Enum.map(
+            <.input
+              type="select"
+              field={@merge_form[:dest_id]}
+              options={
+                Enum.map(
                   @merge_selection,
-                  &{"#{&1.last_name} #{&1.first_name} #{&1.organization && ~s|(#{&1.organization.name})|}", &1.id}
-                )}
-                prompt={[key: gettext("Select a user...")]}
-                class={select_state_class(@changeset, :dest_id)}
-              />
-            </.sm_field>
+                  &{"#{&1.last_name} #{&1.first_name} #{&1.organization && ~s|(#{&1.organization.name})|}",
+                   &1.id}
+                )
+              }
+              prompt={gettext("Select a user...")}
+              class={select_state_class(@merge_form, :dest_id)}
+            />
             <div class="modal-action">
-              <Submit class={submit_state_class(@changeset)}>{gettext("Merge")}</Submit>
-              <Reset
-                click={JS.navigate("/admin/users")}
+              <button
+                type="submit"
+                phx-value-action={@action}
+                class={submit_state_class(@merge_form)}
+              >
+                {gettext("Merge")}
+              </button>
+              <input
+                type="reset"
+                phx-click={JS.navigate("/admin/users")}
                 class="btn btn-md btn-ghost"
                 value={gettext("Cancel")}
               />
             </div>
-          </Form>
+          </.form>
         </div>
       </div>
     </div>
   </div>
-  {!-- Index table --}
+  <!-- Index table -->
   <.live_component
     module={SMWeb.Components.Grid}
     id="users-list"
@@ -204,18 +231,25 @@
           patch={~p"/admin/users/#{item.id}"}
           class="btn btn-square btn-sm btn-info"
           title={gettext("Show")}
-        ><Heroicons.icon name="eye" type="outline" class="w-4 h-4" /></.link>
+        >
+          <Heroicons.icon name="eye" type="outline" class="w-4 h-4" />
+        </.link>
         <.link
           patch={~p"/admin/users/#{item.id}/edit"}
           class="btn btn-square btn-sm btn-warning"
           title={gettext("Edit")}
-        ><Heroicons.icon name="pencil-square" type="solid" class="w-4 h-4" /></.link>
+        >
+          <Heroicons.icon name="pencil-square" type="solid" class="w-4 h-4" />
+        </.link>
         <button
           class="btn btn-square btn-sm btn-error"
-          :on-click={"delete-one", target: "#users-list"}
-          :values={id: item.id}
+          phx-click="delete-one"
+          phx-target="#users-list"
+          phx-value-id={item.id}
           title={gettext("Delete")}
-        ><Heroicons.icon name="trash" type="outline" class="w-4 h-4" /></button>
+        >
+          <Heroicons.icon name="trash" type="outline" class="w-4 h-4" />
+        </button>
       </div>
     </:col>
   </.live_component>

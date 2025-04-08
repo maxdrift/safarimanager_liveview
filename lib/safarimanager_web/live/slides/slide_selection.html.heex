@@ -2,27 +2,42 @@
   current_page={~p"/organize/#{@competition.id}/slide_selection"}
   current_user={@current_user}
 >
-  <.competition_header {=@competition} />
+  <.competition_header competition={@competition} />
   <.steps_header current_step={:selection} competition={@competition} />
   <div class="flex flex-col mt-5">
     <div class="rounded-lg bg-base-200 shadow-lg p-4">
-      <div :if={!@competition.for_teams} class="text-2xl font-bold text-center pb-4">{gettext("Participants")}</div>
-      <div :if={@competition.for_teams} class="text-2xl font-bold text-center pb-4">{gettext("Teams")}</div>
+      <div :if={!@competition.for_teams} class="text-2xl font-bold text-center pb-4">
+        {gettext("Participants")}
+      </div>
+      <div :if={@competition.for_teams} class="text-2xl font-bold text-center pb-4">
+        {gettext("Teams")}
+      </div>
       <div class="my-2">
         <.link
           class="btn btn-outline btn-xs"
           href={~p"/#{@competition.id}/selection_printout"}
           target="_blank"
-        >{gettext("Print all slides selection reports")}</.link>
+        >
+          {gettext("Print all slides selection reports")}
+        </.link>
       </div>
       <div :if={!@competition.for_teams} id="participants-table">
-        <Form for={%{}} as={:participants_filter} change="filter-participants" opts={autocomplete: "off"}>
-          <TextInput
+        <.form
+          for={%{}}
+          as={:participants_filter}
+          phx-change="filter-participants"
+          autocomplete="off"
+        >
+          <.input
+            type="text"
             name={:value}
+            value=""
             class="input input-bordered w-full mb-1"
-            opts={placeholder: gettext("Search for a participant..."), phx_debounce: "500", autocomplete: "nope"}
+            placeholder={gettext("Search for a participant...")}
+            phx-debounce="500"
+            autocomplete="nope"
           />
-        </Form>
+        </.form>
         <div class="max-h-48 overflow-y-auto tiny-scrollbar">
           <table class="table table-zebra table-fixed w-full">
             <thead>
@@ -37,40 +52,44 @@
               </tr>
             </thead>
             <tbody>
-              {#for item <- @participants}
-                <tr>
-                  <td class="truncate">{item.number}</td>
-                  <td class="truncate">{item.user.last_name}</td>
-                  <td class="truncate">{item.user.first_name}</td>
-                  <td class="truncate">{(item.user.organization && item.user.organization.name) || gettext("N/A")}</td>
-                  <td class="truncate">{(item.category && item.category.name) || gettext("N/A")}</td>
-                  <td class="truncate">{item.slides_count}</td>
-                  <td>
-                    <.link
-                      patch={~p"/organize/#{@competition_id}/slide_selection/users/#{item.user_id}"}
-                      class="btn btn-xs"
-                    >
-                      {gettext("Select")}
-                    </.link>
-                  </td>
-                </tr>
-              {#else}
-                <tr>
-                  <td colspan="7">{gettext("No items yet!")}</td>
-                </tr>
-              {/for}
+              <tr :for={item <- @participants}>
+                <td class="truncate">{item.number}</td>
+                <td class="truncate">{item.user.last_name}</td>
+                <td class="truncate">{item.user.first_name}</td>
+                <td class="truncate">
+                  {(item.user.organization && item.user.organization.name) || gettext("N/A")}
+                </td>
+                <td class="truncate">
+                  {(item.category && item.category.name) || gettext("N/A")}
+                </td>
+                <td class="truncate">{item.slides_count}</td>
+                <td>
+                  <.link
+                    patch={~p"/organize/#{@competition_id}/slide_selection/users/#{item.user_id}"}
+                    class="btn btn-xs"
+                  >
+                    {gettext("Select")}
+                  </.link>
+                </td>
+              </tr>
+              <tr :if={Enum.empty?(@participants)}>
+                <td colspan="7">{gettext("No items yet!")}</td>
+              </tr>
             </tbody>
           </table>
         </div>
       </div>
       <div :if={@competition.for_teams} id="teams-table">
-        <Form for={%{}} as={:teams_filter} change="filter-teams" opts={autocomplete: "off"}>
-          <TextInput
+        <.form for={%{}} as={:teams_filter} phx-change="filter-teams" autocomplete="off">
+          <.input
             name={:value}
+            value=""
             class="input input-bordered w-full mb-1"
-            opts={placeholder: gettext("Search for a team..."), phx_debounce: "500", autocomplete: "nope"}
+            placeholder={gettext("Search for a team...")}
+            phx-debounce="500"
+            autocomplete="nope"
           />
-        </Form>
+        </.form>
         <div class="max-h-48 overflow-y-auto tiny-scrollbar bg-base-100 rounded-md">
           <table class="table table-xs table-fixed w-full">
             <thead>
@@ -82,7 +101,7 @@
               </tr>
             </thead>
             <tbody>
-              {#for item <- @teams}
+              <div :for={item <- @teams}>
                 <tr>
                   <td>{item.number}</td>
                   <td class="truncate">{Teams.synthesize_team_name(item) || gettext("N/A")}</td>
@@ -102,28 +121,32 @@
                   <td colspan="2">
                     <table class="table table-xs table-fixed w-full bg-base-300 rounded-md">
                       <tbody>
-                        {#for member <- item.members}
-                          <tr class="border-b last:border-none border-neutral">
-                            <td class="truncate">{member.user.last_name} {member.user.first_name}</td>
-                            <td class="text-right pr-5">
-                              <.link
-                                patch={~p"/organize/#{@competition_id}/slide_selection/users/#{member.user.id}"}
-                                class="btn btn-xs btn-base-200"
-                              >
-                                {gettext("Select")}
-                              </.link>
-                            </td>
-                          </tr>
-                        {/for}
+                        <tr
+                          :for={member <- item.members}
+                          class="border-b last:border-none border-neutral"
+                        >
+                          <td class="truncate">
+                            {member.user.last_name} {member.user.first_name}
+                          </td>
+                          <td class="text-right pr-5">
+                            <.link
+                              patch={
+                                ~p"/organize/#{@competition_id}/slide_selection/users/#{member.user.id}"
+                              }
+                              class="btn btn-xs btn-base-200"
+                            >
+                              {gettext("Select")}
+                            </.link>
+                          </td>
+                        </tr>
                       </tbody>
                     </table>
                   </td>
                 </tr>
-              {#else}
-                <tr>
-                  <td colspan="7">{gettext("No items yet!")}</td>
-                </tr>
-              {/for}
+              </div>
+              <tr :if={Enum.empty?(@teams)}>
+                <td colspan="7">{gettext("No items yet!")}</td>
+              </tr>
             </tbody>
           </table>
         </div>
@@ -131,22 +154,30 @@
     </div>
     <div class="divider" />
     <div class="overflow-y-auto rounded-lg bg-base-200 shadow-lg p-4">
-      {#if @user || @team}
-        <div :if={@user} class="text-2xl font-bold text-center py-4">{gettext("Load CSV for")} {@user.last_name} {@user.first_name}</div>
-        <div :if={@team} class="text-2xl font-bold text-center py-4">{gettext("Load CSV for")} {Teams.synthesize_team_name(@team)}</div>
+      <div :if={@user || @team}>
+        <div :if={@user} class="text-2xl font-bold text-center py-4">
+          {gettext("Load CSV for")} {@user.last_name} {@user.first_name}
+        </div>
+        <div :if={@team} class="text-2xl font-bold text-center py-4">
+          {gettext("Load CSV for")} {Teams.synthesize_team_name(@team)}
+        </div>
         <div class="my-4">
           <.link
             :if={@user}
             class="btn btn-outline btn-xs"
             href={~p"/#{@competition.id}/users/#{@user.id}/selection_printout"}
             target="_blank"
-          >{gettext("Print slides selection report")}</.link>
+          >
+            {gettext("Print slides selection report")}
+          </.link>
           <.link
             :if={@team}
             class="btn btn-outline btn-xs"
             href={~p"/#{@competition.id}/teams/#{@team.id}/selection_printout"}
             target="_blank"
-          >{gettext("Print slides selection report")}</.link>
+          >
+            {gettext("Print slides selection report")}
+          </.link>
         </div>
         <form id="upload-drop-area-form" phx-submit="submit" phx-change="validate">
           <.upload_drop_area field={:csv} uploads={@uploads}>
@@ -154,59 +185,59 @@
           </.upload_drop_area>
         </form>
         <!-- Edit dialog start -->
-        <input type="checkbox" id="edit-selection" class="modal-toggle" checked={@editing?}>
+        <input type="checkbox" id="edit-selection" class="modal-toggle" checked={@editing?} />
         <div class="modal">
           <div :if={@editing?} class="modal-box">
             <h3 class="font-bold text-lg">{gettext("Edit slide selection")}</h3>
-            <Form
-              for={@editing_changeset}
-              change="validate-editing"
-              submit="submit-editing"
+            <.form
+              for={@editing_form}
+              phx-change="validate-editing"
+              phx-submit="submit-editing"
               as={:slide}
-              opts={autocomplete: "off"}
+              autocomplete="off"
             >
               <div class="card-body">
-                <Field name={:subject_id} class="form-control">
-                  <Label class="label">
-                    <span class="label-text">{gettext("Subject")}</span>
-                  </Label>
-                  <Select
+                <div class="form-control">
+                  <.input
+                    type="select"
+                    field={@editing_form[:subject_id]}
+                    label={gettext("Subject")}
                     options={Enum.map(@subjects, fn s -> {String.capitalize(s.name), s.id} end)}
-                    prompt={
-                      key: gettext("Select a subject..."),
-                      disabled: true,
-                      selected: is_nil(@editing_slide.subject_id)
-                    }
-                    class={state_class("select select-bordered", @editing_changeset, :subject_id, [])}
-                    opts={selected: @editing_slide.subject_id}
+                    prompt={gettext("Select a subject...")}
+                    class={state_class("select select-bordered", @editing_form, :subject_id, [])}
                   />
-                  <Label class="label h-7">
-                    <ErrorTag />
-                  </Label>
-                </Field>
-                <Field name={:status} class="form-control">
-                  <Label class="label">
-                    <span class="label-text">{gettext("Status")}</span>
-                  </Label>
-                  <Select
+                </div>
+                <div class="form-control">
+                  <.input
+                    type="select"
+                    field={@editing_form[:status]}
+                    label={gettext("Status")}
                     options={get_status_select_options()}
-                    class={state_class("select select-bordered", @editing_changeset, :status, [])}
-                    opts={selected: @editing_slide.status}
+                    class={state_class("select select-bordered", @editing_form, :status, [])}
                   />
-                  <Label class="label h-7">
-                    <ErrorTag />
-                  </Label>
-                </Field>
+                </div>
               </div>
               <div class="modal-action">
-                <Submit class={
-                  "btn btn-md",
-                  "btn-success": @editing_changeset.action && @editing_changeset.valid?,
-                  "btn-disabled": !(@editing_changeset.action && @editing_changeset.valid?)
-                }>{gettext("Save")}</Submit>
-                <Reset click="stop-editing" class="btn btn-md btn-ghost" value={gettext("Close")} />
+                <button
+                  type="submit"
+                  class={[
+                    "btn btn-md",
+                    @editing_form.action && @editing_form.source.valid? &&
+                      "btn-success",
+                    !(@editing_form.action && @editing_form.source.valid?) &&
+                      "btn-disabled"
+                  ]}
+                >
+                  {gettext("Save")}
+                </button>
+                <input
+                  type="reset"
+                  phx-click="stop-editing"
+                  class="btn btn-md btn-ghost"
+                  value={gettext("Close")}
+                />
               </div>
-            </Form>
+            </.form>
           </div>
         </div>
         <!-- Edit dialog end -->
@@ -215,11 +246,10 @@
           fixed_slides={@fixed_slides}
           discarded_slides={@discarded_slides}
         />
-      {#else}
-        <div class="mt-2 text-center align-middle">
-          {gettext("Select a participant from the top")}.
-        </div>
-      {/if}
+      </div>
+      <div :if={!@user && !@team} class="mt-2 text-center align-middle">
+        {gettext("Select a participant from the top")}.
+      </div>
     </div>
   </div>
   <div class="flex flex-row my-10 w-full">

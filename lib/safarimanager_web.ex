@@ -60,15 +60,8 @@ defmodule SMWeb do
   def component do
     quote do
       use Phoenix.Component
-      use Gettext, backend: SMWeb.Gettext
 
-      import SMWeb.ErrorHelpers
-
-      # Shortcut for generating JS commands
-      alias Phoenix.LiveView.JS
-
-      # Routes generation with the ~p sigil
-      unquote(verified_routes())
+      unquote(html_helpers())
     end
   end
 
@@ -155,7 +148,7 @@ defmodule SMWeb do
 
       # HTML escaping functionality
       import Phoenix.HTML
-      import SMWeb.Components.Confirm
+      # import SMWeb.Components.Confirm, only: [confirm: 3, confirm_root: 1]
       # Core UI components and translation
       import SMWeb.Components.CoreComponents
       import SMWeb.ErrorHelpers

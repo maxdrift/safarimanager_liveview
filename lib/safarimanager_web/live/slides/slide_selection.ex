@@ -2,7 +2,7 @@ defmodule SMWeb.Live.SlideSelection do
   @moduledoc """
   Slide selection view
   """
-  use SMWeb, :surface_view
+  use SMWeb, :live_view
 
   import SMWeb.Components.CompetitionHeader
   import SMWeb.Components.Layout
@@ -18,14 +18,6 @@ defmodule SMWeb.Live.SlideSelection do
   alias SM.Slides.SelectionImport
   alias SM.Subjects
   alias SM.Teams
-  alias Surface.Components.Form
-  alias Surface.Components.Form.ErrorTag
-  alias Surface.Components.Form.Field
-  alias Surface.Components.Form.Label
-  alias Surface.Components.Form.Reset
-  alias Surface.Components.Form.Select
-  alias Surface.Components.Form.Submit
-  alias Surface.Components.Form.TextInput
 
   require Logger
 
@@ -44,7 +36,7 @@ defmodule SMWeb.Live.SlideSelection do
         slide_statuses: get_slide_statuses(),
         editing?: false,
         editing_slide: nil,
-        editing_changeset: nil,
+        editing_form: nil,
         subjects: Subjects.list()
       )
       |> allow_upload(:csv,
@@ -79,19 +71,19 @@ defmodule SMWeb.Live.SlideSelection do
       socket
       |> assign(:editing?, true)
       |> assign(:editing_slide, slide)
-      |> assign(:editing_changeset, Slides.change(slide))
+      |> assign(:editing_form, to_form(Slides.change(slide)))
 
     {:noreply, socket}
   end
 
   def handle_event("validate-editing", %{"slide" => params}, socket) do
     if socket.assigns.editing_slide do
-      changeset =
+      form =
         socket.assigns.editing_slide
         |> Slides.change(params)
-        |> Map.put(:action, :validate)
+        |> to_form(action: :validate)
 
-      socket = assign(socket, :editing_changeset, changeset)
+      socket = assign(socket, :editing_form, form)
       {:noreply, socket}
     else
       {:noreply, socket}
@@ -105,10 +97,10 @@ defmodule SMWeb.Live.SlideSelection do
           socket
           |> assign(:editing?, false)
           |> assign(:editing_slide, nil)
-          |> assign(:editing_changeset, nil)
+          |> assign(:editing_form, nil)
 
         {:error, changeset} ->
-          assign(socket, :editing_changeset, changeset)
+          assign(socket, :editing_form, to_form(changeset))
       end
 
     {:noreply, socket}
@@ -119,7 +111,7 @@ defmodule SMWeb.Live.SlideSelection do
       socket
       |> assign(:editing?, false)
       |> assign(:editing_slide, nil)
-      |> assign(:editing_changeset, nil)
+      |> assign(:editing_form, nil)
 
     {:noreply, socket}
   end

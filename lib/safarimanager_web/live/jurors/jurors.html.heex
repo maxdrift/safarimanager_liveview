@@ -1,11 +1,13 @@
 <.layout current_page={~p"/organize/#{@competition.id}/jurors"} current_user={@current_user}>
-  <.competition_header {=@competition} />
+  <.competition_header competition={@competition} />
   <.steps_header current_step={:jurors} competition={@competition} />
   <div
     :if={@qr_code}
     id="qr-code-dialog"
     class="modal modal-open"
-    :on-window-keydown={JS.remove_class("modal-open", to: "#qr-code-dialog") |> JS.push("hide-qr-code")}
+    phx-window-keydown={
+      JS.remove_class("modal-open", to: "#qr-code-dialog") |> JS.push("hide-qr-code")
+    }
     phx-key="Escape"
   >
     <div class="modal-box">
@@ -24,7 +26,9 @@
       </div>
       <div class="card-actions justify-end">
         <button
-          :on-click={JS.remove_class("modal-open", to: "#qr-code-dialog") |> JS.push("hide-qr-code")}
+          phx-click={
+            JS.remove_class("modal-open", to: "#qr-code-dialog") |> JS.push("hide-qr-code")
+          }
           class="btn btn-md btn-ghost"
         >
           {gettext("Close")}
@@ -35,13 +39,16 @@
   <div class="flex flex-col xl:flex-row mt-5">
     <div class="overflow-y-auto rounded-lg xl:w-1/2 bg-base-200 shadow-lg p-4">
       <div class="text-2xl font-bold text-center py-4">{gettext("Users")}</div>
-      <Form for={%{}} as={:users_filter} change="filter-users" opts={autocomplete: "off"}>
-        <TextInput
-          name={:value}
+      <.form :let={users_filter} for={%{}} phx-change="filter-users" autocomplete="off">
+        <.input
+          type="text"
+          field={users_filter[:value]}
           class="input input-bordered w-full mb-1"
-          opts={placeholder: gettext("Search for a user..."), phx_debounce: "500", autocomplete: "nope"}
+          placeholder={gettext("Search for a user...")}
+          phx-debounce="500"
+          autocomplete="nope"
         />
-      </Form>
+      </.form>
       <div class="max-h-48 overflow-y-auto tiny-scrollbar">
         <table class="table table-zebra table-sm">
           <thead>
@@ -53,20 +60,25 @@
             </tr>
           </thead>
           <tbody>
-            {#for item <- @users}
-              <tr>
-                <td class="truncate">{item.last_name}</td>
-                <td class="truncate">{item.first_name}</td>
-                <td class="truncate">{(item.organization && item.organization.name) || gettext("N/A")}</td>
-                <td>
-                  <button class="btn btn-xs btn-success" :on-click="enroll" :values={user_id: item.id}>{gettext("Enroll")}</button>
-                </td>
-              </tr>
-            {#else}
-              <tr>
-                <td colspan="4">{gettext("No items yet!")}</td>
-              </tr>
-            {/for}
+            <tr :for={item <- @users}>
+              <td class="truncate">{item.last_name}</td>
+              <td class="truncate">{item.first_name}</td>
+              <td class="truncate">
+                {(item.organization && item.organization.name) || gettext("N/A")}
+              </td>
+              <td>
+                <button
+                  class="btn btn-xs btn-success"
+                  phx-click="enroll"
+                  phx-value-user_id={item.id}
+                >
+                  {gettext("Enroll")}
+                </button>
+              </td>
+            </tr>
+            <tr :if={Enum.empty?(@users)}>
+              <td colspan="4">{gettext("No items yet!")}</td>
+            </tr>
           </tbody>
         </table>
       </div>
@@ -88,35 +100,34 @@
               </tr>
             </thead>
             <tbody>
-              {#for item <- @competition.jurors}
-                <tr>
-                  <td class="truncate">{item.user.last_name}</td>
-                  <td class="truncate">{item.user.first_name}</td>
-                  <td class="truncate">{(item.user.organization && item.user.organization.name) || gettext("N/A")}</td>
-                  <td class="flex flex-row gap-1">
-                    <button
-                      class="btn btn-square btn-xs btn-error"
-                      :on-click="remove"
-                      :values={user_id: item.id}
-                      title={gettext("Remove")}
-                    >
-                      <Heroicons.icon name="trash" type="outline" class="w-4 h-4" />
-                    </button>
-                    <button
-                      class="btn btn-square btn-xs btn-secondary"
-                      :on-click="show-qr-code"
-                      :values={user_id: item.user_id}
-                      title={gettext("QR code")}
-                    >
-                      <Heroicons.icon name="qr-code" type="solid" class="h-4 w-4" />
-                    </button>
-                  </td>
-                </tr>
-              {#else}
-                <tr>
-                  <td colspan="4">{gettext("No items yet!")}</td>
-                </tr>
-              {/for}
+              <tr :for={item <- @competition.jurors}>
+                <td class="truncate">{item.user.last_name}</td>
+                <td class="truncate">{item.user.first_name}</td>
+                <td class="truncate">
+                  {(item.user.organization && item.user.organization.name) || gettext("N/A")}
+                </td>
+                <td class="flex flex-row gap-1">
+                  <button
+                    class="btn btn-square btn-xs btn-error"
+                    phx-click="remove"
+                    phx-value-user_id={item.id}
+                    title={gettext("Remove")}
+                  >
+                    <Heroicons.icon name="trash" type="outline" class="w-4 h-4" />
+                  </button>
+                  <button
+                    class="btn btn-square btn-xs btn-secondary"
+                    phx-click="show-qr-code"
+                    phx-value-user_id={item.user_id}
+                    title={gettext("QR code")}
+                  >
+                    <Heroicons.icon name="qr-code" type="solid" class="h-4 w-4" />
+                  </button>
+                </td>
+              </tr>
+              <tr :if={Enum.empty?(@competition.jurors)}>
+                <td colspan="4">{gettext("No items yet!")}</td>
+              </tr>
             </tbody>
           </table>
         </div>
@@ -159,7 +170,10 @@
       {gettext("Participants")}
     </.link>
     <div class="grow" />
-    <.link navigate={"/organize/#{@competition_id}/slides"} class="flex-none btn btn-primary gap-2">
+    <.link
+      navigate={"/organize/#{@competition_id}/slides"}
+      class="flex-none btn btn-primary gap-2"
+    >
       {gettext("Slides")}
       <svg
         xmlns="http://www.w3.org/2000/svg"

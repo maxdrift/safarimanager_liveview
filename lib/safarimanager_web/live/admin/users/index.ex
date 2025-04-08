@@ -2,25 +2,17 @@ defmodule SMWeb.Live.Admin.Users.Index do
   @moduledoc """
   Users live view
   """
-  use SMWeb, :surface_view
+  use SMWeb, :live_view
 
   import SMWeb.Components.DateTimeString
   import SMWeb.Components.FieldsList
   import SMWeb.Components.Layout
   import SMWeb.Components.ShortUUID
-  import SMWeb.Components.SMField
 
   alias SM.Accounts
   alias SM.Accounts.User
   alias SM.Categories
   alias SM.Organizations
-  alias SMWeb.Components.Column
-  alias Surface.Components.Form
-  alias Surface.Components.Form.HiddenInput
-  alias Surface.Components.Form.Reset
-  alias Surface.Components.Form.Select
-  alias Surface.Components.Form.Submit
-  alias Surface.Components.Form.TextInput
 
   require Logger
 
@@ -36,6 +28,7 @@ defmodule SMWeb.Live.Admin.Users.Index do
       socket
       |> load_entities()
       |> reset_current_editing()
+      |> reset_merge_form()
       |> assign(
         action: changeset_action,
         merge_selection: [],
@@ -49,49 +42,51 @@ defmodule SMWeb.Live.Admin.Users.Index do
   @impl Phoenix.LiveView
   # Create/Edit dialog validate callback
   def handle_event("validate", %{"entity" => params}, socket) do
-    changeset =
+    form =
       socket.assigns.record
       |> change(params)
-      |> Map.put(:action, :validate)
+      |> to_form(action: :validate, as: :entity)
 
-    socket = assign(socket, :changeset, changeset)
+    socket = assign(socket, :form, form)
     {:noreply, socket}
   end
 
   def handle_event("validate", %{"merge" => %{"dest_id" => dest_id}}, socket) do
-    changeset =
+    form =
       socket.assigns.merge_selection
       |> Enum.map(& &1.id)
       |> Accounts.merge_changeset(dest_id)
-      |> Map.put(:action, :validate)
+      |> to_form(action: :validate, as: :merge)
 
-    socket = assign(socket, :changeset, changeset)
+    socket = assign(socket, :merge_form, form)
     {:noreply, socket}
   end
 
   # Create/Edit dialog submit callback
-  def handle_event("submit", %{"entity" => %{"_action" => "create"} = params}, socket) do
+  def handle_event("submit", %{"_action" => "create", "entity" => params}, socket) do
     case Accounts.register_simplified_user(params) do
       {:ok, _entity} ->
         socket =
           socket
           |> reset_current_editing()
+          |> reset_merge_form()
           |> push_patch(to: "/admin/users")
 
         socket = put_flash(socket, :info, gettext("User created successfully"))
         {:noreply, socket}
 
       {:error, changeset} ->
-        {:noreply, assign(socket, :changeset, changeset)}
+        {:noreply, assign(socket, :form, to_form(changeset, as: :entity))}
     end
   end
 
-  def handle_event("submit", %{"entity" => %{"_action" => "edit"} = params}, socket) do
+  def handle_event("submit", %{"_action" => "edit", "entity" => params}, socket) do
     case Accounts.update(socket.assigns.record, params) do
       {:ok, entity} ->
         socket =
           socket
           |> reset_current_editing()
+          |> reset_merge_form()
           |> push_patch(to: "/admin/users")
 
         socket =
@@ -104,7 +99,7 @@ defmodule SMWeb.Live.Admin.Users.Index do
         {:noreply, socket}
 
       {:error, changeset} ->
-        {:noreply, assign(socket, :changeset, changeset)}
+        {:noreply, assign(socket, :form, to_form(changeset, as: :entity))}
     end
   end
 
@@ -138,6 +133,7 @@ defmodule SMWeb.Live.Admin.Users.Index do
     socket =
       socket
       |> reset_current_editing()
+      |> reset_merge_form()
       |> assign(merge_selection: [])
       |> push_patch(to: "/admin/users")
 
@@ -156,7 +152,7 @@ defmodule SMWeb.Live.Admin.Users.Index do
             changeset = change(user, %{})
 
             socket =
-              assign(socket, record: user, changeset: changeset, action: :edit)
+              assign(socket, record: user, form: to_form(changeset, as: :entity), action: :edit)
 
             {:noreply, socket}
         end
@@ -177,6 +173,7 @@ defmodule SMWeb.Live.Admin.Users.Index do
         socket =
           socket
           |> reset_current_editing()
+          |> reset_merge_form()
           |> assign(action: :create)
 
         {:noreply, socket}
@@ -317,6 +314,12 @@ defmodule SMWeb.Live.Admin.Users.Index do
 
     socket
     |> assign(:record, entity)
-    |> assign(:changeset, changeset)
+    |> assign(:form, to_form(changeset, as: :entity))
+  end
+
+  defp reset_merge_form(socket) do
+    changeset = Accounts.merge_changeset([], nil)
+
+    assign(socket, :merge_form, to_form(changeset, as: :merge))
   end
 end

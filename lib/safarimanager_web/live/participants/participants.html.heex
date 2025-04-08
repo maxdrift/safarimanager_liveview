@@ -1,20 +1,21 @@
-<.layout
-  current_page={~p"/organize/#{@competition.id}/participants"}
-  current_user={@current_user}
->
-  <.competition_header {=@competition} />
+<.layout current_page={~p"/organize/#{@competition.id}/participants"} current_user={@current_user}>
+  <.competition_header competition={@competition} />
   <.steps_header current_step={:participants} competition={@competition} />
   <div class="flex flex-col xl:flex-row mt-5">
     <div class="overflow-y-auto rounded-lg xl:w-1/2 bg-base-200 shadow-lg">
       <div class="p-4">
         <div class="text-2xl font-bold text-center py-4">{gettext("Users")}</div>
-        <Form for={%{}} as={:users_filter} change="filter-users" opts={autocomplete: "off"}>
-          <TextInput
+        <.form for={%{}} as={:users_filter} phx-change="filter-users" autocomplete="off">
+          <.input
+            type="text"
             name={:value}
+            value=""
             class="input input-bordered w-full mb-1"
-            opts={placeholder: gettext("Search for a user..."), phx_debounce: "500", autocomplete: "nope"}
+            placeholder={gettext("Search for a user...")}
+            phx-debounce="500"
+            autocomplete="nope"
           />
-        </Form>
+        </.form>
         <div class="max-h-48 overflow-y-auto tiny-scrollbar">
           <table class="table table-zebra table-fixed w-full">
             <thead>
@@ -27,42 +28,49 @@
               </tr>
             </thead>
             <tbody>
-              {#for item <- @users}
-                <tr>
-                  <td class="truncate">{item.last_name}</td>
-                  <td class="truncate">{item.first_name}</td>
-                  <td class="truncate">{(item.organization && item.organization.name) || gettext("N/A")}</td>
-                  <td class="truncate">{(item.category && item.category.name) || gettext("N/A")}</td>
-                  <td>
-                    <button class="btn btn-xs btn-success" :on-click="enroll" :values={user_id: item.id}>{gettext("Enroll")}</button>
-                  </td>
-                </tr>
-              {#else}
-                <tr>
-                  <td colspan="5">{gettext("No items yet!")}</td>
-                </tr>
-              {/for}
+              <tr :for={item <- @users}>
+                <td class="truncate">{item.last_name}</td>
+                <td class="truncate">{item.first_name}</td>
+                <td class="truncate">
+                  {(item.organization && item.organization.name) || gettext("N/A")}
+                </td>
+                <td class="truncate">
+                  {(item.category && item.category.name) || gettext("N/A")}
+                </td>
+                <td>
+                  <button
+                    class="btn btn-xs btn-success"
+                    phx-click="enroll"
+                    phx-value-user-id={item.id}
+                  >
+                    {gettext("Enroll")}
+                  </button>
+                </td>
+              </tr>
+              <tr :if={@users == []}>
+                <td colspan="5">{gettext("No items yet!")}</td>
+              </tr>
             </tbody>
           </table>
         </div>
       </div>
       <div class="text-2xl font-bold text-center py-4">{gettext("New User")}</div>
-      <UsersForm
+      <.user_form
         id="participants-new-user-form"
         action={:create}
-        {=@entity}
-        {=@changeset}
-        {=@organizations}
-        {=@categories}
+        entity={@entity}
+        form={@form}
+        organizations={@organizations}
+        categories={@categories}
         validate="validate-new-user"
         submit="submit-new-user"
       >
         <.form_actions
           container_class="modal-action"
-          enable_submit={@changeset.action && @changeset.valid?}
+          enable_submit={@form.action && @form.source.valid?}
           reset="reset-new-user"
         />
-      </UsersForm>
+      </.user_form>
     </div>
     <div class="divider xl:divider-horizontal" />
     <div class="overflow-y-auto rounded-lg xl:w-1/2 bg-base-200 shadow-lg">
@@ -72,14 +80,25 @@
           class="btn btn-outline btn-sm mb-2"
           href={~p"/#{@competition.id}/participants_printout"}
           target="_blank"
-        >{gettext("Print")}</.link>
-        <Form for={%{}} as={:participants_filter} change="filter-participants" opts={autocomplete: "off"}>
-          <TextInput
+        >
+          {gettext("Print")}
+        </.link>
+        <.form
+          for={%{}}
+          as={:participants_filter}
+          phx-change="filter-participants"
+          autocomplete="off"
+        >
+          <.input
+            type="text"
             name={:value}
+            value=""
             class="input input-bordered w-full mb-1"
-            opts={placeholder: gettext("Search for a participant..."), phx_debounce: "500", autocomplete: "nope"}
+            placeholder={gettext("Search for a participant...")}
+            phx-debounce="500"
+            autocomplete="nope"
           />
-        </Form>
+        </.form>
         <div class="max-h-96 overflow-y-auto tiny-scrollbar">
           <table class="table table-zebra table-fixed w-full">
             <thead>
@@ -93,39 +112,50 @@
               </tr>
             </thead>
             <tbody>
-              {#for item <- @participants}
-                <tr>
-                  <td class="truncate">{item.number}</td>
-                  <td class="truncate">{item.user.last_name}</td>
-                  <td class="truncate">{item.user.first_name}</td>
-                  <td class="truncate">{(item.user.organization && item.user.organization.name) || gettext("N/A")}</td>
-                  <td>
-                    <Form for={%{}} as={:category} change="category-change" submit="category-submit">
-                      <Select
-                        id={"#{item.user_id}-category-select"}
-                        field={:category_id}
-                        options={Enum.map(@categories, &{&1.name, &1.id})}
-                        selected={item.category_id}
-                        prompt={[key: gettext("Category...")]}
-                        class="select select-xs select-bordered max-w-4"
-                      />
-                      <HiddenInput id={"#{item.user_id}-category-user-id"} field={:user_id} value={item.user_id} />
-                    </Form>
-                  </td>
-                  <td>
-                    <button
-                      class="btn btn-square btn-xs btn-error"
-                      :on-click="remove"
-                      :values={user_id: item.user.id}
-                      title={gettext("Remove")}
-                    ><Heroicons.icon name="trash" type="outline" class="w-4 h-4" /></button>
-                  </td>
-                </tr>
-              {#else}
-                <tr>
-                  <td colspan="6">{gettext("No items yet!")}</td>
-                </tr>
-              {/for}
+              <tr :for={item <- @participants}>
+                <td class="truncate">{item.number}</td>
+                <td class="truncate">{item.user.last_name}</td>
+                <td class="truncate">{item.user.first_name}</td>
+                <td class="truncate">
+                  {(item.user.organization && item.user.organization.name) || gettext("N/A")}
+                </td>
+                <td>
+                  <.form
+                    for={%{}}
+                    as={:category}
+                    phx-change="category-change"
+                    phx-submit="category-submit"
+                  >
+                    <.input
+                      type="select"
+                      id={"#{item.user_id}-category-select"}
+                      name={:category_id}
+                      options={Enum.map(@categories, &{&1.name, &1.id})}
+                      value={item.category_id}
+                      prompt={gettext("Category...")}
+                      class="select select-xs select-bordered max-w-4"
+                    />
+                    <.hidden_input
+                      id={"#{item.user_id}-category-user-id"}
+                      name={:user_id}
+                      value={item.user_id}
+                    />
+                  </.form>
+                </td>
+                <td>
+                  <button
+                    class="btn btn-square btn-xs btn-error"
+                    phx-click="remove"
+                    phx-value-user-id={item.user.id}
+                    title={gettext("Remove")}
+                  >
+                    <Heroicons.icon name="trash" type="outline" class="w-4 h-4" />
+                  </button>
+                </td>
+              </tr>
+              <tr :if={@participants == []}>
+                <td colspan="6">{gettext("No items yet!")}</td>
+              </tr>
             </tbody>
           </table>
         </div>

@@ -58,7 +58,7 @@ defmodule SM.Participants do
         group_by: [p.user_id],
         order_by: [asc: :number],
         preload: [category: c, user: {u, [organization: o]}],
-        select: %Participant{p | slides_count: count(s.id)}
+        select: %{p | slides_count: count(s.id)}
       )
 
     Repo.all(query)
@@ -126,7 +126,7 @@ defmodule SM.Participants do
         group_by: [p.user_id],
         order_by: [asc: :number],
         preload: [category: c, user: {u, [organization: o]}],
-        select: %Participant{p | slides_count: count(s.id)}
+        select: %{p | slides_count: count(s.id)}
       )
 
     Repo.all(query)

@@ -2,12 +2,11 @@ defmodule SMWeb.Live.Teams do
   @moduledoc """
   Teams live view
   """
-  use SMWeb, :surface_view
+  use SMWeb, :live_view
 
   import SMWeb.Components.CompetitionHeader
   import SMWeb.Components.FieldsList
   import SMWeb.Components.Layout
-  import SMWeb.Components.SMField
   import SMWeb.Components.StepsHeader
 
   alias SM.Accounts
@@ -15,11 +14,6 @@ defmodule SMWeb.Live.Teams do
   alias SM.Competitions
   alias SM.Participants
   alias SM.Teams
-  alias Surface.Components.Form
-  alias Surface.Components.Form.HiddenInput
-  alias Surface.Components.Form.Reset
-  alias Surface.Components.Form.Submit
-  alias Surface.Components.Form.TextInput
 
   require Logger
 
@@ -32,7 +26,7 @@ defmodule SMWeb.Live.Teams do
         participants: [],
         teams: [],
         entity: %User{},
-        changeset: nil,
+        form: nil,
         participants_selection: MapSet.new()
       )
 
@@ -52,7 +46,10 @@ defmodule SMWeb.Live.Teams do
 
   def handle_event(
         "change",
-        %{"_target" => ["participants-list-selection"], "participants-list-selection" => selection},
+        %{
+          "_target" => ["participants-list-selection"],
+          "participants-list-selection" => selection
+        },
         socket
       ) do
     socket =
@@ -72,7 +69,11 @@ defmodule SMWeb.Live.Teams do
     next_team_number = Teams.get_next_team_number(competition_id)
 
     socket =
-      case Teams.create(%{"competition_id" => competition_id, "number" => next_team_number, "members" => members}) do
+      case Teams.create(%{
+             "competition_id" => competition_id,
+             "number" => next_team_number,
+             "members" => members
+           }) do
         {:ok, team} ->
           put_flash(
             socket,
@@ -99,7 +100,7 @@ defmodule SMWeb.Live.Teams do
       |> Teams.change()
       |> to_form()
 
-    socket = assign(socket, changeset: form)
+    socket = assign(socket, form: form)
 
     {:noreply, socket}
   end
@@ -110,10 +111,9 @@ defmodule SMWeb.Live.Teams do
     form =
       team
       |> Teams.change(params)
-      |> Map.put(:action, :validate)
-      |> to_form()
+      |> to_form(action: :validate, as: :entity)
 
-    socket = assign(socket, changeset: form)
+    socket = assign(socket, form: form)
 
     {:noreply, socket}
   end
@@ -123,13 +123,13 @@ defmodule SMWeb.Live.Teams do
 
     {:ok, _team} = Teams.update(team, params)
 
-    socket = assign(socket, changeset: nil)
+    socket = assign(socket, form: nil)
 
     {:noreply, socket}
   end
 
   def handle_event("stop-editing-team", _params, socket) do
-    socket = assign(socket, changeset: nil)
+    socket = assign(socket, form: nil)
 
     {:noreply, socket}
   end
@@ -147,7 +147,7 @@ defmodule SMWeb.Live.Teams do
     end
 
     {:noreply,
-     confirm(socket, on_confirm,
+     SMWeb.Components.Confirm.confirm(socket, on_confirm,
        title: gettext("Delete team"),
        description: gettext("Are you sure you want to delete this team?"),
        confirm_text: gettext("Delete"),

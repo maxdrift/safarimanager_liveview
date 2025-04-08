@@ -2,7 +2,7 @@ defmodule SMWeb.Live.JuryLauncher do
   @moduledoc """
   Jury launcher live view
   """
-  use SMWeb, :surface_view
+  use SMWeb, :live_view
 
   import SMWeb.Components.CompetitionHeader
   import SMWeb.Components.Layout

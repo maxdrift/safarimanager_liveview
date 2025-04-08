@@ -1,5 +1,5 @@
 <.layout current_page={~p"/organize/#{@competition.id}/results"} current_user={@current_user}>
-  <.competition_header {=@competition} />
+  <.competition_header competition={@competition} />
   <.steps_header current_step={:results} competition={@competition} />
   <div class="pt-10 cursor-pointer" x-data="{ expanded: false }">
     <div class="mb-4">
@@ -7,7 +7,9 @@
         class="btn btn-outline btn-sm"
         href={~p"/#{@competition.id}/slides_printout"}
         target="_blank"
-      >{gettext("Print teams slides report")}</.link>
+      >
+        {gettext("Print teams slides report")}
+      </.link>
     </div>
     <div @click="expanded = ! expanded" class="text-xl bg-base-200 p-2 pl-4 rounded-xl shadow-lg">
       <span>
@@ -91,24 +93,31 @@
             </tr>
           </thead>
           <tbody>
-            {#for subject <- @subjects}
-              <tr>
-                <td>{subject.numeric_id}</td>
-                <td class="capitalize">{subject.name}</td>
-                <td>{subject.count}</td>
-                <td>{(subject.distribution && "#{Decimal.mult(subject.distribution, 100) |> Decimal.round(2)}%") ||
-                    gettext("N/A")}</td>
-                <td>
-                  <span class="font-mono">{subject.coefficient}</span>
-                </td>
-                <td>
-                  <span class="font-mono" title={gettext("dynamic coefficient")}>{subject.dynamic_coefficient}</span>
-                  <span title={gettext("dynamic coefficient")}>
-                    <Heroicons.icon name="scale" type="solid" class="h-4 w-4 inline-block py-auto align-middle" />
-                  </span>
-                </td>
-              </tr>
-            {/for}
+            <tr :for={subject <- @subjects}>
+              <td>{subject.numeric_id}</td>
+              <td class="capitalize">{subject.name}</td>
+              <td>{subject.count}</td>
+              <td>
+                {(subject.distribution &&
+                    "#{Decimal.mult(subject.distribution, 100) |> Decimal.round(2)}%") ||
+                  gettext("N/A")}
+              </td>
+              <td>
+                <span class="font-mono">{subject.coefficient}</span>
+              </td>
+              <td>
+                <span class="font-mono" title={gettext("dynamic coefficient")}>
+                  {subject.dynamic_coefficient}
+                </span>
+                <span title={gettext("dynamic coefficient")}>
+                  <Heroicons.icon
+                    name="scale"
+                    type="solid"
+                    class="h-4 w-4 inline-block py-auto align-middle"
+                  />
+                </span>
+              </td>
+            </tr>
           </tbody>
         </table>
       </div>
@@ -125,7 +134,9 @@
         class="flex-none btn btn-outline btn-sm mt-0.5"
         href={"/#{@competition.id}/results_printout"}
         target="_blank"
-      >{gettext("Print")}</.link>
+      >
+        {gettext("Print")}
+      </.link>
     </div>
     <table class="table table-sm table-fixed w-full">
       <thead>
@@ -139,79 +150,95 @@
         </tr>
       </thead>
       <tbody>
-        {#for result <- @results}
-          <tbody x-data="{ expanded: false }">
-            <tr>
-              <td class="truncate">{result.rank}</td>
-              <td class="truncate">{Teams.synthesize_team_name(result.team)}</td>
-              <td class="truncate">{Teams.synthesize_org_name(result.team) || gettext("N/A")}</td>
-              <td class="truncate">{result.total_score}</td>
-              <td class="truncate">{result.slides_count}</td>
-              <td>
-                <button @click="expanded = ! expanded" class="btn btn-xs btn-outline">{gettext("Show details")}</button>
-              </td>
-            </tr>
-            <tr x-show="expanded">
-              <td />
-              <td colspan="5">
-                <table class="table table-xs w-full">
-                  <thead>
-                    <tr>
-                      <th class="bg-base-200">{gettext("File name")}</th>
-                      <th class="bg-base-200">{gettext("Subject #")}</th>
-                      <th class="bg-base-200">{gettext("Subject name")}</th>
-                      <th class="bg-base-200">{gettext("Coeff.")}</th>
-                      <th class="bg-base-200 text-center">{gettext("Votes")}</th>
-                      <th class="bg-base-200">{gettext("Pen.")}</th>
-                      <th class="bg-base-200">{gettext("Status")}</th>
-                      <th class="bg-base-200">{gettext("Score")}</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {#for %{slide: slide, slide_score: score, coefficient: coefficient, use_dynamic?: use_dynamic?} <-
-                        result.slides}
-                      <tr>
-                        <td>{slide.file_name}</td>
-                        <td>
-                          <span class="font-mono">{slide.subject.numeric_id}</span>
-                        </td>
-                        <td><span class="capitalize">{slide.subject.name}</span></td>
-                        <td>
-                          <span class="font-mono" title={(use_dynamic? && gettext("dynamic coefficient")) || ""}>{coefficient}</span>
-                          <span :if={use_dynamic?} title={gettext("dynamic coefficient")}>
-                            <Heroicons.icon name="scale" type="solid" class="h-4 w-4 inline-block py-auto align-middle" />
-                          </span>
-                        </td>
-                        <td class="text-center">
-                          {#for vote <- slide.votes}
-                            <span class="badge badge-outline badge-sm font-mono">{vote.evaluation.name}</span>
-                          {/for}
-                        </td>
-                        <td>{(slide.penalty && "x") || "-"}</td>
-                        <td>
-                          <div class={
-                            "my-auto",
-                            "badge",
-                            "badge-success": slide.status == :submitted_jury,
-                            "badge-warning": slide.status == :submitted_fixed
-                          }>
-                            {status_to_label(slide.status)}
-                          </div>
-                        </td>
-                        <td class="text-right">
-                          <span class="font-mono">{score}</span>
-                        </td>
-                      </tr>
-                    {/for}
-                  </tbody>
-                </table>
-              </td>
-              <td />
-            </tr>
-          </tbody>
-        {#else}
-          <td>{gettext("No results available yet")}</td>
-        {/for}
+        <tbody :for={result <- @results} x-data="{ expanded: false }">
+          <tr>
+            <td class="truncate">{result.rank}</td>
+            <td class="truncate">{Teams.synthesize_team_name(result.team)}</td>
+            <td class="truncate">{Teams.synthesize_org_name(result.team) || gettext("N/A")}</td>
+            <td class="truncate">{result.total_score}</td>
+            <td class="truncate">{result.slides_count}</td>
+            <td>
+              <button @click="expanded = ! expanded" class="btn btn-xs btn-outline">
+                {gettext("Show details")}
+              </button>
+            </td>
+          </tr>
+          <tr x-show="expanded">
+            <td />
+            <td colspan="5">
+              <table class="table table-xs w-full">
+                <thead>
+                  <tr>
+                    <th class="bg-base-200">{gettext("File name")}</th>
+                    <th class="bg-base-200">{gettext("Subject #")}</th>
+                    <th class="bg-base-200">{gettext("Subject name")}</th>
+                    <th class="bg-base-200">{gettext("Coeff.")}</th>
+                    <th class="bg-base-200 text-center">{gettext("Votes")}</th>
+                    <th class="bg-base-200">{gettext("Pen.")}</th>
+                    <th class="bg-base-200">{gettext("Status")}</th>
+                    <th class="bg-base-200">{gettext("Score")}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr :for={
+                    %{
+                      slide: slide,
+                      slide_score: score,
+                      coefficient: coefficient,
+                      use_dynamic?: use_dynamic?
+                    } <-
+                      result.slides
+                  }>
+                    <td>{slide.file_name}</td>
+                    <td>
+                      <span class="font-mono">{slide.subject.numeric_id}</span>
+                    </td>
+                    <td><span class="capitalize">{slide.subject.name}</span></td>
+                    <td>
+                      <span
+                        class="font-mono"
+                        title={(use_dynamic? && gettext("dynamic coefficient")) || ""}
+                      >
+                        {coefficient}
+                      </span>
+                      <span :if={use_dynamic?} title={gettext("dynamic coefficient")}>
+                        <Heroicons.icon
+                          name="scale"
+                          type="solid"
+                          class="h-4 w-4 inline-block py-auto align-middle"
+                        />
+                      </span>
+                    </td>
+                    <td class="text-center">
+                      <span
+                        :for={vote <- slide.votes}
+                        class="badge badge-outline badge-sm font-mono"
+                      >
+                        {vote.evaluation.name}
+                      </span>
+                    </td>
+                    <td>{(slide.penalty && "x") || "-"}</td>
+                    <td>
+                      <div class={[
+                        "my-auto",
+                        "badge",
+                        slide.status == :submitted_jury && "badge-success",
+                        slide.status == :submitted_fixed && "badge-warning"
+                      ]}>
+                        {status_to_label(slide.status)}
+                      </div>
+                    </td>
+                    <td class="text-right">
+                      <span class="font-mono">{score}</span>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </td>
+            <td />
+          </tr>
+        </tbody>
+        <td :if={Enum.empty?(@results)}>{gettext("No results available yet")}</td>
       </tbody>
     </table>
   </div>

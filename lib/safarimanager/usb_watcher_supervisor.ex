@@ -42,7 +42,7 @@ defmodule SM.USBWatcherSupervisor do
         :ok
 
       [{:undefined, child, :worker, _modules}] ->
-        :ok = GenServer.stop(child, :normal, :timer.seconds(60))
+        :ok = GenServer.stop(child, :normal, to_timeout(minute: 1))
         Logger.info("Stopped child: #{inspect(child)}")
 
       [] ->

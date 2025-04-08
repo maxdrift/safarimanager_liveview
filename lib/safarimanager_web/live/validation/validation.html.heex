@@ -1,18 +1,22 @@
-<div class="flex flex-col flex-nowrap h-screen" :on-window-keyup="evaluation-key">
+<div class="flex flex-col flex-nowrap h-screen" phx-window-keyup="evaluation-key">
   <div class="flex-initial">
     <div class="flex flex-row justify-between">
       <div>
-        <span :if={@curr_slide} class="align-sub p-1 pl-3 font-bold">{@curr_index + 1} {gettext("of")} {@image_count}</span>
-        <span :if={!@curr_slide} class="align-sub p-1 pl-3 font-bold">0 {gettext("of")} {@image_count}</span>
+        <span :if={@curr_slide} class="align-sub p-1 pl-3 font-bold">
+          {@curr_index + 1} {gettext("of")} {@image_count}
+        </span>
+        <span :if={!@curr_slide} class="align-sub p-1 pl-3 font-bold">
+          0 {gettext("of")} {@image_count}
+        </span>
         <div
           :if={@curr_slide}
-          class={
+          class={[
             "align-sub",
             "ml-4",
             "badge",
-            "badge-success": @curr_slide && @curr_slide.status == :submitted_jury,
-            "badge-warning": @curr_slide && @curr_slide.status == :submitted_fixed
-          }
+            @curr_slide && @curr_slide.status == :submitted_jury && "badge-success",
+            @curr_slide && @curr_slide.status == :submitted_fixed && "badge-warning"
+          ]}
         >
           {@curr_slide && status_to_label(@curr_slide.status)}
         </div>
@@ -21,15 +25,20 @@
         <div class="flex flex-row">
           <button
             id="subject-label"
-            class={
+            class={[
               "btn",
               "btn-outline",
               "btn-xs",
-              "line-through": @slide_flags.wrong_subject,
-              "btn-disabled": @slide_flags.wrong_subject
+              @slide_flags.wrong_subject && "line-through",
+              @slide_flags.wrong_subject && "btn-disabled"
+            ]}
+            phx-click={
+              unless @slide_flags.wrong_subject,
+                do: JS.hide() |> JS.show(to: "#wrong-subject-select")
             }
-            :on-click={unless @slide_flags.wrong_subject, do: JS.hide() |> JS.show(to: "#wrong-subject-select")}
-          >{@curr_slide && String.capitalize(@curr_slide.subject.name)}</button>
+          >
+            {@curr_slide && String.capitalize(@curr_slide.subject.name)}
+          </button>
           <Heroicons.icon
             :if={@slide_flags.wrong_subject}
             name="arrow-long-right"
@@ -40,45 +49,59 @@
             :if={@slide_flags.wrong_subject}
             id="wrong-subject-label"
             class="btn btn-outline btn-xs"
-            :on-click={JS.hide() |> JS.show(to: "#wrong-subject-select")}
-          >{@slide_flags.wrong_subject &&
+            phx-click={JS.hide() |> JS.show(to: "#wrong-subject-select")}
+          >
+            {@slide_flags.wrong_subject &&
               String.capitalize(
                 Enum.find(@subjects, &(&1.id == @slide_flags.wrong_subject.context["to"])).name
-              )}</button>
-          <Form
+              )}
+          </button>
+          <.form
             for={%{}}
             as={:wrong_subject_flag}
-            change={JS.hide(to: "#wrong-subject-select")
-            |> JS.show(to: "#subject-label")
-            |> maybe_show_wrong_subject_label(@slide_flags)
-            |> JS.push("wrong-subject-change")}
-            submit="wrong-subject-submit"
+            phx-change={
+              JS.hide(to: "#wrong-subject-select")
+              |> JS.show(to: "#subject-label")
+              |> maybe_show_wrong_subject_label(@slide_flags)
+              |> JS.push("wrong-subject-change")
+            }
+            phx-submit="wrong-subject-submit"
           >
             <div
               id="wrong-subject-select"
               class="hidden"
-              phx-click-away={JS.hide(to: "#wrong-subject-select")
-              |> JS.show(to: "#subject-label")
-              |> maybe_show_wrong_subject_label(@slide_flags)}
+              phx-click-away={
+                JS.hide(to: "#wrong-subject-select")
+                |> JS.show(to: "#subject-label")
+                |> maybe_show_wrong_subject_label(@slide_flags)
+              }
             >
-              <Select
-                field={:new_subject}
+              <.input
+                type="select"
+                name={:new_subject}
                 class="select select-bordered select-xs"
                 options={Enum.map(@subjects, &{String.capitalize(&1.name), &1.id})}
-                selected={(@slide_flags.wrong_subject && @slide_flags.wrong_subject.context["to"]) || @curr_slide.subject_id}
+                value={
+                  (@slide_flags.wrong_subject && @slide_flags.wrong_subject.context["to"]) ||
+                    @curr_slide.subject_id
+                }
               />
-              <HiddenInput
-                field={:flag_id}
+              <.hidden_input
+                name={:flag_id}
                 value={@slide_flags.wrong_subject && @slide_flags.wrong_subject.id}
               />
               <span
                 class="btn btn-xs btn-square"
-                :on-click={JS.hide(to: "#wrong-subject-select")
-                |> JS.show(to: "#subject-label")
-                |> maybe_show_wrong_subject_label(@slide_flags)}
-              >X</span>
+                phx-click={
+                  JS.hide(to: "#wrong-subject-select")
+                  |> JS.show(to: "#subject-label")
+                  |> maybe_show_wrong_subject_label(@slide_flags)
+                }
+              >
+                X
+              </span>
             </div>
-          </Form>
+          </.form>
         </div>
       </div>
       <div class="flex flex-row justify-between gap-2">
@@ -116,13 +139,16 @@
               <path d="M19,13H6.75L12,18.25L11.34,19L4.84,12.5L11.34,6L12,6.75L6.75,12H19V13Z" />
             </svg>
           </.jury_toolbar_button>
-          <Form for={%{}} as={:go_to} change="go-to-change" submit="go-to-submit">
-            <NumberInput
+          <.form for={%{}} as={:go_to} phx-change="go-to-change" phx-submit="go-to-submit">
+            <.input
+              type="number"
+              name={:go_to}
+              value=""
               class="join-item input input-sm w-24 mx-0.5"
-              field={:go_to}
-              opts={placeholder: gettext("Go to..."), phx_debounce: "1000"}
+              placeholder={gettext("Go to...")}
+              phx-debounce="1000"
             />
-          </Form>
+          </.form>
           <.jury_toolbar_button
             id="next-image"
             class="btn btn-sm join-item"
@@ -158,10 +184,18 @@
           </.jury_toolbar_button>
         </div>
         <div class="join">
-          <.jury_toolbar_button id="zoom-out" class="btn btn-sm join-item" title={gettext("Zoom out")}>
+          <.jury_toolbar_button
+            id="zoom-out"
+            class="btn btn-sm join-item"
+            title={gettext("Zoom out")}
+          >
             <Heroicons.icon name="magnifying-glass-minus" type="outline" class="w-6 h-6" />
           </.jury_toolbar_button>
-          <.jury_toolbar_button id="zoom-100" class="btn btn-sm join-item" title={gettext("Zoom 100%")}>
+          <.jury_toolbar_button
+            id="zoom-100"
+            class="btn btn-sm join-item"
+            title={gettext("Zoom 100%")}
+          >
             <svg
               stroke-miterlimit="10"
               style="fill-rule:nonzero;clip-rule:evenodd;stroke-linecap:round;stroke-linejoin:round;"
@@ -200,12 +234,26 @@
               />
             </svg>
           </.jury_toolbar_button>
-          <.jury_toolbar_button id="home" class="btn btn-sm join-item" title={gettext("Fit to window")}>
-            <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="h-6 w-6" viewBox="0 0 16 16">
-              <path d="M0 3.5A1.5 1.5 0 0 1 1.5 2h13A1.5 1.5 0 0 1 16 3.5v9a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 0 12.5v-9zM1.5 3a.5.5 0 0 0-.5.5v9a.5.5 0 0 0 .5.5h13a.5.5 0 0 0 .5-.5v-9a.5.5 0 0 0-.5-.5h-13z" /> <path d="M2 4.5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 0 1H3v2.5a.5.5 0 0 1-1 0v-3zm12 7a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1 0-1H13V8.5a.5.5 0 0 1 1 0v3z" />
+          <.jury_toolbar_button
+            id="home"
+            class="btn btn-sm join-item"
+            title={gettext("Fit to window")}
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="currentColor"
+              class="h-6 w-6"
+              viewBox="0 0 16 16"
+            >
+              <path d="M0 3.5A1.5 1.5 0 0 1 1.5 2h13A1.5 1.5 0 0 1 16 3.5v9a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 0 12.5v-9zM1.5 3a.5.5 0 0 0-.5.5v9a.5.5 0 0 0 .5.5h13a.5.5 0 0 0 .5-.5v-9a.5.5 0 0 0-.5-.5h-13z" />
+              <path d="M2 4.5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 0 1H3v2.5a.5.5 0 0 1-1 0v-3zm12 7a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1 0-1H13V8.5a.5.5 0 0 1 1 0v3z" />
             </svg>
           </.jury_toolbar_button>
-          <.jury_toolbar_button id="zoom-in" class="btn btn-sm join-item" title={gettext("Zoom in")}>
+          <.jury_toolbar_button
+            id="zoom-in"
+            class="btn btn-sm join-item"
+            title={gettext("Zoom in")}
+          >
             <Heroicons.icon name="magnifying-glass-plus" type="outline" class="w-6 h-6" />
           </.jury_toolbar_button>
         </div>
@@ -225,7 +273,11 @@
             <Heroicons.icon name="arrow-uturn-right" type="solid" class="w-6 h-6" />
           </.jury_toolbar_button>
         </div>
-        <.jury_toolbar_button class="btn btn-square btn-sm" id="full-page" title={gettext("Fullscreen")}>
+        <.jury_toolbar_button
+          class="btn btn-square btn-sm"
+          id="full-page"
+          title={gettext("Fullscreen")}
+        >
           <Heroicons.icon name="arrows-pointing-out" type="solid" class="w-6 h-6 mx-auto" />
         </.jury_toolbar_button>
         <a href={"/organize/#{@competition.id}/validation_launcher"} class="btn btn-sm">
@@ -234,31 +286,45 @@
       </div>
     </div>
   </div>
-  {!-- phx-update="ignore" is VERY VERY important! --}
-  <div id="openseadragon-viewer" class="flex-1" :hook="Lightbox" phx-update="ignore" />
+  <!-- phx-update="ignore" is VERY VERY important! -->
+  <div id="openseadragon-viewer" class="flex-1" phx-hook="Lightbox" phx-update="ignore" />
   <div class="flex-initial">
     <div :if={@curr_slide} class="flex flex-row">
-      <Form for={%{}} as={:unrecognizable} submit="unrecognizable-submit">
-        <button class={"btn", "btn-xs", "mx-2", "btn-error": @slide_flags.unrecognizable} field={:value}>{gettext("unrecognizable")}</button>
-        <HiddenInput
-          field={:flag_id}
+      <.form for={%{}} as={:unrecognizable} phx-submit="unrecognizable-submit">
+        <button
+          class={["btn", "btn-xs", "mx-2", @slide_flags.unrecognizable && "btn-error"]}
+          field={:value}
+        >
+          {gettext("unrecognizable")}
+        </button>
+        <.hidden_input
+          name={:flag_id}
           value={@slide_flags.unrecognizable && @slide_flags.unrecognizable.id}
         />
-      </Form>
-      <Form for={%{}} as={:distinction} submit="distinction-submit">
-        <button class={"btn", "btn-xs", "mx-2", "btn-error": @slide_flags.distinction} field={:value}>{gettext("distinction")}</button>
-        <HiddenInput field={:flag_id} value={@slide_flags.distinction && @slide_flags.distinction.id} />
-      </Form>
-      <Form for={%{}} as={:note} change="note-change" submit="note-submit">
-        <Label field={:value} class="capitalize ml-2">{gettext("note")}:</Label>
-        <TextInput
-          value={(@slide_flags.note && @slide_flags.note.context["message"]) || ""}
-          class={"input", "input-bordered", "input-xs", "input-error": @slide_flags.note}
+      </.form>
+      <.form for={%{}} as={:distinction} phx-submit="distinction-submit">
+        <button
+          class={["btn", "btn-xs", "mx-2", @slide_flags.distinction && "btn-error"]}
           field={:value}
-          opts={placeholder: gettext("Insert a note here...")}
+        >
+          {gettext("distinction")}
+        </button>
+        <.hidden_input
+          name={:flag_id}
+          value={@slide_flags.distinction && @slide_flags.distinction.id}
         />
-        <HiddenInput field={:flag_id} value={@slide_flags.note && @slide_flags.note.id} />
-      </Form>
+      </.form>
+      <.form for={%{}} as={:note} phx-change="note-change" phx-submit="note-submit">
+        <.input
+          type="text"
+          name={:value}
+          label={gettext("note")}
+          value={(@slide_flags.note && @slide_flags.note.context["message"]) || ""}
+          class={["input", "input-bordered", "input-xs", @slide_flags.note && "input-error"]}
+          placeholder={gettext("Insert a note here...")}
+        />
+        <.hidden_input name={:flag_id} value={@slide_flags.note && @slide_flags.note.id} />
+      </.form>
     </div>
   </div>
 </div>

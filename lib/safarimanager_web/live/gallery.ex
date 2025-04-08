@@ -2,7 +2,7 @@ defmodule SMWeb.Live.Gallery do
   @moduledoc """
   Live view handling display of a Slide gallery
   """
-  use SMWeb, :surface_view
+  use SMWeb, :live_view
 
   import SMWeb.Components.Thumbnail
 

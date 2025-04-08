@@ -25,11 +25,10 @@ config :safarimanager, SMWeb.Endpoint,
     ],
     # Start the esbuild watcher by calling Esbuild.install_and_run(:default, args)
     esbuild: {Esbuild, :install_and_run, [:default, ~w(--sourcemap=inline --watch)]}
-  ]
-
-# Watch static and templates for browser reloading.
-config :safarimanager, SMWeb.Endpoint,
-  reloadable_compilers: [:gettext, :elixir, :surface],
+  ],
+  # Watch static and templates for browser reloading.
+  reloadable_compilers: [:gettext, :elixir],
+  web_console_logger: true,
   live_reload: [
     patterns: [
       ~r"priv/static/.*(js|css|png|jpeg|jpg|gif|svg)$",

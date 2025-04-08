@@ -242,7 +242,7 @@ defmodule SMWeb.Components.SlidesSelectionList do
                 <button
                   class="btn btn-secondary btn-xs"
                   phx-click="start-editing"
-                  phx-value-id{slide.id}
+                  phx-value-id={slide.id}
                 >
                   {gettext("Edit")}
                 </button>
