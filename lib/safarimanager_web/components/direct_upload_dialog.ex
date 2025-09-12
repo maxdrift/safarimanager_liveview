@@ -2,7 +2,7 @@ defmodule SMWeb.Components.DirectUploadDialog do
   @moduledoc """
   Auto upload dialog component.
   """
-  use SMWeb, :surface_live_component
+  use SMWeb, :live_component
 
   import SMWeb.Components.Dialog
 
@@ -11,54 +11,54 @@ defmodule SMWeb.Components.DirectUploadDialog do
   alias SM.Slides
   alias SM.USBWatcherSupervisor
   alias SMWeb.Components.DirectUploadDialog
-  alias Surface.Components.Form
-  alias Surface.Components.Form.ErrorTag
-  alias Surface.Components.Form.Field
-  alias Surface.Components.Form.Label
-  alias Surface.Components.Form.Select
+  # alias Surface.Components.Form
+  # alias Surface.Components.Form.ErrorTag
+  # alias Surface.Components.Form.Field
+  # alias Surface.Components.Form.Label
+  # alias Surface.Components.Form.Select
 
   require Logger
 
-  data show, :boolean, default: false
-  data cwd, :string, default: "~/"
-  data items, :list, default: []
-  data user_id, :string, default: nil
-  data progress, :decimal, default: Decimal.new(0)
-  prop file_filter, :list, default: []
-  prop participants, :list, default: []
+  # data show, :boolean, default: false
+  # data cwd, :string, default: "~/"
+  # data items, :list, default: []
+  # data user_id, :string, default: nil
+  # data progress, :decimal, default: Decimal.new(0)
+
+  attr :file_filter, :list, default: []
+  attr :participants, :list, default: []
 
   def render(assigns) do
-    ~F"""
+    ~H"""
     <div>
-      <.dialog {=@id} {=@show}>
+      <.dialog id={@id} show={@show}>
         <div class="text-xl font-bold text-center">
           {gettext("Image import")}
         </div>
         <div class="my-2">
           <progress
-            class={"progress", "progress-secondary", invisible: Decimal.equal?(@progress, 0)}
+            class={["progress", "progress-secondary", Decimal.equal?(@progress, 0) && "invisible"]}
             value={Decimal.mult(@progress, 100) |> Decimal.round()}
             max="100"
           />
         </div>
         <div class="mb-4">
-          <Form for={%{}} as={:slide_import} change="validate">
-            <Field name={:user_id} class="form-control">
-              <Select
+          <.form for={%{}} as={:slide_import} phx-change="validate">
+            <div class="form-control">
+              <.input
+                type="select"
+                name={:user_id}
                 options={Enum.map(@participants, &{participant_select_option_txt(&1), &1.user_id})}
-                prompt={[key: gettext("Select a participant...")]}
-                selected={@user_id}
+                prompt={gettext("Select a participant...")}
+                value={@user_id}
                 class="select select-bordered"
               />
-              <Label class="label h-7">
-                <ErrorTag />
-              </Label>
-            </Field>
-          </Form>
+            </div>
+          </.form>
         </div>
         <div class="my-6">
           <div>
-            <button :on-click="level-up" class="btn btn-outline btn-xs gap-1">
+            <button phx-click="level-up" class="btn btn-outline btn-xs gap-1">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 class="h-4 w-4"
@@ -73,60 +73,63 @@ defmodule SMWeb.Components.DirectUploadDialog do
             </button>
           </div>
           <div class="flex flex-col mt-4 max-h-60 overflow-y-auto tiny-scrollbar">
-            {#for %{type: type, name: item} <- @items}
-              <div>
-                <button
-                  :if={type == :dir}
-                  :on-click="level-down"
-                  :values={item: item}
-                  class="btn btn-ghost btn-xs gap-1"
+            <div :for={%{type: type, name: item} <- @items}>
+              <button
+                :if={type == :dir}
+                phx-click="level-down"
+                phx-value-item={item}
+                class="btn btn-ghost btn-xs gap-1"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="h-4 w-4"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  stroke-width="2"
                 >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    class="h-4 w-4"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    stroke-width="2"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"
-                    />
-                  </svg>
-                  {Path.basename(item)}
-                </button>
-                <button :if={type == :img} class="btn btn-link btn-xs btn-disabled gap-1">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    class="h-4 w-4"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    stroke-width="2"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
-                    />
-                  </svg>
-                  {Path.basename(item)}
-                </button>
-              </div>
-            {/for}
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"
+                  />
+                </svg>
+                {Path.basename(item)}
+              </button>
+              <button :if={type == :img} class="btn btn-link btn-xs btn-disabled gap-1">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="h-4 w-4"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+                  />
+                </svg>
+                {Path.basename(item)}
+              </button>
+            </div>
           </div>
         </div>
         <div class="flex flex-row w-full">
           <button
-            class={"flex-none", "btn", "btn-primary", "btn-disabled": not can_import?(@user_id, @items)}
-            :on-click="import"
+            class={[
+              "flex-none",
+              "btn",
+              "btn-primary",
+              not can_import?(@user_id, @items) && "btn-disabled"
+            ]}
+            phx-click="import"
           >
             {gettext("Import")}<span :if={can_import?(@user_id, @items)}>&nbsp;{count_image_type(@items)} {gettext("images")}</span>
           </button>
           <div class="grow" />
-          <button class="flex-none btn btn-error" :on-click="hide">{gettext("Close")}</button>
+          <button class="flex-none btn btn-error" phx-click="hide">{gettext("Close")}</button>
         </div>
       </.dialog>
     </div>
@@ -134,6 +137,22 @@ defmodule SMWeb.Components.DirectUploadDialog do
   end
 
   # Public API
+
+  @impl Phoenix.LiveComponent
+  def update(assigns, socket) do
+    assigns =
+      assigns
+      |> Map.to_list()
+      |> Keyword.merge(
+        show: false,
+        cwd: "~/",
+        items: [],
+        user_id: nil,
+        progress: Decimal.new(0)
+      )
+
+    {:ok, assign(socket, assigns)}
+  end
 
   @spec show(String.t(), String.t(), String.t(), [Participant.t()]) :: any()
   def show(dialog_id, new_volume, competition_id, participants) do

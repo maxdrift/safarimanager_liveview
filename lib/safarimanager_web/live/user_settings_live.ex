@@ -1,22 +1,15 @@
 defmodule SMWeb.Live.UserSettingsLive do
   @moduledoc false
-  use SMWeb, :surface_view
+  use SMWeb, :live_view
 
   import SMWeb.Components.Layout
 
   alias SM.Accounts
-  alias Surface.Components.Form
-  alias Surface.Components.Form.EmailInput
-  alias Surface.Components.Form.ErrorTag
-  alias Surface.Components.Form.Field
-  alias Surface.Components.Form.Label
-  alias Surface.Components.Form.PasswordInput
-  alias Surface.Components.Form.Submit
 
   on_mount SMWeb.SidebarHook
 
   def render(assigns) do
-    ~F"""
+    ~H"""
     <.layout current_user={@current_user} current_page={~p"/users/settings"}>
       <header>
         <h1 class="text-lg font-semibold leading-8">
@@ -24,39 +17,36 @@ defmodule SMWeb.Live.UserSettingsLive do
         </h1>
       </header>
 
-      <Form id="email_form" for={@email_changeset} submit="update_email" change="validate_email">
-        <div :if={@email_changeset.action == :insert} class="alert alert-error shadow-lg">
+      <.form id="email_form" for={@email_form} phx-submit="update_email" phx-change="validate_email">
+        <div :if={@email_form.action == :insert} class="alert alert-error shadow-lg">
           <div>
             <Heroicons.icon name="exclamation-circle" type="outline" class="h-6 w-6" />
             <span>{gettext("Oops, something went wrong! Please check the errors below.")}</span>
           </div>
         </div>
-        <Field name={:email} class="form-control">
-          <Label class="label">{gettext("Email")}</Label>
-          <EmailInput opts={required: true} class="input input-bordered" />
-          <Label class="label h-7">
-            <ErrorTag />
-          </Label>
-        </Field>
+        <.input
+          type="email"
+          label={gettext("Email")}
+          field={@email_form[:email]}
+          class="input input-bordered"
+          phx-debounce="1000"
+          required
+        />
 
-        <Field name={:current_password} class="form-control">
-          <Label class="label">{gettext("Current password")}</Label>
-          <PasswordInput
-            name="current_password"
-            id="current_password_for_email"
-            value={@email_form_current_password}
-            opts={required: true}
-            class="input input-bordered"
-          />
-          <Label class="label h-7">
-            <ErrorTag />
-          </Label>
-        </Field>
+        <.input
+          type="password"
+          label={gettext("Current password")}
+          name="current_password"
+          value={@email_form_current_password}
+          class="input input-bordered"
+          phx-debounce="1000"
+          required
+        />
 
-        <Submit opts={"phx-disable-with": gettext("Changing...")} class="btn btn-outline">
+        <button type="submit" phx-disable-with={gettext("Changing...")} class="btn btn-outline">
           {gettext("Change Email")}
-        </Submit>
-      </Form>
+        </button>
+      </.form>
 
       <header class="mt-6">
         <h1 class="text-lg font-semibold leading-8">
@@ -64,57 +54,57 @@ defmodule SMWeb.Live.UserSettingsLive do
         </h1>
       </header>
 
-      <Form
+      <.form
         id="password_form"
-        for={@password_changeset}
+        for={@password_form}
         action={~p"/users/log_in?_action=password_updated"}
         method="post"
-        change="validate_password"
-        submit="update_password"
-        trigger_action={@trigger_submit}
+        phx-change="validate_password"
+        phx-submit="update_password"
+        phx-trigger-action={@trigger_submit}
       >
-        <div :if={@password_changeset.action == :insert} class="alert alert-error shadow-lg">
+        <div :if={@password_form.action == :insert} class="alert alert-error shadow-lg">
           <div>
             <Heroicons.icon name="exclamation-circle" type="outline" class="h-6 w-6" />
             <span>{gettext("Oops, something went wrong! Please check the errors below.")}</span>
           </div>
         </div>
 
-        <Field name={:email} class="form-control">
-          <EmailInput value={@current_email} opts={hidden: true} />
-        </Field>
+        <.hidden_input name="email" value={@current_email} />
 
-        <Field name={:password} class="form-control">
-          <Label class="label">{gettext("New password")}</Label>
-          <PasswordInput opts={required: true} class="input input-bordered" />
-          <Label class="label h-7">
-            <ErrorTag />
-          </Label>
-        </Field>
-        <Field name={:password_confirmation} class="form-control">
-          <Label class="label">{gettext("Confirm new password")}</Label>
-          <PasswordInput class="input input-bordered" />
-          <Label class="label h-7">
-            <ErrorTag />
-          </Label>
-        </Field>
-        <Field name={:current_password} class="form-control">
-          <Label class="label">{gettext("Current password")}</Label>
-          <PasswordInput
-            id="current_password_for_password"
-            value={@current_password}
-            opts={required: true}
-            class="input input-bordered"
-          />
-          <Label class="label h-7">
-            <ErrorTag />
-          </Label>
-        </Field>
+        <.input
+          type="password"
+          label={gettext("New password")}
+          field={@password_form[:password]}
+          class="input input-bordered"
+          phx-debounce="1000"
+          required
+        />
 
-        <Submit opts={"phx-disable-with": gettext("Changing...")} class="btn btn-outline">
+        <.input
+          type="password"
+          label={gettext("Confirm new password")}
+          field={@password_form[:password_confirmation]}
+          class="input input-bordered"
+          phx-debounce="1000"
+          required
+        />
+
+        <.input
+          id="current_password_for_password"
+          type="password"
+          label={gettext("Current password")}
+          name="current_password"
+          value={@current_password}
+          class="input input-bordered"
+          phx-debounce="1000"
+          required
+        />
+
+        <button type="submit" phx-disable-with={gettext("Changing...")} class="btn btn-outline">
           {gettext("Change Password")}
-        </Submit>
-      </Form>
+        </button>
+      </.form>
     </.layout>
     """
   end
@@ -140,8 +130,8 @@ defmodule SMWeb.Live.UserSettingsLive do
       |> assign(:current_password, nil)
       |> assign(:email_form_current_password, nil)
       |> assign(:current_email, user.email)
-      |> assign(:email_changeset, Accounts.change_user_email(user))
-      |> assign(:password_changeset, Accounts.change_user_password(user))
+      |> assign(:email_form, to_form(Accounts.change_user_email(user)))
+      |> assign(:password_form, to_form(Accounts.change_user_password(user)))
       |> assign(:trigger_submit, false)
 
     {:ok, socket}
@@ -153,7 +143,7 @@ defmodule SMWeb.Live.UserSettingsLive do
 
     socket =
       assign(socket,
-        email_changeset: Map.put(email_changeset, :action, :validate),
+        email_form: to_form(email_changeset, action: :validate),
         email_form_current_password: password
       )
 
@@ -176,17 +166,18 @@ defmodule SMWeb.Live.UserSettingsLive do
         {:noreply, put_flash(socket, :info, info)}
 
       {:error, changeset} ->
-        {:noreply, assign(socket, :email_changeset, Map.put(changeset, :action, :insert))}
+        {:noreply, assign(socket, :email_form, to_form(changeset, action: :insert))}
     end
   end
 
   def handle_event("validate_password", params, socket) do
-    %{"user" => %{"current_password" => password} = user_params} = params
+    %{"current_password" => password, "user" => user_params} = params
+
     password_changeset = Accounts.change_user_password(socket.assigns.current_user, user_params)
 
     {:noreply,
      socket
-     |> assign(:password_changeset, Map.put(password_changeset, :action, :validate))
+     |> assign(:password_form, to_form(password_changeset, action: :validate))
      |> assign(:current_password, password)}
   end
 
@@ -199,12 +190,12 @@ defmodule SMWeb.Live.UserSettingsLive do
         socket =
           socket
           |> assign(:trigger_submit, true)
-          |> assign(:password_changeset, Accounts.change_user_password(user, user_params))
+          |> assign(:password_form, to_form(Accounts.change_user_password(user, user_params)))
 
         {:noreply, socket}
 
       {:error, changeset} ->
-        {:noreply, assign(socket, :password_changeset, changeset)}
+        {:noreply, assign(socket, :password_form, to_form(changeset))}
     end
   end
 end

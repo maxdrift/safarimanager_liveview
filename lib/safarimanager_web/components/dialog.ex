@@ -7,7 +7,7 @@ defmodule SMWeb.Components.Dialog do
   attr :id, :string, required: true
   attr :show, :boolean, default: false
 
-  slot :default, required: true
+  slot :inner_block, required: true
 
   def dialog(assigns) do
     ~H"""

@@ -2,7 +2,7 @@ defmodule SMWeb.Components.FileBrowser do
   @moduledoc """
   File browser component.
   """
-  use SMWeb, :surface_live_component
+  use SMWeb, :live_component
 
   alias SM.Cache
   alias SM.FileBrowser
@@ -35,7 +35,7 @@ defmodule SMWeb.Components.FileBrowser do
       </div>
       <div class="my-6">
         <div>
-          <button phx-click="level-up" class="btn btn-outline btn-xs gap-1">
+          <button phx-click="level-up" class="btn btn-outline btn-xs gap-1" phx-target={@myself}>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               class="h-4 w-4"
@@ -56,6 +56,7 @@ defmodule SMWeb.Components.FileBrowser do
               phx-click="level-down"
               phx-value-item={item}
               class="btn btn-ghost btn-xs gap-1"
+              phx-target={@myself}
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -77,7 +78,8 @@ defmodule SMWeb.Components.FileBrowser do
               :if={type != :dir}
               phx-click="select"
               phx-value-item={item}
-              class={["btn", "btn-link", "btn-xs", "gap-1", "btn-disabled": not selectable]}
+              class={["btn", "btn-link", "btn-xs", "gap-1", not selectable && "btn-disabled"]}
+              phx-target={@myself}
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -149,7 +151,8 @@ defmodule SMWeb.Components.FileBrowser do
       |> Map.to_list()
       |> Keyword.merge(
         cwd: cwd,
-        items: dir_items
+        items: dir_items,
+        upload_progress: Decimal.new(0)
       )
 
     {:ok, assign(socket, assigns)}
