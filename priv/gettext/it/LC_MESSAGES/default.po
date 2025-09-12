@@ -11,34 +11,34 @@ msgstr ""
 "Language: it\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: lib/safarimanager_web/components/core_components.ex:448
-#: lib/safarimanager_web/live/admin/categories/index.sface:104
-#: lib/safarimanager_web/live/admin/competitions/index.sface:404
-#: lib/safarimanager_web/live/admin/evaluations/index.sface:137
-#: lib/safarimanager_web/live/admin/organizations/index.sface:175
-#: lib/safarimanager_web/live/admin/participants/index.sface:126
-#: lib/safarimanager_web/live/admin/subjects/index.sface:124
-#: lib/safarimanager_web/live/admin/teams/index.sface:186
-#: lib/safarimanager_web/live/admin/users/index.sface:199
-#: lib/safarimanager_web/live/validation/validation_launcher.sface:143
-#: lib/safarimanager_web/live/validation/validation_launcher.sface:227
+#: lib/safarimanager_web/components/core_components.ex:477
+#: lib/safarimanager_web/live/admin/categories/index.html.heex:112
+#: lib/safarimanager_web/live/admin/competitions/index.html.heex:536
+#: lib/safarimanager_web/live/admin/evaluations/index.html.heex:154
+#: lib/safarimanager_web/live/admin/organizations/index.html.heex:190
+#: lib/safarimanager_web/live/admin/participants/index.html.heex:132
+#: lib/safarimanager_web/live/admin/subjects/index.html.heex:142
+#: lib/safarimanager_web/live/admin/teams/index.html.heex:190
+#: lib/safarimanager_web/live/admin/users/index.html.heex:228
+#: lib/safarimanager_web/live/validation/validation_launcher.html.heex:149
+#: lib/safarimanager_web/live/validation/validation_launcher.html.heex:269
 #, elixir-autogen, elixir-format
 msgid "Actions"
 msgstr "Azioni"
 
-#: lib/safarimanager_web/components/sidebar.ex:55
+#: lib/safarimanager_web/components/sidebar.ex:62
 #, elixir-autogen, elixir-format
 msgid "Admin"
 msgstr "Amministrazione"
 
-#: lib/safarimanager_web/components/sidebar.ex:122
-#: lib/safarimanager_web/live/hooks/sidebar_hook.ex:42
+#: lib/safarimanager_web/components/sidebar.ex:130
+#: lib/safarimanager_web/live/hooks/sidebar_hook.ex:43
 #, elixir-autogen, elixir-format
 msgid "Are you sure you want to shut down Safari Manager now?"
 msgstr "Sei sicuro di voler arrestare Safari Manager ora?"
 
-#: lib/safarimanager_web/components/sidebar.ex:89
-#: lib/safarimanager_web/live/admin/import.ex:44
+#: lib/safarimanager_web/components/sidebar.ex:96
+#: lib/safarimanager_web/live/admin/import.ex:38
 #, elixir-autogen, elixir-format
 msgid "Categories"
 msgstr "Categorie"
@@ -48,64 +48,59 @@ msgstr "Categorie"
 msgid "Change theme"
 msgstr "Cambia tema"
 
-#: lib/safarimanager_web/components/sidebar.ex:71
-#: lib/safarimanager_web/live/admin/import.ex:45
+#: lib/safarimanager_web/components/sidebar.ex:78
+#: lib/safarimanager_web/live/admin/import.ex:39
 #, elixir-autogen, elixir-format
 msgid "Competitions"
 msgstr "Competizioni"
 
-#: lib/safarimanager_web/components/sidebar.ex:77
-#: lib/safarimanager_web/live/admin/import.ex:46
-#: lib/safarimanager_web/live/jury/jury.sface:13
+#: lib/safarimanager_web/components/sidebar.ex:84
+#: lib/safarimanager_web/live/admin/import.ex:40
+#: lib/safarimanager_web/live/jury/jury.html.heex:18
 #, elixir-autogen, elixir-format
 msgid "Evaluations"
 msgstr "Valutazioni"
 
-#: lib/safarimanager_web/components/hero.ex:20
-#, elixir-autogen, elixir-format
-msgid "Hi, %{name}!"
-msgstr "Ciao, %{name}!"
-
-#: lib/safarimanager_web/components/sidebar.ex:47
+#: lib/safarimanager_web/components/sidebar.ex:54
 #, elixir-autogen, elixir-format
 msgid "Home"
 msgstr "Home"
 
-#: lib/safarimanager_web/components/sidebar.ex:59
-#: lib/safarimanager_web/live/admin/import.ex:48
+#: lib/safarimanager_web/components/sidebar.ex:66
+#: lib/safarimanager_web/live/admin/import.ex:42
 #, elixir-autogen, elixir-format
 msgid "Organizations"
 msgstr "Società"
 
-#: lib/safarimanager_web/components/sidebar.ex:95
-#: lib/safarimanager_web/components/steps_header.ex:33
-#: lib/safarimanager_web/live/admin/import.ex:49
-#: lib/safarimanager_web/live/jurors/jurors.sface:159
-#: lib/safarimanager_web/live/new_competition/new_competition.sface:84
-#: lib/safarimanager_web/live/participants/participants.sface:67
-#: lib/safarimanager_web/live/slides/slide_selection.sface:9
-#: lib/safarimanager_web/live/slides/slides.sface:6
-#: lib/safarimanager_web/live/teams/teams.sface:67
-#: lib/safarimanager_web/live/teams/teams.sface:215
+#: lib/safarimanager_web/components/sidebar.ex:102
+#: lib/safarimanager_web/components/steps_header.ex:34
+#: lib/safarimanager_web/live/admin/import.ex:43
+#: lib/safarimanager_web/live/jurors/jurors.html.heex:170
+#: lib/safarimanager_web/live/new_competition/new_competition.html.heex:83
+#: lib/safarimanager_web/live/participants/participants.html.heex:78
+#: lib/safarimanager_web/live/slides/slide_selection.html.heex:10
+#: lib/safarimanager_web/live/slides/slides.html.heex:7
+#: lib/safarimanager_web/live/teams/teams.html.heex:77
+#: lib/safarimanager_web/live/teams/teams.html.heex:252
 #, elixir-autogen, elixir-format
 msgid "Participants"
 msgstr "Partecipanti"
 
-#: lib/safarimanager_web/components/sidebar.ex:121
-#: lib/safarimanager_web/components/sidebar.ex:123
-#: lib/safarimanager_web/components/sidebar.ex:133
-#: lib/safarimanager_web/live/hooks/sidebar_hook.ex:41
-#: lib/safarimanager_web/live/hooks/sidebar_hook.ex:43
+#: lib/safarimanager_web/components/sidebar.ex:129
+#: lib/safarimanager_web/components/sidebar.ex:131
+#: lib/safarimanager_web/components/sidebar.ex:142
+#: lib/safarimanager_web/live/hooks/sidebar_hook.ex:42
+#: lib/safarimanager_web/live/hooks/sidebar_hook.ex:44
 #, elixir-autogen, elixir-format
 msgid "Shut Down"
 msgstr "Arresta"
 
-#: lib/safarimanager_web/components/sidebar.ex:65
-#: lib/safarimanager_web/live/admin/import.ex:51
-#: lib/safarimanager_web/live/results/results.sface:70
-#: lib/safarimanager_web/live/results/results.sface:81
-#: lib/safarimanager_web/live/results/team_results.sface:70
-#: lib/safarimanager_web/live/results/team_results.sface:81
+#: lib/safarimanager_web/components/sidebar.ex:72
+#: lib/safarimanager_web/live/admin/import.ex:45
+#: lib/safarimanager_web/live/results/results.html.heex:70
+#: lib/safarimanager_web/live/results/results.html.heex:81
+#: lib/safarimanager_web/live/results/team_results.html.heex:72
+#: lib/safarimanager_web/live/results/team_results.html.heex:83
 #, elixir-autogen, elixir-format
 msgid "Subjects"
 msgstr "Soggetti"
@@ -115,151 +110,150 @@ msgstr "Soggetti"
 msgid "Theme"
 msgstr "Tema"
 
-#: lib/safarimanager_web/components/core_components.ex:153
-#: lib/safarimanager_web/components/flash.ex:76
+#: lib/safarimanager_web/components/core_components.ex:78
+#: lib/safarimanager_web/components/core_components.ex:137
 #, elixir-autogen, elixir-format
 msgid "close"
 msgstr "chiudi"
 
-#: lib/safarimanager/accounts/user.ex:152
+#: lib/safarimanager/accounts/user.ex:153
 #, elixir-autogen, elixir-format
 msgid "did not change"
 msgstr "non è cambiato"
 
-#: lib/safarimanager/accounts/user.ex:173
+#: lib/safarimanager/accounts/user.ex:174
 #, elixir-autogen, elixir-format
 msgid "does not match password"
 msgstr "non coincide con la password"
 
-#: lib/safarimanager/accounts/user.ex:211
+#: lib/safarimanager/accounts/user.ex:214
 #, elixir-autogen, elixir-format
 msgid "is not valid"
 msgstr "non è valido"
 
-#: lib/safarimanager/accounts/user.ex:62
+#: lib/safarimanager/accounts/user.ex:63
 #, elixir-autogen, elixir-format
 msgid "must have the @ sign and no spaces"
 msgstr "deve contenere il simbolo @ e nessuno spazio"
 
-#: lib/safarimanager_web/components/user_dropdown.ex:36
-#: lib/safarimanager_web/live/admin/competitions/form.sface:179
-#: lib/safarimanager_web/live/admin/competitions/index.sface:68
-#: lib/safarimanager_web/live/admin/competitions/index.sface:68
-#: lib/safarimanager_web/live/admin/competitions/index.sface:252
+#: lib/safarimanager_web/components/user_dropdown.ex:34
+#: lib/safarimanager_web/live/admin/competitions/index.html.heex:67
+#: lib/safarimanager_web/live/admin/competitions/index.html.heex:339
+#: lib/safarimanager_web/live/admin/competitions/new_form.ex:138
 #, elixir-autogen, elixir-format
 msgid "Settings"
 msgstr "Impostazioni"
 
-#: lib/safarimanager_web/components/user_dropdown.ex:15
+#: lib/safarimanager_web/components/user_dropdown.ex:13
 #, elixir-autogen, elixir-format
 msgid "User options"
 msgstr "Opzioni utente"
 
-#: lib/safarimanager_web/components/steps_header.ex:42
-#: lib/safarimanager_web/live/admin/import.ex:47
-#: lib/safarimanager_web/live/jurors/jurors.sface:78
-#: lib/safarimanager_web/live/new_competition/new_competition.sface:90
-#: lib/safarimanager_web/live/participants/participants.sface:169
-#: lib/safarimanager_web/live/slides/slides.sface:260
-#: lib/safarimanager_web/live/teams/teams.sface:219
+#: lib/safarimanager_web/components/steps_header.ex:43
+#: lib/safarimanager_web/live/admin/import.ex:41
+#: lib/safarimanager_web/live/jurors/jurors.html.heex:90
+#: lib/safarimanager_web/live/new_competition/new_competition.html.heex:90
+#: lib/safarimanager_web/live/participants/participants.html.heex:202
+#: lib/safarimanager_web/live/slides/slides.html.heex:305
+#: lib/safarimanager_web/live/teams/teams.html.heex:259
 #, elixir-autogen, elixir-format
 msgid "Jurors"
 msgstr "Giurati"
 
-#: lib/safarimanager_web/components/steps_header.ex:56
+#: lib/safarimanager_web/components/steps_header.ex:57
 #: lib/safarimanager_web/controllers/selection_printout_html/show_multi.html.heex:38
 #: lib/safarimanager_web/controllers/selection_printout_html/show_multi_teams.html.heex:33
 #: lib/safarimanager_web/controllers/selection_printout_html/show_single.html.heex:37
 #: lib/safarimanager_web/controllers/selection_printout_html/show_single_team.html.heex:32
 #: lib/safarimanager_web/controllers/slides_printout_html/show.html.heex:38
 #: lib/safarimanager_web/controllers/slides_printout_html/show_teams.html.heex:30
-#: lib/safarimanager_web/live/results/results.ex:88
-#: lib/safarimanager_web/live/results/results.sface:255
-#: lib/safarimanager_web/live/results/team_results.ex:63
-#: lib/safarimanager_web/live/results/team_results.sface:238
-#: lib/safarimanager_web/live/slides/slide_selection.ex:369
-#: lib/safarimanager_web/live/validation/validation.ex:424
-#: lib/safarimanager_web/live/validation/validation_launcher.ex:257
-#: lib/safarimanager_web/live/validation/validation_launcher.sface:28
-#: lib/safarimanager_web/live/validation/validation_launcher.sface:285
+#: lib/safarimanager_web/live/results/results.ex:84
+#: lib/safarimanager_web/live/results/results.html.heex:240
+#: lib/safarimanager_web/live/results/team_results.ex:62
+#: lib/safarimanager_web/live/results/team_results.html.heex:257
+#: lib/safarimanager_web/live/slides/slide_selection.ex:359
+#: lib/safarimanager_web/live/validation/validation.ex:415
+#: lib/safarimanager_web/live/validation/validation_launcher.ex:253
+#: lib/safarimanager_web/live/validation/validation_launcher.html.heex:28
+#: lib/safarimanager_web/live/validation/validation_launcher.html.heex:335
 #, elixir-autogen, elixir-format
 msgid "Jury"
 msgstr "Giuria"
 
-#: lib/safarimanager_web/components/steps_header.ex:60
+#: lib/safarimanager_web/components/steps_header.ex:61
 #: lib/safarimanager_web/controllers/results_printout_controller.ex:50
 #: lib/safarimanager_web/controllers/results_printout_controller.ex:67
-#: lib/safarimanager_web/live/jury/jury_launcher.sface:80
-#: lib/safarimanager_web/live/jury/jury_launcher.sface:97
-#: lib/safarimanager_web/live/results/results.sface:131
-#: lib/safarimanager_web/live/results/team_results.sface:125
+#: lib/safarimanager_web/live/jury/jury_launcher.html.heex:82
+#: lib/safarimanager_web/live/jury/jury_launcher.html.heex:99
+#: lib/safarimanager_web/live/results/results.html.heex:125
+#: lib/safarimanager_web/live/results/team_results.html.heex:130
 #, elixir-autogen, elixir-format
 msgid "Results"
 msgstr "Classifica"
 
-#: lib/safarimanager_web/components/steps_header.ex:47
-#: lib/safarimanager_web/live/new_competition/new_competition.sface:118
-#: lib/safarimanager_web/live/slides/slides.sface:267
-#: lib/safarimanager_web/live/validation/validation_launcher.sface:278
+#: lib/safarimanager_web/components/steps_header.ex:48
+#: lib/safarimanager_web/live/new_competition/new_competition.html.heex:116
+#: lib/safarimanager_web/live/slides/slides.html.heex:312
+#: lib/safarimanager_web/live/validation/validation_launcher.html.heex:328
 #, elixir-autogen, elixir-format
 msgid "Selection"
 msgstr "Selezione"
 
-#: lib/safarimanager_web/components/steps_header.ex:43
-#: lib/safarimanager_web/live/admin/import.ex:50
-#: lib/safarimanager_web/live/jurors/jurors.sface:163
-#: lib/safarimanager_web/live/new_competition/new_competition.sface:109
-#: lib/safarimanager_web/live/slides/slide_selection.sface:35
-#: lib/safarimanager_web/live/slides/slide_selection.sface:233
-#: lib/safarimanager_web/live/slides/slides.sface:30
+#: lib/safarimanager_web/components/steps_header.ex:44
+#: lib/safarimanager_web/live/admin/import.ex:44
+#: lib/safarimanager_web/live/jurors/jurors.html.heex:177
+#: lib/safarimanager_web/live/new_competition/new_competition.html.heex:108
+#: lib/safarimanager_web/live/slides/slide_selection.html.heex:50
+#: lib/safarimanager_web/live/slides/slide_selection.html.heex:267
+#: lib/safarimanager_web/live/slides/slides.html.heex:43
 #, elixir-autogen, elixir-format
 msgid "Slides"
 msgstr "Slide"
 
-#: lib/safarimanager_web/components/steps_header.ex:53
-#: lib/safarimanager_web/live/jury/jury_launcher.sface:72
-#: lib/safarimanager_web/live/slides/slide_selection.sface:240
+#: lib/safarimanager_web/components/steps_header.ex:54
+#: lib/safarimanager_web/live/jury/jury_launcher.html.heex:74
+#: lib/safarimanager_web/live/slides/slide_selection.html.heex:274
 #, elixir-autogen, elixir-format
 msgid "Validation"
 msgstr "Convalida"
 
-#: lib/safarimanager_web/components/sidebar.ex:83
-#: lib/safarimanager_web/live/admin/import.ex:52
-#: lib/safarimanager_web/live/jurors/jurors.sface:37
-#: lib/safarimanager_web/live/participants/participants.sface:7
+#: lib/safarimanager_web/components/sidebar.ex:90
+#: lib/safarimanager_web/live/admin/import.ex:46
+#: lib/safarimanager_web/live/jurors/jurors.html.heex:41
+#: lib/safarimanager_web/live/participants/participants.html.heex:7
 #, elixir-autogen, elixir-format
 msgid "Users"
 msgstr "Utenti"
 
-#: lib/safarimanager_web/live/admin/import.sface:26
+#: lib/safarimanager_web/live/admin/import.html.heex:21
 #, elixir-autogen, elixir-format
 msgid "Click or drop a CSV file in this box"
 msgstr "Clicca o trascina un file CSV in quest'area"
 
-#: lib/safarimanager_web/components/upload_drop_area.ex:27
+#: lib/safarimanager_web/components/upload_drop_area.ex:22
 #, elixir-autogen, elixir-format
 msgid "Click or drop files in this box"
 msgstr "Clicca o trascina files in quest'area"
 
-#: lib/safarimanager_web/live/admin/import.sface:16
+#: lib/safarimanager_web/live/admin/import.html.heex:11
 #, elixir-autogen, elixir-format
 msgid "Select a table"
 msgstr "Seleziona una tabella"
 
-#: lib/safarimanager_web/components/direct_upload_dialog.ex:124
-#: lib/safarimanager_web/components/sidebar.ex:107
-#: lib/safarimanager_web/live/admin/import.sface:65
+#: lib/safarimanager_web/components/direct_upload_dialog.ex:118
+#: lib/safarimanager_web/components/sidebar.ex:114
+#: lib/safarimanager_web/live/admin/import.html.heex:69
 #, elixir-autogen, elixir-format
 msgid "Import"
 msgstr "Importa"
 
-#: lib/safarimanager_web/live/admin/import.sface:3
+#: lib/safarimanager_web/live/admin/import.html.heex:3
 #, elixir-autogen, elixir-format
 msgid "Import from CSV"
 msgstr "Importa da CSV"
 
-#: lib/safarimanager_web/components/form_actions.ex:13
-#: lib/safarimanager_web/live/admin/import.sface:69
+#: lib/safarimanager_web/components/form_actions.ex:12
+#: lib/safarimanager_web/live/admin/import.html.heex:74
 #, elixir-autogen, elixir-format
 msgid "Reset"
 msgstr "Resetta"
@@ -288,10 +282,10 @@ msgstr "società"
 msgid "participants"
 msgstr "partecipanti"
 
-#: lib/safarimanager_web/live/jury/jury_launcher.sface:13
-#: lib/safarimanager_web/live/jury/jury_launcher.sface:30
-#: lib/safarimanager_web/live/jury/jury_launcher.sface:47
-#: lib/safarimanager_web/live/slides/slides.sface:128
+#: lib/safarimanager_web/live/jury/jury_launcher.html.heex:12
+#: lib/safarimanager_web/live/jury/jury_launcher.html.heex:26
+#: lib/safarimanager_web/live/jury/jury_launcher.html.heex:41
+#: lib/safarimanager_web/live/slides/slides.html.heex:155
 #, elixir-format, elixir-autogen
 msgid "slides"
 msgstr "slide"
@@ -328,34 +322,22 @@ msgstr "evento internazionale"
 msgid "other"
 msgstr "altro"
 
-#, elixir-format
-msgid "submitted jury"
-msgstr "in giuria"
-
-#, elixir-format
-msgid "submitted fixed"
-msgstr "punteggio fisso"
-
-#, elixir-format
-msgid "disabled"
-msgstr "disattivato"
-
-#: lib/safarimanager_web/live/admin/import.ex:94
+#: lib/safarimanager_web/live/admin/import.ex:89
 #, elixir-autogen, elixir-format
 msgid "Imported %{success} of %{total} entries in %{table}"
 msgstr "Importati %{success} su %{total} elementi in %{table}"
 
-#: lib/safarimanager_web/live/admin/import.ex:113
+#: lib/safarimanager_web/live/admin/import.ex:108
 #, elixir-autogen, elixir-format
 msgid "Too large"
 msgstr "Troppo grande"
 
-#: lib/safarimanager_web/live/admin/import.ex:115
+#: lib/safarimanager_web/live/admin/import.ex:110
 #, elixir-autogen, elixir-format
 msgid "You have selected an unacceptable file type"
 msgstr "Hai selezionato un tipo di file incompatibile"
 
-#: lib/safarimanager_web/live/admin/import.ex:114
+#: lib/safarimanager_web/live/admin/import.ex:109
 #, elixir-autogen, elixir-format
 msgid "You have selected too many files"
 msgstr "Hai selezionato troppi file"
@@ -365,36 +347,36 @@ msgstr "Hai selezionato troppi file"
 msgid "Already registered?"
 msgstr "Già iscritto?"
 
-#: lib/safarimanager_web/live/user_settings_live.ex:22
-#: lib/safarimanager_web/live/user_settings_live.ex:59
+#: lib/safarimanager_web/live/user_settings_live.ex:16
+#: lib/safarimanager_web/live/user_settings_live.ex:47
 #, elixir-autogen, elixir-format
 msgid "Change Email"
 msgstr "Modifica Email"
 
-#: lib/safarimanager_web/live/user_settings_live.ex:65
-#: lib/safarimanager_web/live/user_settings_live.ex:120
+#: lib/safarimanager_web/live/user_settings_live.ex:53
+#: lib/safarimanager_web/live/user_settings_live.ex:105
 #, elixir-autogen, elixir-format
 msgid "Change Password"
 msgstr "Modifica Password"
 
-#: lib/safarimanager_web/live/user_settings_live.ex:58
-#: lib/safarimanager_web/live/user_settings_live.ex:119
+#: lib/safarimanager_web/live/user_settings_live.ex:46
+#: lib/safarimanager_web/live/user_settings_live.ex:104
 #, elixir-autogen, elixir-format
 msgid "Changing..."
 msgstr "Modifica in corso..."
 
-#: lib/safarimanager_web/live/user_confirmation_live.ex:11
+#: lib/safarimanager_web/live/user_confirmation_live.ex:12
 #, elixir-autogen, elixir-format
 msgid "Confirm Account"
 msgstr "Conferma Account"
 
-#: lib/safarimanager_web/live/user_confirmation_live.ex:16
+#: lib/safarimanager_web/live/user_confirmation_live.ex:17
 #, elixir-autogen, elixir-format
 msgid "Confirm my account"
 msgstr "Conferma il mio account"
 
 #: lib/safarimanager_web/live/user_reset_password_live.ex:28
-#: lib/safarimanager_web/live/user_settings_live.ex:100
+#: lib/safarimanager_web/live/user_settings_live.ex:86
 #, elixir-autogen, elixir-format
 msgid "Confirm new password"
 msgstr "Conferma la nuova password"
@@ -409,8 +391,8 @@ msgstr "Crea un account"
 msgid "Creating account..."
 msgstr "Creazione account in corso..."
 
-#: lib/safarimanager_web/live/user_settings_live.ex:45
-#: lib/safarimanager_web/live/user_settings_live.ex:107
+#: lib/safarimanager_web/live/user_settings_live.ex:38
+#: lib/safarimanager_web/live/user_settings_live.ex:96
 #, elixir-autogen, elixir-format
 msgid "Current password"
 msgstr "Password attuale"
@@ -420,13 +402,12 @@ msgstr "Password attuale"
 msgid "Don't have an account?"
 msgstr "Non hai un account?"
 
-#: lib/safarimanager_web/live/admin/users/form.sface:36
-#: lib/safarimanager_web/live/admin/users/index.sface:25
-#: lib/safarimanager_web/live/admin/users/index.sface:25
-#: lib/safarimanager_web/live/admin/users/index.sface:70
+#: lib/safarimanager_web/components/user_form.ex:51
+#: lib/safarimanager_web/live/admin/users/index.html.heex:25
+#: lib/safarimanager_web/live/admin/users/index.html.heex:80
 #: lib/safarimanager_web/live/user_login_live.ex:29
 #: lib/safarimanager_web/live/user_registration_live.ex:39
-#: lib/safarimanager_web/live/user_settings_live.ex:37
+#: lib/safarimanager_web/live/user_settings_live.ex:29
 #, elixir-autogen, elixir-format
 msgid "Email"
 msgstr "Email"
@@ -453,22 +434,22 @@ msgid "Keep me logged in"
 msgstr "Ricordami"
 
 #: lib/safarimanager_web/live/user_confirmation_instructions_live.ex:31
-#: lib/safarimanager_web/live/user_confirmation_live.ex:22
+#: lib/safarimanager_web/live/user_confirmation_live.ex:23
 #: lib/safarimanager_web/live/user_reset_password_live.ex:40
 #, elixir-autogen, elixir-format
 msgid "Log in"
 msgstr "Accedi"
 
 #: lib/safarimanager_web/live/user_reset_password_live.ex:24
-#: lib/safarimanager_web/live/user_settings_live.ex:93
+#: lib/safarimanager_web/live/user_settings_live.ex:77
 #, elixir-autogen, elixir-format
 msgid "New password"
 msgstr "Nuova password"
 
 #: lib/safarimanager_web/live/user_registration_live.ex:36
 #: lib/safarimanager_web/live/user_reset_password_live.ex:21
-#: lib/safarimanager_web/live/user_settings_live.ex:33
-#: lib/safarimanager_web/live/user_settings_live.ex:84
+#: lib/safarimanager_web/live/user_settings_live.ex:24
+#: lib/safarimanager_web/live/user_settings_live.ex:69
 #, elixir-autogen, elixir-format
 msgid "Oops, something went wrong! Please check the errors below."
 msgstr "Ops, si è verificato un problema! Controlla gli errori riportati."
@@ -485,7 +466,7 @@ msgid "Password reset successfully."
 msgstr "Password reimpostata con successo."
 
 #: lib/safarimanager_web/live/user_confirmation_instructions_live.ex:30
-#: lib/safarimanager_web/live/user_confirmation_live.ex:21
+#: lib/safarimanager_web/live/user_confirmation_live.ex:22
 #: lib/safarimanager_web/live/user_reset_password_live.ex:39
 #, elixir-autogen, elixir-format
 msgid "Register"
@@ -550,12 +531,12 @@ msgstr "Accedi all'account"
 msgid "Sign up"
 msgstr "Registra"
 
-#: lib/safarimanager_web/live/user_confirmation_live.ex:53
+#: lib/safarimanager_web/live/user_confirmation_live.ex:54
 #, elixir-autogen, elixir-format
 msgid "User confirmation link is invalid or it has expired."
 msgstr "Il link di conferma dell'utente non è valido o è scaduto."
 
-#: lib/safarimanager_web/live/user_confirmation_live.ex:38
+#: lib/safarimanager_web/live/user_confirmation_live.ex:39
 #, elixir-autogen, elixir-format
 msgid "User confirmed successfully."
 msgstr "Utente confermato con successo."
@@ -575,61 +556,61 @@ msgstr "un account ora."
 msgid "to your account now."
 msgstr "al tuo account ora."
 
-#: lib/safarimanager_web/live/participants/participants.sface:72
-#: lib/safarimanager_web/live/results/results.sface:147
-#: lib/safarimanager_web/live/results/team_results.sface:132
-#: lib/safarimanager_web/live/teams/teams.sface:148
+#: lib/safarimanager_web/live/participants/participants.html.heex:84
+#: lib/safarimanager_web/live/results/results.html.heex:143
+#: lib/safarimanager_web/live/results/team_results.html.heex:138
+#: lib/safarimanager_web/live/teams/teams.html.heex:174
 #, elixir-autogen, elixir-format
 msgid "Print"
 msgstr "Stampa"
 
-#: lib/safarimanager_web/live/slides/slide_selection.ex:256
+#: lib/safarimanager_web/live/slides/slide_selection.ex:246
 #, elixir-autogen, elixir-format
 msgid "Slide selection has been imported."
 msgstr "La selezione delle slide è stata importata."
 
-#: lib/safarimanager_web/live/slides/slide_selection.ex:290
+#: lib/safarimanager_web/live/slides/slide_selection.ex:280
 #, elixir-autogen, elixir-format
 msgid "Unable to import slide selection: invalid CSV file"
 msgstr "Impossibile importare la selezione: file CSV non valido"
 
-#: lib/safarimanager_web/live/slides/slide_selection.ex:264
+#: lib/safarimanager_web/live/slides/slide_selection.ex:254
 #, elixir-autogen, elixir-format
 msgid "Unable to import slide selection: slide not found"
 msgstr "Impossibile importare la selezione: slide non trovata"
 
-#: lib/safarimanager_web/live/slides/slide_selection.ex:283
+#: lib/safarimanager_web/live/slides/slide_selection.ex:273
 #, elixir-autogen, elixir-format
 msgid "Unable to import slide selection: subject not found"
 msgstr "Impossibile importare la selezione: soggetto non trovato"
 
-#: lib/safarimanager_web/components/grid.ex:210
+#: lib/safarimanager_web/components/grid.ex:213
 #, elixir-autogen, elixir-format
 msgid "Are you sure you want to delete 1 record?"
 msgstr "Sei sicuro di voler eliminare 1 record?"
 
-#: lib/safarimanager_web/components/grid.ex:195
+#: lib/safarimanager_web/components/grid.ex:196
 #, elixir-autogen, elixir-format
 msgid "Are you sure you want to delete all records?"
 msgstr "Sei sicuro di voler eliminare tutti i record?"
 
-#: lib/safarimanager_web/components/grid.ex:178
+#: lib/safarimanager_web/components/grid.ex:179
 #, elixir-autogen, elixir-format
 msgid "Are you sure you want to delete this record?"
 msgstr "Sei sicuro di voler eliminare questo record?"
 
-#: lib/safarimanager_web/components/direct_upload_dialog.ex:127
-#: lib/safarimanager_web/live/admin/categories/index.sface:35
-#: lib/safarimanager_web/live/admin/competitions/index.sface:131
-#: lib/safarimanager_web/live/admin/evaluations/index.sface:44
-#: lib/safarimanager_web/live/admin/organizations/index.sface:35
-#: lib/safarimanager_web/live/admin/participants/index.sface:38
-#: lib/safarimanager_web/live/admin/subjects/index.sface:41
-#: lib/safarimanager_web/live/admin/teams/index.sface:55
-#: lib/safarimanager_web/live/admin/users/index.sface:44
-#: lib/safarimanager_web/live/jurors/jurors.sface:30
-#: lib/safarimanager_web/live/new_competition/new_competition.sface:147
-#: lib/safarimanager_web/live/slides/slide_selection.sface:207
+#: lib/safarimanager_web/components/direct_upload_dialog.ex:121
+#: lib/safarimanager_web/live/admin/categories/index.html.heex:35
+#: lib/safarimanager_web/live/admin/competitions/index.html.heex:153
+#: lib/safarimanager_web/live/admin/evaluations/index.html.heex:44
+#: lib/safarimanager_web/live/admin/organizations/index.html.heex:35
+#: lib/safarimanager_web/live/admin/participants/index.html.heex:38
+#: lib/safarimanager_web/live/admin/subjects/index.html.heex:41
+#: lib/safarimanager_web/live/admin/teams/index.html.heex:52
+#: lib/safarimanager_web/live/admin/users/index.html.heex:44
+#: lib/safarimanager_web/live/jurors/jurors.html.heex:34
+#: lib/safarimanager_web/live/new_competition/new_competition.html.heex:148
+#: lib/safarimanager_web/live/slides/slide_selection.html.heex:237
 #, elixir-autogen, elixir-format
 msgid "Close"
 msgstr "Chiudi"
@@ -640,197 +621,189 @@ msgstr "Chiudi"
 #: lib/safarimanager_web/controllers/selection_printout_html/show_single_team.html.heex:31
 #: lib/safarimanager_web/controllers/slides_printout_html/show.html.heex:35
 #: lib/safarimanager_web/controllers/slides_printout_html/show_teams.html.heex:27
-#: lib/safarimanager_web/live/admin/subjects/index.sface:112
-#: lib/safarimanager_web/live/results/results.sface:184
-#: lib/safarimanager_web/live/results/team_results.sface:167
+#: lib/safarimanager_web/live/admin/subjects/index.html.heex:130
+#: lib/safarimanager_web/live/results/results.html.heex:179
+#: lib/safarimanager_web/live/results/team_results.html.heex:175
 #, elixir-autogen, elixir-format
 msgid "Coeff."
 msgstr "Coeff."
 
-#: lib/safarimanager_web/live/admin/subjects/index.sface:25
-#: lib/safarimanager_web/live/admin/subjects/index.sface:25
-#: lib/safarimanager_web/live/admin/subjects/index.sface:70
-#: lib/safarimanager_web/live/results/results.sface:89
-#: lib/safarimanager_web/live/results/team_results.sface:89
+#: lib/safarimanager_web/live/admin/subjects/index.html.heex:25
+#: lib/safarimanager_web/live/admin/subjects/index.html.heex:84
+#: lib/safarimanager_web/live/results/results.html.heex:89
+#: lib/safarimanager_web/live/results/team_results.html.heex:91
 #, elixir-autogen, elixir-format
 msgid "Coefficient"
 msgstr "Coefficiente"
 
-#: lib/safarimanager_web/components/grid.ex:38
+#: lib/safarimanager_web/components/grid.ex:35
 #, elixir-autogen, elixir-format
 msgid "Create"
 msgstr "Crea"
 
-#: lib/safarimanager_web/live/admin/categories/index.sface:98
-#: lib/safarimanager_web/live/admin/evaluations/index.sface:131
-#: lib/safarimanager_web/live/admin/organizations/index.sface:169
-#: lib/safarimanager_web/live/admin/participants/index.sface:123
-#: lib/safarimanager_web/live/admin/subjects/index.sface:118
+#: lib/safarimanager_web/live/admin/categories/index.html.heex:106
+#: lib/safarimanager_web/live/admin/evaluations/index.html.heex:148
+#: lib/safarimanager_web/live/admin/organizations/index.html.heex:184
+#: lib/safarimanager_web/live/admin/participants/index.html.heex:129
+#: lib/safarimanager_web/live/admin/subjects/index.html.heex:136
 #, elixir-autogen, elixir-format
 msgid "Created"
 msgstr "Creato"
 
-#: lib/safarimanager_web/components/grid.ex:52
-#: lib/safarimanager_web/components/grid.ex:179
-#: lib/safarimanager_web/components/grid.ex:196
-#: lib/safarimanager_web/components/grid.ex:211
-#: lib/safarimanager_web/components/grid.ex:230
-#: lib/safarimanager_web/live/admin/categories/index.sface:120
-#: lib/safarimanager_web/live/admin/competitions/index.ex:132
-#: lib/safarimanager_web/live/admin/competitions/index.sface:420
-#: lib/safarimanager_web/live/admin/evaluations/index.sface:153
-#: lib/safarimanager_web/live/admin/organizations/index.sface:191
-#: lib/safarimanager_web/live/admin/participants/index.sface:142
-#: lib/safarimanager_web/live/admin/subjects/index.sface:140
-#: lib/safarimanager_web/live/admin/teams/index.sface:202
-#: lib/safarimanager_web/live/admin/users/index.sface:216
-#: lib/safarimanager_web/live/slides/slides.ex:105
-#: lib/safarimanager_web/live/slides/slides.ex:130
-#: lib/safarimanager_web/live/slides/slides.sface:184
-#: lib/safarimanager_web/live/teams/teams.ex:155
+#: lib/safarimanager_web/components/grid.ex:56
+#: lib/safarimanager_web/components/grid.ex:180
+#: lib/safarimanager_web/components/grid.ex:197
+#: lib/safarimanager_web/components/grid.ex:214
+#: lib/safarimanager_web/components/grid.ex:233
+#: lib/safarimanager_web/live/admin/categories/index.html.heex:133
+#: lib/safarimanager_web/live/admin/competitions/index.ex:115
+#: lib/safarimanager_web/live/admin/competitions/index.html.heex:557
+#: lib/safarimanager_web/live/admin/evaluations/index.html.heex:175
+#: lib/safarimanager_web/live/admin/organizations/index.html.heex:211
+#: lib/safarimanager_web/live/admin/participants/index.html.heex:153
+#: lib/safarimanager_web/live/admin/subjects/index.html.heex:163
+#: lib/safarimanager_web/live/admin/teams/index.html.heex:211
+#: lib/safarimanager_web/live/admin/users/index.html.heex:249
+#: lib/safarimanager_web/live/slides/slides.ex:101
+#: lib/safarimanager_web/live/slides/slides.ex:126
+#: lib/safarimanager_web/live/slides/slides.html.heex:221
+#: lib/safarimanager_web/live/teams/teams.ex:153
 #, elixir-autogen, elixir-format
 msgid "Delete"
 msgstr "Elimina"
 
-#: lib/safarimanager_web/components/grid.ex:194
+#: lib/safarimanager_web/components/grid.ex:195
 #, elixir-autogen, elixir-format
 msgid "Delete all records"
 msgstr "Elimina tutti i record"
 
-#: lib/safarimanager_web/components/grid.ex:177
-#: lib/safarimanager_web/components/grid.ex:209
+#: lib/safarimanager_web/components/grid.ex:178
+#: lib/safarimanager_web/components/grid.ex:212
 #, elixir-autogen, elixir-format
 msgid "Delete record"
 msgstr "Elimina record"
 
-#: lib/safarimanager_web/components/grid.ex:224
+#: lib/safarimanager_web/components/grid.ex:227
 #, elixir-autogen, elixir-format
 msgid "Delete records"
 msgstr "Elimina i record"
 
-#: lib/safarimanager_web/components/slides_selection_list.ex:75
-#: lib/safarimanager_web/components/slides_selection_list.ex:147
-#: lib/safarimanager_web/components/slides_selection_list.ex:219
-#: lib/safarimanager_web/live/admin/categories/index.sface:114
-#: lib/safarimanager_web/live/admin/competitions/index.sface:414
-#: lib/safarimanager_web/live/admin/evaluations/index.sface:147
-#: lib/safarimanager_web/live/admin/organizations/index.sface:185
-#: lib/safarimanager_web/live/admin/participants/index.sface:136
-#: lib/safarimanager_web/live/admin/subjects/index.sface:134
-#: lib/safarimanager_web/live/admin/teams/index.sface:196
-#: lib/safarimanager_web/live/admin/users/index.sface:210
-#: lib/safarimanager_web/live/teams/teams.sface:182
+#: lib/safarimanager_web/components/slides_selection_list.ex:87
+#: lib/safarimanager_web/components/slides_selection_list.ex:166
+#: lib/safarimanager_web/components/slides_selection_list.ex:247
+#: lib/safarimanager_web/live/admin/categories/index.html.heex:124
+#: lib/safarimanager_web/live/admin/competitions/index.html.heex:548
+#: lib/safarimanager_web/live/admin/evaluations/index.html.heex:166
+#: lib/safarimanager_web/live/admin/organizations/index.html.heex:202
+#: lib/safarimanager_web/live/admin/participants/index.html.heex:144
+#: lib/safarimanager_web/live/admin/subjects/index.html.heex:154
+#: lib/safarimanager_web/live/admin/teams/index.html.heex:202
+#: lib/safarimanager_web/live/admin/users/index.html.heex:240
+#: lib/safarimanager_web/live/teams/teams.html.heex:217
 #, elixir-autogen, elixir-format
 msgid "Edit"
 msgstr "Modifica"
 
-#: lib/safarimanager_web/live/admin/subjects/index.ex:88
+#: lib/safarimanager_web/live/admin/subjects/index.ex:77
 #, elixir-autogen, elixir-format
 msgid "Edited subject"
 msgstr "Soggetto modificato"
 
-#: lib/safarimanager_web/components/grid.ex:40
+#: lib/safarimanager_web/components/grid.ex:38
 #, elixir-autogen, elixir-format
 msgid "Export to CSV"
 msgstr "Esporta in CSV"
 
-#: lib/safarimanager_web/components/grid.ex:50
+#: lib/safarimanager_web/components/grid.ex:48
 #, elixir-autogen, elixir-format
 msgid "Merge into"
 msgstr "Unisci"
 
-#: lib/safarimanager_web/live/admin/categories/index.sface:101
-#: lib/safarimanager_web/live/admin/evaluations/index.sface:134
-#: lib/safarimanager_web/live/admin/organizations/index.sface:172
-#: lib/safarimanager_web/live/admin/subjects/index.sface:121
+#: lib/safarimanager_web/live/admin/categories/index.html.heex:109
+#: lib/safarimanager_web/live/admin/evaluations/index.html.heex:151
+#: lib/safarimanager_web/live/admin/organizations/index.html.heex:187
+#: lib/safarimanager_web/live/admin/subjects/index.html.heex:139
 #, elixir-autogen, elixir-format
 msgid "Modified"
 msgstr "Modificato"
 
 #: lib/safarimanager_web/controllers/participants_printout_html/show.html.heex:35
-#: lib/safarimanager_web/live/admin/categories/index.sface:19
-#: lib/safarimanager_web/live/admin/categories/index.sface:19
-#: lib/safarimanager_web/live/admin/categories/index.sface:55
-#: lib/safarimanager_web/live/admin/categories/index.sface:92
-#: lib/safarimanager_web/live/admin/competitions/form.sface:12
-#: lib/safarimanager_web/live/admin/competitions/form.sface:298
-#: lib/safarimanager_web/live/admin/competitions/index.sface:19
-#: lib/safarimanager_web/live/admin/competitions/index.sface:19
-#: lib/safarimanager_web/live/admin/competitions/index.sface:152
-#: lib/safarimanager_web/live/admin/competitions/index.sface:335
-#: lib/safarimanager_web/live/admin/competitions/index.sface:389
-#: lib/safarimanager_web/live/admin/evaluations/index.sface:19
-#: lib/safarimanager_web/live/admin/evaluations/index.sface:19
-#: lib/safarimanager_web/live/admin/evaluations/index.sface:64
-#: lib/safarimanager_web/live/admin/evaluations/index.sface:116
-#: lib/safarimanager_web/live/admin/organizations/index.sface:19
-#: lib/safarimanager_web/live/admin/organizations/index.sface:19
-#: lib/safarimanager_web/live/admin/organizations/index.sface:55
-#: lib/safarimanager_web/live/admin/organizations/index.sface:163
-#: lib/safarimanager_web/live/admin/subjects/index.sface:19
-#: lib/safarimanager_web/live/admin/subjects/index.sface:19
-#: lib/safarimanager_web/live/admin/subjects/index.sface:64
-#: lib/safarimanager_web/live/admin/subjects/index.sface:108
-#: lib/safarimanager_web/live/admin/teams/index.sface:25
-#: lib/safarimanager_web/live/admin/teams/index.sface:25
-#: lib/safarimanager_web/live/admin/teams/index.sface:140
-#: lib/safarimanager_web/live/admin/teams/index.sface:177
-#: lib/safarimanager_web/live/new_competition/new_competition.sface:62
-#: lib/safarimanager_web/live/results/results.sface:86
-#: lib/safarimanager_web/live/results/results.sface:153
-#: lib/safarimanager_web/live/results/team_results.sface:86
-#: lib/safarimanager_web/live/slides/slide_selection.sface:79
-#: lib/safarimanager_web/live/slides/slides.sface:71
-#: lib/safarimanager_web/live/slides/slides.sface:150
-#: lib/safarimanager_web/live/teams/teams.sface:25
-#: lib/safarimanager_web/live/teams/teams.sface:162
+#: lib/safarimanager_web/live/admin/categories/index.html.heex:19
+#: lib/safarimanager_web/live/admin/categories/index.html.heex:56
+#: lib/safarimanager_web/live/admin/categories/index.html.heex:100
+#: lib/safarimanager_web/live/admin/competitions/index.html.heex:19
+#: lib/safarimanager_web/live/admin/competitions/index.html.heex:177
+#: lib/safarimanager_web/live/admin/competitions/index.html.heex:455
+#: lib/safarimanager_web/live/admin/competitions/index.html.heex:521
+#: lib/safarimanager_web/live/admin/competitions/new_form.ex:28
+#: lib/safarimanager_web/live/admin/competitions/new_form.ex:219
+#: lib/safarimanager_web/live/admin/evaluations/index.html.heex:19
+#: lib/safarimanager_web/live/admin/evaluations/index.html.heex:66
+#: lib/safarimanager_web/live/admin/evaluations/index.html.heex:133
+#: lib/safarimanager_web/live/admin/organizations/index.html.heex:19
+#: lib/safarimanager_web/live/admin/organizations/index.html.heex:56
+#: lib/safarimanager_web/live/admin/organizations/index.html.heex:178
+#: lib/safarimanager_web/live/admin/subjects/index.html.heex:19
+#: lib/safarimanager_web/live/admin/subjects/index.html.heex:70
+#: lib/safarimanager_web/live/admin/subjects/index.html.heex:126
+#: lib/safarimanager_web/live/admin/teams/index.html.heex:25
+#: lib/safarimanager_web/live/admin/teams/index.html.heex:134
+#: lib/safarimanager_web/live/admin/teams/index.html.heex:181
+#: lib/safarimanager_web/live/new_competition/new_competition.html.heex:59
+#: lib/safarimanager_web/live/results/results.html.heex:86
+#: lib/safarimanager_web/live/results/results.html.heex:149
+#: lib/safarimanager_web/live/results/team_results.html.heex:88
+#: lib/safarimanager_web/live/slides/slide_selection.html.heex:98
+#: lib/safarimanager_web/live/slides/slides.html.heex:89
+#: lib/safarimanager_web/live/slides/slides.html.heex:182
+#: lib/safarimanager_web/live/teams/teams.html.heex:31
+#: lib/safarimanager_web/live/teams/teams.html.heex:198
 #, elixir-autogen, elixir-format
 msgid "Name"
 msgstr "Nome"
 
 #: lib/safarimanager_web/controllers/participants_printout_html/show.html.heex:34
 #: lib/safarimanager_web/controllers/teams_printout_html/show.html.heex:34
-#: lib/safarimanager_web/live/admin/subjects/index.sface:105
+#: lib/safarimanager_web/live/admin/subjects/index.html.heex:123
 #, elixir-autogen, elixir-format
 msgid "Num."
 msgstr "Num."
 
-#: lib/safarimanager_web/live/admin/subjects/index.sface:61
+#: lib/safarimanager_web/live/admin/subjects/index.html.heex:63
 #, elixir-autogen, elixir-format
 msgid "Numeric ID"
 msgstr "ID numerico"
 
-#: lib/safarimanager_web/components/form_actions.ex:14
-#: lib/safarimanager_web/live/admin/categories/index.sface:71
-#: lib/safarimanager_web/live/admin/competitions/index.sface:368
-#: lib/safarimanager_web/live/admin/evaluations/index.sface:95
-#: lib/safarimanager_web/live/admin/organizations/index.sface:65
-#: lib/safarimanager_web/live/admin/participants/index.sface:92
-#: lib/safarimanager_web/live/admin/subjects/index.sface:86
-#: lib/safarimanager_web/live/admin/teams/index.sface:157
-#: lib/safarimanager_web/live/admin/users/index.sface:93
-#: lib/safarimanager_web/live/new_competition/new_competition.sface:28
-#: lib/safarimanager_web/live/slides/slide_selection.sface:206
-#: lib/safarimanager_web/live/teams/teams.sface:52
+#: lib/safarimanager_web/components/form_actions.ex:13
+#: lib/safarimanager_web/live/admin/categories/index.html.heex:77
+#: lib/safarimanager_web/live/admin/competitions/index.html.heex:498
+#: lib/safarimanager_web/live/admin/competitions/new_form.ex:264
+#: lib/safarimanager_web/live/admin/evaluations/index.html.heex:110
+#: lib/safarimanager_web/live/admin/organizations/index.html.heex:73
+#: lib/safarimanager_web/live/admin/participants/index.html.heex:96
+#: lib/safarimanager_web/live/admin/subjects/index.html.heex:102
+#: lib/safarimanager_web/live/admin/teams/index.html.heex:155
+#: lib/safarimanager_web/live/admin/users/index.html.heex:105
+#: lib/safarimanager_web/live/slides/slide_selection.html.heex:231
+#: lib/safarimanager_web/live/teams/teams.html.heex:59
 #, elixir-autogen, elixir-format
 msgid "Save"
 msgstr "Salva"
 
-#: lib/safarimanager_web/live/admin/subjects/index.sface:22
-#: lib/safarimanager_web/live/admin/subjects/index.sface:22
-#: lib/safarimanager_web/live/admin/subjects/index.sface:67
+#: lib/safarimanager_web/live/admin/subjects/index.html.heex:22
+#: lib/safarimanager_web/live/admin/subjects/index.html.heex:77
 #, elixir-autogen, elixir-format
 msgid "Scientific Name"
 msgstr "Nome Scientifico"
 
-#: lib/safarimanager_web/live/admin/categories/index.sface:109
-#: lib/safarimanager_web/live/admin/competitions/index.sface:409
-#: lib/safarimanager_web/live/admin/evaluations/index.sface:142
-#: lib/safarimanager_web/live/admin/organizations/index.sface:180
-#: lib/safarimanager_web/live/admin/participants/index.sface:131
-#: lib/safarimanager_web/live/admin/subjects/index.sface:129
-#: lib/safarimanager_web/live/admin/teams/index.sface:191
-#: lib/safarimanager_web/live/admin/users/index.sface:204
+#: lib/safarimanager_web/live/admin/categories/index.html.heex:117
+#: lib/safarimanager_web/live/admin/competitions/index.html.heex:541
+#: lib/safarimanager_web/live/admin/evaluations/index.html.heex:159
+#: lib/safarimanager_web/live/admin/organizations/index.html.heex:195
+#: lib/safarimanager_web/live/admin/participants/index.html.heex:137
+#: lib/safarimanager_web/live/admin/subjects/index.html.heex:147
+#: lib/safarimanager_web/live/admin/teams/index.html.heex:195
+#: lib/safarimanager_web/live/admin/users/index.html.heex:233
 #, elixir-autogen, elixir-format
 msgid "Show"
 msgstr "Mostra"
@@ -839,255 +812,227 @@ msgstr "Mostra"
 #: lib/safarimanager_web/controllers/results_printout_html/show.html.heex:24
 #: lib/safarimanager_web/controllers/results_printout_html/show_teams.html.heex:24
 #: lib/safarimanager_web/controllers/teams_printout_html/show.html.heex:24
-#: lib/safarimanager_web/live/admin/competitions/form.sface:45
-#: lib/safarimanager_web/live/admin/competitions/index.sface:27
-#: lib/safarimanager_web/live/admin/competitions/index.sface:27
-#: lib/safarimanager_web/live/admin/competitions/index.sface:163
-#: lib/safarimanager_web/live/admin/evaluations/index.sface:28
-#: lib/safarimanager_web/live/admin/evaluations/index.sface:28
-#: lib/safarimanager_web/live/admin/evaluations/index.sface:79
-#: lib/safarimanager_web/live/admin/evaluations/index.sface:125
-#: lib/safarimanager_web/live/admin/subjects/index.sface:28
-#: lib/safarimanager_web/live/admin/subjects/index.sface:28
-#: lib/safarimanager_web/live/admin/subjects/index.sface:73
-#: lib/safarimanager_web/live/admin/subjects/index.sface:115
+#: lib/safarimanager_web/live/admin/competitions/index.html.heex:27
+#: lib/safarimanager_web/live/admin/competitions/index.html.heex:196
+#: lib/safarimanager_web/live/admin/competitions/new_form.ex:53
+#: lib/safarimanager_web/live/admin/evaluations/index.html.heex:28
+#: lib/safarimanager_web/live/admin/evaluations/index.html.heex:92
+#: lib/safarimanager_web/live/admin/evaluations/index.html.heex:142
+#: lib/safarimanager_web/live/admin/subjects/index.html.heex:28
+#: lib/safarimanager_web/live/admin/subjects/index.html.heex:91
+#: lib/safarimanager_web/live/admin/subjects/index.html.heex:133
 #, elixir-autogen, elixir-format
 msgid "Type"
 msgstr "Tipo"
 
-#: lib/safarimanager_web/components/confirm.ex:91
-#: lib/safarimanager_web/live/admin/categories/index.sface:76
-#: lib/safarimanager_web/live/admin/competitions/index.sface:373
-#: lib/safarimanager_web/live/admin/evaluations/index.sface:100
-#: lib/safarimanager_web/live/admin/organizations/index.sface:70
-#: lib/safarimanager_web/live/admin/organizations/index.sface:144
-#: lib/safarimanager_web/live/admin/participants/index.sface:97
-#: lib/safarimanager_web/live/admin/subjects/index.sface:91
-#: lib/safarimanager_web/live/admin/teams/index.sface:159
-#: lib/safarimanager_web/live/admin/users/index.sface:95
-#: lib/safarimanager_web/live/admin/users/index.sface:168
-#: lib/safarimanager_web/live/ballot_box/ballot_box.ex:51
-#: lib/safarimanager_web/live/new_competition/new_competition.sface:33
-#: lib/safarimanager_web/live/slides/slides.sface:218
-#: lib/safarimanager_web/live/teams/teams.sface:57
+#: lib/safarimanager_web/components/confirm.ex:88
+#: lib/safarimanager_web/live/admin/categories/index.html.heex:83
+#: lib/safarimanager_web/live/admin/competitions/index.html.heex:504
+#: lib/safarimanager_web/live/admin/competitions/new_form.ex:270
+#: lib/safarimanager_web/live/admin/evaluations/index.html.heex:116
+#: lib/safarimanager_web/live/admin/organizations/index.html.heex:79
+#: lib/safarimanager_web/live/admin/organizations/index.html.heex:158
+#: lib/safarimanager_web/live/admin/participants/index.html.heex:102
+#: lib/safarimanager_web/live/admin/subjects/index.html.heex:108
+#: lib/safarimanager_web/live/admin/teams/index.html.heex:161
+#: lib/safarimanager_web/live/admin/users/index.html.heex:111
+#: lib/safarimanager_web/live/admin/users/index.html.heex:196
+#: lib/safarimanager_web/live/ballot_box/ballot_box.ex:62
+#: lib/safarimanager_web/live/slides/slides.html.heex:262
+#: lib/safarimanager_web/live/teams/teams.html.heex:67
 #, elixir-autogen, elixir-format
 msgid "Cancel"
 msgstr "Annulla"
 
-#: lib/safarimanager_web/components/confirm.ex:85
+#: lib/safarimanager_web/components/confirm.ex:82
 #, elixir-autogen, elixir-format
 msgid "Don't show this message again"
 msgstr "Non mostrare più questo messaggio"
 
-#: lib/safarimanager_web/live/admin/subjects/index.ex:187
+#: lib/safarimanager_web/live/admin/subjects/index.ex:176
 #, elixir-autogen, elixir-format
 msgid "All subjects deleted successfully"
 msgstr "Tutti i soggetti sono stati eliminati con successo"
 
-#: lib/safarimanager_web/live/admin/subjects/index.ex:72
+#: lib/safarimanager_web/live/admin/subjects/index.ex:61
 #, elixir-autogen, elixir-format
 msgid "Subject created successfully"
 msgstr "Soggetto creato con successo"
 
-#: lib/safarimanager_web/live/admin/subjects/index.ex:164
+#: lib/safarimanager_web/live/admin/subjects/index.ex:153
 #, elixir-autogen, elixir-format
 msgid "Subject deleted successfully"
 msgstr "Soggetto eliminato con successo"
 
-#: lib/safarimanager_web/live/admin/subjects/index.ex:175
+#: lib/safarimanager_web/live/admin/subjects/index.ex:164
 #, elixir-autogen, elixir-format
 msgid "Subjects deleted successfully"
 msgstr "Soggetti eliminati con successo"
 
-#: lib/safarimanager_web/live/admin/subjects/index.ex:165
+#: lib/safarimanager_web/live/admin/subjects/index.ex:154
 #, elixir-autogen, elixir-format
 msgid "Unable to delete Subject"
 msgstr "Impossibile eliminare il soggetto"
 
-#: lib/safarimanager_web/live/admin/subjects/index.ex:178
+#: lib/safarimanager_web/live/admin/subjects/index.ex:167
 #, elixir-autogen, elixir-format
 msgid "Unable to delete Subjects"
 msgstr "Impossibile eliminare i soggetti"
 
-#: lib/safarimanager_web/live/admin/subjects/index.ex:139
+#: lib/safarimanager_web/live/admin/subjects/index.ex:128
 #, elixir-autogen, elixir-format
 msgid "Unable to retrieve this Subject"
 msgstr "Impossibile recuperare questo soggetto"
 
-#: lib/safarimanager_web/live/admin/categories/index.sface:25
-#: lib/safarimanager_web/live/admin/categories/index.sface:25
-#: lib/safarimanager_web/live/admin/competitions/index.sface:121
-#: lib/safarimanager_web/live/admin/competitions/index.sface:121
-#: lib/safarimanager_web/live/admin/evaluations/index.sface:34
-#: lib/safarimanager_web/live/admin/evaluations/index.sface:34
-#: lib/safarimanager_web/live/admin/organizations/index.sface:25
-#: lib/safarimanager_web/live/admin/organizations/index.sface:25
-#: lib/safarimanager_web/live/admin/participants/index.sface:28
-#: lib/safarimanager_web/live/admin/participants/index.sface:28
-#: lib/safarimanager_web/live/admin/subjects/index.sface:31
-#: lib/safarimanager_web/live/admin/subjects/index.sface:31
-#: lib/safarimanager_web/live/admin/teams/index.sface:45
-#: lib/safarimanager_web/live/admin/teams/index.sface:45
-#: lib/safarimanager_web/live/admin/users/index.sface:34
-#: lib/safarimanager_web/live/admin/users/index.sface:34
+#: lib/safarimanager_web/live/admin/categories/index.html.heex:25
+#: lib/safarimanager_web/live/admin/competitions/index.html.heex:143
+#: lib/safarimanager_web/live/admin/evaluations/index.html.heex:34
+#: lib/safarimanager_web/live/admin/organizations/index.html.heex:25
+#: lib/safarimanager_web/live/admin/participants/index.html.heex:28
+#: lib/safarimanager_web/live/admin/subjects/index.html.heex:31
+#: lib/safarimanager_web/live/admin/teams/index.html.heex:42
+#: lib/safarimanager_web/live/admin/users/index.html.heex:34
 #, elixir-autogen, elixir-format
 msgid "Inserted"
 msgstr "Creato"
 
-#: lib/safarimanager_web/live/admin/competitions/form.sface:94
-#: lib/safarimanager_web/live/admin/competitions/index.sface:197
-#: lib/safarimanager_web/live/admin/participants/index.sface:16
-#: lib/safarimanager_web/live/admin/participants/index.sface:16
-#: lib/safarimanager_web/live/admin/participants/index.sface:58
-#: lib/safarimanager_web/live/admin/subjects/index.sface:16
-#: lib/safarimanager_web/live/admin/subjects/index.sface:16
-#: lib/safarimanager_web/live/admin/teams/index.sface:22
-#: lib/safarimanager_web/live/admin/teams/index.sface:22
-#: lib/safarimanager_web/live/admin/teams/index.sface:85
+#: lib/safarimanager_web/live/admin/competitions/index.html.heex:248
+#: lib/safarimanager_web/live/admin/competitions/new_form.ex:77
+#: lib/safarimanager_web/live/admin/participants/index.html.heex:16
+#: lib/safarimanager_web/live/admin/participants/index.html.heex:59
+#: lib/safarimanager_web/live/admin/subjects/index.html.heex:16
+#: lib/safarimanager_web/live/admin/teams/index.html.heex:22
+#: lib/safarimanager_web/live/admin/teams/index.html.heex:84
 #, elixir-autogen, elixir-format
 msgid "Number"
 msgstr "Numero"
 
-#: lib/safarimanager_web/live/admin/subjects/index.sface:12
+#: lib/safarimanager_web/live/admin/subjects/index.html.heex:12
 #, elixir-autogen, elixir-format
 msgid "Subject details"
 msgstr "Dettagli soggetto"
 
-#: lib/safarimanager_web/live/admin/categories/index.sface:28
-#: lib/safarimanager_web/live/admin/categories/index.sface:28
-#: lib/safarimanager_web/live/admin/competitions/index.sface:124
-#: lib/safarimanager_web/live/admin/competitions/index.sface:124
-#: lib/safarimanager_web/live/admin/evaluations/index.sface:37
-#: lib/safarimanager_web/live/admin/evaluations/index.sface:37
-#: lib/safarimanager_web/live/admin/organizations/index.sface:28
-#: lib/safarimanager_web/live/admin/organizations/index.sface:28
-#: lib/safarimanager_web/live/admin/participants/index.sface:31
-#: lib/safarimanager_web/live/admin/participants/index.sface:31
-#: lib/safarimanager_web/live/admin/subjects/index.sface:34
-#: lib/safarimanager_web/live/admin/subjects/index.sface:34
-#: lib/safarimanager_web/live/admin/teams/index.sface:48
-#: lib/safarimanager_web/live/admin/teams/index.sface:48
-#: lib/safarimanager_web/live/admin/users/index.sface:37
-#: lib/safarimanager_web/live/admin/users/index.sface:37
+#: lib/safarimanager_web/live/admin/categories/index.html.heex:28
+#: lib/safarimanager_web/live/admin/competitions/index.html.heex:146
+#: lib/safarimanager_web/live/admin/evaluations/index.html.heex:37
+#: lib/safarimanager_web/live/admin/organizations/index.html.heex:28
+#: lib/safarimanager_web/live/admin/participants/index.html.heex:31
+#: lib/safarimanager_web/live/admin/subjects/index.html.heex:34
+#: lib/safarimanager_web/live/admin/teams/index.html.heex:45
+#: lib/safarimanager_web/live/admin/users/index.html.heex:37
 #, elixir-autogen, elixir-format
 msgid "Updated"
 msgstr "Aggiornato"
 
-#: lib/safarimanager_web/live/admin/subjects/index.sface:57
+#: lib/safarimanager_web/live/admin/subjects/index.html.heex:57
 #, elixir-autogen, elixir-format
 msgid "Edit subject"
 msgstr "Modifica soggetto"
 
-#: lib/safarimanager_web/live/admin/subjects/index.sface:56
+#: lib/safarimanager_web/live/admin/subjects/index.html.heex:56
 #, elixir-autogen, elixir-format
 msgid "New subject"
 msgstr "Nuovo soggetto"
 
-#: lib/safarimanager_web/components/confirm.ex:42
+#: lib/safarimanager_web/components/confirm.ex:39
 #, elixir-autogen, elixir-format
 msgid "Are you sure?"
 msgstr "Sei sicuro?"
 
-#: lib/safarimanager_web/live/hooks/sidebar_hook.ex:27
+#: lib/safarimanager_web/live/hooks/sidebar_hook.ex:28
 #, elixir-autogen, elixir-format
 msgid "Safari Manager is shutting down. You can close this page."
 msgstr "Arresto di Safari Manager in corso. Puoi chiudere questa pagina."
 
-#: lib/safarimanager_web/components/confirm.ex:44
-#: lib/safarimanager_web/live/admin/competitions/index.sface:33
-#: lib/safarimanager_web/live/admin/evaluations/index.sface:26
+#: lib/safarimanager_web/components/confirm.ex:41
+#: lib/safarimanager_web/live/admin/competitions/index.html.heex:33
+#: lib/safarimanager_web/live/admin/evaluations/index.html.heex:26
 #, elixir-autogen, elixir-format
 msgid "Yes"
 msgstr "Sì"
 
-#: lib/safarimanager_web/live/admin/categories/index.ex:159
+#: lib/safarimanager_web/live/admin/categories/index.ex:149
 #, elixir-autogen, elixir-format
 msgid "All categories deleted successfully"
 msgstr "Tutti le categorie sono state eliminate con successo"
 
-#: lib/safarimanager_web/live/admin/categories/index.ex:147
+#: lib/safarimanager_web/live/admin/categories/index.ex:137
 #, elixir-autogen, elixir-format
 msgid "Categories deleted successfully"
 msgstr "Categorie eliminate con successo"
 
-#: lib/safarimanager_web/live/admin/categories/index.ex:68
+#: lib/safarimanager_web/live/admin/categories/index.ex:58
 #, elixir-autogen, elixir-format
 msgid "Category created successfully"
 msgstr "Categoria creata con successo"
 
-#: lib/safarimanager_web/live/admin/categories/index.ex:136
+#: lib/safarimanager_web/live/admin/categories/index.ex:126
 #, elixir-autogen, elixir-format
 msgid "Category deleted successfully"
 msgstr "Categoria eliminata con successo"
 
-#: lib/safarimanager_web/live/admin/categories/index.sface:12
+#: lib/safarimanager_web/live/admin/categories/index.html.heex:12
 #, elixir-autogen, elixir-format
 msgid "Category details"
 msgstr "Dettagli categoria"
 
-#: lib/safarimanager_web/live/admin/categories/index.sface:51
+#: lib/safarimanager_web/live/admin/categories/index.html.heex:51
 #, elixir-autogen, elixir-format
 msgid "Edit category"
 msgstr "Modifica categoria"
 
-#: lib/safarimanager_web/live/admin/categories/index.ex:84
+#: lib/safarimanager_web/live/admin/categories/index.ex:74
 #, elixir-autogen, elixir-format
 msgid "Edited category"
 msgstr "Categoria modificata"
 
-#: lib/safarimanager_web/live/admin/categories/index.sface:16
-#: lib/safarimanager_web/live/admin/categories/index.sface:16
-#: lib/safarimanager_web/live/admin/categories/index.sface:89
-#: lib/safarimanager_web/live/admin/competitions/index.sface:16
-#: lib/safarimanager_web/live/admin/competitions/index.sface:16
-#: lib/safarimanager_web/live/admin/competitions/index.sface:386
-#: lib/safarimanager_web/live/admin/evaluations/index.sface:16
-#: lib/safarimanager_web/live/admin/evaluations/index.sface:16
-#: lib/safarimanager_web/live/admin/evaluations/index.sface:113
-#: lib/safarimanager_web/live/admin/organizations/index.sface:16
-#: lib/safarimanager_web/live/admin/organizations/index.sface:16
-#: lib/safarimanager_web/live/admin/organizations/index.sface:160
-#: lib/safarimanager_web/live/admin/teams/index.sface:16
-#: lib/safarimanager_web/live/admin/teams/index.sface:16
-#: lib/safarimanager_web/live/admin/teams/index.sface:171
-#: lib/safarimanager_web/live/admin/users/index.sface:16
-#: lib/safarimanager_web/live/admin/users/index.sface:16
-#: lib/safarimanager_web/live/admin/users/index.sface:184
+#: lib/safarimanager_web/live/admin/categories/index.html.heex:16
+#: lib/safarimanager_web/live/admin/categories/index.html.heex:97
+#: lib/safarimanager_web/live/admin/competitions/index.html.heex:16
+#: lib/safarimanager_web/live/admin/competitions/index.html.heex:518
+#: lib/safarimanager_web/live/admin/evaluations/index.html.heex:16
+#: lib/safarimanager_web/live/admin/evaluations/index.html.heex:130
+#: lib/safarimanager_web/live/admin/organizations/index.html.heex:16
+#: lib/safarimanager_web/live/admin/organizations/index.html.heex:175
+#: lib/safarimanager_web/live/admin/teams/index.html.heex:16
+#: lib/safarimanager_web/live/admin/teams/index.html.heex:175
+#: lib/safarimanager_web/live/admin/users/index.html.heex:16
+#: lib/safarimanager_web/live/admin/users/index.html.heex:213
 #, elixir-autogen, elixir-format
 msgid "ID"
 msgstr "ID"
 
-#: lib/safarimanager_web/live/admin/categories/index.sface:50
+#: lib/safarimanager_web/live/admin/categories/index.html.heex:50
 #, elixir-autogen, elixir-format
 msgid "New category"
 msgstr "Nuova categoria"
 
-#: lib/safarimanager_web/live/admin/categories/index.ex:150
+#: lib/safarimanager_web/live/admin/categories/index.ex:140
 #, elixir-autogen, elixir-format
 msgid "Unable to delete Categories"
 msgstr "Impossibile eliminare le categorie"
 
-#: lib/safarimanager_web/live/admin/categories/index.ex:137
+#: lib/safarimanager_web/live/admin/categories/index.ex:127
 #, elixir-autogen, elixir-format
 msgid "Unable to delete Category"
 msgstr "Impossibile eliminare la categoria"
 
-#: lib/safarimanager_web/live/admin/categories/index.ex:111
+#: lib/safarimanager_web/live/admin/categories/index.ex:101
 #, elixir-autogen, elixir-format
 msgid "Unable to retrieve this Category"
 msgstr "Impossibile recuperare questa categoria"
 
-#: lib/safarimanager_web/live/admin/organizations/index.ex:203
+#: lib/safarimanager_web/live/admin/organizations/index.ex:196
 #, elixir-autogen, elixir-format
 msgid "All organizations deleted successfully"
 msgstr "Tutte le società sono state eliminate con successo"
 
-#: lib/safarimanager_web/live/admin/organizations/index.sface:51
+#: lib/safarimanager_web/live/admin/organizations/index.html.heex:51
 #, elixir-autogen, elixir-format
 msgid "Edit organization"
 msgstr "Modifica società"
 
-#: lib/safarimanager_web/live/admin/organizations/index.ex:92
+#: lib/safarimanager_web/live/admin/organizations/index.ex:82
 #, elixir-autogen, elixir-format
 msgid "Edited organization"
 msgstr "Società modificata"
@@ -1097,199 +1042,194 @@ msgstr "Società modificata"
 #: lib/safarimanager_web/controllers/results_printout_html/show_teams.html.heex:21
 #: lib/safarimanager_web/controllers/slides_printout_html/show.html.heex:21
 #: lib/safarimanager_web/controllers/teams_printout_html/show.html.heex:21
-#: lib/safarimanager_web/live/admin/competitions/index.sface:395
-#: lib/safarimanager_web/live/admin/organizations/index.sface:22
-#: lib/safarimanager_web/live/admin/organizations/index.sface:22
-#: lib/safarimanager_web/live/admin/organizations/index.sface:58
-#: lib/safarimanager_web/live/admin/organizations/index.sface:166
+#: lib/safarimanager_web/live/admin/competitions/index.html.heex:527
+#: lib/safarimanager_web/live/admin/organizations/index.html.heex:22
+#: lib/safarimanager_web/live/admin/organizations/index.html.heex:63
+#: lib/safarimanager_web/live/admin/organizations/index.html.heex:181
 #, elixir-autogen, elixir-format
 msgid "Location"
 msgstr "Luogo"
 
-#: lib/safarimanager_web/live/admin/organizations/index.sface:50
+#: lib/safarimanager_web/live/admin/organizations/index.html.heex:50
 #, elixir-autogen, elixir-format
 msgid "New organization"
 msgstr "Nuova società"
 
-#: lib/safarimanager_web/live/admin/organizations/index.ex:76
+#: lib/safarimanager_web/live/admin/organizations/index.ex:66
 #, elixir-autogen, elixir-format
 msgid "Organization created successfully"
 msgstr "Società creata con successo"
 
-#: lib/safarimanager_web/live/admin/organizations/index.ex:180
+#: lib/safarimanager_web/live/admin/organizations/index.ex:173
 #, elixir-autogen, elixir-format
 msgid "Organization deleted successfully"
 msgstr "Società eliminata con successo"
 
-#: lib/safarimanager_web/live/admin/organizations/index.sface:12
+#: lib/safarimanager_web/live/admin/organizations/index.html.heex:12
 #, elixir-autogen, elixir-format
 msgid "Organization details"
 msgstr "Dettagli società"
 
-#: lib/safarimanager_web/live/admin/organizations/index.ex:191
+#: lib/safarimanager_web/live/admin/organizations/index.ex:184
 #, elixir-autogen, elixir-format
 msgid "Organizations deleted successfully"
 msgstr "Società eliminate con successo"
 
-#: lib/safarimanager_web/live/admin/organizations/index.ex:181
+#: lib/safarimanager_web/live/admin/organizations/index.ex:174
 #, elixir-autogen, elixir-format
 msgid "Unable to delete Organization"
 msgstr "Impossibile eliminare la società"
 
-#: lib/safarimanager_web/live/admin/organizations/index.ex:194
+#: lib/safarimanager_web/live/admin/organizations/index.ex:187
 #, elixir-autogen, elixir-format
 msgid "Unable to delete Organizations"
 msgstr "Impossibile eliminare le società"
 
-#: lib/safarimanager_web/live/admin/organizations/index.ex:155
+#: lib/safarimanager_web/live/admin/organizations/index.ex:148
 #, elixir-autogen, elixir-format
 msgid "Unable to retrieve this Organization"
 msgstr "Impossibile recuperare questa società"
 
-#: lib/safarimanager_web/live/admin/competitions/form.sface:25
-#: lib/safarimanager_web/live/admin/competitions/index.sface:158
-#: lib/safarimanager_web/live/admin/organizations/index.sface:135
-#: lib/safarimanager_web/live/admin/users/form.sface:52
-#: lib/safarimanager_web/live/admin/users/index.sface:76
+#: lib/safarimanager_web/components/user_form.ex:63
+#: lib/safarimanager_web/live/admin/competitions/index.html.heex:189
+#: lib/safarimanager_web/live/admin/organizations/index.html.heex:149
+#: lib/safarimanager_web/live/admin/users/index.html.heex:90
 #, elixir-autogen, elixir-format
 msgid "Select an organization..."
 msgstr "Seleziona una società..."
 
-#: lib/safarimanager_web/live/admin/organizations/index.ex:125
+#: lib/safarimanager_web/live/admin/organizations/index.ex:118
 #, elixir-autogen, elixir-format
 msgid "Error merging organizations"
 msgstr "Si è verificato un errore unendo le società"
 
-#: lib/safarimanager_web/live/admin/organizations/index.ex:119
+#: lib/safarimanager_web/live/admin/organizations/index.ex:112
 #, elixir-autogen, elixir-format
 msgid "Error merging organizations: a destination must be specified"
 msgstr "Impossibile unire le società: specificare una società di destinazione"
 
-#: lib/safarimanager_web/live/admin/organizations/index.ex:107
+#: lib/safarimanager_web/live/admin/organizations/index.ex:100
 #, elixir-autogen, elixir-format
 msgid "Successfully merged organizations"
 msgstr "Società unite con successo"
 
-#: lib/safarimanager_web/live/admin/competitions/index.ex:203
+#: lib/safarimanager_web/live/admin/competitions/index.ex:186
 #, elixir-autogen, elixir-format
 msgid "All competitions deleted successfully"
 msgstr "Tutte le competizioni sono state eliminate con successo"
 
-#: lib/safarimanager_web/live/admin/competitions/form.sface:135
-#: lib/safarimanager_web/live/admin/competitions/index.sface:59
-#: lib/safarimanager_web/live/admin/competitions/index.sface:59
-#: lib/safarimanager_web/live/admin/competitions/index.sface:212
+#: lib/safarimanager_web/live/admin/competitions/index.html.heex:59
+#: lib/safarimanager_web/live/admin/competitions/index.html.heex:290
+#: lib/safarimanager_web/live/admin/competitions/new_form.ex:106
 #, elixir-autogen, elixir-format
 msgid "Allowed evaluations"
 msgstr "Valutazioni consentite"
 
-#: lib/safarimanager_web/live/admin/competitions/form.sface:112
-#: lib/safarimanager_web/live/admin/competitions/index.sface:50
-#: lib/safarimanager_web/live/admin/competitions/index.sface:50
-#: lib/safarimanager_web/live/admin/competitions/index.sface:203
+#: lib/safarimanager_web/live/admin/competitions/index.html.heex:50
+#: lib/safarimanager_web/live/admin/competitions/index.html.heex:266
+#: lib/safarimanager_web/live/admin/competitions/new_form.ex:89
 #, elixir-autogen, elixir-format
 msgid "City"
 msgstr "Città"
 
-#: lib/safarimanager_web/live/admin/competitions/index.ex:86
-#: lib/safarimanager_web/live/new_competition/new_competition.ex:68
+#: lib/safarimanager_web/live/admin/competitions/index.ex:69
+#: lib/safarimanager_web/live/admin/competitions/new_form.ex:320
+#: lib/safarimanager_web/live/new_competition/new_competition.ex:60
 #, elixir-autogen, elixir-format
 msgid "Competition created successfully"
 msgstr "Competizione creata con successo"
 
-#: lib/safarimanager_web/live/admin/competitions/index.ex:180
+#: lib/safarimanager_web/live/admin/competitions/index.ex:163
 #, elixir-autogen, elixir-format
 msgid "Competition deleted successfully"
 msgstr "Competizione eliminata con successo"
 
-#: lib/safarimanager_web/live/admin/competitions/index.sface:12
-#: lib/safarimanager_web/live/new_competition/new_competition.sface:78
-#: lib/safarimanager_web/live/results/results.sface:38
-#: lib/safarimanager_web/live/results/team_results.sface:38
+#: lib/safarimanager_web/live/admin/competitions/index.html.heex:12
+#: lib/safarimanager_web/live/new_competition/new_competition.html.heex:74
+#: lib/safarimanager_web/live/results/results.html.heex:38
+#: lib/safarimanager_web/live/results/team_results.html.heex:40
 #, elixir-autogen, elixir-format
 msgid "Competition details"
 msgstr "Dettagli competizione"
 
-#: lib/safarimanager_web/live/admin/competitions/index.ex:191
+#: lib/safarimanager_web/live/admin/competitions/index.ex:174
 #, elixir-autogen, elixir-format
 msgid "Competitions deleted successfully"
 msgstr "Competizioni eliminate con successo"
 
-#: lib/safarimanager_web/live/admin/competitions/form.sface:130
-#: lib/safarimanager_web/live/admin/competitions/index.sface:56
-#: lib/safarimanager_web/live/admin/competitions/index.sface:56
-#: lib/safarimanager_web/live/admin/competitions/index.sface:209
+#: lib/safarimanager_web/live/admin/competitions/index.html.heex:56
+#: lib/safarimanager_web/live/admin/competitions/index.html.heex:284
+#: lib/safarimanager_web/live/admin/competitions/new_form.ex:101
 #, elixir-autogen, elixir-format
 msgid "Country"
 msgstr "Paese"
 
-#: lib/safarimanager_web/live/admin/competitions/index.sface:398
+#: lib/safarimanager_web/live/admin/competitions/index.html.heex:530
 #, elixir-autogen, elixir-format
 msgid "Date (start)"
 msgstr "Data (inizio)"
 
-#: lib/safarimanager_web/live/admin/competitions/index.sface:147
+#: lib/safarimanager_web/live/admin/competitions/index.html.heex:169
 #, elixir-autogen, elixir-format
 msgid "Edit competition"
 msgstr "Modifica competizione"
 
-#: lib/safarimanager_web/live/admin/competitions/index.ex:102
+#: lib/safarimanager_web/live/admin/competitions/index.ex:85
 #, elixir-autogen, elixir-format
 msgid "Edited competition"
 msgstr "Competizione modificata"
 
-#: lib/safarimanager_web/live/admin/competitions/index.sface:38
-#: lib/safarimanager_web/live/admin/competitions/index.sface:38
+#: lib/safarimanager_web/live/admin/competitions/index.html.heex:38
 #, elixir-autogen, elixir-format
 msgid "End"
 msgstr "Fine"
 
-#: lib/safarimanager_web/live/admin/competitions/form.sface:73
-#: lib/safarimanager_web/live/admin/competitions/index.sface:188
+#: lib/safarimanager_web/live/admin/competitions/index.html.heex:230
+#: lib/safarimanager_web/live/admin/competitions/new_form.ex:65
 #, elixir-autogen, elixir-format
 msgid "End date/time"
 msgstr "Data/ora Fine"
 
-#: lib/safarimanager_web/live/admin/competitions/form.sface:195
-#: lib/safarimanager_web/live/admin/competitions/index.sface:72
-#: lib/safarimanager_web/live/admin/competitions/index.sface:261
+#: lib/safarimanager_web/live/admin/competitions/index.html.heex:72
+#: lib/safarimanager_web/live/admin/competitions/index.html.heex:353
+#: lib/safarimanager_web/live/admin/competitions/new_form.ex:149
 #, elixir-autogen, elixir-format
 msgid "Evaluations per juror"
 msgstr "Valutazioni per giurato"
 
-#: lib/safarimanager_web/live/admin/competitions/form.sface:245
-#: lib/safarimanager_web/live/admin/competitions/index.sface:77
-#: lib/safarimanager_web/live/admin/competitions/index.sface:296
+#: lib/safarimanager_web/live/admin/competitions/index.html.heex:83
+#: lib/safarimanager_web/live/admin/competitions/index.html.heex:405
+#: lib/safarimanager_web/live/admin/competitions/new_form.ex:181
 #, elixir-autogen, elixir-format
 msgid "Fixed points multiplier"
 msgstr "Molt. punteggio fisso"
 
-#: lib/safarimanager_web/live/admin/competitions/form.sface:328
-#: lib/safarimanager_web/live/admin/competitions/index.sface:347
+#: lib/safarimanager_web/live/admin/competitions/index.html.heex:474
+#: lib/safarimanager_web/live/admin/competitions/new_form.ex:233
 #, elixir-autogen, elixir-format
 msgid "From"
 msgstr "Da"
 
-#: lib/safarimanager_web/live/admin/competitions/form.sface:205
-#: lib/safarimanager_web/live/admin/competitions/index.sface:267
+#: lib/safarimanager_web/live/admin/competitions/index.html.heex:362
+#: lib/safarimanager_web/live/admin/competitions/new_form.ex:155
 #, elixir-autogen, elixir-format
 msgid "Max slides for jury"
 msgstr "Max slide in giuria"
 
-#: lib/safarimanager_web/live/admin/competitions/form.sface:215
-#: lib/safarimanager_web/live/admin/competitions/index.sface:74
-#: lib/safarimanager_web/live/admin/competitions/index.sface:273
+#: lib/safarimanager_web/live/admin/competitions/index.html.heex:76
+#: lib/safarimanager_web/live/admin/competitions/index.html.heex:371
+#: lib/safarimanager_web/live/admin/competitions/new_form.ex:161
 #, elixir-autogen, elixir-format
 msgid "Max submitted slides"
 msgstr "Max slide presentate"
 
 #: lib/safarimanager_web/components/datetime_string.ex:17
-#: lib/safarimanager_web/components/slides_selection_list.ex:70
-#: lib/safarimanager_web/components/slides_selection_list.ex:72
-#: lib/safarimanager_web/components/slides_selection_list.ex:142
-#: lib/safarimanager_web/components/slides_selection_list.ex:144
-#: lib/safarimanager_web/components/slides_selection_list.ex:214
-#: lib/safarimanager_web/components/slides_selection_list.ex:216
+#: lib/safarimanager_web/components/slides_selection_list.ex:74
+#: lib/safarimanager_web/components/slides_selection_list.ex:78
+#: lib/safarimanager_web/components/slides_selection_list.ex:153
+#: lib/safarimanager_web/components/slides_selection_list.ex:157
+#: lib/safarimanager_web/components/slides_selection_list.ex:234
+#: lib/safarimanager_web/components/slides_selection_list.ex:238
 #: lib/safarimanager_web/controllers/participants_printout_html/show.html.heex:18
 #: lib/safarimanager_web/controllers/participants_printout_html/show.html.heex:21
 #: lib/safarimanager_web/controllers/participants_printout_html/show.html.heex:24
@@ -1317,70 +1257,71 @@ msgstr "Max slide presentate"
 #: lib/safarimanager_web/controllers/teams_printout_html/show.html.heex:18
 #: lib/safarimanager_web/controllers/teams_printout_html/show.html.heex:21
 #: lib/safarimanager_web/controllers/teams_printout_html/show.html.heex:24
-#: lib/safarimanager_web/live/admin/competitions/index.sface:24
-#: lib/safarimanager_web/live/admin/competitions/index.sface:64
-#: lib/safarimanager_web/live/admin/competitions/index.sface:96
-#: lib/safarimanager_web/live/admin/competitions/index.sface:396
-#: lib/safarimanager_web/live/admin/competitions/index.sface:396
-#: lib/safarimanager_web/live/admin/competitions/index.sface:402
-#: lib/safarimanager_web/live/admin/participants/index.sface:26
-#: lib/safarimanager_web/live/admin/participants/index.sface:121
-#: lib/safarimanager_web/live/admin/teams/index.sface:20
-#: lib/safarimanager_web/live/admin/teams/index.sface:27
-#: lib/safarimanager_web/live/admin/teams/index.sface:32
-#: lib/safarimanager_web/live/admin/teams/index.sface:40
-#: lib/safarimanager_web/live/admin/teams/index.sface:175
-#: lib/safarimanager_web/live/admin/teams/index.sface:178
-#: lib/safarimanager_web/live/admin/teams/index.sface:181
-#: lib/safarimanager_web/live/admin/teams/index.sface:184
-#: lib/safarimanager_web/live/admin/users/index.sface:29
-#: lib/safarimanager_web/live/admin/users/index.sface:32
-#: lib/safarimanager_web/live/admin/users/index.sface:194
-#: lib/safarimanager_web/live/admin/users/index.sface:197
-#: lib/safarimanager_web/live/jurors/jurors.sface:60
-#: lib/safarimanager_web/live/jurors/jurors.sface:95
-#: lib/safarimanager_web/live/participants/participants.sface:31
-#: lib/safarimanager_web/live/participants/participants.sface:32
-#: lib/safarimanager_web/live/participants/participants.sface:98
-#: lib/safarimanager_web/live/results/results.sface:100
-#: lib/safarimanager_web/live/results/results.sface:167
-#: lib/safarimanager_web/live/results/results.sface:168
-#: lib/safarimanager_web/live/results/team_results.sface:100
-#: lib/safarimanager_web/live/results/team_results.sface:151
-#: lib/safarimanager_web/live/slides/slide_selection.sface:45
-#: lib/safarimanager_web/live/slides/slide_selection.sface:46
-#: lib/safarimanager_web/live/slides/slide_selection.sface:88
-#: lib/safarimanager_web/live/slides/slide_selection.sface:89
-#: lib/safarimanager_web/live/slides/slides.sface:40
-#: lib/safarimanager_web/live/slides/slides.sface:41
-#: lib/safarimanager_web/live/slides/slides.sface:80
-#: lib/safarimanager_web/live/slides/slides.sface:81
-#: lib/safarimanager_web/live/slides/slides.sface:181
-#: lib/safarimanager_web/live/slides/slides.sface:215
-#: lib/safarimanager_web/live/teams/teams.sface:44
-#: lib/safarimanager_web/live/teams/teams.sface:122
-#: lib/safarimanager_web/live/teams/teams.sface:123
-#: lib/safarimanager_web/live/teams/teams.sface:172
-#: lib/safarimanager_web/live/teams/teams.sface:173
-#: lib/safarimanager_web/live/teams/teams.sface:175
-#: lib/safarimanager_web/live/validation/validation_launcher.ex:251
+#: lib/safarimanager_web/live/admin/competitions/index.html.heex:24
+#: lib/safarimanager_web/live/admin/competitions/index.html.heex:63
+#: lib/safarimanager_web/live/admin/competitions/index.html.heex:116
+#: lib/safarimanager_web/live/admin/competitions/index.html.heex:528
+#: lib/safarimanager_web/live/admin/competitions/index.html.heex:528
+#: lib/safarimanager_web/live/admin/competitions/index.html.heex:534
+#: lib/safarimanager_web/live/admin/participants/index.html.heex:26
+#: lib/safarimanager_web/live/admin/participants/index.html.heex:127
+#: lib/safarimanager_web/live/admin/teams/index.html.heex:20
+#: lib/safarimanager_web/live/admin/teams/index.html.heex:27
+#: lib/safarimanager_web/live/admin/teams/index.html.heex:32
+#: lib/safarimanager_web/live/admin/teams/index.html.heex:38
+#: lib/safarimanager_web/live/admin/teams/index.html.heex:179
+#: lib/safarimanager_web/live/admin/teams/index.html.heex:182
+#: lib/safarimanager_web/live/admin/teams/index.html.heex:185
+#: lib/safarimanager_web/live/admin/teams/index.html.heex:188
+#: lib/safarimanager_web/live/admin/users/index.html.heex:29
+#: lib/safarimanager_web/live/admin/users/index.html.heex:32
+#: lib/safarimanager_web/live/admin/users/index.html.heex:223
+#: lib/safarimanager_web/live/admin/users/index.html.heex:226
+#: lib/safarimanager_web/live/jurors/jurors.html.heex:67
+#: lib/safarimanager_web/live/jurors/jurors.html.heex:107
+#: lib/safarimanager_web/live/participants/participants.html.heex:35
+#: lib/safarimanager_web/live/participants/participants.html.heex:38
+#: lib/safarimanager_web/live/participants/participants.html.heex:120
+#: lib/safarimanager_web/live/results/results.html.heex:99
+#: lib/safarimanager_web/live/results/results.html.heex:162
+#: lib/safarimanager_web/live/results/results.html.heex:163
+#: lib/safarimanager_web/live/results/team_results.html.heex:103
+#: lib/safarimanager_web/live/results/team_results.html.heex:157
+#: lib/safarimanager_web/live/slides/slide_selection.html.heex:60
+#: lib/safarimanager_web/live/slides/slide_selection.html.heex:63
+#: lib/safarimanager_web/live/slides/slide_selection.html.heex:107
+#: lib/safarimanager_web/live/slides/slide_selection.html.heex:108
+#: lib/safarimanager_web/live/slides/slides.html.heex:53
+#: lib/safarimanager_web/live/slides/slides.html.heex:56
+#: lib/safarimanager_web/live/slides/slides.html.heex:98
+#: lib/safarimanager_web/live/slides/slides.html.heex:99
+#: lib/safarimanager_web/live/slides/slides.html.heex:213
+#: lib/safarimanager_web/live/slides/slides.html.heex:255
+#: lib/safarimanager_web/live/teams/teams.html.heex:52
+#: lib/safarimanager_web/live/teams/teams.html.heex:146
+#: lib/safarimanager_web/live/teams/teams.html.heex:149
+#: lib/safarimanager_web/live/teams/teams.html.heex:207
+#: lib/safarimanager_web/live/teams/teams.html.heex:208
+#: lib/safarimanager_web/live/teams/teams.html.heex:210
+#: lib/safarimanager_web/live/validation/validation_launcher.ex:247
 #, elixir-autogen, elixir-format
 msgid "N/A"
 msgstr "N/D"
 
-#: lib/safarimanager_web/live/admin/competitions/index.sface:146
-#: lib/safarimanager_web/live/new_competition/new_competition.sface:11
+#: lib/safarimanager_web/live/admin/competitions/index.html.heex:168
+#: lib/safarimanager_web/live/new_competition/new_competition.html.heex:11
 #, elixir-autogen, elixir-format
 msgid "New competition"
 msgstr "Nuova competizione"
 
-#: lib/safarimanager_web/live/admin/competitions/form.sface:185
-#: lib/safarimanager_web/live/admin/competitions/index.sface:71
-#: lib/safarimanager_web/live/admin/competitions/index.sface:255
+#: lib/safarimanager_web/live/admin/competitions/index.html.heex:70
+#: lib/safarimanager_web/live/admin/competitions/index.html.heex:344
+#: lib/safarimanager_web/live/admin/competitions/new_form.ex:143
 #, elixir-autogen, elixir-format
 msgid "Number of jurors"
 msgstr "Numero di giurati"
 
+#: lib/safarimanager_web/components/user_form.ex:60
 #: lib/safarimanager_web/controllers/participants_printout_html/show.html.heex:36
 #: lib/safarimanager_web/controllers/results_printout_html/show.html.heex:36
 #: lib/safarimanager_web/controllers/results_printout_html/show_teams.html.heex:33
@@ -1391,351 +1332,337 @@ msgstr "Numero di giurati"
 #: lib/safarimanager_web/controllers/slides_printout_html/show.html.heex:17
 #: lib/safarimanager_web/controllers/slides_printout_html/show_teams.html.heex:17
 #: lib/safarimanager_web/controllers/teams_printout_html/show.html.heex:36
-#: lib/safarimanager_web/live/admin/competitions/form.sface:21
-#: lib/safarimanager_web/live/admin/competitions/index.sface:155
-#: lib/safarimanager_web/live/admin/users/form.sface:48
-#: lib/safarimanager_web/live/admin/users/index.sface:28
-#: lib/safarimanager_web/live/admin/users/index.sface:28
-#: lib/safarimanager_web/live/admin/users/index.sface:73
-#: lib/safarimanager_web/live/admin/users/index.sface:193
-#: lib/safarimanager_web/live/jurors/jurors.sface:51
-#: lib/safarimanager_web/live/jurors/jurors.sface:86
-#: lib/safarimanager_web/live/participants/participants.sface:21
-#: lib/safarimanager_web/live/participants/participants.sface:87
-#: lib/safarimanager_web/live/results/results.sface:154
-#: lib/safarimanager_web/live/results/team_results.sface:139
-#: lib/safarimanager_web/live/slides/slide_selection.sface:33
-#: lib/safarimanager_web/live/slides/slide_selection.sface:80
-#: lib/safarimanager_web/live/slides/slides.sface:28
-#: lib/safarimanager_web/live/slides/slides.sface:72
-#: lib/safarimanager_web/live/teams/teams.sface:100
-#: lib/safarimanager_web/live/teams/teams.sface:163
+#: lib/safarimanager_web/live/admin/competitions/index.html.heex:186
+#: lib/safarimanager_web/live/admin/competitions/new_form.ex:36
+#: lib/safarimanager_web/live/admin/users/index.html.heex:28
+#: lib/safarimanager_web/live/admin/users/index.html.heex:87
+#: lib/safarimanager_web/live/admin/users/index.html.heex:222
+#: lib/safarimanager_web/live/jurors/jurors.html.heex:58
+#: lib/safarimanager_web/live/jurors/jurors.html.heex:98
+#: lib/safarimanager_web/live/participants/participants.html.heex:25
+#: lib/safarimanager_web/live/participants/participants.html.heex:109
+#: lib/safarimanager_web/live/results/results.html.heex:150
+#: lib/safarimanager_web/live/results/team_results.html.heex:146
+#: lib/safarimanager_web/live/slides/slide_selection.html.heex:48
+#: lib/safarimanager_web/live/slides/slide_selection.html.heex:99
+#: lib/safarimanager_web/live/slides/slides.html.heex:41
+#: lib/safarimanager_web/live/slides/slides.html.heex:90
+#: lib/safarimanager_web/live/teams/teams.html.heex:119
+#: lib/safarimanager_web/live/teams/teams.html.heex:199
 #, elixir-autogen, elixir-format
 msgid "Organization"
 msgstr "Società"
 
-#: lib/safarimanager_web/live/admin/competitions/index.sface:22
-#: lib/safarimanager_web/live/admin/competitions/index.sface:22
-#: lib/safarimanager_web/live/admin/competitions/index.sface:401
+#: lib/safarimanager_web/live/admin/competitions/index.html.heex:22
+#: lib/safarimanager_web/live/admin/competitions/index.html.heex:533
 #, elixir-autogen, elixir-format
 msgid "Organizer"
 msgstr "Organizzatore"
 
-#: lib/safarimanager_web/live/admin/competitions/form.sface:255
-#: lib/safarimanager_web/live/admin/competitions/index.sface:78
-#: lib/safarimanager_web/live/admin/competitions/index.sface:304
+#: lib/safarimanager_web/live/admin/competitions/index.html.heex:85
+#: lib/safarimanager_web/live/admin/competitions/index.html.heex:415
+#: lib/safarimanager_web/live/admin/competitions/new_form.ex:188
 #, elixir-autogen, elixir-format
 msgid "Penalty amount"
 msgstr "Valore penalizzazione"
 
-#: lib/safarimanager_web/live/admin/competitions/form.sface:103
-#: lib/safarimanager_web/live/admin/competitions/index.sface:47
-#: lib/safarimanager_web/live/admin/competitions/index.sface:47
-#: lib/safarimanager_web/live/admin/competitions/index.sface:200
+#: lib/safarimanager_web/live/admin/competitions/index.html.heex:47
+#: lib/safarimanager_web/live/admin/competitions/index.html.heex:257
+#: lib/safarimanager_web/live/admin/competitions/new_form.ex:83
 #, elixir-autogen, elixir-format
 msgid "Postal code"
 msgstr "Codice postale"
 
-#: lib/safarimanager_web/live/admin/competitions/form.sface:225
-#: lib/safarimanager_web/live/admin/competitions/index.sface:75
-#: lib/safarimanager_web/live/admin/competitions/index.sface:281
+#: lib/safarimanager_web/live/admin/competitions/index.html.heex:79
+#: lib/safarimanager_web/live/admin/competitions/index.html.heex:379
+#: lib/safarimanager_web/live/admin/competitions/new_form.ex:167
 #, elixir-autogen, elixir-format
 msgid "Proportional submission"
 msgstr "Sistema percentuale"
 
-#: lib/safarimanager_web/live/admin/competitions/index.sface:35
-#: lib/safarimanager_web/live/admin/competitions/index.sface:35
+#: lib/safarimanager_web/live/admin/competitions/index.html.heex:35
 #, elixir-autogen, elixir-format
 msgid "Start"
 msgstr "Inizio"
 
-#: lib/safarimanager_web/live/admin/competitions/form.sface:61
-#: lib/safarimanager_web/live/admin/competitions/index.sface:182
+#: lib/safarimanager_web/live/admin/competitions/index.html.heex:221
+#: lib/safarimanager_web/live/admin/competitions/new_form.ex:59
 #, elixir-autogen, elixir-format
 msgid "Start date/time"
 msgstr "Data/ora inizio"
 
-#: lib/safarimanager_web/live/admin/competitions/form.sface:121
-#: lib/safarimanager_web/live/admin/competitions/index.sface:53
-#: lib/safarimanager_web/live/admin/competitions/index.sface:53
-#: lib/safarimanager_web/live/admin/competitions/index.sface:206
+#: lib/safarimanager_web/live/admin/competitions/index.html.heex:53
+#: lib/safarimanager_web/live/admin/competitions/index.html.heex:275
+#: lib/safarimanager_web/live/admin/competitions/new_form.ex:95
 #, elixir-autogen, elixir-format
 msgid "State/Province"
 msgstr "Stato/Provincia"
 
-#: lib/safarimanager_web/live/admin/competitions/form.sface:85
-#: lib/safarimanager_web/live/admin/competitions/index.sface:41
-#: lib/safarimanager_web/live/admin/competitions/index.sface:41
-#: lib/safarimanager_web/live/admin/competitions/index.sface:194
+#: lib/safarimanager_web/live/admin/competitions/index.html.heex:41
+#: lib/safarimanager_web/live/admin/competitions/index.html.heex:239
+#: lib/safarimanager_web/live/admin/competitions/new_form.ex:71
 #, elixir-autogen, elixir-format
 msgid "Street name"
 msgstr "Via"
 
-#: lib/safarimanager_web/live/admin/competitions/index.sface:44
-#: lib/safarimanager_web/live/admin/competitions/index.sface:44
+#: lib/safarimanager_web/live/admin/competitions/index.html.heex:44
 #, elixir-autogen, elixir-format
 msgid "Street number"
 msgstr "Numero"
 
-#: lib/safarimanager_web/live/admin/competitions/form.sface:235
-#: lib/safarimanager_web/live/admin/competitions/index.sface:76
-#: lib/safarimanager_web/live/admin/competitions/index.sface:288
+#: lib/safarimanager_web/live/admin/competitions/index.html.heex:81
+#: lib/safarimanager_web/live/admin/competitions/index.html.heex:395
+#: lib/safarimanager_web/live/admin/competitions/new_form.ex:174
 #, elixir-autogen, elixir-format
 msgid "Submission ratio"
 msgstr "Percentuale in giuria"
 
-#: lib/safarimanager_web/live/admin/competitions/form.sface:343
-#: lib/safarimanager_web/live/admin/competitions/index.sface:353
+#: lib/safarimanager_web/live/admin/competitions/index.html.heex:484
+#: lib/safarimanager_web/live/admin/competitions/new_form.ex:240
 #, elixir-autogen, elixir-format
 msgid "To"
 msgstr "A"
 
-#: lib/safarimanager_web/live/admin/competitions/index.ex:181
+#: lib/safarimanager_web/live/admin/competitions/index.ex:164
 #, elixir-autogen, elixir-format
 msgid "Unable to delete Competition"
 msgstr "Impossibile eliminare la competizione"
 
-#: lib/safarimanager_web/live/admin/competitions/index.ex:194
+#: lib/safarimanager_web/live/admin/competitions/index.ex:177
 #, elixir-autogen, elixir-format
 msgid "Unable to delete Competitions"
 msgstr "Impossibile eliminare le competizioni"
 
-#: lib/safarimanager_web/live/admin/competitions/index.ex:155
+#: lib/safarimanager_web/live/admin/competitions/index.ex:138
 #, elixir-autogen, elixir-format
 msgid "Unable to retrieve this Competition"
 msgstr "Impossibile recuperare questa competizione"
 
-#: lib/safarimanager_web/live/admin/competitions/form.sface:313
-#: lib/safarimanager_web/live/admin/competitions/index.sface:341
-#: lib/safarimanager_web/live/admin/evaluations/index.sface:22
-#: lib/safarimanager_web/live/admin/evaluations/index.sface:22
-#: lib/safarimanager_web/live/admin/evaluations/index.sface:67
-#: lib/safarimanager_web/live/admin/evaluations/index.sface:119
+#: lib/safarimanager_web/live/admin/competitions/index.html.heex:464
+#: lib/safarimanager_web/live/admin/competitions/new_form.ex:226
+#: lib/safarimanager_web/live/admin/evaluations/index.html.heex:22
+#: lib/safarimanager_web/live/admin/evaluations/index.html.heex:73
+#: lib/safarimanager_web/live/admin/evaluations/index.html.heex:136
 #, elixir-autogen, elixir-format
 msgid "Value"
 msgstr "Valore"
 
-#: lib/safarimanager_web/live/admin/competitions/form.sface:293
-#: lib/safarimanager_web/live/admin/competitions/index.sface:88
-#: lib/safarimanager_web/live/admin/competitions/index.sface:332
+#: lib/safarimanager_web/live/admin/competitions/index.html.heex:108
+#: lib/safarimanager_web/live/admin/competitions/index.html.heex:450
+#: lib/safarimanager_web/live/admin/competitions/new_form.ex:214
 #, elixir-autogen, elixir-format
 msgid "Dynamic coefficients"
 msgstr "Coefficienti dinamici"
 
-#: lib/safarimanager_web/live/admin/competitions/index.sface:73
+#: lib/safarimanager_web/live/admin/competitions/index.html.heex:74
 #, elixir-autogen, elixir-format
 msgid "Max jury slides"
 msgstr "Max slide in giuria"
 
-#: lib/safarimanager_web/live/admin/competitions/index.sface:91
+#: lib/safarimanager_web/live/admin/competitions/index.html.heex:111
 #, elixir-autogen, elixir-format
 msgid "from"
 msgstr "da"
 
-#: lib/safarimanager_web/live/admin/competitions/index.sface:91
+#: lib/safarimanager_web/live/admin/competitions/index.html.heex:111
 #, elixir-autogen, elixir-format
 msgid "to"
 msgstr "a"
 
-#: lib/safarimanager_web/live/admin/evaluations/index.ex:168
+#: lib/safarimanager_web/live/admin/evaluations/index.ex:155
 #, elixir-autogen, elixir-format
 msgid "All evaluations deleted successfully"
 msgstr "Tutte le valutazioni sono state eliminate con successo"
 
-#: lib/safarimanager_web/live/admin/evaluations/index.sface:31
-#: lib/safarimanager_web/live/admin/evaluations/index.sface:31
-#: lib/safarimanager_web/live/admin/evaluations/index.sface:88
-#: lib/safarimanager_web/live/admin/evaluations/index.sface:128
+#: lib/safarimanager_web/live/admin/evaluations/index.html.heex:31
+#: lib/safarimanager_web/live/admin/evaluations/index.html.heex:101
+#: lib/safarimanager_web/live/admin/evaluations/index.html.heex:145
 #, elixir-autogen, elixir-format
 msgid "Description"
 msgstr "Descrizione"
 
-#: lib/safarimanager_web/live/admin/evaluations/index.sface:60
+#: lib/safarimanager_web/live/admin/evaluations/index.html.heex:60
 #, elixir-autogen, elixir-format
 msgid "Edit evaluation"
 msgstr "Modifica valutazione"
 
-#: lib/safarimanager_web/live/admin/evaluations/index.ex:91
+#: lib/safarimanager_web/live/admin/evaluations/index.ex:78
 #, elixir-autogen, elixir-format
 msgid "Edited evaluation"
 msgstr "Valutazione modificata"
 
-#: lib/safarimanager_web/live/admin/evaluations/index.ex:71
+#: lib/safarimanager_web/live/admin/evaluations/index.ex:58
 #, elixir-autogen, elixir-format
 msgid "Evaluation created successfully"
 msgstr "Valutazione creata con successo"
 
-#: lib/safarimanager_web/live/admin/evaluations/index.ex:145
+#: lib/safarimanager_web/live/admin/evaluations/index.ex:132
 #, elixir-autogen, elixir-format
 msgid "Evaluation deleted successfully"
 msgstr "Valutazione eliminata con successo"
 
-#: lib/safarimanager_web/live/admin/evaluations/index.sface:12
+#: lib/safarimanager_web/live/admin/evaluations/index.html.heex:12
 #, elixir-autogen, elixir-format
 msgid "Evaluation details"
 msgstr "Dettagli valutazione"
 
-#: lib/safarimanager_web/live/admin/evaluations/index.ex:156
+#: lib/safarimanager_web/live/admin/evaluations/index.ex:143
 #, elixir-autogen, elixir-format
 msgid "Evaluations deleted successfully"
 msgstr "Valutazioni eliminate con successo"
 
-#: lib/safarimanager_web/live/admin/evaluations/index.sface:59
+#: lib/safarimanager_web/live/admin/evaluations/index.html.heex:59
 #, elixir-autogen, elixir-format
 msgid "New evaluation"
 msgstr "Nuova valutazione"
 
-#: lib/safarimanager_web/live/admin/evaluations/index.ex:146
+#: lib/safarimanager_web/live/admin/evaluations/index.ex:133
 #, elixir-autogen, elixir-format
 msgid "Unable to delete Evaluation"
 msgstr "Impossibile eliminare la valutazione"
 
-#: lib/safarimanager_web/live/admin/evaluations/index.ex:159
+#: lib/safarimanager_web/live/admin/evaluations/index.ex:146
 #, elixir-autogen, elixir-format
 msgid "Unable to delete Evaluations"
 msgstr "Impossibile eliminare le valutazioni"
 
-#: lib/safarimanager_web/live/admin/evaluations/index.ex:119
+#: lib/safarimanager_web/live/admin/evaluations/index.ex:106
 #, elixir-autogen, elixir-format
 msgid "Unable to retrieve this Evaluation"
 msgstr "Impossibile recuperare questa valutazione"
 
-#: lib/safarimanager_web/live/admin/users/index.ex:215
+#: lib/safarimanager_web/live/admin/users/index.ex:210
 #, elixir-autogen, elixir-format
 msgid "All users deleted successfully"
 msgstr "Tutti gli utenti sono stati eliminati con successo"
 
+#: lib/safarimanager_web/components/user_form.ex:70
 #: lib/safarimanager_web/controllers/participants_printout_html/show.html.heex:37
 #: lib/safarimanager_web/controllers/results_printout_html/show.html.heex:37
 #: lib/safarimanager_web/controllers/selection_printout_html/show_multi.html.heex:26
 #: lib/safarimanager_web/controllers/selection_printout_html/show_single.html.heex:25
 #: lib/safarimanager_web/controllers/slides_printout_html/show.html.heex:25
-#: lib/safarimanager_web/live/admin/participants/index.sface:25
-#: lib/safarimanager_web/live/admin/participants/index.sface:25
-#: lib/safarimanager_web/live/admin/participants/index.sface:79
-#: lib/safarimanager_web/live/admin/participants/index.sface:120
-#: lib/safarimanager_web/live/admin/users/form.sface:62
-#: lib/safarimanager_web/live/admin/users/index.sface:31
-#: lib/safarimanager_web/live/admin/users/index.sface:31
-#: lib/safarimanager_web/live/admin/users/index.sface:81
-#: lib/safarimanager_web/live/admin/users/index.sface:196
-#: lib/safarimanager_web/live/participants/participants.sface:22
-#: lib/safarimanager_web/live/participants/participants.sface:88
-#: lib/safarimanager_web/live/results/results.sface:155
-#: lib/safarimanager_web/live/slides/slide_selection.sface:34
-#: lib/safarimanager_web/live/slides/slides.sface:29
-#: lib/safarimanager_web/live/teams/teams.sface:101
+#: lib/safarimanager_web/live/admin/participants/index.html.heex:25
+#: lib/safarimanager_web/live/admin/participants/index.html.heex:85
+#: lib/safarimanager_web/live/admin/participants/index.html.heex:126
+#: lib/safarimanager_web/live/admin/users/index.html.heex:31
+#: lib/safarimanager_web/live/admin/users/index.html.heex:95
+#: lib/safarimanager_web/live/admin/users/index.html.heex:225
+#: lib/safarimanager_web/live/participants/participants.html.heex:26
+#: lib/safarimanager_web/live/participants/participants.html.heex:110
+#: lib/safarimanager_web/live/results/results.html.heex:151
+#: lib/safarimanager_web/live/slides/slide_selection.html.heex:49
+#: lib/safarimanager_web/live/slides/slides.html.heex:42
+#: lib/safarimanager_web/live/teams/teams.html.heex:120
 #, elixir-autogen, elixir-format
 msgid "Category"
 msgstr "Categoria"
 
-#: lib/safarimanager_web/live/admin/users/index.sface:60
+#: lib/safarimanager_web/live/admin/users/index.html.heex:60
 #, elixir-autogen, elixir-format
 msgid "Edit user"
 msgstr "Modifica utente"
 
-#: lib/safarimanager_web/live/admin/users/index.ex:103
+#: lib/safarimanager_web/live/admin/users/index.ex:96
 #, elixir-autogen, elixir-format
 msgid "Edited user"
 msgstr "Utente modificato"
 
-#: lib/safarimanager_web/live/admin/users/index.sface:19
-#: lib/safarimanager_web/live/admin/users/index.sface:19
-#: lib/safarimanager_web/live/admin/users/index.sface:67
-#: lib/safarimanager_web/live/admin/users/index.sface:190
+#: lib/safarimanager_web/live/admin/users/index.html.heex:19
+#: lib/safarimanager_web/live/admin/users/index.html.heex:73
+#: lib/safarimanager_web/live/admin/users/index.html.heex:219
 #, elixir-autogen, elixir-format
 msgid "First name"
 msgstr "Nome"
 
-#: lib/safarimanager_web/live/admin/users/index.sface:22
-#: lib/safarimanager_web/live/admin/users/index.sface:22
-#: lib/safarimanager_web/live/admin/users/index.sface:64
-#: lib/safarimanager_web/live/admin/users/index.sface:187
+#: lib/safarimanager_web/live/admin/users/index.html.heex:22
+#: lib/safarimanager_web/live/admin/users/index.html.heex:66
+#: lib/safarimanager_web/live/admin/users/index.html.heex:216
 #, elixir-autogen, elixir-format
 msgid "Last name"
 msgstr "Cognome"
 
-#: lib/safarimanager_web/live/admin/users/index.sface:59
+#: lib/safarimanager_web/live/admin/users/index.html.heex:59
 #, elixir-autogen, elixir-format
 msgid "New user"
 msgstr "Nuovo utente"
 
-#: lib/safarimanager_web/live/admin/participants/index.sface:83
-#: lib/safarimanager_web/live/admin/users/form.sface:66
-#: lib/safarimanager_web/live/admin/users/index.sface:84
+#: lib/safarimanager_web/components/user_form.ex:73
+#: lib/safarimanager_web/live/admin/participants/index.html.heex:88
+#: lib/safarimanager_web/live/admin/users/index.html.heex:98
 #, elixir-autogen, elixir-format
 msgid "Select a category..."
 msgstr "Seleziona una categoria..."
 
-#: lib/safarimanager_web/live/admin/users/index.ex:193
+#: lib/safarimanager_web/live/admin/users/index.ex:188
 #, elixir-autogen, elixir-format
 msgid "Unable to delete User"
 msgstr "Impossibile eliminare l'utente"
 
-#: lib/safarimanager_web/live/admin/users/index.ex:206
+#: lib/safarimanager_web/live/admin/users/index.ex:201
 #, elixir-autogen, elixir-format
 msgid "Unable to delete Users"
 msgstr "Impossibile eliminare gli utenti"
 
-#: lib/safarimanager_web/live/admin/users/index.ex:167
+#: lib/safarimanager_web/live/admin/users/index.ex:161
 #, elixir-autogen, elixir-format
 msgid "Unable to retrieve this User"
 msgstr "Impossibile recuperare questo utente"
 
-#: lib/safarimanager_web/live/admin/users/index.ex:83
+#: lib/safarimanager_web/live/admin/users/index.ex:75
 #, elixir-autogen, elixir-format
 msgid "User created successfully"
 msgstr "Utente creato con successo"
 
-#: lib/safarimanager_web/live/admin/users/index.ex:192
+#: lib/safarimanager_web/live/admin/users/index.ex:187
 #, elixir-autogen, elixir-format
 msgid "User deleted successfully"
 msgstr "Utente eliminato con successo"
 
-#: lib/safarimanager_web/live/admin/users/index.sface:12
+#: lib/safarimanager_web/live/admin/users/index.html.heex:12
 #, elixir-autogen, elixir-format
 msgid "User details"
 msgstr "Dettagli utente"
 
-#: lib/safarimanager_web/live/admin/users/index.ex:203
+#: lib/safarimanager_web/live/admin/users/index.ex:198
 #, elixir-autogen, elixir-format
 msgid "Users deleted successfully"
 msgstr "Utenti eliminati con successo"
 
-#: lib/safarimanager_web/live/admin/users/index.ex:137
+#: lib/safarimanager_web/live/admin/users/index.ex:130
 #, elixir-autogen, elixir-format
 msgid "Error merging users"
 msgstr "Si è verificato un errore unendo gli utenti"
 
-#: lib/safarimanager_web/live/admin/users/index.ex:131
+#: lib/safarimanager_web/live/admin/users/index.ex:124
 #, elixir-autogen, elixir-format
 msgid "Error merging users: a destination must be specified"
 msgstr "Impossibile unire gli utenti: specificare un utente di destinazione"
 
-#: lib/safarimanager_web/live/admin/participants/index.sface:74
-#: lib/safarimanager_web/live/admin/teams/index.sface:101
-#: lib/safarimanager_web/live/admin/users/index.sface:159
+#: lib/safarimanager_web/live/admin/participants/index.html.heex:79
+#: lib/safarimanager_web/live/admin/teams/index.html.heex:98
+#: lib/safarimanager_web/live/admin/users/index.html.heex:181
 #, elixir-autogen, elixir-format
 msgid "Select a user..."
 msgstr "Seleziona un utente..."
 
-#: lib/safarimanager_web/live/admin/users/index.ex:119
+#: lib/safarimanager_web/live/admin/users/index.ex:112
 #, elixir-autogen, elixir-format
 msgid "Successfully merged users"
 msgstr "Utenti uniti con successo"
 
-#: lib/safarimanager_web/live/admin/organizations/index.sface:86
+#: lib/safarimanager_web/live/admin/organizations/index.html.heex:95
 #, elixir-autogen, elixir-format
 msgid "Merge organizations"
 msgstr "Unisci società"
 
-#: lib/safarimanager_web/live/admin/users/index.sface:110
+#: lib/safarimanager_web/live/admin/users/index.html.heex:127
 #, elixir-autogen, elixir-format
 msgid "Merge users"
 msgstr "Unisci utenti"
 
-#: lib/safarimanager_web/live/admin/organizations/index.sface:140
-#: lib/safarimanager_web/live/admin/users/index.sface:164
+#: lib/safarimanager_web/live/admin/organizations/index.html.heex:153
+#: lib/safarimanager_web/live/admin/users/index.html.heex:190
 #, elixir-autogen, elixir-format
 msgid "Merge"
 msgstr "Unisci"
@@ -1744,97 +1671,94 @@ msgstr "Unisci"
 #: lib/safarimanager_web/controllers/selection_printout_html/show_multi_teams.html.heex:28
 #: lib/safarimanager_web/controllers/selection_printout_html/show_single.html.heex:32
 #: lib/safarimanager_web/controllers/selection_printout_html/show_single_team.html.heex:27
-#: lib/safarimanager_web/live/admin/participants/index.sface:111
-#: lib/safarimanager_web/live/participants/participants.sface:84
-#: lib/safarimanager_web/live/results/results.sface:85
-#: lib/safarimanager_web/live/results/team_results.sface:85
-#: lib/safarimanager_web/live/slides/slide_selection.sface:30
-#: lib/safarimanager_web/live/slides/slide_selection.sface:78
-#: lib/safarimanager_web/live/slides/slides.sface:25
-#: lib/safarimanager_web/live/slides/slides.sface:70
-#: lib/safarimanager_web/live/teams/teams.sface:161
+#: lib/safarimanager_web/live/admin/participants/index.html.heex:117
+#: lib/safarimanager_web/live/participants/participants.html.heex:106
+#: lib/safarimanager_web/live/results/results.html.heex:85
+#: lib/safarimanager_web/live/results/team_results.html.heex:87
+#: lib/safarimanager_web/live/slides/slide_selection.html.heex:45
+#: lib/safarimanager_web/live/slides/slide_selection.html.heex:97
+#: lib/safarimanager_web/live/slides/slides.html.heex:38
+#: lib/safarimanager_web/live/slides/slides.html.heex:88
+#: lib/safarimanager_web/live/teams/teams.html.heex:197
 #, elixir-autogen, elixir-format
 msgid "#"
 msgstr "#"
 
-#: lib/safarimanager_web/live/admin/participants/index.ex:171
+#: lib/safarimanager_web/live/admin/participants/index.ex:161
 #, elixir-autogen, elixir-format
 msgid "All participants deleted successfully"
 msgstr "Tutti i partecipanti sono stati eliminati con successo"
 
-#: lib/safarimanager_web/live/admin/participants/index.sface:19
-#: lib/safarimanager_web/live/admin/participants/index.sface:19
-#: lib/safarimanager_web/live/admin/participants/index.sface:61
-#: lib/safarimanager_web/live/admin/participants/index.sface:114
-#: lib/safarimanager_web/live/admin/teams/index.sface:19
-#: lib/safarimanager_web/live/admin/teams/index.sface:19
-#: lib/safarimanager_web/live/admin/teams/index.sface:76
-#: lib/safarimanager_web/live/admin/teams/index.sface:174
-#: lib/safarimanager_web/live/participants/participants.sface:144
+#: lib/safarimanager_web/live/admin/participants/index.html.heex:19
+#: lib/safarimanager_web/live/admin/participants/index.html.heex:67
+#: lib/safarimanager_web/live/admin/participants/index.html.heex:120
+#: lib/safarimanager_web/live/admin/teams/index.html.heex:19
+#: lib/safarimanager_web/live/admin/teams/index.html.heex:75
+#: lib/safarimanager_web/live/admin/teams/index.html.heex:178
+#: lib/safarimanager_web/live/participants/participants.html.heex:177
 #, elixir-autogen, elixir-format
 msgid "Competition"
 msgstr "Competizione"
 
-#: lib/safarimanager_web/live/admin/participants/index.sface:54
+#: lib/safarimanager_web/live/admin/participants/index.html.heex:54
 #, elixir-autogen, elixir-format
 msgid "Edit participant"
 msgstr "Modifica partecipante"
 
-#: lib/safarimanager_web/live/admin/participants/index.ex:93
+#: lib/safarimanager_web/live/admin/participants/index.ex:83
 #, elixir-autogen, elixir-format
 msgid "Edited participant"
 msgstr "Partecipante modificato"
 
-#: lib/safarimanager_web/live/admin/participants/index.sface:53
+#: lib/safarimanager_web/live/admin/participants/index.html.heex:53
 #, elixir-autogen, elixir-format
 msgid "New participant"
 msgstr "Nuovo partecipante"
 
-#: lib/safarimanager_web/live/admin/participants/index.ex:73
+#: lib/safarimanager_web/live/admin/participants/index.ex:63
 #, elixir-autogen, elixir-format
 msgid "Participant created successfully"
 msgstr "Partecipante creato con successo"
 
-#: lib/safarimanager_web/live/admin/participants/index.ex:148
+#: lib/safarimanager_web/live/admin/participants/index.ex:138
 #, elixir-autogen, elixir-format
 msgid "Participant deleted successfully"
 msgstr "Partecipante eliminato con successo"
 
-#: lib/safarimanager_web/live/admin/participants/index.sface:12
+#: lib/safarimanager_web/live/admin/participants/index.html.heex:12
 #, elixir-autogen, elixir-format
 msgid "Participant details"
 msgstr "Dettagli Partecipante"
 
-#: lib/safarimanager_web/live/admin/participants/index.ex:159
+#: lib/safarimanager_web/live/admin/participants/index.ex:149
 #, elixir-autogen, elixir-format
 msgid "Participants deleted successfully"
 msgstr "Partecipanti eliminati con successo"
 
-#: lib/safarimanager_web/live/admin/participants/index.ex:149
+#: lib/safarimanager_web/live/admin/participants/index.ex:139
 #, elixir-autogen, elixir-format
 msgid "Unable to delete Participant"
 msgstr "Impossibile eliminare il partecipante"
 
-#: lib/safarimanager_web/live/admin/participants/index.ex:162
+#: lib/safarimanager_web/live/admin/participants/index.ex:152
 #, elixir-autogen, elixir-format
 msgid "Unable to delete Participants"
 msgstr "Impossibile eliminare i partecipanti"
 
-#: lib/safarimanager_web/live/admin/participants/index.ex:121
+#: lib/safarimanager_web/live/admin/participants/index.ex:111
 #, elixir-autogen, elixir-format
 msgid "Unable to retrieve this Participant"
 msgstr "Impossibile recuperare questo partecipante"
 
-#: lib/safarimanager_web/live/admin/participants/index.sface:22
-#: lib/safarimanager_web/live/admin/participants/index.sface:22
-#: lib/safarimanager_web/live/admin/participants/index.sface:70
-#: lib/safarimanager_web/live/admin/participants/index.sface:117
+#: lib/safarimanager_web/live/admin/participants/index.html.heex:22
+#: lib/safarimanager_web/live/admin/participants/index.html.heex:76
+#: lib/safarimanager_web/live/admin/participants/index.html.heex:123
 #, elixir-autogen, elixir-format
 msgid "User"
 msgstr "Utente"
 
-#: lib/safarimanager_web/live/admin/participants/index.sface:65
-#: lib/safarimanager_web/live/admin/teams/index.sface:80
+#: lib/safarimanager_web/live/admin/participants/index.html.heex:70
+#: lib/safarimanager_web/live/admin/teams/index.html.heex:78
 #, elixir-autogen, elixir-format
 msgid "Select a competition..."
 msgstr "Seleziona una competizione..."
@@ -1888,62 +1812,62 @@ msgstr "Ora di esposizione"
 
 #: lib/safarimanager_web/controllers/results_printout_html/show.html.heex:34
 #: lib/safarimanager_web/controllers/results_printout_html/show_teams.html.heex:31
-#: lib/safarimanager_web/live/results/results.sface:152
-#: lib/safarimanager_web/live/results/team_results.sface:137
+#: lib/safarimanager_web/live/results/results.html.heex:148
+#: lib/safarimanager_web/live/results/team_results.html.heex:144
 #, elixir-autogen, elixir-format
 msgid "Rank"
 msgstr "Pos."
 
 #: lib/safarimanager_web/controllers/results_printout_html/show.html.heex:39
 #: lib/safarimanager_web/controllers/results_printout_html/show_teams.html.heex:35
-#: lib/safarimanager_web/live/results/results.sface:157
-#: lib/safarimanager_web/live/results/team_results.sface:141
+#: lib/safarimanager_web/live/results/results.html.heex:153
+#: lib/safarimanager_web/live/results/team_results.html.heex:148
 #, elixir-autogen, elixir-format
 msgid "Species"
 msgstr "Specie"
 
-#: lib/safarimanager_web/controllers/participants_printout_controller.ex:29
+#: lib/safarimanager_web/controllers/participants_printout_controller.ex:30
 #: lib/safarimanager_web/controllers/participants_printout_html/show.html.heex:28
 #, elixir-autogen, elixir-format
 msgid "Participants list"
 msgstr "Lista partecipanti"
 
 #: lib/safarimanager_web/components/slides_selection_list.ex:51
-#: lib/safarimanager_web/components/slides_selection_list.ex:123
-#: lib/safarimanager_web/components/slides_selection_list.ex:195
+#: lib/safarimanager_web/components/slides_selection_list.ex:131
+#: lib/safarimanager_web/components/slides_selection_list.ex:212
 #: lib/safarimanager_web/controllers/selection_printout_html/show_multi.html.heex:34
 #: lib/safarimanager_web/controllers/selection_printout_html/show_multi_teams.html.heex:29
 #: lib/safarimanager_web/controllers/selection_printout_html/show_single.html.heex:33
 #: lib/safarimanager_web/controllers/selection_printout_html/show_single_team.html.heex:28
 #: lib/safarimanager_web/controllers/slides_printout_html/show.html.heex:32
 #: lib/safarimanager_web/controllers/slides_printout_html/show_teams.html.heex:24
-#: lib/safarimanager_web/live/results/results.sface:181
-#: lib/safarimanager_web/live/results/team_results.sface:164
-#: lib/safarimanager_web/live/validation/validation_launcher.sface:71
-#: lib/safarimanager_web/live/validation/validation_launcher.sface:200
+#: lib/safarimanager_web/live/results/results.html.heex:176
+#: lib/safarimanager_web/live/results/team_results.html.heex:172
+#: lib/safarimanager_web/live/validation/validation_launcher.html.heex:74
+#: lib/safarimanager_web/live/validation/validation_launcher.html.heex:237
 #, elixir-autogen, elixir-format
 msgid "File name"
 msgstr "Nome file"
 
 #: lib/safarimanager_web/controllers/slides_printout_html/show.html.heex:37
 #: lib/safarimanager_web/controllers/slides_printout_html/show_teams.html.heex:29
-#: lib/safarimanager_web/live/results/results.sface:186
-#: lib/safarimanager_web/live/results/team_results.sface:169
+#: lib/safarimanager_web/live/results/results.html.heex:181
+#: lib/safarimanager_web/live/results/team_results.html.heex:177
 #, elixir-autogen, elixir-format
 msgid "Pen."
 msgstr "Pen."
 
-#: lib/safarimanager_web/live/results/results.sface:10
+#: lib/safarimanager_web/live/results/results.html.heex:10
 #, elixir-autogen, elixir-format
 msgid "Print participants slides report"
 msgstr "Stampa le schede concorrente"
 
 #: lib/safarimanager_web/controllers/slides_printout_html/show.html.heex:39
 #: lib/safarimanager_web/controllers/slides_printout_html/show_teams.html.heex:31
-#: lib/safarimanager_web/live/results/results.sface:156
-#: lib/safarimanager_web/live/results/results.sface:188
-#: lib/safarimanager_web/live/results/team_results.sface:140
-#: lib/safarimanager_web/live/results/team_results.sface:171
+#: lib/safarimanager_web/live/results/results.html.heex:152
+#: lib/safarimanager_web/live/results/results.html.heex:183
+#: lib/safarimanager_web/live/results/team_results.html.heex:147
+#: lib/safarimanager_web/live/results/team_results.html.heex:179
 #, elixir-autogen, elixir-format
 msgid "Score"
 msgstr "Punti"
@@ -1970,8 +1894,8 @@ msgstr "Nome specie"
 
 #: lib/safarimanager_web/controllers/slides_printout_html/show.html.heex:36
 #: lib/safarimanager_web/controllers/slides_printout_html/show_teams.html.heex:28
-#: lib/safarimanager_web/live/results/results.sface:185
-#: lib/safarimanager_web/live/results/team_results.sface:168
+#: lib/safarimanager_web/live/results/results.html.heex:180
+#: lib/safarimanager_web/live/results/team_results.html.heex:176
 #, elixir-autogen, elixir-format
 msgid "Votes"
 msgstr "Voti"
@@ -2001,13 +1925,13 @@ msgstr "Punteggio totale"
 msgid "Notes"
 msgstr "Note"
 
-#: lib/safarimanager_web/live/slides/slide_selection.sface:16
+#: lib/safarimanager_web/live/slides/slide_selection.html.heex:21
 #, elixir-autogen, elixir-format
 msgid "Print all slides selection reports"
 msgstr "Stampa tutti i riepiloghi delle selezioni"
 
-#: lib/safarimanager_web/live/slides/slide_selection.sface:143
-#: lib/safarimanager_web/live/slides/slide_selection.sface:149
+#: lib/safarimanager_web/live/slides/slide_selection.html.heex:171
+#: lib/safarimanager_web/live/slides/slide_selection.html.heex:179
 #, elixir-autogen, elixir-format
 msgid "Print slides selection report"
 msgstr "Stampa il riepilogo della selezione"
@@ -2049,227 +1973,221 @@ msgstr "Il direttore di gara"
 msgid "The referee"
 msgstr "Il giudice di gara"
 
-#: lib/safarimanager_web/live/jury/jury.sface:138
-#: lib/safarimanager_web/live/jury/jury.sface:139
-#: lib/safarimanager_web/live/validation/validation.sface:212
+#: lib/safarimanager_web/live/jury/jury.html.heex:195
+#: lib/safarimanager_web/live/jury/jury.html.heex:197
+#: lib/safarimanager_web/live/validation/validation.html.heex:284
 #, elixir-autogen, elixir-format
 msgid "Exit"
 msgstr "Esci"
 
-#: lib/safarimanager_web/live/jury/jury.sface:47
-#: lib/safarimanager_web/live/validation/validation.sface:120
+#: lib/safarimanager_web/live/jury/jury.html.heex:65
+#: lib/safarimanager_web/live/validation/validation.html.heex:156
 #, elixir-autogen, elixir-format
 msgid "Next"
 msgstr "Successiva"
 
-#: lib/safarimanager_web/live/jury/jury.sface:36
-#: lib/safarimanager_web/live/validation/validation.sface:102
+#: lib/safarimanager_web/live/jury/jury.html.heex:49
+#: lib/safarimanager_web/live/validation/validation.html.heex:130
 #, elixir-autogen, elixir-format
 msgid "Prev"
 msgstr "Precedente"
 
-#: lib/safarimanager_web/live/validation/validation_launcher.sface:74
+#: lib/safarimanager_web/live/validation/validation_launcher.html.heex:77
 #, elixir-autogen, elixir-format
 msgid "Wrong subject"
 msgstr "Soggetto errato"
 
-#: lib/safarimanager_web/live/ballot_box/ballot_box.ex:64
-#: lib/safarimanager_web/live/jury/jury.sface:8
-#: lib/safarimanager_web/live/jury/jury.sface:9
-#: lib/safarimanager_web/live/validation/validation.sface:5
-#: lib/safarimanager_web/live/validation/validation.sface:6
+#: lib/safarimanager_web/live/ballot_box/ballot_box.ex:74
+#: lib/safarimanager_web/live/jury/jury.html.heex:9
+#: lib/safarimanager_web/live/jury/jury.html.heex:12
+#: lib/safarimanager_web/live/validation/validation.html.heex:6
+#: lib/safarimanager_web/live/validation/validation.html.heex:9
 #, elixir-autogen, elixir-format
 msgid "of"
 msgstr "di"
 
-#: lib/safarimanager_web/components/slides_selection_list.ex:90
-#: lib/safarimanager_web/live/results/results.ex:87
-#: lib/safarimanager_web/live/results/team_results.ex:62
-#: lib/safarimanager_web/live/slides/slide_selection.ex:368
-#: lib/safarimanager_web/live/validation/validation.ex:423
-#: lib/safarimanager_web/live/validation/validation_launcher.ex:256
-#: lib/safarimanager_web/live/validation/validation_launcher.sface:29
+#: lib/safarimanager_web/components/slides_selection_list.ex:98
+#: lib/safarimanager_web/live/results/results.ex:83
+#: lib/safarimanager_web/live/results/team_results.ex:61
+#: lib/safarimanager_web/live/slides/slide_selection.ex:358
+#: lib/safarimanager_web/live/validation/validation.ex:414
+#: lib/safarimanager_web/live/validation/validation_launcher.ex:252
+#: lib/safarimanager_web/live/validation/validation_launcher.html.heex:29
 #, elixir-autogen, elixir-format
 msgid "Fixed points"
 msgstr "Punteggio fisso"
 
-#: lib/safarimanager_web/live/validation/validation_launcher.sface:23
+#: lib/safarimanager_web/live/validation/validation_launcher.html.heex:23
 #, elixir-autogen, elixir-format
 msgid "Checks"
 msgstr "Controlli"
 
-#: lib/safarimanager_web/live/validation/validation_launcher.sface:33
+#: lib/safarimanager_web/live/validation/validation_launcher.html.heex:33
 #, elixir-autogen, elixir-format
 msgid "Dup. Subjects"
 msgstr "Soggetti duplicati"
 
-#: lib/safarimanager_web/live/validation/validation_launcher.sface:34
-#: lib/safarimanager_web/live/validation/validation_launcher.sface:68
+#: lib/safarimanager_web/live/validation/validation_launcher.html.heex:34
+#: lib/safarimanager_web/live/validation/validation_launcher.html.heex:71
 #, elixir-autogen, elixir-format
 msgid "Flags"
 msgstr "Flag"
 
-#: lib/safarimanager_web/live/validation/validation_launcher.sface:32
+#: lib/safarimanager_web/live/validation/validation_launcher.html.heex:32
 #, elixir-autogen, elixir-format
 msgid "Jury Count"
 msgstr "Conteggio in giuria"
 
-#: lib/safarimanager_web/live/validation/validation_launcher.sface:139
-#: lib/safarimanager_web/live/validation/validation_launcher.sface:223
+#: lib/safarimanager_web/live/validation/validation_launcher.html.heex:145
+#: lib/safarimanager_web/live/validation/validation_launcher.html.heex:265
 #, elixir-autogen, elixir-format
 msgid "Open"
 msgstr "Apri"
 
-#: lib/safarimanager_web/live/validation/validation_launcher.sface:26
+#: lib/safarimanager_web/live/validation/validation_launcher.html.heex:26
 #, elixir-autogen, elixir-format
 msgid "Participant #"
 msgstr "# partecipante"
 
-#: lib/safarimanager_web/live/validation/validation_launcher.sface:13
+#: lib/safarimanager_web/live/validation/validation_launcher.html.heex:13
 #, elixir-autogen, elixir-format
 msgid "Start Validation"
 msgstr "Avvia convalida"
 
-#: lib/safarimanager_web/live/results/results.sface:187
-#: lib/safarimanager_web/live/results/team_results.sface:170
-#: lib/safarimanager_web/live/slides/slide_selection.sface:189
-#: lib/safarimanager_web/live/validation/validation_launcher.sface:73
-#: lib/safarimanager_web/live/validation/validation_launcher.sface:202
+#: lib/safarimanager_web/live/results/results.html.heex:182
+#: lib/safarimanager_web/live/results/team_results.html.heex:178
+#: lib/safarimanager_web/live/slides/slide_selection.html.heex:214
+#: lib/safarimanager_web/live/validation/validation_launcher.html.heex:76
+#: lib/safarimanager_web/live/validation/validation_launcher.html.heex:239
 #, elixir-autogen, elixir-format
 msgid "Status"
 msgstr "Stato"
 
 #: lib/safarimanager_web/components/slides_selection_list.ex:53
-#: lib/safarimanager_web/components/slides_selection_list.ex:125
-#: lib/safarimanager_web/components/slides_selection_list.ex:197
-#: lib/safarimanager_web/live/slides/slide_selection.sface:171
-#: lib/safarimanager_web/live/validation/validation_launcher.sface:72
-#: lib/safarimanager_web/live/validation/validation_launcher.sface:201
+#: lib/safarimanager_web/components/slides_selection_list.ex:133
+#: lib/safarimanager_web/components/slides_selection_list.ex:214
+#: lib/safarimanager_web/live/slides/slide_selection.html.heex:204
+#: lib/safarimanager_web/live/validation/validation_launcher.html.heex:75
+#: lib/safarimanager_web/live/validation/validation_launcher.html.heex:238
 #, elixir-autogen, elixir-format
 msgid "Subject"
 msgstr "Soggetto"
 
-#: lib/safarimanager_web/live/validation/validation_launcher.sface:31
+#: lib/safarimanager_web/live/validation/validation_launcher.html.heex:31
 #, elixir-autogen, elixir-format
 msgid "Submitted Count"
 msgstr "Conteggio presentate"
 
-#: lib/safarimanager_web/live/validation/validation_launcher.sface:260
-#, elixir-autogen, elixir-format
-msgid "There are no slides yet"
-msgstr "Ancora non ci sono slide"
-
-#: lib/safarimanager_web/live/admin/competitions/index.sface:118
-#: lib/safarimanager_web/live/validation/validation_launcher.sface:30
+#: lib/safarimanager_web/live/admin/competitions/index.html.heex:137
+#: lib/safarimanager_web/live/validation/validation_launcher.html.heex:30
 #, elixir-autogen, elixir-format
 msgid "Total"
 msgstr "Totale"
 
-#: lib/safarimanager_web/live/jurors/jurors.sface:62
-#: lib/safarimanager_web/live/participants/participants.sface:34
+#: lib/safarimanager_web/live/jurors/jurors.html.heex:75
+#: lib/safarimanager_web/live/participants/participants.html.heex:46
 #, elixir-autogen, elixir-format
 msgid "Enroll"
 msgstr "Iscrivi"
 
-#: lib/safarimanager_web/live/admin/users/form.sface:24
-#: lib/safarimanager_web/live/jurors/jurors.sface:50
-#: lib/safarimanager_web/live/jurors/jurors.sface:85
-#: lib/safarimanager_web/live/participants/participants.sface:20
-#: lib/safarimanager_web/live/participants/participants.sface:86
-#: lib/safarimanager_web/live/slides/slide_selection.sface:32
-#: lib/safarimanager_web/live/slides/slides.sface:27
-#: lib/safarimanager_web/live/teams/teams.sface:99
+#: lib/safarimanager_web/components/user_form.ex:42
+#: lib/safarimanager_web/live/jurors/jurors.html.heex:57
+#: lib/safarimanager_web/live/jurors/jurors.html.heex:97
+#: lib/safarimanager_web/live/participants/participants.html.heex:24
+#: lib/safarimanager_web/live/participants/participants.html.heex:108
+#: lib/safarimanager_web/live/slides/slide_selection.html.heex:47
+#: lib/safarimanager_web/live/slides/slides.html.heex:40
+#: lib/safarimanager_web/live/teams/teams.html.heex:118
 #, elixir-autogen, elixir-format
 msgid "First Name"
 msgstr "Nome"
 
-#: lib/safarimanager_web/live/admin/users/form.sface:12
-#: lib/safarimanager_web/live/jurors/jurors.sface:49
-#: lib/safarimanager_web/live/jurors/jurors.sface:84
-#: lib/safarimanager_web/live/participants/participants.sface:19
-#: lib/safarimanager_web/live/participants/participants.sface:85
-#: lib/safarimanager_web/live/slides/slide_selection.sface:31
-#: lib/safarimanager_web/live/slides/slides.sface:26
-#: lib/safarimanager_web/live/teams/teams.sface:98
+#: lib/safarimanager_web/components/user_form.ex:33
+#: lib/safarimanager_web/live/jurors/jurors.html.heex:56
+#: lib/safarimanager_web/live/jurors/jurors.html.heex:96
+#: lib/safarimanager_web/live/participants/participants.html.heex:23
+#: lib/safarimanager_web/live/participants/participants.html.heex:107
+#: lib/safarimanager_web/live/slides/slide_selection.html.heex:46
+#: lib/safarimanager_web/live/slides/slides.html.heex:39
+#: lib/safarimanager_web/live/teams/teams.html.heex:117
 #, elixir-autogen, elixir-format
 msgid "Last Name"
 msgstr "Cognome"
 
-#: lib/safarimanager_web/live/participants/participants.sface:46
+#: lib/safarimanager_web/live/participants/participants.html.heex:57
 #, elixir-autogen, elixir-format
 msgid "New User"
 msgstr "Nuovo utente"
 
-#: lib/safarimanager_web/live/jurors/jurors.sface:67
-#: lib/safarimanager_web/live/jurors/jurors.sface:117
-#: lib/safarimanager_web/live/participants/participants.sface:39
-#: lib/safarimanager_web/live/participants/participants.sface:123
-#: lib/safarimanager_web/live/slides/slide_selection.sface:59
-#: lib/safarimanager_web/live/slides/slide_selection.sface:124
-#: lib/safarimanager_web/live/slides/slides.sface:51
-#: lib/safarimanager_web/live/slides/slides.sface:106
-#: lib/safarimanager_web/live/slides/slides.sface:235
-#: lib/safarimanager_web/live/teams/teams.sface:127
-#: lib/safarimanager_web/live/teams/teams.sface:194
+#: lib/safarimanager_web/live/jurors/jurors.html.heex:80
+#: lib/safarimanager_web/live/jurors/jurors.html.heex:129
+#: lib/safarimanager_web/live/participants/participants.html.heex:51
+#: lib/safarimanager_web/live/participants/participants.html.heex:157
+#: lib/safarimanager_web/live/slides/slide_selection.html.heex:76
+#: lib/safarimanager_web/live/slides/slide_selection.html.heex:148
+#: lib/safarimanager_web/live/slides/slides.html.heex:66
+#: lib/safarimanager_web/live/slides/slides.html.heex:130
+#: lib/safarimanager_web/live/slides/slides.html.heex:282
+#: lib/safarimanager_web/live/teams/teams.html.heex:153
+#: lib/safarimanager_web/live/teams/teams.html.heex:232
 #, elixir-autogen, elixir-format
 msgid "No items yet!"
 msgstr "Non ci sono ancora elementi!"
 
-#: lib/safarimanager_web/live/jurors/jurors.sface:101
-#: lib/safarimanager_web/live/participants/participants.sface:117
-#: lib/safarimanager_web/live/teams/teams.sface:188
+#: lib/safarimanager_web/live/jurors/jurors.html.heex:114
+#: lib/safarimanager_web/live/participants/participants.html.heex:150
+#: lib/safarimanager_web/live/teams/teams.html.heex:225
 #, elixir-autogen, elixir-format
 msgid "Remove"
 msgstr "Rimuovi"
 
-#: lib/safarimanager_web/live/participants/participants.sface:77
-#: lib/safarimanager_web/live/slides/slide_selection.sface:23
-#: lib/safarimanager_web/live/slides/slides.sface:18
-#: lib/safarimanager_web/live/teams/teams.sface:90
+#: lib/safarimanager_web/live/participants/participants.html.heex:97
+#: lib/safarimanager_web/live/slides/slide_selection.html.heex:36
+#: lib/safarimanager_web/live/slides/slides.html.heex:29
+#: lib/safarimanager_web/live/teams/teams.html.heex:107
 #, elixir-autogen, elixir-format
 msgid "Search for a participant..."
 msgstr "Cerca un partecipante..."
 
-#: lib/safarimanager_web/live/jurors/jurors.sface:42
-#: lib/safarimanager_web/live/participants/participants.sface:12
+#: lib/safarimanager_web/live/jurors/jurors.html.heex:47
+#: lib/safarimanager_web/live/participants/participants.html.heex:14
 #, elixir-autogen, elixir-format
 msgid "Search for a user..."
 msgstr "Cerca un utente..."
 
-#: lib/safarimanager_web/live/admin/competitions/form.sface:52
-#: lib/safarimanager_web/live/admin/competitions/index.sface:169
-#: lib/safarimanager_web/live/admin/evaluations/index.sface:83
-#: lib/safarimanager_web/live/admin/subjects/index.sface:77
+#: lib/safarimanager_web/live/admin/competitions/index.html.heex:203
+#: lib/safarimanager_web/live/admin/evaluations/index.html.heex:95
+#: lib/safarimanager_web/live/admin/subjects/index.html.heex:95
 #, elixir-autogen, elixir-format
 msgid "Select a type..."
 msgstr "Seleziona un tipo..."
 
-#: lib/safarimanager_web/live/slides/slides.sface:119
+#: lib/safarimanager_web/live/slides/slides.html.heex:144
 #, elixir-autogen, elixir-format
 msgid "Auto discovery"
 msgstr "Auto rilevamento"
 
-#: lib/safarimanager_web/live/slides/slides.sface:141
+#: lib/safarimanager_web/live/slides/slides.html.heex:174
 #, elixir-autogen, elixir-format
 msgid "Click or drop some images in this box"
 msgstr "Clicca o trascina immagini in quest'area"
 
-#: lib/safarimanager_web/live/slides/slides.sface:128
+#: lib/safarimanager_web/live/slides/slides.html.heex:155
 #, elixir-autogen, elixir-format
 msgid "Currently"
 msgstr "Attualmente"
 
-#: lib/safarimanager_web/live/slides/slides.sface:163
+#: lib/safarimanager_web/live/slides/slides.html.heex:195
 #, elixir-autogen, elixir-format
 msgid "Delete all"
 msgstr "Elimina tutto"
 
-#: lib/safarimanager_web/live/slides/slides.sface:152
+#: lib/safarimanager_web/live/slides/slides.html.heex:184
 #, elixir-autogen, elixir-format
 msgid "Dimensions"
 msgstr "Dimensioni"
 
-#: lib/safarimanager_web/live/slides/slides.sface:10
+#: lib/safarimanager_web/live/slides/slides.html.heex:14
 #, elixir-autogen, elixir-format
 msgid "Export Slides to CSV"
 msgstr "Esporta slide in CSV"
@@ -2279,113 +2197,113 @@ msgstr "Esporta slide in CSV"
 msgid "File browser"
 msgstr "Browser file"
 
-#: lib/safarimanager_web/components/direct_upload_dialog.ex:33
+#: lib/safarimanager_web/components/direct_upload_dialog.ex:25
 #, elixir-autogen, elixir-format
 msgid "Image import"
 msgstr "Importazione immagini"
 
-#: lib/safarimanager_web/components/file_browser.ex:134
+#: lib/safarimanager_web/components/file_browser.ex:133
 #, elixir-autogen, elixir-format
 msgid "Import all"
 msgstr "Importa tutte"
 
-#: lib/safarimanager_web/components/direct_upload_dialog.ex:70
+#: lib/safarimanager_web/components/direct_upload_dialog.ex:61
 #: lib/safarimanager_web/components/file_browser.ex:49
 #, elixir-autogen, elixir-format
 msgid "Level up"
 msgstr "Livello superiore"
 
-#: lib/safarimanager_web/live/slides/slides.sface:126
+#: lib/safarimanager_web/live/slides/slides.html.heex:152
 #, elixir-autogen, elixir-format
 msgid "Load slides for"
 msgstr "Carica le slide per"
 
-#: lib/safarimanager_web/live/jurors/jurors.ex:44
+#: lib/safarimanager_web/live/jurors/jurors.ex:42
 #, elixir-autogen, elixir-format
 msgid "Reached max num. of Jurors"
 msgstr "Raggiunto il limite di giurati"
 
-#: lib/safarimanager_web/live/slides/slide_selection.sface:53
-#: lib/safarimanager_web/live/slides/slide_selection.sface:95
-#: lib/safarimanager_web/live/slides/slide_selection.sface:113
-#: lib/safarimanager_web/live/slides/slides.sface:45
-#: lib/safarimanager_web/live/slides/slides.sface:95
+#: lib/safarimanager_web/live/slides/slide_selection.html.heex:71
+#: lib/safarimanager_web/live/slides/slide_selection.html.heex:114
+#: lib/safarimanager_web/live/slides/slide_selection.html.heex:138
+#: lib/safarimanager_web/live/slides/slides.html.heex:61
+#: lib/safarimanager_web/live/slides/slides.html.heex:120
 #, elixir-autogen, elixir-format
 msgid "Select"
 msgstr "Seleziona"
 
-#: lib/safarimanager_web/live/slides/slide_selection.sface:216
-#: lib/safarimanager_web/live/slides/slides.sface:243
+#: lib/safarimanager_web/live/slides/slide_selection.html.heex:251
+#: lib/safarimanager_web/live/slides/slides.html.heex:289
 #, elixir-autogen, elixir-format
 msgid "Select a participant from the top"
 msgstr "Seleziona un partecipante dalla lista qui su"
 
-#: lib/safarimanager_web/components/direct_upload_dialog.ex:47
+#: lib/safarimanager_web/components/direct_upload_dialog.ex:41
 #, elixir-autogen, elixir-format
 msgid "Select a participant..."
 msgstr "Seleziona un partecipante..."
 
 #: lib/safarimanager_web/components/slides_selection_list.ex:52
-#: lib/safarimanager_web/components/slides_selection_list.ex:124
-#: lib/safarimanager_web/components/slides_selection_list.ex:196
-#: lib/safarimanager_web/live/slides/slides.sface:151
+#: lib/safarimanager_web/components/slides_selection_list.ex:132
+#: lib/safarimanager_web/components/slides_selection_list.ex:213
+#: lib/safarimanager_web/live/slides/slides.html.heex:183
 #, elixir-autogen, elixir-format
 msgid "Size"
 msgstr "Peso"
 
-#: lib/safarimanager_web/components/competition_header.ex:13
-#: lib/safarimanager_web/live/new_competition/new_competition.sface:184
+#: lib/safarimanager_web/components/competition_header.ex:14
+#: lib/safarimanager_web/live/new_competition/new_competition.html.heex:187
 #, elixir-autogen, elixir-format
 msgid "Somewhere..."
 msgstr "Da qualche parte..."
 
-#: lib/safarimanager_web/components/file_browser.ex:134
+#: lib/safarimanager_web/components/file_browser.ex:133
 #, elixir-autogen, elixir-format
 msgid "files"
 msgstr "file"
 
-#: lib/safarimanager_web/components/direct_upload_dialog.ex:124
+#: lib/safarimanager_web/components/direct_upload_dialog.ex:118
 #, elixir-autogen, elixir-format
 msgid "images"
 msgstr "immagini"
 
-#: lib/safarimanager_web/live/slides/slides.sface:128
+#: lib/safarimanager_web/live/slides/slides.html.heex:157
 #, elixir-autogen, elixir-format
 msgid "uploading"
 msgstr "in caricamento"
 
-#: lib/safarimanager_web/live/slides/slide_selection.sface:153
+#: lib/safarimanager_web/live/slides/slide_selection.html.heex:184
 #, elixir-autogen, elixir-format
 msgid "Click or drop CSV files in this box"
 msgstr "Clicca o trascina file CSV in quest'area"
 
-#: lib/safarimanager_web/live/slides/slide_selection.sface:160
+#: lib/safarimanager_web/live/slides/slide_selection.html.heex:191
 #, elixir-autogen, elixir-format
 msgid "Edit slide selection"
 msgstr "Modifica la selezione delle slide"
 
-#: lib/safarimanager_web/live/slides/slide_selection.sface:135
-#: lib/safarimanager_web/live/slides/slide_selection.sface:136
+#: lib/safarimanager_web/live/slides/slide_selection.html.heex:159
+#: lib/safarimanager_web/live/slides/slide_selection.html.heex:162
 #, elixir-autogen, elixir-format
 msgid "Load CSV for"
 msgstr "Carica CSV per"
 
-#: lib/safarimanager_web/components/slides_selection_list.ex:80
+#: lib/safarimanager_web/components/slides_selection_list.ex:59
 #, elixir-autogen, elixir-format
 msgid "No slides selected for Jury"
 msgstr "Nessuna slide selezionata per la giuria"
 
-#: lib/safarimanager_web/components/slides_selection_list.ex:152
+#: lib/safarimanager_web/components/slides_selection_list.ex:139
 #, elixir-autogen, elixir-format
 msgid "No slides selected for fixed points"
 msgstr "Nessuna slide selezionata a punteggio fisso"
 
-#: lib/safarimanager_web/components/slides_selection_list.ex:224
+#: lib/safarimanager_web/components/slides_selection_list.ex:220
 #, elixir-autogen, elixir-format
 msgid "No slides selected to be discarded."
 msgstr "Nessuna slide scartata"
 
-#: lib/safarimanager_web/live/slides/slide_selection.sface:176
+#: lib/safarimanager_web/live/slides/slide_selection.html.heex:206
 #, elixir-autogen, elixir-format
 msgid "Select a subject..."
 msgstr "Seleziona un soggetto..."
@@ -2395,355 +2313,356 @@ msgstr "Seleziona un soggetto..."
 msgid "Selected for Jury"
 msgstr "In giuria"
 
-#: lib/safarimanager_web/components/slides_selection_list.ex:162
-#: lib/safarimanager_web/live/slides/slide_selection.ex:371
+#: lib/safarimanager_web/components/slides_selection_list.ex:177
+#: lib/safarimanager_web/live/slides/slide_selection.ex:361
 #, elixir-autogen, elixir-format
 msgid "Discarded"
 msgid_plural "Discarded"
 msgstr[0] "Scartata"
 msgstr[1] "Scartate"
 
-#: lib/safarimanager_web/live/jury/jury.sface:163
+#: lib/safarimanager_web/live/jury/jury.html.heex:227
+#: lib/safarimanager_web/live/jury/jury.html.heex:229
 #, elixir-autogen, elixir-format
 msgid "Clear"
 msgstr "Resetta"
 
-#: lib/safarimanager_web/live/ballot_box/ballot_box.ex:77
-#: lib/safarimanager_web/live/jury/jury.sface:160
+#: lib/safarimanager_web/live/ballot_box/ballot_box.ex:85
+#: lib/safarimanager_web/live/jury/jury.html.heex:222
 #, elixir-autogen, elixir-format
 msgid "No evaluations available"
 msgstr "Non ci sono valutazioni disponibili"
 
-#: lib/safarimanager_web/live/jury/jury.sface:171
+#: lib/safarimanager_web/live/jury/jury.html.heex:244
+#: lib/safarimanager_web/live/jury/jury.html.heex:246
 #, elixir-autogen, elixir-format
 msgid "Penalty"
 msgstr "Penalizzazione"
 
-#: lib/safarimanager_web/live/jury/jury_launcher.sface:20
-#: lib/safarimanager_web/live/jury/jury_launcher.sface:37
-#: lib/safarimanager_web/live/jury/jury_launcher.sface:54
+#: lib/safarimanager_web/live/jury/jury_launcher.html.heex:19
+#: lib/safarimanager_web/live/jury/jury_launcher.html.heex:33
+#: lib/safarimanager_web/live/jury/jury_launcher.html.heex:53
 #, elixir-autogen, elixir-format
 msgid "Start Jury"
 msgstr "Avvia giuria"
 
-#: lib/safarimanager_web/live/jury/jury.ex:329
+#: lib/safarimanager_web/live/jury/jury.ex:330
 #, elixir-autogen, elixir-format
 msgid "Unexpected error while saving evaluation"
 msgstr "Errore inaspettato nell'applicare la valutazione"
 
-#: lib/safarimanager_web/live/results/results.sface:87
-#: lib/safarimanager_web/live/results/team_results.sface:87
+#: lib/safarimanager_web/live/results/results.html.heex:87
+#: lib/safarimanager_web/live/results/team_results.html.heex:89
 #, elixir-autogen, elixir-format
 msgid "Count"
 msgstr "Conteggio"
 
-#: lib/safarimanager_web/live/results/results.sface:88
-#: lib/safarimanager_web/live/results/team_results.sface:88
+#: lib/safarimanager_web/live/results/results.html.heex:88
+#: lib/safarimanager_web/live/results/team_results.html.heex:90
 #, elixir-autogen, elixir-format
 msgid "Distribution"
 msgstr "Distribuzione"
 
-#: lib/safarimanager_web/live/results/results.sface:238
-#: lib/safarimanager_web/live/results/team_results.sface:221
+#: lib/safarimanager_web/live/results/results.html.heex:224
+#: lib/safarimanager_web/live/results/team_results.html.heex:241
 #, elixir-autogen, elixir-format
 msgid "No results available yet"
 msgstr "Classifica non ancora disponibile"
 
-#: lib/safarimanager_web/live/results/results.sface:50
-#: lib/safarimanager_web/live/results/team_results.sface:50
+#: lib/safarimanager_web/live/results/results.html.heex:50
+#: lib/safarimanager_web/live/results/team_results.html.heex:52
 #, elixir-autogen, elixir-format
 msgid "Num. of jurors"
 msgstr "Num. di giurati"
 
-#: lib/safarimanager_web/live/results/results.sface:46
+#: lib/safarimanager_web/live/results/results.html.heex:46
 #, elixir-autogen, elixir-format
 msgid "Num. of participants"
 msgstr "Num di partecipanti"
 
-#: lib/safarimanager_web/live/results/results.sface:66
-#: lib/safarimanager_web/live/results/team_results.sface:66
+#: lib/safarimanager_web/live/results/results.html.heex:66
+#: lib/safarimanager_web/live/results/team_results.html.heex:68
 #, elixir-autogen, elixir-format
 msgid "Penalties"
 msgstr "Penalizzazioni"
 
-#: lib/safarimanager_web/live/results/results.sface:172
-#: lib/safarimanager_web/live/results/team_results.sface:155
+#: lib/safarimanager_web/live/results/results.html.heex:167
+#: lib/safarimanager_web/live/results/team_results.html.heex:162
 #, elixir-autogen, elixir-format
 msgid "Show details"
 msgstr "Mostra dettagli"
 
-#: lib/safarimanager_web/live/results/results.sface:54
-#: lib/safarimanager_web/live/results/team_results.sface:54
+#: lib/safarimanager_web/live/results/results.html.heex:54
+#: lib/safarimanager_web/live/results/team_results.html.heex:56
 #, elixir-autogen, elixir-format
 msgid "Slides for jury"
 msgstr "Slide in giuria"
 
-#: lib/safarimanager_web/live/results/results.sface:58
-#: lib/safarimanager_web/live/results/team_results.sface:58
+#: lib/safarimanager_web/live/results/results.html.heex:58
+#: lib/safarimanager_web/live/results/team_results.html.heex:60
 #, elixir-autogen, elixir-format
 msgid "Slides with fixed points"
 msgstr "Slide a punteggio fisso"
 
-#: lib/safarimanager_web/live/results/results.sface:43
-#: lib/safarimanager_web/live/results/team_results.sface:43
+#: lib/safarimanager_web/live/results/results.html.heex:43
+#: lib/safarimanager_web/live/results/team_results.html.heex:45
 #, elixir-autogen, elixir-format
 msgid "Stats"
 msgstr "Statistiche"
 
-#: lib/safarimanager_web/live/results/results.sface:182
-#: lib/safarimanager_web/live/results/team_results.sface:165
+#: lib/safarimanager_web/live/results/results.html.heex:177
+#: lib/safarimanager_web/live/results/team_results.html.heex:173
 #, elixir-autogen, elixir-format
 msgid "Subject #"
 msgstr "# soggetto"
 
-#: lib/safarimanager_web/live/results/results.sface:183
-#: lib/safarimanager_web/live/results/team_results.sface:166
+#: lib/safarimanager_web/live/results/results.html.heex:178
+#: lib/safarimanager_web/live/results/team_results.html.heex:174
 #, elixir-autogen, elixir-format
 msgid "Subject name"
 msgstr "Nome soggetto"
 
-#: lib/safarimanager_web/live/results/results.sface:62
-#: lib/safarimanager_web/live/results/team_results.sface:62
+#: lib/safarimanager_web/live/results/results.html.heex:62
+#: lib/safarimanager_web/live/results/team_results.html.heex:64
 #, elixir-autogen, elixir-format
 msgid "Total slides"
 msgstr "Totale slide"
 
-#: lib/safarimanager_web/live/slides/slide_selection.ex:273
+#: lib/safarimanager_web/live/slides/slide_selection.ex:263
 #, elixir-autogen, elixir-format
 msgid "Unable to import slide selection: multiple slides with the same file name (or very similar) were found"
 msgstr "Impossibile importare la selezione delle slide: sono presenti più slide con lo stesso nome file (o molto simile)"
 
-#: lib/safarimanager_web/live/validation/validation.sface:222
+#: lib/safarimanager_web/live/validation/validation.html.heex:298
 #, elixir-format, elixir-autogen
 msgid "unrecognizable"
 msgstr "irriconoscibile"
 
-#: lib/safarimanager_web/live/validation/validation.sface:229
+#: lib/safarimanager_web/live/validation/validation.html.heex:310
 #, elixir-format, elixir-autogen
 msgid "distinction"
 msgstr "segnalazione"
 
-#: lib/safarimanager_web/live/validation/validation.sface:233
+#: lib/safarimanager_web/live/validation/validation.html.heex:321
 #, elixir-format, elixir-autogen
 msgid "note"
 msgstr "nota"
 
-#: lib/safarimanager_web/live/slides/slides.ex:129
+#: lib/safarimanager_web/live/slides/slides.ex:125
 #, elixir-autogen, elixir-format
 msgid "Are you sure you want to delete all slides?"
 msgstr "Sei sicuro di voler eliminare tutte le slide?"
 
-#: lib/safarimanager_web/live/slides/slides.ex:104
+#: lib/safarimanager_web/live/slides/slides.ex:100
 #, elixir-autogen, elixir-format
 msgid "Are you sure you want to delete this slide?"
 msgstr "Sei sicuro di voler eliminare questa slide?"
 
-#: lib/safarimanager_web/live/slides/slides.ex:103
+#: lib/safarimanager_web/live/slides/slides.ex:99
 #, elixir-autogen, elixir-format
 msgid "Delete slide"
 msgstr "Elimina slide"
 
-#: lib/safarimanager_web/live/slides/slides.ex:128
+#: lib/safarimanager_web/live/slides/slides.ex:124
 #, elixir-autogen, elixir-format
 msgid "Delete all slides"
 msgstr "Elimina tutte le slide"
 
-#: lib/safarimanager_web/live/validation/validation_launcher.sface:177
+#: lib/safarimanager_web/live/validation/validation_launcher.html.heex:204
 #, elixir-autogen, elixir-format
 msgid "Clear all flags"
 msgstr "Rimuovi tutte le flag"
 
-#: lib/safarimanager_web/live/validation/validation_launcher.sface:76
+#: lib/safarimanager_web/live/validation/validation_launcher.html.heex:79
 #, elixir-autogen, elixir-format
 msgid "Distinction"
 msgstr "Segnalazione"
 
-#: lib/safarimanager_web/live/validation/validation_launcher.sface:197
+#: lib/safarimanager_web/live/validation/validation_launcher.html.heex:233
 #, elixir-autogen, elixir-format
 msgid "Duplicate subjects"
 msgstr "Soggetti duplicati"
 
-#: lib/safarimanager_web/live/validation/validation_launcher.ex:93
+#: lib/safarimanager_web/live/validation/validation_launcher.ex:89
 #, elixir-autogen, elixir-format
 msgid "Error moving slide to discarded"
 msgstr "Impossibile spostare la slide negli scarti"
 
-#: lib/safarimanager_web/live/validation/validation_launcher.ex:77
+#: lib/safarimanager_web/live/validation/validation_launcher.ex:73
 #, elixir-autogen, elixir-format
 msgid "Error moving slide to fixed points"
 msgstr "Impossibile spostare la slide in punteggio fisso"
 
-#: lib/safarimanager_web/live/validation/validation_launcher.ex:61
+#: lib/safarimanager_web/live/validation/validation_launcher.ex:57
 #, elixir-autogen, elixir-format
 msgid "Error moving slide to jury"
 msgstr "Impossibile spostare la slide in giuria"
 
-#: lib/safarimanager_web/live/validation/validation.sface:238
+#: lib/safarimanager_web/live/validation/validation.html.heex:324
 #, elixir-autogen, elixir-format
 msgid "Insert a note here..."
 msgstr "Inserisci una nota qui..."
 
-#: lib/safarimanager_web/live/validation/validation_launcher.sface:174
-#: lib/safarimanager_web/live/validation/validation_launcher.sface:247
+#: lib/safarimanager_web/live/validation/validation_launcher.html.heex:195
+#: lib/safarimanager_web/live/validation/validation_launcher.html.heex:301
 #, elixir-autogen, elixir-format
 msgid "Move to discarded"
 msgstr "Sposta negli scarti"
 
-#: lib/safarimanager_web/live/validation/validation_launcher.sface:171
-#: lib/safarimanager_web/live/validation/validation_launcher.sface:244
+#: lib/safarimanager_web/live/validation/validation_launcher.html.heex:186
+#: lib/safarimanager_web/live/validation/validation_launcher.html.heex:292
 #, elixir-autogen, elixir-format
 msgid "Move to fixed points"
 msgstr "Sposta in punteggio fisso"
 
-#: lib/safarimanager_web/live/validation/validation_launcher.sface:163
-#: lib/safarimanager_web/live/validation/validation_launcher.sface:236
+#: lib/safarimanager_web/live/validation/validation_launcher.html.heex:176
+#: lib/safarimanager_web/live/validation/validation_launcher.html.heex:282
 #, elixir-autogen, elixir-format
 msgid "Move to jury"
 msgstr "Sposta in giuria"
 
-#: lib/safarimanager_web/live/validation/validation_launcher.sface:77
+#: lib/safarimanager_web/live/validation/validation_launcher.html.heex:80
 #, elixir-autogen, elixir-format
 msgid "Note"
 msgstr "Nota"
 
-#: lib/safarimanager_web/live/validation/validation_launcher.ex:104
+#: lib/safarimanager_web/live/validation/validation_launcher.ex:100
 #, elixir-autogen, elixir-format
 msgid "Removed all slide flags"
 msgstr "Tutte le flag sono state rimosse"
 
-#: lib/safarimanager_web/live/validation/validation_launcher.ex:88
+#: lib/safarimanager_web/live/validation/validation_launcher.ex:84
 #, elixir-autogen, elixir-format
 msgid "Slide moved to discarded"
 msgstr "Slide spostata negli scarti"
 
-#: lib/safarimanager_web/live/validation/validation_launcher.ex:72
+#: lib/safarimanager_web/live/validation/validation_launcher.ex:68
 #, elixir-autogen, elixir-format
 msgid "Slide moved to fixed points"
 msgstr "Slide spostata in punteggio fisso"
 
-#: lib/safarimanager_web/live/validation/validation_launcher.ex:56
+#: lib/safarimanager_web/live/validation/validation_launcher.ex:52
 #, elixir-autogen, elixir-format
 msgid "Slide moved to jury"
 msgstr "Slide spostata in giuria"
 
-#: lib/safarimanager_web/live/validation/validation_launcher.sface:75
+#: lib/safarimanager_web/live/validation/validation_launcher.html.heex:78
 #, elixir-autogen, elixir-format
 msgid "Unrecognizable"
 msgstr "Irriconoscibile"
 
-#: lib/safarimanager_web/live/validation/validation_launcher.sface:155
+#: lib/safarimanager_web/live/validation/validation_launcher.html.heex:166
 #, elixir-autogen, elixir-format
 msgid "Apply subject correction"
 msgstr "Applica correzione soggetto"
 
-#: lib/safarimanager_web/live/validation/validation_launcher.ex:45
+#: lib/safarimanager_web/live/validation/validation_launcher.ex:41
 #, elixir-autogen, elixir-format
 msgid "Error applying subject correction to slide"
 msgstr "Impossibile applicare la correzione del soggetto alla slide"
 
-#: lib/safarimanager_web/live/validation/validation_launcher.ex:40
+#: lib/safarimanager_web/live/validation/validation_launcher.ex:36
 #, elixir-autogen, elixir-format
 msgid "Subject correction applied successfully"
 msgstr "Correzione soggetto applicata con successo"
 
-#: lib/safarimanager_web/live/jury/jury.sface:24
-#: lib/safarimanager_web/live/validation/validation.sface:90
+#: lib/safarimanager_web/live/jury/jury.html.heex:33
+#: lib/safarimanager_web/live/validation/validation.html.heex:114
 #, elixir-autogen, elixir-format
 msgid "First"
 msgstr "Prima"
 
-#: lib/safarimanager_web/live/jury/jury.sface:118
-#: lib/safarimanager_web/live/validation/validation.sface:191
+#: lib/safarimanager_web/live/jury/jury.html.heex:149
+#: lib/safarimanager_web/live/validation/validation.html.heex:240
 #, elixir-autogen, elixir-format
 msgid "Fit to window"
 msgstr "Adatta alla finestra"
 
-#: lib/safarimanager_web/live/jury/jury.sface:135
-#: lib/safarimanager_web/live/validation/validation.sface:208
+#: lib/safarimanager_web/live/jury/jury.html.heex:188
+#: lib/safarimanager_web/live/validation/validation.html.heex:279
 #, elixir-autogen, elixir-format
 msgid "Fullscreen"
 msgstr "Schermo intero"
 
-#: lib/safarimanager_web/live/jury/jury.sface:62
-#: lib/safarimanager_web/live/validation/validation.sface:135
+#: lib/safarimanager_web/live/jury/jury.html.heex:82
+#: lib/safarimanager_web/live/validation/validation.html.heex:173
 #, elixir-autogen, elixir-format
 msgid "Last"
 msgstr "Ultima"
 
-#: lib/safarimanager_web/live/results/results.sface:135
+#: lib/safarimanager_web/live/results/results.html.heex:131
 #, elixir-autogen, elixir-format
 msgid "Overall"
 msgstr "Generale"
 
-#: lib/safarimanager_web/live/jury/jury.sface:128
-#: lib/safarimanager_web/live/validation/validation.sface:201
+#: lib/safarimanager_web/live/jury/jury.html.heex:173
+#: lib/safarimanager_web/live/validation/validation.html.heex:264
 #, elixir-autogen, elixir-format
 msgid "Rotate left"
 msgstr "Ruota in senso antiorario"
 
-#: lib/safarimanager_web/live/jury/jury.sface:131
-#: lib/safarimanager_web/live/validation/validation.sface:204
+#: lib/safarimanager_web/live/jury/jury.html.heex:180
+#: lib/safarimanager_web/live/validation/validation.html.heex:271
 #, elixir-autogen, elixir-format
 msgid "Rotate right"
 msgstr "Ruota in senso orario"
 
-#: lib/safarimanager_web/live/jury/jury.sface:79
-#: lib/safarimanager_web/live/validation/validation.sface:152
+#: lib/safarimanager_web/live/jury/jury.html.heex:106
+#: lib/safarimanager_web/live/validation/validation.html.heex:197
 #, elixir-autogen, elixir-format
 msgid "Zoom 100%"
 msgstr "Zoom 100%"
 
-#: lib/safarimanager_web/live/jury/jury.sface:123
-#: lib/safarimanager_web/live/validation/validation.sface:196
+#: lib/safarimanager_web/live/jury/jury.html.heex:164
+#: lib/safarimanager_web/live/validation/validation.html.heex:255
 #, elixir-autogen, elixir-format
 msgid "Zoom in"
 msgstr "Ingrandisci"
 
-#: lib/safarimanager_web/live/jury/jury.sface:76
-#: lib/safarimanager_web/live/validation/validation.sface:149
+#: lib/safarimanager_web/live/jury/jury.html.heex:99
+#: lib/safarimanager_web/live/validation/validation.html.heex:190
 #, elixir-autogen, elixir-format
 msgid "Zoom out"
 msgstr "Rimpicciolisci"
 
-#: lib/safarimanager_web/live/admin/categories/index.sface:22
-#: lib/safarimanager_web/live/admin/categories/index.sface:22
-#: lib/safarimanager_web/live/admin/categories/index.sface:58
-#: lib/safarimanager_web/live/admin/categories/index.sface:95
+#: lib/safarimanager_web/live/admin/categories/index.html.heex:22
+#: lib/safarimanager_web/live/admin/categories/index.html.heex:63
+#: lib/safarimanager_web/live/admin/categories/index.html.heex:103
 #, elixir-autogen, elixir-format
 msgid "Camera type"
 msgstr "Tipo di fotocamera"
 
-#: lib/safarimanager_web/live/admin/categories/index.sface:62
+#: lib/safarimanager_web/live/admin/categories/index.html.heex:69
 #, elixir-autogen, elixir-format
 msgid "Select a camera type..."
 msgstr "Seleziona un tipo di fotocamera..."
 
-#: lib/safarimanager_web/live/admin/categories/index.ex:258
-#: lib/safarimanager_web/live/jury/jury_launcher.ex:66
+#: lib/safarimanager_web/live/admin/categories/index.ex:248
+#: lib/safarimanager_web/live/jury/jury_launcher.ex:65
 #, elixir-autogen, elixir-format
 msgid "any"
 msgstr "qualsiasi"
 
-#: lib/safarimanager_web/live/admin/categories/index.ex:259
-#: lib/safarimanager_web/live/jury/jury_launcher.ex:65
+#: lib/safarimanager_web/live/admin/categories/index.ex:249
+#: lib/safarimanager_web/live/jury/jury_launcher.ex:64
 #, elixir-autogen, elixir-format
 msgid "compact"
 msgstr "compatte"
 
-#: lib/safarimanager_web/live/admin/categories/index.ex:260
-#: lib/safarimanager_web/live/jury/jury_launcher.ex:64
+#: lib/safarimanager_web/live/admin/categories/index.ex:250
+#: lib/safarimanager_web/live/jury/jury_launcher.ex:63
 #, elixir-autogen, elixir-format
 msgid "reflex"
 msgstr "reflex"
 
-#: lib/safarimanager_web/live/jury/jury_launcher.sface:14
-#: lib/safarimanager_web/live/jury/jury_launcher.sface:31
-#: lib/safarimanager_web/live/jury/jury_launcher.sface:48
+#: lib/safarimanager_web/live/jury/jury_launcher.html.heex:13
+#: lib/safarimanager_web/live/jury/jury_launcher.html.heex:27
+#: lib/safarimanager_web/live/jury/jury_launcher.html.heex:42
 #, elixir-autogen, elixir-format
 msgid "species"
 msgstr "specie"
 
-#: lib/safarimanager_web/live/jury/jury_launcher.ex:55
+#: lib/safarimanager_web/live/jury/jury_launcher.ex:54
 #, elixir-autogen, elixir-format
 msgid "all"
 msgstr "tutte"
@@ -2753,240 +2672,235 @@ msgstr "tutte"
 msgid "classification"
 msgstr "classifica"
 
-#: lib/safarimanager_web/live/participants/participants.ex:134
+#: lib/safarimanager_web/live/participants/participants.ex:136
 #, elixir-autogen, elixir-format
 msgid "Category was changed successfully"
 msgstr "Categoria modificate con successo"
 
-#: lib/safarimanager_web/live/participants/participants.sface:106
+#: lib/safarimanager_web/live/participants/participants.html.heex:135
 #, elixir-autogen, elixir-format
 msgid "Category..."
 msgstr "Categoria..."
 
-#: lib/safarimanager_web/live/validation/validation.sface:117
+#: lib/safarimanager_web/live/validation/validation.html.heex:148
 #, elixir-autogen, elixir-format
 msgid "Go to..."
 msgstr "Vai a..."
 
-#: lib/safarimanager_web/live/participants/participants.ex:140
+#: lib/safarimanager_web/live/participants/participants.ex:144
 #, elixir-autogen, elixir-format
 msgid "Unable to change Category"
 msgstr "Impossibile modificare la categoria"
 
-#: lib/safarimanager_web/live/admin/teams/index.ex:206
+#: lib/safarimanager_web/live/admin/teams/index.ex:189
 #, elixir-autogen, elixir-format
 msgid "All teams deleted successfully"
 msgstr "Tutte le squadre sono state eliminate con successo"
 
-#: lib/safarimanager_web/live/admin/teams/index.sface:71
-#: lib/safarimanager_web/live/teams/teams.sface:13
+#: lib/safarimanager_web/live/admin/teams/index.html.heex:68
+#: lib/safarimanager_web/live/teams/teams.html.heex:15
 #, elixir-autogen, elixir-format
 msgid "Edit team"
 msgstr "Modifica squadra"
 
-#: lib/safarimanager_web/live/admin/teams/index.ex:123
+#: lib/safarimanager_web/live/admin/teams/index.ex:106
 #, elixir-autogen, elixir-format
 msgid "Edited team"
 msgstr "Squadra modificata"
 
-#: lib/safarimanager_web/live/admin/teams/index.sface:96
+#: lib/safarimanager_web/live/admin/teams/index.html.heex:95
 #, elixir-autogen, elixir-format
 msgid "Member"
 msgstr "Membro"
 
 #: lib/safarimanager_web/controllers/teams_printout_html/show.html.heex:37
-#: lib/safarimanager_web/live/admin/teams/index.sface:35
-#: lib/safarimanager_web/live/admin/teams/index.sface:35
-#: lib/safarimanager_web/live/admin/teams/index.sface:183
-#: lib/safarimanager_web/live/teams/teams.sface:39
-#: lib/safarimanager_web/live/teams/teams.sface:39
-#: lib/safarimanager_web/live/teams/teams.sface:164
+#: lib/safarimanager_web/live/admin/teams/index.html.heex:35
+#: lib/safarimanager_web/live/admin/teams/index.html.heex:187
+#: lib/safarimanager_web/live/teams/teams.html.heex:49
+#: lib/safarimanager_web/live/teams/teams.html.heex:200
 #, elixir-autogen, elixir-format
 msgid "Members"
 msgstr "Membri"
 
-#: lib/safarimanager_web/live/admin/teams/index.sface:70
+#: lib/safarimanager_web/live/admin/teams/index.html.heex:67
 #, elixir-autogen, elixir-format
 msgid "New team"
 msgstr "Nuova squadra"
 
-#: lib/safarimanager_web/live/admin/teams/index.sface:146
-#: lib/safarimanager_web/live/admin/teams/index.sface:180
-#: lib/safarimanager_web/live/teams/teams.sface:31
+#: lib/safarimanager_web/live/admin/teams/index.html.heex:143
+#: lib/safarimanager_web/live/admin/teams/index.html.heex:184
+#: lib/safarimanager_web/live/teams/teams.html.heex:41
 #, elixir-autogen, elixir-format
 msgid "Org. name"
 msgstr "Nome Soc."
 
-#: lib/safarimanager_web/live/admin/teams/index.sface:30
-#: lib/safarimanager_web/live/admin/teams/index.sface:30
+#: lib/safarimanager_web/live/admin/teams/index.html.heex:30
 #, elixir-autogen, elixir-format
 msgid "Organization name"
 msgstr "Nome società"
 
-#: lib/safarimanager_web/live/admin/teams/index.ex:96
-#: lib/safarimanager_web/live/teams/teams.ex:82
+#: lib/safarimanager_web/live/admin/teams/index.ex:79
+#: lib/safarimanager_web/live/teams/teams.ex:81
 #, elixir-autogen, elixir-format
 msgid "Team created successfully"
 msgstr "Squadra creata con successo"
 
-#: lib/safarimanager_web/live/admin/teams/index.ex:183
-#: lib/safarimanager_web/live/teams/teams.ex:143
+#: lib/safarimanager_web/live/admin/teams/index.ex:166
+#: lib/safarimanager_web/live/teams/teams.ex:141
 #, elixir-autogen, elixir-format
 msgid "Team deleted successfully"
 msgstr "Squadra eliminata con successo"
 
-#: lib/safarimanager_web/live/admin/teams/index.sface:12
+#: lib/safarimanager_web/live/admin/teams/index.html.heex:12
 #, elixir-autogen, elixir-format
 msgid "Team details"
 msgstr "Dettagli squadra"
 
-#: lib/safarimanager_web/components/sidebar.ex:101
-#: lib/safarimanager_web/components/steps_header.ex:39
-#: lib/safarimanager_web/live/jurors/jurors.sface:142
-#: lib/safarimanager_web/live/new_competition/new_competition.sface:96
-#: lib/safarimanager_web/live/new_competition/new_competition.sface:199
-#: lib/safarimanager_web/live/participants/participants.sface:152
-#: lib/safarimanager_web/live/slides/slide_selection.sface:10
-#: lib/safarimanager_web/live/slides/slides.sface:7
-#: lib/safarimanager_web/live/teams/teams.sface:140
+#: lib/safarimanager_web/components/sidebar.ex:108
+#: lib/safarimanager_web/components/steps_header.ex:40
+#: lib/safarimanager_web/live/jurors/jurors.html.heex:153
+#: lib/safarimanager_web/live/new_competition/new_competition.html.heex:97
+#: lib/safarimanager_web/live/new_competition/new_competition.html.heex:204
+#: lib/safarimanager_web/live/participants/participants.html.heex:185
+#: lib/safarimanager_web/live/slides/slide_selection.html.heex:13
+#: lib/safarimanager_web/live/slides/slides.html.heex:10
+#: lib/safarimanager_web/live/teams/teams.html.heex:165
 #, elixir-autogen, elixir-format
 msgid "Teams"
 msgstr "Squadre"
 
-#: lib/safarimanager_web/live/admin/teams/index.ex:194
+#: lib/safarimanager_web/live/admin/teams/index.ex:177
 #, elixir-autogen, elixir-format
 msgid "Teams deleted successfully"
 msgstr "Squadre eliminate con successo"
 
-#: lib/safarimanager_web/live/admin/teams/index.ex:105
+#: lib/safarimanager_web/live/admin/teams/index.ex:88
 #, elixir-autogen, elixir-format
 msgid "Unable to create the team"
 msgstr "Impossibile creare la squadra"
 
-#: lib/safarimanager_web/live/admin/teams/index.ex:184
+#: lib/safarimanager_web/live/admin/teams/index.ex:167
 #, elixir-autogen, elixir-format
 msgid "Unable to delete Team"
 msgstr "Impossibile eliminare la squadra"
 
-#: lib/safarimanager_web/live/admin/teams/index.ex:197
+#: lib/safarimanager_web/live/admin/teams/index.ex:180
 #, elixir-autogen, elixir-format
 msgid "Unable to delete Teams"
 msgstr "Impossibile eliminare le squadre"
 
-#: lib/safarimanager_web/live/admin/teams/index.ex:158
+#: lib/safarimanager_web/live/admin/teams/index.ex:141
 #, elixir-autogen, elixir-format
 msgid "Unable to retrieve this Team"
 msgstr "Impossibile recuperare questa squadra"
 
-#: lib/safarimanager_web/live/admin/competitions/form.sface:176
-#: lib/safarimanager_web/live/admin/competitions/index.sface:249
-#: lib/safarimanager_web/live/admin/teams/index.sface:137
+#: lib/safarimanager_web/live/admin/competitions/index.html.heex:334
+#: lib/safarimanager_web/live/admin/competitions/new_form.ex:134
+#: lib/safarimanager_web/live/admin/teams/index.html.heex:127
 #, elixir-autogen, elixir-format
 msgid "add more"
 msgstr "aggiungi"
 
-#: lib/safarimanager_web/live/admin/competitions/form.sface:165
-#: lib/safarimanager_web/live/admin/competitions/index.sface:238
-#: lib/safarimanager_web/live/admin/teams/index.sface:123
+#: lib/safarimanager_web/live/admin/competitions/index.html.heex:324
+#: lib/safarimanager_web/live/admin/teams/index.html.heex:115
 #, elixir-autogen, elixir-format
 msgid "remove"
 msgstr "rimuovi"
 
-#: lib/safarimanager_web/live/teams/teams.sface:83
+#: lib/safarimanager_web/live/teams/teams.html.heex:93
 #, elixir-autogen, elixir-format
 msgid "Create team"
 msgstr "Crea squadra"
 
-#: lib/safarimanager_web/live/teams/teams.ex:87
+#: lib/safarimanager_web/live/teams/teams.ex:86
 #, elixir-autogen, elixir-format
 msgid "Unable to create team"
 msgstr "Impossibile creare la squadra"
 
 #: lib/safarimanager/utils.ex:54
-#: lib/safarimanager_web/components/competition_header.ex:43
+#: lib/safarimanager_web/components/competition_header.ex:48
 #, elixir-autogen, elixir-format
 msgid "Sometime..."
 msgstr "In qualche data..."
 
-#: lib/safarimanager_web/live/teams/teams.ex:154
+#: lib/safarimanager_web/live/teams/teams.ex:152
 #, elixir-autogen, elixir-format
 msgid "Are you sure you want to delete this team?"
 msgstr "Sei sicuro di voler eliminare questa squadra?"
 
-#: lib/safarimanager_web/live/teams/teams.ex:153
+#: lib/safarimanager_web/live/teams/teams.ex:151
 #, elixir-autogen, elixir-format
 msgid "Delete team"
 msgstr "Elimina squadra"
 
-#: lib/safarimanager_web/live/admin/competitions/form.sface:35
-#: lib/safarimanager_web/live/admin/competitions/index.sface:32
-#: lib/safarimanager_web/live/admin/competitions/index.sface:32
-#: lib/safarimanager_web/live/admin/competitions/index.sface:175
-#: lib/safarimanager_web/live/admin/competitions/index.sface:392
-#: lib/safarimanager_web/live/new_competition/new_competition.sface:71
+#: lib/safarimanager_web/live/admin/competitions/index.html.heex:32
+#: lib/safarimanager_web/live/admin/competitions/index.html.heex:209
+#: lib/safarimanager_web/live/admin/competitions/index.html.heex:524
+#: lib/safarimanager_web/live/admin/competitions/new_form.ex:42
+#: lib/safarimanager_web/live/new_competition/new_competition.html.heex:66
 #, elixir-autogen, elixir-format
 msgid "For teams"
 msgstr "A squadre"
 
-#: lib/safarimanager_web/live/slides/slide_selection.sface:71
-#: lib/safarimanager_web/live/slides/slides.sface:63
-#: lib/safarimanager_web/live/teams/teams.sface:154
+#: lib/safarimanager_web/live/slides/slide_selection.html.heex:88
+#: lib/safarimanager_web/live/slides/slides.html.heex:79
+#: lib/safarimanager_web/live/teams/teams.html.heex:188
 #, elixir-autogen, elixir-format
 msgid "Search for a team..."
 msgstr "Cerca una squadra..."
 
-#: lib/safarimanager_web/live/results/team_results.sface:138
+#: lib/safarimanager_web/live/results/team_results.html.heex:145
 #, elixir-autogen, elixir-format
 msgid "Team"
 msgstr "Squadra"
 
-#: lib/safarimanager_web/live/teams/teams.ex:147
+#: lib/safarimanager_web/live/teams/teams.ex:145
 #, elixir-autogen, elixir-format
 msgid "Unable to delete team"
 msgstr "Impossibile eliminare la squadra"
 
-#: lib/safarimanager_web/live/new_competition/new_competition.sface:140
+#: lib/safarimanager_web/live/new_competition/new_competition.html.heex:138
 #, elixir-autogen, elixir-format
 msgid "Duplicate"
 msgstr "Duplica"
 
-#: lib/safarimanager_web/live/new_competition/new_competition.sface:47
-#: lib/safarimanager_web/live/new_competition/new_competition.sface:193
+#: lib/safarimanager_web/live/new_competition/new_competition.html.heex:40
+#: lib/safarimanager_web/live/new_competition/new_competition.html.heex:198
 #, elixir-autogen, elixir-format
 msgid "Duplicate competition"
 msgstr "Duplica competizione"
 
-#: lib/safarimanager_web/live/new_competition/new_competition.ex:173
+#: lib/safarimanager_web/live/new_competition/new_competition.ex:169
 #, elixir-autogen, elixir-format
 msgid "Error duplicating competition"
 msgstr "Impossibile duplicare la competizione"
 
-#: lib/safarimanager_web/live/new_competition/new_competition.sface:127
+#: lib/safarimanager_web/live/new_competition/new_competition.html.heex:124
 #, elixir-autogen, elixir-format
 msgid "Jury votes"
 msgstr "Voti giuria"
 
-#: lib/safarimanager_web/live/new_competition/new_competition.sface:58
+#: lib/safarimanager_web/live/new_competition/new_competition.html.heex:54
 #, elixir-autogen, elixir-format
 msgid "New competition details"
 msgstr "Dettagli nuova competizione"
 
-#: lib/safarimanager_web/live/results/team_results.sface:46
+#: lib/safarimanager_web/live/results/team_results.html.heex:48
 #, elixir-autogen, elixir-format
 msgid "Num. of teams"
 msgstr "Num. di team"
 
-#: lib/safarimanager_web/live/new_competition/new_competition.ex:166
+#: lib/safarimanager_web/live/new_competition/new_competition.ex:162
 #, elixir-autogen, elixir-format
 msgid "Successfully duplicated competition"
 msgstr "Competizione duplicata con successo"
 
-#: lib/safarimanager_web/live/validation/validation_launcher.sface:27
+#: lib/safarimanager_web/live/validation/validation_launcher.html.heex:27
 #, elixir-autogen, elixir-format
 msgid "Team #"
 msgstr "Squadra #"
 
-#: lib/safarimanager_web/live/new_competition/new_competition.ex:78
+#: lib/safarimanager_web/live/new_competition/new_competition.ex:70
 #, elixir-autogen, elixir-format
 msgid "Unable to create competition"
 msgstr "Impossibile creare la competizione"
@@ -2996,13 +2910,13 @@ msgstr "Impossibile creare la competizione"
 msgid "Team name"
 msgstr "Nome squadra"
 
-#: lib/safarimanager_web/controllers/teams_printout_controller.ex:29
+#: lib/safarimanager_web/controllers/teams_printout_controller.ex:30
 #: lib/safarimanager_web/controllers/teams_printout_html/show.html.heex:28
 #, elixir-autogen, elixir-format
 msgid "Teams list"
 msgstr "Lista squadre"
 
-#: lib/safarimanager_web/live/results/team_results.sface:10
+#: lib/safarimanager_web/live/results/team_results.html.heex:11
 #, elixir-autogen, elixir-format
 msgid "Print teams slides report"
 msgstr "Stampa le schede delle squadre"
@@ -3017,118 +2931,115 @@ msgstr "Numero squadra"
 msgid "Teams slides report"
 msgstr "Schede delle squadre"
 
-#: lib/safarimanager_web/live/jurors/jurors.sface:21
+#: lib/safarimanager_web/live/jurors/jurors.html.heex:23
 #, elixir-autogen, elixir-format
 msgid "Alternatively, paste this URL into the Jury's browser:"
 msgstr "Oppure, incolla questo URL nel browser del giurato:"
 
-#: lib/safarimanager_web/live/ballot_box/ballot_box.ex:48
+#: lib/safarimanager_web/live/ballot_box/ballot_box.ex:59
 #, elixir-autogen, elixir-format
 msgid "Confirm"
 msgstr "Conferma"
 
-#: lib/safarimanager_web/live/admin/competitions/index.sface:33
-#: lib/safarimanager_web/live/admin/evaluations/index.sface:26
+#: lib/safarimanager_web/live/admin/competitions/index.html.heex:33
+#: lib/safarimanager_web/live/admin/evaluations/index.html.heex:26
 #, elixir-autogen, elixir-format
 msgid "No"
 msgstr "No"
 
-#: lib/safarimanager_web/live/admin/evaluations/index.sface:25
-#: lib/safarimanager_web/live/admin/evaluations/index.sface:25
-#: lib/safarimanager_web/live/admin/evaluations/index.sface:75
-#: lib/safarimanager_web/live/admin/evaluations/index.sface:122
+#: lib/safarimanager_web/live/admin/evaluations/index.html.heex:25
+#: lib/safarimanager_web/live/admin/evaluations/index.html.heex:81
+#: lib/safarimanager_web/live/admin/evaluations/index.html.heex:139
 #, elixir-autogen, elixir-format
 msgid "Penalty?"
 msgstr "Penalizzazione?"
 
-#: lib/safarimanager_web/live/ballot_box/ballot_box.ex:36
+#: lib/safarimanager_web/live/ballot_box/ballot_box.ex:44
 #, elixir-autogen, elixir-format
 msgid "Please wait for the next slide."
 msgstr "Attendi la prossima slide."
 
-#: lib/safarimanager_web/live/jurors/jurors.sface:109
+#: lib/safarimanager_web/live/jurors/jurors.html.heex:122
 #, elixir-autogen, elixir-format
 msgid "QR code"
 msgstr "QR code"
 
-#: lib/safarimanager_web/live/admin/competitions/form.sface:153
-#: lib/safarimanager_web/live/admin/competitions/index.sface:226
+#: lib/safarimanager_web/live/admin/competitions/index.html.heex:311
 #, elixir-autogen, elixir-format
 msgid "Select an evaluation..."
 msgstr "Seleziona una valutazione..."
 
-#: lib/safarimanager_web/live/ballot_box/ballot_box.ex:45
+#: lib/safarimanager_web/live/ballot_box/ballot_box.ex:55
 #, elixir-autogen, elixir-format
 msgid "Selected vote:"
 msgstr "Voto selezionato:"
 
-#: lib/safarimanager_web/live/ballot_box/ballot_box.ex:24
+#: lib/safarimanager_web/live/ballot_box/ballot_box.ex:27
 #, elixir-autogen, elixir-format
 msgid "Voting not available yet. Wait for the Jury session to start!"
 msgstr "Votazione non ancora disponibile. Attendi che inizi la sessione di giuria!"
 
-#: lib/safarimanager_web/live/ballot_box/ballot_box.ex:33
+#: lib/safarimanager_web/live/ballot_box/ballot_box.ex:40
 #, elixir-autogen, elixir-format
 msgid "You have voted on slide"
 msgstr "Hai votato la slide"
 
-#: lib/safarimanager_web/live/ballot_box/ballot_box.ex:64
+#: lib/safarimanager_web/live/ballot_box/ballot_box.ex:74
 #, elixir-autogen, elixir-format
 msgid "slide"
 msgstr "slide"
 
-#: lib/safarimanager_web/live/jurors/jurors.sface:13
+#: lib/safarimanager_web/live/jurors/jurors.html.heex:15
 #, elixir-autogen, elixir-format
 msgid "Juror invite QR code"
 msgstr "QR code per invitare un giurato"
 
-#: lib/safarimanager_web/live/new_competition/new_competition.sface:176
+#: lib/safarimanager_web/live/new_competition/new_competition.html.heex:179
 #, elixir-autogen, elixir-format
 msgid "Highest votes image"
 msgstr "Immagine con i massimi voti"
 
-#: lib/safarimanager_web/live/admin/competitions/index.ex:316
+#: lib/safarimanager_web/live/admin/competitions/index.ex:304
 #, elixir-autogen, elixir-format
 msgid "discarded"
 msgstr "scartate"
 
-#: lib/safarimanager_web/live/admin/competitions/index.ex:315
+#: lib/safarimanager_web/live/admin/competitions/index.ex:303
 #, elixir-autogen, elixir-format
 msgid "submitted_fixed"
 msgstr "punteggio fisso"
 
-#: lib/safarimanager_web/live/admin/competitions/index.ex:314
+#: lib/safarimanager_web/live/admin/competitions/index.ex:302
 #, elixir-autogen, elixir-format
 msgid "submitted_jury"
 msgstr "in giuria"
 
-#: lib/safarimanager_web/live/admin/competitions/index.sface:100
-#: lib/safarimanager_web/live/admin/competitions/index.sface:100
+#: lib/safarimanager_web/live/admin/competitions/index.html.heex:120
 #, elixir-autogen, elixir-format
 msgid "Slides size"
 msgstr "Dimensioni slide"
 
-#: lib/safarimanager_web/live/admin/competitions/index.ex:131
+#: lib/safarimanager_web/live/admin/competitions/index.ex:114
 #, elixir-autogen, elixir-format
 msgid "Are you sure you want to delete all discarded slides?"
 msgstr "Sei sicuro di voler eliminare tutte le slide scartate?"
 
-#: lib/safarimanager_web/live/admin/competitions/index.ex:120
+#: lib/safarimanager_web/live/admin/competitions/index.ex:103
 #, elixir-autogen, elixir-format
 msgid "Deleted all discarded slides"
 msgstr "Elimina tutte le slide scartate"
 
-#: lib/safarimanager_web/live/admin/competitions/index.sface:114
+#: lib/safarimanager_web/live/admin/competitions/index.html.heex:133
 #, elixir-autogen, elixir-format
 msgid "Erase"
 msgstr "Elimina"
 
-#: lib/safarimanager_web/live/admin/competitions/index.ex:130
+#: lib/safarimanager_web/live/admin/competitions/index.ex:113
 #, elixir-autogen, elixir-format
 msgid "Erase discarded slides"
 msgstr "Elimina le slide scartate"
 
-#: lib/safarimanager_web/live/admin/competitions/index.ex:124
+#: lib/safarimanager_web/live/admin/competitions/index.ex:107
 #, elixir-autogen, elixir-format
 msgid "Error deleting discarded slides"
 msgstr "Impossibile eliminare alcune slide scartate"
@@ -3137,46 +3048,106 @@ msgstr "Impossibile eliminare alcune slide scartate"
 #: lib/safarimanager_web/controllers/slides_printout_html/show.html.heex:55
 #: lib/safarimanager_web/controllers/slides_printout_html/show_teams.html.heex:43
 #: lib/safarimanager_web/controllers/slides_printout_html/show_teams.html.heex:47
-#: lib/safarimanager_web/live/results/results.sface:105
-#: lib/safarimanager_web/live/results/results.sface:106
-#: lib/safarimanager_web/live/results/results.sface:201
-#: lib/safarimanager_web/live/results/results.sface:202
-#: lib/safarimanager_web/live/results/team_results.sface:105
-#: lib/safarimanager_web/live/results/team_results.sface:106
-#: lib/safarimanager_web/live/results/team_results.sface:184
-#: lib/safarimanager_web/live/results/team_results.sface:185
+#: lib/safarimanager_web/live/results/results.html.heex:104
+#: lib/safarimanager_web/live/results/results.html.heex:105
+#: lib/safarimanager_web/live/results/results.html.heex:195
+#: lib/safarimanager_web/live/results/results.html.heex:196
+#: lib/safarimanager_web/live/results/team_results.html.heex:109
+#: lib/safarimanager_web/live/results/team_results.html.heex:112
+#: lib/safarimanager_web/live/results/team_results.html.heex:200
+#: lib/safarimanager_web/live/results/team_results.html.heex:204
 #, elixir-autogen, elixir-format
 msgid "dynamic coefficient"
 msgstr "coefficiente dinamico"
 
-#: lib/safarimanager_web/live/results/results.sface:90
-#: lib/safarimanager_web/live/results/team_results.sface:90
+#: lib/safarimanager_web/live/results/results.html.heex:90
+#: lib/safarimanager_web/live/results/team_results.html.heex:92
 #, elixir-autogen, elixir-format
 msgid "Dynamic coeff."
 msgstr "Coeff. dinamico"
 
-#: lib/safarimanager_web/live/admin/competitions/form.sface:265
-#: lib/safarimanager_web/live/admin/competitions/index.sface:79
-#: lib/safarimanager_web/live/admin/competitions/index.sface:310
+#: lib/safarimanager_web/live/admin/competitions/index.html.heex:87
+#: lib/safarimanager_web/live/admin/competitions/index.html.heex:425
+#: lib/safarimanager_web/live/admin/competitions/new_form.ex:199
 #, elixir-autogen, elixir-format
 msgid "Coefficient mode"
 msgstr "Modalità coefficiente"
 
-#: lib/safarimanager_web/live/admin/competitions/form.sface:280
-#: lib/safarimanager_web/live/admin/competitions/index.sface:82
-#: lib/safarimanager_web/live/admin/competitions/index.sface:321
+#: lib/safarimanager_web/live/admin/competitions/index.html.heex:96
+#: lib/safarimanager_web/live/admin/competitions/index.html.heex:439
+#: lib/safarimanager_web/live/admin/competitions/new_form.ex:210
 #, elixir-autogen, elixir-format
 msgid "Dynamic coefficient mode"
 msgstr "Modalità coefficiente dinamico"
 
-#: lib/safarimanager_web/live/admin/competitions/form.sface:271
-#: lib/safarimanager_web/live/admin/competitions/index.sface:315
+#: lib/safarimanager_web/live/admin/competitions/index.html.heex:432
 #, elixir-autogen, elixir-format
 msgid "Select a coefficient mode..."
 msgstr "Seleziona una modalità coefficiente..."
 
-#: lib/safarimanager_web/live/admin/competitions/form.sface:286
-#: lib/safarimanager_web/live/admin/competitions/index.sface:328
+#: lib/safarimanager_web/live/admin/competitions/index.html.heex:446
 #, elixir-autogen, elixir-format
 msgid "Select a dynamic coefficient mode..."
 msgstr "Seleziona una modalità coefficiente dinamico..."
+
+#: lib/safarimanager_web/live/admin/competitions/new_form.ex:252
+#, elixir-autogen, elixir-format
+msgid "Add Dynamic Coefficient"
+msgstr ""
+
+#: lib/safarimanager_web/components/core_components.ex:168
+#, elixir-autogen, elixir-format
+msgid "Attempting to reconnect"
+msgstr ""
+
+#: lib/safarimanager_web/live/admin/competitions/new_form.ex:305
+#, elixir-autogen, elixir-format, fuzzy
+msgid "Competition updated successfully"
+msgstr "Competizione creata con successo"
+
+#: lib/safarimanager_web/components/core_components.ex:159
+#, elixir-autogen, elixir-format
+msgid "Error!"
+msgstr ""
+
+#: lib/safarimanager_web/live/admin/competitions/index.html.heex:308
+#: lib/safarimanager_web/live/admin/competitions/new_form.ex:115
+#, elixir-autogen, elixir-format, fuzzy
+msgid "Evaluation"
+msgstr "Valutazioni"
+
+#: lib/safarimanager_web/components/core_components.ex:180
+#, elixir-autogen, elixir-format
+msgid "Hang in there while we get back on track"
+msgstr ""
+
+#: lib/safarimanager_web/live/jury/jury_launcher.html.heex:23
+#: lib/safarimanager_web/live/jury/jury_launcher.html.heex:37
+#, elixir-autogen, elixir-format
+msgid "Jury is not yet available"
+msgstr ""
+
+#: lib/safarimanager_web/live/admin/competitions/new_form.ex:259
+#, elixir-autogen, elixir-format, fuzzy
+msgid "Save Competition"
+msgstr "Nuova competizione"
+
+#: lib/safarimanager_web/live/admin/competitions/new_form.ex:256
+#, elixir-autogen, elixir-format
+msgid "Saving..."
+msgstr ""
+
+#: lib/safarimanager_web/components/core_components.ex:175
+#, elixir-autogen, elixir-format
+msgid "Something went wrong!"
+msgstr ""
+
+#: lib/safarimanager_web/components/core_components.ex:158
+#, elixir-autogen, elixir-format
+msgid "Success!"
+msgstr ""
+
+#: lib/safarimanager_web/components/core_components.ex:163
+#, elixir-autogen, elixir-format
+msgid "We can't find the internet"
+msgstr ""

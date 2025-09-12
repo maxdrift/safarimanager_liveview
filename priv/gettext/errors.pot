@@ -93,13 +93,13 @@ msgstr ""
 msgid "must be equal to %{number}"
 msgstr ""
 
-#: lib/safarimanager_web/controllers/user_auth.ex:184
-#: lib/safarimanager_web/controllers/user_auth.ex:252
+#: lib/safarimanager_web/controllers/user_auth.ex:185
+#: lib/safarimanager_web/controllers/user_auth.ex:253
 #, elixir-autogen, elixir-format
 msgid "You must log in to access this page."
 msgstr ""
 
-#: lib/safarimanager/teams/team.ex:56
+#: lib/safarimanager/teams/team.ex:57
 #, elixir-autogen, elixir-format
 msgid "is already a member of this team"
 msgstr ""

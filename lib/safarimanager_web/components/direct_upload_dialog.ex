@@ -11,19 +11,8 @@ defmodule SMWeb.Components.DirectUploadDialog do
   alias SM.Slides
   alias SM.USBWatcherSupervisor
   alias SMWeb.Components.DirectUploadDialog
-  # alias Surface.Components.Form
-  # alias Surface.Components.Form.ErrorTag
-  # alias Surface.Components.Form.Field
-  # alias Surface.Components.Form.Label
-  # alias Surface.Components.Form.Select
 
   require Logger
-
-  # data show, :boolean, default: false
-  # data cwd, :string, default: "~/"
-  # data items, :list, default: []
-  # data user_id, :string, default: nil
-  # data progress, :decimal, default: Decimal.new(0)
 
   attr :file_filter, :list, default: []
   attr :participants, :list, default: []
@@ -43,7 +32,7 @@ defmodule SMWeb.Components.DirectUploadDialog do
           />
         </div>
         <div class="mb-4">
-          <.form for={%{}} as={:slide_import} phx-change="validate">
+          <.form for={%{}} as={:slide_import} phx-change="validate" phx-target={@myself}>
             <div class="form-control">
               <.input
                 type="select"
@@ -58,7 +47,7 @@ defmodule SMWeb.Components.DirectUploadDialog do
         </div>
         <div class="my-6">
           <div>
-            <button phx-click="level-up" class="btn btn-outline btn-xs gap-1">
+            <button phx-click="level-up" class="btn btn-outline btn-xs gap-1" phx-target={@myself}>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 class="h-4 w-4"
@@ -77,6 +66,7 @@ defmodule SMWeb.Components.DirectUploadDialog do
               <button
                 :if={type == :dir}
                 phx-click="level-down"
+                phx-target={@myself}
                 phx-value-item={item}
                 class="btn btn-ghost btn-xs gap-1"
               >
@@ -125,11 +115,14 @@ defmodule SMWeb.Components.DirectUploadDialog do
               not can_import?(@user_id, @items) && "btn-disabled"
             ]}
             phx-click="import"
+            phx-target={@myself}
           >
             {gettext("Import")}<span :if={can_import?(@user_id, @items)}>&nbsp;{count_image_type(@items)} {gettext("images")}</span>
           </button>
           <div class="grow" />
-          <button class="flex-none btn btn-error" phx-click="hide">{gettext("Close")}</button>
+          <button class="flex-none btn btn-error" phx-click="hide" phx-target={@myself}>
+            {gettext("Close")}
+          </button>
         </div>
       </.dialog>
     </div>
@@ -140,18 +133,19 @@ defmodule SMWeb.Components.DirectUploadDialog do
 
   @impl Phoenix.LiveComponent
   def update(assigns, socket) do
-    assigns =
-      assigns
-      |> Map.to_list()
-      |> Keyword.merge(
-        show: false,
-        cwd: "~/",
-        items: [],
-        user_id: nil,
-        progress: Decimal.new(0)
+    new_assigns =
+      Keyword.merge(
+        [
+          show: false,
+          cwd: "~/",
+          items: [],
+          user_id: nil,
+          progress: Decimal.new(0)
+        ],
+        Map.to_list(assigns)
       )
 
-    {:ok, assign(socket, assigns)}
+    {:ok, assign(socket, new_assigns)}
   end
 
   @spec show(String.t(), String.t(), String.t(), [Participant.t()]) :: any()

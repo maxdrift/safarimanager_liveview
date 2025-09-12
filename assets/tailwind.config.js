@@ -8,7 +8,7 @@ module.exports = {
         './js/**/*.js',
         '../lib/*_web.ex',
         '../lib/*_web/**/*.*ex',
-        '../lib/*_web/**/*.sface',
+        '../lib/*_web/**/*.heex',
     ],
     theme: {
         // extend: {},

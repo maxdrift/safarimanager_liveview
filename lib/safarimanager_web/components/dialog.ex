@@ -19,7 +19,7 @@ defmodule SMWeb.Components.Dialog do
       phx-target={"#" <> @id}
     >
       <div :if={@show} class="modal-box">
-        {render_slot(@default)}
+        {render_slot(@inner_block)}
       </div>
     </div>
     """

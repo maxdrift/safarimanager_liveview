@@ -13,6 +13,11 @@ defmodule SM.USBWatcherSupervisor do
 
   @spec start_poller(pid()) :: :ok
   def start_poller(caller_pid) do
+    if active?() do
+      Logger.info("Poller already active. Stopping poller.")
+      stop_poller()
+    end
+
     spec = {SM.USBWatcher, [caller_pid]}
     {:ok, pid} = DynamicSupervisor.start_child(__MODULE__, spec)
     Logger.info("Started child: #{inspect(pid)}")

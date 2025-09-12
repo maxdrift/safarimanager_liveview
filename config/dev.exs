@@ -33,7 +33,7 @@ config :safarimanager, SMWeb.Endpoint,
     patterns: [
       ~r"priv/static/.*(js|css|png|jpeg|jpg|gif|svg)$",
       ~r"priv/gettext/.*(po)$",
-      ~r"lib/safarimanager_web/(live|views|components)/.*(ex|sface|js)$",
+      ~r"lib/safarimanager_web/(live|views|components)/.*(ex|heex|js)$",
       ~r"lib/safarimanager_web/templates/.*(eex)$"
     ]
   ]

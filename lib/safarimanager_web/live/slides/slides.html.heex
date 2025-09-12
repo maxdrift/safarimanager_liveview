@@ -135,12 +135,13 @@
       </div>
     </div>
     <div class="divider" />
-    <.live_component module={DirectUploadDialog} id="auto-upload-dialog" />
+    <.live_component module={DirectUploadDialog} id="auto-upload-dialog" file_filter={[:jpg]} />
     <div class="form-control w-44">
       <.form for={%{}} as={:discovery_mode} phx-change="validate">
         <.input
           type="checkbox"
           name="discovery_mode"
+          value={@discovery_mode}
           label={gettext("Auto discovery")}
           class="toggle toggle-primary"
         />

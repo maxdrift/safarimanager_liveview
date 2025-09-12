@@ -73,40 +73,6 @@ defmodule SMWeb do
     end
   end
 
-  def surface_view do
-    quote do
-      use Surface.LiveView,
-        layout: {SMWeb.Layouts, :live}
-
-      unquote(html_helpers())
-    end
-  end
-
-  def surface_component do
-    quote do
-      use Surface.Component
-      use Gettext, backend: SMWeb.Gettext
-
-      import SMWeb.ErrorHelpers
-
-      # Shortcut for generating JS commands
-      alias Phoenix.LiveView.JS
-
-      # Routes generation with the ~p sigil
-      unquote(verified_routes())
-    end
-  end
-
-  def surface_live_component do
-    quote do
-      use Surface.LiveComponent
-
-      import SMWeb.ErrorHelpers
-
-      unquote(html_helpers())
-    end
-  end
-
   def router do
     quote do
       use Phoenix.Router, helpers: false
