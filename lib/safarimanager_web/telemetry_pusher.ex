@@ -11,24 +11,29 @@ defmodule SMWeb.TelemetryPusher do
   end
 
   @impl GenServer
-  def init(state) do
+  def init(_state) do
     schedule_work()
-    {:ok, state}
+    {:ok, %{push_to_remote: true}}
   end
 
   @impl GenServer
-  def handle_info(:push, state) do
-    :ok =
+  def handle_info(:push, %{push_to_remote: true} = state) do
+    state =
       case do_recurrent_thing() do
         :ok ->
-          :ok
+          state
 
         {:error, reason} ->
           Logger.warning("Unable to push metrics to server: #{inspect(reason)}")
-          :ok
+          Logger.error("Disabling further metrics pushes to remote instance")
+          %{state | push_to_remote: false}
       end
 
     :ok = schedule_work()
+    {:noreply, state}
+  end
+
+  def handle_info(:push, state) do
     {:noreply, state}
   end
 

@@ -10,9 +10,7 @@ defmodule SMWeb.TelemetryPusherSupervisor do
 
   @impl Supervisor
   def init(_init_arg) do
-    children = [
-      {TelemetryPusher, []}
-    ]
+    children = [TelemetryPusher]
 
     Supervisor.init(children, strategy: :one_for_one)
   end
