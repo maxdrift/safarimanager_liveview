@@ -16,6 +16,8 @@ openssl_version=$2
 target=$3
 build_docs=${BUILD_DOCS:-}
 
+ulimit -n 65535
+
 # Common build flags
 export MAKEFLAGS=-j8
 cflags="-Os -fno-common -mmacosx-version-min=11.0"
