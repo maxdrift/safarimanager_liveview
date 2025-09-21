@@ -53,9 +53,10 @@ jobs:
   #     - name: Build the app
   #       run: .github/scripts/app/build_windows.sh
   #       shell: msys2 {0}
-
   build-app:
     strategy:
+      # keep building for one target even if other targets fail
+      fail-fast: false
       matrix:
         os: [macOS]
         target: [ARM64, X64]
