@@ -33,17 +33,17 @@ if Mix.target() == :app do
       open(SMWeb.Endpoint.access_url())
     end
 
-    defp open("file://" <> path) do
-      path
-      |> SM.Utils.notebook_open_url()
-      |> open()
-    end
+    # defp open("file://" <> path) do
+    #   path
+    #   |> SM.Utils.notebook_open_url()
+    #   |> open()
+    # end
 
-    defp open("smgr://" <> rest) do
-      "https://#{rest}"
-      |> SM.Utils.notebook_import_url()
-      |> open()
-    end
+    # defp open("smgr://" <> rest) do
+    #   "https://#{rest}"
+    #   |> SM.Utils.notebook_import_url()
+    #   |> open()
+    # end
 
     defp open("/settings") do
       %{SMWeb.Endpoint.access_struct_url() | path: "/settings"}
