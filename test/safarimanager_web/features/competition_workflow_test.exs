@@ -47,27 +47,38 @@ defmodule SMWeb.Features.CompetitionWorkflowTest do
     end
 
     @tag :workflow
-    test "user can create a new competition via context", %{
+    test "user can create a new competition via form submission", %{
+      conn: conn,
       organization: organization,
       evaluation: evaluation
     } do
-      # Test competition creation through the context directly
-      # (The LiveComponent form submission has bugs that need separate fixes)
-      {:ok, competition} =
-        Competitions.create(%{
-          "name" => "Safari Championship 2026",
-          "type" => :qualification,
-          "organization_id" => organization.id,
-          "competitions_evaluations" => [%{"evaluation_id" => evaluation.id}]
-        })
+      # Visit the page
+      {:ok, view, _html} = live(conn, ~p"/organize/new")
 
+      # Submit the competition form
+      {:error, {:live_redirect, %{to: new_path}}} =
+        view
+        |> form("#competition-form",
+          competition: %{
+            "name" => "Safari Championship 2026",
+            "organization_id" => organization.id,
+            "type" => :qualification,
+            "competitions_evaluations" => %{
+              "0" => %{"evaluation_id" => evaluation.id}
+            }
+          }
+        )
+        |> render_submit()
+
+      # Verify redirect path
+      assert ["organize", competition_id, "participants"] = String.split(new_path, "/", trim: true)
+
+      # Verify competition was created correctly
+      assert {:ok, competition} = Competitions.get(competition_id)
       assert competition.name == "Safari Championship 2026"
       assert competition.organization_id == organization.id
       assert competition.type == :qualification
-
-      # Fetch competition with preloaded associations to verify
-      {:ok, loaded_competition} = Competitions.get(competition.id)
-      assert [assigned_evaluation] = loaded_competition.allowed_evaluations
+      assert [assigned_evaluation] = competition.allowed_evaluations
       assert assigned_evaluation.id == evaluation.id
     end
 
@@ -79,7 +90,7 @@ defmodule SMWeb.Features.CompetitionWorkflowTest do
     } do
       # First create the competition
       {:ok, competition} =
-        SM.Competitions.create(%{
+        Competitions.create(%{
           "name" => "Test Safari Event",
           "type" => :qualification,
           "organization_id" => organization.id,
@@ -90,6 +101,106 @@ defmodule SMWeb.Features.CompetitionWorkflowTest do
       conn
       |> visit(~p"/organize/new")
       |> assert_has("##{competition.id}-competition-tile", text: "Test Safari Event")
+    end
+
+    @tag :workflow
+    test "form can be submitted with different competition types", %{
+      conn: conn,
+      organization: organization,
+      evaluation: evaluation
+    } do
+      {:ok, view, _html} = live(conn, ~p"/organize/new")
+
+      # Submit the competition form with national_championship type
+      {:error, {:live_redirect, %{to: new_path}}} =
+        view
+        |> form("#competition-form",
+          competition: %{
+            "name" => "National Championship 2026",
+            "organization_id" => organization.id,
+            "type" => :national_championship,
+            "competitions_evaluations" => %{
+              "0" => %{"evaluation_id" => evaluation.id}
+            }
+          }
+        )
+        |> render_submit()
+
+      # Verify redirect path
+      assert ["organize", competition_id, "participants"] = String.split(new_path, "/", trim: true)
+
+      # Verify competition was created with correct type
+      {:ok, competition} = Competitions.get(competition_id)
+      assert competition.name == "National Championship 2026"
+      assert competition.type == :national_championship
+    end
+
+    @tag :workflow
+    test "competition is created with default settings", %{
+      organization: organization,
+      evaluation: evaluation
+    } do
+      {:ok, competition} =
+        Competitions.create(%{
+          "name" => "Default Settings Competition",
+          "type" => :qualification,
+          "organization_id" => organization.id,
+          "competitions_evaluations" => [%{"evaluation_id" => evaluation.id}]
+        })
+
+      {:ok, loaded_competition} = Competitions.get(competition.id)
+
+      # Verify default settings are applied
+      settings = loaded_competition.settings
+      assert settings.number_of_jurors == 3
+      assert settings.evaluations_per_juror == 1
+      assert settings.max_jury_slides == 15
+      assert settings.max_submitted_slides == 99
+      assert settings.proportional_submission == true
+    end
+
+    @tag :workflow
+    test "competition can be created with team mode enabled", %{
+      organization: organization,
+      evaluation: evaluation
+    } do
+      {:ok, competition} =
+        Competitions.create(%{
+          "name" => "Team Competition",
+          "type" => :qualification,
+          "organization_id" => organization.id,
+          "for_teams" => true,
+          "competitions_evaluations" => [%{"evaluation_id" => evaluation.id}]
+        })
+
+      assert competition.for_teams == true
+    end
+
+    @tag :workflow
+    test "user can navigate to a competition from the listing", %{
+      conn: conn,
+      organization: organization,
+      evaluation: evaluation
+    } do
+      # Create a competition
+      {:ok, competition} =
+        Competitions.create(%{
+          "name" => "Clickable Competition",
+          "type" => :qualification,
+          "organization_id" => organization.id,
+          "competitions_evaluations" => [%{"evaluation_id" => evaluation.id}]
+        })
+
+      # Visit the listing page
+      {:ok, view, _html} = live(conn, ~p"/organize/new")
+
+      # Click on the competition tile (triggers open event)
+      {:error, {:live_redirect, %{to: path}}} =
+        view
+        |> element("##{competition.id}-competition-tile")
+        |> render_click()
+
+      assert path =~ "/organize/#{competition.id}/participants"
     end
   end
 

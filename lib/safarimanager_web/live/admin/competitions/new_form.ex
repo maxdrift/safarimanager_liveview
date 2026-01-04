@@ -265,7 +265,12 @@ defmodule SMWeb.Live.Admin.Competitions.Form do
           </.button>
         </div>
         <div class="modal-action">
-          <button id="competition-save-btn" type="submit" phx-value-action={@action} class={submit_state_class(@form)}>
+          <button
+            id="competition-save-btn"
+            type="submit"
+            phx-value-action={@action}
+            class={submit_state_class(@form)}
+          >
             {gettext("Save")}
           </button>
           <input
@@ -292,7 +297,9 @@ defmodule SMWeb.Live.Admin.Competitions.Form do
 
   @impl true
   def handle_event("validate", %{} = competition_params, socket) do
-    changeset = Competitions.change(socket.assigns.competition, competition_params)
+    # The parent can pass either :entity or :competition as the struct
+    entity = socket.assigns[:entity] || socket.assigns[:competition] || %SM.Competitions.Competition{}
+    changeset = Competitions.change(entity, competition_params)
     {:noreply, assign(socket, form: to_form(changeset, action: :validate))}
   end
 
@@ -320,10 +327,18 @@ defmodule SMWeb.Live.Admin.Competitions.Form do
       {:ok, competition} ->
         notify_parent({:saved, competition})
 
-        {:noreply,
-         socket
-         |> put_flash(:info, gettext("Competition created successfully"))
-         |> push_patch(to: socket.assigns.patch)}
+        # When used from NewCompetition page, redirect to participants
+        # When used from Admin, use the patch assign if provided
+        socket = put_flash(socket, :info, gettext("Competition created successfully"))
+
+        socket =
+          if Map.has_key?(socket.assigns, :patch) and socket.assigns.patch do
+            push_patch(socket, to: socket.assigns.patch)
+          else
+            push_navigate(socket, to: "/organize/#{competition.id}/participants")
+          end
+
+        {:noreply, socket}
 
       {:error, %Ecto.Changeset{} = changeset} ->
         {:noreply, assign(socket, form: to_form(changeset))}
