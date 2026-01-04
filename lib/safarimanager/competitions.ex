@@ -198,7 +198,7 @@ defmodule SM.Competitions do
   @doc """
   Duplicate a competition.
   """
-  @spec duplicate(String.t(), Map.t()) :: {:ok, Competition.t()} | {:error, any()}
+  @spec duplicate(String.t(), map()) :: {:ok, Competition.t()} | {:error, any()}
   def duplicate(id, config \\ %{}) do
     case get(id) do
       {:ok, existing_competition} ->
