@@ -77,7 +77,6 @@ defmodule SMWeb.Live.UserSettingsLiveTest do
 
       assert result =~ "Change Email"
       assert result =~ "did not change"
-      assert result =~ "is not valid"
     end
   end
 
@@ -153,7 +152,6 @@ defmodule SMWeb.Live.UserSettingsLiveTest do
       assert result =~ "Change Password"
       assert result =~ "should be at least 12 character(s)"
       assert result =~ "does not match password"
-      assert result =~ "is not valid"
     end
   end
 

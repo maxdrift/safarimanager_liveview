@@ -70,7 +70,7 @@ defmodule SMWeb.Live.UserSettingsLive do
           </div>
         </div>
 
-        <.hidden_input name="email" value={@current_email} />
+        <.hidden_input name="user[email]" id="user_email_for_password" value={@current_email} />
 
         <.input
           type="password"

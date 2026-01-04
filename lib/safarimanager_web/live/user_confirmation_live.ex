@@ -11,8 +11,8 @@ defmodule SMWeb.Live.UserConfirmationLive do
     ~H"""
     <.header>{gettext("Confirm Account")}</.header>
 
-    <.simple_form :let={f} for={%{}} as={:user} id="confirmation_form" phx-submit="confirm_account">
-      <.hidden_input field={{f, :token}} value={@token} />
+    <.simple_form for={%{}} as={:user} id="confirmation_form" phx-submit="confirm_account">
+      <.hidden_input name="user[token]" id="user_token" value={@token} />
       <:actions>
         <.button phx-disable-with="Confirming...">{gettext("Confirm my account")}</.button>
       </:actions>

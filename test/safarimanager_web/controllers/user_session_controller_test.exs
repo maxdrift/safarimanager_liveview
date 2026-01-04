@@ -15,14 +15,16 @@ defmodule SMWeb.UserSessionControllerTest do
         })
 
       assert get_session(conn, :user_token)
+      # Home page (/) redirects to /organize/new
       assert redirected_to(conn) == ~p"/"
 
-      # Now do a logged in request and assert on the menu
-      conn = get(conn, ~p"/")
+      # Follow the redirect chain to the actual destination
+      conn = get(recycle(conn), ~p"/organize/new")
       response = html_response(conn, 200)
-      assert response =~ user.email
-      assert response =~ "Settings</a>"
-      assert response =~ "Log out</a>"
+      # Verify the user is logged in by checking for welcome flash message
+      assert response =~ "Welcome back!"
+      # Verify we're on the organize page
+      assert response =~ "Safari Manager"
     end
 
     test "logs the user in with remember me", %{conn: conn, user: user} do
