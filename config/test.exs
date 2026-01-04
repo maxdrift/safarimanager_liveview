@@ -32,3 +32,6 @@ config :safarimanager, SMWeb.Endpoint,
   http: [ip: {127, 0, 0, 1}, port: 4002],
   secret_key_base: "LGY+YLBArtMn1SS2N8vx5S0dqSXFusK72PKwcr1RbHJxRxiZWu3HHJQRz2KVmCLk",
   server: false
+
+# PhoenixTest configuration
+config :phoenix_test, :endpoint, SMWeb.Endpoint

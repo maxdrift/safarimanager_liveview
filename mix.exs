@@ -74,6 +74,7 @@ defmodule SM.MixProject do
       {:phoenix_html, "~> 4.2.0"},
       {:phoenix_live_reload, "~> 1.5.3", only: :dev},
       {:phoenix_live_view, "~> 1.0.1", override: true},
+      {:phoenix_test, "~> 0.9.1", only: :test, runtime: false},
       {:phoenix_view, "~> 2.0"},
       {:phoenix, "~> 1.7.0"},
       {:postgrex, "~> 0.20.0"},
