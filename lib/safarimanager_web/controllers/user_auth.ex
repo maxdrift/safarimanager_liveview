@@ -175,6 +175,7 @@ defmodule SMWeb.UserAuth do
   def on_mount(:ensure_authenticated, _params, session, socket) do
     socket = mount_current_user(session, socket)
 
+    # Allow any user including anonymous to access protected routes
     if socket.assigns.current_user do
       {:cont, socket}
     else
@@ -193,12 +194,19 @@ defmodule SMWeb.UserAuth do
   def on_mount(:redirect_if_user_is_authenticated, _params, session, socket) do
     socket = mount_current_user(session, socket)
 
-    if socket.assigns.current_user do
+    # Only redirect real authenticated users, not anonymous
+    if real_authenticated_user?(socket.assigns.current_user) do
       {:halt, Phoenix.LiveView.redirect(socket, to: signed_in_path(socket))}
     else
       {:cont, socket}
     end
   end
+
+  # Anonymous users are not considered "real" authenticated users
+  # (they can still access login/register pages)
+  defp real_authenticated_user?(%User{email: "anonymous@mba.re"}), do: false
+  defp real_authenticated_user?(%User{}), do: true
+  defp real_authenticated_user?(_), do: false
 
   defp mount_current_user(session, socket) do
     # TODO: clean up/remove Anonymous user support
@@ -227,9 +235,10 @@ defmodule SMWeb.UserAuth do
 
   @doc """
   Used for routes that require the user to not be authenticated.
+  Only redirects real authenticated users, not anonymous.
   """
   def redirect_if_user_is_authenticated(conn, _opts) do
-    if conn.assigns[:current_user] do
+    if real_authenticated_user?(conn.assigns[:current_user]) do
       conn
       |> redirect(to: signed_in_path(conn))
       |> halt()
@@ -240,12 +249,14 @@ defmodule SMWeb.UserAuth do
 
   @doc """
   Used for routes that require the user to be authenticated.
+  Allows anonymous users to access protected routes.
 
   If you want to enforce the user email is confirmed before
   they use the application at all, here would be a good place.
   """
   @spec require_authenticated_user(Plug.Conn.t(), any) :: Plug.Conn.t()
   def require_authenticated_user(conn, _opts) do
+    # Allow any user including anonymous
     if conn.assigns[:current_user] do
       conn
     else
