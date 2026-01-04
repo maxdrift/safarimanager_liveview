@@ -80,7 +80,6 @@ defmodule SM.MixProject do
       {:progress_bar, "~> 3.0"},
       {:prom_ex, "~> 1.8"},
       {:qrcode_ex, "~> 0.1.0"},
-      {:random_password, "~> 1.0"},
       {:req, "~> 0.5.8"},
       {:rexbug, "~> 1.0"},
       {:styler, "~> 1.2", only: [:dev, :test], runtime: false},
