@@ -23,6 +23,7 @@ defmodule SMWeb.Live.Admin.Competitions.Form do
       >
         <div class="flex flex-wrap pt-3">
           <.input
+            id="competition-name-input"
             field={@form[:name]}
             type="text"
             label={gettext("Name")}
@@ -30,6 +31,7 @@ defmodule SMWeb.Live.Admin.Competitions.Form do
             class="form-control w-full px-3"
           />
           <.input
+            id="competition-organization-input"
             field={@form[:organization_id]}
             type="select"
             options={Enum.map(@organizations, &{&1.name, &1.id})}
@@ -37,12 +39,14 @@ defmodule SMWeb.Live.Admin.Competitions.Form do
             class="form-control w-full px-3"
           />
           <.input
+            id="competition-for-teams-input"
             field={@form[:for_teams]}
             type="checkbox"
             label={gettext("For teams")}
             class="form-control w-1/2 px-3"
           />
           <.input
+            id="competition-type-input"
             field={@form[:type]}
             type="select"
             options={
@@ -252,6 +256,7 @@ defmodule SMWeb.Live.Admin.Competitions.Form do
             <span>{gettext("Add Dynamic Coefficient")}</span>
           </label>
           <.button
+            id="competition-submit-btn"
             type="submit"
             phx-disable-with={gettext("Saving...")}
             class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 dark:bg-blue-600 dark:hover:bg-blue-700"
@@ -260,7 +265,7 @@ defmodule SMWeb.Live.Admin.Competitions.Form do
           </.button>
         </div>
         <div class="modal-action">
-          <button type="submit" phx-value-action={@action} class={submit_state_class(@form)}>
+          <button id="competition-save-btn" type="submit" phx-value-action={@action} class={submit_state_class(@form)}>
             {gettext("Save")}
           </button>
           <input
