@@ -15,6 +15,8 @@ defmodule SM.AccountsFixtures do
   def valid_user_attributes(attrs \\ %{}) do
     user_id = System.unique_integer([:positive])
 
+    attrs = if is_list(attrs), do: Map.new(attrs), else: attrs
+
     Map.merge(
       %{
         email: unique_user_email(user_id),
