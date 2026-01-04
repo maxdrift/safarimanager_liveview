@@ -1,5 +1,6 @@
 defmodule SMWeb.Live.ValidationTest do
   use SMWeb.ConnCase
+  use Gettext, backend: SMWeb.Gettext
 
   import Phoenix.LiveViewTest
   import SM.CompetitionsFixtures

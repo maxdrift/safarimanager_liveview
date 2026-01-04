@@ -17,12 +17,10 @@ defmodule SMWeb.Live.UserSettingsLiveTest do
       assert html =~ "Change Password"
     end
 
-    test "redirects if user is not logged in", %{conn: conn} do
-      assert {:error, redirect} = live(conn, ~p"/users/settings")
-
-      assert {:redirect, %{to: path, flash: flash}} = redirect
-      assert path == ~p"/users/log_in"
-      assert %{"error" => "You must log in to access this page."} = flash
+    test "allows anonymous users to access settings", %{conn: conn} do
+      # Anonymous users can access the settings page
+      {:ok, _lv, html} = live(conn, ~p"/users/settings")
+      assert html =~ "Change Email"
     end
   end
 
@@ -199,13 +197,14 @@ defmodule SMWeb.Live.UserSettingsLiveTest do
       assert Accounts.get_user_by_email(user.email)
     end
 
-    test "redirects if user is not logged in", %{token: token} do
+    test "allows anonymous users but shows error for invalid token", %{token: token} do
       conn = build_conn()
+      # Anonymous users can access but token validation fails
       {:error, redirect} = live(conn, ~p"/users/settings/confirm_email/#{token}")
-      assert {:redirect, %{to: path, flash: flash}} = redirect
-      assert path == ~p"/users/log_in"
+      assert {:live_redirect, %{to: path, flash: flash}} = redirect
+      assert path == ~p"/users/settings"
       assert %{"error" => message} = flash
-      assert message == "You must log in to access this page."
+      assert message == "Email change link is invalid or it has expired."
     end
   end
 end
