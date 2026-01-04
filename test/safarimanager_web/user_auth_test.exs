@@ -110,11 +110,12 @@ defmodule SMWeb.UserAuthTest do
                "users_sessions:#{Base.url_encode64(user_token)}"
     end
 
-    test "does not authenticate if data is missing", %{conn: conn, user: user} do
+    test "assigns anonymous user if data is missing", %{conn: conn, user: user} do
       _ = Accounts.generate_user_session_token(user)
       conn = UserAuth.fetch_current_user(conn, [])
       refute get_session(conn, :user_token)
-      refute conn.assigns.current_user
+      assert conn.assigns.current_user.email == "anonymous@mba.re"
+      assert conn.assigns.current_user.last_name == "Anonymous"
     end
   end
 
@@ -129,7 +130,7 @@ defmodule SMWeb.UserAuthTest do
       assert updated_socket.assigns.current_user.id == user.id
     end
 
-    test "assigns nil to current_ user assign if there isn't a valid user_token ", %{conn: conn} do
+    test "assigns nil to current_user if there isn't a valid user_token", %{conn: conn} do
       user_token = "invalid_token"
       session = conn |> put_session(:user_token, user_token) |> get_session()
 
@@ -139,13 +140,14 @@ defmodule SMWeb.UserAuthTest do
       assert updated_socket.assigns.current_user == nil
     end
 
-    test "assigns nil to current_ user assign if there isn't a user_token", %{conn: conn} do
+    test "assigns anonymous user if there isn't a user_token", %{conn: conn} do
       session = get_session(conn)
 
       {:cont, updated_socket} =
         UserAuth.on_mount(:mount_current_user, %{}, session, %LiveView.Socket{})
 
-      assert updated_socket.assigns.current_user == nil
+      assert updated_socket.assigns.current_user.email == "anonymous@mba.re"
+      assert updated_socket.assigns.current_user.last_name == "Anonymous"
     end
   end
 
@@ -173,16 +175,12 @@ defmodule SMWeb.UserAuthTest do
       assert updated_socket.assigns.current_user == nil
     end
 
-    test "redirects to login page if there isn't a user_token ", %{conn: conn} do
+    test "allows anonymous user if there isn't a user_token", %{conn: conn} do
       session = get_session(conn)
 
-      socket = %LiveView.Socket{
-        endpoint: SMWeb.Endpoint,
-        assigns: %{__changed__: %{}, flash: %{}}
-      }
-
-      {:halt, updated_socket} = UserAuth.on_mount(:ensure_authenticated, %{}, session, socket)
-      assert updated_socket.assigns.current_user == nil
+      # Anonymous users are allowed through ensure_authenticated
+      {:cont, updated_socket} = UserAuth.on_mount(:ensure_authenticated, %{}, session, %LiveView.Socket{})
+      assert updated_socket.assigns.current_user.email == "anonymous@mba.re"
     end
   end
 
