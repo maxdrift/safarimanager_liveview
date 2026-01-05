@@ -15,8 +15,8 @@ defmodule SMWeb.FeatureCase do
     quote do
       use SMWeb, :verified_routes
 
-      import SMWeb.FeatureCase
       import PhoenixTest
+      import SMWeb.FeatureCase
     end
   end
 

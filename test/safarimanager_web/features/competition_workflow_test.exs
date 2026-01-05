@@ -366,16 +366,60 @@ defmodule SMWeb.Features.CompetitionWorkflowTest do
     ]
 
     @tag :workflow
-    @tag :skip
-    test "user can view slides for a competition", %{
+    test "user can view slides page with enrolled participants", %{
+      conn: conn,
+      competition: competition,
+      participants: participants
+    } do
+      [first_participant | _] = participants
+
+      conn
+      |> visit(~p"/organize/#{competition.id}/slides")
+      |> assert_has("#participants-table")
+      |> assert_has("#slides-participants-list")
+      |> assert_has("#slides-participant-row-#{first_participant.user_id}")
+      |> assert_has("#select-participant-#{first_participant.user_id}")
+    end
+
+    @tag :workflow
+    test "user can select a participant to upload slides", %{
+      conn: conn,
+      competition: competition,
+      participants: participants
+    } do
+      [first_participant | _] = participants
+
+      conn
+      |> visit(~p"/organize/#{competition.id}/slides")
+      |> click_link("#select-participant-#{first_participant.user_id}", "Select")
+      |> assert_has("#slides-upload-section")
+      |> assert_has("#slides-user-header")
+    end
+
+    @tag :workflow
+    test "slides page shows participant slide count", %{
+      conn: conn,
+      competition: competition,
+      participants: participants
+    } do
+      [first_participant | _] = participants
+
+      # Initially, no slides should exist
+      conn
+      |> visit(~p"/organize/#{competition.id}/slides")
+      |> assert_has("#slides-count-#{first_participant.user_id}", text: "0")
+    end
+
+    @tag :workflow
+    test "user can navigate from slides to selection page", %{
       conn: conn,
       competition: competition
     } do
       conn
       |> visit(~p"/organize/#{competition.id}/slides")
-      |> assert_has("h1", text: competition.name)
-
-      # TODO: Implement slide import flow test
+      |> click_link(".btn-primary", "Selection")
+      # Selection page shows "Participants" section and validation link
+      |> assert_has(".btn-primary", text: "Validation")
     end
   end
 
@@ -395,16 +439,71 @@ defmodule SMWeb.Features.CompetitionWorkflowTest do
     ]
 
     @tag :workflow
-    @tag :skip
-    test "user can navigate to slide selection", %{
+    test "user can view slide selection page with participants", %{
+      conn: conn,
+      competition: competition,
+      participants: participants
+    } do
+      [first_participant | _] = participants
+
+      conn
+      |> visit(~p"/organize/#{competition.id}/slide_selection")
+      |> assert_has("#selection-participants-table")
+      |> assert_has("#selection-participant-row-#{first_participant.user_id}")
+    end
+
+    @tag :workflow
+    test "user can select participant and view their slides", %{
+      conn: conn,
+      competition: competition,
+      participants: participants,
+      slides: slides_map
+    } do
+      [first_participant | _] = participants
+      user_slides = Map.get(slides_map, first_participant.user_id)
+
+      # Verify slides exist for the participant
+      assert length(user_slides) > 0
+
+      conn
+      |> visit(~p"/organize/#{competition.id}/slide_selection")
+      |> click_link("#selection-select-participant-#{first_participant.user_id}", "Select")
+      |> assert_has("#selection-content")
+      |> assert_has("#selection-user-header")
+      # All new slides start as discarded
+      |> assert_has("#selection-discarded-section")
+    end
+
+    @tag :workflow
+    test "slide selection shows correct counts for each category", %{
+      conn: conn,
+      competition: competition,
+      participants: participants,
+      slides: slides_map
+    } do
+      [first_participant | _] = participants
+      user_slides = Map.get(slides_map, first_participant.user_id)
+
+      # Initially, all slides should be discarded
+      discarded_count = length(user_slides)
+
+      conn
+      |> visit(~p"/organize/#{competition.id}/slide_selection/users/#{first_participant.user_id}")
+      |> assert_has("#jury-slides-count", text: "0")
+      |> assert_has("#fixed-slides-count", text: "0")
+      |> assert_has("#discarded-slides-count", text: Integer.to_string(discarded_count))
+    end
+
+    @tag :workflow
+    test "user can navigate from selection to validation", %{
       conn: conn,
       competition: competition
     } do
       conn
       |> visit(~p"/organize/#{competition.id}/slide_selection")
-      |> assert_has("h1", text: competition.name)
-
-      # TODO: Implement slide selection flow test
+      |> click_link(".btn-primary", "Validation")
+      # Validation launcher page should have start button
+      |> assert_has("#start-validation-btn")
     end
   end
 
@@ -425,16 +524,37 @@ defmodule SMWeb.Features.CompetitionWorkflowTest do
     ]
 
     @tag :workflow
-    @tag :skip
-    test "user can launch validation workflow", %{
+    test "user can view validation launcher with stats summary", %{
       conn: conn,
       competition: competition
     } do
       conn
       |> visit(~p"/organize/#{competition.id}/validation_launcher")
       |> assert_has("#start-validation-btn")
+      |> assert_has("#validation-results-table")
+    end
 
-      # TODO: Implement validation workflow test
+    @tag :workflow
+    test "user can start validation workflow", %{
+      conn: conn,
+      competition: competition
+    } do
+      conn
+      |> visit(~p"/organize/#{competition.id}/validation_launcher")
+      |> click_link("#start-validation-btn", "Start Validation")
+      # Should navigate to the validation page with slides
+      |> assert_has("#validation-image-container")
+    end
+
+    @tag :workflow
+    test "user can navigate to jury launcher", %{
+      conn: conn,
+      competition: competition
+    } do
+      conn
+      |> visit(~p"/organize/#{competition.id}/validation_launcher")
+      |> click_link(".btn-primary", "Jury")
+      |> assert_has("#start-jury-btn")
     end
   end
 
@@ -456,16 +576,26 @@ defmodule SMWeb.Features.CompetitionWorkflowTest do
     ]
 
     @tag :workflow
-    @tag :skip
-    test "user can launch jury session", %{
+    test "user can view jury launcher", %{
       conn: conn,
       competition: competition
     } do
       conn
       |> visit(~p"/organize/#{competition.id}/jury_launcher")
-      |> assert_has("h1", text: competition.name)
+      |> assert_has("#jury-launcher-content")
+      |> assert_has("#jury-categories-stats")
+      |> assert_has("#jury-all-stats")
+    end
 
-      # TODO: Implement jury workflow test
+    @tag :workflow
+    test "user can navigate to results from jury launcher", %{
+      conn: conn,
+      competition: competition
+    } do
+      conn
+      |> visit(~p"/organize/#{competition.id}/jury_launcher")
+      |> click_link(".btn-primary", "Results")
+      |> assert_has("#results-content")
     end
   end
 
@@ -486,16 +616,29 @@ defmodule SMWeb.Features.CompetitionWorkflowTest do
     ]
 
     @tag :workflow
-    @tag :skip
-    test "user can view competition results", %{
+    test "user can view competition results page", %{
       conn: conn,
       competition: competition
     } do
       conn
       |> visit(~p"/organize/#{competition.id}/results")
-      |> assert_has("h1", text: competition.name)
+      |> assert_has("#results-content")
+      # Results page shows competition details section
+      |> assert_has("span", text: "Competition details")
+    end
 
-      # TODO: Implement results verification test
+    @tag :workflow
+    test "results page shows competition stats", %{
+      conn: conn,
+      competition: competition,
+      participants: participants
+    } do
+      participant_count = length(participants)
+
+      conn
+      |> visit(~p"/organize/#{competition.id}/results")
+      |> assert_has("th", text: "Num. of participants")
+      |> assert_has("td", text: Integer.to_string(participant_count))
     end
   end
 end
