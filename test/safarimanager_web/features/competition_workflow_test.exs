@@ -18,7 +18,11 @@ defmodule SMWeb.Features.CompetitionWorkflowTest do
 
   use SMWeb.ConnCase, async: false
 
-  import Phoenix.LiveViewTest, only: [live: 2, form: 3, render_submit: 1, element: 2, render_click: 1]
+  # Import specific LiveViewTest functions for form submissions that trigger redirects
+  # and for use within PhoenixTest's unwrap/2 callback
+  import Phoenix.LiveViewTest,
+    only: [live: 2, form: 3, render_submit: 1, render_change: 1, element: 2, render_click: 1]
+
   import PhoenixTest
   import SM.CompetitionsFixtures
 
@@ -189,6 +193,64 @@ defmodule SMWeb.Features.CompetitionWorkflowTest do
         |> render_click()
 
       assert path =~ "/organize/#{competition.id}/participants"
+    end
+
+    @tag :workflow
+    test "form validation preserves previously entered values", %{
+      conn: conn,
+      organization: organization
+    } do
+      # This test prevents regression of the form reset bug where
+      # editing one field would clear other fields during phx-change validation.
+      # The bug occurred when handle_event("validate", ...) didn't extract the
+      # nested "competition" key from params.
+
+      # Use PhoenixTest's visit then unwrap for direct LiveViewTest access
+      # to trigger phx-change events (not directly supported by PhoenixTest)
+      conn
+      |> visit(~p"/organize/new")
+      |> unwrap(fn view ->
+        # Step 1: Fill in name and other fields
+        view
+        |> form("#competition-form",
+          competition: %{
+            "name" => "My Safari Event",
+            "city" => "Catania",
+            "country" => "Italy"
+          }
+        )
+        |> render_change()
+
+        # Step 2: Change another field (type) - all previous values should persist
+        html =
+          view
+          |> form("#competition-form",
+            competition: %{
+              "name" => "My Safari Event",
+              "organization_id" => organization.id,
+              "type" => :national_championship,
+              "city" => "Catania",
+              "country" => "Italy"
+            }
+          )
+          |> render_change()
+
+        # Verify input values are preserved in the form fields after validation
+        # Using specific input value assertions to avoid false positives
+        assert html =~ ~r/<input[^>]*id="competition-name-input"[^>]*value="My Safari Event"/s or
+                 html =~ ~r/<input[^>]*value="My Safari Event"[^>]*id="competition-name-input"/s
+
+        assert html =~ ~r/<input[^>]*name="competition\[city\]"[^>]*value="Catania"/s or
+                 html =~ ~r/<input[^>]*value="Catania"[^>]*name="competition\[city\]"/s
+
+        assert html =~ ~r/<input[^>]*name="competition\[country\]"[^>]*value="Italy"/s or
+                 html =~ ~r/<input[^>]*value="Italy"[^>]*name="competition\[country\]"/s
+
+        # Return rendered HTML for unwrap to handle
+        html
+      end)
+      |> assert_has("#competition-form")
+      |> assert_has("#competition-name-input")
     end
   end
 

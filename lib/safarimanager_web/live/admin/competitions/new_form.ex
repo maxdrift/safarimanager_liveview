@@ -296,7 +296,7 @@ defmodule SMWeb.Live.Admin.Competitions.Form do
   end
 
   @impl true
-  def handle_event("validate", %{} = competition_params, socket) do
+  def handle_event("validate", %{"competition" => competition_params}, socket) do
     # The parent can pass either :entity or :competition as the struct
     entity = socket.assigns[:entity] || socket.assigns[:competition] || %SM.Competitions.Competition{}
     changeset = Competitions.change(entity, competition_params)
