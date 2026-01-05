@@ -57,11 +57,7 @@ defmodule SMWeb.Live.Admin.Competitions.Form do
               type="datetime-local"
               label={gettext("Start date/time")}
             />
-            <.input
-              field={@form[:end_time]}
-              type="datetime-local"
-              label={gettext("End date/time")}
-            />
+            <.input field={@form[:end_time]} type="datetime-local" label={gettext("End date/time")} />
             <div class="md:col-span-2 flex items-center">
               <.input
                 id="competition-for-teams-input"
@@ -77,53 +73,31 @@ defmodule SMWeb.Live.Admin.Competitions.Form do
         <div class="collapse collapse-arrow border border-base-300 rounded-lg bg-base-100">
           <input type="checkbox" class="peer" />
           <div class="collapse-title font-semibold text-base-content/70 uppercase tracking-wide text-sm">
-            <.icon name="hero-map-pin" class="w-4 h-4 inline-block mr-2" />
+            <Heroicons.icon name="map-pin" type="outline" class="w-4 h-4 inline-block mr-2" />
             {gettext("Location")}
-            <span class="text-xs font-normal normal-case ml-2 opacity-60">{gettext("(optional)")}</span>
+            <span class="text-xs font-normal normal-case ml-2 opacity-60">
+              {gettext("(optional)")}
+            </span>
           </div>
           <div class="collapse-content">
             <div class="grid grid-cols-12 gap-4 pt-2">
               <div class="col-span-9">
-                <.input
-                  field={@form[:street_name]}
-                  type="text"
-                  label={gettext("Street name")}
-                />
+                <.input field={@form[:street_name]} type="text" label={gettext("Street name")} />
               </div>
               <div class="col-span-3">
-                <.input
-                  field={@form[:street_number]}
-                  type="text"
-                  label={gettext("Number")}
-                />
+                <.input field={@form[:street_number]} type="text" label={gettext("Number")} />
               </div>
               <div class="col-span-4">
-                <.input
-                  field={@form[:postal_code]}
-                  type="text"
-                  label={gettext("Postal code")}
-                />
+                <.input field={@form[:postal_code]} type="text" label={gettext("Postal code")} />
               </div>
               <div class="col-span-8">
-                <.input
-                  field={@form[:city]}
-                  type="text"
-                  label={gettext("City")}
-                />
+                <.input field={@form[:city]} type="text" label={gettext("City")} />
               </div>
               <div class="col-span-6">
-                <.input
-                  field={@form[:state]}
-                  type="text"
-                  label={gettext("State/Province")}
-                />
+                <.input field={@form[:state]} type="text" label={gettext("State/Province")} />
               </div>
               <div class="col-span-6">
-                <.input
-                  field={@form[:country]}
-                  type="text"
-                  label={gettext("Country")}
-                />
+                <.input field={@form[:country]} type="text" label={gettext("Country")} />
               </div>
             </div>
           </div>
@@ -132,13 +106,13 @@ defmodule SMWeb.Live.Admin.Competitions.Form do
         <%!-- Evaluations Section --%>
         <fieldset class="border border-base-300 rounded-lg p-4">
           <legend class="px-2 text-sm font-semibold text-base-content/70 uppercase tracking-wide">
-            <.icon name="hero-star" class="w-4 h-4 inline-block mr-1" />
+            <Heroicons.icon name="star" type="outline" class="w-4 h-4 inline-block mr-1" />
             {gettext("Allowed evaluations")}
           </legend>
           <div id="allowed-evaluations-inputs" class="space-y-2">
             <.inputs_for :let={evaluation} field={@form[:competitions_evaluations]}>
               <div class="flex items-end gap-2">
-                <.hidden_input name="entity[evaluation_sort][]" value={evaluation.index} />
+                <.hidden_input name={"#{@form.name}[evaluation_sort][]"} value={evaluation.index} />
                 <div class="flex-grow">
                   <.input
                     field={evaluation[:evaluation_id]}
@@ -147,22 +121,28 @@ defmodule SMWeb.Live.Admin.Competitions.Form do
                     label={gettext("Evaluation")}
                   />
                 </div>
-                <label class="btn btn-ghost btn-square btn-sm mb-1 text-error hover:bg-error/10">
+                <label class="btn btn-square btn-sm mb-1 border border-error/30 bg-error/5 text-error hover:bg-error/20 hover:border-error/50 transition-colors">
                   <input
                     type="checkbox"
-                    name="entity[evaluation_drop][]"
+                    name={"#{@form.name}[evaluation_drop][]"}
                     value={evaluation.index}
                     class="hidden"
+                    phx-debounce="100"
                   />
-                  <.icon name="hero-trash" class="w-4 h-4" />
+                  <Heroicons.icon name="trash" type="solid" class="w-4 h-4" />
                 </label>
               </div>
             </.inputs_for>
           </div>
           <div class="mt-3">
             <label class="btn btn-ghost btn-sm text-primary hover:bg-primary/10">
-              <input type="checkbox" name="entity[evaluation_sort][]" class="hidden" />
-              <.icon name="hero-plus-circle" class="w-5 h-5" />
+              <input
+                type="checkbox"
+                name={"#{@form.name}[evaluation_sort][]"}
+                class="hidden"
+                phx-debounce="100"
+              />
+              <Heroicons.icon name="plus-circle" type="outline" class="w-5 h-5" />
               {gettext("Add evaluation")}
             </label>
           </div>
@@ -172,7 +152,7 @@ defmodule SMWeb.Live.Admin.Competitions.Form do
         <.inputs_for :let={settings} field={@form[:settings]}>
           <fieldset class="border border-base-300 rounded-lg p-4">
             <legend class="px-2 text-sm font-semibold text-base-content/70 uppercase tracking-wide">
-              <.icon name="hero-cog-6-tooth" class="w-4 h-4 inline-block mr-1" />
+              <Heroicons.icon name="cog-6-tooth" type="outline" class="w-4 h-4 inline-block mr-1" />
               {gettext("Competition Settings")}
             </legend>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -268,19 +248,17 @@ defmodule SMWeb.Live.Admin.Competitions.Form do
           <div class="collapse collapse-arrow border border-base-300 rounded-lg bg-base-100">
             <input type="checkbox" class="peer" />
             <div class="collapse-title font-semibold text-base-content/70 uppercase tracking-wide text-sm">
-              <.icon name="hero-variable" class="w-4 h-4 inline-block mr-2" />
+              <Heroicons.icon name="variable" type="outline" class="w-4 h-4 inline-block mr-2" />
               {gettext("Dynamic coefficients")}
-              <span class="text-xs font-normal normal-case ml-2 opacity-60">{gettext("(advanced)")}</span>
+              <span class="text-xs font-normal normal-case ml-2 opacity-60">
+                {gettext("(advanced)")}
+              </span>
             </div>
             <div class="collapse-content">
               <div class="space-y-4 pt-2">
                 <.inputs_for :let={dynamic_coefficient} field={settings[:dynamic_coefficients]}>
                   <div class="grid grid-cols-4 gap-3 p-3 bg-base-200/50 rounded-lg">
-                    <.input
-                      field={dynamic_coefficient[:name]}
-                      type="text"
-                      label={gettext("Name")}
-                    />
+                    <.input field={dynamic_coefficient[:name]} type="text" label={gettext("Name")} />
                     <.input
                       field={dynamic_coefficient[:value]}
                       type="number"
@@ -302,8 +280,13 @@ defmodule SMWeb.Live.Admin.Competitions.Form do
                   </div>
                 </.inputs_for>
                 <label class="btn btn-ghost btn-sm text-primary hover:bg-primary/10">
-                  <input type="checkbox" name="entity[dynamic_coefficients_sort][]" class="hidden" />
-                  <.icon name="hero-plus-circle" class="w-5 h-5" />
+                  <input
+                    type="checkbox"
+                    name={"#{@form.name}[settings][dynamic_coefficients_sort][]"}
+                    class="hidden"
+                    phx-debounce="100"
+                  />
+                  <Heroicons.icon name="plus-circle" type="outline" class="w-5 h-5" />
                   {gettext("Add Dynamic Coefficient")}
                 </label>
               </div>
@@ -327,7 +310,7 @@ defmodule SMWeb.Live.Admin.Competitions.Form do
             phx-disable-with={gettext("Saving...")}
             class={submit_state_class(@form)}
           >
-            <.icon name="hero-check" class="w-4 h-4 mr-1" />
+            <Heroicons.icon name="check" type="outline" class="w-4 h-4 mr-1" />
             {gettext("Save Competition")}
           </button>
         </div>
