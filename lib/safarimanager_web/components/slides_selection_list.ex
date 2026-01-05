@@ -12,10 +12,14 @@ defmodule SMWeb.Components.SlidesSelectionList do
 
   def slides_selection_list(assigns) do
     ~H"""
-    <div x-data="{ expanded: true }">
-      <div class="alert alert-success alert-sm my-2" @click="expanded = ! expanded">
+    <div id="selection-jury-section" x-data="{ expanded: true }">
+      <div
+        id="selection-jury-header"
+        class="alert alert-success alert-sm my-2"
+        @click="expanded = ! expanded"
+      >
         <span class="text-xl mx-auto">
-          {gettext("Selected for Jury")} ({Enum.count(@jury_slides)})
+          {gettext("Selected for Jury")} (<span id="jury-slides-count">{Enum.count(@jury_slides)}</span>)
         </span>
         <span>
           <svg
@@ -92,10 +96,14 @@ defmodule SMWeb.Components.SlidesSelectionList do
         </table>
       </div>
     </div>
-    <div x-data="{ expanded: false }">
-      <div class="alert alert-warning alert-sm my-2" @click="expanded = ! expanded">
+    <div id="selection-fixed-section" x-data="{ expanded: false }">
+      <div
+        id="selection-fixed-header"
+        class="alert alert-warning alert-sm my-2"
+        @click="expanded = ! expanded"
+      >
         <span class="text-xl mx-auto">
-          {gettext("Fixed points")} ({Enum.count(@fixed_slides)})
+          {gettext("Fixed points")} (<span id="fixed-slides-count">{Enum.count(@fixed_slides)}</span>)
         </span>
         <span>
           <svg
@@ -171,12 +179,16 @@ defmodule SMWeb.Components.SlidesSelectionList do
         </table>
       </div>
     </div>
-    <div x-data="{ expanded: false }">
-      <div class="alert alert-error alert-sm my-2" @click="expanded = ! expanded">
+    <div id="selection-discarded-section" x-data="{ expanded: false }">
+      <div
+        id="selection-discarded-header"
+        class="alert alert-error alert-sm my-2"
+        @click="expanded = ! expanded"
+      >
         <span class="text-xl mx-auto">
-          {ngettext("Discarded", "Discarded", Enum.count(@discarded_slides))} ({Enum.count(
+          {ngettext("Discarded", "Discarded", Enum.count(@discarded_slides))} (<span id="discarded-slides-count">{Enum.count(
             @discarded_slides
-          )})
+          )}</span>)
         </span>
         <span>
           <svg
