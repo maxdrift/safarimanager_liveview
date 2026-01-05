@@ -4,8 +4,8 @@
 >
   <.competition_header competition={@competition} />
   <.steps_header current_step={:jury} competition={@competition} />
-  <div class="mt-20 text-center">
-    <div class="stats stats-vertical lg:stats-horizontal shadow">
+  <div id="jury-launcher-content" class="mt-20 text-center">
+    <div id="jury-categories-stats" class="stats stats-vertical lg:stats-horizontal shadow">
       <div :if={!@competition.for_teams}>
         <div :for={{camera_type, stats} <- @stats.camera_type} class="stat">
           <div class="stat-value text-2xl capitalize">{stats.name}</div>
@@ -36,12 +36,13 @@
         </div>
         <span :if={Enum.empty?(@stats.category)}>{gettext("Jury is not yet available")}</span>
       </div>
-      <div class="stat">
+      <div id="jury-all-stats" class="stat">
         <div class="stat-value text-2xl capitalize">{@stats.all.name}</div>
         <div class="stat-title">{@stats.all.slides_count} {gettext("slides")}</div>
         <div class="stat-desc">{@stats.all.species_count} {gettext("species")}</div>
         <div class="stat-actions">
           <.link
+            id="start-jury-btn"
             navigate={"/organize/#{@competition_id}/jury"}
             class={[
               "btn",
