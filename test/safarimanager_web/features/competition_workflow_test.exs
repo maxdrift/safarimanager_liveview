@@ -44,7 +44,7 @@ defmodule SMWeb.Features.CompetitionWorkflowTest do
       |> assert_has("#competition-name-input")
       |> assert_has("#competition-organization-input")
       |> assert_has("#competition-type-input")
-      |> assert_has("#competition-submit-btn")
+      |> assert_has("#competition-save-btn")
     end
 
     @tag :workflow
