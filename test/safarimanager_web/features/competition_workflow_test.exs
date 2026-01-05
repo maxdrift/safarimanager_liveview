@@ -12,13 +12,13 @@ defmodule SMWeb.Features.CompetitionWorkflowTest do
   7. Results - Calculate rankings
 
   These tests use PhoenixTest for a user-centric testing approach.
+  For complex form submissions that trigger redirects, we use Phoenix.LiveViewTest
+  directly within the test since PhoenixTest's unwrap has specific return expectations.
   """
 
-  # Using ConnCase with explicit imports to avoid conflicts between
-  # PhoenixTest and Phoenix.LiveViewTest functions.
   use SMWeb.ConnCase, async: false
 
-  import Phoenix.LiveViewTest
+  import Phoenix.LiveViewTest, only: [live: 2, form: 3, render_submit: 1, element: 2, render_click: 1]
   import PhoenixTest
   import SM.CompetitionsFixtures
 
@@ -33,17 +33,14 @@ defmodule SMWeb.Features.CompetitionWorkflowTest do
 
     @tag :workflow
     test "user can view the new competition page and see the form", %{conn: conn} do
-      # Test that the page loads and form elements are present
-      {:ok, view, html} = live(conn, ~p"/organize/new")
-
-      # Verify page elements exist
-      assert html =~ "new-competition-button"
-      assert has_element?(view, "#new-competition-button")
-      assert has_element?(view, "#competition-form")
-      assert has_element?(view, "#competition-name-input")
-      assert has_element?(view, "#competition-organization-input")
-      assert has_element?(view, "#competition-type-input")
-      assert has_element?(view, "#competition-submit-btn")
+      conn
+      |> visit(~p"/organize/new")
+      |> assert_has("#new-competition-button")
+      |> assert_has("#competition-form")
+      |> assert_has("#competition-name-input")
+      |> assert_has("#competition-organization-input")
+      |> assert_has("#competition-type-input")
+      |> assert_has("#competition-submit-btn")
     end
 
     @tag :workflow
@@ -52,10 +49,9 @@ defmodule SMWeb.Features.CompetitionWorkflowTest do
       organization: organization,
       evaluation: evaluation
     } do
-      # Visit the page
+      # Use LiveViewTest for form submission that causes redirect
       {:ok, view, _html} = live(conn, ~p"/organize/new")
 
-      # Submit the competition form
       {:error, {:live_redirect, %{to: new_path}}} =
         view
         |> form("#competition-form",
@@ -70,8 +66,7 @@ defmodule SMWeb.Features.CompetitionWorkflowTest do
         )
         |> render_submit()
 
-      # Verify redirect path
-      assert ["organize", competition_id, "participants"] = String.split(new_path, "/", trim: true)
+      ["organize", competition_id, "participants"] = String.split(new_path, "/", trim: true)
 
       # Verify competition was created correctly
       assert {:ok, competition} = Competitions.get(competition_id)
@@ -97,7 +92,7 @@ defmodule SMWeb.Features.CompetitionWorkflowTest do
           "competitions_evaluations" => [%{"evaluation_id" => evaluation.id}]
         })
 
-      # Then verify it appears in the listing
+      # Then verify it appears in the listing using PhoenixTest
       conn
       |> visit(~p"/organize/new")
       |> assert_has("##{competition.id}-competition-tile", text: "Test Safari Event")
@@ -111,7 +106,6 @@ defmodule SMWeb.Features.CompetitionWorkflowTest do
     } do
       {:ok, view, _html} = live(conn, ~p"/organize/new")
 
-      # Submit the competition form with national_championship type
       {:error, {:live_redirect, %{to: new_path}}} =
         view
         |> form("#competition-form",
@@ -126,10 +120,8 @@ defmodule SMWeb.Features.CompetitionWorkflowTest do
         )
         |> render_submit()
 
-      # Verify redirect path
-      assert ["organize", competition_id, "participants"] = String.split(new_path, "/", trim: true)
+      ["organize", competition_id, "participants"] = String.split(new_path, "/", trim: true)
 
-      # Verify competition was created with correct type
       {:ok, competition} = Competitions.get(competition_id)
       assert competition.name == "National Championship 2026"
       assert competition.type == :national_championship
@@ -150,7 +142,6 @@ defmodule SMWeb.Features.CompetitionWorkflowTest do
 
       {:ok, loaded_competition} = Competitions.get(competition.id)
 
-      # Verify default settings are applied
       settings = loaded_competition.settings
       assert settings.number_of_jurors == 3
       assert settings.evaluations_per_juror == 1
@@ -182,7 +173,6 @@ defmodule SMWeb.Features.CompetitionWorkflowTest do
       organization: organization,
       evaluation: evaluation
     } do
-      # Create a competition
       {:ok, competition} =
         Competitions.create(%{
           "name" => "Clickable Competition",
@@ -191,10 +181,8 @@ defmodule SMWeb.Features.CompetitionWorkflowTest do
           "competitions_evaluations" => [%{"evaluation_id" => evaluation.id}]
         })
 
-      # Visit the listing page
       {:ok, view, _html} = live(conn, ~p"/organize/new")
 
-      # Click on the competition tile (triggers open event)
       {:error, {:live_redirect, %{to: path}}} =
         view
         |> element("##{competition.id}-competition-tile")
@@ -213,21 +201,91 @@ defmodule SMWeb.Features.CompetitionWorkflowTest do
       :register_and_log_in_user,
       :create_organization,
       :create_competition,
-      :create_category
+      :create_category,
+      :register_users
     ]
 
     @tag :workflow
-    @tag :skip
+    test "user can view participants page with available users", %{
+      conn: conn,
+      competition: competition,
+      users: users
+    } do
+      [first_user | _] = users
+
+      conn
+      |> visit(~p"/organize/#{competition.id}/participants")
+      |> assert_has("#users-table")
+      |> assert_has("#users-table-body")
+      |> assert_has("#user-row-#{first_user.id}")
+      |> assert_has("#enroll-user-#{first_user.id}")
+    end
+
+    @tag :workflow
     test "user can enroll a participant in a competition", %{
       conn: conn,
       competition: competition,
-      category: _category
+      users: users
     } do
+      [user_to_enroll | _] = users
+
       conn
       |> visit(~p"/organize/#{competition.id}/participants")
-      |> assert_has("h1", text: competition.name)
+      |> assert_has("#participants-table")
+      |> refute_has("#participant-row-#{user_to_enroll.id}")
+      |> click_button("#enroll-user-#{user_to_enroll.id}", "Enroll")
+      |> assert_has("#participant-row-#{user_to_enroll.id}")
+      |> refute_has("#user-row-#{user_to_enroll.id}")
+    end
 
-      # TODO: Implement participant enrollment flow test
+    @tag :workflow
+    test "enrolled participant has correct number assigned", %{
+      conn: conn,
+      competition: competition,
+      users: users
+    } do
+      [user1, user2 | _] = users
+
+      conn
+      |> visit(~p"/organize/#{competition.id}/participants")
+      |> click_button("#enroll-user-#{user1.id}", "Enroll")
+      |> click_button("#enroll-user-#{user2.id}", "Enroll")
+      |> assert_has("#participant-row-#{user1.id}")
+      |> assert_has("#participant-row-#{user2.id}")
+      |> assert_has("#participant-row-#{user1.id}", text: user1.last_name)
+      |> assert_has("#participant-row-#{user2.id}", text: user2.last_name)
+    end
+
+    @tag :workflow
+    test "user can remove a participant from competition", %{
+      conn: conn,
+      competition: competition,
+      users: users
+    } do
+      [user_to_enroll | _] = users
+
+      conn
+      |> visit(~p"/organize/#{competition.id}/participants")
+      |> click_button("#enroll-user-#{user_to_enroll.id}", "Enroll")
+      |> assert_has("#participant-row-#{user_to_enroll.id}")
+      |> click_button("#remove-participant-#{user_to_enroll.id}", "Remove")
+      |> refute_has("#participant-row-#{user_to_enroll.id}")
+      |> assert_has("#user-row-#{user_to_enroll.id}")
+    end
+
+    @tag :workflow
+    test "user can filter available users by name", %{
+      conn: conn,
+      competition: competition,
+      users: users
+    } do
+      [target_user | _] = users
+
+      conn
+      |> visit(~p"/organize/#{competition.id}/participants")
+      |> assert_has("#user-row-#{target_user.id}")
+      |> fill_in("Search users", with: target_user.last_name)
+      |> assert_has("#user-row-#{target_user.id}")
     end
   end
 

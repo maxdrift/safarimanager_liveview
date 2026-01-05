@@ -6,10 +6,12 @@
       <div class="p-4">
         <div class="text-2xl font-bold text-center py-4">{gettext("Users")}</div>
         <.form for={%{}} as={:users_filter} phx-change="filter-users" autocomplete="off">
+          <label for="users-filter-input" class="sr-only">{gettext("Search users")}</label>
           <.input
             type="text"
             name={:value}
             value=""
+            id="users-filter-input"
             class="input input-bordered w-full mb-1"
             placeholder={gettext("Search for a user...")}
             phx-debounce="500"
@@ -17,7 +19,7 @@
           />
         </.form>
         <div class="max-h-48 overflow-y-auto tiny-scrollbar">
-          <table class="table table-zebra table-fixed w-full">
+          <table id="users-table" class="table table-zebra table-fixed w-full">
             <thead>
               <tr>
                 <th class="sticky top-0 w-auto">{gettext("Last Name")}</th>
@@ -27,8 +29,8 @@
                 <th class="sticky top-0 w-auto" />
               </tr>
             </thead>
-            <tbody>
-              <tr :for={item <- @users}>
+            <tbody id="users-table-body">
+              <tr :for={item <- @users} id={"user-row-#{item.id}"}>
                 <td class="truncate">{item.last_name}</td>
                 <td class="truncate">{item.first_name}</td>
                 <td class="truncate">
@@ -39,6 +41,7 @@
                 </td>
                 <td>
                   <button
+                    id={"enroll-user-#{item.id}"}
                     class="btn btn-xs btn-success"
                     phx-click="enroll"
                     phx-value-user-id={item.id}
@@ -100,7 +103,7 @@
           />
         </.form>
         <div class="max-h-96 overflow-y-auto tiny-scrollbar">
-          <table class="table table-zebra table-fixed w-full">
+          <table id="participants-table" class="table table-zebra table-fixed w-full">
             <thead>
               <tr>
                 <th class="sticky top-0 w-2">{gettext("#")}</th>
@@ -111,8 +114,8 @@
                 <th class="sticky top-0 w-1/12" />
               </tr>
             </thead>
-            <tbody>
-              <tr :for={item <- @participants}>
+            <tbody id="participants-table-body">
+              <tr :for={item <- @participants} id={"participant-row-#{item.user_id}"}>
                 <td class="truncate">{item.number}</td>
                 <td class="truncate">{item.user.last_name}</td>
                 <td class="truncate">{item.user.first_name}</td>
@@ -144,11 +147,13 @@
                 </td>
                 <td>
                   <button
+                    id={"remove-participant-#{item.user_id}"}
                     class="btn btn-square btn-xs btn-error"
                     phx-click="remove"
                     phx-value-user-id={item.user.id}
                     title={gettext("Remove")}
                   >
+                    <span class="sr-only">{gettext("Remove")}</span>
                     <Heroicons.icon name="trash" type="outline" class="w-4 h-4" />
                   </button>
                 </td>
