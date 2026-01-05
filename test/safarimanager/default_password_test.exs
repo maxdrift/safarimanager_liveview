@@ -69,4 +69,3 @@ defmodule SM.DefaultPasswordTest do
     end
   end
 end
-

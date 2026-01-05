@@ -46,10 +46,7 @@ defmodule SMWeb.Live.Teams do
 
   def handle_event(
         "change",
-        %{
-          "_target" => ["participants-list-selection"],
-          "participants-list-selection" => selection
-        },
+        %{"_target" => ["participants-list-selection"], "participants-list-selection" => selection},
         socket
       ) do
     socket =

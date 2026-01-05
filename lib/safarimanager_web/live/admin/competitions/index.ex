@@ -186,8 +186,7 @@ defmodule SMWeb.Live.Admin.Competitions.Index do
     {:noreply, put_flash(socket, :info, gettext("All competitions deleted successfully"))}
   end
 
-  def handle_info({Competitions, [:competition, :deleted], deleted_ids}, socket)
-      when is_list(deleted_ids) do
+  def handle_info({Competitions, [:competition, :deleted], deleted_ids}, socket) when is_list(deleted_ids) do
     socket =
       deleted_ids
       |> Stream.map(fn id -> "items-#{id}" end)
@@ -200,8 +199,7 @@ defmodule SMWeb.Live.Admin.Competitions.Index do
     {:noreply, socket}
   end
 
-  def handle_info({Competitions, [:competition, :deleted], deleted_count}, socket)
-      when is_integer(deleted_count) do
+  def handle_info({Competitions, [:competition, :deleted], deleted_count}, socket) when is_integer(deleted_count) do
     {:noreply, push_navigate(socket, to: "/admin/competitions")}
   end
 

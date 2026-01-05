@@ -122,11 +122,7 @@ defmodule SMWeb.Live.Participants do
     {:noreply, assign(socket, :participants, participants)}
   end
 
-  def handle_event(
-        "category-change",
-        %{"category" => %{"category_id" => new_category_id, "user_id" => user_id}},
-        socket
-      ) do
+  def handle_event("category-change", %{"category" => %{"category_id" => new_category_id, "user_id" => user_id}}, socket) do
     {:ok, participant} = Participants.get(user_id, socket.assigns.competition_id)
 
     participant
@@ -137,9 +133,7 @@ defmodule SMWeb.Live.Participants do
         {:noreply, socket}
 
       {:error, reason} ->
-        Logger.error(
-          "Error changing participant (user ID: #{user_id}) category during enrollment: #{inspect(reason)}"
-        )
+        Logger.error("Error changing participant (user ID: #{user_id}) category during enrollment: #{inspect(reason)}")
 
         socket = put_flash(socket, :error, gettext("Unable to change Category"))
 

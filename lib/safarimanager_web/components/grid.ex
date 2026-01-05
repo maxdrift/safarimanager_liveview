@@ -4,6 +4,8 @@ defmodule SMWeb.Components.Grid do
   """
   use SMWeb, :live_component
 
+  alias SMWeb.Components.Confirm
+
   attr :entity_name, :string
 
   attr :items, :list, required: true
@@ -174,7 +176,7 @@ defmodule SMWeb.Components.Grid do
     end
 
     {:noreply,
-     SMWeb.Components.Confirm.confirm(socket, on_confirm,
+     Confirm.confirm(socket, on_confirm,
        title: gettext("Delete record"),
        description: gettext("Are you sure you want to delete this record?"),
        confirm_text: gettext("Delete"),
@@ -191,7 +193,7 @@ defmodule SMWeb.Components.Grid do
       socket
     end
 
-    SMWeb.Components.Confirm.confirm(socket, on_confirm,
+    Confirm.confirm(socket, on_confirm,
       title: gettext("Delete all records"),
       description: gettext("Are you sure you want to delete all records?"),
       confirm_text: gettext("Delete"),
@@ -208,7 +210,7 @@ defmodule SMWeb.Components.Grid do
       socket
     end
 
-    SMWeb.Components.Confirm.confirm(socket, on_confirm,
+    Confirm.confirm(socket, on_confirm,
       title: gettext("Delete record"),
       description: gettext("Are you sure you want to delete 1 record?"),
       confirm_text: gettext("Delete"),
@@ -223,7 +225,7 @@ defmodule SMWeb.Components.Grid do
       socket
     end
 
-    SMWeb.Components.Confirm.confirm(socket, on_confirm,
+    Confirm.confirm(socket, on_confirm,
       title: gettext("Delete records"),
       description:
         Gettext.gettext(

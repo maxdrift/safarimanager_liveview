@@ -166,44 +166,44 @@
         </div>
       </div>
     </div>
-      <div
-        :for={competition <- @competitions}
-        id={"#{competition.id}-competition-tile"}
-        class="card card-compact bg-base-100 shadow-xl image-full cursor-pointer"
-        phx-click="open"
-        phx-value-id={competition.id}
-      >
-        <figure :if={get_competition_background_img(competition.id)}>
-          <img
-            src={get_competition_background_img(competition.id)}
-            alt={gettext("Highest votes image")}
-          />
-        </figure>
-        <div class="card-body">
-          <h2 class="card-title">
-            {competition.name}
-          </h2>
-          <p>
-            <div><span>{competition.city || gettext("Somewhere...")}</span></div>
-            <div>{Utils.pretty_dates(competition.start_time, competition.end_time)}</div>
-          </p>
-          <div class="card-actions">
-            <div>
-              <button
-                class="btn btn-square btn-xs btn-outline btn-warning"
-                phx-click={
-                  JS.push("duplication-config", value: %{competition_id: competition.id})
-                  |> JS.add_class("modal-open", to: "#duplicate-dialog")
-                }
-                title={gettext("Duplicate competition")}
-              >
-                <Heroicons.icon name="document-duplicate" type="outline" class="w-4 h-4" />
-              </button>
-            </div>
-            <div class="grow" />
-            <div :if={competition.for_teams} class="badge badge-outline">{gettext("Teams")}</div>
+    <div
+      :for={competition <- @competitions}
+      id={"#{competition.id}-competition-tile"}
+      class="card card-compact bg-base-100 shadow-xl image-full cursor-pointer"
+      phx-click="open"
+      phx-value-id={competition.id}
+    >
+      <figure :if={get_competition_background_img(competition.id)}>
+        <img
+          src={get_competition_background_img(competition.id)}
+          alt={gettext("Highest votes image")}
+        />
+      </figure>
+      <div class="card-body">
+        <h2 class="card-title">
+          {competition.name}
+        </h2>
+        <p>
+          <div><span>{competition.city || gettext("Somewhere...")}</span></div>
+          <div>{Utils.pretty_dates(competition.start_time, competition.end_time)}</div>
+        </p>
+        <div class="card-actions">
+          <div>
+            <button
+              class="btn btn-square btn-xs btn-outline btn-warning"
+              phx-click={
+                JS.push("duplication-config", value: %{competition_id: competition.id})
+                |> JS.add_class("modal-open", to: "#duplicate-dialog")
+              }
+              title={gettext("Duplicate competition")}
+            >
+              <Heroicons.icon name="document-duplicate" type="outline" class="w-4 h-4" />
+            </button>
           </div>
+          <div class="grow" />
+          <div :if={competition.for_teams} class="badge badge-outline">{gettext("Teams")}</div>
         </div>
       </div>
+    </div>
   </div>
 </.layout>

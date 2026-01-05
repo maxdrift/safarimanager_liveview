@@ -137,11 +137,7 @@ defmodule SMWeb.Live.NewCompetition do
     {:noreply, socket}
   end
 
-  def handle_event(
-        "validate-duplicate",
-        %{"duplicate_competition" => %{"competition_id" => ""}},
-        socket
-      ) do
+  def handle_event("validate-duplicate", %{"duplicate_competition" => %{"competition_id" => ""}}, socket) do
     {:noreply, socket}
   end
 
