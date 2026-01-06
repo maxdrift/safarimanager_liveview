@@ -5,7 +5,6 @@ defmodule SMWeb.Live.Participants do
   use SMWeb, :live_view
 
   import SMWeb.Components.CompetitionHeader
-  import SMWeb.Components.FormActions
   import SMWeb.Components.Layout
   import SMWeb.Components.StepsHeader
   import SMWeb.Components.UserForm

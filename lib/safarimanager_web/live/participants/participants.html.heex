@@ -1,10 +1,75 @@
 <.layout current_page={~p"/organize/#{@competition.id}/participants"} current_user={@current_user}>
   <.competition_header competition={@competition} />
   <.steps_header current_step={:participants} competition={@competition} />
-  <div class="flex flex-col xl:flex-row mt-5">
-    <div class="overflow-y-auto rounded-lg xl:w-1/2 bg-base-200 shadow-lg">
+
+  <%!-- Quick Actions Section --%>
+  <div class="mt-5 mb-4">
+    <div class="card bg-base-200 shadow-lg">
+      <div class="card-body p-4">
+        <h3 class="card-title text-lg mb-3">
+          <Heroicons.icon name="bolt" type="outline" class="w-5 h-5" />
+          {gettext("Quick Actions")}
+        </h3>
+        <div class="flex flex-col md:flex-row gap-3">
+          <%!-- Register New User --%>
+          <div class="flex-1">
+            <div class="collapse collapse-arrow bg-base-100 border border-base-300">
+              <input type="checkbox" class="peer" />
+              <div class="collapse-title font-semibold text-base-content">
+                <Heroicons.icon name="user-plus" type="outline" class="w-5 h-5 inline-block mr-2" />
+                {gettext("Register New User")}
+              </div>
+              <div class="collapse-content">
+                <div class="pt-2">
+                  <.user_form
+                    id="participants-new-user-form"
+                    action={:create}
+                    entity={@entity}
+                    form={@form}
+                    organizations={@organizations}
+                    categories={@categories}
+                    validate="validate-new-user"
+                    submit="submit-new-user"
+                  >
+                    <div class="flex gap-2 justify-end mt-4">
+                      <button
+                        type="button"
+                        class="btn btn-ghost btn-sm"
+                        phx-click="reset-new-user"
+                      >
+                        {gettext("Reset")}
+                      </button>
+                      <button
+                        type="submit"
+                        class="btn btn-primary btn-sm"
+                        disabled={!(@form.action && @form.source.valid?)}
+                      >
+                        <Heroicons.icon name="check" type="outline" class="w-4 h-4 mr-1" />
+                        {gettext("Register")}
+                      </button>
+                    </div>
+                  </.user_form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <%!-- Main Content: Users and Participants --%>
+  <div class="flex flex-col xl:flex-row gap-4">
+    <%!-- Available Users Section --%>
+    <div class="flex-1 rounded-lg bg-base-200 shadow-lg">
       <div class="p-4">
-        <div class="text-2xl font-bold text-center py-4">{gettext("Users")}</div>
+        <div class="flex items-center justify-between mb-3">
+          <h2 class="text-xl font-bold">
+            <Heroicons.icon name="users" type="outline" class="w-5 h-5 inline-block mr-2" />
+            {gettext("Available Users")}
+          </h2>
+          <span class="badge badge-primary badge-lg">{length(@users)}</span>
+        </div>
         <.form for={%{}} as={:users_filter} phx-change="filter-users" autocomplete="off">
           <label for="users-filter-input" class="sr-only">{gettext("Search users")}</label>
           <.input
@@ -12,80 +77,77 @@
             name={:value}
             value=""
             id="users-filter-input"
-            class="input input-bordered w-full mb-1"
+            class="input input-bordered w-full mb-3"
             placeholder={gettext("Search for a user...")}
             phx-debounce="500"
             autocomplete="nope"
           />
         </.form>
-        <div class="max-h-48 overflow-y-auto tiny-scrollbar">
+        <div class="max-h-[500px] overflow-y-auto tiny-scrollbar">
           <table id="users-table" class="table table-zebra table-fixed w-full">
             <thead>
               <tr>
-                <th class="sticky top-0 w-auto">{gettext("Last Name")}</th>
-                <th class="sticky top-0 w-auto">{gettext("First Name")}</th>
-                <th class="sticky top-0 w-auto">{gettext("Organization")}</th>
-                <th class="sticky top-0 w-auto">{gettext("Category")}</th>
-                <th class="sticky top-0 w-auto" />
+                <th class="sticky top-0">{gettext("Last Name")}</th>
+                <th class="sticky top-0">{gettext("First Name")}</th>
+                <th class="sticky top-0">{gettext("Organization")}</th>
+                <th class="sticky top-0">{gettext("Category")}</th>
+                <th class="sticky top-0 w-24">{gettext("Action")}</th>
               </tr>
             </thead>
             <tbody id="users-table-body">
-              <tr :for={item <- @users} id={"user-row-#{item.id}"}>
-                <td class="truncate">{item.last_name}</td>
+              <tr :for={item <- @users} id={"user-row-#{item.id}"} class="hover">
+                <td class="truncate font-medium">{item.last_name}</td>
                 <td class="truncate">{item.first_name}</td>
-                <td class="truncate">
+                <td class="truncate text-sm text-base-content/70">
                   {(item.organization && item.organization.name) || gettext("N/A")}
                 </td>
-                <td class="truncate">
+                <td class="truncate text-sm text-base-content/70">
                   {(item.category && item.category.name) || gettext("N/A")}
                 </td>
                 <td>
                   <button
                     id={"enroll-user-#{item.id}"}
-                    class="btn btn-xs btn-success"
+                    class="btn btn-sm btn-success w-full"
                     phx-click="enroll"
                     phx-value-user-id={item.id}
+                    title={gettext("Enroll in competition")}
                   >
-                    {gettext("Enroll")}
+                    <Heroicons.icon name="user-plus" type="outline" class="w-4 h-4" />
+                    <span class="sr-only">{gettext("Enroll")}</span>
                   </button>
                 </td>
               </tr>
               <tr :if={@users == []}>
-                <td colspan="5">{gettext("No items yet!")}</td>
+                <td colspan="5" class="text-center py-8 text-base-content/50">
+                  {gettext("No users available. Register a new user above.")}
+                </td>
               </tr>
             </tbody>
           </table>
         </div>
       </div>
-      <div class="text-2xl font-bold text-center py-4">{gettext("New User")}</div>
-      <.user_form
-        id="participants-new-user-form"
-        action={:create}
-        entity={@entity}
-        form={@form}
-        organizations={@organizations}
-        categories={@categories}
-        validate="validate-new-user"
-        submit="submit-new-user"
-      >
-        <.form_actions
-          container_class="modal-action"
-          enable_submit={@form.action && @form.source.valid?}
-          reset="reset-new-user"
-        />
-      </.user_form>
     </div>
-    <div class="divider xl:divider-horizontal" />
-    <div class="overflow-y-auto rounded-lg xl:w-1/2 bg-base-200 shadow-lg">
+
+    <%!-- Participants Section --%>
+    <div class="flex-1 rounded-lg bg-base-200 shadow-lg">
       <div class="p-4">
-        <div class="text-2xl font-bold text-center py-4">{gettext("Participants")}</div>
-        <.link
-          class="btn btn-outline btn-sm mb-2"
-          href={~p"/#{@competition.id}/participants_printout"}
-          target="_blank"
-        >
-          {gettext("Print")}
-        </.link>
+        <div class="flex items-center justify-between mb-3">
+          <h2 class="text-xl font-bold">
+            <Heroicons.icon name="user-group" type="outline" class="w-5 h-5 inline-block mr-2" />
+            {gettext("Participants")}
+          </h2>
+          <div class="flex items-center gap-2">
+            <span class="badge badge-success badge-lg">{length(@participants)}</span>
+            <.link
+              class="btn btn-outline btn-sm"
+              href={~p"/#{@competition.id}/participants_printout"}
+              target="_blank"
+            >
+              <Heroicons.icon name="printer" type="outline" class="w-4 h-4 mr-1" />
+              {gettext("Print")}
+            </.link>
+          </div>
+        </div>
         <.form
           for={%{}}
           as={:participants_filter}
@@ -96,33 +158,33 @@
             type="text"
             name={:value}
             value=""
-            class="input input-bordered w-full mb-1"
+            class="input input-bordered w-full mb-3"
             placeholder={gettext("Search for a participant...")}
             phx-debounce="500"
             autocomplete="nope"
           />
         </.form>
-        <div class="max-h-96 overflow-y-auto tiny-scrollbar">
-          <table id="participants-table" class="table table-zebra table-fixed w-full">
+        <div class="max-h-[500px] overflow-y-auto tiny-scrollbar">
+          <table id="participants-table" class="table table-zebra table-compact w-full">
             <thead>
               <tr>
-                <th class="sticky top-0 w-2">{gettext("#")}</th>
-                <th class="sticky top-0 w-auto">{gettext("Last Name")}</th>
-                <th class="sticky top-0 w-auto">{gettext("First Name")}</th>
-                <th class="sticky top-0 w-auto">{gettext("Organization")}</th>
-                <th class="sticky top-0 w-3/12">{gettext("Category")}</th>
-                <th class="sticky top-0 w-1/12" />
+                <th class="sticky top-0 w-12">{gettext("#")}</th>
+                <th class="sticky top-0">{gettext("Last Name")}</th>
+                <th class="sticky top-0">{gettext("First Name")}</th>
+                <th class="sticky top-0">{gettext("Organization")}</th>
+                <th class="sticky top-0 w-48">{gettext("Category")}</th>
+                <th class="sticky top-0 w-16">{gettext("Action")}</th>
               </tr>
             </thead>
             <tbody id="participants-table-body">
-              <tr :for={item <- @participants} id={"participant-row-#{item.user_id}"}>
-                <td class="truncate">{item.number}</td>
-                <td class="truncate">{item.user.last_name}</td>
-                <td class="truncate">{item.user.first_name}</td>
-                <td class="truncate">
+              <tr :for={item <- @participants} id={"participant-row-#{item.user_id}"} class="hover">
+                <td class="font-bold text-primary py-1">{item.number}</td>
+                <td class="truncate font-medium py-1">{item.user.last_name}</td>
+                <td class="truncate py-1">{item.user.first_name}</td>
+                <td class="truncate text-sm text-base-content/70 py-1">
                   {(item.user.organization && item.user.organization.name) || gettext("N/A")}
                 </td>
-                <td>
+                <td class="py-1">
                   <.form
                     for={%{}}
                     as={:category}
@@ -136,7 +198,7 @@
                       options={Enum.map(@categories, &{&1.name, &1.id})}
                       value={item.category_id}
                       prompt={gettext("Category...")}
-                      class="select select-xs select-bordered max-w-4"
+                      class="select select-bordered w-full text-sm"
                     />
                     <.hidden_input
                       id={"#{item.user_id}-category-user-id"}
@@ -145,21 +207,23 @@
                     />
                   </.form>
                 </td>
-                <td>
+                <td class="py-1">
                   <button
                     id={"remove-participant-#{item.user_id}"}
                     class="btn btn-square btn-xs btn-error"
                     phx-click="remove"
                     phx-value-user-id={item.user.id}
-                    title={gettext("Remove")}
+                    title={gettext("Remove from competition")}
                   >
+                    <Heroicons.icon name="trash" type="outline" class="w-3 h-3" />
                     <span class="sr-only">{gettext("Remove")}</span>
-                    <Heroicons.icon name="trash" type="outline" class="w-4 h-4" />
                   </button>
                 </td>
               </tr>
               <tr :if={@participants == []}>
-                <td colspan="6">{gettext("No items yet!")}</td>
+                <td colspan="6" class="text-center py-8 text-base-content/50">
+                  {gettext("No participants yet. Enroll users from the list on the left.")}
+                </td>
               </tr>
             </tbody>
           </table>
