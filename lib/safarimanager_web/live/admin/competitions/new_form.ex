@@ -105,23 +105,29 @@ defmodule SMWeb.Live.Admin.Competitions.Form do
 
         <%!-- Evaluations Section --%>
         <fieldset class="border border-base-300 rounded-lg p-4">
-          <legend class="px-2 text-sm font-semibold text-base-content/70 uppercase tracking-wide">
+          <legend class="px-2 text-sm font-semibold text-base-content/70 uppercase tracking-wide mb-3">
             <Heroicons.icon name="star" type="outline" class="w-4 h-4 inline-block mr-1" />
             {gettext("Allowed evaluations")}
           </legend>
-          <div id="allowed-evaluations-inputs" class="space-y-2">
+          <div id="allowed-evaluations-inputs" class="flex flex-wrap gap-2">
             <.inputs_for :let={evaluation} field={@form[:competitions_evaluations]}>
-              <div class="flex items-end gap-2">
-                <.hidden_input name={"#{@form.name}[evaluation_sort][]"} value={evaluation.index} />
-                <div class="flex-grow">
-                  <.input
-                    field={evaluation[:evaluation_id]}
-                    type="select"
-                    options={Enum.map(@evaluations, &{&1.name, &1.id})}
-                    label={gettext("Evaluation")}
-                  />
+              <.hidden_input name={"#{@form.name}[evaluation_sort][]"} value={evaluation.index} />
+              <div class="group flex items-center gap-1 bg-base-200 rounded-lg px-2 py-1.5 hover:bg-base-300 transition-colors">
+                <div class="form-control">
+                  <select
+                    id={evaluation[:evaluation_id].id}
+                    name={evaluation[:evaluation_id].name}
+                    class="select select-sm select-bordered bg-base-100 border-base-300 focus:border-primary focus:outline-none min-w-[140px] text-sm"
+                    phx-debounce="100"
+                  >
+                    <option value="">{gettext("Select...")}</option>
+                    {Phoenix.HTML.Form.options_for_select(
+                      Enum.map(@evaluations, &{&1.name, &1.id}),
+                      evaluation[:evaluation_id].value
+                    )}
+                  </select>
                 </div>
-                <label class="btn btn-square btn-sm mb-1 border border-error/30 bg-error/5 text-error hover:bg-error/20 hover:border-error/50 transition-colors">
+                <label class="btn btn-square btn-xs border border-error/30 bg-error/5 text-error hover:bg-error/20 hover:border-error/50 transition-colors cursor-pointer">
                   <input
                     type="checkbox"
                     name={"#{@form.name}[evaluation_drop][]"}
@@ -129,7 +135,7 @@ defmodule SMWeb.Live.Admin.Competitions.Form do
                     class="hidden"
                     phx-debounce="100"
                   />
-                  <Heroicons.icon name="trash" type="solid" class="w-4 h-4" />
+                  <Heroicons.icon name="trash" type="solid" class="w-3 h-3" />
                 </label>
               </div>
             </.inputs_for>
@@ -142,7 +148,7 @@ defmodule SMWeb.Live.Admin.Competitions.Form do
                 class="hidden"
                 phx-debounce="100"
               />
-              <Heroicons.icon name="plus-circle" type="outline" class="w-5 h-5" />
+              <Heroicons.icon name="plus-circle" type="outline" class="w-4 h-4" />
               {gettext("Add evaluation")}
             </label>
           </div>
