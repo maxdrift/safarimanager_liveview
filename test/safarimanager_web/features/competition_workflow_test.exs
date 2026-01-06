@@ -21,7 +21,7 @@ defmodule SMWeb.Features.CompetitionWorkflowTest do
   # Import specific LiveViewTest functions for form submissions that trigger redirects
   # and for use within PhoenixTest's unwrap/2 callback
   import Phoenix.LiveViewTest,
-    only: [live: 2, form: 3, render_submit: 1, render_change: 1, element: 2, render_click: 1]
+    only: [live: 2, form: 3, render_submit: 1, render_change: 1, render_change: 2, element: 2, render_click: 1]
 
   import PhoenixTest
   import SM.CompetitionsFixtures
@@ -348,6 +348,51 @@ defmodule SMWeb.Features.CompetitionWorkflowTest do
       |> assert_has("#user-row-#{target_user.id}")
       |> fill_in("Search users", with: target_user.last_name)
       |> assert_has("#user-row-#{target_user.id}")
+    end
+
+    @tag :workflow
+    test "user can change category for an enrolled participant", %{
+      conn: conn,
+      competition: competition,
+      users: users,
+      category: original_category
+    } do
+      alias SM.Categories
+      alias SM.Participants
+
+      # Create a second category
+      {:ok, new_category} =
+        Categories.create(%{"name" => "Apnea Compact", "camera_type" => :compact})
+
+      [user_to_enroll | _] = users
+
+      # Enroll the participant first
+      conn
+      |> visit(~p"/organize/#{competition.id}/participants")
+      |> click_button("#enroll-user-#{user_to_enroll.id}", "Enroll")
+      |> assert_has("#participant-row-#{user_to_enroll.id}")
+      |> unwrap(fn view ->
+        # Get the participant to verify initial category
+        {:ok, participant} = Participants.get(user_to_enroll.id, competition.id)
+        assert participant.category_id == original_category.id
+
+        # Change the category via the form
+        # Note: params come in flat, not nested under "category" despite as={:category}
+        html =
+          view
+          |> element("#category-form-#{user_to_enroll.id}")
+          |> render_change(%{
+            "category_id" => new_category.id,
+            "user_id" => user_to_enroll.id
+          })
+
+        # Verify the category was changed in the database
+        {:ok, updated_participant} = Participants.get(user_to_enroll.id, competition.id)
+        assert updated_participant.category_id == new_category.id
+
+        # Return HTML for unwrap to handle
+        html
+      end)
     end
   end
 

@@ -121,14 +121,21 @@ defmodule SMWeb.Live.Participants do
     {:noreply, assign(socket, :participants, participants)}
   end
 
-  def handle_event("category-change", %{"category" => %{"category_id" => new_category_id, "user_id" => user_id}}, socket) do
+  def handle_event("category-change", %{"category_id" => new_category_id, "user_id" => user_id}, socket) do
     {:ok, participant} = Participants.get(user_id, socket.assigns.competition_id)
 
     participant
     |> Participants.update(%{"category_id" => new_category_id})
     |> case do
       {:ok, _participant} ->
-        socket = put_flash(socket, :info, gettext("Category was changed successfully"))
+        # Reload participants list to reflect the change
+        participants = Participants.list(socket.assigns.competition_id)
+
+        socket =
+          socket
+          |> assign(:participants, participants)
+          |> put_flash(:info, gettext("Category was changed successfully"))
+
         {:noreply, socket}
 
       {:error, reason} ->
