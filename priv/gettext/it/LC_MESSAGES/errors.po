@@ -96,8 +96,8 @@ msgstr "deve essere maggiore o uguale a %{number}"
 msgid "must be equal to %{number}"
 msgstr "deve essere uguale a %{number}"
 
-#: lib/safarimanager_web/controllers/user_auth.ex:185
-#: lib/safarimanager_web/controllers/user_auth.ex:253
+#: lib/safarimanager_web/controllers/user_auth.ex:186
+#: lib/safarimanager_web/controllers/user_auth.ex:264
 #, elixir-autogen, elixir-format
 msgid "You must log in to access this page."
 msgstr "Devi effettuare il login per accedere a questa pagina."
