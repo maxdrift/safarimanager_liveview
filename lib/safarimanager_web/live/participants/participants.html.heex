@@ -168,23 +168,34 @@
           <table id="participants-table" class="table table-zebra table-compact w-full">
             <thead>
               <tr>
-                <th class="sticky top-0 w-12">{gettext("#")}</th>
-                <th class="sticky top-0">{gettext("Last Name")}</th>
-                <th class="sticky top-0">{gettext("First Name")}</th>
-                <th class="sticky top-0">{gettext("Organization")}</th>
-                <th class="sticky top-0 w-48">{gettext("Category")}</th>
-                <th class="sticky top-0 w-16">{gettext("Action")}</th>
+                <th class="sticky top-0 w-10">{gettext("#")}</th>
+                <th class="sticky top-0 w-24">{gettext("Last Name")}</th>
+                <th class="sticky top-0 w-20">{gettext("First Name")}</th>
+                <th class="sticky top-0 w-32">{gettext("Organization")}</th>
+                <th class="sticky top-0 w-56">{gettext("Category")}</th>
+                <th class="sticky top-0 w-12">{gettext("Action")}</th>
               </tr>
             </thead>
             <tbody id="participants-table-body">
-              <tr :for={item <- @participants} id={"participant-row-#{item.user_id}"} class="hover">
-                <td class="font-bold text-primary py-1">{item.number}</td>
-                <td class="truncate font-medium py-1">{item.user.last_name}</td>
-                <td class="truncate py-1">{item.user.first_name}</td>
-                <td class="truncate text-sm text-base-content/70 py-1">
-                  {(item.user.organization && item.user.organization.name) || gettext("N/A")}
+              <tr
+                :for={item <- @participants}
+                id={"participant-row-#{item.user_id}"}
+                class="hover"
+              >
+                <td class="font-bold text-primary py-0.5">{item.number}</td>
+                <td class="truncate font-medium py-0.5 text-sm">{item.user.last_name}</td>
+                <td class="truncate py-0.5 text-sm">{item.user.first_name}</td>
+                <td class="py-0.5">
+                  <div
+                    class="truncate text-sm text-base-content/70 max-w-[8rem]"
+                    title={
+                      (item.user.organization && item.user.organization.name) || gettext("N/A")
+                    }
+                  >
+                    {(item.user.organization && item.user.organization.name) || gettext("N/A")}
+                  </div>
                 </td>
-                <td class="py-1">
+                <td class="py-0.5">
                   <.form
                     for={%{}}
                     as={:category}
@@ -198,7 +209,7 @@
                       options={Enum.map(@categories, &{&1.name, &1.id})}
                       value={item.category_id}
                       prompt={gettext("Category...")}
-                      class="select select-bordered w-full text-sm"
+                      class="select select-bordered select-sm w-full text-sm min-w-[10rem]"
                     />
                     <.hidden_input
                       id={"#{item.user_id}-category-user-id"}
@@ -207,7 +218,7 @@
                     />
                   </.form>
                 </td>
-                <td class="py-1">
+                <td class="py-0.5">
                   <button
                     id={"remove-participant-#{item.user_id}"}
                     class="btn btn-square btn-xs btn-error"
