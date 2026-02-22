@@ -25,7 +25,7 @@ defmodule SMWeb.Live.Jurors do
   end
 
   @impl Phoenix.LiveView
-  def handle_event("enroll", %{"user_id" => user_id}, socket) do
+  def handle_event("enroll", %{"user-id" => user_id}, socket) do
     competition_id = socket.assigns.competition_id
     max_jurors_count = socket.assigns.competition.settings.number_of_jurors
 
@@ -46,7 +46,7 @@ defmodule SMWeb.Live.Jurors do
     {:noreply, socket}
   end
 
-  def handle_event("remove", %{"user_id" => user_id}, socket) do
+  def handle_event("remove", %{"user-id" => user_id}, socket) do
     {:ok, _juror} = Jurors.delete(user_id, socket.assigns.competition_id)
 
     {:noreply, socket}
@@ -62,7 +62,7 @@ defmodule SMWeb.Live.Jurors do
     {:noreply, assign(socket, :users, users)}
   end
 
-  def handle_event("show-qr-code", %{"user_id" => user_id}, socket) do
+  def handle_event("show-qr-code", %{"user-id" => user_id}, socket) do
     {:ok, user} = Accounts.get_user(user_id)
     {:ok, address} = Config.get_private_network_address()
     host = %{Endpoint.access_struct_url() | host: Utils.ip_to_host(address)}

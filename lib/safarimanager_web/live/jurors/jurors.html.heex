@@ -1,6 +1,7 @@
 <.layout current_page={~p"/organize/#{@competition.id}/jurors"} current_user={@current_user}>
   <.competition_header competition={@competition} />
   <.steps_header current_step={:jurors} competition={@competition} />
+
   <div
     :if={@qr_code}
     id="qr-code-dialog"
@@ -36,97 +37,137 @@
       </div>
     </div>
   </div>
-  <div class="flex flex-col xl:flex-row mt-5">
-    <div class="overflow-y-auto rounded-lg xl:w-1/2 bg-base-200 shadow-lg p-4">
-      <div class="text-2xl font-bold text-center py-4">{gettext("Users")}</div>
-      <.form :let={users_filter} for={%{}} phx-change="filter-users" autocomplete="off">
-        <.input
-          type="text"
-          field={users_filter[:value]}
-          class="input input-bordered w-full mb-1"
-          placeholder={gettext("Search for a user...")}
-          phx-debounce="500"
-          autocomplete="nope"
-        />
-      </.form>
-      <div class="max-h-48 overflow-y-auto tiny-scrollbar">
-        <table class="table table-zebra table-sm">
-          <thead>
-            <tr>
-              <th class="sticky top-0 w-auto">{gettext("Last Name")}</th>
-              <th class="sticky top-0 w-auto">{gettext("First Name")}</th>
-              <th class="sticky top-0 w-auto">{gettext("Organization")}</th>
-              <th class="sticky top-0 w-auto" />
-            </tr>
-          </thead>
-          <tbody>
-            <tr :for={item <- @users}>
-              <td class="truncate">{item.last_name}</td>
-              <td class="truncate">{item.first_name}</td>
-              <td class="truncate">
-                {(item.organization && item.organization.name) || gettext("N/A")}
-              </td>
-              <td>
-                <button
-                  class="btn btn-xs btn-success"
-                  phx-click="enroll"
-                  phx-value-user_id={item.id}
-                >
-                  {gettext("Enroll")}
-                </button>
-              </td>
-            </tr>
-            <tr :if={Enum.empty?(@users)}>
-              <td colspan="4">{gettext("No items yet!")}</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-    <div class="divider xl:divider-horizontal" />
-    <div class="overflow-y-auto rounded-lg xl:w-1/2 bg-base-200 shadow-lg">
+
+  <%!-- Main Content: Users and Jurors --%>
+  <div class="mt-5 flex flex-col xl:flex-row gap-4">
+    <%!-- Available Users Section --%>
+    <div class="flex-1 rounded-lg bg-base-200 shadow-lg">
       <div class="p-4">
-        <div class="text-2xl font-bold text-center py-4">
-          {gettext("Jurors")} (max: {@competition.settings.number_of_jurors})
+        <div class="flex items-center justify-between mb-3">
+          <h2 class="text-xl font-bold">
+            <Heroicons.icon name="users" type="outline" class="w-5 h-5 inline-block mr-2" />
+            {gettext("Available Users")}
+          </h2>
+          <span class="badge badge-primary badge-lg">{length(@users)}</span>
         </div>
-        <div class="max-h-96 overflow-y-auto tiny-scrollbar">
-          <table class="table table-zebra table-sm">
+        <.form for={%{}} as={:users_filter} phx-change="filter-users" autocomplete="off">
+          <label for="users-filter-input" class="sr-only">{gettext("Search users")}</label>
+          <.input
+            type="text"
+            name={:value}
+            value=""
+            id="users-filter-input"
+            class="input input-bordered w-full mb-3"
+            placeholder={gettext("Search for a user...")}
+            phx-debounce="500"
+            autocomplete="nope"
+          />
+        </.form>
+        <div class="max-h-[500px] overflow-y-auto tiny-scrollbar">
+          <table id="juror-users-table" class="table table-zebra table-fixed w-full">
             <thead>
               <tr>
-                <th class="sticky top-0 w-auto">{gettext("Last Name")}</th>
-                <th class="sticky top-0 w-auto">{gettext("First Name")}</th>
-                <th class="sticky top-0 w-auto">{gettext("Organization")}</th>
-                <th class="sticky top-0 w-1/12" />
+                <th class="sticky top-0">{gettext("Last Name")}</th>
+                <th class="sticky top-0">{gettext("First Name")}</th>
+                <th class="sticky top-0">{gettext("Organization")}</th>
+                <th class="sticky top-0 w-24">{gettext("Action")}</th>
               </tr>
             </thead>
-            <tbody>
-              <tr :for={item <- @competition.jurors}>
-                <td class="truncate">{item.user.last_name}</td>
-                <td class="truncate">{item.user.first_name}</td>
-                <td class="truncate">
-                  {(item.user.organization && item.user.organization.name) || gettext("N/A")}
+            <tbody id="juror-users-table-body">
+              <tr :for={item <- @users} id={"juror-user-row-#{item.id}"} class="hover">
+                <td class="truncate font-medium">{item.last_name}</td>
+                <td class="truncate">{item.first_name}</td>
+                <td class="truncate text-sm text-base-content/70">
+                  {(item.organization && item.organization.name) || gettext("N/A")}
                 </td>
-                <td class="flex flex-row gap-1">
+                <td>
                   <button
-                    class="btn btn-square btn-xs btn-error"
-                    phx-click="remove"
-                    phx-value-user_id={item.id}
-                    title={gettext("Remove")}
+                    id={"enroll-juror-#{item.id}"}
+                    class="btn btn-sm btn-success w-full"
+                    phx-click="enroll"
+                    phx-value-user-id={item.id}
+                    title={gettext("Enroll as juror")}
                   >
-                    <Heroicons.icon name="trash" type="outline" class="w-4 h-4" />
-                  </button>
-                  <button
-                    class="btn btn-square btn-xs btn-secondary"
-                    phx-click="show-qr-code"
-                    phx-value-user_id={item.user_id}
-                    title={gettext("QR code")}
-                  >
-                    <Heroicons.icon name="qr-code" type="solid" class="h-4 w-4" />
+                    <Heroicons.icon name="user-plus" type="outline" class="w-4 h-4" />
+                    <span class="sr-only">{gettext("Enroll")}</span>
                   </button>
                 </td>
               </tr>
-              <tr :if={Enum.empty?(@competition.jurors)}>
-                <td colspan="4">{gettext("No items yet!")}</td>
+              <tr :if={@users == []}>
+                <td colspan="4" class="text-center py-8 text-base-content/50">
+                  {gettext("No users available.")}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <%!-- Jurors Section --%>
+    <div class="flex-1 rounded-lg bg-base-200 shadow-lg">
+      <div class="p-4">
+        <div class="flex items-center justify-between mb-3">
+          <h2 class="text-xl font-bold">
+            <Heroicons.icon name="scale" type="outline" class="w-5 h-5 inline-block mr-2" />
+            {gettext("Jurors")}
+          </h2>
+          <div class="flex items-center gap-2">
+            <span class="badge badge-success badge-lg">
+              {length(@competition.jurors)} / {@competition.settings.number_of_jurors}
+            </span>
+          </div>
+        </div>
+        <div class="max-h-[500px] overflow-y-auto tiny-scrollbar">
+          <table id="jurors-table" class="table table-zebra table-fixed w-full">
+            <thead>
+              <tr>
+                <th class="sticky top-0">{gettext("Last Name")}</th>
+                <th class="sticky top-0">{gettext("First Name")}</th>
+                <th class="sticky top-0">{gettext("Organization")}</th>
+                <th class="sticky top-0 w-24">{gettext("Action")}</th>
+              </tr>
+            </thead>
+            <tbody id="jurors-table-body">
+              <tr
+                :for={item <- @competition.jurors}
+                id={"juror-row-#{item.user_id}"}
+                class="hover"
+              >
+                <td class="truncate font-medium">{item.user.last_name}</td>
+                <td class="truncate">{item.user.first_name}</td>
+                <td class="truncate text-sm text-base-content/70">
+                  {(item.user.organization && item.user.organization.name) || gettext("N/A")}
+                </td>
+                <td>
+                  <div class="flex gap-1">
+                    <button
+                      id={"remove-juror-#{item.user_id}"}
+                      class="btn btn-square btn-xs btn-error"
+                      phx-click="remove"
+                      phx-value-user-id={item.user_id}
+                      title={gettext("Remove from jury")}
+                    >
+                      <Heroicons.icon name="trash" type="outline" class="w-3 h-3" />
+                      <span class="sr-only">{gettext("Remove")}</span>
+                    </button>
+                    <button
+                      id={"qr-juror-#{item.user_id}"}
+                      class="btn btn-square btn-xs btn-secondary"
+                      phx-click="show-qr-code"
+                      phx-value-user-id={item.user_id}
+                      title={gettext("QR code")}
+                    >
+                      <Heroicons.icon name="qr-code" type="solid" class="h-3 w-3" />
+                      <span class="sr-only">{gettext("QR code")}</span>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+              <tr :if={@competition.jurors == []}>
+                <td colspan="4" class="text-center py-8 text-base-content/50">
+                  {gettext("No jurors yet. Enroll users from the list on the left.")}
+                </td>
               </tr>
             </tbody>
           </table>
@@ -134,6 +175,7 @@
       </div>
     </div>
   </div>
+
   <div class="flex flex-row my-10 w-full">
     <.link
       :if={@competition.for_teams}
