@@ -313,8 +313,8 @@
       </tbody>
     </table>
   </div>
-  <div class="flex flex-row my-10 w-full">
-    <.link navigate={"/organize/#{@competition_id}/slide_selection"} class="flex-none btn gap-2">
+  <div class="flex flex-row my-10 w-full items-center gap-2">
+    <.link navigate={"/organize/#{@competition_id}/slide_selection"} class="flex-none btn gap-2 min-w-40 h-12 justify-center items-center">
       <svg
         xmlns="http://www.w3.org/2000/svg"
         class="h-6 w-6"
@@ -330,7 +330,7 @@
     <div class="grow" />
     <.link
       navigate={"/organize/#{@competition_id}/jury_launcher"}
-      class="flex-none btn btn-primary gap-2"
+      class="flex-none btn btn-primary gap-2 min-w-40 h-12 justify-center items-center"
     >
       {gettext("Jury")}
       <svg
