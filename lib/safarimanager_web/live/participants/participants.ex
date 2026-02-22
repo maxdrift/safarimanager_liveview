@@ -28,8 +28,9 @@ defmodule SMWeb.Live.Participants do
         categories: Categories.list(),
         participants: [],
         entity: %User{},
-        form: to_form(Accounts.change_for_competition_registration(%User{})),
-        participants_selection: MapSet.new()
+        form: to_form(Accounts.change_for_competition_registration(%User{}), as: :entity),
+        participants_selection: MapSet.new(),
+        expand_register_form: false
       )
 
     {:ok, socket}
@@ -60,10 +61,8 @@ defmodule SMWeb.Live.Participants do
   end
 
   def handle_event("validate-new-user", %{"entity" => entity}, socket) do
-    form =
-      socket.assigns.entity
-      |> Accounts.change_for_competition_registration(entity)
-      |> to_form(action: :validate, as: :entity)
+    changeset = Accounts.change_for_competition_registration(socket.assigns.entity, entity)
+    form = to_form(changeset, action: :validate, as: :entity)
 
     {:noreply, assign(socket, :form, form)}
   end
@@ -76,7 +75,7 @@ defmodule SMWeb.Live.Participants do
           |> assign(:entity, %User{})
           |> assign(
             :form,
-            to_form(Accounts.change_for_competition_registration(socket.assigns.entity))
+            to_form(Accounts.change_for_competition_registration(socket.assigns.entity), as: :entity)
           )
           # Note: remember events pushed from the server via push_event are global
           # and will be dispatched to all active hooks on the client who are handling that event.
@@ -90,15 +89,20 @@ defmodule SMWeb.Live.Participants do
   end
 
   def handle_event("reset-new-user", %{}, socket) do
+    fresh_entity = %User{}
     socket =
       socket
-      |> assign(:entity, %User{})
+      |> assign(:entity, fresh_entity)
       |> assign(
         :form,
-        to_form(Accounts.change_for_competition_registration(socket.assigns.entity))
+        to_form(Accounts.change_for_competition_registration(fresh_entity), as: :entity)
       )
 
     {:noreply, socket}
+  end
+
+  def handle_event("toggle-register-form", _params, socket) do
+    {:noreply, assign(socket, :expand_register_form, !socket.assigns.expand_register_form)}
   end
 
   def handle_event("filter-users", %{"value" => ""}, socket) do
@@ -119,6 +123,11 @@ defmodule SMWeb.Live.Participants do
   def handle_event("filter-participants", %{"value" => value}, socket) do
     participants = Participants.filter_by_name(socket.assigns.competition_id, value)
     {:noreply, assign(socket, :participants, participants)}
+  end
+
+  def handle_event("category-change", %{"category_id" => new_category_id, "user_id" => _user_id}, socket)
+      when new_category_id in [nil, ""] do
+    {:noreply, socket}
   end
 
   def handle_event("category-change", %{"category_id" => new_category_id, "user_id" => user_id}, socket) do

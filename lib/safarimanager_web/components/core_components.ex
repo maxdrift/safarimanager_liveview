@@ -285,6 +285,7 @@ defmodule SMWeb.Components.CoreComponents do
   attr :errors, :list, default: []
   attr :checked, :boolean, doc: "the checked flag for checkbox inputs"
   attr :prompt, :string, default: nil, doc: "the prompt for select inputs"
+  attr :prompt_disabled, :boolean, default: false, doc: "when true, the prompt option is disabled and cannot be selected"
   attr :options, :list, doc: "the options to pass to Phoenix.HTML.Form.options_for_select/2"
   attr :multiple, :boolean, default: false, doc: "the multiple flag for select inputs"
 
@@ -340,7 +341,7 @@ defmodule SMWeb.Components.CoreComponents do
     <div class="form-control w-full">
       <.label :if={@label} for={@id}>{@label}</.label>
       <select id={@id} name={@name} class="select select-bordered w-full" multiple={@multiple} {@rest}>
-        <option :if={@prompt} value="">{@prompt}</option>
+        <option :if={@prompt} value="" disabled={@prompt_disabled}>{@prompt}</option>
         {Phoenix.HTML.Form.options_for_select(@options, @value)}
       </select>
       <.error :for={msg <- @errors}>{msg}</.error>

@@ -13,8 +13,16 @@
         <div class="flex flex-col md:flex-row gap-3">
           <%!-- Register New User --%>
           <div class="flex-1">
-            <div class="collapse collapse-arrow bg-base-100 border border-base-300">
-              <input type="checkbox" class="peer" />
+            <div
+              id="register-new-user-collapse"
+              class="collapse collapse-arrow bg-base-100 border border-base-300"
+            >
+              <input
+                type="checkbox"
+                class="peer"
+                checked={@expand_register_form}
+                phx-click="toggle-register-form"
+              />
               <div class="collapse-title font-semibold text-base-content">
                 <Heroicons.icon name="user-plus" type="outline" class="w-5 h-5 inline-block mr-2" />
                 {gettext("Register New User")}
@@ -42,7 +50,14 @@
                       <button
                         type="submit"
                         class="btn btn-primary btn-sm"
-                        disabled={!(@form.action && @form.source.valid?)}
+                        disabled={
+                          !(@form.action &&
+                              Enum.empty?(
+                                Enum.reject(@form.source.errors, fn {field, _} ->
+                                  field == :password || field == :hashed_password
+                                end)
+                              ))
+                        }
                       >
                         <Heroicons.icon name="check" type="outline" class="w-4 h-4 mr-1" />
                         {gettext("Register")}
@@ -210,6 +225,7 @@
                       options={Enum.map(@categories, &{&1.name, &1.id})}
                       value={item.category_id}
                       prompt={gettext("Category...")}
+                      prompt_disabled={true}
                       class="select select-bordered select-sm w-full text-sm min-w-[10rem]"
                     />
                     <.hidden_input
