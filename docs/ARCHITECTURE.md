@@ -18,9 +18,9 @@ Safari Manager is a comprehensive platform for managing underwater photography c
 
 - **Slide**: A photograph submitted to a competition. Slides progress through states: discarded → submitted for jury review or submitted with fixed points.
 
-- **Subject**: The fish species or marine element depicted in a slide. Subjects have coefficients that affect scoring based on difficulty/rarity.
+- **Subject**: The fish species or marine element depicted in a slide. Every submitted slide must reference a subject. Subjects carry a static **coefficient** (a difficulty/rarity multiplier) and a **type** classification (`fish`, `macro`, `fish_macro`, `ambient`). At scoring time a **dynamic coefficient** is also computed per subject, based on how many participants photographed it in that competition — rarer subjects can earn a higher bonus.
 
-- **Evaluation**: A vote or score that jurors assign to slides. Evaluations can be numeric values or boolean flags (like penalties).
+- **Evaluation**: A configurable vote option that jurors assign to slides. Evaluations have a numeric value and are either normal scores or penalty-type votes. Each competition chooses its own set of allowed evaluations and their display order via `CompetitionEvaluation`, so different competitions can use entirely different vote scales.
 
 - **Juror**: A user designated to evaluate slides during the jury phase of a competition.
 
@@ -198,12 +198,9 @@ Synchronized voting experience:
 
 ### Results Calculation
 
-Sophisticated ranking algorithm:
-1. Calculate slide scores based on status (jury votes × coefficient, or fixed points × coefficient)
-2. Apply dynamic coefficients based on species distribution
-3. Sum participant/team totals
-4. Sort by: total score → slide count → coefficient distribution (highest first)
-5. Handle ties with equal ranking
+Each slide earns a score based on its status and the selected coefficient: jury slides sum all vote values and multiply by the coefficient; fixed-point slides apply a flat multiplier to the coefficient; penalised slides receive a flat negative amount regardless of votes. Dynamic coefficients augment the static subject coefficient based on how commonly each species was photographed across participants. Participant totals are the sum of all their slide scores; teams aggregate across members. Rankings sort by total score, then by slide count, then by how many slides a participant holds at each coefficient value (highest coefficients first). Tied participants share a rank.
+
+→ See [Scoring & Evaluation Reference](SCORING.md) for the full specification.
 
 ---
 
