@@ -259,8 +259,11 @@ defmodule SM.Subjects do
   def list_with_coefficients(competition_id) do
     {:ok, competition} = Competitions.get(competition_id)
     slides_subjects = Slides.subjects_distribution(competition_id)
+    overrides = Competitions.subject_static_coefficient_overrides(competition_id)
 
-    list_with_dynamic_coefficients(competition, slides_subjects)
+    competition
+    |> list_with_dynamic_coefficients(slides_subjects)
+    |> apply_competition_static_coefficients(overrides)
   end
 
   # Internal
@@ -326,5 +329,14 @@ defmodule SM.Subjects do
 
   defp between(%Decimal{} = left, %Decimal{} = center, %Decimal{} = right) do
     Decimal.compare(center, left) == :gt and Decimal.compare(center, right) in [:lt, :eq]
+  end
+
+  defp apply_competition_static_coefficients(subjects, overrides) when map_size(overrides) == 0, do: subjects
+
+  defp apply_competition_static_coefficients(subjects, overrides) do
+    Enum.map(subjects, fn %Subject{} = s ->
+      c = Map.get(overrides, s.id, s.coefficient)
+      %{s | coefficient: c}
+    end)
   end
 end

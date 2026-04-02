@@ -8,8 +8,10 @@ defmodule SM.Competitions do
   alias SM.Categories.Category
   alias SM.Competitions.Competition
   alias SM.Competitions.CompetitionSettings
+  alias SM.Competitions.CompetitionSubject
   alias SM.Participants.Participant
   alias SM.Slides
+  alias SM.Subjects.Subject
 
   @doc """
   Returns the list of competition types.
@@ -162,7 +164,8 @@ defmodule SM.Competitions do
            :competitions_evaluations,
            :allowed_evaluations,
            :organization,
-           :settings
+           :settings,
+           [competition_subjects: :subject]
          ])}
     end
   end
@@ -202,7 +205,8 @@ defmodule SM.Competitions do
   def duplicate(id, config \\ %{}) do
     case get(id) do
       {:ok, existing_competition} ->
-        existing_competition = Repo.preload(existing_competition, slides: [:slide_flags, :votes])
+        existing_competition =
+          Repo.preload(existing_competition, [:competition_subjects, slides: [:slide_flags, :votes]])
 
         competition_params =
           existing_competition
@@ -249,9 +253,15 @@ defmodule SM.Competitions do
 
     competition_settings = Map.put(competition_settings, :dynamic_coefficients, dynamic_coefficients)
 
+    competition_subjects =
+      competition
+      |> Map.get(:competition_subjects, [])
+      |> Enum.map(fn cs -> %{subject_id: cs.subject_id, coefficient: cs.coefficient} end)
+
     params
     |> Map.put(:settings, competition_settings)
     |> Map.put(:competitions_evaluations, competitions_evaluations)
+    |> Map.put(:competition_subjects, competition_subjects)
   end
 
   defp maybe_duplicate_participants(params, competition, config) do
@@ -525,6 +535,156 @@ defmodule SM.Competitions do
   end
 
   # Internal
+
+  @doc """
+  Returns true when the competition has at least one `competition_subjects` row.
+
+  When false, static coefficients come from the global `subjects` table (legacy mode).
+  """
+  @spec competition_subjects_configured?(Ecto.UUID.t()) :: boolean()
+  def competition_subjects_configured?(competition_id) do
+    from(cs in CompetitionSubject,
+      where: cs.competition_id == ^competition_id,
+      select: count(cs.id)
+    )
+    |> Repo.one()
+    |> Kernel.>(0)
+  end
+
+  @doc """
+  Map of `subject_id` → competition static coefficient for this competition.
+
+  Empty map means legacy mode (use global subject coefficients).
+  """
+  @spec subject_static_coefficient_overrides(Ecto.UUID.t()) :: %{String.t() => integer()}
+  def subject_static_coefficient_overrides(competition_id) do
+    from(cs in CompetitionSubject,
+      where: cs.competition_id == ^competition_id,
+      select: {cs.subject_id, cs.coefficient}
+    )
+    |> Repo.all()
+    |> Map.new()
+  end
+
+  @doc """
+  Static coefficient used for scoring: join row when configured, else global catalog value.
+  """
+  @spec effective_static_coefficient(Ecto.UUID.t(), String.t(), integer() | nil) :: integer()
+  def effective_static_coefficient(competition_id, subject_id, global_coefficient) do
+    overrides = subject_static_coefficient_overrides(competition_id)
+
+    if map_size(overrides) == 0 do
+      global_coefficient || 0
+    else
+      Map.get(overrides, subject_id, global_coefficient) || 0
+    end
+  end
+
+  @doc """
+  Subjects allowed for slide assignment: full catalog in legacy mode, else join rows only.
+  """
+  @spec list_subjects_for_competition(Ecto.UUID.t()) :: [Subject.t()]
+  def list_subjects_for_competition(competition_id) do
+    if competition_subjects_configured?(competition_id) do
+      Repo.all(
+        from(s in Subject,
+          join: cs in CompetitionSubject,
+          on: cs.subject_id == s.id and cs.competition_id == ^competition_id,
+          order_by: [asc: s.numeric_id],
+          distinct: true,
+          select: s
+        )
+      )
+    else
+      SM.Subjects.list()
+    end
+  end
+
+  @doc """
+  Nested params for `cast_assoc(:competition_subjects)` — one row per catalog subject with global coefficients.
+  """
+  @spec competition_subject_seed_nested_params :: %{String.t() => map()}
+  def competition_subject_seed_nested_params do
+    SM.Subjects.list()
+    |> Enum.sort_by(& &1.numeric_id)
+    |> Enum.with_index()
+    |> Map.new(fn {sub, i} ->
+      {Integer.to_string(i),
+       %{
+         "subject_id" => sub.id,
+         "coefficient" => sub.coefficient || 0
+       }}
+    end)
+  end
+
+  @doc """
+  Set every coefficient in nested `competition_subjects` form params to the same value (clamped at 0).
+  """
+  @spec bulk_set_competition_subject_params(map(), integer()) :: map()
+  def bulk_set_competition_subject_params(nested_params, value) when is_map(nested_params) and is_integer(value) do
+    v = max(0, value)
+
+    Map.new(nested_params, fn {k, row} ->
+      {k, Map.put(row, "coefficient", v)}
+    end)
+  end
+
+  @doc """
+  Add an integer offset to each coefficient in nested form params (floored at 0).
+  """
+  @spec bulk_offset_competition_subject_params(map(), integer()) :: map()
+  def bulk_offset_competition_subject_params(nested_params, delta) when is_map(nested_params) do
+    Map.new(nested_params, fn {k, row} ->
+      int_coeff = parse_coeff_int(row["coefficient"] || row[:coefficient])
+      {k, Map.put(row, "coefficient", max(0, int_coeff + delta))}
+    end)
+  end
+
+  @doc """
+  Reset coefficients in nested params from current global `subjects` rows.
+  """
+  @spec bulk_reset_competition_subject_params_from_catalog(map()) :: map()
+  def bulk_reset_competition_subject_params_from_catalog(nested_params) when is_map(nested_params) do
+    ids =
+      nested_params
+      |> Enum.map(fn {_k, row} -> row["subject_id"] || row[:subject_id] end)
+      |> Enum.reject(&(&1 in [nil, ""]))
+
+    coeffs =
+      if ids == [] do
+        %{}
+      else
+        from(s in Subject, where: s.id in ^ids, select: {s.id, s.coefficient})
+        |> Repo.all()
+        |> Map.new(fn {id, c} -> {id, c || 0} end)
+      end
+
+    Map.new(nested_params, fn {k, row} ->
+      sid = row["subject_id"] || row[:subject_id]
+      c = Map.get(coeffs, sid, row["coefficient"] || row[:coefficient] || 0)
+      {k, Map.put(row, "coefficient", c)}
+    end)
+  end
+
+  @doc """
+  Returns true if any slide in the competition references this subject.
+  """
+  @spec slide_references_subject?(Ecto.UUID.t(), String.t()) :: boolean()
+  def slide_references_subject?(competition_id, subject_id) do
+    from(sl in SM.Slides.Slide,
+      where: sl.competition_id == ^competition_id and sl.subject_id == ^subject_id,
+      select: count(sl.id)
+    )
+    |> Repo.one()
+    |> Kernel.>(0)
+  end
+
+  defp parse_coeff_int(v) do
+    case Integer.parse(to_string(v || 0)) do
+      {n, _} -> n
+      :error -> 0
+    end
+  end
 
   defp delete_while(id, acc) do
     case Slides.delete_files(id) do

@@ -185,7 +185,7 @@ defmodule SMWeb.Live.ParticipantsTest do
       |> render_click()
 
       # Register button should be disabled again (form cleared)
-      assert view |> render() =~ ~r/<button[^>]*type="submit"[^>]*disabled[^>]*>.*Register/s
+      assert render(view) =~ ~r/<button[^>]*type="submit"[^>]*disabled[^>]*>.*Register/s
     end
   end
 
@@ -221,11 +221,7 @@ defmodule SMWeb.Live.ParticipantsTest do
     end
   end
 
-  defp enroll_one_participant(%{
-         competition: competition,
-         organization: organization,
-         category: category
-       }) do
+  defp enroll_one_participant(%{competition: competition, organization: organization, category: category}) do
     user = SM.AccountsFixtures.user_fixture()
 
     {:ok, user} =

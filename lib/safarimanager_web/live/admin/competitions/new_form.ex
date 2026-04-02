@@ -6,6 +6,7 @@ defmodule SMWeb.Live.Admin.Competitions.Form do
   use Gettext, backend: SMWeb.Gettext
 
   alias SM.Competitions
+  alias SM.Competitions.Competition
 
   @impl true
   def render(assigns) do
@@ -300,6 +301,141 @@ defmodule SMWeb.Live.Admin.Competitions.Form do
           </div>
         </.inputs_for>
 
+        <%!-- Subjects for this competition --%>
+        <fieldset class="border border-base-300 rounded-lg p-4" id="competition-subjects-fieldset">
+          <legend class="px-2 text-sm font-semibold text-base-content/70 uppercase tracking-wide mb-3">
+            <Heroicons.icon name="squares-2x2" type="outline" class="w-4 h-4 inline-block mr-1" />
+            {gettext("Subjects and coefficients")}
+          </legend>
+          <p class="text-sm text-base-content/60 mb-3">
+            {gettext(
+              "Choose which species are allowed in this competition and set static coefficients. Use the buttons below to load the full catalog or adjust values in bulk."
+            )}
+          </p>
+          <div class="mb-3 overflow-x-auto overflow-y-visible overscroll-x-contain">
+            <div class="flex flex-nowrap items-end gap-2 min-w-0 py-0.5">
+              <button
+                type="button"
+                phx-click="subjects-seed-catalog"
+                phx-target={@myself}
+                class="btn btn-sm btn-outline btn-primary shrink-0 whitespace-nowrap"
+              >
+                {gettext("Load all from catalog")}
+              </button>
+              <button
+                type="button"
+                phx-click="subjects-reset-catalog-coefficients"
+                phx-target={@myself}
+                class="btn btn-sm btn-outline shrink-0 whitespace-nowrap"
+              >
+                {gettext("Reset coefficients from catalog")}
+              </button>
+              <button
+                type="button"
+                phx-click="subjects-bulk-offset"
+                phx-value-delta="-1"
+                phx-target={@myself}
+                class="btn btn-sm btn-outline shrink-0 whitespace-nowrap"
+              >
+                {gettext("Decrease all by 1")}
+              </button>
+              <button
+                type="button"
+                phx-click="subjects-bulk-offset"
+                phx-value-delta="1"
+                phx-target={@myself}
+                class="btn btn-sm btn-outline shrink-0 whitespace-nowrap"
+              >
+                {gettext("Increase all by 1")}
+              </button>
+              <div class="flex flex-nowrap items-end gap-2 shrink-0 border-l border-base-300 pl-2 ml-1">
+                <label
+                  for="subject-bulk-set-draft"
+                  class="text-sm text-base-content/70 whitespace-nowrap self-center pb-0.5"
+                >
+                  {gettext("Set all to")}
+                </label>
+                <input
+                  type="number"
+                  min="0"
+                  id="subject-bulk-set-draft"
+                  name="subject_bulk_set_draft"
+                  value={@subject_bulk_set_draft}
+                  class="input input-bordered input-sm w-20 shrink-0"
+                  phx-change="subject-bulk-set-draft"
+                  phx-target={@myself}
+                  phx-debounce="300"
+                />
+                <button
+                  type="button"
+                  phx-click="subjects-bulk-set-all"
+                  phx-target={@myself}
+                  class="btn btn-sm btn-outline shrink-0 whitespace-nowrap"
+                >
+                  {gettext("Apply")}
+                </button>
+              </div>
+            </div>
+          </div>
+          <div :if={competition_subjects_errors(@form) != []} class="text-error text-sm mb-2">
+            <p :for={msg <- competition_subjects_errors(@form)}>{msg}</p>
+          </div>
+          <div class="max-h-64 overflow-y-auto border border-base-200 rounded-lg">
+            <.inputs_for :let={csrow} field={@form[:competition_subjects]}>
+              <.hidden_input name={"#{@form.name}[competition_subject_sort][]"} value={csrow.index} />
+              <div class="flex flex-wrap items-end gap-2 p-2 border-b border-base-200 last:border-b-0 bg-base-100">
+                <div class="form-control min-w-[200px] flex-1">
+                  <label class="label py-0">
+                    <span class="label-text text-xs">{gettext("Subject")}</span>
+                  </label>
+                  <select
+                    id={csrow[:subject_id].id}
+                    name={csrow[:subject_id].name}
+                    class="select select-bordered select-sm w-full"
+                    phx-debounce="100"
+                  >
+                    <option value="">{gettext("Select…")}</option>
+                    {Phoenix.HTML.Form.options_for_select(
+                      subject_select_options(@subjects),
+                      csrow[:subject_id].value
+                    )}
+                  </select>
+                </div>
+                <div class="form-control w-28">
+                  <label class="label py-0">
+                    <span class="label-text text-xs">{gettext("Coeff.")}</span>
+                  </label>
+                  <.input
+                    field={csrow[:coefficient]}
+                    type="number"
+                    class="input input-bordered input-sm w-full"
+                  />
+                </div>
+                <label class="btn btn-square btn-sm btn-ghost text-error">
+                  <input
+                    type="checkbox"
+                    name={"#{@form.name}[competition_subject_drop][]"}
+                    value={csrow.index}
+                    class="hidden"
+                  />
+                  <Heroicons.icon name="trash" type="solid" class="w-4 h-4" />
+                </label>
+              </div>
+            </.inputs_for>
+          </div>
+          <div class="mt-2">
+            <label class="btn btn-ghost btn-sm text-primary">
+              <input
+                type="checkbox"
+                name={"#{@form.name}[competition_subject_sort][]"}
+                class="hidden"
+              />
+              <Heroicons.icon name="plus-circle" type="outline" class="w-4 h-4" />
+              {gettext("Add subject row")}
+            </label>
+          </div>
+        </fieldset>
+
         <.hidden_input field={@form[:_action]} value={@action} />
 
         <%!-- Modal Actions --%>
@@ -326,19 +462,19 @@ defmodule SMWeb.Live.Admin.Competitions.Form do
   end
 
   @impl true
-  def update(%{form: changeset} = assigns, socket) do
-    {:ok,
-     socket
-     |> assign(assigns)
-     |> assign_new(:form, fn ->
-       to_form(changeset)
-     end)}
+  def update(assigns, socket) do
+    socket =
+      socket
+      |> assign(assigns)
+      |> assign_new(:subjects, fn -> [] end)
+      |> assign_new(:subject_bulk_set_draft, fn -> "" end)
+
+    {:ok, socket}
   end
 
   @impl true
   def handle_event("validate", %{"competition" => competition_params}, socket) do
-    # The parent can pass either :entity or :competition as the struct
-    entity = socket.assigns[:entity] || socket.assigns[:competition] || %SM.Competitions.Competition{}
+    entity = socket.assigns[:entity] || socket.assigns[:competition] || %Competition{}
     changeset = Competitions.change(entity, competition_params)
     {:noreply, assign(socket, form: to_form(changeset, action: :validate))}
   end
@@ -347,15 +483,81 @@ defmodule SMWeb.Live.Admin.Competitions.Form do
     save_competition(socket, socket.assigns.action, competition_params)
   end
 
-  defp save_competition(socket, :edit_competition, competition_params) do
-    case Competitions.update(socket.assigns.competition, competition_params) do
-      {:ok, competition} ->
-        notify_parent({:saved, competition})
+  def handle_event("subjects-seed-catalog", _params, socket) do
+    params =
+      socket.assigns.form.source.params
+      |> Kernel.||(%{})
+      |> Map.put("competition_subjects", Competitions.competition_subject_seed_nested_params())
 
-        {:noreply,
-         socket
-         |> put_flash(:info, gettext("Competition updated successfully"))
-         |> push_patch(to: socket.assigns.patch)}
+    {:noreply, rechange_competition_form(socket, params)}
+  end
+
+  def handle_event("subjects-reset-catalog-coefficients", _params, socket) do
+    params = socket.assigns.form.source.params || %{}
+    nested = params["competition_subjects"] || %{}
+    new_nested = Competitions.bulk_reset_competition_subject_params_from_catalog(nested)
+    {:noreply, rechange_competition_form(socket, Map.put(params, "competition_subjects", new_nested))}
+  end
+
+  def handle_event("subjects-bulk-offset", %{"delta" => delta_str}, socket) do
+    delta =
+      case Integer.parse(delta_str) do
+        {d, _} -> d
+        :error -> 0
+      end
+
+    params = socket.assigns.form.source.params || %{}
+    nested = params["competition_subjects"] || %{}
+    new_nested = Competitions.bulk_offset_competition_subject_params(nested, delta)
+    {:noreply, rechange_competition_form(socket, Map.put(params, "competition_subjects", new_nested))}
+  end
+
+  def handle_event("subject-bulk-set-draft", %{"subject_bulk_set_draft" => v}, socket) do
+    {:noreply, assign(socket, :subject_bulk_set_draft, v)}
+  end
+
+  def handle_event("subject-bulk-set-draft", _params, socket) do
+    {:noreply, socket}
+  end
+
+  def handle_event("subjects-bulk-set-all", _params, socket) do
+    value =
+      case Integer.parse(to_string(socket.assigns.subject_bulk_set_draft || "")) do
+        {n, _} -> max(0, n)
+        :error -> 0
+      end
+
+    params = socket.assigns.form.source.params || %{}
+    nested = params["competition_subjects"] || %{}
+    new_nested = Competitions.bulk_set_competition_subject_params(nested, value)
+    {:noreply, rechange_competition_form(socket, Map.put(params, "competition_subjects", new_nested))}
+  end
+
+  defp rechange_competition_form(socket, params) do
+    entity = socket.assigns[:entity] || socket.assigns[:competition] || %Competition{}
+    cs = Competitions.change(entity, params)
+    assign(socket, form: to_form(cs, action: :validate))
+  end
+
+  defp save_competition(socket, :edit_competition, competition_params) do
+    competition = socket.assigns.competition
+
+    with :ok <- validate_subject_removals(competition, competition_params),
+         {:ok, updated} <- Competitions.update(competition, competition_params) do
+      notify_parent({:saved, updated})
+
+      {:noreply,
+       socket
+       |> put_flash(:info, gettext("Competition updated successfully"))
+       |> push_patch(to: socket.assigns.patch)}
+    else
+      {:error, msg} when is_binary(msg) ->
+        cs =
+          competition
+          |> Competitions.change(competition_params)
+          |> Ecto.Changeset.add_error(:competition_subjects, msg)
+
+        {:noreply, assign(socket, form: to_form(cs))}
 
       {:error, %Ecto.Changeset{} = changeset} ->
         {:noreply, assign(socket, form: to_form(changeset))}
@@ -363,26 +565,77 @@ defmodule SMWeb.Live.Admin.Competitions.Form do
   end
 
   defp save_competition(socket, :new_competition, competition_params) do
-    case Competitions.create(competition_params) do
-      {:ok, competition} ->
-        notify_parent({:saved, competition})
+    entity = socket.assigns[:entity] || %Competition{}
 
-        # When used from NewCompetition page, redirect to participants
-        # When used from Admin, use the patch assign if provided
-        socket = put_flash(socket, :info, gettext("Competition created successfully"))
+    case validate_at_least_one_subject_row(competition_params) do
+      {:error, msg} ->
+        cs =
+          entity
+          |> Competitions.change(competition_params)
+          |> Ecto.Changeset.add_error(:competition_subjects, msg)
 
-        socket =
-          if Map.has_key?(socket.assigns, :patch) and socket.assigns.patch do
-            push_patch(socket, to: socket.assigns.patch)
-          else
-            push_navigate(socket, to: "/organize/#{competition.id}/participants")
-          end
+        {:noreply, assign(socket, form: to_form(cs))}
 
-        {:noreply, socket}
+      :ok ->
+        case Competitions.create(competition_params) do
+          {:ok, competition} ->
+            notify_parent({:saved, competition})
+            socket = put_flash(socket, :info, gettext("Competition created successfully"))
 
-      {:error, %Ecto.Changeset{} = changeset} ->
-        {:noreply, assign(socket, form: to_form(changeset))}
+            socket =
+              if Map.has_key?(socket.assigns, :patch) and socket.assigns.patch do
+                push_patch(socket, to: socket.assigns.patch)
+              else
+                push_navigate(socket, to: "/organize/#{competition.id}/participants")
+              end
+
+            {:noreply, socket}
+
+          {:error, %Ecto.Changeset{} = changeset} ->
+            {:noreply, assign(socket, form: to_form(changeset))}
+        end
     end
+  end
+
+  defp validate_at_least_one_subject_row(params) do
+    rows = params["competition_subjects"] || %{}
+
+    if Enum.any?(rows, fn {_k, v} -> (v["subject_id"] || "") != "" end) do
+      :ok
+    else
+      {:error, gettext("Add at least one subject (use “Load all from catalog” or “Add subject row”).")}
+    end
+  end
+
+  defp validate_subject_removals(competition, params) do
+    {:ok, full} = Competitions.get(competition.id)
+    old_ids = Enum.map(full.competition_subjects, & &1.subject_id)
+
+    new_ids =
+      (params["competition_subjects"] || %{})
+      |> Enum.map(fn {_k, v} -> v["subject_id"] end)
+      |> Enum.reject(&(&1 in [nil, ""]))
+
+    removed = old_ids -- new_ids
+
+    case Enum.find(removed, &Competitions.slide_references_subject?(competition.id, &1)) do
+      nil -> :ok
+      _ -> {:error, gettext("Cannot remove a subject that still has slides in this competition.")}
+    end
+  end
+
+  defp competition_subjects_errors(%Phoenix.HTML.Form{source: %Ecto.Changeset{} = cs}) do
+    cs.errors
+    |> Keyword.get_values(:competition_subjects)
+    |> Enum.map(&elem(&1, 0))
+  end
+
+  defp competition_subjects_errors(_), do: []
+
+  defp subject_select_options(subjects) do
+    Enum.map(subjects, fn s ->
+      {"#{s.numeric_id} — #{s.name}", s.id}
+    end)
   end
 
   defp notify_parent(msg), do: send(self(), {__MODULE__, msg})

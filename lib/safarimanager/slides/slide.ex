@@ -5,6 +5,7 @@ defmodule SM.Slides.Slide do
   use SM, :schema
 
   alias SM.Accounts.User
+  alias SM.Competitions
   alias SM.Competitions.Competition
   alias SM.Slides.SlideEvaluation
   alias SM.Slides.SlideFlag
@@ -54,6 +55,7 @@ defmodule SM.Slides.Slide do
     |> cast_assoc(:slide_flags, required: false)
     |> cast_assoc(:votes, required: false)
     |> maybe_require_subject()
+    |> validate_subject_allowed_for_competition()
     |> foreign_key_constraint(:user_id)
     |> foreign_key_constraint(:competition_id)
     |> foreign_key_constraint(:subject_id)
@@ -84,6 +86,34 @@ defmodule SM.Slides.Slide do
       changeset
     else
       validate_required(changeset, [:subject_id])
+    end
+  end
+
+  defp validate_subject_allowed_for_competition(changeset) do
+    competition_id = get_field(changeset, :competition_id)
+    subject_id = get_change(changeset, :subject_id)
+
+    cond do
+      subject_id in [nil, ""] ->
+        changeset
+
+      not is_binary(competition_id) ->
+        changeset
+
+      not Competitions.competition_subjects_configured?(competition_id) ->
+        changeset
+
+      true ->
+        allowed_ids =
+          competition_id
+          |> Competitions.list_subjects_for_competition()
+          |> MapSet.new(& &1.id)
+
+        if MapSet.member?(allowed_ids, subject_id) do
+          changeset
+        else
+          add_error(changeset, :subject_id, "is not an allowed subject for this competition")
+        end
     end
   end
 end

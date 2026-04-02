@@ -34,9 +34,16 @@ Subjects carry the following domain-relevant attributes:
 | **Scientific name** | Latin binomial for species accuracy |
 | **Numeric ID** | Integer used for ordering slides in the jury queue (same species are grouped together) |
 | **Type** | Classification: `fish`, `macro`, `fish_macro`, or `ambient` |
-| **Coefficient** | Non-negative integer. The core difficulty multiplier. A coefficient of 1 is neutral; higher values reward photographing rarer or harder subjects. |
+| **Coefficient** | Non-negative integer on the global catalog row. Used as the default when adding a species to a competition and as the **effective** static multiplier in **legacy** competitions (see below). |
 
-The static coefficient is a property of the subject itself and does not change between competitions.
+### Per-competition subject list and coefficients
+
+Each competition can define **`competition_subjects`**: a join of catalog `subjects` to that competition with a **competition-specific** non-negative integer coefficient.
+
+- If a competition has **no** such rows, scoring uses **legacy** behaviour: every catalog subject can be assigned to slides, and the **global** `subjects.coefficient` is the static multiplier.
+- If a competition has **at least one** row, only those subjects are intended for slide assignment (enforced in the UI and on slide updates when a subject is changed), and the **static** multiplier for scoring is taken from the join row (with fallback to the global coefficient if a row is missing for a subject).
+
+Dynamic coefficient bonuses (rarity intervals) still apply on top of this **effective** static coefficient, according to `coefficient_mode` / `dynamic_coefficient_mode` as before.
 
 ---
 
@@ -107,10 +114,10 @@ Which coefficient is applied to a given slide depends on the competition's coeff
 - **`coefficient_mode`** — controls when the static subject coefficient is applied. Options: `disabled` (always use 1), `all` (apply to all submitted slides), `submitted_jury` (only jury slides), `submitted_fixed` (only fixed-point slides).
 - **`dynamic_coefficient_mode`** — same set of options, but for the dynamic bonus coefficient (described below).
 
-The final coefficient for a slide is resolved as:
+The final coefficient for a slide is resolved as (where **static** means the effective per-competition or legacy global value described above):
 
-1. If the dynamic coefficient mode applies to this slide's status → `subject.coefficient + dynamic_bonus`
-2. Else if the static coefficient mode applies → `subject.coefficient`
+1. If the dynamic coefficient mode applies to this slide's status → `static_coefficient + dynamic_bonus`
+2. Else if the static coefficient mode applies → `static_coefficient`
 3. Otherwise → `1` (neutral)
 
 ---
@@ -141,7 +148,7 @@ Competition administrators can tune the bonus values to meaningfully reward rare
 
 When the dynamic coefficient is active, it is added to the static coefficient rather than replacing it:
 
-> **Final coefficient = subject.coefficient + dynamic_bonus**
+> **Final coefficient = effective_static_coefficient + dynamic_bonus**
 
 This means the dynamic bonus always augments the base difficulty — a naturally hard subject (high static coefficient) that is also rarely photographed earns both rewards.
 

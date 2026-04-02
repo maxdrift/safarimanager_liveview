@@ -6,6 +6,7 @@ defmodule SM.Slides do
 
   alias Ecto.Multi
   alias SM.Competitions
+  alias SM.Competitions.CompetitionSubject
   alias SM.ImageProcessing
   alias SM.Jurors.Juror
   alias SM.Participants.Participant
@@ -449,12 +450,14 @@ defmodule SM.Slides do
         join: p in Participant,
         on: p.user_id == sl.user_id and p.competition_id == ^competition_id,
         join: su in assoc(sl, :subject),
+        left_join: cs in CompetitionSubject,
+        on: cs.competition_id == ^competition_id and cs.subject_id == su.id,
         where: [competition_id: ^competition_id],
         where: [status: :submitted_jury],
-        group_by: [:user_id, su.coefficient],
+        group_by: [p.number, fragment("coalesce(?, ?)", cs.coefficient, su.coefficient)],
         order_by: [asc: p.number],
         select: {p.number, count(sl.id)},
-        having: su.coefficient == ^coefficient
+        having: fragment("coalesce(?, ?) = ?", cs.coefficient, su.coefficient, ^coefficient)
       )
 
     Repo.all(query)
@@ -468,12 +471,14 @@ defmodule SM.Slides do
         on: tm.user_id == sl.user_id,
         join: t in assoc(tm, :team),
         join: su in assoc(sl, :subject),
+        left_join: cs in CompetitionSubject,
+        on: cs.competition_id == ^competition_id and cs.subject_id == su.id,
         where: [competition_id: ^competition_id],
         where: [status: :submitted_jury],
-        group_by: [:user_id, su.coefficient],
+        group_by: [t.number, fragment("coalesce(?, ?)", cs.coefficient, su.coefficient)],
         order_by: [asc: t.number],
         select: {t.number, count(sl.id)},
-        having: su.coefficient == ^coefficient
+        having: fragment("coalesce(?, ?) = ?", cs.coefficient, su.coefficient, ^coefficient)
       )
 
     Repo.all(query)

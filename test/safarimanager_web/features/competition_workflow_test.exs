@@ -27,6 +27,23 @@ defmodule SMWeb.Features.CompetitionWorkflowTest do
   import SM.CompetitionsFixtures
 
   alias SM.Competitions
+  alias SM.Subjects
+
+  # Inserts a subject and returns nested form params. Must run **before** `live/2` so the
+  # competition form's subject `<select>` options include this id (options come from mount).
+  defp one_competition_subject_form_row! do
+    n = System.unique_integer([:positive])
+
+    {:ok, s} =
+      Subjects.create(%{
+        "name" => "Workflow form subject #{n}",
+        "numeric_id" => n,
+        "type" => :fish,
+        "coefficient" => 1
+      })
+
+    %{"0" => %{"subject_id" => s.id, "coefficient" => 1}}
+  end
 
   # ============================================================================
   # Stage 2: Setup Phase Tests
@@ -53,7 +70,8 @@ defmodule SMWeb.Features.CompetitionWorkflowTest do
       organization: organization,
       evaluation: evaluation
     } do
-      # Use LiveViewTest for form submission that causes redirect
+      subject_rows = one_competition_subject_form_row!()
+
       {:ok, view, _html} = live(conn, ~p"/organize/new")
 
       {:error, {:live_redirect, %{to: new_path}}} =
@@ -65,7 +83,8 @@ defmodule SMWeb.Features.CompetitionWorkflowTest do
             "type" => :qualification,
             "competitions_evaluations" => %{
               "0" => %{"evaluation_id" => evaluation.id}
-            }
+            },
+            "competition_subjects" => subject_rows
           }
         )
         |> render_submit()
@@ -108,6 +127,8 @@ defmodule SMWeb.Features.CompetitionWorkflowTest do
       organization: organization,
       evaluation: evaluation
     } do
+      subject_rows = one_competition_subject_form_row!()
+
       {:ok, view, _html} = live(conn, ~p"/organize/new")
 
       {:error, {:live_redirect, %{to: new_path}}} =
@@ -119,7 +140,8 @@ defmodule SMWeb.Features.CompetitionWorkflowTest do
             "type" => :national_championship,
             "competitions_evaluations" => %{
               "0" => %{"evaluation_id" => evaluation.id}
-            }
+            },
+            "competition_subjects" => subject_rows
           }
         )
         |> render_submit()

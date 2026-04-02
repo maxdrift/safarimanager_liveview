@@ -9,7 +9,6 @@ defmodule SMWeb.Live.Validation do
   alias SM.Cache
   alias SM.Competitions
   alias SM.Slides
-  alias SM.Subjects
   alias SM.Utils
 
   require Logger
@@ -25,7 +24,7 @@ defmodule SMWeb.Live.Validation do
       |> assign(:curr_index, 0)
       |> assign(:image_count, 0)
       |> assign(:curr_slide, nil)
-      |> assign(:subjects, Subjects.list())
+      |> assign(:subjects, [])
 
     {:ok, socket}
   end
@@ -62,7 +61,8 @@ defmodule SMWeb.Live.Validation do
         image_count: Enum.count(slides),
         curr_index: current_index,
         curr_slide: slide,
-        slide_flags: Slides.slide_flags_by_types(slide)
+        slide_flags: Slides.slide_flags_by_types(slide),
+        subjects: Competitions.list_subjects_for_competition(competition_id)
       )
       # Note: remember events pushed from the server via push_event are global
       # and will be dispatched to all active hooks on the client who are handling that event.
@@ -84,6 +84,7 @@ defmodule SMWeb.Live.Validation do
       socket
       |> assign(:competition, competition)
       |> assign(:slides, slides)
+      |> assign(:subjects, Competitions.list_subjects_for_competition(competition_id))
 
     next_slide_id =
       with slide_id when not is_nil(slide_id) <-

@@ -37,7 +37,7 @@ defmodule SMWeb.Live.SlideSelection do
         editing?: false,
         editing_slide: nil,
         editing_form: nil,
-        subjects: Subjects.list()
+        subjects: []
       )
       |> allow_upload(:csv,
         accept: ~w(.csv),
@@ -145,7 +145,8 @@ defmodule SMWeb.Live.SlideSelection do
       team: nil,
       discarded_slides: Map.get(grouped_slides, :discarded, []),
       jury_slides: Map.get(grouped_slides, :submitted_jury, []),
-      fixed_slides: Map.get(grouped_slides, :submitted_fixed, [])
+      fixed_slides: Map.get(grouped_slides, :submitted_fixed, []),
+      subjects: Competitions.list_subjects_for_competition(competition_id)
     )
   end
 
@@ -165,7 +166,8 @@ defmodule SMWeb.Live.SlideSelection do
       team: team,
       discarded_slides: Map.get(grouped_slides, :discarded, []),
       jury_slides: Map.get(grouped_slides, :submitted_jury, []),
-      fixed_slides: Map.get(grouped_slides, :submitted_fixed, [])
+      fixed_slides: Map.get(grouped_slides, :submitted_fixed, []),
+      subjects: Competitions.list_subjects_for_competition(competition_id)
     )
   end
 
@@ -180,7 +182,8 @@ defmodule SMWeb.Live.SlideSelection do
       user: nil,
       discarded_slides: [],
       jury_slides: [],
-      fixed_slides: []
+      fixed_slides: [],
+      subjects: Competitions.list_subjects_for_competition(competition_id)
     )
   end
 

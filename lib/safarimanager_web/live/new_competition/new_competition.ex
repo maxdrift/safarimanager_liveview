@@ -10,9 +10,11 @@ defmodule SMWeb.Live.NewCompetition do
   alias SM.Competitions.Competition
   alias SM.Competitions.CompetitionEvaluation
   alias SM.Competitions.CompetitionSettings
+  alias SM.Competitions.CompetitionSubject
   alias SM.Evaluations
   alias SM.Organizations
   alias SM.Slides
+  alias SM.Subjects
   alias SM.Utils
 
   require Logger
@@ -26,14 +28,15 @@ defmodule SMWeb.Live.NewCompetition do
     socket =
       assign(socket,
         entity: %Competition{},
-        form: %Competition{} |> Competitions.change() |> to_form(),
+        form: %Competition{} |> Competitions.change() |> assign_form(),
         competitions: Competitions.list(),
         organizations: Organizations.list(),
         evaluations: Evaluations.list(),
         coefficient_modes: CompetitionSettings.get_coefficient_modes(),
         dynamic_coefficient_modes: CompetitionSettings.get_dynamic_coefficient_modes(),
         competition_types: Competitions.list_competition_types(),
-        duplication_form: to_form(%{}, as: :duplicate_competition)
+        duplication_form: to_form(%{}, as: :duplicate_competition),
+        subjects: Subjects.list()
       )
 
     {:ok, socket}
@@ -78,7 +81,7 @@ defmodule SMWeb.Live.NewCompetition do
     socket =
       socket
       |> assign(:entity, %Competition{})
-      |> assign(:form, socket.assigns.entity |> Competitions.change() |> to_form())
+      |> assign(:form, %Competition{} |> Competitions.change() |> assign_form())
 
     {:noreply, socket}
   end
@@ -172,7 +175,8 @@ defmodule SMWeb.Live.NewCompetition do
       assign(socket,
         form: %Competition{} |> Competitions.change() |> assign_form(),
         competitions: Competitions.list(),
-        organizations: Organizations.list()
+        organizations: Organizations.list(),
+        subjects: Subjects.list()
       )
 
     {:noreply, socket}
@@ -213,16 +217,26 @@ defmodule SMWeb.Live.NewCompetition do
   end
 
   defp assign_form(%Ecto.Changeset{} = changeset) do
-    if Ecto.Changeset.get_field(changeset, :competitions_evaluations) == [] do
-      all_evaluation_ids =
-        Enum.map(Evaluations.list(), &%CompetitionEvaluation{evaluation_id: &1.id})
+    changeset =
+      if Ecto.Changeset.get_field(changeset, :competitions_evaluations) == [] do
+        all_evaluation_ids =
+          Enum.map(Evaluations.list(), &%CompetitionEvaluation{evaluation_id: &1.id})
 
-      changeset
-      |> Ecto.Changeset.put_change(:competitions_evaluations, all_evaluation_ids)
-      |> to_form()
-    else
-      to_form(changeset)
-    end
+        Ecto.Changeset.put_change(changeset, :competitions_evaluations, all_evaluation_ids)
+      else
+        changeset
+      end
+
+    changeset =
+      if Ecto.Changeset.get_field(changeset, :competition_subjects) == [] do
+        Ecto.Changeset.put_assoc(changeset, :competition_subjects, [
+          %CompetitionSubject{coefficient: 0}
+        ])
+      else
+        changeset
+      end
+
+    to_form(changeset)
   end
 
   defp get_competition_background_img(competition_id) do

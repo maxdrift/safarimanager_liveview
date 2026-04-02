@@ -90,6 +90,7 @@ defmodule SMWeb.Live.Participants do
 
   def handle_event("reset-new-user", %{}, socket) do
     fresh_entity = %User{}
+
     socket =
       socket
       |> assign(:entity, fresh_entity)

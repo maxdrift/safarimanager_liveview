@@ -6,6 +6,7 @@ defmodule SM.Competitions.Competition do
 
   alias SM.Competitions.CompetitionEvaluation
   alias SM.Competitions.CompetitionSettings
+  alias SM.Competitions.CompetitionSubject
   alias SM.Evaluations.Evaluation
   alias SM.Jurors.Juror
   alias SM.Organizations.Organization
@@ -37,6 +38,7 @@ defmodule SM.Competitions.Competition do
     has_many :teams, Team
     has_many :jurors, Juror, preload_order: [asc: :inserted_at], on_replace: :delete
     has_many :slides, Slide
+    has_many :competition_subjects, CompetitionSubject, on_replace: :delete
 
     timestamps()
   end
@@ -69,6 +71,12 @@ defmodule SM.Competitions.Competition do
       sort_param: :evaluation_sort,
       drop_param: :evaluation_drop,
       required: true
+    )
+    |> cast_assoc(:competition_subjects,
+      with: &CompetitionSubject.changeset/3,
+      sort_param: :competition_subject_sort,
+      drop_param: :competition_subject_drop,
+      required: false
     )
     |> validate_dates()
   end
@@ -106,6 +114,12 @@ defmodule SM.Competitions.Competition do
     |> cast_assoc(:jurors, required: false)
     |> cast_assoc(:slides, required: false)
     |> cast_assoc(:teams, required: false)
+    |> cast_assoc(:competition_subjects,
+      with: &CompetitionSubject.changeset/3,
+      sort_param: :competition_subject_sort,
+      drop_param: :competition_subject_drop,
+      required: false
+    )
     |> validate_dates()
   end
 
