@@ -51,14 +51,13 @@ defmodule SMWeb.Live.Admin.Competitions.Index do
       socket.assigns.record
       |> change(params)
       |> Map.put(:action, :validate)
-      |> assign_form()
 
-    socket = assign(socket, :changeset, changeset)
+    socket = assign(socket, :changeset, to_entity_form(changeset, action: :validate))
     {:noreply, socket}
   end
 
   # Create/Edit dialog submit callback
-  def handle_event("submit", %{"entity" => %{"_action" => "create"} = params}, socket) do
+  def handle_event("submit", %{"_action" => "create", "entity" => params}, socket) do
     case Competitions.create(params) do
       {:ok, %Competition{}} ->
         socket =
@@ -70,11 +69,11 @@ defmodule SMWeb.Live.Admin.Competitions.Index do
         {:noreply, socket}
 
       {:error, changeset} ->
-        {:noreply, assign(socket, :changeset, changeset)}
+        {:noreply, assign(socket, :changeset, to_entity_form(changeset))}
     end
   end
 
-  def handle_event("submit", %{"entity" => %{"_action" => "edit"} = params}, socket) do
+  def handle_event("submit", %{"_action" => "edit", "entity" => params}, socket) do
     case Competitions.update(socket.assigns.record, params) do
       {:ok, entity} ->
         socket =
@@ -87,7 +86,7 @@ defmodule SMWeb.Live.Admin.Competitions.Index do
         {:noreply, socket}
 
       {:error, changeset} ->
-        {:noreply, assign(socket, :changeset, changeset)}
+        {:noreply, assign(socket, :changeset, to_entity_form(changeset))}
     end
   end
 
@@ -126,7 +125,7 @@ defmodule SMWeb.Live.Admin.Competitions.Index do
             {:noreply, assign(socket, record: competition)}
 
           :edit ->
-            changeset = competition |> change(%{}) |> assign_form()
+            changeset = competition |> change(%{}) |> to_entity_form()
 
             socket =
               assign(socket, record: competition, changeset: changeset, action: :edit)
@@ -277,23 +276,25 @@ defmodule SMWeb.Live.Admin.Competitions.Index do
 
   defp reset_current_editing(socket) do
     entity = %Competition{}
-    changeset = entity |> change(%{}) |> assign_form()
+    changeset = entity |> change(%{}) |> to_entity_form()
 
     socket
     |> assign(:record, entity)
     |> assign(:changeset, changeset)
   end
 
-  defp assign_form(%Ecto.Changeset{} = changeset) do
+  defp to_entity_form(%Ecto.Changeset{} = changeset, form_opts \\ []) do
+    opts = Keyword.merge([as: :entity], form_opts)
+
     if Ecto.Changeset.get_field(changeset, :competitions_evaluations) == [] do
       all_evaluation_ids =
         Enum.map(Evaluations.list(), &%CompetitionEvaluation{evaluation_id: &1.id})
 
       changeset
       |> Ecto.Changeset.put_change(:competitions_evaluations, all_evaluation_ids)
-      |> to_form()
+      |> to_form(opts)
     else
-      to_form(changeset)
+      to_form(changeset, opts)
     end
   end
 

@@ -168,7 +168,13 @@
         <span :if={@live_action == :new}>{gettext("New competition")}</span>
         <span :if={@live_action == :edit}>{gettext("Edit competition")}</span>
       </div>
-      <.form for={@changeset} phx-change="validate" phx-submit="submit" autocomplete="off">
+      <.form
+        for={@changeset}
+        id="admin-competition-form"
+        phx-change="validate"
+        phx-submit="submit"
+        autocomplete="off"
+      >
         <div class="card-body">
           <div class="flex flex-wrap">
             <div class="w-full">
