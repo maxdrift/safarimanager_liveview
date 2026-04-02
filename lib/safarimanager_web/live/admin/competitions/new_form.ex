@@ -542,25 +542,28 @@ defmodule SMWeb.Live.Admin.Competitions.Form do
   defp save_competition(socket, :edit_competition, competition_params) do
     competition = socket.assigns.competition
 
-    with :ok <- validate_subject_removals(competition, competition_params),
-         {:ok, updated} <- Competitions.update(competition, competition_params) do
-      notify_parent({:saved, updated})
+    if Competitions.competition_subject_removal_blocked?(competition.id, competition_params) do
+      msg = gettext("Cannot remove a subject that still has slides in this competition.")
 
-      {:noreply,
-       socket
-       |> put_flash(:info, gettext("Competition updated successfully"))
-       |> push_patch(to: socket.assigns.patch)}
+      cs =
+        competition
+        |> Competitions.change(competition_params)
+        |> Ecto.Changeset.add_error(:competition_subjects, msg)
+
+      {:noreply, assign(socket, form: to_form(cs))}
     else
-      {:error, msg} when is_binary(msg) ->
-        cs =
-          competition
-          |> Competitions.change(competition_params)
-          |> Ecto.Changeset.add_error(:competition_subjects, msg)
+      case Competitions.update(competition, competition_params) do
+        {:ok, updated} ->
+          notify_parent({:saved, updated})
 
-        {:noreply, assign(socket, form: to_form(cs))}
+          {:noreply,
+           socket
+           |> put_flash(:info, gettext("Competition updated successfully"))
+           |> push_patch(to: socket.assigns.patch)}
 
-      {:error, %Ecto.Changeset{} = changeset} ->
-        {:noreply, assign(socket, form: to_form(changeset))}
+        {:error, %Ecto.Changeset{} = changeset} ->
+          {:noreply, assign(socket, form: to_form(changeset))}
+      end
     end
   end
 
@@ -598,29 +601,10 @@ defmodule SMWeb.Live.Admin.Competitions.Form do
   end
 
   defp validate_at_least_one_subject_row(params) do
-    rows = params["competition_subjects"] || %{}
-
-    if Enum.any?(rows, fn {_k, v} -> (v["subject_id"] || "") != "" end) do
+    if Competitions.competition_params_have_assigned_subject?(params) do
       :ok
     else
       {:error, gettext("Add at least one subject (use “Load all from catalog” or “Add subject row”).")}
-    end
-  end
-
-  defp validate_subject_removals(competition, params) do
-    {:ok, full} = Competitions.get(competition.id)
-    old_ids = Enum.map(full.competition_subjects, & &1.subject_id)
-
-    new_ids =
-      (params["competition_subjects"] || %{})
-      |> Enum.map(fn {_k, v} -> v["subject_id"] end)
-      |> Enum.reject(&(&1 in [nil, ""]))
-
-    removed = old_ids -- new_ids
-
-    case Enum.find(removed, &Competitions.slide_references_subject?(competition.id, &1)) do
-      nil -> :ok
-      _ -> {:error, gettext("Cannot remove a subject that still has slides in this competition.")}
     end
   end
 

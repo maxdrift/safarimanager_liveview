@@ -13,9 +13,11 @@ defmodule SMWeb.Live.Admin.Competitions.Index do
   alias SM.Competitions.Competition
   alias SM.Competitions.CompetitionEvaluation
   alias SM.Competitions.CompetitionSettings
+  alias SM.Competitions.CompetitionSubject
   alias SM.Evaluations
   alias SM.Organizations
   alias SM.Slides
+  alias SM.Subjects
   alias SM.Utils
 
   require Logger
@@ -37,8 +39,11 @@ defmodule SMWeb.Live.Admin.Competitions.Index do
         competition_types: Competitions.list_competition_types(),
         organizations: Organizations.list(),
         evaluations: Evaluations.list(),
+        subjects: Subjects.list(),
         coefficient_modes: CompetitionSettings.get_coefficient_modes(),
-        dynamic_coefficient_modes: CompetitionSettings.get_dynamic_coefficient_modes()
+        dynamic_coefficient_modes: CompetitionSettings.get_dynamic_coefficient_modes(),
+        last_entity_params: nil,
+        subject_bulk_set_draft: ""
       )
 
     {:ok, socket}
@@ -52,42 +57,111 @@ defmodule SMWeb.Live.Admin.Competitions.Index do
       |> change(params)
       |> Map.put(:action, :validate)
 
-    socket = assign(socket, :changeset, to_entity_form(changeset, action: :validate))
+    socket =
+      socket
+      |> assign(:last_entity_params, params)
+      |> assign(:changeset, to_entity_form(changeset, action: :validate))
+
     {:noreply, socket}
   end
 
   # Create/Edit dialog submit callback
   def handle_event("submit", %{"_action" => "create", "entity" => params}, socket) do
-    case Competitions.create(params) do
-      {:ok, %Competition{}} ->
-        socket =
-          socket
-          |> reset_current_editing()
-          |> push_patch(to: "/admin/competitions")
+    if Competitions.competition_params_have_assigned_subject?(params) do
+      case Competitions.create(params) do
+        {:ok, %Competition{}} ->
+          socket =
+            socket
+            |> reset_current_editing()
+            |> push_patch(to: "/admin/competitions")
 
-        socket = put_flash(socket, :info, gettext("Competition created successfully"))
-        {:noreply, socket}
+          socket = put_flash(socket, :info, gettext("Competition created successfully"))
+          {:noreply, socket}
 
-      {:error, changeset} ->
-        {:noreply, assign(socket, :changeset, to_entity_form(changeset))}
+        {:error, changeset} ->
+          {:noreply, assign(socket, :changeset, to_entity_form(changeset))}
+      end
+    else
+      msg = gettext("Add at least one subject (use “Load all from catalog” or “Add subject row”).")
+
+      cs =
+        socket.assigns.record
+        |> change(params)
+        |> Ecto.Changeset.add_error(:competition_subjects, msg)
+
+      {:noreply, assign(socket, :changeset, to_entity_form(cs))}
     end
   end
 
   def handle_event("submit", %{"_action" => "edit", "entity" => params}, socket) do
-    case Competitions.update(socket.assigns.record, params) do
-      {:ok, entity} ->
-        socket =
-          socket
-          |> reset_current_editing()
-          |> push_patch(to: "/admin/competitions")
+    competition = socket.assigns.record
 
-        socket = put_flash(socket, :info, ~s(#{gettext("Edited competition")} "#{entity.name}"))
+    if Competitions.competition_subject_removal_blocked?(competition.id, params) do
+      msg = gettext("Cannot remove a subject that still has slides in this competition.")
 
-        {:noreply, socket}
+      cs =
+        competition
+        |> change(params)
+        |> Ecto.Changeset.add_error(:competition_subjects, msg)
 
-      {:error, changeset} ->
-        {:noreply, assign(socket, :changeset, to_entity_form(changeset))}
+      {:noreply, assign(socket, :changeset, to_entity_form(cs))}
+    else
+      case Competitions.update(competition, params) do
+        {:ok, entity} ->
+          socket =
+            socket
+            |> reset_current_editing()
+            |> push_patch(to: "/admin/competitions")
+
+          socket = put_flash(socket, :info, ~s(#{gettext("Edited competition")} "#{entity.name}"))
+
+          {:noreply, socket}
+
+        {:error, changeset} ->
+          {:noreply, assign(socket, :changeset, to_entity_form(changeset))}
+      end
     end
+  end
+
+  def handle_event("admin-subject-bulk-set-draft", %{"subject_bulk_set_draft" => v}, socket) do
+    {:noreply, assign(socket, :subject_bulk_set_draft, v)}
+  end
+
+  def handle_event("admin-subject-bulk-set-draft", _params, socket), do: {:noreply, socket}
+
+  def handle_event("admin-subjects-seed-catalog", _params, socket) do
+    {:noreply, merge_entity_competition_subjects(socket, Competitions.competition_subject_seed_nested_params())}
+  end
+
+  def handle_event("admin-subjects-reset-catalog-coefficients", _params, socket) do
+    nested = current_competition_subjects_nested(socket)
+
+    new_nested = Competitions.bulk_reset_competition_subject_params_from_catalog(nested)
+    {:noreply, merge_entity_competition_subjects(socket, new_nested)}
+  end
+
+  def handle_event("admin-subjects-bulk-offset", %{"delta" => delta_str}, socket) do
+    delta =
+      case Integer.parse(delta_str) do
+        {d, _} -> d
+        :error -> 0
+      end
+
+    nested = current_competition_subjects_nested(socket)
+    new_nested = Competitions.bulk_offset_competition_subject_params(nested, delta)
+    {:noreply, merge_entity_competition_subjects(socket, new_nested)}
+  end
+
+  def handle_event("admin-subjects-bulk-set-all", _params, socket) do
+    value =
+      case Integer.parse(to_string(socket.assigns.subject_bulk_set_draft || "")) do
+        {n, _} -> max(0, n)
+        :error -> 0
+      end
+
+    nested = current_competition_subjects_nested(socket)
+    new_nested = Competitions.bulk_set_competition_subject_params(nested, value)
+    {:noreply, merge_entity_competition_subjects(socket, new_nested)}
   end
 
   def handle_event("erase-discarded-slides", _params, socket) do
@@ -128,7 +202,13 @@ defmodule SMWeb.Live.Admin.Competitions.Index do
             changeset = competition |> change(%{}) |> to_entity_form()
 
             socket =
-              assign(socket, record: competition, changeset: changeset, action: :edit)
+              assign(socket,
+                record: competition,
+                changeset: changeset,
+                action: :edit,
+                last_entity_params: nil,
+                subject_bulk_set_draft: ""
+              )
 
             {:noreply, socket}
         end
@@ -281,21 +361,98 @@ defmodule SMWeb.Live.Admin.Competitions.Index do
     socket
     |> assign(:record, entity)
     |> assign(:changeset, changeset)
+    |> assign(:last_entity_params, nil)
+    |> assign(:subject_bulk_set_draft, "")
   end
 
   defp to_entity_form(%Ecto.Changeset{} = changeset, form_opts \\ []) do
     opts = Keyword.merge([as: :entity], form_opts)
 
-    if Ecto.Changeset.get_field(changeset, :competitions_evaluations) == [] do
-      all_evaluation_ids =
-        Enum.map(Evaluations.list(), &%CompetitionEvaluation{evaluation_id: &1.id})
+    changeset =
+      if Ecto.Changeset.get_field(changeset, :competitions_evaluations) == [] do
+        all_evaluation_ids =
+          Enum.map(Evaluations.list(), &%CompetitionEvaluation{evaluation_id: &1.id})
 
-      changeset
-      |> Ecto.Changeset.put_change(:competitions_evaluations, all_evaluation_ids)
-      |> to_form(opts)
-    else
-      to_form(changeset, opts)
+        Ecto.Changeset.put_change(changeset, :competitions_evaluations, all_evaluation_ids)
+      else
+        changeset
+      end
+
+    changeset =
+      if Ecto.Changeset.get_field(changeset, :competition_subjects) == [] &&
+           is_nil(Ecto.Changeset.get_field(changeset, :id)) do
+        Ecto.Changeset.put_change(changeset, :competition_subjects, [
+          %CompetitionSubject{coefficient: 0}
+        ])
+      else
+        changeset
+      end
+
+    to_form(changeset, opts)
+  end
+
+  defp current_competition_subjects_nested(socket) do
+    base = socket.assigns[:last_entity_params] || %{}
+
+    case base["competition_subjects"] do
+      v when is_map(v) and map_size(v) > 0 ->
+        v
+
+      _ ->
+        cs = socket.assigns.changeset.source
+
+        case Ecto.Changeset.get_field(cs, :competition_subjects) do
+          list when is_list(list) ->
+            list
+            |> Enum.with_index()
+            |> Map.new(fn {row, i} ->
+              sid =
+                case row do
+                  %{subject_id: sid} -> sid
+                  %{"subject_id" => sid} -> sid
+                  _ -> nil
+                end
+
+              c =
+                case row do
+                  %{coefficient: c} -> c
+                  %{"coefficient" => c} -> c
+                  _ -> 0
+                end
+
+              {Integer.to_string(i), %{"subject_id" => sid, "coefficient" => c || 0}}
+            end)
+
+          _ ->
+            %{}
+        end
     end
+  end
+
+  defp merge_entity_competition_subjects(socket, new_nested) do
+    base = socket.assigns[:last_entity_params] || %{}
+    merged = Map.put(base, "competition_subjects", new_nested)
+
+    changeset =
+      socket.assigns.record
+      |> change(merged)
+      |> Map.put(:action, :validate)
+
+    socket
+    |> assign(:last_entity_params, merged)
+    |> assign(:changeset, to_entity_form(changeset, action: :validate))
+  end
+
+  defp competition_subjects_errors(%Phoenix.HTML.Form{source: %Ecto.Changeset{} = cs}) do
+    cs.errors
+    |> Keyword.get_values(:competition_subjects)
+    |> Enum.map(&elem(&1, 0))
+  end
+
+  defp competition_subjects_errors(_), do: []
+
+  defp subject_select_options(subjects) do
+    Enum.map(subjects, fn s -> {"#{s.numeric_id} — #{s.name}", s.id} end)
   end
 
   defp slide_status_to_label(:submitted_jury), do: gettext("submitted_jury")

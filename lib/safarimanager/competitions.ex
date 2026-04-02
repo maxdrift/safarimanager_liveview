@@ -666,6 +666,35 @@ defmodule SM.Competitions do
     end)
   end
 
+  @doc false
+  @spec competition_params_have_assigned_subject?(map()) :: boolean()
+  def competition_params_have_assigned_subject?(params) when is_map(params) do
+    rows = params["competition_subjects"] || %{}
+
+    Enum.any?(rows, fn {_k, v} -> (v["subject_id"] || "") != "" end)
+  end
+
+  @doc false
+  @spec competition_subject_removal_blocked?(Ecto.UUID.t(), map()) :: boolean()
+  def competition_subject_removal_blocked?(competition_id, params) when is_binary(competition_id) do
+    case get(competition_id) do
+      {:ok, full} ->
+        old_ids = Enum.map(full.competition_subjects, & &1.subject_id)
+
+        new_ids =
+          (params["competition_subjects"] || %{})
+          |> Enum.map(fn {_k, v} -> v["subject_id"] end)
+          |> Enum.reject(&(&1 in [nil, ""]))
+
+        removed = old_ids -- new_ids
+
+        Enum.any?(removed, &slide_references_subject?(competition_id, &1))
+
+      {:error, :not_found} ->
+        false
+    end
+  end
+
   @doc """
   Returns true if any slide in the competition references this subject.
   """

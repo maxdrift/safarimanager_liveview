@@ -496,6 +496,133 @@
                 </div>
               </.inputs_for>
             </.inputs_for>
+            <div id="admin-competition-subjects-fieldset" class="text-lg w-full">
+              {gettext("Subjects and coefficients")}:
+            </div>
+            <p class="text-sm text-base-content/60 w-full mb-2">
+              {gettext(
+                "Allowed species and static coefficients. Use bulk actions to load the catalog or adjust every row at once."
+              )}
+            </p>
+            <div class="w-full mb-2 overflow-x-auto overflow-y-visible overscroll-x-contain">
+              <div class="flex flex-nowrap items-end gap-2 min-w-0 py-0.5">
+                <button
+                  type="button"
+                  phx-click="admin-subjects-seed-catalog"
+                  class="btn btn-sm btn-outline btn-primary shrink-0 whitespace-nowrap"
+                >
+                  {gettext("Load all from catalog")}
+                </button>
+                <button
+                  type="button"
+                  phx-click="admin-subjects-reset-catalog-coefficients"
+                  class="btn btn-sm btn-outline shrink-0 whitespace-nowrap"
+                >
+                  {gettext("Reset coefficients from catalog")}
+                </button>
+                <button
+                  type="button"
+                  phx-click="admin-subjects-bulk-offset"
+                  phx-value-delta="-1"
+                  class="btn btn-sm btn-outline shrink-0 whitespace-nowrap"
+                >
+                  {gettext("Decrease all by 1")}
+                </button>
+                <button
+                  type="button"
+                  phx-click="admin-subjects-bulk-offset"
+                  phx-value-delta="1"
+                  class="btn btn-sm btn-outline shrink-0 whitespace-nowrap"
+                >
+                  {gettext("Increase all by 1")}
+                </button>
+                <div class="flex flex-nowrap items-end gap-2 shrink-0 border-l border-base-300 pl-2 ml-1">
+                  <label
+                    for="admin-subject-bulk-set-draft"
+                    class="text-sm text-base-content/70 whitespace-nowrap self-center pb-0.5"
+                  >
+                    {gettext("Set all to")}
+                  </label>
+                  <input
+                    type="number"
+                    min="0"
+                    id="admin-subject-bulk-set-draft"
+                    name="subject_bulk_set_draft"
+                    value={@subject_bulk_set_draft}
+                    class="input input-bordered input-sm w-20 shrink-0"
+                    phx-change="admin-subject-bulk-set-draft"
+                    phx-debounce="300"
+                  />
+                  <button
+                    type="button"
+                    phx-click="admin-subjects-bulk-set-all"
+                    class="btn btn-sm btn-outline shrink-0 whitespace-nowrap"
+                  >
+                    {gettext("Apply")}
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div
+              :if={competition_subjects_errors(@changeset) != []}
+              class="text-error text-sm w-full mb-2"
+            >
+              <p :for={msg <- competition_subjects_errors(@changeset)}>{msg}</p>
+            </div>
+            <div class="w-full max-h-64 overflow-y-auto border border-base-200 rounded-lg mb-2">
+              <.inputs_for :let={csrow} field={@changeset[:competition_subjects]}>
+                <.hidden_input name="entity[competition_subject_sort][]" value={csrow.index} />
+                <div class="flex flex-wrap items-end gap-2 p-2 border-b border-base-200 last:border-b-0 bg-base-100">
+                  <div class="form-control min-w-[200px] flex-1">
+                    <label class="label py-0">
+                      <span class="label-text text-xs">{gettext("Subject")}</span>
+                    </label>
+                    <select
+                      id={csrow[:subject_id].id}
+                      name={csrow[:subject_id].name}
+                      class={
+                        state_class("select select-bordered select-sm w-full", csrow, :subject_id,
+                          type: :select
+                        )
+                      }
+                      phx-debounce="100"
+                    >
+                      <option value="">{gettext("Select…")}</option>
+                      {Phoenix.HTML.Form.options_for_select(
+                        subject_select_options(@subjects),
+                        csrow[:subject_id].value
+                      )}
+                    </select>
+                  </div>
+                  <div class="form-control w-28">
+                    <label class="label py-0">
+                      <span class="label-text text-xs">{gettext("Coeff.")}</span>
+                    </label>
+                    <.input
+                      field={csrow[:coefficient]}
+                      type="number"
+                      class="input input-bordered input-sm w-full"
+                    />
+                  </div>
+                  <label class="btn btn-square btn-sm btn-ghost text-error">
+                    <input
+                      type="checkbox"
+                      name="entity[competition_subject_drop][]"
+                      value={csrow.index}
+                      class="hidden"
+                    />
+                    <Heroicons.icon name="trash" type="solid" class="w-4 h-4" />
+                  </label>
+                </div>
+              </.inputs_for>
+            </div>
+            <div class="form-control w-full mb-2">
+              <label class="btn btn-ghost btn-sm">
+                <input type="checkbox" name="entity[competition_subject_sort][]" class="hidden" />
+                <Heroicons.icon name="plus-circle" type="solid" class="w-6 h-6" />
+                {gettext("Add subject row")}
+              </label>
+            </div>
             <.hidden_input name={:_action} value={@action} />
           </div>
         </div>
