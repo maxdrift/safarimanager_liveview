@@ -2,7 +2,7 @@
 .PHONY: prepush help format-check compile-strict test credo dialyzer
 
 # Bump CalVer in mix.exs, commit, tag vYYYY.MM.seq, and push (branch + tags).
-.PHONY: bump release git-tag git-push-tags
+.PHONY: bump release git-tag git-push-tags retag-latest
 
 .DEFAULT_GOAL := help
 
@@ -20,6 +20,7 @@ help:
 	@echo "  make git-tag          # annotated tag from mix.exs (vYYYY.MM.seq)"
 	@echo "  make git-push-tags    # git push + push tags"
 	@echo "  make release          # bump + commit + tag + push"
+	@echo "  make retag-latest     # drop newest v* tag + GH release, recreate at HEAD, push"
 
 prepush: format-check compile-strict test credo dialyzer
 
@@ -58,3 +59,17 @@ git-tag:
 git-push-tags:
 	git push
 	git push --tags
+
+# Most recently created tag matching v* (see git-for-each-ref creatordate).
+retag-latest:
+	@command -v gh >/dev/null || { echo "gh (GitHub CLI) is required." >&2; exit 1; }; \
+	tag=$$(git for-each-ref --sort=-creatordate --format '%(refname:short)' 'refs/tags/v*' | head -1); \
+	if [ -z "$$tag" ]; then echo 'No tags matching v* found.' >&2; exit 1; fi; \
+	echo "Retagging $$tag at $$(git rev-parse --short HEAD)..."; \
+	git tag -d "$$tag" 2>/dev/null || true; \
+	if ! gh release delete "$$tag" --yes --cleanup-tag 2>/dev/null; then \
+	  git push origin ":refs/tags/$$tag" || true; \
+	fi; \
+	ver=$${tag#v}; \
+	git tag -a "$$tag" -m "Version $$ver"; \
+	git push origin "$$tag"
