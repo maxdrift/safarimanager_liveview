@@ -78,6 +78,12 @@ jobs:
         with:
           path: _build/elixir-${{ env.elixir }}
           key: ${{ runner.os }}-${{ matrix.target }}-elixir-${{ env.elixir }}
+      - name: Set up macOS code signing
+        run: bash .github/scripts/app/setup_macos_codesigning.sh
+        env:
+          KEYCHAIN_PASSWORD: ${{ secrets.KEYCHAIN_PASSWORD }}
+          MACOS_CERTIFICATE_BASE64: ${{ secrets.MACOS_CERTIFICATE_BASE64 }}
+          MACOS_CERTIFICATE_PASSWORD: ${{ secrets.MACOS_CERTIFICATE_PASSWORD }}
       - name: Build the app
         run: .github/scripts/app/build_macos.sh
         env:
@@ -89,6 +95,9 @@ jobs:
           PROMETHEUS_PUSH_GW_PASSWORD: ${{ secrets.PROMETHEUS_PUSH_GW_PASSWORD }}
           ELIXIRKIT_CODESIGN_IDENTITY: ${{ secrets.ELIXIRKIT_CODESIGN_IDENTITY }}
           SM_LOCALE: it
+      - name: Remove CI signing keychain
+        if: always()
+        run: security delete-keychain SM_CI_CODESIGN.keychain 2>/dev/null || true
       - name: Release
         uses: softprops/action-gh-release@v2
         if: startsWith(github.ref, 'refs/tags/')
