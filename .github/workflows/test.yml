@@ -4,8 +4,8 @@ on: workflow_dispatch
   #   branches:
   #     - main
 env:
-  otp: "25.0.4"
-  elixir: "1.14.2"
+  otp: "27.3"
+  elixir: "1.18.4"
 jobs:
   main:
     runs-on: ubuntu-latest
