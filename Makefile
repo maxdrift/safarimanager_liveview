@@ -1,7 +1,7 @@
 # Local checks before pushing (CI-style).
 .PHONY: prepush help format-check compile-strict test credo dialyzer
 
-# Bump CalVer in mix.exs, commit, tag vYYYY.MM.seq, and push (branch + tags).
+# Bump CalVer in mix.exs, commit, tag vY.M.S, and push (branch + tags).
 .PHONY: bump release git-tag git-push-tags retag-latest
 
 .DEFAULT_GOAL := help
@@ -15,9 +15,9 @@ help:
 	@echo "  make credo"
 	@echo "  make dialyzer"
 	@echo ""
-	@echo "Version (CalVer in mix.exs: @version \"YYYY.MM.seq\")"
-	@echo "  make bump             # vs today: same month -> seq+1; new month/year -> YYYY.MM.1"
-	@echo "  make git-tag          # annotated tag from mix.exs (vYYYY.MM.seq)"
+	@echo "Version (CalVer in mix.exs: @version \"Y.M.S\", no leading zeros)"
+	@echo "  make bump             # vs today: same month -> seq+1; new month/year -> Y.M.1"
+	@echo "  make git-tag          # annotated tag from mix.exs (vY.M.S)"
 	@echo "  make git-push-tags    # git push + push tags"
 	@echo "  make release          # bump + commit + tag + push"
 	@echo "  make retag-latest     # drop newest v* tag + GH release, recreate at HEAD, push"

@@ -1,4 +1,4 @@
-# Bump CalVer in mix.exs: @version "YYYY.MM.seq"
+# Bump CalVer in mix.exs: @version "Y.M.S" (year.month.seq, no leading zeros)
 #
 # Compares the version period in mix.exs with today's local date (OS timezone):
 # - Same year and month: increment seq.
@@ -10,7 +10,7 @@
 
 content = File.read!("mix.exs")
 
-case Regex.run(~r/@version "(\d{4})\.(\d{1,2})\.(\d+)"/, content) do
+case Regex.run(~r/@version "(\d+)\.(\d+)\.(\d+)"/, content) do
   [_, ys, ms, seqs] ->
     file_y = String.to_integer(ys)
     file_m = String.to_integer(ms)
@@ -23,13 +23,12 @@ case Regex.run(~r/@version "(\d{4})\.(\d{1,2})\.(\d+)"/, content) do
         {cur_y, cur_m, 1}
       end
 
-    mm = String.pad_leading(Integer.to_string(new_m), 2, "0")
-    new_v = "#{new_y}.#{mm}.#{new_seq}"
+    new_v = "#{new_y}.#{new_m}.#{new_seq}"
 
     # Replacement must be a function: a string repl would treat "\\1" + "2026..." as "\\12...".
     new_content =
       Regex.replace(
-        ~r/(@version ")\d{4}\.\d{1,2}\.\d+(")/,
+        ~r/(@version ")\d+\.\d+\.\d+(")/,
         content,
         fn _, open, close -> open <> new_v <> close end,
         global: false
@@ -39,6 +38,6 @@ case Regex.run(~r/@version "(\d{4})\.(\d{1,2})\.(\d+)"/, content) do
     IO.puts(new_v)
 
   _ ->
-    IO.puts(:stderr, ~s(Could not find @version "YYYY.MM.seq" in mix.exs))
+    IO.puts(:stderr, ~s'Could not find @version "Y.M.S" (dot-separated integers) in mix.exs')
     System.halt(1)
 end
