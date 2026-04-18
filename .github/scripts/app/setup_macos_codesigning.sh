@@ -7,8 +7,8 @@
 #   MACOS_CERTIFICATE_BASE64    — base64 of the exported .p12 (Developer ID Application)
 #   MACOS_CERTIFICATE_PASSWORD  — export password of the .p12
 #
-# One-time local step to produce MACOS_CERTIFICATE_BASE64:
-#   base64 -i DeveloperID.p12 | tr -d '\n' | pbcopy
+# One-time local step to produce MACOS_CERTIFICATE_BASE64 (single line, no quotes):
+#   base64 -i DeveloperID.p12 | tr -d '\n'
 #
 set -euo pipefail
 
@@ -24,7 +24,35 @@ P12="$(mktemp -t sm-ci-signing.XXXXXX.p12)"
 cleanup() { rm -f "$P12"; }
 trap cleanup EXIT
 
-printf '%s' "$MACOS_CERTIFICATE_BASE64" | base64 -d >"$P12"
+# GitHub secrets often include newlines or stray quotes; PKCS#12 must decode to binary.
+B64=$(printf '%s' "$MACOS_CERTIFICATE_BASE64" | tr -d '\n\r\t ')
+B64="${B64#\"}"
+B64="${B64%\"}"
+
+if ! printf '%s' "$B64" | base64 -d >"$P12" 2>/dev/null; then
+  echo "ERROR: MACOS_CERTIFICATE_BASE64 is not valid base64." >&2
+  exit 1
+fi
+
+if [ ! -s "$P12" ]; then
+  echo "ERROR: decoded certificate file is empty." >&2
+  exit 1
+fi
+
+first=$(head -c 1 "$P12" || true)
+if [ "$first" = "-" ]; then
+  echo "ERROR: decoded content looks like PEM text, not a .p12 file." >&2
+  echo "Export 'Developer ID Application' as .p12 from Keychain Access, then:" >&2
+  echo "  base64 -i Your.p12 | tr -d '\n'" >&2
+  exit 1
+fi
+
+if ! openssl pkcs12 -in "$P12" -nokeys -passin "pass:${MACOS_CERTIFICATE_PASSWORD}" -info -noout >/dev/null 2>&1; then
+  echo "ERROR: PKCS#12 is unreadable or MACOS_CERTIFICATE_PASSWORD is wrong (openssl could not open it)." >&2
+  echo "Re-export the .p12, confirm the password, then set MACOS_CERTIFICATE_BASE64 to:" >&2
+  echo "  base64 -i Your.p12 | tr -d '\n'" >&2
+  exit 1
+fi
 
 security delete-keychain "$KEYCHAIN_NAME" 2>/dev/null || true
 security create-keychain -p "$KEYCHAIN_PASSWORD" "$KEYCHAIN_NAME"
