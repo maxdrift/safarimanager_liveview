@@ -7,8 +7,8 @@ on:
     tags:
       - "v*.*.*"
 env:
-  otp: "27.2"
-  elixir: "1.18.1"
+  otp: "27.3"
+  elixir: "1.18.4"
 jobs:
   # windows:
   #   runs-on: windows-latest
