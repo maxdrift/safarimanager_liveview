@@ -1,5 +1,5 @@
 # Local checks before pushing (CI-style).
-.PHONY: prepush help format-check compile-strict test credo dialyzer
+.PHONY: prepush help format-check compile-strict test credo dialyzer codesign-setup-test codesign-setup-validate
 
 # Bump CalVer in mix.exs, commit, tag vY.M.S, and push (branch + tags).
 .PHONY: bump release git-tag git-push-tags retag-latest
@@ -9,6 +9,8 @@
 help:
 	@echo "Checks"
 	@echo "  make prepush          format, compile --warnings-as-errors, test, credo, dialyzer"
+	@echo "  make codesign-setup-validate  verify .p12 + password (openssl only; no keychain)"
+	@echo "  make codesign-setup-test      full keychain setup like CI (see .env.codesign.local.example)"
 	@echo "  make format-check"
 	@echo "  make compile-strict"
 	@echo "  make test"
@@ -38,6 +40,12 @@ credo:
 
 dialyzer:
 	mix dialyzer
+
+codesign-setup-validate:
+	bash scripts/test_macos_codesign_setup.sh --validate-only
+
+codesign-setup-test:
+	bash scripts/test_macos_codesign_setup.sh
 
 bump:
 	elixir scripts/bump_calver.exs

@@ -52,6 +52,9 @@ TODO
 # Direnv private file
 .envrc.custom
 
+# Local code signing test env (scripts/test_macos_codesign_setup.sh)
+.env.codesign.local
+
 # The directory used by ExUnit :tmp_dir
 /tmp/
 
