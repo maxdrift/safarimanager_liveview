@@ -79,6 +79,8 @@ defmodule SM.CompetitionSubjectsTest do
 
     assert {:ok, [result]} = Results.list(competition.id, nil)
     # default fixed_points_multiplier 5 × effective coefficient 7 = 35 (not 2 → 10)
+    assert Decimal.eq?(result.slide_points, Decimal.new(35))
+    assert Decimal.eq?(result.submission_bonus, Decimal.new(0))
     assert Decimal.eq?(result.total_score, Decimal.new(35))
   end
 

@@ -223,6 +223,12 @@ defmodule SMWeb.Live.Admin.Competitions.Form do
                 label={gettext("Fixed points multiplier")}
               />
               <.input
+                field={settings[:submission_bonus_per_slide]}
+                type="number"
+                step="0.01"
+                label={gettext("Submission bonus (per slide)")}
+              />
+              <.input
                 field={settings[:penalty_amount]}
                 type="number"
                 step="0.01"

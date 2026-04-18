@@ -20,14 +20,19 @@ defmodule SM.Results do
         competition_id
         |> Participants.list(category_id)
         |> Stream.map(fn participant ->
-          {slides, total_score} =
+          {slides, slide_points} =
             list_by_participant(competition_id, competition, participant.user.id, subjects_map)
+
+          submission_bonus = submission_bonus(competition.settings, slides)
+          total_score = Decimal.add(slide_points, submission_bonus)
 
           %{
             participant: participant,
             user: participant.user,
             slides: slides,
             slides_count: Enum.count(slides),
+            slide_points: slide_points,
+            submission_bonus: submission_bonus,
             total_score: total_score
           }
         end)
@@ -64,15 +69,17 @@ defmodule SM.Results do
         competition_id
         |> Teams.list_by_competition()
         |> Stream.map(fn team ->
-          {slides, total_score} =
+          {slides, slide_points_sum} =
             team.users
             |> Enum.map(fn user ->
               {:ok, participant} = Participants.get(user.id, competition_id)
               participant
             end)
-            |> Enum.reduce({[], 0}, fn participant, {slides_acc, total_score_acc} ->
-              {slides, total_score} = list_by_participant(competition_id, competition, participant.user.id, subjects_map)
-              {slides_acc ++ slides, Decimal.add(total_score_acc, total_score)}
+            |> Enum.reduce({[], Decimal.new(0)}, fn participant, {slides_acc, slide_points_acc} ->
+              {slides, slide_points} =
+                list_by_participant(competition_id, competition, participant.user.id, subjects_map)
+
+              {slides_acc ++ slides, Decimal.add(slide_points_acc, slide_points)}
             end)
 
           slides =
@@ -80,10 +87,15 @@ defmodule SM.Results do
             |> Enum.sort_by(& &1.slide.file_name, :asc)
             |> Enum.sort_by(& &1.slide.status, :desc)
 
+          submission_bonus = submission_bonus(competition.settings, slides)
+          total_score = Decimal.add(slide_points_sum, submission_bonus)
+
           %{
             team: team,
             slides: slides,
             slides_count: Enum.count(slides),
+            slide_points: slide_points_sum,
+            submission_bonus: submission_bonus,
             total_score: total_score
           }
         end)
@@ -206,6 +218,29 @@ defmodule SM.Results do
 
       true ->
         {Decimal.new(1), false}
+    end
+  end
+
+  # slide_rows: [%{slide: %Slide{}, ...}, ...]
+  defp submission_bonus(settings, slide_rows) do
+    k = settings.submission_bonus_per_slide
+
+    k =
+      cond do
+        match?(%Decimal{}, k) -> k
+        is_nil(k) -> Decimal.new(0)
+        true -> Decimal.new("#{k}")
+      end
+
+    cond do
+      Decimal.compare(k, Decimal.new(0)) != :gt ->
+        Decimal.new(0)
+
+      Enum.any?(slide_rows, fn %{slide: slide} -> slide.penalty end) ->
+        Decimal.new(0)
+
+      true ->
+        Decimal.mult(k, Decimal.new(Enum.count(slide_rows)))
     end
   end
 end

@@ -156,9 +156,23 @@ This means the dynamic bonus always augments the base difficulty — a naturally
 
 ## Participant and Team Totals
 
-A participant's total score is the **sum of all their individual slide scores** across all submitted (non-discarded) slides.
+A participant's total score is the **sum of all their individual slide scores** across all submitted (non-discarded) slides, plus an optional **submission bonus** when configured.
 
-In team competitions, a team's total score is the **sum of all scores across every member's submitted slides**. The same ranking and tiebreaker logic applies to teams.
+### Submission bonus (per slide)
+
+If `submission_bonus_per_slide` (competition setting, default `0`) is greater than zero, each participant receives an extra:
+
+> **submission_bonus_per_slide × N**
+
+where **N** is the number of submitted slides (`submitted_jury` + `submitted_fixed`) for that participant. If **any** of those slides has the **penalty** flag set, the **entire** submission bonus for that participant is **zero** (penalty slide scores still apply as usual).
+
+In team competitions, the team's slide-point total is still the **sum of all members' slide scores**. The submission bonus is computed **once per team** as:
+
+> **submission_bonus_per_slide × M**
+
+where **M** is the total number of submitted slides across **all** team members (not the sum of per-member bonuses). If any slide in that combined set is penalised, the **team** submission bonus is **zero**.
+
+The same ranking and tiebreaker logic applies to teams.
 
 ---
 
@@ -172,7 +186,7 @@ Participants are sorted by total score, highest first. This is the primary ranki
 
 ### First Tiebreaker: Number of Submitted Slides
 
-When two participants have equal total scores, the one with more submitted slides ranks higher. Submitting more valid slides demonstrates greater effort and breadth.
+When two participants have equal total scores, the one with more submitted slides ranks higher. Submitting more valid slides demonstrates greater effort and breadth. (When a positive submission bonus is enabled, slide count is also reflected in the primary score, so this tiebreaker often matters only when totals tie for other reasons.)
 
 ### Second Tiebreaker: Coefficient Distribution
 
@@ -195,6 +209,7 @@ The following competition settings directly control scoring behaviour:
 | `coefficient_mode` | Whether and when the static subject coefficient is applied (`disabled`, `all`, `submitted_jury`, `submitted_fixed`) |
 | `dynamic_coefficient_mode` | Whether and when the dynamic rarity bonus is applied (same options) |
 | `fixed_points_multiplier` | Base score for fixed-point slides before coefficient (default: 5.0) |
+| `submission_bonus_per_slide` | Points added per submitted slide (jury + fixed); forfeited if any penalised slide exists (default: 0) |
 | `penalty_amount` | Flat score assigned to penalised slides (default: −100) |
 | `number_of_jurors` | Expected number of jurors per slide; used for quorum calculation |
 | `evaluations_per_juror` | Expected number of votes each juror casts per slide |

@@ -409,6 +409,7 @@ defmodule SM.Migrator do
                     proportional_submission: if(percentuale == -1, do: true, else: false),
                     submission_ratio: Decimal.div(pspeciep, 100),
                     fixed_points_multiplier: Decimal.new(moltpuntfisso),
+                    submission_bonus_per_slide: Decimal.new(0),
                     penalty_amount: Decimal.negate(Decimal.new(row.penalty)),
                     dynamic_coefficients_enabled: dynamic_coefficients_enabled?,
                     coefficient_mode: :all_slides,

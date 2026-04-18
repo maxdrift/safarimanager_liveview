@@ -46,6 +46,7 @@ defmodule SM.Competitions.CompetitionSettings do
              :proportional_submission,
              :submission_ratio,
              :fixed_points_multiplier,
+             :submission_bonus_per_slide,
              :penalty_amount,
              :coefficient_mode,
              :dynamic_coefficient_mode,
@@ -63,6 +64,7 @@ defmodule SM.Competitions.CompetitionSettings do
     field :proportional_submission, :boolean, default: true
     field :submission_ratio, :decimal
     field :fixed_points_multiplier, :decimal
+    field :submission_bonus_per_slide, :decimal, default: Decimal.new("0")
     field :penalty_amount, :decimal
     field :coefficient_mode, Ecto.Enum, values: Keyword.keys(@coefficient_modes), default: :all
     field :dynamic_coefficient_mode, Ecto.Enum, values: Keyword.keys(@coefficient_modes), default: :disabled
@@ -86,6 +88,7 @@ defmodule SM.Competitions.CompetitionSettings do
       :proportional_submission,
       :submission_ratio,
       :fixed_points_multiplier,
+      :submission_bonus_per_slide,
       :penalty_amount,
       :coefficient_mode,
       :dynamic_coefficient_mode
@@ -99,6 +102,7 @@ defmodule SM.Competitions.CompetitionSettings do
       :fixed_points_multiplier,
       :penalty_amount
     ])
+    |> validate_number(:submission_bonus_per_slide, greater_than_or_equal_to: 0)
     |> cast_embed(:dynamic_coefficients)
   end
 

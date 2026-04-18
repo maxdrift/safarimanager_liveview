@@ -516,6 +516,7 @@ defmodule SM.Competitions do
       "proportional_submission" => fetch_config!(:proportional_submission),
       "submission_ratio" => fetch_config!(:submission_ratio),
       "fixed_points_multiplier" => fetch_config!(:fixed_points_multiplier),
+      "submission_bonus_per_slide" => fetch_config!(:submission_bonus_per_slide),
       "penalty_amount" => fetch_config!(:penalty_amount),
       "dynamic_coefficients" => fetch_config!(:dynamic_coefficients)
     }

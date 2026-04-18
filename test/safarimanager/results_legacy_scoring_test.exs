@@ -100,6 +100,8 @@ defmodule SM.ResultsLegacyScoringTest do
       # coefficient from subject (2) × fixed_points_multiplier (5) = 10
       assert Decimal.eq?(row.slide_score, Decimal.new(10))
       assert Decimal.eq?(row.coefficient, Decimal.new(2))
+      assert Decimal.eq?(result.slide_points, Decimal.new(10))
+      assert Decimal.eq?(result.submission_bonus, Decimal.new(0))
       assert Decimal.eq?(result.total_score, Decimal.new(10))
     end
 

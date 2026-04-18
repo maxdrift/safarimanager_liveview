@@ -75,6 +75,7 @@ config :safarimanager, SM.Competitions.CompetitionSettings,
     proportional_submission: true,
     submission_ratio: "0.25",
     fixed_points_multiplier: "5.0",
+    submission_bonus_per_slide: "0",
     penalty_amount: "-100",
     dynamic_coefficients: [
       %{name: "max", from: "0", to: "0.33", value: "1"},
