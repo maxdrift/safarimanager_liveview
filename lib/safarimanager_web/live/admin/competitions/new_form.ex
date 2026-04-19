@@ -11,14 +11,14 @@ defmodule SMWeb.Live.Admin.Competitions.Form do
   @impl true
   def render(assigns) do
     ~H"""
-    <div class="max-h-[80vh] overflow-y-auto pr-2">
+    <div class="max-h-[80vh] min-h-0 min-w-0 w-full max-w-full overflow-y-auto overflow-x-hidden pr-2">
       <.form
         for={@form}
         id="competition-form"
         phx-target={@myself}
         phx-change="validate"
         phx-submit="save"
-        class="space-y-6"
+        class="space-y-6 min-w-0 max-w-full"
       >
         <%!-- Basic Information Section --%>
         <fieldset class="border border-base-300 rounded-lg p-4">
@@ -70,9 +70,16 @@ defmodule SMWeb.Live.Admin.Competitions.Form do
           </div>
         </fieldset>
 
-        <%!-- Location Section (Collapsible) --%>
+        <%!-- Location Section (Collapsible; checked is server-driven so phx-change validate does not reset it) --%>
         <div class="collapse collapse-arrow border border-base-300 rounded-lg bg-base-100">
-          <input type="checkbox" class="peer" />
+          <input
+            type="checkbox"
+            class="peer"
+            id="competition-location-collapse"
+            checked={@location_collapse_open?}
+            phx-hook="StopFormChange"
+            phx-click={JS.push("location-collapse-toggle", target: @myself)}
+          />
           <div class="collapse-title font-semibold text-base-content/70 uppercase tracking-wide text-sm">
             <Heroicons.icon name="map-pin" type="outline" class="w-4 h-4 inline-block mr-2" />
             {gettext("Location")}
@@ -257,9 +264,16 @@ defmodule SMWeb.Live.Admin.Competitions.Form do
             </div>
           </fieldset>
 
-          <%!-- Dynamic Coefficients Section (Collapsible) --%>
+          <%!-- Dynamic Coefficients Section (Collapsible; server-driven like Location) --%>
           <div class="collapse collapse-arrow border border-base-300 rounded-lg bg-base-100">
-            <input type="checkbox" class="peer" />
+            <input
+              type="checkbox"
+              class="peer"
+              id="competition-dynamic-coefficients-collapse"
+              checked={@dynamic_coefficients_collapse_open?}
+              phx-hook="StopFormChange"
+              phx-click={JS.push("dynamic-coefficients-collapse-toggle", target: @myself)}
+            />
             <div class="collapse-title font-semibold text-base-content/70 uppercase tracking-wide text-sm">
               <Heroicons.icon name="variable" type="outline" class="w-4 h-4 inline-block mr-2" />
               {gettext("Dynamic coefficients")}
@@ -308,23 +322,26 @@ defmodule SMWeb.Live.Admin.Competitions.Form do
         </.inputs_for>
 
         <%!-- Subjects for this competition --%>
-        <fieldset class="border border-base-300 rounded-lg p-4" id="competition-subjects-fieldset">
-          <legend class="px-2 text-sm font-semibold text-base-content/70 uppercase tracking-wide mb-3">
-            <Heroicons.icon name="squares-2x2" type="outline" class="w-4 h-4 inline-block mr-1" />
+        <fieldset
+          class="min-w-0 max-w-full border border-base-300 rounded-lg p-4"
+          id="competition-subjects-fieldset"
+        >
+          <legend class="px-2 text-sm font-semibold text-base-content/70 uppercase tracking-wide mb-3 max-w-full whitespace-normal break-words">
+            <Heroicons.icon name="squares-2x2" type="outline" class="w-4 h-4 inline-block mr-1 shrink-0" />
             {gettext("Subjects and coefficients")}
           </legend>
-          <p class="text-sm text-base-content/60 mb-3">
+          <p class="text-sm text-base-content/60 mb-3 max-w-full break-words text-pretty">
             {gettext(
               "Choose which species are allowed in this competition and set static coefficients. Use the buttons below to load the full catalog or adjust values in bulk."
             )}
           </p>
-          <div class="mb-3 overflow-x-auto overflow-y-visible overscroll-x-contain">
-            <div class="flex flex-nowrap items-end gap-2 min-w-0 py-0.5">
+          <div class="mb-3 w-full min-w-0 max-w-full">
+            <div class="flex flex-wrap items-end gap-2 py-0.5">
               <button
                 type="button"
                 phx-click="subjects-seed-catalog"
                 phx-target={@myself}
-                class="btn btn-sm btn-outline btn-primary shrink-0 whitespace-nowrap"
+                class="btn btn-sm btn-outline btn-primary shrink-0 text-left whitespace-normal sm:whitespace-nowrap"
               >
                 {gettext("Load all from catalog")}
               </button>
@@ -332,7 +349,7 @@ defmodule SMWeb.Live.Admin.Competitions.Form do
                 type="button"
                 phx-click="subjects-reset-catalog-coefficients"
                 phx-target={@myself}
-                class="btn btn-sm btn-outline shrink-0 whitespace-nowrap"
+                class="btn btn-sm btn-outline shrink-0 text-left whitespace-normal sm:whitespace-nowrap"
               >
                 {gettext("Reset coefficients from catalog")}
               </button>
@@ -341,7 +358,7 @@ defmodule SMWeb.Live.Admin.Competitions.Form do
                 phx-click="subjects-bulk-offset"
                 phx-value-delta="-1"
                 phx-target={@myself}
-                class="btn btn-sm btn-outline shrink-0 whitespace-nowrap"
+                class="btn btn-sm btn-outline shrink-0 text-left whitespace-normal sm:whitespace-nowrap"
               >
                 {gettext("Decrease all by 1")}
               </button>
@@ -350,14 +367,14 @@ defmodule SMWeb.Live.Admin.Competitions.Form do
                 phx-click="subjects-bulk-offset"
                 phx-value-delta="1"
                 phx-target={@myself}
-                class="btn btn-sm btn-outline shrink-0 whitespace-nowrap"
+                class="btn btn-sm btn-outline shrink-0 text-left whitespace-normal sm:whitespace-nowrap"
               >
                 {gettext("Increase all by 1")}
               </button>
-              <div class="flex flex-nowrap items-end gap-2 shrink-0 border-l border-base-300 pl-2 ml-1">
+              <div class="flex min-w-0 max-w-full flex-wrap items-end gap-2 pt-2 max-sm:w-full max-sm:border-t max-sm:border-base-300 max-sm:pl-0 sm:ml-1 sm:border-l sm:border-base-300 sm:pl-2 sm:pt-0">
                 <label
                   for="subject-bulk-set-draft"
-                  class="text-sm text-base-content/70 whitespace-nowrap self-center pb-0.5"
+                  class="text-sm text-base-content/70 max-w-full break-words sm:whitespace-nowrap self-center pb-0.5"
                 >
                   {gettext("Set all to")}
                 </label>
@@ -367,7 +384,7 @@ defmodule SMWeb.Live.Admin.Competitions.Form do
                   id="subject-bulk-set-draft"
                   name="subject_bulk_set_draft"
                   value={@subject_bulk_set_draft}
-                  class="input input-bordered input-sm w-20 shrink-0"
+                  class="input input-bordered input-sm w-full max-w-[10rem] shrink-0 sm:w-20"
                   phx-change="subject-bulk-set-draft"
                   phx-target={@myself}
                   phx-debounce="300"
@@ -376,7 +393,7 @@ defmodule SMWeb.Live.Admin.Competitions.Form do
                   type="button"
                   phx-click="subjects-bulk-set-all"
                   phx-target={@myself}
-                  class="btn btn-sm btn-outline shrink-0 whitespace-nowrap"
+                  class="btn btn-sm btn-outline shrink-0"
                 >
                   {gettext("Apply")}
                 </button>
@@ -386,18 +403,18 @@ defmodule SMWeb.Live.Admin.Competitions.Form do
           <div :if={competition_subjects_errors(@form) != []} class="text-error text-sm mb-2">
             <p :for={msg <- competition_subjects_errors(@form)}>{msg}</p>
           </div>
-          <div class="max-h-64 overflow-y-auto border border-base-200 rounded-lg">
+          <div class="max-h-64 min-w-0 max-w-full overflow-y-auto overflow-x-hidden border border-base-200 rounded-lg">
             <.inputs_for :let={csrow} field={@form[:competition_subjects]}>
               <.hidden_input name={"#{@form.name}[competition_subject_sort][]"} value={csrow.index} />
-              <div class="flex flex-wrap items-end gap-2 p-2 border-b border-base-200 last:border-b-0 bg-base-100">
-                <div class="form-control min-w-[200px] flex-1">
+              <div class="grid grid-cols-1 gap-2 p-2 border-b border-base-200 last:border-b-0 bg-base-100 sm:grid-cols-[minmax(0,1fr)_7rem_auto] sm:items-end">
+                <div class="form-control min-w-0 w-full max-w-full sm:col-span-1">
                   <label class="label py-0">
-                    <span class="label-text text-xs">{gettext("Subject")}</span>
+                    <span class="label-text text-xs max-w-full break-words">{gettext("Subject")}</span>
                   </label>
                   <select
                     id={csrow[:subject_id].id}
                     name={csrow[:subject_id].name}
-                    class="select select-bordered select-sm w-full"
+                    class="select select-bordered select-sm w-full min-w-0 max-w-full"
                     phx-debounce="100"
                   >
                     <option value="">{gettext("Select…")}</option>
@@ -407,17 +424,17 @@ defmodule SMWeb.Live.Admin.Competitions.Form do
                     )}
                   </select>
                 </div>
-                <div class="form-control w-28">
+                <div class="form-control w-full min-w-0 sm:w-28 sm:max-w-[7rem]">
                   <label class="label py-0">
                     <span class="label-text text-xs">{gettext("Coeff.")}</span>
                   </label>
                   <.input
                     field={csrow[:coefficient]}
                     type="number"
-                    class="input input-bordered input-sm w-full"
+                    class="input-sm min-w-0"
                   />
                 </div>
-                <label class="btn btn-square btn-sm btn-ghost text-error">
+                <label class="btn btn-square btn-sm btn-ghost shrink-0 justify-self-start text-error sm:justify-self-end">
                   <input
                     type="checkbox"
                     name={"#{@form.name}[competition_subject_drop][]"}
@@ -474,6 +491,8 @@ defmodule SMWeb.Live.Admin.Competitions.Form do
       |> assign(assigns)
       |> assign_new(:subjects, fn -> [] end)
       |> assign_new(:subject_bulk_set_draft, fn -> "" end)
+      |> assign_new(:location_collapse_open?, fn -> false end)
+      |> assign_new(:dynamic_coefficients_collapse_open?, fn -> false end)
 
     {:ok, socket}
   end
@@ -482,7 +501,21 @@ defmodule SMWeb.Live.Admin.Competitions.Form do
   def handle_event("validate", %{"competition" => competition_params}, socket) do
     entity = socket.assigns[:entity] || socket.assigns[:competition] || %Competition{}
     changeset = Competitions.change(entity, competition_params)
-    {:noreply, assign(socket, form: to_form(changeset, action: :validate))}
+
+    socket =
+      socket
+      |> assign(:form, to_form(changeset, action: :validate))
+      |> merge_collapse_assigns_from_params(competition_params)
+
+    {:noreply, socket}
+  end
+
+  def handle_event("location-collapse-toggle", _params, socket) do
+    {:noreply, update(socket, :location_collapse_open?, &(!&1))}
+  end
+
+  def handle_event("dynamic-coefficients-collapse-toggle", _params, socket) do
+    {:noreply, update(socket, :dynamic_coefficients_collapse_open?, &(!&1))}
   end
 
   def handle_event("save", %{"competition" => competition_params}, socket) do
@@ -542,7 +575,52 @@ defmodule SMWeb.Live.Admin.Competitions.Form do
   defp rechange_competition_form(socket, params) do
     entity = socket.assigns[:entity] || socket.assigns[:competition] || %Competition{}
     cs = Competitions.change(entity, params)
-    assign(socket, form: to_form(cs, action: :validate))
+
+    socket
+    |> assign(:form, to_form(cs, action: :validate))
+    |> merge_collapse_assigns_from_params(params)
+  end
+
+  defp merge_collapse_assigns_from_params(socket, competition_params) do
+    socket
+    |> assign(
+      :location_collapse_open?,
+      socket.assigns.location_collapse_open? or
+        location_fields_non_empty?(competition_params)
+    )
+    |> assign(
+      :dynamic_coefficients_collapse_open?,
+      socket.assigns.dynamic_coefficients_collapse_open? or
+        dynamic_coefficients_fields_non_empty?(competition_params)
+    )
+  end
+
+  defp location_fields_non_empty?(params) when is_map(params) do
+    ~w(street_name street_number postal_code city state country)
+    |> Enum.any?(&non_blank_string?(Map.get(params, &1)))
+  end
+
+  defp dynamic_coefficients_fields_non_empty?(params) when is_map(params) do
+    case params["settings"] do
+      %{} = settings ->
+        case settings["dynamic_coefficients"] do
+          coeffs when is_map(coeffs) ->
+            Enum.any?(coeffs, fn {_idx, row} ->
+              is_map(row) and
+                Enum.any?(~w(name from to value), &non_blank_string?(Map.get(row, &1)))
+            end)
+
+          _ ->
+            false
+        end
+
+      _ ->
+        false
+    end
+  end
+
+  defp non_blank_string?(v) do
+    v not in [nil, ""] and String.trim(to_string(v)) != ""
   end
 
   defp save_competition(socket, :edit_competition, competition_params) do

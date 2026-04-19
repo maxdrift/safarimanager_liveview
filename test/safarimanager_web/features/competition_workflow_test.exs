@@ -21,7 +21,16 @@ defmodule SMWeb.Features.CompetitionWorkflowTest do
   # Import specific LiveViewTest functions for form submissions that trigger redirects
   # and for use within PhoenixTest's unwrap/2 callback
   import Phoenix.LiveViewTest,
-    only: [live: 2, form: 3, render_submit: 1, render_change: 1, render_change: 2, element: 2, render_click: 1]
+    only: [
+      live: 2,
+      form: 3,
+      render_submit: 1,
+      render_change: 1,
+      render_change: 2,
+      element: 2,
+      render_click: 1,
+      has_element?: 2
+    ]
 
   import PhoenixTest
   import SM.CompetitionsFixtures
@@ -273,6 +282,47 @@ defmodule SMWeb.Features.CompetitionWorkflowTest do
       end)
       |> assert_has("#competition-form")
       |> assert_has("#competition-name-input")
+    end
+
+    @tag :workflow
+    test "location collapse stays open while editing location fields on validate", %{
+      conn: conn,
+      organization: organization
+    } do
+      # Regression: the Location accordion used a DaisyUI checkbox that was recreated
+      # unchecked on every phx-change validate, collapsing the section while typing.
+      conn
+      |> visit(~p"/organize/new")
+      |> unwrap(fn view ->
+        view
+        |> form("#competition-form",
+          competition: %{
+            "name" => "Coastal Safari",
+            "organization_id" => organization.id,
+            "city" => "Catania"
+          }
+        )
+        |> render_change()
+
+        assert has_element?(view, "#competition-location-collapse[checked]")
+
+        html =
+          view
+          |> form("#competition-form",
+            competition: %{
+              "name" => "Coastal Safari",
+              "organization_id" => organization.id,
+              "city" => "Catania",
+              "country" => "Italy"
+            }
+          )
+          |> render_change()
+
+        assert has_element?(view, "#competition-location-collapse[checked]")
+
+        html
+      end)
+      |> assert_has("#competition-form")
     end
   end
 

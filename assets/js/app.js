@@ -107,6 +107,20 @@ let autoClearFlash = {
   },
 }
 
+// Prevents collapse UI checkboxes from bubbling `change` to a parent form with
+// phx-change (e.g. validate), which would re-render and reset unchecked state.
+const stopFormChange = {
+  mounted() {
+    this.el.addEventListener(
+      "change",
+      (e) => {
+        e.stopPropagation()
+      },
+      false
+    )
+  }
+}
+
 const hooks = {
   GridSelection: GridSelection,
   InfiniteScroll: InfiniteScroll,
@@ -114,7 +128,8 @@ const hooks = {
   AutoClearFlash: autoClearFlash,
   Sortable: sortable,
   SortableInputsFor: sortableInputsFor,
-  NoSleep: noSleep
+  NoSleep: noSleep,
+  StopFormChange: stopFormChange
 }
 
 console.log("hooks", hooks)

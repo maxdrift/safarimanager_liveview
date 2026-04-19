@@ -292,6 +292,7 @@ defmodule SMWeb.Components.CoreComponents do
   attr :prompt_disabled, :boolean, default: false, doc: "when true, the prompt option is disabled and cannot be selected"
   attr :options, :list, doc: "the options to pass to Phoenix.HTML.Form.options_for_select/2"
   attr :multiple, :boolean, default: false, doc: "the multiple flag for select inputs"
+  attr :class, :any, default: nil, doc: "extra classes merged onto the control (input, select, or textarea)"
 
   attr :rest, :global, include: ~w(accept autocomplete capture cols disabled form list max maxlength min minlength
                 multiple pattern placeholder readonly required rows size step)
@@ -344,7 +345,13 @@ defmodule SMWeb.Components.CoreComponents do
     ~H"""
     <div class="form-control w-full">
       <.label :if={@label} for={@id}>{@label}</.label>
-      <select id={@id} name={@name} class="select select-bordered w-full" multiple={@multiple} {@rest}>
+      <select
+        id={@id}
+        name={@name}
+        class={["select select-bordered w-full", @class]}
+        multiple={@multiple}
+        {@rest}
+      >
         <option :if={@prompt} value="" disabled={@prompt_disabled}>{@prompt}</option>
         {Phoenix.HTML.Form.options_for_select(@options, @value)}
       </select>
@@ -356,13 +363,14 @@ defmodule SMWeb.Components.CoreComponents do
   def input(%{type: "textarea"} = assigns) do
     ~H"""
     <div class="form-control w-full">
-      <.label for={@id}>{@label}</.label>
+      <.label :if={@label} for={@id}>{@label}</.label>
       <textarea
         id={@id}
         name={@name}
         class={[
           "textarea textarea-bordered min-h-[6rem]",
-          @errors != [] && "textarea-error"
+          @errors != [] && "textarea-error",
+          @class
         ]}
         {@rest}
       >{Phoenix.HTML.Form.normalize_value("textarea", @value)}</textarea>
@@ -375,7 +383,7 @@ defmodule SMWeb.Components.CoreComponents do
   def input(assigns) do
     ~H"""
     <div class="form-control w-full">
-      <.label for={@id}>{@label}</.label>
+      <.label :if={@label} for={@id}>{@label}</.label>
       <input
         type={@type}
         name={@name}
@@ -383,7 +391,8 @@ defmodule SMWeb.Components.CoreComponents do
         value={Phoenix.HTML.Form.normalize_value(@type, @value)}
         class={[
           "input input-bordered w-full",
-          @errors != [] && "input-error"
+          @errors != [] && "input-error",
+          @class
         ]}
         {@rest}
       />
