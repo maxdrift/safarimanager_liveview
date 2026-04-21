@@ -1,8 +1,5 @@
 import Config
 
-# Build ex_image_resizer from source in CI until precompiled NIFs are published (see ex_image_resizer README).
-config :rustler_precompiled, :force_build, ex_image_resizer: true
-
 database_path =
   Path.join(System.tmp_dir!(), "safarimanager/#{System.unique_integer()}-test-database.db")
 
