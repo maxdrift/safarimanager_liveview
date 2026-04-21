@@ -21,7 +21,7 @@ Safari Manager handles the complete competition lifecycle for underwater fish ph
 | Framework | Phoenix 1.7+ with LiveView 1.0+ |
 | Database | SQLite (default), PostgreSQL (supported) |
 | Styling | Tailwind CSS + DaisyUI |
-| Image Processing | libvips via `image` |
+| Image Processing | `ex_image_resizer` (Rust NIF; precompiled when available) |
 | Observability | Prometheus (PromEx) + Loki (Svadilfari) |
 
 ## Getting Started
@@ -31,7 +31,7 @@ Safari Manager handles the complete competition lifecycle for underwater fish ph
 - Elixir 1.18+
 - Erlang/OTP 26+
 - Node.js (for asset compilation)
-- libvips (for image processing)
+- Rust toolchain (`rustc`, `cargo`) for compiling the `ex_image_resizer` NIF from source until precompiled artifacts are published (see `ex_image_resizer` README)
 
 ### Installation
 

@@ -1,5 +1,8 @@
 import Config
 
+# Build ex_image_resizer from source until precompiled NIFs + checksum-Elixir.ExImageResizer.exs are published for your targets.
+config :rustler_precompiled, :force_build, ex_image_resizer: true
+
 # Do not include metadata nor timestamps in development logs
 config :logger, :console, format: "[$level] $message\n"
 

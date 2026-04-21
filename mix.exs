@@ -65,7 +65,11 @@ defmodule SM.MixProject do
       {:gettext, "~> 0.24"},
       {:heroicons,
        github: "tailwindlabs/heroicons", tag: "v2.1.5", sparse: "optimized", app: false, compile: false, depth: 1},
-      {:image, "~> 0.33"},
+      # Pinned at tag v0.2.0 (all 5 precompiled NIFs attached on GitHub release).
+      # The `checksum-Elixir.ExImageResizer.exs` file is not yet committed on that tag, so
+      # dependents still force a local Rust build via `config :rustler_precompiled, :force_build`.
+      # Switch to a later tag that ships the checksum file to drop the Rust toolchain requirement.
+      {:ex_image_resizer, git: "https://github.com/maxdrift/ExImageResizer.git", tag: "v0.2.0"},
       {:jason, "~> 1.2"},
       {:nebulex, "~> 2.5"},
       {:nimble_csv, "~> 1.2"},
@@ -82,6 +86,7 @@ defmodule SM.MixProject do
       {:prom_ex, "~> 1.8"},
       {:qrcode_ex, "~> 0.1.0"},
       {:req, "~> 0.5.8"},
+      {:rustler, "~> 0.37", optional: true},
       {:rexbug, "~> 1.0"},
       {:styler, "~> 1.2", only: [:dev, :test], runtime: false},
       {:svadilfari, git: "https://github.com/maxdrift/svadilfari", branch: "main"},

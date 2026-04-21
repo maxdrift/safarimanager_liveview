@@ -18,6 +18,8 @@ jobs:
         with:
           otp-version: ${{ env.otp }}
           elixir-version: ${{ env.elixir }}
+      - name: Install Rust (ex_image_resizer NIF)
+        uses: dtolnay/rust-toolchain@stable
       - name: Cache Mix
         uses: actions/cache@v3
         with:
@@ -67,6 +69,8 @@ jobs:
           version-type: strict
           otp-version: ${{ env.otp }}
           elixir-version: ${{ env.elixir }}
+      - name: Install Rust (ex_image_resizer NIF)
+        uses: dtolnay/rust-toolchain@stable
       - name: Start epmd
         run: $(elixir -e 'IO.puts "#{:code.root_dir()}/erts-#{:erlang.system_info(:version)}"')/bin/epmd.exe -daemon
         shell: bash

@@ -327,7 +327,11 @@ defmodule SMWeb.Live.Admin.Competitions.Form do
           id="competition-subjects-fieldset"
         >
           <legend class="px-2 text-sm font-semibold text-base-content/70 uppercase tracking-wide mb-3 max-w-full whitespace-normal break-words">
-            <Heroicons.icon name="squares-2x2" type="outline" class="w-4 h-4 inline-block mr-1 shrink-0" />
+            <Heroicons.icon
+              name="squares-2x2"
+              type="outline"
+              class="w-4 h-4 inline-block mr-1 shrink-0"
+            />
             {gettext("Subjects and coefficients")}
           </legend>
           <p class="text-sm text-base-content/60 mb-3 max-w-full break-words text-pretty">
@@ -409,7 +413,9 @@ defmodule SMWeb.Live.Admin.Competitions.Form do
               <div class="grid grid-cols-1 gap-2 p-2 border-b border-base-200 last:border-b-0 bg-base-100 sm:grid-cols-[minmax(0,1fr)_7rem_auto] sm:items-end">
                 <div class="form-control min-w-0 w-full max-w-full sm:col-span-1">
                   <label class="label py-0">
-                    <span class="label-text text-xs max-w-full break-words">{gettext("Subject")}</span>
+                    <span class="label-text text-xs max-w-full break-words">
+                      {gettext("Subject")}
+                    </span>
                   </label>
                   <select
                     id={csrow[:subject_id].id}
@@ -428,11 +434,7 @@ defmodule SMWeb.Live.Admin.Competitions.Form do
                   <label class="label py-0">
                     <span class="label-text text-xs">{gettext("Coeff.")}</span>
                   </label>
-                  <.input
-                    field={csrow[:coefficient]}
-                    type="number"
-                    class="input-sm min-w-0"
-                  />
+                  <.input field={csrow[:coefficient]} type="number" class="input-sm min-w-0" />
                 </div>
                 <label class="btn btn-square btn-sm btn-ghost shrink-0 justify-self-start text-error sm:justify-self-end">
                   <input
@@ -596,8 +598,7 @@ defmodule SMWeb.Live.Admin.Competitions.Form do
   end
 
   defp location_fields_non_empty?(params) when is_map(params) do
-    ~w(street_name street_number postal_code city state country)
-    |> Enum.any?(&non_blank_string?(Map.get(params, &1)))
+    Enum.any?(~w(street_name street_number postal_code city state country), &non_blank_string?(Map.get(params, &1)))
   end
 
   defp dynamic_coefficients_fields_non_empty?(params) when is_map(params) do

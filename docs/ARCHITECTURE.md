@@ -51,7 +51,7 @@ Safari Manager is a comprehensive platform for managing underwater photography c
 
 ### Key Dependencies
 
-- **Image Processing**: `image` (libvips wrapper) for thumbnails and EXIF extraction
+- **Image Processing**: `ex_image_resizer` (Rust NIF via `rustler_precompiled`) for thumbnails and EXIF extraction
 - **Authentication**: bcrypt_elixir for password hashing, built-in Phoenix auth
 - **Caching**: Nebulex with local adapter
 - **Observability**: PromEx (Prometheus metrics), Svadilfari (Loki logging)
