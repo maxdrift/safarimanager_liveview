@@ -157,7 +157,7 @@
                                 :if={slide_flags.wrong_subject}
                                 class="btn btn-sm btn-ghost"
                                 phx-click="apply-subject-correction"
-                                phx-value-slide_id={slide.id}
+                                phx-value-slide-id={slide.id}
                                 phx-value-new-subject={
                                   slide_flags.wrong_subject &&
                                     slide_flags.wrong_subject.context["to"]
@@ -190,7 +190,7 @@
                               <a
                                 class="btn btn-sm btn-ghost"
                                 phx-click="move-slide-to-discarded"
-                                phx-value-slide_id={slide.id}
+                                phx-value-slide-id={slide.id}
                               >
                                 {gettext("Move to discarded")}
                               </a>
@@ -199,7 +199,7 @@
                               <a
                                 class="btn btn-sm btn-ghost"
                                 phx-click="clear-all-flags"
-                                phx-value-slide_id={slide.id}
+                                phx-value-slide-id={slide.id}
                               >
                                 {gettext("Clear all flags")}
                               </a>
