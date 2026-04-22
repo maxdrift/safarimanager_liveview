@@ -204,15 +204,18 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr :for={
-                    %{
-                      slide: slide,
-                      slide_score: score,
-                      coefficient: coefficient,
-                      use_dynamic?: use_dynamic?
-                    } <-
-                      result.slides
-                  }>
+                  <tr
+                    :for={
+                      %{
+                        slide: slide,
+                        slide_score: score,
+                        coefficient: coefficient,
+                        use_dynamic?: use_dynamic?
+                      } <-
+                        result.slides
+                    }
+                    id={"results-slide-#{slide.id}"}
+                  >
                     <td>{slide.file_name}</td>
                     <td>
                       <span class="font-mono">{slide.subject.numeric_id}</span>
@@ -221,6 +224,7 @@
                     <td>
                       <span
                         class="font-mono"
+                        data-test-results-slide-coefficient
                         title={(use_dynamic? && gettext("dynamic coefficient")) || ""}
                       >
                         {coefficient}
