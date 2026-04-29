@@ -77,8 +77,8 @@ msgstr ""
 #: lib/safarimanager_web/live/jurors/jurors.html.heex:212
 #: lib/safarimanager_web/live/new_competition/new_competition.html.heex:85
 #: lib/safarimanager_web/live/participants/participants.html.heex:152
-#: lib/safarimanager_web/live/slides/slide_selection.html.heex:10
-#: lib/safarimanager_web/live/slides/slides.html.heex:7
+#: lib/safarimanager_web/live/slides/slide_selection.html.heex:20
+#: lib/safarimanager_web/live/slides/slides.html.heex:17
 #: lib/safarimanager_web/live/teams/teams.html.heex:77
 #: lib/safarimanager_web/live/teams/teams.html.heex:255
 #, elixir-autogen, elixir-format
@@ -152,7 +152,7 @@ msgstr ""
 #: lib/safarimanager_web/live/jurors/jurors.html.heex:113
 #: lib/safarimanager_web/live/new_competition/new_competition.html.heex:92
 #: lib/safarimanager_web/live/participants/participants.html.heex:302
-#: lib/safarimanager_web/live/slides/slides.html.heex:319
+#: lib/safarimanager_web/live/slides/slides.html.heex:443
 #: lib/safarimanager_web/live/teams/teams.html.heex:262
 #, elixir-autogen, elixir-format
 msgid "Jurors"
@@ -167,10 +167,10 @@ msgstr ""
 #: lib/safarimanager_web/controllers/slides_printout_html/show_teams.html.heex:30
 #: lib/safarimanager_web/live/admin/competitions/new_form.ex:176
 #: lib/safarimanager_web/live/results/results.ex:84
-#: lib/safarimanager_web/live/results/results.html.heex:301
+#: lib/safarimanager_web/live/results/results.html.heex:305
 #: lib/safarimanager_web/live/results/team_results.ex:62
 #: lib/safarimanager_web/live/results/team_results.html.heex:277
-#: lib/safarimanager_web/live/slides/slide_selection.ex:362
+#: lib/safarimanager_web/live/slides/slide_selection.ex:431
 #: lib/safarimanager_web/live/validation/validation.ex:416
 #: lib/safarimanager_web/live/validation/validation_launcher.ex:253
 #: lib/safarimanager_web/live/validation/validation_launcher.html.heex:28
@@ -192,7 +192,7 @@ msgstr ""
 
 #: lib/safarimanager_web/components/steps_header.ex:48
 #: lib/safarimanager_web/live/new_competition/new_competition.html.heex:118
-#: lib/safarimanager_web/live/slides/slides.html.heex:326
+#: lib/safarimanager_web/live/slides/slides.html.heex:450
 #: lib/safarimanager_web/live/validation/validation_launcher.html.heex:331
 #, elixir-autogen, elixir-format
 msgid "Selection"
@@ -202,16 +202,16 @@ msgstr ""
 #: lib/safarimanager_web/live/admin/import.ex:44
 #: lib/safarimanager_web/live/jurors/jurors.html.heex:219
 #: lib/safarimanager_web/live/new_competition/new_competition.html.heex:110
-#: lib/safarimanager_web/live/slides/slide_selection.html.heex:54
-#: lib/safarimanager_web/live/slides/slide_selection.html.heex:276
-#: lib/safarimanager_web/live/slides/slides.html.heex:47
+#: lib/safarimanager_web/live/slides/slide_selection.html.heex:73
+#: lib/safarimanager_web/live/slides/slide_selection.html.heex:407
+#: lib/safarimanager_web/live/slides/slides.html.heex:70
 #, elixir-autogen, elixir-format
 msgid "Slides"
 msgstr ""
 
 #: lib/safarimanager_web/components/steps_header.ex:54
 #: lib/safarimanager_web/live/jury/jury_launcher.html.heex:75
-#: lib/safarimanager_web/live/slides/slide_selection.html.heex:283
+#: lib/safarimanager_web/live/slides/slide_selection.html.heex:415
 #, elixir-autogen, elixir-format
 msgid "Validation"
 msgstr ""
@@ -296,7 +296,7 @@ msgstr ""
 #: lib/safarimanager_web/live/jury/jury_launcher.html.heex:12
 #: lib/safarimanager_web/live/jury/jury_launcher.html.heex:26
 #: lib/safarimanager_web/live/jury/jury_launcher.html.heex:41
-#: lib/safarimanager_web/live/slides/slides.html.heex:166
+#: lib/safarimanager_web/live/slides/slides.html.heex:255
 #, elixir-format, elixir-autogen
 msgid "slides"
 msgstr ""
@@ -576,22 +576,22 @@ msgstr ""
 msgid "Print"
 msgstr ""
 
-#: lib/safarimanager_web/live/slides/slide_selection.ex:249
+#: lib/safarimanager_web/live/slides/slide_selection.ex:287
 #, elixir-autogen, elixir-format
 msgid "Slide selection has been imported."
 msgstr ""
 
-#: lib/safarimanager_web/live/slides/slide_selection.ex:283
+#: lib/safarimanager_web/live/slides/slide_selection.ex:321
 #, elixir-autogen, elixir-format
 msgid "Unable to import slide selection: invalid CSV file"
 msgstr ""
 
-#: lib/safarimanager_web/live/slides/slide_selection.ex:257
+#: lib/safarimanager_web/live/slides/slide_selection.ex:295
 #, elixir-autogen, elixir-format
 msgid "Unable to import slide selection: slide not found"
 msgstr ""
 
-#: lib/safarimanager_web/live/slides/slide_selection.ex:276
+#: lib/safarimanager_web/live/slides/slide_selection.ex:314
 #, elixir-autogen, elixir-format
 msgid "Unable to import slide selection: subject not found"
 msgstr ""
@@ -622,7 +622,7 @@ msgstr ""
 #: lib/safarimanager_web/live/admin/users/index.html.heex:44
 #: lib/safarimanager_web/live/jurors/jurors.html.heex:35
 #: lib/safarimanager_web/live/new_competition/new_competition.html.heex:150
-#: lib/safarimanager_web/live/slides/slide_selection.html.heex:243
+#: lib/safarimanager_web/live/slides/slide_selection.html.heex:358
 #, elixir-autogen, elixir-format
 msgid "Close"
 msgstr ""
@@ -680,7 +680,7 @@ msgstr ""
 #: lib/safarimanager_web/live/admin/users/index.html.heex:249
 #: lib/safarimanager_web/live/slides/slides.ex:101
 #: lib/safarimanager_web/live/slides/slides.ex:126
-#: lib/safarimanager_web/live/slides/slides.html.heex:232
+#: lib/safarimanager_web/live/slides/slides.html.heex:333
 #: lib/safarimanager_web/live/teams/teams.ex:150
 #, elixir-autogen, elixir-format
 msgid "Delete"
@@ -702,9 +702,9 @@ msgstr ""
 msgid "Delete records"
 msgstr ""
 
-#: lib/safarimanager_web/components/slides_selection_list.ex:91
-#: lib/safarimanager_web/components/slides_selection_list.ex:174
-#: lib/safarimanager_web/components/slides_selection_list.ex:259
+#: lib/safarimanager_web/components/slides_selection_list.ex:87
+#: lib/safarimanager_web/components/slides_selection_list.ex:161
+#: lib/safarimanager_web/components/slides_selection_list.ex:237
 #: lib/safarimanager_web/live/admin/categories/index.html.heex:124
 #: lib/safarimanager_web/live/admin/competitions/index.html.heex:694
 #: lib/safarimanager_web/live/admin/evaluations/index.html.heex:166
@@ -767,9 +767,9 @@ msgstr ""
 #: lib/safarimanager_web/live/results/results.html.heex:88
 #: lib/safarimanager_web/live/results/results.html.heex:163
 #: lib/safarimanager_web/live/results/team_results.html.heex:88
-#: lib/safarimanager_web/live/slides/slide_selection.html.heex:104
-#: lib/safarimanager_web/live/slides/slides.html.heex:98
-#: lib/safarimanager_web/live/slides/slides.html.heex:193
+#: lib/safarimanager_web/live/slides/slide_selection.html.heex:158
+#: lib/safarimanager_web/live/slides/slides.html.heex:155
+#: lib/safarimanager_web/live/slides/slides.html.heex:287
 #: lib/safarimanager_web/live/teams/teams.html.heex:31
 #: lib/safarimanager_web/live/teams/teams.html.heex:198
 #, elixir-autogen, elixir-format
@@ -797,7 +797,7 @@ msgstr ""
 #: lib/safarimanager_web/live/admin/subjects/index.html.heex:102
 #: lib/safarimanager_web/live/admin/teams/index.html.heex:155
 #: lib/safarimanager_web/live/admin/users/index.html.heex:105
-#: lib/safarimanager_web/live/slides/slide_selection.html.heex:237
+#: lib/safarimanager_web/live/slides/slide_selection.html.heex:355
 #: lib/safarimanager_web/live/teams/teams.html.heex:59
 #, elixir-autogen, elixir-format
 msgid "Save"
@@ -851,7 +851,7 @@ msgstr ""
 #: lib/safarimanager_web/live/admin/users/index.html.heex:111
 #: lib/safarimanager_web/live/admin/users/index.html.heex:196
 #: lib/safarimanager_web/live/ballot_box/ballot_box.ex:62
-#: lib/safarimanager_web/live/slides/slides.html.heex:273
+#: lib/safarimanager_web/live/slides/slides.html.heex:383
 #: lib/safarimanager_web/live/teams/teams.html.heex:67
 #, elixir-autogen, elixir-format
 msgid "Cancel"
@@ -1238,12 +1238,12 @@ msgid "Max submitted slides"
 msgstr ""
 
 #: lib/safarimanager_web/components/datetime_string.ex:17
-#: lib/safarimanager_web/components/slides_selection_list.ex:78
-#: lib/safarimanager_web/components/slides_selection_list.ex:82
-#: lib/safarimanager_web/components/slides_selection_list.ex:161
-#: lib/safarimanager_web/components/slides_selection_list.ex:165
-#: lib/safarimanager_web/components/slides_selection_list.ex:246
-#: lib/safarimanager_web/components/slides_selection_list.ex:250
+#: lib/safarimanager_web/components/slides_selection_list.ex:74
+#: lib/safarimanager_web/components/slides_selection_list.ex:77
+#: lib/safarimanager_web/components/slides_selection_list.ex:148
+#: lib/safarimanager_web/components/slides_selection_list.ex:151
+#: lib/safarimanager_web/components/slides_selection_list.ex:224
+#: lib/safarimanager_web/components/slides_selection_list.ex:227
 #: lib/safarimanager_web/controllers/participants_printout_html/show.html.heex:18
 #: lib/safarimanager_web/controllers/participants_printout_html/show.html.heex:21
 #: lib/safarimanager_web/controllers/participants_printout_html/show.html.heex:24
@@ -1302,16 +1302,20 @@ msgstr ""
 #: lib/safarimanager_web/live/results/results.html.heex:180
 #: lib/safarimanager_web/live/results/team_results.html.heex:103
 #: lib/safarimanager_web/live/results/team_results.html.heex:157
-#: lib/safarimanager_web/live/slides/slide_selection.html.heex:64
-#: lib/safarimanager_web/live/slides/slide_selection.html.heex:67
-#: lib/safarimanager_web/live/slides/slide_selection.html.heex:113
-#: lib/safarimanager_web/live/slides/slide_selection.html.heex:114
-#: lib/safarimanager_web/live/slides/slides.html.heex:57
-#: lib/safarimanager_web/live/slides/slides.html.heex:60
-#: lib/safarimanager_web/live/slides/slides.html.heex:107
-#: lib/safarimanager_web/live/slides/slides.html.heex:108
-#: lib/safarimanager_web/live/slides/slides.html.heex:224
-#: lib/safarimanager_web/live/slides/slides.html.heex:266
+#: lib/safarimanager_web/live/slides/slide_selection.html.heex:89
+#: lib/safarimanager_web/live/slides/slide_selection.html.heex:92
+#: lib/safarimanager_web/live/slides/slide_selection.html.heex:96
+#: lib/safarimanager_web/live/slides/slide_selection.html.heex:98
+#: lib/safarimanager_web/live/slides/slide_selection.html.heex:171
+#: lib/safarimanager_web/live/slides/slide_selection.html.heex:177
+#: lib/safarimanager_web/live/slides/slides.html.heex:86
+#: lib/safarimanager_web/live/slides/slides.html.heex:89
+#: lib/safarimanager_web/live/slides/slides.html.heex:93
+#: lib/safarimanager_web/live/slides/slides.html.heex:95
+#: lib/safarimanager_web/live/slides/slides.html.heex:168
+#: lib/safarimanager_web/live/slides/slides.html.heex:174
+#: lib/safarimanager_web/live/slides/slides.html.heex:324
+#: lib/safarimanager_web/live/slides/slides.html.heex:375
 #: lib/safarimanager_web/live/teams/teams.html.heex:52
 #: lib/safarimanager_web/live/teams/teams.html.heex:146
 #: lib/safarimanager_web/live/teams/teams.html.heex:149
@@ -1358,10 +1362,10 @@ msgstr ""
 #: lib/safarimanager_web/live/participants/participants.html.heex:189
 #: lib/safarimanager_web/live/results/results.html.heex:164
 #: lib/safarimanager_web/live/results/team_results.html.heex:146
-#: lib/safarimanager_web/live/slides/slide_selection.html.heex:52
-#: lib/safarimanager_web/live/slides/slide_selection.html.heex:105
-#: lib/safarimanager_web/live/slides/slides.html.heex:45
-#: lib/safarimanager_web/live/slides/slides.html.heex:99
+#: lib/safarimanager_web/live/slides/slide_selection.html.heex:71
+#: lib/safarimanager_web/live/slides/slide_selection.html.heex:159
+#: lib/safarimanager_web/live/slides/slides.html.heex:68
+#: lib/safarimanager_web/live/slides/slides.html.heex:156
 #: lib/safarimanager_web/live/teams/teams.html.heex:119
 #: lib/safarimanager_web/live/teams/teams.html.heex:199
 #, elixir-autogen, elixir-format
@@ -1566,8 +1570,8 @@ msgstr ""
 #: lib/safarimanager_web/live/participants/participants.html.heex:108
 #: lib/safarimanager_web/live/participants/participants.html.heex:190
 #: lib/safarimanager_web/live/results/results.html.heex:165
-#: lib/safarimanager_web/live/slides/slide_selection.html.heex:53
-#: lib/safarimanager_web/live/slides/slides.html.heex:46
+#: lib/safarimanager_web/live/slides/slide_selection.html.heex:72
+#: lib/safarimanager_web/live/slides/slides.html.heex:69
 #: lib/safarimanager_web/live/teams/teams.html.heex:120
 #, elixir-autogen, elixir-format
 msgid "Category"
@@ -1690,10 +1694,10 @@ msgstr ""
 #: lib/safarimanager_web/live/participants/participants.html.heex:186
 #: lib/safarimanager_web/live/results/results.html.heex:87
 #: lib/safarimanager_web/live/results/team_results.html.heex:87
-#: lib/safarimanager_web/live/slides/slide_selection.html.heex:49
-#: lib/safarimanager_web/live/slides/slide_selection.html.heex:103
-#: lib/safarimanager_web/live/slides/slides.html.heex:42
-#: lib/safarimanager_web/live/slides/slides.html.heex:97
+#: lib/safarimanager_web/live/slides/slide_selection.html.heex:68
+#: lib/safarimanager_web/live/slides/slide_selection.html.heex:157
+#: lib/safarimanager_web/live/slides/slides.html.heex:65
+#: lib/safarimanager_web/live/slides/slides.html.heex:154
 #: lib/safarimanager_web/live/teams/teams.html.heex:197
 #, elixir-autogen, elixir-format
 msgid "#"
@@ -1847,9 +1851,9 @@ msgstr ""
 msgid "Participants list"
 msgstr ""
 
-#: lib/safarimanager_web/components/slides_selection_list.ex:55
-#: lib/safarimanager_web/components/slides_selection_list.ex:139
-#: lib/safarimanager_web/components/slides_selection_list.ex:224
+#: lib/safarimanager_web/components/slides_selection_list.ex:44
+#: lib/safarimanager_web/components/slides_selection_list.ex:118
+#: lib/safarimanager_web/components/slides_selection_list.ex:194
 #: lib/safarimanager_web/controllers/selection_printout_html/show_multi.html.heex:34
 #: lib/safarimanager_web/controllers/selection_printout_html/show_multi_teams.html.heex:29
 #: lib/safarimanager_web/controllers/selection_printout_html/show_single.html.heex:33
@@ -1940,13 +1944,13 @@ msgstr ""
 msgid "Notes"
 msgstr ""
 
-#: lib/safarimanager_web/live/slides/slide_selection.html.heex:21
+#: lib/safarimanager_web/live/slides/slide_selection.html.heex:28
 #, elixir-autogen, elixir-format
 msgid "Print all slides selection reports"
 msgstr ""
 
-#: lib/safarimanager_web/live/slides/slide_selection.html.heex:177
-#: lib/safarimanager_web/live/slides/slide_selection.html.heex:185
+#: lib/safarimanager_web/live/slides/slide_selection.html.heex:268
+#: lib/safarimanager_web/live/slides/slide_selection.html.heex:276
 #, elixir-autogen, elixir-format
 msgid "Print slides selection report"
 msgstr ""
@@ -2021,10 +2025,10 @@ msgstr ""
 msgid "of"
 msgstr ""
 
-#: lib/safarimanager_web/components/slides_selection_list.ex:106
+#: lib/safarimanager_web/components/slides_selection_list.ex:110
 #: lib/safarimanager_web/live/results/results.ex:83
 #: lib/safarimanager_web/live/results/team_results.ex:61
-#: lib/safarimanager_web/live/slides/slide_selection.ex:361
+#: lib/safarimanager_web/live/slides/slide_selection.ex:430
 #: lib/safarimanager_web/live/validation/validation.ex:415
 #: lib/safarimanager_web/live/validation/validation_launcher.ex:252
 #: lib/safarimanager_web/live/validation/validation_launcher.html.heex:29
@@ -2071,19 +2075,19 @@ msgstr ""
 
 #: lib/safarimanager_web/live/results/results.html.heex:202
 #: lib/safarimanager_web/live/results/team_results.html.heex:178
-#: lib/safarimanager_web/live/slides/slide_selection.html.heex:220
+#: lib/safarimanager_web/live/slides/slide_selection.html.heex:333
 #: lib/safarimanager_web/live/validation/validation_launcher.html.heex:76
 #: lib/safarimanager_web/live/validation/validation_launcher.html.heex:239
 #, elixir-autogen, elixir-format
 msgid "Status"
 msgstr ""
 
-#: lib/safarimanager_web/components/slides_selection_list.ex:57
-#: lib/safarimanager_web/components/slides_selection_list.ex:141
-#: lib/safarimanager_web/components/slides_selection_list.ex:226
+#: lib/safarimanager_web/components/slides_selection_list.ex:46
+#: lib/safarimanager_web/components/slides_selection_list.ex:120
+#: lib/safarimanager_web/components/slides_selection_list.ex:196
 #: lib/safarimanager_web/live/admin/competitions/index.html.heex:591
 #: lib/safarimanager_web/live/admin/competitions/new_form.ex:417
-#: lib/safarimanager_web/live/slides/slide_selection.html.heex:210
+#: lib/safarimanager_web/live/slides/slide_selection.html.heex:316
 #: lib/safarimanager_web/live/validation/validation_launcher.html.heex:75
 #: lib/safarimanager_web/live/validation/validation_launcher.html.heex:238
 #, elixir-autogen, elixir-format
@@ -2096,7 +2100,7 @@ msgid "Submitted Count"
 msgstr ""
 
 #: lib/safarimanager_web/live/admin/competitions/index.html.heex:140
-#: lib/safarimanager_web/live/results/results.html.heex:274
+#: lib/safarimanager_web/live/results/results.html.heex:278
 #: lib/safarimanager_web/live/results/team_results.html.heex:250
 #: lib/safarimanager_web/live/validation/validation_launcher.html.heex:30
 #, elixir-autogen, elixir-format
@@ -2114,8 +2118,8 @@ msgstr ""
 #: lib/safarimanager_web/live/jurors/jurors.html.heex:126
 #: lib/safarimanager_web/live/participants/participants.html.heex:106
 #: lib/safarimanager_web/live/participants/participants.html.heex:188
-#: lib/safarimanager_web/live/slides/slide_selection.html.heex:51
-#: lib/safarimanager_web/live/slides/slides.html.heex:44
+#: lib/safarimanager_web/live/slides/slide_selection.html.heex:70
+#: lib/safarimanager_web/live/slides/slides.html.heex:67
 #: lib/safarimanager_web/live/teams/teams.html.heex:118
 #, elixir-autogen, elixir-format
 msgid "First Name"
@@ -2126,18 +2130,18 @@ msgstr ""
 #: lib/safarimanager_web/live/jurors/jurors.html.heex:125
 #: lib/safarimanager_web/live/participants/participants.html.heex:105
 #: lib/safarimanager_web/live/participants/participants.html.heex:187
-#: lib/safarimanager_web/live/slides/slide_selection.html.heex:50
-#: lib/safarimanager_web/live/slides/slides.html.heex:43
+#: lib/safarimanager_web/live/slides/slide_selection.html.heex:69
+#: lib/safarimanager_web/live/slides/slides.html.heex:66
 #: lib/safarimanager_web/live/teams/teams.html.heex:117
 #, elixir-autogen, elixir-format
 msgid "Last Name"
 msgstr ""
 
-#: lib/safarimanager_web/live/slides/slide_selection.html.heex:82
-#: lib/safarimanager_web/live/slides/slide_selection.html.heex:154
-#: lib/safarimanager_web/live/slides/slides.html.heex:75
-#: lib/safarimanager_web/live/slides/slides.html.heex:139
-#: lib/safarimanager_web/live/slides/slides.html.heex:293
+#: lib/safarimanager_web/live/slides/slide_selection.html.heex:116
+#: lib/safarimanager_web/live/slides/slide_selection.html.heex:219
+#: lib/safarimanager_web/live/slides/slides.html.heex:113
+#: lib/safarimanager_web/live/slides/slides.html.heex:207
+#: lib/safarimanager_web/live/slides/slides.html.heex:404
 #: lib/safarimanager_web/live/teams/teams.html.heex:153
 #: lib/safarimanager_web/live/teams/teams.html.heex:232
 #, elixir-autogen, elixir-format
@@ -2152,8 +2156,8 @@ msgid "Remove"
 msgstr ""
 
 #: lib/safarimanager_web/live/participants/participants.html.heex:177
-#: lib/safarimanager_web/live/slides/slide_selection.html.heex:40
-#: lib/safarimanager_web/live/slides/slides.html.heex:33
+#: lib/safarimanager_web/live/slides/slide_selection.html.heex:53
+#: lib/safarimanager_web/live/slides/slides.html.heex:50
 #: lib/safarimanager_web/live/teams/teams.html.heex:107
 #, elixir-autogen, elixir-format
 msgid "Search for a participant..."
@@ -2172,32 +2176,32 @@ msgstr ""
 msgid "Select a type..."
 msgstr ""
 
-#: lib/safarimanager_web/live/slides/slides.html.heex:154
+#: lib/safarimanager_web/live/slides/slides.html.heex:228
 #, elixir-autogen, elixir-format
 msgid "Auto discovery"
 msgstr ""
 
-#: lib/safarimanager_web/live/slides/slides.html.heex:185
+#: lib/safarimanager_web/live/slides/slides.html.heex:278
 #, elixir-autogen, elixir-format
 msgid "Click or drop some images in this box"
 msgstr ""
 
-#: lib/safarimanager_web/live/slides/slides.html.heex:165
+#: lib/safarimanager_web/live/slides/slides.html.heex:253
 #, elixir-autogen, elixir-format
 msgid "Currently"
 msgstr ""
 
-#: lib/safarimanager_web/live/slides/slides.html.heex:206
+#: lib/safarimanager_web/live/slides/slides.html.heex:300
 #, elixir-autogen, elixir-format
 msgid "Delete all"
 msgstr ""
 
-#: lib/safarimanager_web/live/slides/slides.html.heex:195
+#: lib/safarimanager_web/live/slides/slides.html.heex:289
 #, elixir-autogen, elixir-format
 msgid "Dimensions"
 msgstr ""
 
-#: lib/safarimanager_web/live/slides/slides.html.heex:14
+#: lib/safarimanager_web/live/slides/slides.html.heex:25
 #, elixir-autogen, elixir-format
 msgid "Export Slides to CSV"
 msgstr ""
@@ -2223,7 +2227,7 @@ msgstr ""
 msgid "Level up"
 msgstr ""
 
-#: lib/safarimanager_web/live/slides/slides.html.heex:162
+#: lib/safarimanager_web/live/slides/slides.html.heex:250
 #, elixir-autogen, elixir-format
 msgid "Load slides for"
 msgstr ""
@@ -2233,21 +2237,15 @@ msgstr ""
 msgid "Reached max num. of Jurors"
 msgstr ""
 
-#: lib/safarimanager_web/live/slides/slide_selection.html.heex:76
-#: lib/safarimanager_web/live/slides/slide_selection.html.heex:77
-#: lib/safarimanager_web/live/slides/slide_selection.html.heex:120
-#: lib/safarimanager_web/live/slides/slide_selection.html.heex:144
-#: lib/safarimanager_web/live/slides/slides.html.heex:69
-#: lib/safarimanager_web/live/slides/slides.html.heex:70
-#: lib/safarimanager_web/live/slides/slides.html.heex:129
+#: lib/safarimanager_web/live/slides/slide_selection.html.heex:109
+#: lib/safarimanager_web/live/slides/slide_selection.html.heex:110
+#: lib/safarimanager_web/live/slides/slide_selection.html.heex:184
+#: lib/safarimanager_web/live/slides/slide_selection.html.heex:207
+#: lib/safarimanager_web/live/slides/slides.html.heex:106
+#: lib/safarimanager_web/live/slides/slides.html.heex:107
+#: lib/safarimanager_web/live/slides/slides.html.heex:195
 #, elixir-autogen, elixir-format
 msgid "Select"
-msgstr ""
-
-#: lib/safarimanager_web/live/slides/slide_selection.html.heex:257
-#: lib/safarimanager_web/live/slides/slides.html.heex:300
-#, elixir-autogen, elixir-format
-msgid "Select a participant from the top"
 msgstr ""
 
 #: lib/safarimanager_web/components/direct_upload_dialog.ex:41
@@ -2255,10 +2253,10 @@ msgstr ""
 msgid "Select a participant..."
 msgstr ""
 
-#: lib/safarimanager_web/components/slides_selection_list.ex:56
-#: lib/safarimanager_web/components/slides_selection_list.ex:140
-#: lib/safarimanager_web/components/slides_selection_list.ex:225
-#: lib/safarimanager_web/live/slides/slides.html.heex:194
+#: lib/safarimanager_web/components/slides_selection_list.ex:45
+#: lib/safarimanager_web/components/slides_selection_list.ex:119
+#: lib/safarimanager_web/components/slides_selection_list.ex:195
+#: lib/safarimanager_web/live/slides/slides.html.heex:288
 #, elixir-autogen, elixir-format
 msgid "Size"
 msgstr ""
@@ -2279,54 +2277,54 @@ msgstr ""
 msgid "images"
 msgstr ""
 
-#: lib/safarimanager_web/live/slides/slides.html.heex:168
+#: lib/safarimanager_web/live/slides/slides.html.heex:255
 #, elixir-autogen, elixir-format
 msgid "uploading"
 msgstr ""
 
-#: lib/safarimanager_web/live/slides/slide_selection.html.heex:190
+#: lib/safarimanager_web/live/slides/slide_selection.html.heex:288
 #, elixir-autogen, elixir-format
 msgid "Click or drop CSV files in this box"
 msgstr ""
 
-#: lib/safarimanager_web/live/slides/slide_selection.html.heex:197
+#: lib/safarimanager_web/live/slides/slide_selection.html.heex:301
 #, elixir-autogen, elixir-format
 msgid "Edit slide selection"
 msgstr ""
 
-#: lib/safarimanager_web/live/slides/slide_selection.html.heex:165
-#: lib/safarimanager_web/live/slides/slide_selection.html.heex:168
+#: lib/safarimanager_web/live/slides/slide_selection.html.heex:246
+#: lib/safarimanager_web/live/slides/slide_selection.html.heex:253
 #, elixir-autogen, elixir-format
 msgid "Load CSV for"
 msgstr ""
 
-#: lib/safarimanager_web/components/slides_selection_list.ex:63
+#: lib/safarimanager_web/components/slides_selection_list.ex:53
 #, elixir-autogen, elixir-format
 msgid "No slides selected for Jury"
 msgstr ""
 
-#: lib/safarimanager_web/components/slides_selection_list.ex:147
+#: lib/safarimanager_web/components/slides_selection_list.ex:127
 #, elixir-autogen, elixir-format
 msgid "No slides selected for fixed points"
 msgstr ""
 
-#: lib/safarimanager_web/components/slides_selection_list.ex:232
+#: lib/safarimanager_web/components/slides_selection_list.ex:203
 #, elixir-autogen, elixir-format
 msgid "No slides selected to be discarded."
 msgstr ""
 
-#: lib/safarimanager_web/live/slides/slide_selection.html.heex:212
+#: lib/safarimanager_web/live/slides/slide_selection.html.heex:318
 #, elixir-autogen, elixir-format
 msgid "Select a subject..."
 msgstr ""
 
-#: lib/safarimanager_web/components/slides_selection_list.ex:22
+#: lib/safarimanager_web/components/slides_selection_list.ex:36
 #, elixir-autogen, elixir-format
 msgid "Selected for Jury"
 msgstr ""
 
-#: lib/safarimanager_web/components/slides_selection_list.ex:189
-#: lib/safarimanager_web/live/slides/slide_selection.ex:364
+#: lib/safarimanager_web/components/slides_selection_list.ex:184
+#: lib/safarimanager_web/live/slides/slide_selection.ex:433
 #, elixir-autogen, elixir-format
 msgid "Discarded"
 msgid_plural "Discarded"
@@ -2375,7 +2373,7 @@ msgstr ""
 msgid "Distribution"
 msgstr ""
 
-#: lib/safarimanager_web/live/results/results.html.heex:282
+#: lib/safarimanager_web/live/results/results.html.heex:286
 #: lib/safarimanager_web/live/results/team_results.html.heex:258
 #, elixir-autogen, elixir-format
 msgid "No results available yet"
@@ -2440,7 +2438,7 @@ msgstr ""
 msgid "Total slides"
 msgstr ""
 
-#: lib/safarimanager_web/live/slides/slide_selection.ex:266
+#: lib/safarimanager_web/live/slides/slide_selection.ex:304
 #, elixir-autogen, elixir-format
 msgid "Unable to import slide selection: multiple slides with the same file name (or very similar) were found"
 msgstr ""
@@ -2774,8 +2772,8 @@ msgstr ""
 #: lib/safarimanager_web/live/new_competition/new_competition.html.heex:99
 #: lib/safarimanager_web/live/new_competition/new_competition.html.heex:206
 #: lib/safarimanager_web/live/participants/participants.html.heex:285
-#: lib/safarimanager_web/live/slides/slide_selection.html.heex:13
-#: lib/safarimanager_web/live/slides/slides.html.heex:10
+#: lib/safarimanager_web/live/slides/slide_selection.html.heex:18
+#: lib/safarimanager_web/live/slides/slides.html.heex:15
 #: lib/safarimanager_web/live/teams/teams.html.heex:165
 #, elixir-autogen, elixir-format
 msgid "Teams"
@@ -2853,8 +2851,8 @@ msgstr ""
 msgid "For teams"
 msgstr ""
 
-#: lib/safarimanager_web/live/slides/slide_selection.html.heex:94
-#: lib/safarimanager_web/live/slides/slides.html.heex:88
+#: lib/safarimanager_web/live/slides/slide_selection.html.heex:145
+#: lib/safarimanager_web/live/slides/slides.html.heex:142
 #: lib/safarimanager_web/live/teams/teams.html.heex:188
 #, elixir-autogen, elixir-format
 msgid "Search for a team..."
@@ -3062,8 +3060,8 @@ msgstr ""
 #: lib/safarimanager_web/controllers/slides_printout_html/show_teams.html.heex:47
 #: lib/safarimanager_web/live/results/results.html.heex:109
 #: lib/safarimanager_web/live/results/results.html.heex:112
-#: lib/safarimanager_web/live/results/results.html.heex:224
 #: lib/safarimanager_web/live/results/results.html.heex:228
+#: lib/safarimanager_web/live/results/results.html.heex:232
 #: lib/safarimanager_web/live/results/team_results.html.heex:109
 #: lib/safarimanager_web/live/results/team_results.html.heex:112
 #: lib/safarimanager_web/live/results/team_results.html.heex:200
@@ -3237,8 +3235,8 @@ msgstr ""
 msgid "Scoring"
 msgstr ""
 
-#: lib/safarimanager_web/live/slides/slide_selection.html.heex:26
-#: lib/safarimanager_web/live/slides/slides.html.heex:19
+#: lib/safarimanager_web/live/slides/slide_selection.html.heex:38
+#: lib/safarimanager_web/live/slides/slides.html.heex:35
 #, elixir-autogen, elixir-format
 msgid "Search participants"
 msgstr ""
@@ -3349,7 +3347,7 @@ msgstr ""
 msgid "Set all to"
 msgstr ""
 
-#: lib/safarimanager_web/live/results/results.html.heex:266
+#: lib/safarimanager_web/live/results/results.html.heex:270
 #: lib/safarimanager_web/live/results/team_results.html.heex:242
 #, elixir-autogen, elixir-format
 msgid "Slide points"
@@ -3361,7 +3359,7 @@ msgstr ""
 msgid "Subjects and coefficients"
 msgstr ""
 
-#: lib/safarimanager_web/live/results/results.html.heex:270
+#: lib/safarimanager_web/live/results/results.html.heex:274
 #: lib/safarimanager_web/live/results/team_results.html.heex:246
 #, elixir-autogen, elixir-format
 msgid "Submission bonus"
@@ -3372,4 +3370,35 @@ msgstr ""
 #: lib/safarimanager_web/live/admin/competitions/new_form.ex:236
 #, elixir-autogen, elixir-format
 msgid "Submission bonus (per slide)"
+msgstr ""
+
+#: lib/safarimanager_web/live/slides/slide_selection.html.heex:256
+#, elixir-autogen, elixir-format
+msgid "Assign subjects and jury vs. fixed status from a spreadsheet, or edit rows below."
+msgstr ""
+
+#: lib/safarimanager_web/live/slides/slide_selection.html.heex:380
+#, elixir-autogen, elixir-format
+msgid "No participant or team selected"
+msgstr ""
+
+#: lib/safarimanager_web/live/slides/slides.html.heex:417
+#, elixir-autogen, elixir-format
+msgid "No participant selected"
+msgstr ""
+
+#: lib/safarimanager_web/live/slides/slide_selection.html.heex:130
+#: lib/safarimanager_web/live/slides/slides.html.heex:127
+#, elixir-autogen, elixir-format
+msgid "Search teams"
+msgstr ""
+
+#: lib/safarimanager_web/live/slides/slides.html.heex:420
+#, elixir-autogen, elixir-format
+msgid "Select a participant or team from the list above to upload and manage slides."
+msgstr ""
+
+#: lib/safarimanager_web/live/slides/slide_selection.html.heex:383
+#, elixir-autogen, elixir-format
+msgid "Select a participant or team from the list to import a CSV and manage slide selection."
 msgstr ""

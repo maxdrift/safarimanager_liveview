@@ -138,6 +138,22 @@ defmodule SMWeb.Live.Slides do
     {:noreply, assign(socket, :participants, participants)}
   end
 
+  def handle_event("filter-teams", %{"value" => ""}, socket) do
+    teams = Teams.list_by_competition(socket.assigns.competition_id)
+    {:noreply, assign(socket, :teams, teams)}
+  end
+
+  def handle_event("filter-teams", %{"value" => value}, socket) do
+    needle = value |> String.trim() |> String.downcase()
+
+    teams =
+      socket.assigns.competition_id
+      |> Teams.list_by_competition()
+      |> Enum.filter(&team_matches_search?(&1, needle))
+
+    {:noreply, assign(socket, :teams, teams)}
+  end
+
   def handle_event("show-upload-dialog", _params, socket) do
     DirectUploadDialog.show(
       "auto-upload-dialog",
@@ -285,6 +301,29 @@ defmodule SMWeb.Live.Slides do
   def handle_info(_any, socket), do: {:noreply, socket}
 
   # Internal
+
+  defp team_matches_search?(_team, ""), do: true
+
+  defp team_matches_search?(team, needle) do
+    member_parts =
+      Enum.flat_map(team.members || [], fn m ->
+        u = m.user
+        ["#{u.first_name} #{u.last_name}", "#{u.last_name} #{u.first_name}"]
+      end)
+
+    haystack =
+      [
+        team.name,
+        team.organization_name,
+        Teams.synthesize_team_name(team)
+        | member_parts
+      ]
+      |> Enum.reject(&is_nil/1)
+      |> Enum.reject(&(&1 == ""))
+      |> Enum.map(&String.downcase/1)
+
+    Enum.any?(haystack, &String.contains?(&1, needle))
+  end
 
   # defp get_entry!(socket, file_name) do
   #   Enum.find(socket.assigns.uploads.images.entries, fn entry ->
