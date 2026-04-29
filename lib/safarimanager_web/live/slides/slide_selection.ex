@@ -37,7 +37,10 @@ defmodule SMWeb.Live.SlideSelection do
         editing?: false,
         editing_slide: nil,
         editing_form: nil,
-        subjects: []
+        subjects: [],
+        selection_jury_expanded: true,
+        selection_fixed_expanded: false,
+        selection_discarded_expanded: false
       )
       |> allow_upload(:csv,
         accept: ~w(.csv),
@@ -62,6 +65,34 @@ defmodule SMWeb.Live.SlideSelection do
   def handle_event("filter-participants", %{"value" => value}, socket) do
     participants = Participants.filter_by_name(socket.assigns.competition_id, value)
     {:noreply, assign(socket, :participants, participants)}
+  end
+
+  def handle_event("filter-teams", %{"value" => ""}, socket) do
+    teams = Teams.list_by_competition(socket.assigns.competition_id)
+    {:noreply, assign(socket, :teams, teams)}
+  end
+
+  def handle_event("filter-teams", %{"value" => value}, socket) do
+    needle = value |> String.trim() |> String.downcase()
+
+    teams =
+      socket.assigns.competition_id
+      |> Teams.list_by_competition()
+      |> Enum.filter(&team_matches_search?(&1, needle))
+
+    {:noreply, assign(socket, :teams, teams)}
+  end
+
+  def handle_event("selection-section-toggle", %{"section" => section}, socket) do
+    socket =
+      case section do
+        "jury" -> update(socket, :selection_jury_expanded, &(!&1))
+        "fixed" -> update(socket, :selection_fixed_expanded, &(!&1))
+        "discarded" -> update(socket, :selection_discarded_expanded, &(!&1))
+        _ -> socket
+      end
+
+    {:noreply, socket}
   end
 
   def handle_event("start-editing", %{"id" => slide_id}, socket) do
@@ -136,7 +167,8 @@ defmodule SMWeb.Live.SlideSelection do
 
     grouped_slides = get_user_slides_by_status(user_id, competition_id)
 
-    assign(socket,
+    socket
+    |> assign(
       competition_id: competition_id,
       competition: competition,
       participants: Participants.list(competition_id),
@@ -148,6 +180,7 @@ defmodule SMWeb.Live.SlideSelection do
       fixed_slides: Map.get(grouped_slides, :submitted_fixed, []),
       subjects: Competitions.list_subjects_for_competition(competition_id)
     )
+    |> assign_selection_section_collapse_defaults()
   end
 
   defp apply_action(socket, :load_team, %{"competition_id" => competition_id, "team_id" => team_id}) do
@@ -157,7 +190,8 @@ defmodule SMWeb.Live.SlideSelection do
 
     {:ok, team} = Teams.get(team_id)
 
-    assign(socket,
+    socket
+    |> assign(
       competition_id: competition_id,
       competition: competition,
       participants: Participants.list(competition_id),
@@ -169,22 +203,26 @@ defmodule SMWeb.Live.SlideSelection do
       fixed_slides: Map.get(grouped_slides, :submitted_fixed, []),
       subjects: Competitions.list_subjects_for_competition(competition_id)
     )
+    |> assign_selection_section_collapse_defaults()
   end
 
   defp apply_action(socket, :index, %{"competition_id" => competition_id}) do
     {:ok, competition} = Competitions.get(competition_id)
 
-    assign(socket,
+    socket
+    |> assign(
       competition_id: competition_id,
       competition: competition,
       participants: Participants.list(competition_id),
       teams: Teams.list_by_competition(competition_id),
       user: nil,
+      team: nil,
       discarded_slides: [],
       jury_slides: [],
       fixed_slides: [],
       subjects: Competitions.list_subjects_for_competition(competition_id)
     )
+    |> assign_selection_section_collapse_defaults()
   end
 
   @impl Phoenix.LiveView
@@ -348,6 +386,37 @@ defmodule SMWeb.Live.SlideSelection do
       {:error, {:multiple_results, file_name}} ->
         {:error, {:multiple_slides_found, file_name}}
     end
+  end
+
+  defp assign_selection_section_collapse_defaults(socket) do
+    assign(socket,
+      selection_jury_expanded: true,
+      selection_fixed_expanded: false,
+      selection_discarded_expanded: false
+    )
+  end
+
+  defp team_matches_search?(_team, ""), do: true
+
+  defp team_matches_search?(team, needle) do
+    member_parts =
+      Enum.flat_map(team.members || [], fn m ->
+        u = m.user
+        ["#{u.first_name} #{u.last_name}", "#{u.last_name} #{u.first_name}"]
+      end)
+
+    haystack =
+      [
+        team.name,
+        team.organization_name,
+        Teams.synthesize_team_name(team)
+        | member_parts
+      ]
+      |> Enum.reject(&is_nil/1)
+      |> Enum.reject(&(&1 == ""))
+      |> Enum.map(&String.downcase/1)
+
+    Enum.any?(haystack, &String.contains?(&1, needle))
   end
 
   defp get_slide_statuses do

@@ -618,7 +618,7 @@ defmodule SMWeb.Features.CompetitionWorkflowTest do
     } do
       conn
       |> visit(~p"/organize/#{competition.id}/slide_selection")
-      |> click_link(".btn-primary", "Validation")
+      |> click_link("#slide-selection-nav-validation", "Validation")
       # Validation launcher page should have start button
       |> assert_has("#start-validation-btn")
     end
