@@ -61,10 +61,4 @@ defmodule SMWeb.Live.TeamResults do
   defp status_to_label(:submitted_fixed), do: gettext("Fixed points")
   defp status_to_label(:submitted_jury), do: gettext("Jury")
   defp status_to_label(other), do: Gettext.gettext(SMWeb.Gettext, other)
-
-  defp submission_bonus_configured?(%{settings: %{submission_bonus_per_slide: k}}) when not is_nil(k) do
-    Decimal.compare(k, Decimal.new("0")) == :gt
-  end
-
-  defp submission_bonus_configured?(_), do: false
 end

@@ -83,7 +83,7 @@
                   <b>{gettext("Fixed points multiplier")}:</b> {@record.settings.fixed_points_multiplier}
                 </li>
                 <li>
-                  <b>{gettext("Submission bonus (per slide)")}:</b> {@record.settings.submission_bonus_per_slide}
+                  <b>{gettext("Species bonus (per slide)")}:</b> {@record.settings.submission_bonus_per_slide}
                 </li>
                 <li><b>{gettext("Penalty amount")}:</b> {@record.settings.penalty_amount}</li>
                 <li>
@@ -421,7 +421,7 @@
               <div class="w-1/2">
                 <.input
                   type="number"
-                  label={gettext("Submission bonus (per slide)")}
+                  label={gettext("Species bonus (per slide)")}
                   field={settings[:submission_bonus_per_slide]}
                   class={input_state_class(settings.source, :submission_bonus_per_slide)}
                   phx-debounce="1000"

@@ -235,7 +235,7 @@
                 </tbody>
               </table>
               <div
-                :if={submission_bonus_configured?(@competition)}
+                :if={Results.submission_bonus_configured?(@competition.settings)}
                 class="mt-3 flex flex-col gap-1 text-sm border-t border-base-300 pt-2"
               >
                 <div class="flex justify-between gap-4">
@@ -243,7 +243,7 @@
                   <span class="font-mono">{result.slide_points}</span>
                 </div>
                 <div class="flex justify-between gap-4">
-                  <span>{gettext("Submission bonus")}</span>
+                  <span>{gettext("Species bonus")}</span>
                   <span class="font-mono">{result.submission_bonus}</span>
                 </div>
                 <div class="flex justify-between gap-4 font-semibold">

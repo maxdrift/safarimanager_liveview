@@ -233,7 +233,7 @@ defmodule SMWeb.Live.Admin.Competitions.Form do
                 field={settings[:submission_bonus_per_slide]}
                 type="number"
                 step="0.01"
-                label={gettext("Submission bonus (per slide)")}
+                label={gettext("Species bonus (per slide)")}
               />
               <.input
                 field={settings[:penalty_amount]}

@@ -90,6 +90,23 @@
         <span class="font-mono text-right">{result.total_score}</span>
       </div>
     </div>
+    <div
+      :if={SM.Results.submission_bonus_configured?(@competition.settings)}
+      class="mt-3 flex flex-col gap-1 text-sm border-t border-base-300 pt-2"
+    >
+      <div class="flex flex-row justify-between gap-6">
+        <span class="font-bold">{gettext("Slide points")}</span>
+        <span class="font-mono">{result.slide_points}</span>
+      </div>
+      <div class="flex flex-row justify-between gap-6">
+        <span class="font-bold">{gettext("Species bonus")}</span>
+        <span class="font-mono">{result.submission_bonus}</span>
+      </div>
+      <div class="flex flex-row justify-between gap-6 font-semibold">
+        <span>{gettext("Total")}</span>
+        <span class="font-mono">{result.total_score}</span>
+      </div>
+    </div>
     <div class="break-after-page last:break-after-avoid-page" />
   <% end %>
 </div>

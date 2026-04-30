@@ -359,6 +359,16 @@ defmodule SM.ResultsSubmissionBonusTest do
     end
   end
 
+  describe "submission_bonus_configured?/1" do
+    test "false when rate is zero" do
+      refute Results.submission_bonus_configured?(%{submission_bonus_per_slide: Decimal.new(0)})
+    end
+
+    test "true when rate is positive" do
+      assert Results.submission_bonus_configured?(%{submission_bonus_per_slide: Decimal.new("0.5")})
+    end
+  end
+
   describe "CompetitionSettings changeset" do
     test "rejects negative submission_bonus_per_slide" do
       cs =

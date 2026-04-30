@@ -2099,6 +2099,8 @@ msgstr ""
 msgid "Submitted Count"
 msgstr ""
 
+#: lib/safarimanager_web/controllers/slides_printout_html/show.html.heex:106
+#: lib/safarimanager_web/controllers/slides_printout_html/show_teams.html.heex:98
 #: lib/safarimanager_web/live/admin/competitions/index.html.heex:140
 #: lib/safarimanager_web/live/results/results.html.heex:278
 #: lib/safarimanager_web/live/results/team_results.html.heex:250
@@ -3347,6 +3349,8 @@ msgstr ""
 msgid "Set all to"
 msgstr ""
 
+#: lib/safarimanager_web/controllers/slides_printout_html/show.html.heex:98
+#: lib/safarimanager_web/controllers/slides_printout_html/show_teams.html.heex:90
 #: lib/safarimanager_web/live/results/results.html.heex:270
 #: lib/safarimanager_web/live/results/team_results.html.heex:242
 #, elixir-autogen, elixir-format
@@ -3357,19 +3361,6 @@ msgstr ""
 #: lib/safarimanager_web/live/admin/competitions/new_form.ex:335
 #, elixir-autogen, elixir-format
 msgid "Subjects and coefficients"
-msgstr ""
-
-#: lib/safarimanager_web/live/results/results.html.heex:274
-#: lib/safarimanager_web/live/results/team_results.html.heex:246
-#, elixir-autogen, elixir-format
-msgid "Submission bonus"
-msgstr ""
-
-#: lib/safarimanager_web/live/admin/competitions/index.html.heex:86
-#: lib/safarimanager_web/live/admin/competitions/index.html.heex:424
-#: lib/safarimanager_web/live/admin/competitions/new_form.ex:236
-#, elixir-autogen, elixir-format
-msgid "Submission bonus (per slide)"
 msgstr ""
 
 #: lib/safarimanager_web/live/slides/slide_selection.html.heex:256
@@ -3401,4 +3392,19 @@ msgstr ""
 #: lib/safarimanager_web/live/slides/slide_selection.html.heex:383
 #, elixir-autogen, elixir-format
 msgid "Select a participant or team from the list to import a CSV and manage slide selection."
+msgstr ""
+
+#: lib/safarimanager_web/controllers/slides_printout_html/show.html.heex:102
+#: lib/safarimanager_web/controllers/slides_printout_html/show_teams.html.heex:94
+#: lib/safarimanager_web/live/results/results.html.heex:274
+#: lib/safarimanager_web/live/results/team_results.html.heex:246
+#, elixir-autogen, elixir-format
+msgid "Species bonus"
+msgstr ""
+
+#: lib/safarimanager_web/live/admin/competitions/index.html.heex:86
+#: lib/safarimanager_web/live/admin/competitions/index.html.heex:424
+#: lib/safarimanager_web/live/admin/competitions/new_form.ex:236
+#, elixir-autogen, elixir-format
+msgid "Species bonus (per slide)"
 msgstr ""

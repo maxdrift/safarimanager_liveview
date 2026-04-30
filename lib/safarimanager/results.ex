@@ -123,6 +123,15 @@ defmodule SM.Results do
     end
   end
 
+  @doc """
+  True when the competition configures a positive `submission_bonus_per_slide` rate.
+  """
+  @spec submission_bonus_configured?(map() | struct()) :: boolean()
+  def submission_bonus_configured?(settings) do
+    k = normalize_submission_bonus_per_slide(settings.submission_bonus_per_slide)
+    Decimal.compare(k, Decimal.new(0)) == :gt
+  end
+
   @spec get_printout_config :: any
   def get_printout_config do
     :safarimanager
@@ -223,14 +232,7 @@ defmodule SM.Results do
 
   # slide_rows: [%{slide: %Slide{}, ...}, ...]
   defp submission_bonus(settings, slide_rows) do
-    k = settings.submission_bonus_per_slide
-
-    k =
-      cond do
-        match?(%Decimal{}, k) -> k
-        is_nil(k) -> Decimal.new(0)
-        true -> Decimal.new("#{k}")
-      end
+    k = normalize_submission_bonus_per_slide(settings.submission_bonus_per_slide)
 
     cond do
       Decimal.compare(k, Decimal.new(0)) != :gt ->
@@ -241,6 +243,14 @@ defmodule SM.Results do
 
       true ->
         Decimal.mult(k, Decimal.new(Enum.count(slide_rows)))
+    end
+  end
+
+  defp normalize_submission_bonus_per_slide(k) do
+    cond do
+      match?(%Decimal{}, k) -> k
+      is_nil(k) -> Decimal.new(0)
+      true -> Decimal.new("#{k}")
     end
   end
 end
