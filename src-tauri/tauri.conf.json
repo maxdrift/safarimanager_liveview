@@ -39,7 +39,7 @@
   },
   "plugins": {
     "updater": {
-      "pubkey": "RWS9fvBLhazVB5jIhySte3iRHGJYDJNuGP8nMlDCFLIQNDXZM/qpGm4B",
+      "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IERBMDJEMTlENzM0RjYyREUKUldUZVlrOXpuZEVDMnJSQm5HOE01WXJ4Y0h0c1ZuVHk5cnNGRW9Mc09UZ01CL2p2Z2pmbCt1YWcK",
       "endpoints": [
         "https://github.com/maxdrift/safarimanager_liveview/releases/latest/download/latest.json"
       ]
