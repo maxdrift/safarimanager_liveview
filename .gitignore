@@ -55,7 +55,7 @@ TODO
 # Local code signing test env (scripts/test_macos_codesign_setup.sh)
 .env.codesign.local
 
-# Tauri updater private key (generate with `minisign -G -p src-tauri/updater.pub -s src-tauri/updater.key -W`)
+# Tauri updater private key (generate with `make app-updater-keys` → tauri signer generate)
 src-tauri/updater.key
 
 # Tauri / Rust build output

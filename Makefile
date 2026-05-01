@@ -31,7 +31,7 @@ help:
 	@echo "  make app-dev                  # tauri dev (Phoenix started by app; no CLI wait on :4000)"
 	@echo "  make app-build                # prod Elixir release + tauri bundle"
 	@echo "  make app-clean                # rm src-tauri/target"
-	@echo "  make app-updater-keys         # minisign keypair → src-tauri/updater.{pub,key} (see README)"
+	@echo "  make app-updater-keys         # tauri signer generate → src-tauri/updater.{pub,key} (see README)"
 	@echo "  make app-updater-keys-force   # overwrite existing updater.key"
 
 prepush: format-check compile-strict test credo dialyzer

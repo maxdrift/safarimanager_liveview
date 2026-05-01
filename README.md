@@ -84,14 +84,18 @@ make app-build  # production bundle (requires Rust + MIX_ENV=prod release)
 
 Release artifacts are built in CI via `tauri-apps/tauri-action` (see [.github/workflows/release.yml](.github/workflows/release.yml)).
 
-**Updater signing:** set `TAURI_SIGNING_PRIVATE_KEY` (and optional `TAURI_SIGNING_PRIVATE_KEY_PASSWORD`) in GitHub secrets. The public key in [`src-tauri/tauri.conf.json`](src-tauri/tauri.conf.json) must match the generated key. From the repo root:
+**Updater signing:** per [Tauri’s updater docs](https://v2.tauri.app/plugin/updater/), signing cannot be disabled; CI needs `TAURI_SIGNING_PRIVATE_KEY` set (and optional `TAURI_SIGNING_PRIVATE_KEY_PASSWORD` if the key is encrypted). The `plugins.updater.pubkey` value in [`src-tauri/tauri.conf.json`](src-tauri/tauri.conf.json) must match that keypair.
+
+From the repo root:
 
 ```bash
-make app-updater-keys              # writes src-tauri/updater.pub + src-tauri/updater.key (unencrypted key; -W)
-make app-updater-keys-force        # same, but overwrites an existing updater.key (FORCE=1)
+make app-updater-keys              # `tauri signer generate` → src-tauri/updater.pub + updater.key (no password)
+make app-updater-keys-force        # same, overwrites an existing updater.key (FORCE=1)
 ```
 
-Then paste the **second line** of `src-tauri/updater.pub` into `plugins.updater.pubkey` in `tauri.conf.json`. Never commit `updater.key` (it is gitignored).
+Copy the **full contents** of `src-tauri/updater.pub` (one line) into `plugins.updater.pubkey` in `tauri.conf.json`. Set GitHub secret **`TAURI_SIGNING_PRIVATE_KEY`** to the **full contents** of `src-tauri/updater.key` (one line—the format emitted by the CLI). Never commit `updater.key` (it is gitignored).
+
+For an encrypted private key, run `cd src-tauri && npx --yes @tauri-apps/cli@2 signer generate -w updater.key -p '…'` yourself and set **`TAURI_SIGNING_PRIVATE_KEY_PASSWORD`** in GitHub as well.
 
 ## Documentation
 

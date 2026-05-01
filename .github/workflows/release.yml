@@ -113,6 +113,7 @@ jobs:
           DIRECT_FILE_UPLOAD: ${{ secrets.DIRECT_FILE_UPLOAD != '' && secrets.DIRECT_FILE_UPLOAD || 'true' }}
           PROMETHEUS_PUSH_GW_USER: ${{ secrets.PROMETHEUS_PUSH_GW_USER }}
           PROMETHEUS_PUSH_GW_PASSWORD: ${{ secrets.PROMETHEUS_PUSH_GW_PASSWORD }}
+          # Full contents of updater.key from `tauri signer generate` (see scripts/tauri_updater_keys.sh / README).
           TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
           APPLE_CERTIFICATE: ${{ secrets.MACOS_CERTIFICATE_BASE64 }}
           APPLE_CERTIFICATE_PASSWORD: ${{ secrets.MACOS_CERTIFICATE_PASSWORD }}
