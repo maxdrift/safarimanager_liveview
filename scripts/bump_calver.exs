@@ -1,31 +1,40 @@
 # Bump CalVer across mix.exs and Tauri manifests: @version / Cargo.toml / Cargo.lock / tauri.conf.json
-# Format: Y.M.S (year.month.seq, no leading zeros)
+# Format: YY.M.S (two-digit calendar year, month, sequence within that month; no leading zeros)
 #
 # Compares the version in mix.exs with today's local date (OS timezone):
-# - Same year and month: increment seq.
-# - Different year or month: set to today's YYYY.MM with seq 1.
+# - Same YY and month: increment seq.
+# - Different YY or month: set to today's YY.M with seq 1.
+#
+# The first segment may still be a legacy four-digit year (e.g. 2026); it is normalized to YY (26)
+# for comparison and for the written version.
 #
 # Usage (from repo root): elixir scripts/bump_calver.exs
 
 {{cur_y, cur_m, _}, _} = :calendar.local_time()
+cur_yy = rem(cur_y, 100)
+
+normalize_year_segment = fn ys ->
+  y = String.to_integer(ys)
+  if y >= 100, do: rem(y, 100), else: y
+end
 
 mix_path = "mix.exs"
 content = File.read!(mix_path)
 
 case Regex.run(~r/@version "(\d+)\.(\d+)\.(\d+)"/, content) do
   [_, ys, ms, seqs] ->
-    file_y = String.to_integer(ys)
+    file_yy = normalize_year_segment.(ys)
     file_m = String.to_integer(ms)
     file_seq = String.to_integer(seqs)
 
-    {new_y, new_m, new_seq} =
-      if file_y == cur_y && file_m == cur_m do
-        {cur_y, cur_m, file_seq + 1}
+    {new_yy, new_m, new_seq} =
+      if file_yy == cur_yy && file_m == cur_m do
+        {cur_yy, cur_m, file_seq + 1}
       else
-        {cur_y, cur_m, 1}
+        {cur_yy, cur_m, 1}
       end
 
-    new_v = "#{new_y}.#{new_m}.#{new_seq}"
+    new_v = "#{new_yy}.#{new_m}.#{new_seq}"
 
     new_mix =
       Regex.replace(
@@ -77,6 +86,6 @@ case Regex.run(~r/@version "(\d+)\.(\d+)\.(\d+)"/, content) do
     IO.puts(new_v)
 
   _ ->
-    IO.puts(:stderr, ~s'Could not find @version "Y.M.S" (dot-separated integers) in mix.exs')
+    IO.puts(:stderr, ~s'Could not find @version "YY.M.S" (dot-separated integers) in mix.exs')
     System.halt(1)
 end

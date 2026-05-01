@@ -84,6 +84,8 @@ make app-build  # production bundle (requires Rust + MIX_ENV=prod release)
 
 Release artifacts are built in CI via `tauri-apps/tauri-action` (see [.github/workflows/release.yml](.github/workflows/release.yml)).
 
+**Versioning:** releases use **CalVer `YY.M.S`** (two-digit calendar year, month, sequence within that month), kept in sync across `mix.exs`, `src-tauri/tauri.conf.json`, and `src-tauri/Cargo.toml` / `Cargo.lock` via `make bump` / `elixir scripts/bump_calver.exs`. Git tags look like `v26.5.1`. Prefer `make retag-latest` to retry CI on an existing tag without bumping again.
+
 **Updater signing:** per [Tauri’s updater docs](https://v2.tauri.app/plugin/updater/), signing cannot be disabled; CI needs `TAURI_SIGNING_PRIVATE_KEY` set (and optional `TAURI_SIGNING_PRIVATE_KEY_PASSWORD` if the key is encrypted). The `plugins.updater.pubkey` value in [`src-tauri/tauri.conf.json`](src-tauri/tauri.conf.json) must match that keypair.
 
 From the repo root:

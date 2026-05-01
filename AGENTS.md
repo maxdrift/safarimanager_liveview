@@ -54,6 +54,7 @@ discarded → submitted_jury (evaluated by jurors)
 ## Project guidelines
 
 - Use `mix precommit` alias when you are done with all changes and fix any pending issues
+- **Releases:** CalVer **`YY.M.S`** (two-digit year); `make bump` updates Elixir + Tauri manifests; tags are **`vYY.M.S`** (e.g. `v26.5.1`). After a failed tagged release, fix `main` and use **`make retag-latest`** instead of **`make release`** so you do not advance the CalVer sequence unnecessarily.
 - Use the already included and available `:req` (`Req`) library for HTTP requests, **avoid** `:httpoison`, `:tesla`, and `:httpc`. Req is included by default and is the preferred HTTP client for Phoenix apps
 
 ### Phoenix v1.8 guidelines

@@ -4,7 +4,7 @@
 # Desktop app (Tauri + ElixirKit).
 .PHONY: app-dev app-build app-clean help-app-version app-updater-keys app-updater-keys-force
 
-# Bump CalVer in mix.exs (+ Tauri manifests), commit, tag vY.M.S, and push.
+# Bump CalVer in mix.exs (+ Tauri manifests), commit, tag vYY.M.S, and push.
 .PHONY: bump release git-tag git-push-tags retag-latest
 
 .DEFAULT_GOAL := help
@@ -20,9 +20,9 @@ help:
 	@echo "  make credo"
 	@echo "  make dialyzer"
 	@echo ""
-	@echo "Version (CalVer Y.M.S in mix.exs, src-tauri/Cargo.toml, Cargo.lock, tauri.conf.json)"
-	@echo "  make bump             # bump CalVer only (same month -> seq+1; new month/year -> Y.M.1)"
-	@echo "  make git-tag          # annotated tag from mix.exs (vY.M.S), local only"
+	@echo "Version (CalVer YY.M.S in mix.exs, src-tauri/Cargo.toml, Cargo.lock, tauri.conf.json)"
+	@echo "  make bump             # bump CalVer only (same month -> seq+1; new month/year -> YY.M.1)"
+	@echo "  make git-tag          # annotated tag from mix.exs (vYY.M.S), local only"
 	@echo "  make git-push-tags    # git push + push tags"
 	@echo "  make release          # bump + commit version files + tag + push (new release only)"
 	@echo "  make retag-latest     # move newest v* tag to HEAD + refresh GH release (CI retry; no bump)"
