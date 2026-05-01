@@ -127,12 +127,12 @@ defmodule SM.MixProject do
   # See the documentation for `Mix` for more info on aliases.
   defp aliases do
     [
-      setup: ["deps.get", "ecto.setup", "cmd --cd assets yarn"],
+      setup: ["deps.get", "ecto.setup", yarn_in_assets()],
       # "ecto.setup": ["ecto.create", "ecto.migrate", "run priv/repo/seeds.exs"],
       "ecto.setup": ["ecto.create", "ecto.migrate"],
       "ecto.reset": ["ecto.drop", "ecto.setup"],
       test: ["ecto.create --quiet", "ecto.migrate --quiet", "test"],
-      "assets.deploy": ["cmd --cd assets yarn run deploy"],
+      "assets.deploy": [yarn_in_assets("run deploy")],
       "assets.esbuild": ["esbuild default --minify"],
       release: [
         "assets.esbuild",
@@ -141,6 +141,17 @@ defmodule SM.MixProject do
         "phx.digest.clean --all"
       ]
     ]
+  end
+
+  # Mix `cmd` uses :spawn_executable; on Windows `yarn` resolves to yarn.cmd, which is not a PE
+  # executable and fails with :eacces. Route through cmd.exe instead.
+  defp yarn_in_assets(args \\ "") do
+    suffix = if args == "", do: "", else: " #{args}"
+
+    case :os.type() do
+      {:win32, _} -> "cmd --cd assets cmd /c yarn#{suffix}"
+      _ -> "cmd --cd assets yarn#{suffix}"
+    end
   end
 
   defp dialyzer do
