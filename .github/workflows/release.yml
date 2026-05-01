@@ -4,6 +4,10 @@ on:
     tags:
       - "v*.*.*"
 
+# Required for tauri-action to upload assets and merge updater JSON into the release.
+permissions:
+  contents: write
+
 env:
   CARGO_TERM_COLOR: always
 
