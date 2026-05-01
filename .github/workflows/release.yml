@@ -114,9 +114,9 @@ jobs:
           PROMETHEUS_PUSH_GW_USER: ${{ secrets.PROMETHEUS_PUSH_GW_USER }}
           PROMETHEUS_PUSH_GW_PASSWORD: ${{ secrets.PROMETHEUS_PUSH_GW_PASSWORD }}
           TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
-          APPLE_CERTIFICATE: ${{ secrets.APPLE_CERTIFICATE }}
-          APPLE_CERTIFICATE_PASSWORD: ${{ secrets.APPLE_CERTIFICATE_PASSWORD }}
-          APPLE_SIGNING_IDENTITY: ${{ secrets.APPLE_SIGNING_IDENTITY }}
+          APPLE_CERTIFICATE: ${{ secrets.MACOS_CERTIFICATE_BASE64 }}
+          APPLE_CERTIFICATE_PASSWORD: ${{ secrets.MACOS_CERTIFICATE_PASSWORD }}
+          APPLE_SIGNING_IDENTITY: ${{ secrets.ELIXIRKIT_CODESIGN_IDENTITY }}
         with:
           projectPath: src-tauri
           tagName: ${{ github.ref_name }}
