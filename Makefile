@@ -4,7 +4,7 @@
 # Desktop app (Tauri + ElixirKit).
 .PHONY: app-dev app-build app-clean help-app-version app-updater-keys app-updater-keys-force
 
-# Bump CalVer in mix.exs, commit, tag vY.M.S, and push (branch + tags).
+# Bump CalVer in mix.exs (+ Tauri manifests), commit, tag vY.M.S, and push.
 .PHONY: bump release git-tag git-push-tags retag-latest
 
 .DEFAULT_GOAL := help
@@ -21,11 +21,11 @@ help:
 	@echo "  make dialyzer"
 	@echo ""
 	@echo "Version (CalVer Y.M.S in mix.exs, src-tauri/Cargo.toml, Cargo.lock, tauri.conf.json)"
-	@echo "  make bump             # vs today: same month -> seq+1; new month/year -> Y.M.1"
-	@echo "  make git-tag          # annotated tag from mix.exs (vY.M.S)"
+	@echo "  make bump             # bump CalVer only (same month -> seq+1; new month/year -> Y.M.1)"
+	@echo "  make git-tag          # annotated tag from mix.exs (vY.M.S), local only"
 	@echo "  make git-push-tags    # git push + push tags"
-	@echo "  make release          # bump + commit + tag + push"
-	@echo "  make retag-latest     # drop newest v* tag + GH release, recreate at HEAD, push"
+	@echo "  make release          # bump + commit version files + tag + push (new release only)"
+	@echo "  make retag-latest     # move newest v* tag to HEAD + refresh GH release (CI retry; no bump)"
 	@echo ""
 	@echo "Desktop app (needs Rust + cargo-tauri / npx @tauri-apps/cli)"
 	@echo "  make app-dev                  # tauri dev (Phoenix started by app; no CLI wait on :4000)"
