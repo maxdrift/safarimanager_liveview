@@ -9,6 +9,8 @@ defmodule SM.Application do
 
   @impl Application
   def start(_type, _args) do
+    pubsub_url = System.get_env("ELIXIRKIT_PUBSUB")
+
     children =
       [
         SM.PromEx,
@@ -22,13 +24,20 @@ defmodule SM.Application do
         SMWeb.TelemetryPusherSupervisor,
         # Start the PubSub system
         {Phoenix.PubSub, name: SM.PubSub},
+        {ElixirKit.PubSub, connect: pubsub_url || :ignore, on_exit: fn -> System.stop() end},
         # Nebulex caching system
         SM.Cache,
         # Mounted devices watcher process
         {SM.USBWatcherSupervisor, []},
         # Start the Endpoint (http/https)
-        SMWeb.Endpoint
-      ] ++ app_specs()
+        SMWeb.Endpoint,
+        {Task,
+         fn ->
+           if pubsub_url do
+             ElixirKit.PubSub.broadcast("messages", "ready")
+           end
+         end}
+      ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
     # for other strategies and supported options
@@ -67,11 +76,5 @@ defmodule SM.Application do
 
     uploads_path = Application.get_env(:safarimanager, SM.Slides.Slide)[:uploads_base_path]
     Logger.info("[Safari Manager] Uploads path set to #{uploads_path}")
-  end
-
-  if Mix.target() == :app do
-    defp app_specs, do: [SMApp]
-  else
-    defp app_specs, do: []
   end
 end

@@ -55,6 +55,12 @@ TODO
 # Local code signing test env (scripts/test_macos_codesign_setup.sh)
 .env.codesign.local
 
+# Tauri updater private key (generate with `minisign -G -p src-tauri/updater.pub -s src-tauri/updater.key -W`)
+src-tauri/updater.key
+
+# Tauri / Rust build output
+src-tauri/target/
+
 # The directory used by ExUnit :tmp_dir
 /tmp/
 

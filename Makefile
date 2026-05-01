@@ -1,6 +1,9 @@
 # Local checks before pushing (CI-style).
 .PHONY: prepush help format-check compile-strict test credo dialyzer codesign-setup-test codesign-setup-validate
 
+# Desktop app (Tauri + ElixirKit).
+.PHONY: app-dev app-build app-clean help-app-version app-updater-keys app-updater-keys-force
+
 # Bump CalVer in mix.exs, commit, tag vY.M.S, and push (branch + tags).
 .PHONY: bump release git-tag git-push-tags retag-latest
 
@@ -17,12 +20,19 @@ help:
 	@echo "  make credo"
 	@echo "  make dialyzer"
 	@echo ""
-	@echo "Version (CalVer in mix.exs: @version \"Y.M.S\", no leading zeros)"
+	@echo "Version (CalVer Y.M.S in mix.exs, src-tauri/Cargo.toml, Cargo.lock, tauri.conf.json)"
 	@echo "  make bump             # vs today: same month -> seq+1; new month/year -> Y.M.1"
 	@echo "  make git-tag          # annotated tag from mix.exs (vY.M.S)"
 	@echo "  make git-push-tags    # git push + push tags"
 	@echo "  make release          # bump + commit + tag + push"
 	@echo "  make retag-latest     # drop newest v* tag + GH release, recreate at HEAD, push"
+	@echo ""
+	@echo "Desktop app (needs Rust + cargo-tauri / npx @tauri-apps/cli)"
+	@echo "  make app-dev                  # tauri dev (Phoenix started by app; no CLI wait on :4000)"
+	@echo "  make app-build                # prod Elixir release + tauri bundle"
+	@echo "  make app-clean                # rm src-tauri/target"
+	@echo "  make app-updater-keys         # minisign keypair → src-tauri/updater.{pub,key} (see README)"
+	@echo "  make app-updater-keys-force   # overwrite existing updater.key"
 
 prepush: format-check compile-strict test credo dialyzer
 
@@ -55,7 +65,7 @@ release: bump
 
 _release_commit_tag_push:
 	@version=$$(sed -n 's/^[[:space:]]*@version "\([^"]*\)".*/\1/p' mix.exs); \
-	git add mix.exs && \
+	git add mix.exs src-tauri/tauri.conf.json src-tauri/Cargo.toml src-tauri/Cargo.lock && \
 	git commit -m "Bump version to $$version" && \
 	git tag -a "v$$version" -m "Version $$version" && \
 	git push && git push --tags
@@ -81,3 +91,26 @@ retag-latest:
 	ver=$${tag#v}; \
 	git tag -a "$$tag" -m "Version $$ver"; \
 	git push origin "$$tag"
+
+# --- Desktop (Tauri) ---
+
+help-app-version:
+	@sed -n 's/^[[:space:]]*@version "\([^"]*\)".*/\1/p' mix.exs | head -1
+
+# Phoenix is spawned inside the Rust binary (elixirkit::mix), not by beforeDevCommand — so the CLI
+# must not block on build.devUrl, or `tauri dev` waits forever for a server that does not exist yet.
+app-dev:
+	cd src-tauri && npx --yes @tauri-apps/cli@2 dev --no-dev-server-wait
+
+app-build:
+	bash scripts/tauri_prebuild.sh
+	cd src-tauri && npx --yes @tauri-apps/cli@2 build
+
+app-clean:
+	rm -rf src-tauri/target
+
+app-updater-keys:
+	bash scripts/tauri_updater_keys.sh
+
+app-updater-keys-force:
+	FORCE=1 bash scripts/tauri_updater_keys.sh

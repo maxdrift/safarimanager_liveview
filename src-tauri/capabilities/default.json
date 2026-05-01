@@ -1,0 +1,22 @@
+{
+  "$schema": "https://schema.tauri.app/config/2/capability",
+  "identifier": "default",
+  "description": "Default permissions for Safari Manager desktop",
+  "windows": [
+    "main"
+  ],
+  "permissions": [
+    "core:default",
+    "core:webview:allow-create-webview-window",
+    "updater:default",
+    "fs:default",
+    "fs:allow-home-read-recursive",
+    "fs:allow-home-write-recursive",
+    "fs:allow-desktop-read-recursive",
+    "fs:allow-desktop-write-recursive",
+    "fs:allow-appdata-read-recursive",
+    "fs:allow-appdata-write-recursive",
+    "fs:allow-applocaldata-read-recursive",
+    "fs:allow-applocaldata-write-recursive"
+  ]
+}

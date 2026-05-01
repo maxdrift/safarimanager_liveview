@@ -1,5 +1,6 @@
-elixir="1.18.1"
-otp="27.2"
+# Keep OTP and Elixir in sync with `.tool-versions` (erlang / elixir lines).
+elixir="1.19.5"
+otp="28.5"
 openssl="1.1.1s"
 rebar3="3.22.0"
 ubuntu="jammy-20240808"

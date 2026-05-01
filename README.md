@@ -17,7 +17,7 @@ Safari Manager handles the complete competition lifecycle for underwater fish ph
 
 | Component | Technology |
 |-----------|------------|
-| Language | Elixir 1.18+ |
+| Language | Elixir 1.19.x (see [`.tool-versions`](.tool-versions)) |
 | Framework | Phoenix 1.7+ with LiveView 1.0+ |
 | Database | SQLite (default), PostgreSQL (supported) |
 | Styling | Tailwind CSS + DaisyUI |
@@ -28,8 +28,7 @@ Safari Manager handles the complete competition lifecycle for underwater fish ph
 
 ### Prerequisites
 
-- Elixir 1.18+
-- Erlang/OTP 26+
+- Elixir and Erlang/OTP: pinned in [`.tool-versions`](.tool-versions) (use [asdf](https://asdf-vm.com/) or [mise](https://mise.jdx.dev/) locally); CI uses the same values via [`versions`](versions)
 - Node.js (for asset compilation)
 - Rust toolchain (`rustc`, `cargo`) for compiling the `ex_image_resizer` NIF from source until precompiled artifacts are published (see `ex_image_resizer` README)
 
@@ -74,15 +73,25 @@ Traditional Phoenix deployment with external database:
 MIX_ENV=prod mix release safarimanager
 ```
 
-### Standalone Desktop App (macOS)
+### Desktop app (Tauri + ElixirKit)
 
-Self-contained application bundle with embedded OTP and SQLite:
+Native window wrapping the Phoenix server (see [ElixirKit Tauri guide](https://github.com/livebook-dev/elixirkit/blob/main/guides/tauri.md)):
 
 ```bash
-MIX_ENV=prod MIX_TARGET=app mix release app
+make app-dev    # local dev (Rust + mix phx.server)
+make app-build  # production bundle (requires Rust + MIX_ENV=prod release)
 ```
 
-See `elixirkit/` for native shell integration details.
+Release artifacts are built in CI via `tauri-apps/tauri-action` (see [.github/workflows/release.yml](.github/workflows/release.yml)).
+
+**Updater signing:** set `TAURI_SIGNING_PRIVATE_KEY` (and optional `TAURI_SIGNING_PRIVATE_KEY_PASSWORD`) in GitHub secrets. The public key in [`src-tauri/tauri.conf.json`](src-tauri/tauri.conf.json) must match the generated key. From the repo root:
+
+```bash
+make app-updater-keys              # writes src-tauri/updater.pub + src-tauri/updater.key (unencrypted key; -W)
+make app-updater-keys-force        # same, but overwrites an existing updater.key (FORCE=1)
+```
+
+Then paste the **second line** of `src-tauri/updater.pub` into `plugins.updater.pubkey` in `tauri.conf.json`. Never commit `updater.key` (it is gitignored).
 
 ## Documentation
 
