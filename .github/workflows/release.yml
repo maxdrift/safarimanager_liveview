@@ -105,6 +105,22 @@ jobs:
         shell: bash
         run: bash scripts/tauri_prebuild.sh
 
+      # snappyer is a C++ NIF; on a clean Windows box it fails to load with
+      # "The specified module could not be found" because msvcp140.dll /
+      # vcruntime140*.dll are not installed. Drop them next to the NIF so
+      # LoadLibrary resolves them from the DLL's own directory.
+      - name: Bundle MSVC runtime next to snappyer NIF (Windows)
+        if: runner.os == 'Windows'
+        shell: bash
+        run: |
+          set -euo pipefail
+          NIF_DIR=$(ls -d src-tauri/target/rel/lib/snappyer-*/priv | head -n1)
+          test -d "$NIF_DIR" || { echo "snappyer priv dir not found"; exit 1; }
+          for dll in vcruntime140.dll vcruntime140_1.dll msvcp140.dll; do
+            cp "/c/Windows/System32/$dll" "$NIF_DIR/"
+          done
+          ls -la "$NIF_DIR"
+
       - name: Build Tauri bundles
         uses: tauri-apps/tauri-action@v0.6
         env:
