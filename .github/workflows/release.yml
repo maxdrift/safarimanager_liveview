@@ -126,6 +126,8 @@ jobs:
           projectPath: src-tauri
           tagName: ${{ github.ref_name }}
           releaseName: Safari Manager ${{ github.ref_name }}
+          generateReleaseNotes: true
           releaseDraft: true
-          uploadUpdaterJson: true
+          prerelease: false
+          includeUpdaterJson: true
           args: ${{ matrix.args }}
