@@ -1,6 +1,6 @@
 [package]
 name = "safarimanager_desktop"
-version = "26.5.5"
+version = "26.5.6"
 description = "Safari Manager desktop shell (Tauri + ElixirKit)"
 edition = "2021"
 rust-version = "1.77.2"
