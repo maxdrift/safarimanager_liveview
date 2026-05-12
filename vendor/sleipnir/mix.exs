@@ -45,7 +45,6 @@ defmodule Sleipnir.MixProject do
   defp deps do
     [
       {:protobuf, "~> 0.10.0"},
-      {:snappyer, "~> 1.2"},
       {:tesla, "~> 1.4"},
       {:hackney, "~> 1.17"},
       {:telemetry, "~> 1.0 or ~> 1.1"},

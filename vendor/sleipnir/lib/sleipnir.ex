@@ -72,10 +72,8 @@ defmodule Sleipnir do
   end
 
   def stream(entries, labels) when is_list(entries) do
-    labels = labels |> Enum.map(&to_kv/1) |> Enum.reverse() |> Enum.join(",") |> parenthesize
-
     %StreamAdapter{
-      labels: labels,
+      labels: encode_labels(labels),
       entries: sort_entries(entries)
     }
   end
@@ -124,11 +122,13 @@ defmodule Sleipnir do
     |> Enum.sort_by(fn %EntryAdapter{timestamp: timestamp} -> timestamp end, &<=/2)
   end
 
-  defp parenthesize(labels) do
-    "{#{labels}}"
-  end
-
-  defp to_kv({label, value}) do
-    ~s(#{label}="#{value}")
+  # Labels are stored as a JSON-encoded map (e.g. `{"app":"foo"}`) on the
+  # StreamAdapter so the JSON Loki client can pass them through untouched.
+  # The protobuf field is still typed as `string`, but we no longer serialize
+  # PushRequest over the wire as protobuf.
+  defp encode_labels(labels) when is_list(labels) do
+    labels
+    |> Map.new(fn {k, v} -> {to_string(k), to_string(v)} end)
+    |> JSON.encode!()
   end
 end

@@ -36,7 +36,7 @@ defmodule Sleipnir.Client.Tesla do
   end
 
   defp headers(opts) do
-    [{"Content-Type", "application/x-protobuf"}]
+    [{"Content-Type", "application/json"}]
     |> Enum.concat(maybe_add_org_id(opts))
   end
 
@@ -49,7 +49,9 @@ defmodule Sleipnir.Client.Tesla do
 end
 
 defimpl Sleipnir.Client, for: Tesla.Client do
+  alias Logproto.EntryAdapter
   alias Logproto.PushRequest
+  alias Logproto.StreamAdapter
 
   alias Sleipnir.Paths
 
@@ -58,11 +60,7 @@ defimpl Sleipnir.Client, for: Tesla.Client do
 
   @spec push(client, PushRequest.t(), opts) :: Sleipnir.Client.response()
   def push(client, %PushRequest{} = request, opts \\ []) do
-    {:ok, payload} =
-      request
-      |> PushRequest.encode()
-      |> :snappyer.compress()
-
+    payload = JSON.encode_to_iodata!(%{streams: Enum.map(request.streams, &encode_stream/1)})
     path = Keyword.get(opts, :path, Paths.push())
 
     client
@@ -71,6 +69,24 @@ defimpl Sleipnir.Client, for: Tesla.Client do
       {:ok, response} -> {:ok, parse(response)}
       {:error, reason} -> {:error, reason}
     end
+  end
+
+  defp encode_stream(%StreamAdapter{labels: labels, entries: entries}) do
+    %{
+      stream: decode_labels(labels),
+      values: Enum.map(entries, &encode_entry/1)
+    }
+  end
+
+  # `Sleipnir.stream/2` stores labels as a JSON-encoded map for transport.
+  defp decode_labels(labels) when is_binary(labels), do: JSON.decode!(labels)
+
+  defp encode_entry(%EntryAdapter{line: line, timestamp: timestamp}) do
+    [to_string(nanoseconds(timestamp)), to_string(line)]
+  end
+
+  defp nanoseconds(%Google.Protobuf.Timestamp{seconds: seconds, nanos: nanos}) do
+    seconds * 1_000_000_000 + nanos
   end
 
   defp parse(response) do

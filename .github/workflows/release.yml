@@ -105,27 +105,6 @@ jobs:
         shell: bash
         run: bash scripts/tauri_prebuild.sh
 
-      # snappyer is a C++ NIF; on a clean Windows box it fails to load with
-      # "The specified module could not be found" because msvcp140.dll /
-      # vcruntime140*.dll are not installed. OTP's NIF loader on Windows uses
-      # plain LoadLibrary, so dependent DLLs are resolved against erl.exe's
-      # directory (the erts bin dir), NOT the NIF's own priv dir. Drop the
-      # runtime DLLs into rel/erts-*/bin so they're found at load time.
-      - name: Bundle MSVC runtime in erts bin dir (Windows)
-        if: runner.os == 'Windows'
-        shell: bash
-        run: |
-          set -euo pipefail
-          ERTS_BIN=$(ls -d src-tauri/target/rel/erts-*/bin | head -n1)
-          test -d "$ERTS_BIN" || { echo "erts bin dir not found under src-tauri/target/rel"; exit 1; }
-          for dll in vcruntime140.dll vcruntime140_1.dll msvcp140.dll; do
-            src="/c/Windows/System32/$dll"
-            test -f "$src" || { echo "missing $src on runner"; exit 1; }
-            cp "$src" "$ERTS_BIN/"
-          done
-          echo "Bundled MSVC runtime into $ERTS_BIN:"
-          ls -la "$ERTS_BIN" | grep -Ei 'vcruntime|msvcp'
-
       - name: Build Tauri bundles
         uses: tauri-apps/tauri-action@v0.6
         env:
