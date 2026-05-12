@@ -105,6 +105,39 @@ jobs:
         shell: bash
         run: bash scripts/tauri_prebuild.sh
 
+      # From-source C NIFs on Windows (e.g. bcrypt_elixir) link dynamically
+      # against the MSVC runtime (msvcp140.dll, vcruntime140*.dll). End-user
+      # machines without (a sufficiently recent) Visual C++ Redistributable
+      # fail at on_load with the misleading "specified module could not be
+      # found" error. OTP's NIF loader uses plain LoadLibrary, so dependent
+      # DLLs are resolved against erl.exe's directory (the erts bin dir),
+      # NOT the NIF's own priv dir -- drop them there.
+      #
+      # The runtime version is whatever ships with the pinned runner image
+      # (windows-2022 -> VS 2022 toolset). Re-verify after any runner bump.
+      - name: Bundle MSVC runtime for from-source C NIFs (Windows)
+        if: runner.os == 'Windows'
+        shell: bash
+        run: |
+          set -euo pipefail
+          ERTS_BIN=$(ls -d src-tauri/target/rel/erts-*/bin | head -n1)
+          test -d "$ERTS_BIN" || { echo "erts bin dir not found under src-tauri/target/rel"; exit 1; }
+
+          # Sanity-check that from-source C NIFs actually built. The bcrypt
+          # on_load error swallows the real reason; this turns a silent
+          # missing-DLL into a loud build failure.
+          BCRYPT_DLL=$(ls src-tauri/target/rel/lib/bcrypt_elixir-*/priv/bcrypt_nif.dll 2>/dev/null | head -n1 || true)
+          test -n "$BCRYPT_DLL" || { echo "bcrypt_nif.dll missing -- bcrypt_elixir didn't compile"; exit 1; }
+          echo "Built NIF present: $BCRYPT_DLL"
+
+          for dll in vcruntime140.dll vcruntime140_1.dll msvcp140.dll; do
+            src="/c/Windows/System32/$dll"
+            test -f "$src" || { echo "missing $src on runner"; exit 1; }
+            cp "$src" "$ERTS_BIN/"
+          done
+          echo "Bundled MSVC runtime into $ERTS_BIN:"
+          ls -la "$ERTS_BIN" | grep -Ei 'vcruntime|msvcp'
+
       - name: Build Tauri bundles
         uses: tauri-apps/tauri-action@v0.6
         env:
