@@ -2808,7 +2808,7 @@ checksum = "b39cdef0fa800fc44525c84ccb54a029961a8215f9619753635a9c0d2538d46d"
 
 [[package]]
 name = "safarimanager_desktop"
-version = "26.5.4"
+version = "26.5.5"
 dependencies = [
  "dirs 5.0.1",
  "elixirkit",
