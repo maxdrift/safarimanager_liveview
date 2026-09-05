@@ -43,7 +43,63 @@ pub mod migration {
         Ok(())
     }
 
-    /// Moves `~/.safarimanager` into `target` unless `SAFARIMANAGER_SKIP_MIGRATION=1`.
+    fn legacy_symlink_ok(legacy: &Path, target: &Path) -> bool {
+        if !legacy.is_symlink() {
+            return false;
+        }
+
+        let Ok(link) = fs::read_link(legacy) else {
+            return false;
+        };
+
+        link == target
+            || fs::canonicalize(legacy).ok() == fs::canonicalize(target).ok()
+    }
+
+    fn symlink_legacy_to_target(log_dir: &Path, legacy: &Path, target: &Path) {
+        if !target.exists() {
+            log_line(log_dir, &format!("target {target:?} missing; skip symlink"));
+            return;
+        }
+
+        if legacy_symlink_ok(legacy, target) {
+            log_line(log_dir, &format!("legacy {legacy:?} already symlinked to {target:?}"));
+            return;
+        }
+
+        if legacy.exists() {
+            log_line(
+                log_dir,
+                &format!("legacy {legacy:?} still exists; skip symlink"),
+            );
+            return;
+        }
+
+        let link_target = fs::canonicalize(target).unwrap_or_else(|_| target.to_path_buf());
+        log_line(
+            log_dir,
+            &format!("symlink {legacy:?} -> {link_target:?}"),
+        );
+
+        let result = {
+            #[cfg(unix)]
+            {
+                std::os::unix::fs::symlink(&link_target, legacy)
+            }
+            #[cfg(windows)]
+            {
+                std::os::windows::fs::symlink_dir(&link_target, legacy)
+            }
+        };
+
+        match result {
+            Ok(()) => log_line(log_dir, "symlink ok"),
+            Err(e) => log_line(log_dir, &format!("symlink failed: {e}")),
+        }
+    }
+
+    /// Moves `~/.safarimanager` into `target` and symlinks it back unless
+    /// `SAFARIMANAGER_SKIP_MIGRATION=1`.
     pub fn migrate_legacy_data_dir(log_dir: &Path, target: &Path) -> io::Result<()> {
         if std::env::var("SAFARIMANAGER_SKIP_MIGRATION").as_deref() == Ok("1") {
             log_line(log_dir, "skip migration (SAFARIMANAGER_SKIP_MIGRATION=1)");
@@ -55,33 +111,46 @@ pub mod migration {
         };
 
         let legacy = home.join(".safarimanager");
-        if !legacy.exists() {
+
+        if legacy_symlink_ok(&legacy, target) {
+            log_line(log_dir, "legacy already symlinked to target");
             return Ok(());
         }
 
-        if !dir_empty_or_missing(target) {
-            let bak = home.join(".safarimanager.bak");
+        if legacy.is_symlink() {
             log_line(
                 log_dir,
-                &format!("target {target:?} non-empty; renaming legacy to {bak:?}"),
+                &format!("legacy {legacy:?} is an unexpected symlink; leaving as-is"),
             );
-            let _ = fs::rename(&legacy, &bak);
             return Ok(());
         }
 
-        if let Some(parent) = target.parent() {
-            fs::create_dir_all(parent)?;
+        if legacy.is_dir() {
+            if dir_empty_or_missing(target) {
+                if let Some(parent) = target.parent() {
+                    fs::create_dir_all(parent)?;
+                }
+
+                log_line(log_dir, &format!("migrating {legacy:?} -> {target:?}"));
+                if fs::rename(&legacy, target).is_ok() {
+                    log_line(log_dir, "migrate: rename ok");
+                } else {
+                    copy_dir_recursive(&legacy, target)?;
+                    let _ = fs::remove_dir_all(&legacy);
+                    log_line(log_dir, "migrate: copy+remove ok");
+                }
+            } else {
+                log_line(
+                    log_dir,
+                    &format!("target {target:?} non-empty; merging {legacy:?} into target"),
+                );
+                copy_dir_recursive(&legacy, target)?;
+                let _ = fs::remove_dir_all(&legacy);
+                log_line(log_dir, "merge ok");
+            }
         }
 
-        log_line(log_dir, &format!("migrating {legacy:?} -> {target:?}"));
-        if fs::rename(&legacy, target).is_ok() {
-            log_line(log_dir, "migrate: rename ok");
-            return Ok(());
-        }
-
-        copy_dir_recursive(&legacy, target)?;
-        fs::remove_dir_all(&legacy)?;
-        log_line(log_dir, "migrate: copy+remove ok");
+        symlink_legacy_to_target(log_dir, &legacy, target);
         Ok(())
     }
 }
