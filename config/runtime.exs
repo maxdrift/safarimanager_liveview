@@ -46,8 +46,6 @@ if config_env() != :test do
   config :safarimanager, SM.Repo, database: db_path
 end
 
-# SECRET_KEY_BASE / LV_SIGNING_SALT must always come from the environment (direnv, CI, or the
-# desktop shell embedding them at compile time for release bundles — see `src-tauri/build.rs`).
 secret_key_base =
   System.get_env("SECRET_KEY_BASE") ||
     raise """
@@ -73,7 +71,12 @@ allowed_origins =
 
 {:ok, hostname} = :inet.gethostname()
 
-env = to_string(config_env())
+env =
+  if config_env() == :prod and config_target() == :app do
+    "app"
+  else
+    to_string(config_env())
+  end
 
 config :logger, :svadilfari,
   labels: [

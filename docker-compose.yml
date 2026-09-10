@@ -11,7 +11,7 @@ services:
       SECRET_KEY_BASE: MROe0TML1wb/8amRSKJ994MKvIpq3JqLM/FMevNTM2YSEst8NXNkcTSkV/C17DP0
       LV_SIGNING_SALT: TNyxrwvV1ifPU5Nn/lSYp+gY1EVtKDIr
       UPLOADS_PATH: /var/safarimanager/uploads
-      DATABASE_PATH: /var/safarimanager
+      DATABASE_PATH: /var/safarimanager/db
       INSTANCE_ID: maxdrift-macbook-docker
       PROMETHEUS_PUSH_GW_HOST: "${PROMETHEUS_PUSH_GW_HOST-https://prometheus.maxdrift.org}"
       PROMETHEUS_PUSH_GW_USER: "${PROMETHEUS_PUSH_GW_USER-safarimanager}"

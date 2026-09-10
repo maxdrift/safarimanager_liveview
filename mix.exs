@@ -1,8 +1,8 @@
 defmodule SM.MixProject do
   use Mix.Project
 
-  @elixir_requirement "~> 1.19"
-  @version "26.5.6"
+  @elixir_requirement "~> 1.18"
+  @version "2026.4.5"
   @description ~s(Application to manage "Underwater Photo Safari" competitions)
 
   def project do
@@ -16,9 +16,11 @@ defmodule SM.MixProject do
       compilers: Mix.compilers(),
       start_permanent: Mix.env() in [:prod, :standalone],
       aliases: aliases(),
-      deps: with_lock(deps()),
+      deps: with_lock(target_deps(Mix.target()) ++ deps()),
       dialyzer: dialyzer(),
       releases: releases(),
+      preferred_cli_env: preferred_cli_env(),
+      preferred_cli_target: preferred_cli_target(),
       default_release: :safarimanager,
       # Adding this explicit list to account for the `race_conditions` warning being removed in OTP 25
       # https://www.erlang.org/patches/otp-25.0#dialyzer-5.0
@@ -33,7 +35,8 @@ defmodule SM.MixProject do
   def application do
     [
       mod: {SM.Application, []},
-      extra_applications: [:logger, :runtime_tools, :os_mon, :inets, :ssl, :xmerl]
+      extra_applications: [:logger, :runtime_tools, :os_mon, :inets, :ssl, :xmerl],
+      env: Application.get_all_env(:safarimanager)
     ]
   end
 
@@ -49,7 +52,7 @@ defmodule SM.MixProject do
     [
       {:bandit, "~> 1.6"},
       {:bcrypt_elixir, "~> 3.2"},
-      {:credo, "~> 1.7.18", only: [:dev, :test], runtime: false},
+      {:credo, "~> 1.7", only: [:dev, :test], runtime: false},
       {:dialyzex, "~> 1.3.0", only: :dev, runtime: false},
       {:ecto_cursor_based_stream, "~> 1.2"},
       {:ecto_sql, "~> 3.12"},
@@ -66,10 +69,6 @@ defmodule SM.MixProject do
       # so no local Rust toolchain is needed at build time.
       {:ex_image_resizer, git: "https://github.com/maxdrift/ExImageResizer.git", tag: "v0.2.0"},
       {:jason, "~> 1.2"},
-      # sleipnir pins protobuf ~> 0.10; Elixir 1.19+ needs protobuf >= 0.15 (map entry compile). We override
-      # protobuf and use vendor/sleipnir (patched structs, no duplicate google.protobuf.Timestamp).
-      {:protobuf, "~> 0.16", override: true},
-      {:sleipnir, path: "vendor/sleipnir", override: true},
       {:nebulex, "~> 2.5"},
       {:nimble_csv, "~> 1.2"},
       {:phoenix_ecto, "~> 4.6.3"},
@@ -93,10 +92,12 @@ defmodule SM.MixProject do
       {:telemetry_metrics, "~> 1.1.0"},
       {:telemetry_poller, "~> 1.0"},
       {:telemetry, "~> 1.2"},
-      {:tesla, "~> 1.14.1"},
-      {:elixirkit, "~> 0.1"}
+      {:tesla, "~> 1.14.1"}
     ]
   end
+
+  defp target_deps(:app), do: [{:elixirkit, path: "elixirkit"}]
+  defp target_deps(_), do: []
 
   @lock (with {:ok, contents} <- File.read("mix.lock"),
               {:ok, quoted} <-
@@ -127,12 +128,12 @@ defmodule SM.MixProject do
   # See the documentation for `Mix` for more info on aliases.
   defp aliases do
     [
-      setup: ["deps.get", "ecto.setup", yarn_in_assets()],
+      setup: ["deps.get", "ecto.setup", "cmd --cd assets yarn"],
       # "ecto.setup": ["ecto.create", "ecto.migrate", "run priv/repo/seeds.exs"],
       "ecto.setup": ["ecto.create", "ecto.migrate"],
       "ecto.reset": ["ecto.drop", "ecto.setup"],
       test: ["ecto.create --quiet", "ecto.migrate --quiet", "test"],
-      "assets.deploy": [yarn_in_assets("run deploy")],
+      "assets.deploy": ["cmd --cd assets yarn run deploy"],
       "assets.esbuild": ["esbuild default --minify"],
       release: [
         "assets.esbuild",
@@ -141,17 +142,6 @@ defmodule SM.MixProject do
         "phx.digest.clean --all"
       ]
     ]
-  end
-
-  # Mix `cmd` uses :spawn_executable; on Windows `yarn` resolves to yarn.cmd, which is not a PE
-  # executable and fails with :eacces. Route through cmd.exe instead.
-  defp yarn_in_assets(args \\ "") do
-    suffix = if args == "", do: "", else: " #{args}"
-
-    case :os.type() do
-      {:win32, _} -> "cmd --cd assets cmd /c yarn#{suffix}"
-      _ -> "cmd --cd assets yarn#{suffix}"
-    end
   end
 
   defp dialyzer do
@@ -164,28 +154,62 @@ defmodule SM.MixProject do
   defp releases do
     [
       safarimanager: [
-        include_executables_for: [:unix, :windows],
+        include_executables_for: [:unix],
         applications: [safarimanager: :permanent],
         strip_beams: true,
-        include_erts: true,
-        steps: [:assemble] ++ codesign_step(),
-        entitlements: "#{__DIR__}/src-tauri/App.entitlements"
+        include_erts: true
+      ],
+      app: [
+        include_erts: false,
+        rel_templates_path: "rel/app",
+        steps: [
+          :assemble,
+          &remove_cookie/1,
+          &standalone_erlang_elixir/1
+        ]
       ]
     ]
-  end
-
-  defp codesign_step do
-    if match?({:unix, :darwin}, :os.type()) do
-      [&ElixirKit.Release.codesign/1]
-    else
-      []
-    end
   end
 
   defp dialyzer_ignored_warnings do
     [
       {:_, {~c"deps/nimble_csv/lib/nimble_csv.ex", 523}, {:_, :_}},
       {:_, {~c"lib/safarimanager/default_password.ex", 5}, {:_, :_}}
+    ]
+  end
+
+  defp remove_cookie(release) do
+    File.rm!(Path.join(release.path, "releases/COOKIE"))
+    release
+  end
+
+  defp standalone_erlang_elixir(release) do
+    {_, bindings} = Code.eval_file("versions")
+    elixir_version = bindings[:elixir]
+    rebar3_version = bindings[:rebar3]
+
+    Code.require_file("rel/app/standalone.exs")
+
+    release
+    |> Standalone.copy_otp()
+    |> Standalone.copy_elixir(elixir_version)
+    |> Standalone.copy_hex()
+    |> Standalone.copy_rebar3(rebar3_version)
+
+    # |> Standalone.bundle_dylibs()
+  end
+
+  defp preferred_cli_env do
+    [
+      app: :prod,
+      "app.build": :prod
+    ]
+  end
+
+  defp preferred_cli_target do
+    [
+      app: :app,
+      "app.build": :app
     ]
   end
 end

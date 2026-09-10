@@ -17,7 +17,7 @@ Safari Manager handles the complete competition lifecycle for underwater fish ph
 
 | Component | Technology |
 |-----------|------------|
-| Language | Elixir 1.19.x (see [`.tool-versions`](.tool-versions)) |
+| Language | Elixir 1.18+ |
 | Framework | Phoenix 1.7+ with LiveView 1.0+ |
 | Database | SQLite (default), PostgreSQL (supported) |
 | Styling | Tailwind CSS + DaisyUI |
@@ -28,7 +28,8 @@ Safari Manager handles the complete competition lifecycle for underwater fish ph
 
 ### Prerequisites
 
-- Elixir and Erlang/OTP: pinned in [`.tool-versions`](.tool-versions) (use [asdf](https://asdf-vm.com/) or [mise](https://mise.jdx.dev/) locally); CI uses the same values via [`versions`](versions)
+- Elixir 1.18+
+- Erlang/OTP 26+
 - Node.js (for asset compilation)
 - Rust toolchain (`rustc`, `cargo`) for compiling the `ex_image_resizer` NIF from source until precompiled artifacts are published (see `ex_image_resizer` README)
 
@@ -73,31 +74,15 @@ Traditional Phoenix deployment with external database:
 MIX_ENV=prod mix release safarimanager
 ```
 
-### Desktop app (Tauri + ElixirKit)
+### Standalone Desktop App (macOS)
 
-Native window wrapping the Phoenix server (see [ElixirKit Tauri guide](https://github.com/livebook-dev/elixirkit/blob/main/guides/tauri.md)):
-
-```bash
-make app-dev    # local dev (Rust + mix phx.server)
-make app-build  # production bundle (requires Rust + MIX_ENV=prod release)
-```
-
-Release artifacts are built in CI via `tauri-apps/tauri-action` (see [.github/workflows/release.yml](.github/workflows/release.yml)).
-
-**Versioning:** releases use **CalVer `YY.M.S`** (two-digit calendar year, month, sequence within that month), kept in sync across `mix.exs`, `src-tauri/tauri.conf.json`, and `src-tauri/Cargo.toml` / `Cargo.lock` via `make bump` / `elixir scripts/bump_calver.exs`. Git tags look like `v26.5.1`. Prefer `make retag-latest` to retry CI on an existing tag without bumping again.
-
-**Updater signing:** per [Tauri’s updater docs](https://v2.tauri.app/plugin/updater/), signing cannot be disabled; CI needs `TAURI_SIGNING_PRIVATE_KEY` set (and optional `TAURI_SIGNING_PRIVATE_KEY_PASSWORD` if the key is encrypted). The `plugins.updater.pubkey` value in [`src-tauri/tauri.conf.json`](src-tauri/tauri.conf.json) must match that keypair.
-
-From the repo root:
+Self-contained application bundle with embedded OTP and SQLite:
 
 ```bash
-make app-updater-keys              # `tauri signer generate` → src-tauri/updater.pub + updater.key (no password)
-make app-updater-keys-force        # same, overwrites an existing updater.key (FORCE=1)
+MIX_ENV=prod MIX_TARGET=app mix release app
 ```
 
-Copy the **full contents** of `src-tauri/updater.pub` (one line) into `plugins.updater.pubkey` in `tauri.conf.json`. Set GitHub secret **`TAURI_SIGNING_PRIVATE_KEY`** to the **full contents** of `src-tauri/updater.key` (one line—the format emitted by the CLI). Never commit `updater.key` (it is gitignored).
-
-For an encrypted private key, run `cd src-tauri && npx --yes @tauri-apps/cli@2 signer generate -w updater.key -p '…'` yourself and set **`TAURI_SIGNING_PRIVATE_KEY_PASSWORD`** in GitHub as well.
+See `elixirkit/` for native shell integration details.
 
 ## Documentation
 
