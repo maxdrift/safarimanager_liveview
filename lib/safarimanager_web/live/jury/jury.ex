@@ -176,12 +176,12 @@ defmodule SMWeb.Live.Jury do
 
     {:ok, _slide} =
       if Slides.has_penalty?(slide_id) do
-        {:ok, _slide} = Slides.clear_penalty(slide_id)
+        Slides.clear_penalty(slide_id)
       else
-        {:ok, _slide} = Slides.apply_penalty(slide_id)
+        Slides.apply_manual_penalty(slide_id)
       end
 
-    {:noreply, socket}
+    {:noreply, reload_curr_slide(socket, slide_id)}
   end
 
   def handle_event("evaluation-key", %{"key" => "ArrowLeft"}, socket) do
@@ -233,10 +233,11 @@ defmodule SMWeb.Live.Jury do
   end
 
   def handle_event("clear-evaluations", %{}, socket) do
-    {:ok, _slide} = Slides.clear_evaluations(socket.assigns.curr_slide.id)
-    {:ok, _slide} = Slides.clear_penalty(socket.assigns.curr_slide.id)
+    slide_id = socket.assigns.curr_slide.id
+    {:ok, _} = Slides.clear_evaluations(slide_id)
+    {:ok, _} = Slides.clear_penalty(slide_id)
 
-    {:noreply, socket}
+    {:noreply, reload_curr_slide(socket, slide_id)}
   end
 
   def handle_event(event, data, socket) do
@@ -318,17 +319,20 @@ defmodule SMWeb.Live.Jury do
   defp evaluate(socket, evaluation_id) do
     slide_id = socket.assigns.curr_slide.id
 
-    case Slides.evaluate(socket.assigns.competition.id, slide_id, evaluation_id) do
-      :ok ->
-        socket
+    socket =
+      case Slides.evaluate(socket.assigns.competition.id, slide_id, evaluation_id) do
+        :ok ->
+          reload_curr_slide(socket, slide_id)
 
-      {:error, :already_evaluated} ->
-        socket
+        {:error, :already_evaluated} ->
+          socket
 
-      {:error, reason} ->
-        Logger.error("Error saving evaluation: #{inspect(reason)}")
-        put_flash(socket, :error, gettext("Unexpected error while saving evaluation"))
-    end
+        {:error, reason} ->
+          Logger.error("Error saving evaluation: #{inspect(reason)}")
+          put_flash(socket, :error, gettext("Unexpected error while saving evaluation"))
+      end
+
+    socket
   end
 
   defp to_prev_image(socket) do
@@ -413,8 +417,21 @@ defmodule SMWeb.Live.Jury do
   defp can_evaluate?(_competition, nil), do: false
 
   defp can_evaluate?(competition, slide) do
-    Enum.count(slide.evaluations) <
-      Enum.count(competition.jurors) * competition.settings.evaluations_per_juror
+    slide_vote_count(slide) < max_slide_votes(competition)
+  end
+
+  defp slide_vote_count(slide) do
+    case slide.votes do
+      %Ecto.Association.NotLoaded{} -> 0
+      votes -> Enum.count(votes)
+    end
+  end
+
+  defp max_slide_votes(competition), do: Slides.max_slide_votes(competition)
+
+  defp reload_curr_slide(socket, slide_id) do
+    {:ok, updated_slide} = Slides.get(slide_id)
+    assign(socket, :curr_slide, updated_slide)
   end
 
   defp broadcast_current_slide(competition_id, slide_id, image_count, curr_index) do

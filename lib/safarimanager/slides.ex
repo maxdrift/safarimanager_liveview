@@ -270,7 +270,7 @@ defmodule SM.Slides do
         on: ^conditions,
         group_by: [sl.id, sl.subject_id, su.numeric_id],
         order_by: [asc: su.numeric_id, asc: sl.id],
-        preload: [:subject, :evaluations],
+        preload: [:subject, votes: :evaluation],
         select: sl
       )
 
@@ -650,7 +650,7 @@ defmodule SM.Slides do
   def get(id) do
     case Repo.get(Slide, id) do
       nil -> {:error, :not_found}
-      result -> {:ok, Repo.preload(result, [:subject, :evaluations, :slide_flags])}
+      result -> {:ok, Repo.preload(result, [:subject, :slide_flags, votes: :evaluation])}
     end
   end
 
@@ -1047,6 +1047,12 @@ defmodule SM.Slides do
     notify_subscribers({:ok, deleted}, [:slide, :updated])
   end
 
+  @spec apply_manual_penalty(String.t()) :: {:ok, Slide.t()} | {:error, any()}
+  def apply_manual_penalty(slide_id) do
+    {:ok, _} = clear_evaluations(slide_id)
+    apply_penalty(slide_id)
+  end
+
   @spec apply_penalty(String.t()) :: {:ok, Slide.t()} | {:error, any()}
   def apply_penalty(slide_id) do
     Multi.new()
@@ -1392,12 +1398,10 @@ defmodule SM.Slides do
   defp maybe_apply_penalty(slide_id, competition_id) do
     {:ok, slide} = get(slide_id)
     {:ok, competition} = Competitions.get(competition_id)
-    settings = competition.settings
     penalty_votes = Enum.count(slide.votes, fn vote -> vote.evaluation.is_penalty end)
 
     {operator, threshold} = @penalty_quorum
-
-    max_votes = settings.number_of_jurors * settings.evaluations_per_juror
+    max_votes = max_slide_votes(competition)
 
     penalty_ratio = Decimal.div(penalty_votes, max_votes)
 
@@ -1408,5 +1412,10 @@ defmodule SM.Slides do
     end
 
     :ok
+  end
+
+  @spec max_slide_votes(Competitions.Competition.t() | map()) :: pos_integer()
+  def max_slide_votes(%{jurors: jurors}) do
+    max(Enum.count(jurors), 1)
   end
 end

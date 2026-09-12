@@ -64,4 +64,46 @@ defmodule SMWeb.Live.JuryLauncher do
   defp camera_type_label(:compact), do: gettext("compact")
   defp camera_type_label(:any), do: gettext("any")
   defp camera_type_label(other), do: Gettext.gettext(SMWeb.Gettext, other)
+
+  attr :id, :string, default: nil
+  attr :button_id, :string, default: nil
+  attr :name, :string, required: true
+  attr :slides_count, :integer, required: true
+  attr :species_count, :integer, required: true
+  attr :href, :string, required: true
+  attr :highlighted, :boolean, default: false
+
+  defp jury_stat_card(assigns) do
+    ~H"""
+    <div
+      id={@id}
+      class={[
+        "card bg-base-100 shadow",
+        @highlighted && "ring-2 ring-primary"
+      ]}
+    >
+      <div class="card-body items-center gap-2 p-4 text-center sm:gap-3 sm:p-6">
+        <h3 class="text-lg font-semibold capitalize sm:text-2xl">{@name}</h3>
+        <p class="text-sm text-base-content/80 sm:text-base">
+          {@slides_count} {gettext("slides")}
+        </p>
+        <p class="text-xs text-base-content/60 sm:text-sm">
+          {@species_count} {gettext("species")}
+        </p>
+        <div class="card-actions mt-2 w-full justify-center sm:mt-4">
+          <.link
+            id={@button_id}
+            navigate={@href}
+            class={[
+              "btn btn-primary w-full sm:btn-lg sm:w-auto",
+              @slides_count == 0 && "btn-disabled"
+            ]}
+          >
+            {gettext("Start Jury")}
+          </.link>
+        </div>
+      </div>
+    </div>
+    """
+  end
 end
