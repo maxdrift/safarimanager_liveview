@@ -251,9 +251,16 @@
             "btn-error",
             @curr_slide && @curr_slide.penalty && "btn-active"
           ]}
-          title={gettext("Penalty")}
+          title={
+            if(@curr_slide && @curr_slide.penalty,
+              do: gettext("Remove the penalty flag from this slide"),
+              else: gettext("Apply a penalty to this slide and clear its votes")
+            )
+          }
         >
-          {gettext("Penalty")}
+          {if @curr_slide && @curr_slide.penalty,
+            do: gettext("Remove penalty"),
+            else: gettext("Apply penalty")}
         </.jury_toolbar_button>
       </div>
       <div class="join">
