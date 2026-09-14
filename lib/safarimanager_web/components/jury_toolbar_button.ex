@@ -26,13 +26,7 @@ defmodule SMWeb.Components.JuryToolbarButton do
     assigns = assign(assigns, :phx_value_attrs, phx_value_attrs)
 
     ~H"""
-    <button
-      id={@id}
-      phx-click={@click}
-      {@phx_value_attrs}
-      class={@class}
-      title={@title}
-    >
+    <button id={@id} phx-click={@click} {@phx_value_attrs} class={@class} title={@title}>
       {render_slot(@inner_block)}
     </button>
     """

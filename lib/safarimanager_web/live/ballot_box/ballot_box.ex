@@ -66,14 +66,17 @@ defmodule SMWeb.Live.BallotBox do
     </div>
     <div
       id="voting-pad"
-      class={[(is_nil(@slide) || @selected_evaluation || !@can_vote_slide) && "blur-sm"]}
+      class={[
+        (is_nil(@slide) || @selected_evaluation || !@can_vote_slide) && "blur-sm",
+        "px-3 pb-[max(1rem,env(safe-area-inset-bottom))]"
+      ]}
       phx-hook="NoSleep"
     >
       <div class="my-4 text-center min-h-6">
         <span :if={@slide} class="capitalize">{@slide && @slide.subject.name}</span>
         - {gettext("slide")} {@curr_index + 1} {gettext("of")} {@image_count}
       </div>
-      <div class="grid grid-cols-3 grid-rows-4 gap-1">
+      <div class="grid grid-cols-2 sm:grid-cols-3 gap-1">
         <button
           :for={evaluation <- @evaluations}
           class="btn btn-lg btn-neutral"
