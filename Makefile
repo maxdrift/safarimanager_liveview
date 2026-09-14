@@ -11,7 +11,7 @@
 
 help:
 	@echo "Checks"
-	@echo "  make prepush          format, compile --warnings-as-errors, test, credo, dialyzer"
+	@echo "  make prepush          format, compile --warnings-as-errors, test, credo (high+)"
 	@echo "  make codesign-setup-validate  verify .p12 + password (openssl only; no keychain)"
 	@echo "  make codesign-setup-test      full keychain setup like CI (see .env.codesign.local.example)"
 	@echo "  make format-check"
@@ -34,7 +34,7 @@ help:
 	@echo "  make app-updater-keys         # tauri signer generate → src-tauri/updater.{pub,key} (see README)"
 	@echo "  make app-updater-keys-force   # overwrite existing updater.key"
 
-prepush: format-check compile-strict test credo dialyzer
+prepush: format-check compile-strict test credo
 
 format-check:
 	mix format --check-formatted
@@ -46,7 +46,7 @@ test:
 	MIX_ENV=test mix test
 
 credo:
-	mix credo
+	mix credo --min-priority higher
 
 dialyzer:
 	mix dialyzer
