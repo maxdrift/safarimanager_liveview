@@ -48,11 +48,8 @@
         phx-submit="submit-duplicate"
       >
         <div class="card-body">
-          <.hidden_input
-            name={:competition_id}
-            value={@duplication_form.params["competition_id"]}
-          />
-          <.hidden_input name={:for_teams} value={@duplication_form.params["for_teams"]} />
+          <.hidden_input field={@duplication_form[:competition_id]} />
+          <.hidden_input field={@duplication_form[:for_teams]} />
           <h3 class="text-lg">{gettext("New competition details")}</h3>
           <div class="border rounded-md border-neutral-focus mb-4 p-2">
             <.input
