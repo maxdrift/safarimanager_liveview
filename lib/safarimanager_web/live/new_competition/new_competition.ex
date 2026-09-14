@@ -48,7 +48,6 @@ defmodule SMWeb.Live.NewCompetition do
       socket.assigns.entity
       |> Competitions.change(entity)
       |> assign_form()
-      |> IO.inspect()
 
     {:noreply, assign(socket, :form, form)}
   end

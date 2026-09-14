@@ -63,7 +63,6 @@ defmodule SMWeb.Live.Admin.Import do
       |> Changeset.validate_required([:table])
       |> Changeset.validate_inclusion(:table, @tables)
       |> to_form(action: :validate, as: :import)
-      |> IO.inspect()
 
     {:noreply, assign(socket, :import_form, form)}
   end
