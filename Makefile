@@ -106,6 +106,7 @@ app-dev:
 
 app-build:
 	bash scripts/tauri_prebuild.sh
+	bash scripts/tauri_bundle_cleanup.sh
 	cd src-tauri && npx --yes @tauri-apps/cli@2 build
 
 app-clean:

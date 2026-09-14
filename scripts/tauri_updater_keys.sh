@@ -16,8 +16,11 @@ fi
 mkdir -p "$TAURI_DIR"
 rm -f "$KEY" "$PUB" "$TAURI_DIR/updater.key.pub"
 
-# --ci: non-interactive; empty password (same idea as the old unencrypted minisign workflow).
-(cd "$TAURI_DIR" && npx --yes @tauri-apps/cli@2 signer generate -w updater.key --ci)
+# --ci: non-interactive, no password. Requires TAURI_SIGNING_PRIVATE_KEY_PASSWORD="" at sign time
+# (set in .envrc.custom locally; CI=true in GitHub Actions skips the prompt automatically).
+FORCE_ARGS=()
+[[ "${FORCE:-}" == "1" ]] && FORCE_ARGS=(--force)
+(cd "$TAURI_DIR" && npx --yes @tauri-apps/cli@2 signer generate -w updater.key "${FORCE_ARGS[@]}" --ci)
 
 if [[ ! -f "$TAURI_DIR/updater.key.pub" ]]; then
   echo "Expected $TAURI_DIR/updater.key.pub after signer generate" >&2
@@ -34,5 +37,6 @@ cat "$PUB"
 echo ""
 echo ""
 echo "Private key: $KEY (gitignored)."
+echo "Local dev: export TAURI_SIGNING_PRIVATE_KEY_PASSWORD=\"\" in .envrc.custom (empty string)."
 echo "GitHub secret TAURI_SIGNING_PRIVATE_KEY: paste the entire contents of that file (single line)."
-echo "Optional: TAURI_SIGNING_PRIVATE_KEY_PASSWORD if you create an encrypted key via signer generate -p …"
+echo "GitHub Actions: CI is set automatically; no password secret needed."
