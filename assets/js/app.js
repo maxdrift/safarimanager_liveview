@@ -121,6 +121,16 @@ const stopFormChange = {
   }
 }
 
+const competitionStepsNav = {
+  mounted() {
+    this.el.addEventListener("change", (e) => {
+      if (e.target.value) {
+        window.location.assign(e.target.value)
+      }
+    })
+  }
+}
+
 const hooks = {
   GridSelection: GridSelection,
   InfiniteScroll: InfiniteScroll,
@@ -129,7 +139,8 @@ const hooks = {
   Sortable: sortable,
   SortableInputsFor: sortableInputsFor,
   NoSleep: noSleep,
-  StopFormChange: stopFormChange
+  StopFormChange: stopFormChange,
+  CompetitionStepsNav: competitionStepsNav
 }
 
 console.log("hooks", hooks)

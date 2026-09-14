@@ -10,18 +10,38 @@ defmodule SMWeb.Components.StepsHeader do
   attr :root_url, :string, default: "/organize"
 
   def steps_header(assigns) do
+    steps =
+      steps(
+        assigns.competition,
+        assigns.current_step,
+        Map.get(assigns, :root_url, "/organize")
+      )
+
+    assigns = assign(assigns, :steps, steps)
+
     ~H"""
-    <div class="pt-4 text-center hidden lg:block">
-      <ul class="steps steps-horizontal">
-        <li
-          :for={step <- steps(@competition, @current_step, @root_url)}
-          class={["step", step.active && "step-primary"]}
+    <div class="pt-4">
+      <div class="hidden lg:block text-center">
+        <ul class="steps steps-horizontal">
+          <li :for={step <- @steps} class={["step", step.active && "step-primary"]}>
+            <a href={step.url}>
+              {step.name}
+            </a>
+          </li>
+        </ul>
+      </div>
+      <div class="lg:hidden px-1">
+        <label for="competition-steps-nav" class="sr-only">{gettext("Competition step")}</label>
+        <select
+          id="competition-steps-nav"
+          class="select select-bordered select-sm w-full max-w-md mx-auto bg-base-100 text-base-content"
+          phx-hook="CompetitionStepsNav"
         >
-          <a href={step.url}>
+          <option :for={step <- @steps} value={step.url} selected={step.id == @current_step}>
             {step.name}
-          </a>
-        </li>
-      </ul>
+          </option>
+        </select>
+      </div>
     </div>
     """
   end

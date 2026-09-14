@@ -14,4 +14,8 @@
   .tiny-scrollbar::-webkit-scrollbar-track {
     @apply bg-base-100;
   }
+
+  .table-scroll {
+    @apply overflow-x-auto max-w-full tiny-scrollbar;
+  }
 }

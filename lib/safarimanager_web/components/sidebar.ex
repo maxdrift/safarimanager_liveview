@@ -14,27 +14,35 @@ defmodule SMWeb.Components.Sidebar do
   def sidebar(assigns) do
     ~H"""
     <nav
-      class="hidden md:flex w-[12rem] h-full py-2 md:py-5 base-300 border-r border-gray-600"
+      class="max-md:fixed max-md:inset-y-0 max-md:left-0 max-md:z-[700] md:static flex flex-col w-[12rem] h-full py-2 md:py-5 bg-base-200 border-r border-base-300 max-md:hidden md:flex shadow-lg md:shadow-none"
       aria-label="sidebar"
       data-el-sidebar
     >
       <button
-        class="hidden text-xl text-base-content hover:text-white focus:text-white absolute top-4 right-3"
-        aria-label="hide sidebar"
-        data-el-toggle-sidebar
+        type="button"
+        class="md:hidden inline-flex items-center justify-center text-base-content hover:text-base-content hover:bg-base-300 rounded-lg absolute top-4 right-3 p-1"
+        aria-label={gettext("Close menu")}
+        data-el-sidebar-close
         phx-click={
-          JS.add_class("hidden", to: "[data-el-sidebar]")
-          |> JS.toggle(to: "[data-el-toggle-sidebar]")
+          JS.add_class("max-md:hidden", to: "[data-el-sidebar]")
+          |> JS.add_class("hidden", to: "[data-el-sidebar-backdrop]")
         }
       >
-        <Heroicons.icon name="bars-3" type="solid" />
+        <Heroicons.icon name="x-mark" type="solid" class="h-6 w-6" />
       </button>
 
       <div class="flex flex-col justify-between h-full">
         <div class="flex flex-col">
           <div class="space-y-3">
             <div class="flex flex-col items-center">
-              <.link href={~p"/"} class="flex items-center group">
+              <.link
+                href={~p"/"}
+                class="flex items-center group"
+                phx-click={
+                  JS.add_class("max-md:hidden", to: "[data-el-sidebar]")
+                  |> JS.add_class("hidden", to: "[data-el-sidebar-backdrop]")
+                }
+              >
                 <img
                   src={~p"/images/logo.png"}
                   class="mx-2"
@@ -42,7 +50,7 @@ defmodule SMWeb.Components.Sidebar do
                   width="40"
                   alt="logo safari manager"
                 />
-                <span class="text-base-content text-lg font-logo ml-[-1px] group-hover:text-white pt-1">
+                <span class="text-base-content text-lg font-logo ml-[-1px] group-hover:text-base-content pt-1">
                   Safari Manager
                 </span>
               </.link>
@@ -56,7 +64,7 @@ defmodule SMWeb.Components.Sidebar do
               to={~p"/organize/new"}
               current={@current_page}
             />
-            <div class="ml-4 border-t border-gray-600" />
+            <div class="ml-4 border-t border-base-300" />
             <div class="ml-6 h-7 flex items-center">
               <span class="text-base-content text-md font-semibold">
                 {gettext("Admin")}

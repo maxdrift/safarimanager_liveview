@@ -13,6 +13,10 @@ defmodule SMWeb.Components.SidebarLink do
     ~H"""
     <.link
       navigate={@to}
+      phx-click={
+        JS.add_class("max-md:hidden", to: "[data-el-sidebar]")
+        |> JS.add_class("hidden", to: "[data-el-sidebar-backdrop]")
+      }
       class={[
         "h-7",
         "flex",
