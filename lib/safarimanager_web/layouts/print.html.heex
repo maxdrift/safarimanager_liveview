@@ -10,17 +10,19 @@
       {assigns[:page_title] || "Safari Manager"}
     </.live_title>
     <link phx-track-static rel="stylesheet" href={~p"/assets/app.css"} />
-    <script defer phx-track-static type="text/javascript" src={~p"/assets/app.js"}>
-    </script>
     <script>
-      document.addEventListener("DOMContentLoaded", () => {
-        window.print();
-        window.onfocus=function(){ window.close();}
-        }, false);
+      document.addEventListener(
+        "DOMContentLoaded",
+        () => {
+          window.print()
+          window.addEventListener("focus", () => window.close(), { once: true })
+        },
+        false
+      )
     </script>
   </head>
 
-  <body class="hidden print:block" data-theme="light">
+  <body data-theme="light">
     {@inner_content}
   </body>
 </html>

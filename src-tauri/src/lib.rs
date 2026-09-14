@@ -1,7 +1,51 @@
+use std::sync::atomic::{AtomicU64, Ordering};
+use std::time::{SystemTime, UNIX_EPOCH};
+
 use tauri::Manager;
 
 mod embedded_phx_env {
     include!(concat!(env!("OUT_DIR"), "/embedded_phx_env.rs"));
+}
+
+static AUX_WINDOW_ID: AtomicU64 = AtomicU64::new(1);
+
+/// Writes a printout HTML snapshot and opens it in the system browser.
+/// WKWebView cannot paginate tables (thead repeat / row breaks) like Chrome/Safari.
+#[tauri::command]
+fn open_print_html(html: String) -> Result<(), String> {
+    let dir = std::env::temp_dir().join("safarimanager-print");
+    std::fs::create_dir_all(&dir).map_err(|e| e.to_string())?;
+
+    let stamp = SystemTime::now()
+        .duration_since(UNIX_EPOCH)
+        .map(|d| d.as_millis())
+        .unwrap_or(0);
+    let path = dir.join(format!("print-{stamp}.html"));
+    std::fs::write(&path, html.as_bytes()).map_err(|e| e.to_string())?;
+
+    #[cfg(target_os = "macos")]
+    {
+        std::process::Command::new("open")
+            .arg(&path)
+            .spawn()
+            .map_err(|e| e.to_string())?;
+    }
+    #[cfg(target_os = "windows")]
+    {
+        std::process::Command::new("cmd")
+            .args(["/C", "start", "", &path.to_string_lossy()])
+            .spawn()
+            .map_err(|e| e.to_string())?;
+    }
+    #[cfg(all(unix, not(target_os = "macos")))]
+    {
+        std::process::Command::new("xdg-open")
+            .arg(&path)
+            .spawn()
+            .map_err(|e| e.to_string())?;
+    }
+
+    Ok(())
 }
 
 pub mod migration {
@@ -176,11 +220,33 @@ fn create_main_window(app: &tauri::AppHandle, port: u16) {
 
     let url = format!("http://127.0.0.1:{port}/");
     let parsed = url.parse().expect("valid app url");
+    let app_handle = app.clone();
 
     let _ =
         tauri::webview::WebviewWindowBuilder::new(app, "main", tauri::WebviewUrl::External(parsed))
             .title("Safari Manager")
             .inner_size(1280.0, 800.0)
+            // Non-print `target="_blank"` / window.open. Printouts are opened in the
+            // system browser via `open_print_html` (see assets/js/app.js).
+            .on_new_window(move |_url, features| {
+                let id = AUX_WINDOW_ID.fetch_add(1, Ordering::Relaxed);
+                let label = format!("aux-{id}");
+                let blank = "about:blank".parse().expect("about:blank");
+
+                match tauri::webview::WebviewWindowBuilder::new(
+                    &app_handle,
+                    &label,
+                    tauri::WebviewUrl::External(blank),
+                )
+                .window_features(features)
+                .title("Safari Manager")
+                .inner_size(1024.0, 768.0)
+                .build()
+                {
+                    Ok(window) => tauri::webview::NewWindowResponse::Create { window },
+                    Err(_) => tauri::webview::NewWindowResponse::Deny,
+                }
+            })
             .build();
 }
 
@@ -188,6 +254,7 @@ pub fn run() {
     tauri::Builder::default()
         .plugin(tauri_plugin_fs::init())
         .plugin(tauri_plugin_updater::Builder::new().build())
+        .invoke_handler(tauri::generate_handler![open_print_html])
         .setup(|app| {
             let handle = app.handle().clone();
 

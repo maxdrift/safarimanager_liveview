@@ -1,0 +1,48 @@
+/* Print / PDF export — rely on the browser print engine for table pagination
+   (thead repeat, row breaks). WKWebView cannot do this reliably. */
+
+@page {
+  size: A4;
+  margin: 12mm;
+}
+
+@media print {
+  html,
+  body {
+    background: white !important;
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+
+  thead {
+    display: table-header-group;
+  }
+
+  tfoot {
+    display: table-footer-group;
+  }
+
+  tr,
+  img,
+  svg {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  .break-after-page {
+    break-after: page;
+    page-break-after: always;
+  }
+
+  .break-after-avoid-page,
+  .last\:break-after-avoid-page:last-child {
+    break-after: avoid-page;
+    page-break-after: avoid;
+  }
+
+  .print-footer {
+    position: static !important;
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+}

@@ -1,0 +1,4 @@
+[[permission]]
+identifier = "allow-open-print-html"
+description = "Allows opening a printout HTML snapshot in the system browser."
+commands.allow = ["open_print_html"]
