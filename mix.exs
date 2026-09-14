@@ -94,7 +94,6 @@ defmodule SM.MixProject do
       {:telemetry_metrics, "~> 1.1"},
       {:telemetry_poller, "~> 1.0"},
       {:telemetry, "~> 1.2"},
-      {:tesla, "~> 1.14"},
       {:elixirkit, "~> 0.1"}
     ]
   end
