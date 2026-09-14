@@ -99,7 +99,9 @@ help-app-version:
 
 # Phoenix is spawned inside the Rust binary (elixirkit::mix), not by beforeDevCommand — so the CLI
 # must not block on build.devUrl, or `tauri dev` waits forever for a server that does not exist yet.
+# Cargo path-deps elixirkit from ../deps/elixirkit/elixirkit_rs (Hex package), so Mix must fetch first.
 app-dev:
+	mix deps.get
 	cd src-tauri && npx --yes @tauri-apps/cli@2 dev --no-dev-server-wait
 
 app-build:
