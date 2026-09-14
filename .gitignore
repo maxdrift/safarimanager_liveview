@@ -31,6 +31,10 @@ safarimanager-*.tar
 # In case you use Node.js/npm, you want to ignore these.
 npm-debug.log
 /assets/node_modules/
+/scripts/node_modules/
+
+# Local responsive audit screenshots (regenerate with scripts/capture_responsive_screenshots.js)
+/docs/responsive-audit/screenshots/
 
 # Ignore generated js hook files for components
 assets/js/_hooks/
