@@ -13,8 +13,8 @@
       {gettext("Start Validation")}
     </.link>
   </div>
-  <div class="mt-10">
-    <table id="validation-results-table" class="table table-xs w-full text-center">
+  <div class="mt-10 table-scroll">
+    <table id="validation-results-table" class="table table-xs w-full text-center min-w-[48rem]">
       <colgroup span="4" />
       <colgroup span="4" />
       <thead>
@@ -63,88 +63,228 @@
           </tr>
           <tr :if={list_to_boolean(stats.flagged_slides ++ stats.duplicate_subjects)}>
             <td />
-            <td colspan="7">
-              <table :if={stats.flagged_slides != []} class="table table-xs w-full text-center">
-                <colgroup span="8" />
-                <thead>
-                  <tr>
-                    <th scope="colgroup" colspan="8" class="bg-base-200">{gettext("Flags")}</th>
-                  </tr>
-                  <tr>
-                    <th scope="col" class="bg-base-200">{gettext("File name")}</th>
-                    <th scope="col" class="bg-base-200">{gettext("Subject")}</th>
-                    <th scope="col" class="bg-base-200">{gettext("Status")}</th>
-                    <th scope="col" class="bg-base-200">{gettext("Wrong subject")}</th>
-                    <th scope="col" class="bg-base-200">{gettext("Unrecognizable")}</th>
-                    <th scope="col" class="bg-base-200">{gettext("Distinction")}</th>
-                    <th scope="col" class="bg-base-200">{gettext("Note")}</th>
-                    <th scope="col" class="bg-base-200" />
-                  </tr>
-                </thead>
-                <tbody>
-                  <%= for slide <- stats.flagged_slides do %>
+            <td colspan="7" class="min-w-0">
+              <div class="table-scroll">
+                <table
+                  :if={stats.flagged_slides != []}
+                  class="table table-xs w-full text-center min-w-[56rem]"
+                >
+                  <colgroup span="8" />
+                  <thead>
+                    <tr>
+                      <th scope="colgroup" colspan="8" class="bg-base-200">{gettext("Flags")}</th>
+                    </tr>
+                    <tr>
+                      <th scope="col" class="bg-base-200">{gettext("File name")}</th>
+                      <th scope="col" class="bg-base-200">{gettext("Subject")}</th>
+                      <th scope="col" class="bg-base-200">{gettext("Status")}</th>
+                      <th scope="col" class="bg-base-200">{gettext("Wrong subject")}</th>
+                      <th scope="col" class="bg-base-200">{gettext("Unrecognizable")}</th>
+                      <th scope="col" class="bg-base-200">{gettext("Distinction")}</th>
+                      <th scope="col" class="bg-base-200">{gettext("Note")}</th>
+                      <th scope="col" class="bg-base-200" />
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <%= for slide <- stats.flagged_slides do %>
+                      <tr
+                        :for={slide_flags <- [Slides.slide_flags_by_types(slide)]}
+                        id={"validation-detail-row-#{slide.id}"}
+                      >
+                        <td>
+                          <span class="sm-file-name">
+                            {slide.file_name}
+                          </span>
+                        </td>
+                        <td>
+                          <span class="sm-subject-name capitalize">
+                            {slide.subject.name}
+                          </span>
+                        </td>
+                        <td>
+                          <div class={[
+                            "sm-status",
+                            "my-auto",
+                            "badge",
+                            "h-auto",
+                            "max-w-full",
+                            "whitespace-normal",
+                            "py-0.5",
+                            "leading-tight",
+                            "text-left",
+                            slide.status == :submitted_jury && "badge-success",
+                            slide.status == :submitted_fixed && "badge-warning"
+                          ]}>
+                            {status_to_label(slide.status)}
+                          </div>
+                        </td>
+                        <td class="capitalize text-center">
+                          <span class="sm-wrong-subject">
+                            {(slide_flags.wrong_subject &&
+                                "#{subject_name(@subjects, slide.subject_id)} → #{subject_name(@subjects, slide_flags.wrong_subject.context["to"])}") ||
+                              "-"}
+                          </span>
+                        </td>
+                        <td>
+                          <span class="sm-unrecognizable">
+                            {(slide_flags.unrecognizable && "✓") || "-"}
+                          </span>
+                        </td>
+                        <td>
+                          <span class="sm-distinction">
+                            {(slide_flags.distinction && "✓") || "-"}
+                          </span>
+                        </td>
+                        <td>
+                          <div
+                            :if={slide_flags.note}
+                            class="tooltip"
+                            data-tip={slide_flags.note.context["message"]}
+                          >
+                            <div class="sm-note max-w-xs truncate">
+                              {(slide_flags.note && slide_flags.note.context["message"]) || "-"}
+                            </div>
+                          </div>
+                          <span :if={!slide_flags.note}>-</span>
+                        </td>
+                        <td class="flex flex-row">
+                          <.link
+                            navigate={"/organize/#{@competition_id}/validation?slide_id=#{slide.id}"}
+                            class="flex-none btn btn-xs"
+                          >
+                            {gettext("Open")}
+                          </.link>
+                          <div class="flex-none mx-1.5 dropdown">
+                            <label tabindex="0" class="btn btn-xs">
+                              {gettext("Actions")}
+                            </label>
+                            <ul
+                              tabindex="0"
+                              class="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52"
+                            >
+                              <li>
+                                <a
+                                  :if={slide_flags.wrong_subject}
+                                  class="btn btn-sm btn-ghost"
+                                  phx-click="apply-subject-correction"
+                                  phx-value-slide-id={slide.id}
+                                  phx-value-new-subject={
+                                    slide_flags.wrong_subject &&
+                                      slide_flags.wrong_subject.context["to"]
+                                  }
+                                >
+                                  {gettext("Apply subject correction")}
+                                </a>
+                              </li>
+                              <li>
+                                <a
+                                  :if={slide.status != :submitted_jury}
+                                  class="btn btn-sm btn-ghost"
+                                  phx-click="move-slide-to-jury"
+                                  phx-value-slide-id={slide.id}
+                                >
+                                  {gettext("Move to jury")}
+                                </a>
+                              </li>
+                              <li>
+                                <a
+                                  :if={slide.status != :submitted_fixed}
+                                  class="btn btn-sm btn-ghost"
+                                  phx-click="move-slide-to-fixed"
+                                  phx-value-slide-id={slide.id}
+                                >
+                                  {gettext("Move to fixed points")}
+                                </a>
+                              </li>
+                              <li>
+                                <a
+                                  class="btn btn-sm btn-ghost"
+                                  phx-click="move-slide-to-discarded"
+                                  phx-value-slide-id={slide.id}
+                                >
+                                  {gettext("Move to discarded")}
+                                </a>
+                              </li>
+                              <li>
+                                <a
+                                  class="btn btn-sm btn-ghost"
+                                  phx-click="clear-all-flags"
+                                  phx-value-slide-id={slide.id}
+                                >
+                                  {gettext("Clear all flags")}
+                                </a>
+                              </li>
+                            </ul>
+                          </div>
+                          <.form
+                            for={%{}}
+                            method="post"
+                            action={~p"/image_export"}
+                            class="flex-none"
+                          >
+                            <.hidden_input name={:slide_id} value={slide.id} />
+                            <button type="submit" class="btn btn-square btn-xs">
+                              <Heroicons.icon
+                                name="arrow-down-tray"
+                                type="outline"
+                                class="h-4 w-4"
+                              />
+                            </button>
+                          </.form>
+                        </td>
+                      </tr>
+                    <% end %>
+                  </tbody>
+                </table>
+                <table
+                  :if={stats.duplicate_subjects != []}
+                  class="table table-xs w-full text-center mt-2 min-w-[36rem]"
+                >
+                  <colgroup span="4" />
+                  <thead>
+                    <tr>
+                      <th scope="colgroup" colspan="4" class="bg-base-200">
+                        {gettext("Duplicate subjects")}
+                      </th>
+                    </tr>
+                    <tr>
+                      <th scope="col" class="bg-base-200">{gettext("File name")}</th>
+                      <th scope="col" class="bg-base-200">{gettext("Subject")}</th>
+                      <th scope="col" class="bg-base-200">{gettext("Status")}</th>
+                      <th scope="col" class="bg-base-200" />
+                    </tr>
+                  </thead>
+                  <tbody>
                     <tr
-                      :for={slide_flags <- [Slides.slide_flags_by_types(slide)]}
-                      id={"validation-detail-row-#{slide.id}"}
+                      :for={slide <- stats.duplicate_subjects}
+                      id={"validation-duplicate-detail-row-#{participant_number}-#{slide.id}"}
                     >
-                      <td>
-                        <span class="sm-file-name">
-                          {slide.file_name}
-                        </span>
-                      </td>
-                      <td>
-                        <span class="sm-subject-name capitalize">
-                          {slide.subject.name}
-                        </span>
-                      </td>
+                      <td>{slide.file_name}</td>
+                      <td><span class="capitalize">{slide.subject.name}</span></td>
                       <td>
                         <div class={[
-                          "sm-status",
                           "my-auto",
                           "badge",
+                          "h-auto",
+                          "max-w-full",
+                          "whitespace-normal",
+                          "py-0.5",
+                          "leading-tight",
+                          "text-left",
                           slide.status == :submitted_jury && "badge-success",
                           slide.status == :submitted_fixed && "badge-warning"
                         ]}>
                           {status_to_label(slide.status)}
                         </div>
                       </td>
-                      <td class="capitalize text-center">
-                        <span class="sm-wrong-subject">
-                          {(slide_flags.wrong_subject &&
-                              "#{subject_name(@subjects, slide.subject_id)} → #{subject_name(@subjects, slide_flags.wrong_subject.context["to"])}") ||
-                            "-"}
-                        </span>
-                      </td>
                       <td>
-                        <span class="sm-unrecognizable">
-                          {(slide_flags.unrecognizable && "✓") || "-"}
-                        </span>
-                      </td>
-                      <td>
-                        <span class="sm-distinction">
-                          {(slide_flags.distinction && "✓") || "-"}
-                        </span>
-                      </td>
-                      <td>
-                        <div
-                          :if={slide_flags.note}
-                          class="tooltip"
-                          data-tip={slide_flags.note.context["message"]}
-                        >
-                          <div class="sm-note max-w-xs truncate">
-                            {(slide_flags.note && slide_flags.note.context["message"]) || "-"}
-                          </div>
-                        </div>
-                        <span :if={!slide_flags.note}>-</span>
-                      </td>
-                      <td class="flex flex-row">
                         <.link
                           navigate={"/organize/#{@competition_id}/validation?slide_id=#{slide.id}"}
-                          class="flex-none btn btn-xs"
+                          class="btn btn-xs"
                         >
                           {gettext("Open")}
                         </.link>
-                        <div class="flex-none mx-1.5 dropdown">
+                        <div class="dropdown mx-auto">
                           <label tabindex="0" class="btn btn-xs">
                             {gettext("Actions")}
                           </label>
@@ -152,20 +292,6 @@
                             tabindex="0"
                             class="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52"
                           >
-                            <li>
-                              <a
-                                :if={slide_flags.wrong_subject}
-                                class="btn btn-sm btn-ghost"
-                                phx-click="apply-subject-correction"
-                                phx-value-slide-id={slide.id}
-                                phx-value-new-subject={
-                                  slide_flags.wrong_subject &&
-                                    slide_flags.wrong_subject.context["to"]
-                                }
-                              >
-                                {gettext("Apply subject correction")}
-                              </a>
-                            </li>
                             <li>
                               <a
                                 :if={slide.status != :submitted_jury}
@@ -195,118 +321,13 @@
                                 {gettext("Move to discarded")}
                               </a>
                             </li>
-                            <li>
-                              <a
-                                class="btn btn-sm btn-ghost"
-                                phx-click="clear-all-flags"
-                                phx-value-slide-id={slide.id}
-                              >
-                                {gettext("Clear all flags")}
-                              </a>
-                            </li>
                           </ul>
                         </div>
-                        <.form
-                          for={%{}}
-                          method="post"
-                          action={~p"/image_export"}
-                          class="flex-none"
-                        >
-                          <.hidden_input name={:slide_id} value={slide.id} />
-                          <button type="submit" class="btn btn-square btn-xs">
-                            <Heroicons.icon name="arrow-down-tray" type="outline" class="h-4 w-4" />
-                          </button>
-                        </.form>
                       </td>
                     </tr>
-                  <% end %>
-                </tbody>
-              </table>
-              <table
-                :if={stats.duplicate_subjects != []}
-                class="table table-xs w-full text-center mt-2"
-              >
-                <colgroup span="4" />
-                <thead>
-                  <tr>
-                    <th scope="colgroup" colspan="4" class="bg-base-200">
-                      {gettext("Duplicate subjects")}
-                    </th>
-                  </tr>
-                  <tr>
-                    <th scope="col" class="bg-base-200">{gettext("File name")}</th>
-                    <th scope="col" class="bg-base-200">{gettext("Subject")}</th>
-                    <th scope="col" class="bg-base-200">{gettext("Status")}</th>
-                    <th scope="col" class="bg-base-200" />
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr
-                    :for={slide <- stats.duplicate_subjects}
-                    id={"validation-duplicate-detail-row-#{participant_number}-#{slide.id}"}
-                  >
-                    <td>{slide.file_name}</td>
-                    <td><span class="capitalize">{slide.subject.name}</span></td>
-                    <td>
-                      <div class={[
-                        "my-auto",
-                        "badge",
-                        slide.status == :submitted_jury && "badge-success",
-                        slide.status == :submitted_fixed && "badge-warning"
-                      ]}>
-                        {status_to_label(slide.status)}
-                      </div>
-                    </td>
-                    <td>
-                      <.link
-                        navigate={"/organize/#{@competition_id}/validation?slide_id=#{slide.id}"}
-                        class="btn btn-xs"
-                      >
-                        {gettext("Open")}
-                      </.link>
-                      <div class="dropdown mx-auto">
-                        <label tabindex="0" class="btn btn-xs">
-                          {gettext("Actions")}
-                        </label>
-                        <ul
-                          tabindex="0"
-                          class="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52"
-                        >
-                          <li>
-                            <a
-                              :if={slide.status != :submitted_jury}
-                              class="btn btn-sm btn-ghost"
-                              phx-click="move-slide-to-jury"
-                              phx-value-slide-id={slide.id}
-                            >
-                              {gettext("Move to jury")}
-                            </a>
-                          </li>
-                          <li>
-                            <a
-                              :if={slide.status != :submitted_fixed}
-                              class="btn btn-sm btn-ghost"
-                              phx-click="move-slide-to-fixed"
-                              phx-value-slide-id={slide.id}
-                            >
-                              {gettext("Move to fixed points")}
-                            </a>
-                          </li>
-                          <li>
-                            <a
-                              class="btn btn-sm btn-ghost"
-                              phx-click="move-slide-to-discarded"
-                              phx-value-slide-id={slide.id}
-                            >
-                              {gettext("Move to discarded")}
-                            </a>
-                          </li>
-                        </ul>
-                      </div>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
+                  </tbody>
+                </table>
+              </div>
             </td>
           </tr>
         <% end %>

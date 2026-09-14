@@ -31,8 +31,8 @@ defmodule SMWeb.Components.Grid do
         phx-submit="grid-selection-submit"
         phx-target={@myself}
       >
-        <div class="flex flex-row-reverse my-2 min-h-8">
-          <div>
+        <div class="flex flex-row-reverse flex-wrap gap-2 my-2 min-h-8">
+          <div class="flex flex-wrap gap-2 justify-end">
             <.link :if={@create_path} patch={@create_path} class="btn btn-sm btn-success">
               {gettext("Create")}
             </.link>
@@ -59,10 +59,10 @@ defmodule SMWeb.Components.Grid do
             </button>
           </div>
         </div>
-        <div class="max-h-full overflow-y-auto tiny-scrollbar">
+        <div class="max-h-full overflow-y-auto tiny-scrollbar table-scroll">
           <table
             id={"#{@id}-table"}
-            class="table table-zebra table-sm table-fixed w-full"
+            class="table table-zebra table-sm table-auto md:table-fixed w-full min-w-[32rem]"
             phx-hook="GridSelection"
           >
             <thead>
@@ -202,8 +202,6 @@ defmodule SMWeb.Components.Grid do
   end
 
   defp do_delete_some(socket, [_one_item] = selected) do
-    IO.inspect(selected, label: "Deleting selected items")
-
     on_confirm = fn socket ->
       send(self(), {"delete-selected", selected})
 

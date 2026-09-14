@@ -22,7 +22,7 @@
         </div>
         <div>
           <span>{gettext("Alternatively, paste this URL into the Jury's browser:")}</span>
-          <span class="font-mono text-xs">{@voting_url}</span>
+          <span class="font-mono text-xs break-all">{@voting_url}</span>
         </div>
       </div>
       <div class="card-actions justify-end">
@@ -39,9 +39,9 @@
   </div>
 
   <%!-- Main Content: Users and Jurors --%>
-  <div class="mt-5 flex flex-col xl:flex-row gap-4">
+  <div class="mt-5 flex flex-col xl:flex-row gap-4 min-w-0">
     <%!-- Available Users Section --%>
-    <div class="flex-1 rounded-lg bg-base-200 shadow-lg">
+    <div class="flex-1 min-w-0 rounded-lg bg-base-200 shadow-lg">
       <div class="p-4">
         <div class="flex items-center justify-between mb-3">
           <h2 class="text-xl font-bold">
@@ -63,8 +63,11 @@
             autocomplete="nope"
           />
         </.form>
-        <div class="max-h-[500px] overflow-y-auto tiny-scrollbar">
-          <table id="juror-users-table" class="table table-zebra table-fixed w-full">
+        <div class="max-h-[500px] overflow-y-auto tiny-scrollbar table-scroll">
+          <table
+            id="juror-users-table"
+            class="table table-zebra table-auto md:table-fixed w-full min-w-[32rem]"
+          >
             <thead>
               <tr>
                 <th class="sticky top-0">{gettext("Last Name")}</th>
@@ -105,7 +108,7 @@
     </div>
 
     <%!-- Jurors Section --%>
-    <div class="flex-1 rounded-lg bg-base-200 shadow-lg">
+    <div class="flex-1 min-w-0 rounded-lg bg-base-200 shadow-lg">
       <div class="p-4">
         <div class="flex items-center justify-between mb-3">
           <h2 class="text-xl font-bold">
@@ -118,8 +121,11 @@
             </span>
           </div>
         </div>
-        <div class="max-h-[500px] overflow-y-auto tiny-scrollbar">
-          <table id="jurors-table" class="table table-zebra table-fixed w-full">
+        <div class="max-h-[500px] overflow-y-auto tiny-scrollbar table-scroll">
+          <table
+            id="jurors-table"
+            class="table table-zebra table-auto md:table-fixed w-full min-w-[28rem]"
+          >
             <thead>
               <tr>
                 <th class="sticky top-0">{gettext("Last Name")}</th>

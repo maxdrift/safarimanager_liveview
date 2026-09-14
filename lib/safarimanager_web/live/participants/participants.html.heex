@@ -74,9 +74,9 @@
   </div>
 
   <%!-- Main Content: Users and Participants --%>
-  <div class="flex flex-col xl:flex-row gap-4">
+  <div class="flex flex-col xl:flex-row gap-4 min-w-0">
     <%!-- Available Users Section --%>
-    <div class="flex-1 rounded-lg bg-base-200 shadow-lg">
+    <div class="flex-1 min-w-0 rounded-lg bg-base-200 shadow-lg">
       <div class="p-4">
         <div class="flex items-center justify-between mb-3">
           <h2 class="text-xl font-bold">
@@ -98,8 +98,11 @@
             autocomplete="nope"
           />
         </.form>
-        <div class="max-h-[500px] overflow-y-auto tiny-scrollbar">
-          <table id="users-table" class="table table-zebra table-fixed w-full">
+        <div class="max-h-[500px] overflow-y-auto tiny-scrollbar table-scroll">
+          <table
+            id="users-table"
+            class="table table-zebra table-auto md:table-fixed w-full min-w-[36rem]"
+          >
             <thead>
               <tr>
                 <th class="sticky top-0">{gettext("Last Name")}</th>
@@ -144,7 +147,7 @@
     </div>
 
     <%!-- Participants Section --%>
-    <div class="flex-1 rounded-lg bg-base-200 shadow-lg">
+    <div class="flex-1 min-w-0 rounded-lg bg-base-200 shadow-lg">
       <div class="p-4">
         <div class="flex items-center justify-between mb-3">
           <h2 class="text-xl font-bold">
@@ -179,15 +182,18 @@
             autocomplete="nope"
           />
         </.form>
-        <div class="max-h-[500px] overflow-y-auto tiny-scrollbar">
-          <table id="participants-table" class="table table-zebra table-compact w-full">
+        <div class="max-h-[500px] overflow-y-auto tiny-scrollbar table-scroll">
+          <table
+            id="participants-table"
+            class="table table-zebra table-compact table-auto md:table-fixed w-full min-w-[44rem]"
+          >
             <thead>
               <tr>
                 <th class="sticky top-0 w-10">{gettext("#")}</th>
-                <th class="sticky top-0 w-24">{gettext("Last Name")}</th>
-                <th class="sticky top-0 w-20">{gettext("First Name")}</th>
-                <th class="sticky top-0 w-32">{gettext("Organization")}</th>
-                <th class="sticky top-0 w-56">{gettext("Category")}</th>
+                <th class="sticky top-0">{gettext("Last Name")}</th>
+                <th class="sticky top-0">{gettext("First Name")}</th>
+                <th class="sticky top-0">{gettext("Organization")}</th>
+                <th class="sticky top-0 min-w-[10rem]">{gettext("Category")}</th>
                 <th class="sticky top-0 w-12">{gettext("Action")}</th>
               </tr>
             </thead>
