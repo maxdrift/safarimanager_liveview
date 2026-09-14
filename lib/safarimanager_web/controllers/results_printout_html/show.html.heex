@@ -8,20 +8,30 @@
     </h4>
     <h5 class="text-center text-sm">{@sub_header_line}</h5>
     <div class="my-3">
-      <span class="text-sm">{gettext("Denomination")}:&nbsp;</span><span class="text-md font-bold uppercase"><%= @competition.name %></span>
+      <span class="text-sm">{gettext("Denomination")}:&nbsp;</span><span class="text-md font-bold uppercase">{@competition.name}</span>
     </div>
     <div class="my-3">
-      <span class="text-sm">{gettext("Organizing organization")}:&nbsp;</span><span class="text-md font-bold uppercase"><%= @competition.organization.name %></span>
+      <span class="text-sm">{gettext("Organizing organization")}:&nbsp;</span><span class="text-md font-bold uppercase">{@competition.organization.name}</span>
     </div>
     <div class="flex flex-row">
       <div class="mr-10">
-        <span class="text-sm">{gettext("Date")}:&nbsp;</span><span class="text-sm font-bold"><%= @competition.start_time && @competition.start_time |> Calendar.strftime("%d/%m/%Y") || gettext("N/A") %></span>
+        <span class="text-sm">{gettext("Date")}:&nbsp;</span><span class="text-sm font-bold">{(@competition.start_time &&
+                                                                                                 @competition.start_time
+                                                                                                 |> Calendar.strftime(
+                                                                                                   "%d/%m/%Y"
+                                                                                                 )) ||
+          gettext("N/A")}</span>
       </div>
       <div class="mr-10">
-        <span class="text-sm">{gettext("Location")}:&nbsp;</span><span class="text-sm font-bold"><%= @competition.city || gettext("N/A") %></span>
+        <span class="text-sm">{gettext("Location")}:&nbsp;</span><span class="text-sm font-bold">{@competition.city ||
+          gettext("N/A")}</span>
       </div>
       <div>
-        <span class="text-sm">{gettext("Type")}:&nbsp;</span><span class="text-sm font-bold"><%= Gettext.gettext(SMWeb.Gettext, Keyword.get(@competition_types, @competition.type)) |> String.capitalize() || gettext("N/A") %></span>
+        <span class="text-sm">{gettext("Type")}:&nbsp;</span><span class="text-sm font-bold">{Gettext.gettext(
+          SMWeb.Gettext,
+          Keyword.get(@competition_types, @competition.type)
+        )
+        |> String.capitalize() || gettext("N/A")}</span>
       </div>
     </div>
     <h1 class="mt-4 text-center text-2xl font-bold uppercase tracking-widest">

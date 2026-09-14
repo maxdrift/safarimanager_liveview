@@ -16,6 +16,7 @@ defmodule SMWeb.Components.FileBrowser do
   attr :import_click, :string
   attr :user_id, :string
 
+  @impl true
   def render(assigns) do
     ~H"""
     <div id={@id}>
@@ -130,7 +131,9 @@ defmodule SMWeb.Components.FileBrowser do
             |> Enum.join(",")
           }
         >
-          {gettext("Import all")}<span :if={can_import?(@user_id, @items)}>&nbsp;{count_selectable_files(@items)} {gettext("files")}</span>
+          {gettext("Import all")}<span :if={can_import?(@user_id, @items)}>&nbsp;{count_selectable_files(
+            @items
+          )} {gettext("files")}</span>
         </button>
       </div>
     </div>
@@ -211,7 +214,7 @@ defmodule SMWeb.Components.FileBrowser do
   end
 
   defp get_last_dir do
-    with last_dir when not is_nil(last_dir) <- Cache.get(:last_dir),
+    with {:ok, last_dir} when not is_nil(last_dir) <- Cache.get(:last_dir),
          true <- File.exists?(last_dir) do
       last_dir
     else

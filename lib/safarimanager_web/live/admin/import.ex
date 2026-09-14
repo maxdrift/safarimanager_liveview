@@ -30,7 +30,7 @@ defmodule SMWeb.Live.Admin.Import do
 
   on_mount SMWeb.SidebarHook
 
-  @impl Phoenix.LiveView
+  @impl LiveView
   def mount(_params, _session, socket) do
     socket =
       socket
@@ -55,7 +55,7 @@ defmodule SMWeb.Live.Admin.Import do
     {:ok, socket}
   end
 
-  @impl Phoenix.LiveView
+  @impl LiveView
   def handle_event("validate", %{"import" => form_data}, socket) do
     form =
       {%{}, @form_schema}

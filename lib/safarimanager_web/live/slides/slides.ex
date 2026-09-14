@@ -25,7 +25,7 @@ defmodule SMWeb.Live.Slides do
 
   on_mount SMWeb.SidebarHook
 
-  @impl Phoenix.LiveView
+  @impl LiveView
   def mount(_params, _session, socket) do
     socket =
       socket
@@ -50,7 +50,7 @@ defmodule SMWeb.Live.Slides do
     {:ok, socket}
   end
 
-  @impl Phoenix.LiveView
+  @impl LiveView
   def handle_event("validate", %{"_target" => ["discovery_mode"], "discovery_mode" => value}, socket) do
     if value == "true" do
       :ok = USBWatcherSupervisor.start_poller(self())
@@ -224,7 +224,7 @@ defmodule SMWeb.Live.Slides do
     {:noreply, socket}
   end
 
-  @impl Phoenix.LiveView
+  @impl LiveView
   def handle_params(%{"competition_id" => competition_id} = params, _uri, socket) do
     _result =
       if connected?(socket),
@@ -251,7 +251,7 @@ defmodule SMWeb.Live.Slides do
     {:noreply, socket}
   end
 
-  @impl Phoenix.LiveView
+  @impl LiveView
   def handle_info({Slides, [:slide, _], _result}, socket) do
     user_id = (socket.assigns.user && socket.assigns.user.id) || nil
     competition_id = socket.assigns.competition_id
@@ -288,6 +288,7 @@ defmodule SMWeb.Live.Slides do
     participants = socket.assigns.participants
     DirectUploadDialog.show("auto-upload-dialog", first_volume, competition_id, participants)
 
+    # Internal
     {:noreply, socket}
   end
 
@@ -300,8 +301,6 @@ defmodule SMWeb.Live.Slides do
 
   def handle_info(_any, socket), do: {:noreply, socket}
 
-  # Internal
-
   defp team_matches_search?(_team, ""), do: true
 
   defp team_matches_search?(team, needle) do
@@ -311,6 +310,12 @@ defmodule SMWeb.Live.Slides do
         ["#{u.first_name} #{u.last_name}", "#{u.last_name} #{u.first_name}"]
       end)
 
+    # defp get_entry!(socket, file_name) do
+    #   Enum.find(socket.assigns.uploads.images.entries, fn entry ->
+    #     entry.client_name == file_name
+    #   end) ||
+    #     raise "no entry found for ref #{inspect(file_name)}"
+    # end
     haystack =
       [
         team.name,
@@ -324,13 +329,6 @@ defmodule SMWeb.Live.Slides do
 
     Enum.any?(haystack, &String.contains?(&1, needle))
   end
-
-  # defp get_entry!(socket, file_name) do
-  #   Enum.find(socket.assigns.uploads.images.entries, fn entry ->
-  #     entry.client_name == file_name
-  #   end) ||
-  #     raise "no entry found for ref #{inspect(file_name)}"
-  # end
 
   defp handle_progress(:images, entry, socket) do
     # SongEntryComponent.send_progress(entry)

@@ -33,11 +33,11 @@ defmodule SM do
 
       require Logger
 
-      @like_fragment if SM.Repo.__adapter__() == Ecto.Adapters.Postgres,
+      # Phoenix PubSub subscription
+
+      @like_fragment if Repo.__adapter__() == Ecto.Adapters.Postgres,
                        do: "? ILIKE ?",
                        else: "? LIKE ?"
-
-      # Phoenix PubSub subscription
 
       @topic inspect(__MODULE__)
 

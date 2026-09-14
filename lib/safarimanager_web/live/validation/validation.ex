@@ -87,12 +87,19 @@ defmodule SMWeb.Live.Validation do
       |> assign(:subjects, Competitions.list_subjects_for_competition(competition_id))
 
     next_slide_id =
-      with slide_id when not is_nil(slide_id) <-
+      with {:ok, slide_id} when not is_nil(slide_id) <-
              Cache.get("#{competition_id}_current_validation_slide_id"),
            {:ok, slide} <- Slides.get(slide_id),
            true <- slide.status in [:submitted_jury, :submitted_fixed] do
         slide.id
       else
+        {:ok, nil} ->
+          Logger.info("Current validation slide_id cache miss")
+
+          slides
+          |> Enum.at(0, %{})
+          |> Map.get(:id)
+
         nil ->
           Logger.info("Current validation slide_id cache miss")
 

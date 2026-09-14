@@ -111,12 +111,19 @@ defmodule SMWeb.Live.Jury do
       assign(socket, competition: competition, slides: slides, category: category)
 
     next_slide_id =
-      with slide_id when not is_nil(slide_id) <-
+      with {:ok, slide_id} when not is_nil(slide_id) <-
              Cache.get("#{competition_id}_#{category}_current_jury_slide_id"),
            {:ok, slide} <- Slides.get(slide_id),
            true <- slide.status == :submitted_jury do
         slide.id
       else
+        {:ok, nil} ->
+          Logger.info("Current jury slide_id cache miss")
+
+          slides
+          |> Enum.at(0, %{})
+          |> Map.get(:id)
+
         nil ->
           Logger.info("Current jury slide_id cache miss")
 

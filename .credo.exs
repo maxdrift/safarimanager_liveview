@@ -1,3 +1,17 @@
+alias Credo.Check.Consistency.MultiAliasImportRequireUse
+alias Credo.Check.Consistency.ParameterPatternMatching
+alias Credo.Check.Readability.AliasOrder
+alias Credo.Check.Readability.LargeNumbers
+alias Credo.Check.Readability.ModuleDoc
+alias Credo.Check.Readability.MultiAlias
+alias Credo.Check.Readability.ParenthesesOnZeroArityDefs
+alias Credo.Check.Readability.PipeIntoAnonymousFunctions
+alias Credo.Check.Readability.PreferImplicitTry
+alias Credo.Check.Readability.SinglePipe
+alias Credo.Check.Readability.StrictModuleLayout
+alias Credo.Check.Readability.UnnecessaryAliasExpansion
+alias Credo.Check.Refactor.MapJoin
+
 # This file contains the configuration for Credo and you are probably reading
 # this after creating it with `mix credo.gen.config`.
 #
@@ -71,7 +85,7 @@
           #
           {Credo.Check.Consistency.ExceptionNames, []},
           {Credo.Check.Consistency.LineEndings, []},
-          {Credo.Check.Consistency.ParameterPatternMatching, []},
+          {ParameterPatternMatching, []},
           {Credo.Check.Consistency.SpaceAroundOperators, []},
           {Credo.Check.Consistency.SpaceInParentheses, []},
           {Credo.Check.Consistency.TabsOrSpaces, []},
@@ -93,25 +107,25 @@
           #
           ## Readability Checks
           #
-          {Credo.Check.Readability.AliasOrder, []},
+          {AliasOrder, []},
           {Credo.Check.Readability.FunctionNames, []},
-          {Credo.Check.Readability.LargeNumbers, []},
+          {LargeNumbers, []},
           {Credo.Check.Readability.MaxLineLength, [priority: :low, max_length: 120]},
           {Credo.Check.Readability.ModuleAttributeNames, []},
-          {Credo.Check.Readability.ModuleDoc, []},
+          {ModuleDoc, []},
           {Credo.Check.Readability.ModuleNames, []},
           {Credo.Check.Readability.ParenthesesInCondition, []},
-          {Credo.Check.Readability.ParenthesesOnZeroArityDefs, []},
-          {Credo.Check.Readability.PipeIntoAnonymousFunctions, []},
+          {ParenthesesOnZeroArityDefs, []},
+          {PipeIntoAnonymousFunctions, []},
           {Credo.Check.Readability.PredicateFunctionNames, []},
-          {Credo.Check.Readability.PreferImplicitTry, []},
+          {PreferImplicitTry, []},
           {Credo.Check.Readability.RedundantBlankLines, []},
           {Credo.Check.Readability.Semicolons, []},
           {Credo.Check.Readability.SpaceAfterCommas, []},
           {Credo.Check.Readability.StringSigils, []},
           {Credo.Check.Readability.TrailingBlankLine, []},
           {Credo.Check.Readability.TrailingWhiteSpace, []},
-          {Credo.Check.Readability.UnnecessaryAliasExpansion, []},
+          {UnnecessaryAliasExpansion, []},
           {Credo.Check.Readability.VariableNames, []},
           {Credo.Check.Readability.WithSingleClause, []},
 
@@ -124,7 +138,7 @@
           {Credo.Check.Refactor.FunctionArity, []},
           {Credo.Check.Refactor.LongQuoteBlocks, []},
           {Credo.Check.Refactor.MatchInCondition, []},
-          {Credo.Check.Refactor.MapJoin, []},
+          {MapJoin, []},
           {Credo.Check.Refactor.NegatedConditionsInUnless, []},
           {Credo.Check.Refactor.NegatedConditionsWithElse, []},
           {Credo.Check.Refactor.Nesting, []},
@@ -159,13 +173,13 @@
 
           # Manually enabled
           {Credo.Check.Readability.Specs, []},
-          {Credo.Check.Consistency.MultiAliasImportRequireUse, []},
+          {MultiAliasImportRequireUse, []},
           {Credo.Check.Consistency.UnusedVariableNames, []},
           {Credo.Check.Readability.ImplTrue, []},
-          {Credo.Check.Readability.MultiAlias, []},
+          {MultiAlias, []},
           {Credo.Check.Readability.SeparateAliasRequire, []},
-          {Credo.Check.Readability.SinglePipe, []},
-          {Credo.Check.Readability.StrictModuleLayout, []},
+          {SinglePipe, []},
+          {StrictModuleLayout, []},
           {Credo.Check.Readability.WithCustomTaggedTuple, []},
           {Credo.Check.Refactor.AppendSingleItem, []},
           {Credo.Check.Refactor.DoubleBooleanNegation, []},
@@ -187,30 +201,30 @@
           # Controversial and experimental checks (opt-in, just move the check to `:enabled`
           #   and be sure to use `mix credo --strict` to see low priority checks)
           #
-          {Credo.Check.Consistency.MultiAliasImportRequireUse, []},
-          {Credo.Check.Consistency.ParameterPatternMatching, []},
+          {MultiAliasImportRequireUse, []},
+          {ParameterPatternMatching, []},
           {Credo.Check.Design.DuplicatedCode, []},
           {Credo.Check.Design.SkipTestWithoutComment, []},
           {Credo.Check.Readability.AliasAs, []},
-          {Credo.Check.Readability.AliasOrder, []},
+          {AliasOrder, []},
           {Credo.Check.Readability.BlockPipe, []},
-          {Credo.Check.Readability.LargeNumbers, []},
-          {Credo.Check.Readability.ModuleDoc, []},
-          {Credo.Check.Readability.MultiAlias, []},
+          {LargeNumbers, []},
+          {ModuleDoc, []},
+          {MultiAlias, []},
           {Credo.Check.Readability.OneArityFunctionInPipe, []},
-          {Credo.Check.Readability.ParenthesesOnZeroArityDefs, []},
-          {Credo.Check.Readability.PipeIntoAnonymousFunctions, []},
-          {Credo.Check.Readability.PreferImplicitTry, []},
+          {ParenthesesOnZeroArityDefs, []},
+          {PipeIntoAnonymousFunctions, []},
+          {PreferImplicitTry, []},
           {Credo.Check.Readability.SingleFunctionToBlockPipe, []},
-          {Credo.Check.Readability.SinglePipe, []},
-          {Credo.Check.Readability.StrictModuleLayout, []},
-          {Credo.Check.Readability.UnnecessaryAliasExpansion, []},
+          {SinglePipe, []},
+          {StrictModuleLayout, []},
+          {UnnecessaryAliasExpansion, []},
           {Credo.Check.Refactor.ABCSize, []},
           {Credo.Check.Refactor.CaseTrivialMatches, []},
           {Credo.Check.Refactor.FilterCount, []},
           {Credo.Check.Refactor.IoPuts, []},
           {Credo.Check.Refactor.MapInto, []},
-          {Credo.Check.Refactor.MapJoin, []},
+          {MapJoin, []},
           {Credo.Check.Refactor.MapMap, []},
           {Credo.Check.Refactor.ModuleDependencies, []},
           {Credo.Check.Refactor.NegatedIsNil, []},

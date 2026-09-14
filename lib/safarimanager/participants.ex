@@ -174,7 +174,7 @@ defmodule SM.Participants do
       )
 
     case Repo.one(query) do
-      %SM.Participants.Participant{number: number} -> number + 1
+      %Participant{number: number} -> number + 1
       nil -> 1
     end
   end
