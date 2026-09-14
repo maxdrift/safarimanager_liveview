@@ -11,6 +11,8 @@
     "core:webview:allow-create-webview-window",
     "allow-open-print-html",
     "updater:default",
+    "dialog:default",
+    "process:default",
     "fs:default",
     "fs:allow-home-read-recursive",
     "fs:allow-home-write-recursive",

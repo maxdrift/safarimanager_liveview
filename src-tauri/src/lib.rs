@@ -3,6 +3,7 @@ use std::time::{SystemTime, UNIX_EPOCH};
 
 use tauri::Manager;
 
+mod app_update;
 mod embedded_phx_env {
     include!(concat!(env!("OUT_DIR"), "/embedded_phx_env.rs"));
 }
@@ -222,37 +223,42 @@ fn create_main_window(app: &tauri::AppHandle, port: u16) {
     let parsed = url.parse().expect("valid app url");
     let app_handle = app.clone();
 
-    let _ =
-        tauri::webview::WebviewWindowBuilder::new(app, "main", tauri::WebviewUrl::External(parsed))
-            .title("Safari Manager")
-            .inner_size(1280.0, 800.0)
-            // Non-print `target="_blank"` / window.open. Printouts are opened in the
-            // system browser via `open_print_html` (see assets/js/app.js).
-            .on_new_window(move |_url, features| {
-                let id = AUX_WINDOW_ID.fetch_add(1, Ordering::Relaxed);
-                let label = format!("aux-{id}");
-                let blank = "about:blank".parse().expect("about:blank");
+    match tauri::webview::WebviewWindowBuilder::new(app, "main", tauri::WebviewUrl::External(parsed))
+        .title("Safari Manager")
+        .inner_size(1280.0, 800.0)
+        // Non-print `target="_blank"` / window.open. Printouts are opened in the
+        // system browser via `open_print_html` (see assets/js/app.js).
+        .on_new_window(move |_url, features| {
+            let id = AUX_WINDOW_ID.fetch_add(1, Ordering::Relaxed);
+            let label = format!("aux-{id}");
+            let blank = "about:blank".parse().expect("about:blank");
 
-                match tauri::webview::WebviewWindowBuilder::new(
-                    &app_handle,
-                    &label,
-                    tauri::WebviewUrl::External(blank),
-                )
-                .window_features(features)
-                .title("Safari Manager")
-                .inner_size(1024.0, 768.0)
-                .build()
-                {
-                    Ok(window) => tauri::webview::NewWindowResponse::Create { window },
-                    Err(_) => tauri::webview::NewWindowResponse::Deny,
-                }
-            })
-            .build();
+            match tauri::webview::WebviewWindowBuilder::new(
+                &app_handle,
+                &label,
+                tauri::WebviewUrl::External(blank),
+            )
+            .window_features(features)
+            .title("Safari Manager")
+            .inner_size(1024.0, 768.0)
+            .build()
+            {
+                Ok(window) => tauri::webview::NewWindowResponse::Create { window },
+                Err(_) => tauri::webview::NewWindowResponse::Deny,
+            }
+        })
+        .build()
+    {
+        Ok(_) => app_update::spawn_check(app.clone()),
+        Err(err) => eprintln!("failed to create main window: {err}"),
+    }
 }
 
 pub fn run() {
     tauri::Builder::default()
         .plugin(tauri_plugin_fs::init())
+        .plugin(tauri_plugin_dialog::init())
+        .plugin(tauri_plugin_process::init())
         .plugin(tauri_plugin_updater::Builder::new().build())
         .invoke_handler(tauri::generate_handler![open_print_html])
         .setup(|app| {
