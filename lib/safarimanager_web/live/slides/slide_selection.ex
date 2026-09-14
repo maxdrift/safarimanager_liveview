@@ -23,7 +23,7 @@ defmodule SMWeb.Live.SlideSelection do
 
   on_mount SMWeb.SidebarHook
 
-  @impl Phoenix.LiveView
+  @impl LiveView
   def mount(_params, _session, socket) do
     socket =
       socket
@@ -52,7 +52,7 @@ defmodule SMWeb.Live.SlideSelection do
     {:ok, socket}
   end
 
-  @impl Phoenix.LiveView
+  @impl LiveView
   def handle_event("validate", _params, socket) do
     {:noreply, socket}
   end
@@ -153,7 +153,7 @@ defmodule SMWeb.Live.SlideSelection do
     {:noreply, socket}
   end
 
-  @impl Phoenix.LiveView
+  @impl LiveView
   def handle_params(params, _uri, socket) do
     _result =
       if connected?(socket),
@@ -225,7 +225,10 @@ defmodule SMWeb.Live.SlideSelection do
     |> assign_selection_section_collapse_defaults()
   end
 
-  @impl Phoenix.LiveView
+  @impl LiveView
+
+  # Internal
+
   def handle_info({Slides, [:slide, _], _result}, socket) do
     user = socket.assigns.user
     team = socket.assigns.team
@@ -262,8 +265,6 @@ defmodule SMWeb.Live.SlideSelection do
 
     {:noreply, socket}
   end
-
-  # Internal
 
   defp get_user_slides_by_status(nil, _competition_id), do: %{}
 

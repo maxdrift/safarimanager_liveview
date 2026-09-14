@@ -17,6 +17,7 @@ defmodule SMWeb.Components.DirectUploadDialog do
   attr :file_filter, :list, default: []
   attr :participants, :list, default: []
 
+  @impl true
   def render(assigns) do
     ~H"""
     <div>
@@ -117,7 +118,9 @@ defmodule SMWeb.Components.DirectUploadDialog do
             phx-click="import"
             phx-target={@myself}
           >
-            {gettext("Import")}<span :if={can_import?(@user_id, @items)}>&nbsp;{count_image_type(@items)} {gettext("images")}</span>
+            {gettext("Import")}<span :if={can_import?(@user_id, @items)}>&nbsp;{count_image_type(
+              @items
+            )} {gettext("images")}</span>
           </button>
           <div class="grow" />
           <button class="flex-none btn btn-error" phx-click="hide" phx-target={@myself}>

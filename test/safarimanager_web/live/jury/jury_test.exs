@@ -280,5 +280,4 @@ defmodule SMWeb.Live.JuryTest do
       assert html =~ "P"
     end
   end
-
 end

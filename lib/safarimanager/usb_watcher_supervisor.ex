@@ -58,7 +58,7 @@ defmodule SM.USBWatcherSupervisor do
 
   @spec active? :: boolean()
   def active? do
-    not (DynamicSupervisor.which_children(__MODULE__) == [])
+    DynamicSupervisor.which_children(__MODULE__) != []
   end
 
   @impl DynamicSupervisor

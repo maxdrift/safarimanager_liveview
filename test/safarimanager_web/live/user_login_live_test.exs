@@ -61,7 +61,7 @@ defmodule SMWeb.Live.UserLoginLiveTest do
 
       {:ok, _login_live, login_html} =
         lv
-        |> element(~s|a:fl-contains("Sign up")|)
+        |> element("a", "Sign up")
         |> render_click()
         |> follow_redirect(conn, ~p"/users/register")
 
@@ -75,7 +75,7 @@ defmodule SMWeb.Live.UserLoginLiveTest do
 
       {:ok, conn} =
         lv
-        |> element(~s{a:fl-contains('Forgot your password?')})
+        |> element("a", "Forgot your password?")
         |> render_click()
         |> follow_redirect(conn, ~p"/users/reset_password")
 
