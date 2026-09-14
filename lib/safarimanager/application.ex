@@ -9,6 +9,10 @@ defmodule SM.Application do
 
   @impl Application
   def start(_type, _args) do
+    if Application.get_env(:safarimanager, :enable_svadilfari_logger, true) do
+      _ = LoggerBackends.add(Svadilfari)
+    end
+
     pubsub_url = System.get_env("ELIXIRKIT_PUBSUB")
 
     children =

@@ -12,6 +12,8 @@ config :bcrypt_elixir, :log_rounds, 1
 # Print only warnings and errors during test
 config :logger, level: :warn
 
+config :safarimanager, :enable_svadilfari_logger, false
+
 # Initialize plugs at runtime for faster test compilation
 config :phoenix, :plug_init_mode, :runtime
 

@@ -64,6 +64,7 @@
             <.form
               for={%{}}
               as={:wrong_subject_flag}
+              id="validation-wrong-subject-form"
               phx-change={
                 JS.hide(to: "#wrong-subject-select")
                 |> JS.show(to: "#subject-label")
@@ -144,7 +145,13 @@
                 <path d="M19,13H6.75L12,18.25L11.34,19L4.84,12.5L11.34,6L12,6.75L6.75,12H19V13Z" />
               </svg>
             </.jury_toolbar_button>
-            <.form for={%{}} as={:go_to} phx-change="go-to-change" phx-submit="go-to-submit">
+            <.form
+              for={%{}}
+              as={:go_to}
+              id="validation-go-to-form"
+              phx-change="go-to-change"
+              phx-submit="go-to-submit"
+            >
               <.input
                 type="number"
                 name={:go_to}
@@ -321,7 +328,13 @@
             value={@slide_flags.distinction && @slide_flags.distinction.id}
           />
         </.form>
-        <.form for={%{}} as={:note} phx-change="note-change" phx-submit="note-submit">
+        <.form
+          for={%{}}
+          as={:note}
+          id="validation-note-form"
+          phx-change="note-change"
+          phx-submit="note-submit"
+        >
           <.input
             type="text"
             name={:value}

@@ -66,6 +66,7 @@ defmodule SM.MixProject do
       # so no local Rust toolchain is needed at build time.
       {:ex_image_resizer, git: "https://github.com/maxdrift/ExImageResizer.git", tag: "v0.2.0"},
       {:jason, "~> 1.2"},
+      {:logger_backends, "~> 1.0"},
       # sleipnir pins protobuf ~> 0.10; Elixir 1.19+ needs protobuf >= 0.15 (map entry compile). We override
       # protobuf and use vendor/sleipnir (patched structs, no duplicate google.protobuf.Timestamp).
       {:protobuf, "~> 0.16", override: true},

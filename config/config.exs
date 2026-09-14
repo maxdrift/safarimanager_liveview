@@ -19,8 +19,6 @@ config :esbuild,
 
 config :gettext, :default_locale, "en"
 
-config :logger, :backends, [:console, Svadilfari]
-
 # Configures Elixir's Logger
 config :logger, :console,
   format: "$time $metadata[$level] $message\n",

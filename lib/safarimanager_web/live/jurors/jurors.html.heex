@@ -50,7 +50,13 @@
           </h2>
           <span class="badge badge-primary badge-lg">{length(@users)}</span>
         </div>
-        <.form for={%{}} as={:users_filter} phx-change="filter-users" autocomplete="off">
+        <.form
+          for={%{}}
+          as={:users_filter}
+          id="jurors-users-filter-form"
+          phx-change="filter-users"
+          autocomplete="off"
+        >
           <label for="users-filter-input" class="sr-only">{gettext("Search users")}</label>
           <.input
             type="text"
