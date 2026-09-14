@@ -12,11 +12,10 @@ defmodule SMWeb.Components.ThemeChangeDropdown do
 
   def theme_change_dropdown(assigns) do
     ~H"""
-    <div title={gettext("Change theme")} class="dropdown dropdown-right dropdown-end">
-      <label
-        tabindex="0"
+    <details title={gettext("Change theme")} class="dropdown dropdown-right dropdown-end">
+      <summary
         aria-label="change theme"
-        class="mt-2 h-7 flex items-center text-base-content hover:text-primary-content border-l-4 border-transparent hover:bg-primary"
+        class="mt-2 h-7 flex items-center list-none text-base-content hover:text-primary-content border-l-4 border-transparent hover:bg-primary cursor-pointer"
       >
         <Heroicons.icon
           name="swatch"
@@ -31,13 +30,13 @@ defmodule SMWeb.Components.ThemeChangeDropdown do
           type="outline"
           class="ml-3 hidden h-4 w-4 sm:inline-block"
         />
-      </label>
-      <div class="dropdown-content bg-base-100 text-base-content rounded-t rounded-b top-px max-h-96 h-[70vh] w-52 overflow-y-auto shadow-2xl ml-[1em]">
-        <div class="grid grid-cols-1 gap-3 p-3" tabindex="0">
+      </summary>
+      <div class="dropdown-content bg-base-100 text-base-content rounded-t rounded-b top-px max-h-96 h-[70vh] w-52 overflow-y-auto shadow-2xl ml-[1em] z-50">
+        <div class="grid grid-cols-1 gap-3 p-3">
           <.theme_change_dropdown_item :for={theme <- @themes} theme={theme} />
         </div>
       </div>
-    </div>
+    </details>
     """
   end
 end

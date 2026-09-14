@@ -9,6 +9,12 @@
     <.live_title>
       {assigns[:page_title] || "Safari Manager"}
     </.live_title>
+    <script>
+      (() => {
+        const theme = localStorage.getItem("theme")
+        if (theme) document.documentElement.setAttribute("data-theme", theme)
+      })()
+    </script>
     <link phx-track-static rel="stylesheet" href={~p"/assets/app.css"} />
     <script defer phx-track-static type="text/javascript" src={~p"/assets/app.js"}>
     </script>

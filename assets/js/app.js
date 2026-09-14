@@ -23,7 +23,6 @@ import collapse from '@alpinejs/collapse'
 // Establish Phoenix Socket and LiveView configuration.
 import { Socket } from "phoenix"
 import { LiveSocket } from "phoenix_live_view"
-import { themeChange } from 'theme-change'
 import topbar from "../vendor/topbar"
 import Sortable from "../vendor/sortable"
 import NoSleep from "nosleep.js"
@@ -35,7 +34,27 @@ window.Alpine = Alpine
 Alpine.plugin(collapse)
 Alpine.start()
 
-themeChange()
+// theme-change attaches one-shot listeners that LiveView morphs strip.
+// Event delegation survives remorphs and works in the Tauri WKWebView.
+const applyTheme = (theme) => {
+  if (!theme) return
+  document.documentElement.setAttribute("data-theme", theme)
+  localStorage.setItem("theme", theme)
+  document.querySelectorAll("[data-set-theme]").forEach((el) => {
+    const actClass = el.getAttribute("data-act-class")
+    if (!actClass) return
+    el.classList.toggle(actClass, el.getAttribute("data-set-theme") === theme)
+  })
+}
+
+applyTheme(localStorage.getItem("theme"))
+
+document.addEventListener("click", (e) => {
+  const el = e.target.closest("[data-set-theme]")
+  if (!el) return
+  applyTheme(el.getAttribute("data-set-theme"))
+  el.closest("details.dropdown")?.removeAttribute("open")
+})
 
 
 let sortable = {
