@@ -1,7 +1,9 @@
+use std::path::PathBuf;
 use std::sync::atomic::{AtomicU64, Ordering};
 use std::time::{SystemTime, UNIX_EPOCH};
 
 use tauri::Manager;
+use url::Url;
 
 mod app_update;
 mod embedded_phx_env {
@@ -10,11 +12,23 @@ mod embedded_phx_env {
 
 static AUX_WINDOW_ID: AtomicU64 = AtomicU64::new(1);
 
-/// Writes a printout HTML snapshot and opens it in the system browser.
-/// WKWebView cannot paginate tables (thead repeat / row breaks) like Chrome/Safari.
-#[tauri::command]
-fn open_print_html(html: String) -> Result<(), String> {
-    let dir = std::env::temp_dir().join("safarimanager-print");
+fn print_temp_dir() -> PathBuf {
+    std::env::temp_dir().join("safarimanager-print")
+}
+
+fn absolutize_print_html(html: &str, origin: &str) -> String {
+    html.replace("href=\"/", &format!("href=\"{origin}/"))
+        .replace("href='/", &format!("href='{origin}/"))
+        .replace("src=\"/", &format!("src=\"{origin}/"))
+        .replace("src='/", &format!("src='{origin}/"))
+}
+
+fn print_origin(url: &Url) -> String {
+    format!("{}://{}", url.scheme(), url.authority())
+}
+
+fn write_and_open_print_html(html: String) -> Result<(), String> {
+    let dir = print_temp_dir();
     std::fs::create_dir_all(&dir).map_err(|e| e.to_string())?;
 
     let stamp = SystemTime::now()
@@ -23,11 +37,14 @@ fn open_print_html(html: String) -> Result<(), String> {
         .unwrap_or(0);
     let path = dir.join(format!("print-{stamp}.html"));
     std::fs::write(&path, html.as_bytes()).map_err(|e| e.to_string())?;
+    open_path_in_system_browser(&path)
+}
 
+fn open_path_in_system_browser(path: &PathBuf) -> Result<(), String> {
     #[cfg(target_os = "macos")]
     {
         std::process::Command::new("open")
-            .arg(&path)
+            .arg(path)
             .spawn()
             .map_err(|e| e.to_string())?;
     }
@@ -41,12 +58,50 @@ fn open_print_html(html: String) -> Result<(), String> {
     #[cfg(all(unix, not(target_os = "macos")))]
     {
         std::process::Command::new("xdg-open")
-            .arg(&path)
+            .arg(path)
             .spawn()
             .map_err(|e| e.to_string())?;
     }
 
     Ok(())
+}
+
+fn is_printout_url(url: &Url) -> bool {
+    url.path().contains("_printout")
+}
+
+async fn open_print_url(app: &tauri::AppHandle, url: Url) -> Result<(), String> {
+    let window = app
+        .get_webview_window("main")
+        .ok_or_else(|| "main window missing".to_string())?;
+
+    let cookies = window
+        .cookies_for_url(url.clone())
+        .map_err(|e| e.to_string())?;
+    let cookie_header = cookies
+        .iter()
+        .map(|cookie| format!("{}={}", cookie.name(), cookie.value()))
+        .collect::<Vec<_>>()
+        .join("; ");
+
+    let client = reqwest::Client::builder()
+        .redirect(reqwest::redirect::Policy::limited(10))
+        .build()
+        .map_err(|e| e.to_string())?;
+
+    let mut request = client.get(url.as_str());
+    if !cookie_header.is_empty() {
+        request = request.header("Cookie", cookie_header);
+    }
+
+    let response = request.send().await.map_err(|e| e.to_string())?;
+    if !response.status().is_success() {
+        return Err(format!("printout fetch failed: {}", response.status()));
+    }
+
+    let origin = print_origin(&url);
+    let html = absolutize_print_html(&response.text().await.map_err(|e| e.to_string())?, &origin);
+    write_and_open_print_html(html)
 }
 
 pub mod migration {
@@ -226,9 +281,19 @@ fn create_main_window(app: &tauri::AppHandle, port: u16) {
     match tauri::webview::WebviewWindowBuilder::new(app, "main", tauri::WebviewUrl::External(parsed))
         .title("Safari Manager")
         .inner_size(1280.0, 800.0)
-        // Non-print `target="_blank"` / window.open. Printouts are opened in the
-        // system browser via `open_print_html` (see assets/js/app.js).
-        .on_new_window(move |_url, features| {
+        // Printouts (`target="_blank"`) are fetched with the webview session and opened
+        // in the system browser. Other `_blank` links get an auxiliary window.
+        .on_new_window(move |url, features| {
+            if is_printout_url(&url) {
+                let app = app_handle.clone();
+                tauri::async_runtime::spawn(async move {
+                    if let Err(err) = open_print_url(&app, url).await {
+                        eprintln!("printout: {err}");
+                    }
+                });
+                return tauri::webview::NewWindowResponse::Deny;
+            }
+
             let id = AUX_WINDOW_ID.fetch_add(1, Ordering::Relaxed);
             let label = format!("aux-{id}");
             let blank = "about:blank".parse().expect("about:blank");
@@ -260,7 +325,6 @@ pub fn run() {
         .plugin(tauri_plugin_dialog::init())
         .plugin(tauri_plugin_process::init())
         .plugin(tauri_plugin_updater::Builder::new().build())
-        .invoke_handler(tauri::generate_handler![open_print_html])
         .setup(|app| {
             let handle = app.handle().clone();
 

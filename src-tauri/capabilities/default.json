@@ -9,7 +9,6 @@
   "permissions": [
     "core:default",
     "core:webview:allow-create-webview-window",
-    "allow-open-print-html",
     "updater:default",
     "dialog:default",
     "process:default",

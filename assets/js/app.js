@@ -56,37 +56,6 @@ document.addEventListener("click", (e) => {
   el.closest("details.dropdown")?.removeAttribute("open")
 })
 
-// WKWebView cannot paginate print tables (row breaks / thead repeat). Snapshot the
-// authenticated printout and open it in the system browser, which can.
-document.addEventListener(
-  "click",
-  (e) => {
-    if (!window.__TAURI_INTERNALS__) return
-    const link = e.target.closest("a[href*='_printout']")
-    if (!link) return
-
-    e.preventDefault()
-    e.stopPropagation()
-
-    const href = link.href
-    ;(async () => {
-      const res = await fetch(href, { credentials: "same-origin" })
-      if (!res.ok) throw new Error(`printout fetch failed: ${res.status}`)
-      let html = await res.text()
-      const origin = window.location.origin
-      html = html
-        .replace(/(href|src)="\//g, `$1="${origin}/`)
-        .replace(/(href|src)='\//g, `$1='${origin}/`)
-      await window.__TAURI_INTERNALS__.invoke("open_print_html", { html })
-    })().catch((err) => {
-      console.error(err)
-      window.open(href, "_blank")
-    })
-  },
-  true
-)
-
-
 let sortable = {
   mounted() {
     let group = this.el.dataset.group
