@@ -39,7 +39,6 @@
     <thead>
       <tr class="uppercase">
         <th class="w-14 border text-center">{gettext("Rank")}</th>
-        <th class="w-auto border text-center">{gettext("Full name")}</th>
         <th class="w-auto border text-center">{gettext("Organization")}</th>
         <th class="w-20 border text-center">{gettext("Points")}</th>
         <th class="w-16 border text-center">{gettext("Species")}</th>
@@ -49,9 +48,6 @@
       <%= for result <- @results do %>
         <tr class="border">
           <td class="border pr-1 text-right font-semibold">{result.rank}º</td>
-          <td class="border font-bold uppercase truncate">
-            {Teams.synthesize_team_name(result.team)}
-          </td>
           <td class="border font-bold capitalize truncate">
             {Teams.synthesize_org_name(result.team) || gettext("N/A")}
           </td>
