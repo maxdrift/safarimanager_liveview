@@ -111,7 +111,7 @@
           />
         </.form>
         <div class="max-h-96 overflow-y-auto tiny-scrollbar table-scroll">
-          <table class="table table-zebra table-auto md:table-fixed w-full min-w-[36rem]">
+          <table class="table table-zebra table-auto md:table-fixed w-full min-w-[36rem] xl:min-w-0">
             <thead>
               <tr>
                 <th class="sticky top-0 w-1" />
@@ -193,14 +193,14 @@
           />
         </.form>
         <div class="max-h-96 overflow-y-auto tiny-scrollbar table-scroll">
-          <table class="table table-zebra table-auto md:table-fixed w-full min-w-[36rem]">
+          <table class="table table-zebra table-auto md:table-fixed w-full min-w-[36rem] xl:min-w-0">
             <thead>
               <tr>
                 <th class="sticky top-0 w-2">{gettext("#")}</th>
                 <th class="sticky top-0 w-auto">{gettext("Name")}</th>
                 <th class="sticky top-0 w-auto">{gettext("Organization")}</th>
                 <th class="sticky top-0 w-auto">{gettext("Members")}</th>
-                <th class="sticky top-0 w-2/12" />
+                <th class="sticky top-0 col-sticky-end w-24" />
               </tr>
             </thead>
             <tbody>
@@ -211,7 +211,7 @@
                 <td class="truncate">
                   {Teams.synthesize_members_names(item) || gettext("N/A")}
                 </td>
-                <td>
+                <td class="col-sticky-end">
                   <button
                     class="btn btn-square btn-xs btn-warning"
                     phx-click="edit-team"

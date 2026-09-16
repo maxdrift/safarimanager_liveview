@@ -18,4 +18,31 @@
   .table-scroll {
     @apply overflow-x-auto max-w-full tiny-scrollbar;
   }
+
+  /* Let fixed-layout tables shrink selects/inputs instead of forcing overflow */
+  .table-scroll .table :is(.form-control, select, input) {
+    @apply min-w-0 max-w-full;
+  }
+
+  /* Keep trailing action columns visible while the table scrolls horizontally */
+  .table-scroll .table :is(th, td).col-sticky-end {
+    position: sticky;
+    right: 0;
+    z-index: 1;
+    @apply bg-base-100;
+    box-shadow: -0.5rem 0 0.5rem -0.5rem rgb(0 0 0 / 0.2);
+  }
+
+  .table-scroll .table thead :is(th, td).col-sticky-end {
+    z-index: 3;
+    @apply bg-base-200;
+  }
+
+  .table-scroll .table-zebra tbody tr:nth-child(even) :is(th, td).col-sticky-end {
+    @apply bg-base-200;
+  }
+
+  .table-scroll .table tbody tr:hover :is(th, td).col-sticky-end {
+    @apply bg-base-200;
+  }
 }

@@ -72,14 +72,14 @@
         <div class="max-h-[500px] overflow-y-auto tiny-scrollbar table-scroll">
           <table
             id="juror-users-table"
-            class="table table-zebra table-auto md:table-fixed w-full min-w-[32rem]"
+            class="table table-zebra table-auto md:table-fixed w-full min-w-[32rem] xl:min-w-0"
           >
             <thead>
               <tr>
                 <th class="sticky top-0">{gettext("Last Name")}</th>
                 <th class="sticky top-0">{gettext("First Name")}</th>
                 <th class="sticky top-0">{gettext("Organization")}</th>
-                <th class="sticky top-0 w-24">{gettext("Action")}</th>
+                <th class="sticky top-0 col-sticky-end w-24">{gettext("Action")}</th>
               </tr>
             </thead>
             <tbody id="juror-users-table-body">
@@ -89,7 +89,7 @@
                 <td class="truncate text-sm text-base-content/70">
                   {(item.organization && item.organization.name) || gettext("N/A")}
                 </td>
-                <td>
+                <td class="col-sticky-end">
                   <button
                     id={"enroll-juror-#{item.id}"}
                     class="btn btn-sm btn-success w-full"
@@ -130,14 +130,14 @@
         <div class="max-h-[500px] overflow-y-auto tiny-scrollbar table-scroll">
           <table
             id="jurors-table"
-            class="table table-zebra table-auto md:table-fixed w-full min-w-[28rem]"
+            class="table table-zebra table-auto md:table-fixed w-full min-w-[28rem] xl:min-w-0"
           >
             <thead>
               <tr>
                 <th class="sticky top-0">{gettext("Last Name")}</th>
                 <th class="sticky top-0">{gettext("First Name")}</th>
                 <th class="sticky top-0">{gettext("Organization")}</th>
-                <th class="sticky top-0 w-24">{gettext("Action")}</th>
+                <th class="sticky top-0 col-sticky-end w-24">{gettext("Action")}</th>
               </tr>
             </thead>
             <tbody id="jurors-table-body">
@@ -151,7 +151,7 @@
                 <td class="truncate text-sm text-base-content/70">
                   {(item.user.organization && item.user.organization.name) || gettext("N/A")}
                 </td>
-                <td>
+                <td class="col-sticky-end">
                   <div class="flex gap-1">
                     <button
                       id={"remove-juror-#{item.user_id}"}
