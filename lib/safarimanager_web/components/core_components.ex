@@ -51,7 +51,7 @@ defmodule SMWeb.Components.CoreComponents do
       phx-mounted={@show && show_modal(@id)}
       phx-remove={hide_modal(@id)}
       data-cancel={JS.exec(@on_cancel, "phx-remove")}
-      class="relative z-50 hidden"
+      class="relative z-[1100] hidden"
     >
       <div
         id={"#{@id}-bg"}
