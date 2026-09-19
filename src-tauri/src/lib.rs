@@ -1,7 +1,8 @@
-use std::path::PathBuf;
+use std::path::{Path, PathBuf};
 use std::sync::atomic::{AtomicU64, Ordering};
 use std::time::{SystemTime, UNIX_EPOCH};
 
+use tauri::menu::{Menu, MenuItem, MenuItemKind, HELP_SUBMENU_ID};
 use tauri::Manager;
 use url::Url;
 
@@ -37,10 +38,10 @@ fn write_and_open_print_html(html: String) -> Result<(), String> {
         .unwrap_or(0);
     let path = dir.join(format!("print-{stamp}.html"));
     std::fs::write(&path, html.as_bytes()).map_err(|e| e.to_string())?;
-    open_path_in_system_browser(&path)
+    open_path(&path)
 }
 
-fn open_path_in_system_browser(path: &PathBuf) -> Result<(), String> {
+fn open_path(path: &Path) -> Result<(), String> {
     #[cfg(target_os = "macos")]
     {
         std::process::Command::new("open")
@@ -63,6 +64,51 @@ fn open_path_in_system_browser(path: &PathBuf) -> Result<(), String> {
             .map_err(|e| e.to_string())?;
     }
 
+    Ok(())
+}
+
+fn open_dir(path: &Path) -> Result<(), String> {
+    std::fs::create_dir_all(path).map_err(|e| e.to_string())?;
+    open_path(path)
+}
+
+/// Capture Elixir stdout/stderr into `log_dir/safarimanager.log` (the old DesktopBridge
+/// wrote `~/Library/Logs/Safarimanager.log`; Tauri had no equivalent until now).
+fn attach_elixir_logs(cmd: &mut std::process::Command, log_dir: &Path) -> Result<(), String> {
+    std::fs::create_dir_all(log_dir).map_err(|e| e.to_string())?;
+    let path = log_dir.join("safarimanager.log");
+    let file = std::fs::OpenOptions::new()
+        .create(true)
+        .append(true)
+        .open(&path)
+        .map_err(|e| e.to_string())?;
+    let err = file.try_clone().map_err(|e| e.to_string())?;
+    cmd.stdout(std::process::Stdio::from(file));
+    cmd.stderr(std::process::Stdio::from(err));
+    Ok(())
+}
+
+fn setup_app_menu(app: &tauri::AppHandle) -> tauri::Result<()> {
+    let menu = Menu::default(app)?;
+
+    if let Some(MenuItemKind::Submenu(help)) = menu.get(HELP_SUBMENU_ID) {
+        help.append(&MenuItem::with_id(
+            app,
+            "open_logs",
+            "Open Logs",
+            true,
+            None::<&str>,
+        )?)?;
+        help.append(&MenuItem::with_id(
+            app,
+            "open_app_data",
+            "Open App Data Folder",
+            true,
+            None::<&str>,
+        )?)?;
+    }
+
+    app.set_menu(menu)?;
     Ok(())
 }
 
@@ -328,6 +374,8 @@ pub fn run() {
         .setup(|app| {
             let handle = app.handle().clone();
 
+            setup_app_menu(&handle)?;
+
             let log_dir = handle
                 .path()
                 .app_log_dir()
@@ -357,6 +405,7 @@ pub fn run() {
             });
 
             let app_handle = handle.clone();
+            let elixir_log_dir = log_dir.clone();
             tauri::async_runtime::spawn_blocking(move || {
                 let rel_dir = match app_handle.path().resource_dir() {
                     Ok(p) => p.join("rel"),
@@ -390,11 +439,34 @@ pub fn run() {
                     uploads_dir.to_str().expect("utf8 UPLOADS_PATH"),
                 );
 
+                if let Err(err) = attach_elixir_logs(&mut cmd, &elixir_log_dir) {
+                    eprintln!("failed to attach elixir logs: {err}");
+                }
+
                 let status = cmd.status().expect("failed to start Elixir release");
                 app_handle.exit(if status.success() { 0 } else { 1 });
             });
 
             Ok(())
+        })
+        .on_menu_event(|app, event| match event.id().as_ref() {
+            "open_logs" => {
+                let log_dir = app
+                    .path()
+                    .app_log_dir()
+                    .unwrap_or_else(|_| project_root().join("log"));
+                if let Err(err) = open_dir(&log_dir) {
+                    eprintln!("open logs: {err}");
+                }
+            }
+            "open_app_data" => {
+                if let Ok(data_dir) = app.path().app_local_data_dir() {
+                    if let Err(err) = open_dir(&data_dir) {
+                        eprintln!("open app data: {err}");
+                    }
+                }
+            }
+            _ => {}
         })
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
