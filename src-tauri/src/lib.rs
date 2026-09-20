@@ -41,25 +41,25 @@ fn write_and_open_print_html(html: String) -> Result<(), String> {
     open_path(&path)
 }
 
-fn open_path(path: &Path) -> Result<(), String> {
+fn open_uri(uri: impl AsRef<std::ffi::OsStr>) -> Result<(), String> {
     #[cfg(target_os = "macos")]
     {
         std::process::Command::new("open")
-            .arg(path)
+            .arg(uri.as_ref())
             .spawn()
             .map_err(|e| e.to_string())?;
     }
     #[cfg(target_os = "windows")]
     {
         std::process::Command::new("cmd")
-            .args(["/C", "start", "", &path.to_string_lossy()])
+            .args(["/C", "start", "", &uri.as_ref().to_string_lossy()])
             .spawn()
             .map_err(|e| e.to_string())?;
     }
     #[cfg(all(unix, not(target_os = "macos")))]
     {
         std::process::Command::new("xdg-open")
-            .arg(path)
+            .arg(uri.as_ref())
             .spawn()
             .map_err(|e| e.to_string())?;
     }
@@ -67,9 +67,17 @@ fn open_path(path: &Path) -> Result<(), String> {
     Ok(())
 }
 
+fn open_path(path: &Path) -> Result<(), String> {
+    open_uri(path.as_os_str())
+}
+
 fn open_dir(path: &Path) -> Result<(), String> {
     std::fs::create_dir_all(path).map_err(|e| e.to_string())?;
     open_path(path)
+}
+
+fn app_home_url() -> String {
+    format!("http://127.0.0.1:{}/", server_port())
 }
 
 /// Capture Elixir stdout/stderr into `log_dir/safarimanager.log` (the old DesktopBridge
@@ -92,6 +100,13 @@ fn setup_app_menu(app: &tauri::AppHandle) -> tauri::Result<()> {
     let menu = Menu::default(app)?;
 
     if let Some(MenuItemKind::Submenu(help)) = menu.get(HELP_SUBMENU_ID) {
+        help.append(&MenuItem::with_id(
+            app,
+            "open_in_browser",
+            "Open in Browser",
+            true,
+            None::<&str>,
+        )?)?;
         help.append(&MenuItem::with_id(
             app,
             "open_logs",
@@ -450,6 +465,11 @@ pub fn run() {
             Ok(())
         })
         .on_menu_event(|app, event| match event.id().as_ref() {
+            "open_in_browser" => {
+                if let Err(err) = open_uri(app_home_url()) {
+                    eprintln!("open in browser: {err}");
+                }
+            }
             "open_logs" => {
                 let log_dir = app
                     .path()
