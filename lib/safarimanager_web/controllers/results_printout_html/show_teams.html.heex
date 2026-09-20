@@ -40,6 +40,7 @@
       <tr class="uppercase">
         <th class="w-14 border text-center">{gettext("Rank")}</th>
         <th class="w-auto border text-center">{gettext("Organization")}</th>
+        <th class="w-auto border text-center">{gettext("Participants")}</th>
         <th class="w-20 border text-center">{gettext("Points")}</th>
         <th class="w-16 border text-center">{gettext("Species")}</th>
       </tr>
@@ -50,6 +51,9 @@
           <td class="border pr-1 text-right font-semibold">{result.rank}º</td>
           <td class="border font-bold capitalize truncate">
             {Teams.synthesize_org_name(result.team) || gettext("N/A")}
+          </td>
+          <td class="border capitalize truncate">
+            {Teams.synthesize_members_names(result.team) || gettext("N/A")}
           </td>
           <td class="border pr-1 text-right font-bold">{result.total_score}</td>
           <td class="border pr-1 text-right">{Enum.count(result.slides)}</td>

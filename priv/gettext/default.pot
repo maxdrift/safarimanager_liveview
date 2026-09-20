@@ -74,6 +74,7 @@ msgstr ""
 
 #: lib/safarimanager_web/components/sidebar.ex:110
 #: lib/safarimanager_web/components/steps_header.ex:54
+#: lib/safarimanager_web/controllers/results_printout_html/show_teams.html.heex:43
 #: lib/safarimanager_web/live/admin/import.ex:43
 #: lib/safarimanager_web/live/jurors/jurors.html.heex:224
 #: lib/safarimanager_web/live/new_competition/new_competition.html.heex:82
@@ -1256,7 +1257,8 @@ msgstr ""
 #: lib/safarimanager_web/controllers/results_printout_html/show_teams.html.heex:23
 #: lib/safarimanager_web/controllers/results_printout_html/show_teams.html.heex:27
 #: lib/safarimanager_web/controllers/results_printout_html/show_teams.html.heex:34
-#: lib/safarimanager_web/controllers/results_printout_html/show_teams.html.heex:52
+#: lib/safarimanager_web/controllers/results_printout_html/show_teams.html.heex:53
+#: lib/safarimanager_web/controllers/results_printout_html/show_teams.html.heex:56
 #: lib/safarimanager_web/controllers/selection_printout_html/show_multi.html.heex:23
 #: lib/safarimanager_web/controllers/selection_printout_html/show_multi.html.heex:27
 #: lib/safarimanager_web/controllers/selection_printout_html/show_multi_teams.html.heex:22
@@ -1816,13 +1818,13 @@ msgid "Overall classification"
 msgstr ""
 
 #: lib/safarimanager_web/controllers/results_printout_html/show.html.heex:48
-#: lib/safarimanager_web/controllers/results_printout_html/show_teams.html.heex:43
+#: lib/safarimanager_web/controllers/results_printout_html/show_teams.html.heex:44
 #, elixir-autogen, elixir-format
 msgid "Points"
 msgstr ""
 
 #: lib/safarimanager_web/controllers/results_printout_html/show.html.heex:85
-#: lib/safarimanager_web/controllers/results_printout_html/show_teams.html.heex:73
+#: lib/safarimanager_web/controllers/results_printout_html/show_teams.html.heex:77
 #, elixir-autogen, elixir-format
 msgid "Pubblication time"
 msgstr ""
@@ -1836,7 +1838,7 @@ msgid "Rank"
 msgstr ""
 
 #: lib/safarimanager_web/controllers/results_printout_html/show.html.heex:49
-#: lib/safarimanager_web/controllers/results_printout_html/show_teams.html.heex:44
+#: lib/safarimanager_web/controllers/results_printout_html/show_teams.html.heex:45
 #: lib/safarimanager_web/live/results/results.html.heex:168
 #: lib/safarimanager_web/live/results/team_results.html.heex:147
 #, elixir-autogen, elixir-format
@@ -1977,14 +1979,14 @@ msgid "Participant number"
 msgstr ""
 
 #: lib/safarimanager_web/controllers/results_printout_html/show.html.heex:88
-#: lib/safarimanager_web/controllers/results_printout_html/show_teams.html.heex:76
+#: lib/safarimanager_web/controllers/results_printout_html/show_teams.html.heex:80
 #, elixir-autogen, elixir-format
 msgid "The director"
 msgstr ""
 
 #: lib/safarimanager_web/controllers/participants_printout_html/show.html.heex:81
 #: lib/safarimanager_web/controllers/results_printout_html/show.html.heex:82
-#: lib/safarimanager_web/controllers/results_printout_html/show_teams.html.heex:70
+#: lib/safarimanager_web/controllers/results_printout_html/show_teams.html.heex:74
 #: lib/safarimanager_web/controllers/teams_printout_html/show.html.heex:85
 #, elixir-autogen, elixir-format
 msgid "The referee"
