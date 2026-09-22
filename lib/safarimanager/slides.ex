@@ -622,16 +622,40 @@ defmodule SM.Slides do
 
   @spec get_max_evaluations_slide(String.t()) :: Slide.t() | nil
   def get_max_evaluations_slide(competition_id) do
+    Map.get(get_max_evaluations_slides([competition_id]), competition_id)
+  end
+
+  @spec get_max_evaluations_slides([String.t()]) :: %{String.t() => Slide.t() | nil}
+  def get_max_evaluations_slides([]), do: %{}
+
+  def get_max_evaluations_slides(competition_ids) do
     query =
       from(sl in Slide,
-        where: [competition_id: ^competition_id, status: :submitted_jury],
+        where: sl.competition_id in ^competition_ids and sl.status == :submitted_jury,
         join: vo in assoc(sl, :votes),
         join: e in assoc(vo, :evaluation),
-        group_by: sl.id,
-        order_by: [desc: sum(e.value)]
+        group_by: [sl.competition_id, sl.id],
+        select: %{competition_id: sl.competition_id, slide: sl, score: sum(e.value)}
       )
 
-    Repo.one(first(query))
+    best_by_competition =
+      query
+      |> Repo.all()
+      |> Enum.group_by(& &1.competition_id, &{&1.slide, &1.score})
+      |> Map.new(fn {competition_id, rows} ->
+        {competition_id, pick_highest_scoring_slide(rows)}
+      end)
+
+    Map.new(competition_ids, fn competition_id ->
+      {competition_id, Map.get(best_by_competition, competition_id)}
+    end)
+  end
+
+  defp pick_highest_scoring_slide(rows) do
+    case Enum.max_by(rows, fn {_slide, score} -> score end, fn -> nil end) do
+      nil -> nil
+      {slide, _score} -> slide
+    end
   end
 
   @doc """

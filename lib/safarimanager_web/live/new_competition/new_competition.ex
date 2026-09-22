@@ -10,7 +10,6 @@ defmodule SMWeb.Live.NewCompetition do
   alias SM.Competitions.Competition
   alias SM.Competitions.CompetitionEvaluation
   alias SM.Competitions.CompetitionSettings
-  alias SM.Competitions.CompetitionSubject
   alias SM.Evaluations
   alias SM.Organizations
   alias SM.Slides
@@ -25,11 +24,14 @@ defmodule SMWeb.Live.NewCompetition do
   def mount(_params, _session, socket) do
     _result = if connected?(socket), do: Competitions.subscribe()
 
+    competitions = Competitions.list()
+
     socket =
       assign(socket,
         entity: %Competition{},
         form: %Competition{} |> Competitions.change() |> assign_form(),
-        competitions: Competitions.list(),
+        competitions: competitions,
+        competition_backgrounds: competition_background_paths(competitions),
         organizations: Organizations.list(),
         evaluations: Evaluations.list(),
         coefficient_modes: CompetitionSettings.get_coefficient_modes(),
@@ -170,10 +172,13 @@ defmodule SMWeb.Live.NewCompetition do
 
   @impl Phoenix.LiveView
   def handle_params(_params, _uri, socket) do
+    competitions = Competitions.list()
+
     socket =
       assign(socket,
         form: %Competition{} |> Competitions.change() |> assign_form(),
-        competitions: Competitions.list(),
+        competitions: competitions,
+        competition_backgrounds: competition_background_paths(competitions),
         organizations: Organizations.list(),
         subjects: Subjects.list()
       )
@@ -183,7 +188,14 @@ defmodule SMWeb.Live.NewCompetition do
 
   @impl Phoenix.LiveView
   def handle_info({Competitions, [:competition, _], _inserted_item}, socket) do
-    socket = assign(socket, competitions: Competitions.list())
+    competitions = Competitions.list()
+
+    socket =
+      assign(socket,
+        competitions: competitions,
+        competition_backgrounds: competition_background_paths(competitions)
+      )
+
     {:noreply, socket}
   end
 
@@ -217,31 +229,45 @@ defmodule SMWeb.Live.NewCompetition do
 
   defp assign_form(%Ecto.Changeset{} = changeset) do
     changeset =
-      if Ecto.Changeset.get_field(changeset, :competitions_evaluations) == [] do
-        all_evaluation_ids =
-          Enum.map(Evaluations.list(), &%CompetitionEvaluation{evaluation_id: &1.id})
-
-        Ecto.Changeset.put_change(changeset, :competitions_evaluations, all_evaluation_ids)
-      else
-        changeset
-      end
-
-    changeset =
-      if Ecto.Changeset.get_field(changeset, :competition_subjects) == [] do
-        Ecto.Changeset.put_assoc(changeset, :competition_subjects, [
-          %CompetitionSubject{coefficient: 0}
-        ])
-      else
-        changeset
-      end
+      changeset
+      |> maybe_seed_competitions_evaluations()
+      |> maybe_seed_competition_subjects()
 
     to_form(changeset)
   end
 
-  defp get_competition_background_img(competition_id) do
-    case Slides.get_max_evaluations_slide(competition_id) do
-      nil -> nil
-      slide -> Utils.slide_path(slide)
+  defp maybe_seed_competitions_evaluations(changeset) do
+    if Ecto.Changeset.get_field(changeset, :competitions_evaluations) == [] do
+      evaluations =
+        Enum.map(Evaluations.list(), &%CompetitionEvaluation{evaluation_id: &1.id})
+
+      Ecto.Changeset.put_change(changeset, :competitions_evaluations, evaluations)
+    else
+      changeset
     end
+  end
+
+  defp maybe_seed_competition_subjects(changeset) do
+    if Ecto.Changeset.get_field(changeset, :competition_subjects) == [] do
+      subjects = Competitions.competition_subject_seed_entries()
+
+      if subjects == [] do
+        changeset
+      else
+        Ecto.Changeset.put_change(changeset, :competition_subjects, subjects)
+      end
+    else
+      changeset
+    end
+  end
+
+  defp competition_background_paths(competitions) do
+    competition_ids = Enum.map(competitions, & &1.id)
+
+    competition_ids
+    |> Slides.get_max_evaluations_slides()
+    |> Map.new(fn {competition_id, slide} ->
+      {competition_id, if(slide, do: Utils.slide_path(slide))}
+    end)
   end
 end

@@ -172,9 +172,9 @@
       phx-click="open"
       phx-value-id={competition.id}
     >
-      <figure :if={get_competition_background_img(competition.id)}>
+      <figure :if={@competition_backgrounds[competition.id]}>
         <img
-          src={get_competition_background_img(competition.id)}
+          src={@competition_backgrounds[competition.id]}
           alt={gettext("Highest votes image")}
         />
       </figure>
