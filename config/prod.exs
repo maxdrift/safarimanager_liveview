@@ -7,3 +7,6 @@ import Config
 config :logger, level: :info
 
 config :safarimanager, SMWeb.Endpoint, cache_static_manifest: "priv/static/cache_manifest.json"
+
+# Remote Loki logging is fragile in packaged desktop builds (offline, restarts).
+config :safarimanager, :enable_svadilfari_logger, false
