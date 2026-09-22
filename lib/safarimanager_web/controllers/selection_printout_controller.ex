@@ -22,7 +22,7 @@ defmodule SMWeb.SelectionPrintoutController do
       full_name = "#{participant.user.last_name} #{participant.user.first_name}"
 
       conn
-      |> put_root_layout(html: :print)
+      |> put_root_layout(html: {SMWeb.Layouts, :print})
       |> render(:show_single,
         header_line: config[:header_line],
         sub_header_line: config[:sub_header_line],
@@ -43,7 +43,7 @@ defmodule SMWeb.SelectionPrintoutController do
       team_name = Teams.synthesize_team_name(team)
 
       conn
-      |> put_root_layout(html: :print)
+      |> put_root_layout(html: {SMWeb.Layouts, :print})
       |> render(:show_single_team,
         header_line: config[:header_line],
         sub_header_line: config[:sub_header_line],
@@ -71,7 +71,7 @@ defmodule SMWeb.SelectionPrintoutController do
     participants = Participants.list_with_slides(competition.id)
 
     conn
-    |> put_root_layout(html: :print)
+    |> put_root_layout(html: {SMWeb.Layouts, :print})
     |> render(:show_multi,
       header_line: config[:header_line],
       sub_header_line: config[:sub_header_line],
@@ -92,7 +92,7 @@ defmodule SMWeb.SelectionPrintoutController do
     teams = Enum.reject(teams, fn team -> is_nil(Map.get(slides, team.id)) end)
 
     conn
-    |> put_root_layout(html: :print)
+    |> put_root_layout(html: {SMWeb.Layouts, :print})
     |> render(:show_multi_teams,
       header_line: config[:header_line],
       sub_header_line: config[:sub_header_line],

@@ -20,7 +20,7 @@ defmodule SMWeb.TeamsPrintoutController do
       teams = Teams.list_by_competition(competition_id)
 
       conn
-      |> put_root_layout(html: :print)
+      |> put_root_layout(html: {SMWeb.Layouts, :print})
       |> render(:show,
         header_line: config[:header_line],
         sub_header_line: config[:sub_header_line],

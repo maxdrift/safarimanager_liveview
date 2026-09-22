@@ -39,7 +39,7 @@ defmodule SMWeb.ResultsPrintoutController do
 
     with {:ok, results} <- Results.list(competition.id, category_id) do
       conn
-      |> put_root_layout(html: :print)
+      |> put_root_layout(html: {SMWeb.Layouts, :print})
       |> render(:show,
         header_line: config[:header_line],
         sub_header_line: config[:sub_header_line],
@@ -57,7 +57,7 @@ defmodule SMWeb.ResultsPrintoutController do
 
     with {:ok, results} <- Results.list_for_teams(competition.id) do
       conn
-      |> put_root_layout(html: :print)
+      |> put_root_layout(html: {SMWeb.Layouts, :print})
       |> render(:show_teams,
         header_line: config[:header_line],
         sub_header_line: config[:sub_header_line],
