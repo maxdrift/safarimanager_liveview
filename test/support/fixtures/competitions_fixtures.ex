@@ -69,6 +69,20 @@ defmodule SM.CompetitionsFixtures do
     %{evaluation: evaluation}
   end
 
+  def create_catalog_subject(_context) do
+    n = System.unique_integer([:positive])
+
+    {:ok, subject} =
+      Subjects.create(%{
+        "name" => "Catalog subject #{n}",
+        "numeric_id" => n,
+        "type" => :fish,
+        "coefficient" => 2
+      })
+
+    %{subject: subject}
+  end
+
   def register_users(%{category: category, organization: organization}) do
     users =
       for _ <- 1..10 do

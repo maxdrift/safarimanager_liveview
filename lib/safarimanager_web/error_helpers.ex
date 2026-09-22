@@ -6,6 +6,7 @@ defmodule SMWeb.ErrorHelpers do
   use PhoenixHTMLHelpers
 
   alias Phoenix.HTML.Form
+  alias Phoenix.HTML.FormField
 
   @doc """
   Generates tag for inlined form input errors.
@@ -117,12 +118,54 @@ defmodule SMWeb.ErrorHelpers do
         # no state checking
         opts[:no_state] -> class
         # The form was submitted and is valid
-        form.source.action && form.source.valid? -> "#{class} btn-success"
+        form_action?(form) && form.source.valid? -> "#{class} btn-success"
         # The form was not yet submitted or is not valid
-        !(form.source.action && form.source.valid?) -> "#{class} btn-disabled"
+        !(form_action?(form) && form.source.valid?) -> "#{class} btn-disabled"
         true -> class
       end
 
     String.trim(class)
   end
+
+  defp form_action?(%Form{action: action, source: source}) do
+    action || source.action
+  end
+
+  @doc """
+  True when a competition subject row already has a subject assigned (catalog / saved rows).
+  """
+  def competition_subject_id_locked?(%FormField{value: value}) when value in [nil, ""], do: false
+
+  def competition_subject_id_locked?(%FormField{value: _}), do: true
+  def competition_subject_id_locked?(_), do: false
+
+  @doc false
+  def competition_subject_label(subjects, subject_id) when is_binary(subject_id) do
+    case Enum.find(subjects, &(&1.id == subject_id)) do
+      nil -> subject_id
+      subject -> "#{subject.numeric_id} — #{subject.name}"
+    end
+  end
+
+  @doc false
+  def competition_subject_select_options(subjects) do
+    Enum.map(subjects, fn subject ->
+      {"#{subject.numeric_id} — #{subject.name}", subject.id}
+    end)
+  end
+
+  @doc false
+  def competition_subjects_errors(%Form{source: %Ecto.Changeset{} = changeset}) do
+    changeset.errors
+    |> Keyword.get_values(:competition_subjects)
+    |> Enum.map(&elem(&1, 0))
+  end
+
+  def competition_subjects_errors(%Ecto.Changeset{} = changeset) do
+    changeset.errors
+    |> Keyword.get_values(:competition_subjects)
+    |> Enum.map(&elem(&1, 0))
+  end
+
+  def competition_subjects_errors(_), do: []
 end

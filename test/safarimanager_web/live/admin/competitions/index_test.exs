@@ -94,7 +94,11 @@ defmodule SMWeb.Live.Admin.Competitions.IndexTest do
       {:ok, view, _html} = live(conn, ~p"/admin/competitions/#{competition.id}/edit")
 
       assert has_element?(view, "#admin-competition-subjects-fieldset")
-      assert has_element?(view, "select[name='entity[competition_subjects][0][subject_id]']")
+
+      assert has_element?(
+               view,
+               "input[type='hidden'][name='entity[competition_subjects][0][subject_id]'][value='#{subject.id}']"
+             )
 
       html_after =
         view
@@ -104,7 +108,7 @@ defmodule SMWeb.Live.Admin.Competitions.IndexTest do
         |> render_change()
 
       assert evaluation_option_selected?(html_after, evaluation.id)
-      assert subject_option_selected?(html_after, subject.id)
+      assert html_after =~ subject.name
     end
 
     test "submit updates competition subject coefficient", %{
@@ -149,8 +153,7 @@ defmodule SMWeb.Live.Admin.Competitions.IndexTest do
             "name" => "Admin comp without subjects",
             "organization_id" => organization.id,
             "type" => "qualification",
-            "competitions_evaluations" => %{"0" => %{"evaluation_id" => evaluation.id}},
-            "competition_subjects" => %{"0" => %{"subject_id" => "", "coefficient" => "0"}}
+            "competitions_evaluations" => %{"0" => %{"evaluation_id" => evaluation.id}}
           }
         )
         |> render_submit()
@@ -164,9 +167,5 @@ defmodule SMWeb.Live.Admin.Competitions.IndexTest do
 
     Regex.match?(~r/<option[^>]*value="#{esc}"[^>]*\bselected/s, html) ||
       Regex.match?(~r/<option[^>]*\bselected[^>]*value="#{esc}"/s, html)
-  end
-
-  defp subject_option_selected?(html, subject_id) do
-    evaluation_option_selected?(html, subject_id)
   end
 end

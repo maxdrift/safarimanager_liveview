@@ -13,7 +13,6 @@ defmodule SMWeb.Live.Admin.Competitions.Index do
   alias SM.Competitions.Competition
   alias SM.Competitions.CompetitionEvaluation
   alias SM.Competitions.CompetitionSettings
-  alias SM.Competitions.CompetitionSubject
   alias SM.Evaluations
   alias SM.Organizations
   alias SM.Slides
@@ -378,16 +377,6 @@ defmodule SMWeb.Live.Admin.Competitions.Index do
         changeset
       end
 
-    changeset =
-      if Ecto.Changeset.get_field(changeset, :competition_subjects) == [] &&
-           is_nil(Ecto.Changeset.get_field(changeset, :id)) do
-        Ecto.Changeset.put_change(changeset, :competition_subjects, [
-          %CompetitionSubject{coefficient: 0}
-        ])
-      else
-        changeset
-      end
-
     to_form(changeset, opts)
   end
 
@@ -441,18 +430,6 @@ defmodule SMWeb.Live.Admin.Competitions.Index do
     socket
     |> assign(:last_entity_params, merged)
     |> assign(:changeset, to_entity_form(changeset, action: :validate))
-  end
-
-  defp competition_subjects_errors(%Phoenix.HTML.Form{source: %Ecto.Changeset{} = cs}) do
-    cs.errors
-    |> Keyword.get_values(:competition_subjects)
-    |> Enum.map(&elem(&1, 0))
-  end
-
-  defp competition_subjects_errors(_), do: []
-
-  defp subject_select_options(subjects) do
-    Enum.map(subjects, fn s -> {"#{s.numeric_id} — #{s.name}", s.id} end)
   end
 
   defp slide_status_to_label(:submitted_jury), do: gettext("submitted_jury")

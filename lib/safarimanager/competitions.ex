@@ -604,16 +604,27 @@ defmodule SM.Competitions do
   @doc """
   Nested params for `cast_assoc(:competition_subjects)` — one row per catalog subject with global coefficients.
   """
-  @spec competition_subject_seed_nested_params :: %{String.t() => map()}
-  def competition_subject_seed_nested_params do
+  @spec competition_subject_seed_entries :: [CompetitionSubject.t()]
+  def competition_subject_seed_entries do
     SM.Subjects.list()
     |> Enum.sort_by(& &1.numeric_id)
+    |> Enum.map(fn subject ->
+      %CompetitionSubject{
+        subject_id: subject.id,
+        coefficient: subject.coefficient || 0
+      }
+    end)
+  end
+
+  @spec competition_subject_seed_nested_params :: %{String.t() => map()}
+  def competition_subject_seed_nested_params do
+    competition_subject_seed_entries()
     |> Enum.with_index()
-    |> Map.new(fn {sub, i} ->
-      {Integer.to_string(i),
+    |> Map.new(fn {row, index} ->
+      {Integer.to_string(index),
        %{
-         "subject_id" => sub.id,
-         "coefficient" => sub.coefficient || 0
+         "subject_id" => row.subject_id,
+         "coefficient" => row.coefficient || 0
        }}
     end)
   end

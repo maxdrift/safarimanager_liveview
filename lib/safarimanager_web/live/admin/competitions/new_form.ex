@@ -7,6 +7,8 @@ defmodule SMWeb.Live.Admin.Competitions.Form do
 
   alias SM.Competitions
   alias SM.Competitions.Competition
+  alias SM.Competitions.CompetitionEvaluation
+  alias SM.Competitions.CompetitionSubject
 
   @impl true
   def render(assigns) do
@@ -417,18 +419,28 @@ defmodule SMWeb.Live.Admin.Competitions.Form do
                       {gettext("Subject")}
                     </span>
                   </label>
-                  <select
-                    id={csrow[:subject_id].id}
-                    name={csrow[:subject_id].name}
-                    class="select select-bordered select-sm w-full min-w-0 max-w-full"
-                    phx-debounce="100"
-                  >
-                    <option value="">{gettext("Select…")}</option>
-                    {Phoenix.HTML.Form.options_for_select(
-                      subject_select_options(@subjects),
-                      csrow[:subject_id].value
-                    )}
-                  </select>
+                  <%= if competition_subject_id_locked?(csrow[:subject_id]) do %>
+                    <.hidden_input field={csrow[:subject_id]} />
+                    <div
+                      id={"#{csrow[:subject_id].id}-label"}
+                      class="select select-bordered select-sm w-full min-w-0 max-w-full bg-base-200 cursor-default"
+                    >
+                      {competition_subject_label(@subjects, csrow[:subject_id].value)}
+                    </div>
+                  <% else %>
+                    <select
+                      id={csrow[:subject_id].id}
+                      name={csrow[:subject_id].name}
+                      class="select select-bordered select-sm w-full min-w-0 max-w-full"
+                      phx-debounce="100"
+                    >
+                      <option value="">{gettext("Select…")}</option>
+                      {Phoenix.HTML.Form.options_for_select(
+                        competition_subject_select_options(@subjects),
+                        csrow[:subject_id].value
+                      )}
+                    </select>
+                  <% end %>
                 </div>
                 <div class="form-control w-full min-w-0 sm:w-28 sm:max-w-[7rem]">
                   <label class="label py-0">
@@ -488,9 +500,13 @@ defmodule SMWeb.Live.Admin.Competitions.Form do
 
   @impl true
   def update(assigns, socket) do
+    component_form = socket.assigns[:form]
+    parent_form = assigns[:form]
+
     socket =
       socket
-      |> assign(assigns)
+      |> assign(Map.delete(assigns, :form))
+      |> maybe_assign_parent_form(parent_form, component_form)
       |> assign_new(:subjects, fn -> [] end)
       |> assign_new(:subject_bulk_set_draft, fn -> "" end)
       |> assign_new(:location_collapse_open?, fn -> false end)
@@ -502,11 +518,17 @@ defmodule SMWeb.Live.Admin.Competitions.Form do
   @impl true
   def handle_event("validate", %{"competition" => competition_params}, socket) do
     entity = socket.assigns[:entity] || socket.assigns[:competition] || %Competition{}
-    changeset = Competitions.change(entity, competition_params)
+    competition_params = merge_competition_form_params(competition_params, socket.assigns.form.source)
+
+    changeset =
+      entity
+      |> Competitions.change(competition_params)
+      |> apply_new_competition_subject_requirement(socket, competition_params)
+      |> Map.put(:action, :validate)
 
     socket =
       socket
-      |> assign(:form, to_form(changeset, action: :validate))
+      |> assign(:form, to_form(changeset))
       |> merge_collapse_assigns_from_params(competition_params)
 
     {:noreply, socket}
@@ -526,15 +548,15 @@ defmodule SMWeb.Live.Admin.Competitions.Form do
 
   def handle_event("subjects-seed-catalog", _params, socket) do
     params =
-      socket.assigns.form.source.params
-      |> Kernel.||(%{})
+      socket
+      |> current_competition_params()
       |> Map.put("competition_subjects", Competitions.competition_subject_seed_nested_params())
 
     {:noreply, rechange_competition_form(socket, params)}
   end
 
   def handle_event("subjects-reset-catalog-coefficients", _params, socket) do
-    params = socket.assigns.form.source.params || %{}
+    params = current_competition_params(socket)
     nested = params["competition_subjects"] || %{}
     new_nested = Competitions.bulk_reset_competition_subject_params_from_catalog(nested)
     {:noreply, rechange_competition_form(socket, Map.put(params, "competition_subjects", new_nested))}
@@ -547,7 +569,7 @@ defmodule SMWeb.Live.Admin.Competitions.Form do
         :error -> 0
       end
 
-    params = socket.assigns.form.source.params || %{}
+    params = current_competition_params(socket)
     nested = params["competition_subjects"] || %{}
     new_nested = Competitions.bulk_offset_competition_subject_params(nested, delta)
     {:noreply, rechange_competition_form(socket, Map.put(params, "competition_subjects", new_nested))}
@@ -568,7 +590,7 @@ defmodule SMWeb.Live.Admin.Competitions.Form do
         :error -> 0
       end
 
-    params = socket.assigns.form.source.params || %{}
+    params = current_competition_params(socket)
     nested = params["competition_subjects"] || %{}
     new_nested = Competitions.bulk_set_competition_subject_params(nested, value)
     {:noreply, rechange_competition_form(socket, Map.put(params, "competition_subjects", new_nested))}
@@ -576,11 +598,169 @@ defmodule SMWeb.Live.Admin.Competitions.Form do
 
   defp rechange_competition_form(socket, params) do
     entity = socket.assigns[:entity] || socket.assigns[:competition] || %Competition{}
-    cs = Competitions.change(entity, params)
+    params = merge_competition_form_params(params, socket.assigns.form.source)
+
+    cs =
+      entity
+      |> Competitions.change(params)
+      |> apply_new_competition_subject_requirement(socket, params)
+      |> Map.put(:action, :validate)
 
     socket
-    |> assign(:form, to_form(cs, action: :validate))
+    |> assign(:form, to_form(cs))
     |> merge_collapse_assigns_from_params(params)
+  end
+
+  defp maybe_assign_parent_form(socket, parent_form, component_form) do
+    if keep_component_form?(component_form, parent_form) do
+      socket
+    else
+      assign(socket, :form, parent_form)
+    end
+  end
+
+  defp keep_component_form?(component_form, parent_form) do
+    validated_form?(component_form) and not validated_form?(parent_form)
+  end
+
+  defp validated_form?(%Phoenix.HTML.Form{action: action, source: source}) do
+    (action || source.action) && source.valid?
+  end
+
+  defp validated_form?(_), do: false
+
+  defp current_competition_params(socket) do
+    merge_competition_form_params(socket.assigns.form.source.params || %{}, socket.assigns.form.source)
+  end
+
+  defp merge_competition_form_params(params, changeset) when is_map(params) do
+    params
+    |> merge_evaluations_from_changeset(changeset)
+    |> merge_subjects_from_changeset(changeset)
+  end
+
+  defp merge_evaluations_from_changeset(params, changeset) do
+    if Map.has_key?(params, "competitions_evaluations") do
+      params
+    else
+      evaluations =
+        Ecto.Changeset.get_change(changeset, :competitions_evaluations) ||
+          Ecto.Changeset.get_field(changeset, :competitions_evaluations) || []
+
+      case evaluations_to_form_params(evaluations) do
+        %{} = nested when map_size(nested) > 0 -> Map.put(params, "competitions_evaluations", nested)
+        _ -> params
+      end
+    end
+  end
+
+  defp merge_subjects_from_changeset(params, changeset) do
+    if Map.has_key?(params, "competition_subjects") do
+      params
+    else
+      subjects =
+        Ecto.Changeset.get_change(changeset, :competition_subjects) ||
+          Ecto.Changeset.get_field(changeset, :competition_subjects) || []
+
+      case subjects_to_form_params(subjects) do
+        %{} = nested when map_size(nested) > 0 -> Map.put(params, "competition_subjects", nested)
+        _ -> params
+      end
+    end
+  end
+
+  defp evaluations_to_form_params(evaluations) when is_list(evaluations) do
+    evaluations
+    |> Enum.with_index()
+    |> Enum.reduce(%{}, fn {evaluation, index}, acc ->
+      case evaluation_id_from(evaluation) do
+        nil -> acc
+        evaluation_id -> Map.put(acc, Integer.to_string(index), %{"evaluation_id" => evaluation_id})
+      end
+    end)
+  end
+
+  defp evaluations_to_form_params(_), do: %{}
+
+  defp evaluation_id_from(%Ecto.Changeset{} = changeset) do
+    Ecto.Changeset.get_field(changeset, :evaluation_id)
+  end
+
+  defp evaluation_id_from(%CompetitionEvaluation{evaluation_id: evaluation_id}), do: evaluation_id
+
+  defp evaluation_id_from(%{"evaluation_id" => evaluation_id}), do: evaluation_id
+  defp evaluation_id_from(%{evaluation_id: evaluation_id}), do: evaluation_id
+  defp evaluation_id_from(_), do: nil
+
+  defp subjects_to_form_params(subjects) when is_list(subjects) do
+    subjects
+    |> Enum.with_index()
+    |> Enum.reduce(%{}, fn {row, index}, acc ->
+      case subject_row_to_params(row) do
+        nil -> acc
+        params -> Map.put(acc, Integer.to_string(index), params)
+      end
+    end)
+  end
+
+  defp subjects_to_form_params(_), do: %{}
+
+  defp subject_row_to_params(%Ecto.Changeset{} = changeset) do
+    subject_id = Ecto.Changeset.get_field(changeset, :subject_id)
+    coefficient = Ecto.Changeset.get_field(changeset, :coefficient) || 0
+
+    if subject_id in [nil, ""] do
+      nil
+    else
+      %{"subject_id" => subject_id, "coefficient" => coefficient}
+    end
+  end
+
+  defp subject_row_to_params(%CompetitionSubject{subject_id: subject_id, coefficient: coefficient}) do
+    if subject_id in [nil, ""] do
+      nil
+    else
+      %{"subject_id" => subject_id, "coefficient" => coefficient || 0}
+    end
+  end
+
+  defp subject_row_to_params(%{"subject_id" => subject_id} = row) do
+    if subject_id in [nil, ""] do
+      nil
+    else
+      %{
+        "subject_id" => subject_id,
+        "coefficient" => row["coefficient"] || row[:coefficient] || 0
+      }
+    end
+  end
+
+  defp subject_row_to_params(%{subject_id: subject_id} = row) do
+    if subject_id in [nil, ""] do
+      nil
+    else
+      %{
+        "subject_id" => subject_id,
+        "coefficient" => row[:coefficient] || row["coefficient"] || 0
+      }
+    end
+  end
+
+  defp subject_row_to_params(_), do: nil
+
+  defp apply_new_competition_subject_requirement(changeset, socket, params) do
+    case validate_at_least_one_subject_row_if_new(socket, params) do
+      :ok -> changeset
+      {:error, msg} -> Ecto.Changeset.add_error(changeset, :competition_subjects, msg)
+    end
+  end
+
+  defp validate_at_least_one_subject_row_if_new(socket, params) do
+    if socket.assigns.action == :new_competition do
+      validate_at_least_one_subject_row(params)
+    else
+      :ok
+    end
   end
 
   defp merge_collapse_assigns_from_params(socket, competition_params) do
@@ -691,20 +871,6 @@ defmodule SMWeb.Live.Admin.Competitions.Form do
     else
       {:error, gettext("Add at least one subject (use “Load all from catalog” or “Add subject row”).")}
     end
-  end
-
-  defp competition_subjects_errors(%Phoenix.HTML.Form{source: %Ecto.Changeset{} = cs}) do
-    cs.errors
-    |> Keyword.get_values(:competition_subjects)
-    |> Enum.map(&elem(&1, 0))
-  end
-
-  defp competition_subjects_errors(_), do: []
-
-  defp subject_select_options(subjects) do
-    Enum.map(subjects, fn s ->
-      {"#{s.numeric_id} — #{s.name}", s.id}
-    end)
   end
 
   defp notify_parent(msg), do: send(self(), {__MODULE__, msg})

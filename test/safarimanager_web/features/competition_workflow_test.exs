@@ -38,12 +38,11 @@ defmodule SMWeb.Features.CompetitionWorkflowTest do
   alias SM.Competitions
   alias SM.Subjects
 
-  # Inserts a subject and returns nested form params. Must run **before** `live/2` so the
-  # competition form's subject `<select>` options include this id (options come from mount).
-  defp one_competition_subject_form_row! do
+  # Inserts a catalog subject before `live/2` so the new competition form auto-seeds it on mount.
+  defp seed_workflow_catalog_subject! do
     n = System.unique_integer([:positive])
 
-    {:ok, s} =
+    {:ok, subject} =
       Subjects.create(%{
         "name" => "Workflow form subject #{n}",
         "numeric_id" => n,
@@ -51,7 +50,7 @@ defmodule SMWeb.Features.CompetitionWorkflowTest do
         "coefficient" => 1
       })
 
-    %{"0" => %{"subject_id" => s.id, "coefficient" => 1}}
+    subject
   end
 
   # ============================================================================
@@ -79,7 +78,7 @@ defmodule SMWeb.Features.CompetitionWorkflowTest do
       organization: organization,
       evaluation: evaluation
     } do
-      subject_rows = one_competition_subject_form_row!()
+      _subject = seed_workflow_catalog_subject!()
 
       {:ok, view, _html} = live(conn, ~p"/organize/new")
 
@@ -92,8 +91,7 @@ defmodule SMWeb.Features.CompetitionWorkflowTest do
             "type" => :qualification,
             "competitions_evaluations" => %{
               "0" => %{"evaluation_id" => evaluation.id}
-            },
-            "competition_subjects" => subject_rows
+            }
           }
         )
         |> render_submit()
@@ -136,7 +134,7 @@ defmodule SMWeb.Features.CompetitionWorkflowTest do
       organization: organization,
       evaluation: evaluation
     } do
-      subject_rows = one_competition_subject_form_row!()
+      _subject = seed_workflow_catalog_subject!()
 
       {:ok, view, _html} = live(conn, ~p"/organize/new")
 
@@ -149,8 +147,7 @@ defmodule SMWeb.Features.CompetitionWorkflowTest do
             "type" => :national_championship,
             "competitions_evaluations" => %{
               "0" => %{"evaluation_id" => evaluation.id}
-            },
-            "competition_subjects" => subject_rows
+            }
           }
         )
         |> render_submit()

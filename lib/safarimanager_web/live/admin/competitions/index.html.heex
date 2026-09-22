@@ -590,22 +590,35 @@
                     <label class="label py-0">
                       <span class="label-text text-xs">{gettext("Subject")}</span>
                     </label>
-                    <select
-                      id={csrow[:subject_id].id}
-                      name={csrow[:subject_id].name}
-                      class={
-                        state_class("select select-bordered select-sm w-full", csrow, :subject_id,
-                          type: :select
-                        )
-                      }
-                      phx-debounce="100"
-                    >
-                      <option value="">{gettext("Select…")}</option>
-                      {Phoenix.HTML.Form.options_for_select(
-                        subject_select_options(@subjects),
-                        csrow[:subject_id].value
-                      )}
-                    </select>
+                    <%= if competition_subject_id_locked?(csrow[:subject_id]) do %>
+                      <.hidden_input field={csrow[:subject_id]} />
+                      <div
+                        id={"#{csrow[:subject_id].id}-label"}
+                        class="select select-bordered select-sm w-full bg-base-200 cursor-default"
+                      >
+                        {competition_subject_label(@subjects, csrow[:subject_id].value)}
+                      </div>
+                    <% else %>
+                      <select
+                        id={csrow[:subject_id].id}
+                        name={csrow[:subject_id].name}
+                        class={
+                          state_class(
+                            "select select-bordered select-sm w-full",
+                            csrow,
+                            :subject_id,
+                            type: :select
+                          )
+                        }
+                        phx-debounce="100"
+                      >
+                        <option value="">{gettext("Select…")}</option>
+                        {Phoenix.HTML.Form.options_for_select(
+                          competition_subject_select_options(@subjects),
+                          csrow[:subject_id].value
+                        )}
+                      </select>
+                    <% end %>
                   </div>
                   <div class="form-control w-28">
                     <label class="label py-0">

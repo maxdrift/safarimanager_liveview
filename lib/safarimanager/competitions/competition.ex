@@ -45,6 +45,8 @@ defmodule SM.Competitions.Competition do
 
   @spec changeset(t(), map()) :: Ecto.Changeset.t()
   def changeset(struct, attrs) do
+    attrs = drop_blank_competition_subject_params(attrs)
+
     struct
     |> cast(attrs, [
       :name,
@@ -158,6 +160,18 @@ defmodule SM.Competitions.Competition do
   end
 
   # Internal
+
+  defp drop_blank_competition_subject_params(%{"competition_subjects" => subjects} = attrs) when is_map(subjects) do
+    filtered =
+      Map.filter(subjects, fn {_key, row} ->
+        subject_id = row["subject_id"] || row[:subject_id]
+        subject_id not in [nil, ""]
+      end)
+
+    Map.put(attrs, "competition_subjects", filtered)
+  end
+
+  defp drop_blank_competition_subject_params(attrs), do: attrs
 
   defp validate_dates(changeset) do
     with start_time when not is_nil(start_time) <- get_field(changeset, :start_time),
