@@ -86,10 +86,12 @@ defmodule SMWeb.PrometheusPush do
 
   defp req_client do
     auth = get_config(:basic_auth)
+    username = Keyword.fetch!(auth, :username)
+    password = Keyword.fetch!(auth, :password)
 
     [
       base_url: get_config(:url),
-      auth: {:basic, user: Keyword.fetch!(auth, :username), pass: Keyword.fetch!(auth, :password)},
+      auth: {:basic, "#{username}:#{password}"},
       finch: SMFinch
     ]
     |> Req.new()
