@@ -20,8 +20,17 @@
   }
 
   /* Let fixed-layout tables shrink selects/inputs instead of forcing overflow */
-  .table-scroll .table :is(.form-control, select, input) {
+  .table-scroll .table :is(.form-control, select, input:not(.checkbox)) {
     @apply min-w-0 max-w-full;
+  }
+
+  /* Selection checkbox column — avoid clipping against table/scroll edges */
+  .table-scroll .table :is(th, td).col-selection {
+    @apply w-12 min-w-12 px-2 text-center align-middle;
+  }
+
+  .table-scroll .table .col-selection .checkbox {
+    @apply shrink-0;
   }
 
   /* Keep trailing action columns visible while the table scrolls horizontally */

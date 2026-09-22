@@ -67,13 +67,13 @@ defmodule SMWeb.Components.Grid do
           >
             <thead>
               <tr>
-                <th class={["sticky", "top-0", "w-1"]}>
-                  <label>
+                <th class={["sticky", "top-0", "col-selection"]}>
+                  <label class="inline-flex items-center justify-center">
                     <input
                       id={"#{@id}-select-all"}
                       type="checkbox"
                       name={"#{@id}-select-all"}
-                      class="checkbox checkbox-sm mt-2"
+                      class="checkbox checkbox-sm"
                     />
                   </label>
                 </th>
@@ -84,13 +84,13 @@ defmodule SMWeb.Components.Grid do
             </thead>
             <tbody id={"#{@id}-table-body"} phx-update="stream">
               <tr :for={{dom_id, item} <- @items} id={dom_id}>
-                <td>
-                  <label>
+                <td class="col-selection">
+                  <label class="inline-flex items-center justify-center">
                     <input
                       type="checkbox"
                       name={"#{@id}-selection[]"}
                       value={maybe_encode_compound_ids(item, @id_fields)}
-                      class="checkbox checkbox-sm mt-2"
+                      class="checkbox checkbox-sm"
                     />
                   </label>
                 </td>
