@@ -14,6 +14,7 @@ defmodule SM.MixProject do
       description: @description,
       elixirc_paths: elixirc_paths(Mix.env()),
       compilers: Mix.compilers(),
+      listeners: [Phoenix.CodeReloader],
       start_permanent: Mix.env() in [:prod, :standalone],
       aliases: aliases(),
       deps: with_lock(deps()),
