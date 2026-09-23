@@ -75,10 +75,10 @@ defmodule SMWeb.PrometheusPush do
     end
   rescue
     e in RuntimeError ->
-      e.message
+      {:error, e.message}
 
     e in ArgumentError ->
-      e.message
+      {:error, e.message}
   end
 
   defp maybe_put_body(opts, nil), do: opts
@@ -89,10 +89,11 @@ defmodule SMWeb.PrometheusPush do
     username = Keyword.fetch!(auth, :username)
     password = Keyword.fetch!(auth, :password)
 
+    # Do not pass :finch here — Req forbids combining a named Finch with
+    # :connect_options, which req_attach_defaults sets for proxy/cacerts.
     [
       base_url: get_config(:url),
-      auth: {:basic, "#{username}:#{password}"},
-      finch: SMFinch
+      auth: {:basic, "#{username}:#{password}"}
     ]
     |> Req.new()
     |> SM.Utils.req_attach_defaults()

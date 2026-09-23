@@ -150,7 +150,6 @@ config :safarimanager, :generators,
   binary_id: true,
   sample_binary_id: "11111111-1111-1111-1111-111111111111"
 
-# config :tesla, :adapter, {Tesla.Adapter.Finch, name: SMFinch}
 config :safarimanager,
   feature_flags: []
 
