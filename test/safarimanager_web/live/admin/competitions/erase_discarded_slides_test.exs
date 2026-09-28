@@ -144,5 +144,22 @@ defmodule SMWeb.Live.Admin.Competitions.EraseDiscardedSlidesTest do
       assert {:ok, _} = discarded |> Enum.map(& &1.id) |> Slides.delete_many()
       refute File.exists?(file_path)
     end
+
+    test "hides size and erase control when a competition directory is linked", %{
+      conn: conn,
+      competition: competition
+    } do
+      root = Path.join(System.tmp_dir!(), "sm_erase_linked_#{System.unique_integer([:positive])}")
+      File.mkdir_p!(root)
+      on_exit(fn -> File.rm_rf(root) end)
+
+      assert {:ok, _} = SM.CompetitionDirectories.link_root(competition.id, root)
+
+      {:ok, view, html} = live(conn, ~p"/admin/competitions/#{competition.id}")
+
+      assert html =~ "Hidden while a competition directory is linked"
+      refute has_element?(view, "#erase-discarded-slides")
+      refute has_element?(view, "button[phx-click='erase-discarded-slides']")
+    end
   end
 end

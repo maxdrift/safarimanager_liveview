@@ -30,4 +30,17 @@ defmodule SM.ImageProcessingTest do
     {:ok, bin} = File.read(out)
     assert {:ok, %{width: 80, height: 80}} = ExImageResizer.info(bin)
   end
+
+  test "save_thumbnail/5 with :fit keeps the original aspect ratio" do
+    out = Path.join(@tmp_dir, "preview.jpg")
+    assert {:ok, src_w, src_h, _} = SM.ImageProcessing.get_metadata(@exif_fixture)
+    assert :ok = SM.ImageProcessing.save_thumbnail(@exif_fixture, 80, 80, out, :fit)
+    assert File.exists?(out)
+
+    {:ok, bin} = File.read(out)
+    assert {:ok, %{width: out_w, height: out_h}} = ExImageResizer.info(bin)
+    assert out_w <= 80 and out_h <= 80
+    assert out_w == 80 or out_h == 80
+    assert_in_delta out_w / out_h, src_w / src_h, 0.02
+  end
 end

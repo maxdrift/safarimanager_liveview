@@ -22,7 +22,7 @@ defmodule SM.Utils do
   """
   @spec slide_path(Slide.t()) :: String.t()
   def slide_path(slide) do
-    "/uploads/#{slide.competition_id}/#{slide.user_id}/#{slide.file_name}"
+    "/slides/#{slide.id}/original"
   end
 
   @spec pretty_dates(nil | DateTime.t(), any()) :: String.t()

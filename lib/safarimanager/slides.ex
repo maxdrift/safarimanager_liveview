@@ -13,6 +13,7 @@ defmodule SM.Slides do
   alias SM.Slides.Slide
   alias SM.Slides.SlideEvaluation
   alias SM.Slides.SlideFlag
+  alias SM.Slides.Storage
   alias SM.Subjects.Subject
   alias SM.Teams.TeamMember
 
@@ -93,17 +94,35 @@ defmodule SM.Slides do
   @spec generate_thumbnail(String.t(), String.t(), String.t(), :small | :medium | :large) ::
           :ok | {:error, any()}
   def generate_thumbnail(competition_id, user_id, file_name, size_type) do
-    orig_path =
-      competition_id
-      |> get_uploads_path(user_id)
-      |> Path.join(file_name)
+    case get(competition_id, user_id, file_name) do
+      {:ok, slide} -> generate_thumbnail_from_source(slide, size_type)
+      {:error, :not_found} = error -> error
+    end
+  end
 
-    thumbs_path = get_thumbnails_path(competition_id, user_id, size_type)
-    File.mkdir_p!(thumbs_path)
+  @spec generate_thumbnail_from_source(Slide.t(), :small | :medium | :large) :: :ok | {:error, any()}
+  def generate_thumbnail_from_source(%Slide{} = slide, size_type) when size_type in [:small, :medium, :large] do
+    source_path = Storage.original_path(slide)
 
-    {width, height} = get_thumbnail_size(size_type)
+    if is_binary(source_path) and File.regular?(source_path) do
+      thumbs_path = get_thumbnails_path(slide.competition_id, slide.user_id, size_type)
+      File.mkdir_p!(thumbs_path)
 
-    ImageProcessing.save_thumbnail(orig_path, width, height, Path.join(thumbs_path, file_name))
+      {width, height} = get_thumbnail_size(size_type)
+      # Medium previews replace unreachable originals, so keep the aspect ratio.
+      # Small (and large) stay square-cropped for dense UI grids.
+      mode = if size_type == :medium, do: :fit, else: :fill
+
+      ImageProcessing.save_thumbnail(
+        source_path,
+        width,
+        height,
+        Path.join(thumbs_path, slide.file_name),
+        mode
+      )
+    else
+      {:error, :source_missing}
+    end
   rescue
     error ->
       {:error, error}
@@ -709,9 +728,13 @@ defmodule SM.Slides do
 
     case Repo.one(query) do
       nil ->
-        Logger.warning("Falling back to LIKE query to find slide with file name #{file_name}")
-        # Fall back to the LIKE query as a last resort
-        find(competition_id, user_id, file_name)
+        # LIKE only for legacy extension-less lookups (e.g. "DSC04313"), not "DSC04313.JPG".
+        if extension_less_file_name?(file_name) do
+          Logger.warning("Falling back to LIKE query to find slide with file name #{file_name}")
+          find(competition_id, user_id, file_name)
+        else
+          {:error, :not_found}
+        end
 
       result ->
         {:ok, result}
@@ -773,39 +796,39 @@ defmodule SM.Slides do
           String.t()
         ) :: {:error, any()} | {:ok, Slide.t()}
   def create_and_store_slide_file(competition_id, user_id, file_name, file_size, file_type, tmp_path) do
+    create_slide_from_file(
+      competition_id,
+      user_id,
+      file_name,
+      file_size,
+      file_type,
+      tmp_path,
+      :internal
+    )
+  end
+
+  @spec create_slide_from_file(
+          String.t(),
+          String.t(),
+          String.t(),
+          non_neg_integer(),
+          String.t(),
+          String.t(),
+          :internal | :linked
+        ) :: {:error, any()} | {:ok, Slide.t()}
+  def create_slide_from_file(competition_id, user_id, file_name, file_size, file_type, source_path, storage)
+      when storage in [:internal, :linked] do
     uploads_path = get_uploads_path(competition_id, user_id)
 
-    Multi.new()
-    |> Multi.run(:copy_file, fn _repo, %{} ->
-      multi_copy_file(uploads_path, file_name, user_id, competition_id, tmp_path)
-    end)
-    |> Multi.run(:verify_duplicate, fn _repo, %{} ->
-      case get(competition_id, user_id, file_name) do
-        {:ok, result} ->
-          Logger.info("Slide #{result.id} from User #{user_id} in Competition #{competition_id} already exists.")
+    # Keep FS/CPU work outside the DB transaction so SQLite write locks stay short.
+    with :ok <- reject_duplicate_slide(competition_id, user_id, file_name),
+         {:ok, file_path} <- prepare_slide_file(uploads_path, file_name, user_id, competition_id, source_path, storage),
+         {:ok, width, height, metadata} <- ImageProcessing.get_metadata(file_path) do
+      metadata = json_safe_metadata(metadata, file_path)
 
-          {:error, {:duplicate, result}}
-
-        {:error, :not_found} ->
-          {:ok, nil}
-      end
-    end)
-    |> Multi.insert(:slide, fn %{copy_file: file_path} ->
-      {:ok, width, height, metadata} = ImageProcessing.get_metadata(file_path)
-
-      metadata =
-        case Jason.encode(metadata) do
-          {:ok, _encoded} ->
-            metadata
-
-          {:error, reason} ->
-            Logger.error("Unable to JSON-encode #{file_path} metadata: #{inspect(reason)}")
-            %{}
-        end
-
-      Slide.changeset(
-        %Slide{},
-        %{
+      changeset =
+        %Slide{}
+        |> Slide.changeset(%{
           user_id: user_id,
           competition_id: competition_id,
           file_name: file_name,
@@ -814,27 +837,24 @@ defmodule SM.Slides do
           width: width,
           height: height,
           metadata: metadata
-        }
-      )
-    end)
-    |> Repo.transaction()
-    |> case do
-      {:ok, %{slide: slide}} ->
-        notify_subscribers({:ok, slide}, [:slide, :created])
+        })
+        |> Ecto.Changeset.put_change(:storage, storage)
 
-      {:error, :slide, failed_value, _changes_so_far} ->
-        :ok =
-          [uploads_path, file_name]
-          |> Path.join()
-          |> File.rm()
+      case Repo.with_busy_retry(fn -> Repo.insert(changeset) end) do
+        {:ok, slide} ->
+          notify_subscribers({:ok, slide}, [:slide, :created])
 
-        {:error, {:slide, failed_value}}
-
-      {:error, :verify_duplicate, {:duplicate, existing_slide}, _changes_so_far} ->
+        {:error, reason} ->
+          cleanup_prepared_internal_file(storage, uploads_path, file_name)
+          {:error, {:slide, reason}}
+      end
+    else
+      {:error, {:duplicate, existing_slide}} ->
         {:ok, existing_slide}
 
-      {:error, failed_operation, failed_value, _changes_so_far} ->
-        {:error, {failed_operation, failed_value}}
+      {:error, _reason} = error ->
+        cleanup_prepared_internal_file(storage, uploads_path, file_name)
+        error
     end
   end
 
@@ -1124,7 +1144,7 @@ defmodule SM.Slides do
     Multi.new()
     |> Multi.delete(:delete, slide)
     |> Multi.run(:delete_files, fn _repo, %{delete: slide} ->
-      case delete_files(slide.competition_id, slide.user_id, slide.file_name) do
+      case delete_slide_files(slide) do
         :ok -> {:ok, :deleted}
         {:error, _reason} = error -> error
       end
@@ -1165,7 +1185,7 @@ defmodule SM.Slides do
       slides
       |> Enum.map(fn slide ->
         Task.async(fn ->
-          delete_files(slide.competition_id, slide.user_id, slide.file_name)
+          delete_slide_files(slide)
         end)
       end)
       |> Task.await_many(30_000)
@@ -1220,17 +1240,21 @@ defmodule SM.Slides do
     end
   end
 
-  @spec delete_files(String.t(), String.t(), String.t()) :: :ok | {:error, any()}
-  def delete_files(competition_id, user_id, file_name) do
-    Logger.debug("Deleting slide file #{Path.join([competition_id, user_id, file_name])}")
-    uploads_path = get_uploads_path(competition_id, user_id)
+  @spec delete_slide_files(Slide.t()) :: :ok | {:error, any()}
+  def delete_slide_files(%Slide{} = slide) do
+    Logger.debug("Deleting slide file #{Path.join([slide.competition_id, slide.user_id, slide.file_name])}")
+
+    uploads_path = get_uploads_path(slide.competition_id, slide.user_id)
     thumbnails_path = Path.join(uploads_path, "thumbnails")
-    # Remove the entire participant directory if empty
-    with :ok <- delete_file(uploads_path, file_name),
-         :ok <- delete_thumbnails(thumbnails_path, file_name) do
+
+    with :ok <- maybe_delete_original(slide, uploads_path),
+         :ok <- delete_thumbnails(thumbnails_path, slide.file_name) do
       delete_empty_participant_dir(uploads_path)
     end
   end
+
+  defp maybe_delete_original(%Slide{storage: :linked}, _uploads_path), do: :ok
+  defp maybe_delete_original(%Slide{} = slide, uploads_path), do: delete_file(uploads_path, slide.file_name)
 
   defp delete_file(uploads_path, file_name) do
     [uploads_path, file_name]
@@ -1387,6 +1411,52 @@ defmodule SM.Slides do
   end
 
   # Internal
+
+  defp extension_less_file_name?(file_name) do
+    Path.extname(file_name) == ""
+  end
+
+  defp prepare_slide_file(uploads_path, file_name, user_id, competition_id, source_path, :internal) do
+    multi_copy_file(uploads_path, file_name, user_id, competition_id, source_path)
+  end
+
+  defp prepare_slide_file(_uploads_path, _file_name, _user_id, _competition_id, source_path, :linked) do
+    if File.regular?(source_path), do: {:ok, source_path}, else: {:error, :enoent}
+  end
+
+  defp reject_duplicate_slide(competition_id, user_id, file_name) do
+    query =
+      from(s in Slide,
+        where: [competition_id: ^competition_id, user_id: ^user_id, file_name: ^file_name]
+      )
+
+    case Repo.one(query) do
+      nil ->
+        :ok
+
+      result ->
+        Logger.info("Slide #{result.id} from User #{user_id} in Competition #{competition_id} already exists.")
+        {:error, {:duplicate, result}}
+    end
+  end
+
+  defp json_safe_metadata(metadata, file_path) do
+    case Jason.encode(metadata) do
+      {:ok, _encoded} ->
+        metadata
+
+      {:error, reason} ->
+        Logger.error("Unable to JSON-encode #{file_path} metadata: #{inspect(reason)}")
+        %{}
+    end
+  end
+
+  defp cleanup_prepared_internal_file(:internal, uploads_path, file_name) do
+    _ = uploads_path |> Path.join(file_name) |> File.rm()
+    :ok
+  end
+
+  defp cleanup_prepared_internal_file(:linked, _uploads_path, _file_name), do: :ok
 
   defp multi_copy_file(uploads_path, file_name, user_id, competition_id, tmp_path) do
     :ok = File.mkdir_p!(uploads_path)

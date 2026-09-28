@@ -5,10 +5,24 @@ defmodule SM.ImageProcessing do
 
   require Logger
 
-  @spec save_thumbnail(String.t(), non_neg_integer(), non_neg_integer(), String.t()) ::
+  @type resize_mode :: :fill | :fit
+
+  @doc """
+  Writes a resized image.
+
+  - `:fill` — fill the box and crop excess (square UI thumbs).
+  - `:fit` — fit inside the box and keep the original aspect ratio (medium preview fallback).
+  """
+  @spec save_thumbnail(String.t(), non_neg_integer(), non_neg_integer(), String.t(), resize_mode()) ::
           :ok | {:error, any()}
-  def save_thumbnail(source, width, height, path) do
+  def save_thumbnail(source, width, height, path, mode \\ :fill)
+
+  def save_thumbnail(source, width, height, path, :fill) do
     ExImageResizer.resize_file_fill(source, path, width, height)
+  end
+
+  def save_thumbnail(source, width, height, path, :fit) do
+    ExImageResizer.resize_file_fit(source, path, width, height)
   end
 
   @spec get_metadata(String.t()) :: {:ok, pos_integer(), pos_integer(), map()} | {:error, any()}
