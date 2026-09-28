@@ -2,6 +2,7 @@ defmodule SMWeb.ImageExportController do
   use SMWeb, :controller
 
   alias SM.Slides
+  alias SM.Slides.Storage
 
   require Logger
 
@@ -9,11 +10,9 @@ defmodule SMWeb.ImageExportController do
   def create(conn, %{"slide_id" => slide_id}) do
     {:ok, slide} = Slides.get(slide_id)
 
-    file_path =
-      slide.competition_id
-      |> Slides.get_uploads_path(slide.user_id)
-      |> Path.join(slide.file_name)
-
-    send_download(conn, {:file, file_path})
+    case Storage.serving_path(slide) do
+      {:ok, file_path} -> send_download(conn, {:file, file_path})
+      {:error, :not_found} -> conn |> put_status(:not_found) |> text("Not found")
+    end
   end
 end

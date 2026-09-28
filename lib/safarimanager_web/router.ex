@@ -39,6 +39,7 @@ defmodule SMWeb.Router do
     get "/", HomeController, :new
     post "/csv_export", CSVExportController, :create
     post "/image_export", ImageExportController, :create
+    get "/slides/:id/original", SlideOriginalController, :show
     get "/:competition_id/results_printout", ResultsPrintoutController, :show
     get "/:competition_id/slides_printout", SlidesPrintoutController, :show
     get "/:competition_id/participants_printout", ParticipantsPrintoutController, :show

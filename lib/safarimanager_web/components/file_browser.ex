@@ -9,12 +9,10 @@ defmodule SMWeb.Components.FileBrowser do
 
   require Logger
 
-  # data cwd, :string
-  # data items, :list
-  # data upload_progress, :decimal, default: Decimal.new(0)
   attr :file_filter, :list, default: []
   attr :import_click, :string
-  attr :user_id, :string
+  attr :user_id, :string, default: nil
+  attr :start_cwd, :string, default: nil
 
   @impl true
   def render(assigns) do
@@ -34,6 +32,9 @@ defmodule SMWeb.Components.FileBrowser do
       <div class="text-xl font-bold text-center">
         {gettext("File browser")}
       </div>
+      <p :if={@cwd} class="text-xs font-mono text-center text-base-content/60 break-all px-2">
+        {@cwd}
+      </p>
       <div class="my-6">
         <div>
           <button phx-click="level-up" class="btn btn-outline btn-xs gap-1" phx-target={@myself}>
@@ -141,58 +142,62 @@ defmodule SMWeb.Components.FileBrowser do
   end
 
   @impl Phoenix.LiveComponent
-  def update(%{file_filter: file_filter} = assigns, socket) do
-    {:ok, cwd} =
-      get_last_dir()
-      |> Path.expand()
-      |> FileBrowser.cd()
-
+  def update(%{navigate: :parent} = assigns, socket) do
+    file_filter = assigns[:file_filter] || socket.assigns[:file_filter] || []
+    cwd = parent_dir(socket.assigns[:cwd])
+    {:ok, _} = set_last_dir(cwd)
     dir_items = FileBrowser.ls!(cwd, filter: file_filter)
 
-    assigns =
-      assigns
-      |> Map.to_list()
-      |> Keyword.merge(
-        cwd: cwd,
-        items: dir_items,
-        upload_progress: Decimal.new(0)
-      )
+    {:ok,
+     socket
+     |> assign(Map.delete(assigns, :navigate))
+     |> assign(cwd: cwd, items: dir_items)}
+  end
 
-    {:ok, assign(socket, assigns)}
+  def update(%{file_filter: file_filter} = assigns, socket) do
+    previous_user = socket.assigns[:user_id]
+    new_user = Map.get(assigns, :user_id)
+    start_cwd = Map.get(assigns, :start_cwd) || socket.assigns[:start_cwd]
+    reset_for_user? = not is_nil(new_user) and new_user != previous_user
+
+    cwd =
+      if reset_for_user? do
+        preferred_start_dir(start_cwd)
+      else
+        current_or_preferred_dir(socket, start_cwd)
+      end
+
+    {:ok, _} = set_last_dir(cwd)
+    dir_items = FileBrowser.ls!(cwd, filter: file_filter)
+
+    progress =
+      Map.get(assigns, :upload_progress) || socket.assigns[:upload_progress] || Decimal.new(0)
+
+    {:ok,
+     socket
+     |> assign(Map.delete(assigns, :navigate))
+     |> assign(cwd: cwd, items: dir_items, upload_progress: progress, start_cwd: start_cwd)}
   end
 
   def update(assigns, socket) do
-    {:ok, assign(socket, assigns)}
+    {:ok, assign(socket, Map.delete(assigns, :navigate))}
   end
-
-  # Event handlers
 
   @impl Phoenix.LiveComponent
   def handle_event("level-down", %{"item" => item}, socket) do
     {:ok, cwd} = FileBrowser.cd(socket.assigns.cwd, item)
     dir_items = FileBrowser.ls!(cwd, filter: socket.assigns.file_filter)
-    full_path = Path.dirname(cwd)
-    {:ok, _full_path} = set_last_dir(full_path)
+    {:ok, _cwd} = set_last_dir(cwd)
 
-    socket =
-      socket
-      |> assign(:cwd, cwd)
-      |> assign(:items, dir_items)
-
-    {:noreply, socket}
+    {:noreply, assign(socket, cwd: cwd, items: dir_items)}
   end
 
   def handle_event("level-up", _params, socket) do
-    {:ok, cwd} = FileBrowser.cd(socket.assigns.cwd, "..")
+    cwd = parent_dir(socket.assigns.cwd)
     dir_items = FileBrowser.ls!(cwd, filter: socket.assigns.file_filter)
     {:ok, _full_path} = set_last_dir(cwd)
 
-    socket =
-      socket
-      |> assign(:cwd, cwd)
-      |> assign(:items, dir_items)
-
-    {:noreply, socket}
+    {:noreply, assign(socket, cwd: cwd, items: dir_items)}
   end
 
   def handle_event(_event, _params, socket) do
@@ -207,26 +212,41 @@ defmodule SMWeb.Components.FileBrowser do
     not is_nil(user_id) and count_selectable_files(items) > 0
   end
 
-  defp set_last_dir(path) do
-    Cache.put(:last_dir, path)
-
-    {:ok, path}
+  defp preferred_start_dir(start_cwd) when is_binary(start_cwd) do
+    if File.dir?(start_cwd), do: Path.expand(start_cwd), else: home_dir()
   end
 
-  defp get_last_dir do
-    with {:ok, last_dir} when not is_nil(last_dir) <- Cache.get(:last_dir),
-         true <- File.exists?(last_dir) do
-      last_dir
-    else
-      _nil_or_false ->
-        Logger.warning("Unable to find last used directory path. Using home directory.")
+  defp preferred_start_dir(_), do: home_dir()
 
-        {:ok, path} =
-          "~/"
-          |> Path.expand()
-          |> set_last_dir()
+  defp current_or_preferred_dir(socket, start_cwd) do
+    case socket.assigns[:cwd] do
+      cwd when is_binary(cwd) ->
+        if File.dir?(cwd), do: Path.expand(cwd), else: preferred_start_dir(start_cwd)
 
-        path
+      _ ->
+        preferred_start_dir(start_cwd)
     end
+  end
+
+  defp parent_dir(nil), do: home_dir()
+
+  defp parent_dir(cwd) when is_binary(cwd) do
+    parent = Path.dirname(Path.expand(cwd))
+    if File.dir?(parent), do: parent, else: home_dir()
+  end
+
+  defp home_dir do
+    home = System.user_home()
+
+    if is_binary(home) and File.dir?(home) do
+      home
+    else
+      Path.expand("~/")
+    end
+  end
+
+  defp set_last_dir(path) do
+    Cache.put(:last_dir, path)
+    {:ok, path}
   end
 end

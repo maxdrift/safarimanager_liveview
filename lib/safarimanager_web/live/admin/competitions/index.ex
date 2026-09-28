@@ -9,6 +9,7 @@ defmodule SMWeb.Live.Admin.Competitions.Index do
   import SMWeb.Components.Layout
   import SMWeb.Components.ShortUUID
 
+  alias SM.CompetitionDirectories
   alias SM.Competitions
   alias SM.Competitions.Competition
   alias SM.Competitions.CompetitionEvaluation
@@ -44,6 +45,7 @@ defmodule SMWeb.Live.Admin.Competitions.Index do
         last_entity_params: nil,
         subject_bulk_set_draft: ""
       )
+      |> assign(:linked_directory?, false)
 
     {:ok, socket}
   end
@@ -164,29 +166,34 @@ defmodule SMWeb.Live.Admin.Competitions.Index do
   end
 
   def handle_event("erase-discarded-slides", _params, socket) do
-    on_confirm = fn socket ->
-      socket.assigns.record.id
-      |> Slides.list_by_status(:discarded)
-      |> Enum.map(& &1.id)
-      |> Slides.delete_many()
-      |> case do
-        {:ok, deleted} ->
-          Logger.info("Deleted #{deleted} discarded slides")
-          put_flash(socket, :info, gettext("Deleted all discarded slides"))
+    if socket.assigns[:linked_directory?] do
+      {:noreply,
+       put_flash(socket, :error, gettext("Erase discarded slides is disabled while a competition directory is linked."))}
+    else
+      on_confirm = fn socket ->
+        socket.assigns.record.id
+        |> Slides.list_by_status(:discarded)
+        |> Enum.map(& &1.id)
+        |> Slides.delete_many()
+        |> case do
+          {:ok, deleted} ->
+            Logger.info("Deleted #{deleted} discarded slides")
+            put_flash(socket, :info, gettext("Deleted all discarded slides"))
 
-        {:error, reason} ->
-          Logger.error("Unable to delete discarded slides: #{inspect(reason)}")
-          put_flash(socket, :error, gettext("Error deleting discarded slides"))
+          {:error, reason} ->
+            Logger.error("Unable to delete discarded slides: #{inspect(reason)}")
+            put_flash(socket, :error, gettext("Error deleting discarded slides"))
+        end
       end
-    end
 
-    {:noreply,
-     SMWeb.Components.Confirm.confirm(socket, on_confirm,
-       title: gettext("Erase discarded slides"),
-       description: gettext("Are you sure you want to delete all discarded slides?"),
-       confirm_text: gettext("Delete"),
-       confirm_icon: "trash"
-     )}
+      {:noreply,
+       SMWeb.Components.Confirm.confirm(socket, on_confirm,
+         title: gettext("Erase discarded slides"),
+         description: gettext("Are you sure you want to delete all discarded slides?"),
+         confirm_text: gettext("Delete"),
+         confirm_icon: "trash"
+       )}
+    end
   end
 
   @impl Phoenix.LiveView
@@ -195,7 +202,11 @@ defmodule SMWeb.Live.Admin.Competitions.Index do
       {:ok, competition} ->
         case socket.assigns.live_action do
           :show ->
-            {:noreply, assign(socket, record: competition)}
+            {:noreply,
+             assign(socket,
+               record: competition,
+               linked_directory?: competition_linked?(competition.id)
+             )}
 
           :edit ->
             changeset = competition |> change(%{}) |> to_entity_form()
@@ -206,7 +217,8 @@ defmodule SMWeb.Live.Admin.Competitions.Index do
                 changeset: changeset,
                 action: :edit,
                 last_entity_params: nil,
-                subject_bulk_set_draft: ""
+                subject_bulk_set_draft: "",
+                linked_directory?: competition_linked?(competition.id)
               )
 
             {:noreply, socket}
@@ -436,4 +448,8 @@ defmodule SMWeb.Live.Admin.Competitions.Index do
   defp slide_status_to_label(:submitted_fixed), do: gettext("submitted_fixed")
   defp slide_status_to_label(:discarded), do: gettext("discarded")
   defp slide_status_to_label(status), do: status
+
+  defp competition_linked?(competition_id) do
+    match?({:ok, _}, CompetitionDirectories.get(competition_id))
+  end
 end

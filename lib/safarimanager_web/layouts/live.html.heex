@@ -1,4 +1,8 @@
 <main role="main" class="grow flex flex-col h-screen">
+  <SMWeb.Components.OriginalsReachabilityBanner.originals_reachability_banner
+    status={assigns[:originals_status] || :unknown}
+    competition_id={assigns[:originals_competition_id]}
+  />
   <.flash flash={@flash} kind={:info} />
   <.flash flash={@flash} kind={:warning} />
   <.flash flash={@flash} kind={:error} />

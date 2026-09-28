@@ -3,6 +3,14 @@
   <.steps_header current_step={:slides} competition={@competition} />
 
   <div class="mt-5 flex flex-col gap-8 pb-8 min-w-0 max-w-full">
+    <.live_component
+      module={SMWeb.Components.CompetitionDirectoryPanel}
+      id="competition-directory-panel"
+      competition_id={@competition_id}
+      participants={@participants}
+      originals_status={@originals_status}
+    />
+
     <%!-- Participant / team picker --%>
     <section
       class="card bg-base-200 shadow-lg border border-base-300/60 flex flex-col min-w-0"
@@ -267,6 +275,7 @@
             file_filter={[:jpg]}
             import_click="direct-import"
             user_id={@user.id}
+            start_cwd={@competition_root_path}
           />
 
           <form
@@ -316,8 +325,19 @@
                         />
                       </div>
                     </td>
-                    <td class="max-w-[10rem] truncate align-middle" title={image.file_name}>
-                      {image.file_name}
+                    <td class="max-w-[12rem] align-middle" title={image.file_name}>
+                      <div class="flex items-center gap-1.5 min-w-0">
+                        <span class="truncate">{image.file_name}</span>
+                        <span
+                          :if={image.storage == :linked}
+                          id={"slide-linked-badge-#{image.id}"}
+                          class="badge badge-ghost badge-xs gap-0.5 shrink-0 border border-base-300 text-base-content/70"
+                          title={gettext("Original kept in competition directory")}
+                        >
+                          <Heroicons.icon name="link" type="outline" class="w-3 h-3" />
+                          <span class="sr-only">{gettext("Linked")}</span>
+                        </span>
+                      </div>
                     </td>
                     <td class="whitespace-nowrap align-middle text-sm">
                       {Utils.format_bytes(image.file_size)}

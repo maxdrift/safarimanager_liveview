@@ -121,12 +121,18 @@
             </ul>
           </:fields_list_item>
           <:fields_list_item label={gettext("Slides size")}>
-            <ul class="list-disc list-inside ml-6">
+            <p :if={@linked_directory?} class="text-sm text-base-content/70">
+              {gettext(
+                "Hidden while a competition directory is linked. Reported sizes are original file sizes, not reclaimable upload space."
+              )}
+            </p>
+            <ul :if={!@linked_directory?} class="list-disc list-inside ml-6">
               <li :for={status <- Slides.list_slide_statuses() |> Enum.sort(:desc)}>
                 <b class="capitalize">{slide_status_to_label(status)}:</b>
                 {Utils.format_bytes(Slides.get_slides_size_by_status(@record.id, status) || 0)}
                 <button
                   :if={status == :discarded}
+                  id="erase-discarded-slides"
                   class={[
                     "btn btn-xs btn-error ml-2",
                     is_nil(Slides.get_slides_size_by_status(@record.id, status)) && "btn-disabled"

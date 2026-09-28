@@ -23,6 +23,8 @@ defmodule SMWeb.Live.SlideSelection do
 
   on_mount SMWeb.SidebarHook
 
+  @slides_refresh_ms 300
+
   @impl LiveView
   def mount(_params, _session, socket) do
     socket =
@@ -33,6 +35,7 @@ defmodule SMWeb.Live.SlideSelection do
         participants: [],
         teams: [],
         slides: [],
+        slides_refresh_ref: nil,
         slide_statuses: get_slide_statuses(),
         editing?: false,
         editing_slide: nil,
@@ -230,6 +233,12 @@ defmodule SMWeb.Live.SlideSelection do
   # Internal
 
   def handle_info({Slides, [:slide, _], _result}, socket) do
+    if ref = socket.assigns.slides_refresh_ref, do: Process.cancel_timer(ref)
+    ref = Process.send_after(self(), :refresh_slides, @slides_refresh_ms)
+    {:noreply, assign(socket, slides_refresh_ref: ref)}
+  end
+
+  def handle_info(:refresh_slides, socket) do
     user = socket.assigns.user
     team = socket.assigns.team
     competition_id = socket.assigns.competition_id
@@ -248,6 +257,7 @@ defmodule SMWeb.Live.SlideSelection do
 
     socket =
       socket
+      |> assign(slides_refresh_ref: nil)
       |> assign(:discarded_slides, Map.get(grouped_slides, :discarded, []))
       |> assign(:jury_slides, Map.get(grouped_slides, :submitted_jury, []))
       |> assign(:fixed_slides, Map.get(grouped_slides, :submitted_fixed, []))
