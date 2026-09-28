@@ -48,6 +48,7 @@ discarded → submitted_jury (evaluated by jurors)
 - **Configuration-driven enums**: Status/type values loaded from config at compile time (e.g., `Slide.get_statuses()`)
 - **Composite primary keys**: Used for join tables (participants, slide_evaluations, jurors)
 - **Launcher + Main pattern**: Complex workflows (Validation, Jury) split into launcher (setup) and main (work) LiveViews
+- **Linked slide originals**: resolve paths via `SM.Slides.Storage`; never delete linked originals with `File.rm`; see [docs/IMAGE_STORAGE.md](docs/IMAGE_STORAGE.md)
 
 ---
 

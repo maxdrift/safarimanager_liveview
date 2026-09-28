@@ -8,7 +8,7 @@ Safari Manager handles the complete competition lifecycle for underwater fish ph
 
 - **Competition Setup** — Configure events with jury settings, scoring rules, and coefficient systems
 - **Participant Management** — Enroll competitors, assign numbers, organize into teams
-- **Photo Import & Selection** — Upload slides, assign species (subjects), choose jury vs. fixed-point submissions
+- **Photo Import & Selection** — Upload slides or link a competition folder to keep originals in place; assign species (subjects), choose jury vs. fixed-point submissions
 - **Validation** — Review species identification, flag issues, detect duplicates
 - **Jury Voting** — Synchronized voting experience with mobile ballot box support
 - **Results & Rankings** — Calculate scores with coefficient multipliers, handle tiebreakers, generate official printouts

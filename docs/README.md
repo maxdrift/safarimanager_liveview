@@ -7,6 +7,9 @@ This folder contains technical documentation for the Safari Manager platform.
 | Document | Description |
 |----------|-------------|
 | [ARCHITECTURE.md](./ARCHITECTURE.md) | High-level system architecture, domain model, and design decisions |
+| [USER_MANUAL_LINKED_ORIGINALS.md](./USER_MANUAL_LINKED_ORIGINALS.md) | Simple operator guide: link a folder and choose how to insert slides |
+| [LINKED_ORIGINALS.md](./LINKED_ORIGINALS.md) | Linked competition originals (product scope, V1 vs future) |
+| [IMAGE_STORAGE.md](./IMAGE_STORAGE.md) | Slide storage modes, on-disk markers, serving and deletion rules |
 | [../AGENTS.md](../AGENTS.md) | Coding conventions and generation rules for AI assistants |
 
 ## Documentation Structure

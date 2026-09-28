@@ -215,10 +215,10 @@ Full data portability through CSV:
 
 ### Image Handling
 
-- Slides stored on filesystem organized by competition/user
-- Thumbnail generation at multiple sizes (small, medium, large)
+- Slide originals: **internal** copy under uploads, or **linked** to a host-local competition directory ([LINKED_ORIGINALS.md](LINKED_ORIGINALS.md), [IMAGE_STORAGE.md](IMAGE_STORAGE.md))
+- Thumbnails always under internal uploads (small + medium for linked fallback)
 - EXIF metadata extraction and storage
-- OpenSeadragon integration for high-resolution viewing
+- OpenSeadragon integration for high-resolution viewing via `/slides/:id/original`
 
 ### Caching Strategy
 
