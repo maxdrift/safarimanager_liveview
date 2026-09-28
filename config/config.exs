@@ -102,6 +102,8 @@ config :safarimanager, SM.PromEx,
 
 config :safarimanager, SM.Repo,
   pool_size: 10,
+  # SQLite default is 2s; import stampedes + USB I/O need longer waits.
+  busy_timeout: 30_000,
   migration_primary_key: [name: :id, type: :binary_id],
   migration_foreign_key: [column: :id, type: :binary_id],
   migration_timestamps: [type: :utc_datetime_usec],
