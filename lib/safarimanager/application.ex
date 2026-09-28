@@ -31,6 +31,7 @@ defmodule SM.Application do
         SM.Cache,
         # Mounted devices watcher process
         {SM.USBWatcherSupervisor, []},
+        SM.CompetitionDirectories.Monitor,
         # Start the Endpoint (http/https)
         SMWeb.Endpoint,
         {Task,

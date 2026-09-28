@@ -5,6 +5,7 @@ defmodule SM.Slides.Slide do
   use SM, :schema
 
   alias SM.Accounts.User
+  alias SM.CompetitionDirectories.PathSafety
   alias SM.Competitions
   alias SM.Competitions.Competition
   alias SM.Slides.SlideEvaluation
@@ -12,6 +13,7 @@ defmodule SM.Slides.Slide do
   alias SM.Subjects.Subject
 
   @statuses Application.compile_env!(:safarimanager, [__MODULE__, :statuses])
+  @storage_values [:internal, :linked]
 
   schema "slides" do
     field :file_name, :string
@@ -22,6 +24,7 @@ defmodule SM.Slides.Slide do
     field :height, :integer
     field :metadata, :map
     field :status, Ecto.Enum, values: @statuses, default: :discarded
+    field :storage, Ecto.Enum, values: @storage_values, default: :internal
     field :penalty, :boolean
     has_many :slide_flags, SlideFlag
     belongs_to :user, User
@@ -52,6 +55,7 @@ defmodule SM.Slides.Slide do
       :subject_id
     ])
     |> validate_required([:file_name, :file_size, :user_id, :competition_id])
+    |> validate_file_name()
     |> cast_assoc(:slide_flags, required: false)
     |> cast_assoc(:votes, required: false)
     |> maybe_require_subject()
@@ -67,6 +71,7 @@ defmodule SM.Slides.Slide do
     struct
     |> cast(attrs, __MODULE__.__schema__(:fields))
     |> validate_required([:id, :file_name, :file_size, :user_id, :competition_id])
+    |> validate_file_name()
     |> maybe_require_subject()
     |> unique_constraint(:id)
     |> foreign_key_constraint(:user_id)
@@ -80,6 +85,13 @@ defmodule SM.Slides.Slide do
   end
 
   # Internal
+
+  # file_name is joined onto storage directories when serving and deleting files.
+  defp validate_file_name(changeset) do
+    validate_change(changeset, :file_name, fn :file_name, name ->
+      if PathSafety.safe_file_name?(name), do: [], else: [file_name: "is not a valid file name"]
+    end)
+  end
 
   defp maybe_require_subject(changeset) do
     if get_field(changeset, :status) == :discarded do

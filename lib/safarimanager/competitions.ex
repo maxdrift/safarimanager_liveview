@@ -6,6 +6,7 @@ defmodule SM.Competitions do
 
   alias Ecto.Multi
   alias SM.Categories.Category
+  alias SM.CompetitionDirectories
   alias SM.Competitions.Competition
   alias SM.Competitions.CompetitionSettings
   alias SM.Competitions.CompetitionSubject
@@ -407,6 +408,9 @@ defmodule SM.Competitions do
   @spec delete(Competition.t()) :: {:ok, Competition.t()} | {:error, any()}
   def delete(%Competition{} = competition) do
     Multi.new()
+    |> Multi.run(:unlink_originals, fn _repo, %{} ->
+      {:ok, CompetitionDirectories.remove_competition_from_manifests(competition.id)}
+    end)
     |> Multi.delete(:delete_competition, competition)
     |> Multi.run(:delete_files, fn _repo, %{} ->
       case Slides.delete_files(competition.id) do
@@ -443,6 +447,9 @@ defmodule SM.Competitions do
     query = from entity in Competition, where: entity.id in ^ids
 
     Multi.new()
+    |> Multi.run(:unlink_originals, fn _repo, %{} ->
+      {:ok, Enum.each(ids, &CompetitionDirectories.remove_competition_from_manifests/1)}
+    end)
     |> Multi.delete_all(:delete_competitions, query)
     |> Multi.run(:delete_files, fn _repo, %{} ->
       Enum.reduce_while(ids, {:ok, :deleted}, &delete_while/2)

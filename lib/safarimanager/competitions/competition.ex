@@ -4,6 +4,7 @@ defmodule SM.Competitions.Competition do
   """
   use SM, :schema
 
+  alias SM.CompetitionDirectories.CompetitionDirectory
   alias SM.Competitions.CompetitionEvaluation
   alias SM.Competitions.CompetitionSettings
   alias SM.Competitions.CompetitionSubject
@@ -38,6 +39,7 @@ defmodule SM.Competitions.Competition do
     has_many :teams, Team
     has_many :jurors, Juror, preload_order: [asc: :inserted_at], on_replace: :delete
     has_many :slides, Slide
+    has_one :competition_directory, CompetitionDirectory, foreign_key: :competition_id
     has_many :competition_subjects, CompetitionSubject, on_replace: :delete
 
     timestamps()
@@ -137,6 +139,7 @@ defmodule SM.Competitions.Competition do
     |> put_assoc(:competitions_evaluations, allowed_evaluations)
   end
 
+  # Internal
   @spec put_allowed_evaluations(t(), [Evaluation.t()]) :: Ecto.Changeset.t()
   def put_allowed_evaluations(struct, evaluations) do
     struct
@@ -158,8 +161,6 @@ defmodule SM.Competitions.Competition do
   def get_types do
     @types
   end
-
-  # Internal
 
   defp drop_blank_competition_subject_params(%{"competition_subjects" => subjects} = attrs) when is_map(subjects) do
     filtered =
