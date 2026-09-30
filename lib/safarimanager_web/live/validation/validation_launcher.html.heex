@@ -61,13 +61,15 @@
               <.validation_checkmark variant={list_to_variant(stats.flagged_slides)} />
             </td>
           </tr>
-          <tr :if={list_to_boolean(stats.flagged_slides ++ stats.duplicate_subjects)}>
+          <tr
+            :if={list_to_boolean(stats.flagged_slides ++ stats.duplicate_subjects)}
+            class="relative z-0 focus-within:z-40"
+          >
             <td />
-            <td colspan="7" class="min-w-0">
-              <div class="table-scroll">
+            <td colspan="7" class="min-w-0 overflow-visible">
                 <table
                   :if={stats.flagged_slides != []}
-                  class="table table-xs w-full text-center min-w-[56rem]"
+                  class="table table-xs w-full text-center"
                 >
                   <colgroup span="8" />
                   <thead>
@@ -147,90 +149,92 @@
                           </div>
                           <span :if={!slide_flags.note}>-</span>
                         </td>
-                        <td class="flex flex-row">
-                          <.link
-                            navigate={"/organize/#{@competition_id}/validation?slide_id=#{slide.id}"}
-                            class="flex-none btn btn-xs"
-                          >
-                            {gettext("Open")}
-                          </.link>
-                          <div class="flex-none mx-1.5 dropdown">
-                            <label tabindex="0" class="btn btn-xs">
-                              {gettext("Actions")}
-                            </label>
-                            <ul
-                              tabindex="0"
-                              class="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52"
+                        <td class="overflow-visible">
+                          <div class="flex flex-row items-center justify-center gap-1.5">
+                            <.link
+                              navigate={"/organize/#{@competition_id}/validation?slide_id=#{slide.id}"}
+                              class="flex-none btn btn-xs"
                             >
-                              <li>
-                                <a
-                                  :if={slide_flags.wrong_subject}
-                                  class="btn btn-sm btn-ghost"
-                                  phx-click="apply-subject-correction"
-                                  phx-value-slide-id={slide.id}
-                                  phx-value-new-subject={
-                                    slide_flags.wrong_subject &&
-                                      slide_flags.wrong_subject.context["to"]
-                                  }
-                                >
-                                  {gettext("Apply subject correction")}
-                                </a>
-                              </li>
-                              <li>
-                                <a
-                                  :if={slide.status != :submitted_jury}
-                                  class="btn btn-sm btn-ghost"
-                                  phx-click="move-slide-to-jury"
-                                  phx-value-slide-id={slide.id}
-                                >
-                                  {gettext("Move to jury")}
-                                </a>
-                              </li>
-                              <li>
-                                <a
-                                  :if={slide.status != :submitted_fixed}
-                                  class="btn btn-sm btn-ghost"
-                                  phx-click="move-slide-to-fixed"
-                                  phx-value-slide-id={slide.id}
-                                >
-                                  {gettext("Move to fixed points")}
-                                </a>
-                              </li>
-                              <li>
-                                <a
-                                  class="btn btn-sm btn-ghost"
-                                  phx-click="move-slide-to-discarded"
-                                  phx-value-slide-id={slide.id}
-                                >
-                                  {gettext("Move to discarded")}
-                                </a>
-                              </li>
-                              <li>
-                                <a
-                                  class="btn btn-sm btn-ghost"
-                                  phx-click="clear-all-flags"
-                                  phx-value-slide-id={slide.id}
-                                >
-                                  {gettext("Clear all flags")}
-                                </a>
-                              </li>
-                            </ul>
+                              {gettext("Open")}
+                            </.link>
+                            <div class="flex-none dropdown dropdown-end relative z-10 focus-within:z-50">
+                              <label tabindex="0" class="btn btn-xs">
+                                {gettext("Actions")}
+                              </label>
+                              <ul
+                                tabindex="0"
+                                class="dropdown-content z-50 menu p-2 shadow bg-base-100 rounded-box w-52"
+                              >
+                                <li>
+                                  <a
+                                    :if={slide_flags.wrong_subject}
+                                    class="btn btn-sm btn-ghost"
+                                    phx-click="apply-subject-correction"
+                                    phx-value-slide-id={slide.id}
+                                    phx-value-new-subject={
+                                      slide_flags.wrong_subject &&
+                                        slide_flags.wrong_subject.context["to"]
+                                    }
+                                  >
+                                    {gettext("Apply subject correction")}
+                                  </a>
+                                </li>
+                                <li>
+                                  <a
+                                    :if={slide.status != :submitted_jury}
+                                    class="btn btn-sm btn-ghost"
+                                    phx-click="move-slide-to-jury"
+                                    phx-value-slide-id={slide.id}
+                                  >
+                                    {gettext("Move to jury")}
+                                  </a>
+                                </li>
+                                <li>
+                                  <a
+                                    :if={slide.status != :submitted_fixed}
+                                    class="btn btn-sm btn-ghost"
+                                    phx-click="move-slide-to-fixed"
+                                    phx-value-slide-id={slide.id}
+                                  >
+                                    {gettext("Move to fixed points")}
+                                  </a>
+                                </li>
+                                <li>
+                                  <a
+                                    class="btn btn-sm btn-ghost"
+                                    phx-click="move-slide-to-discarded"
+                                    phx-value-slide-id={slide.id}
+                                  >
+                                    {gettext("Move to discarded")}
+                                  </a>
+                                </li>
+                                <li>
+                                  <a
+                                    class="btn btn-sm btn-ghost"
+                                    phx-click="clear-all-flags"
+                                    phx-value-slide-id={slide.id}
+                                  >
+                                    {gettext("Clear all flags")}
+                                  </a>
+                                </li>
+                              </ul>
+                            </div>
+                            <.form
+                              for={%{}}
+                              method="post"
+                              action={~p"/image_export"}
+                              class="flex-none"
+                            >
+                              <.hidden_input name={:slide_id} value={slide.id} />
+                              <button type="submit" class="btn btn-square btn-xs">
+                                <Heroicons.icon
+                                  name="arrow-down-tray"
+                                  type="outline"
+                                  class="h-4 w-4"
+                                />
+                              </button>
+                            </.form>
                           </div>
-                          <.form
-                            for={%{}}
-                            method="post"
-                            action={~p"/image_export"}
-                            class="flex-none"
-                          >
-                            <.hidden_input name={:slide_id} value={slide.id} />
-                            <button type="submit" class="btn btn-square btn-xs">
-                              <Heroicons.icon
-                                name="arrow-down-tray"
-                                type="outline"
-                                class="h-4 w-4"
-                              />
-                            </button>
-                          </.form>
                         </td>
                       </tr>
                     <% end %>
@@ -238,7 +242,7 @@
                 </table>
                 <table
                   :if={stats.duplicate_subjects != []}
-                  class="table table-xs w-full text-center mt-2 min-w-[36rem]"
+                  class="table table-xs w-full text-center mt-2"
                 >
                   <colgroup span="4" />
                   <thead>
@@ -277,57 +281,58 @@
                           {status_to_label(slide.status)}
                         </div>
                       </td>
-                      <td>
-                        <.link
-                          navigate={"/organize/#{@competition_id}/validation?slide_id=#{slide.id}"}
-                          class="btn btn-xs"
-                        >
-                          {gettext("Open")}
-                        </.link>
-                        <div class="dropdown mx-auto">
-                          <label tabindex="0" class="btn btn-xs">
-                            {gettext("Actions")}
-                          </label>
-                          <ul
-                            tabindex="0"
-                            class="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52"
+                      <td class="overflow-visible">
+                        <div class="flex flex-row items-center justify-center gap-1.5">
+                          <.link
+                            navigate={"/organize/#{@competition_id}/validation?slide_id=#{slide.id}"}
+                            class="btn btn-xs"
                           >
-                            <li>
-                              <a
-                                :if={slide.status != :submitted_jury}
-                                class="btn btn-sm btn-ghost"
-                                phx-click="move-slide-to-jury"
-                                phx-value-slide-id={slide.id}
-                              >
-                                {gettext("Move to jury")}
-                              </a>
-                            </li>
-                            <li>
-                              <a
-                                :if={slide.status != :submitted_fixed}
-                                class="btn btn-sm btn-ghost"
-                                phx-click="move-slide-to-fixed"
-                                phx-value-slide-id={slide.id}
-                              >
-                                {gettext("Move to fixed points")}
-                              </a>
-                            </li>
-                            <li>
-                              <a
-                                class="btn btn-sm btn-ghost"
-                                phx-click="move-slide-to-discarded"
-                                phx-value-slide-id={slide.id}
-                              >
-                                {gettext("Move to discarded")}
-                              </a>
-                            </li>
-                          </ul>
+                            {gettext("Open")}
+                          </.link>
+                          <div class="dropdown dropdown-end relative z-10 focus-within:z-50">
+                            <label tabindex="0" class="btn btn-xs">
+                              {gettext("Actions")}
+                            </label>
+                            <ul
+                              tabindex="0"
+                              class="dropdown-content z-50 menu p-2 shadow bg-base-100 rounded-box w-52"
+                            >
+                              <li>
+                                <a
+                                  :if={slide.status != :submitted_jury}
+                                  class="btn btn-sm btn-ghost"
+                                  phx-click="move-slide-to-jury"
+                                  phx-value-slide-id={slide.id}
+                                >
+                                  {gettext("Move to jury")}
+                                </a>
+                              </li>
+                              <li>
+                                <a
+                                  :if={slide.status != :submitted_fixed}
+                                  class="btn btn-sm btn-ghost"
+                                  phx-click="move-slide-to-fixed"
+                                  phx-value-slide-id={slide.id}
+                                >
+                                  {gettext("Move to fixed points")}
+                                </a>
+                              </li>
+                              <li>
+                                <a
+                                  class="btn btn-sm btn-ghost"
+                                  phx-click="move-slide-to-discarded"
+                                  phx-value-slide-id={slide.id}
+                                >
+                                  {gettext("Move to discarded")}
+                                </a>
+                              </li>
+                            </ul>
+                          </div>
                         </div>
                       </td>
                     </tr>
                   </tbody>
                 </table>
-              </div>
             </td>
           </tr>
         <% end %>
