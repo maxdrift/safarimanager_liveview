@@ -64,16 +64,33 @@ defmodule SMWeb.Live.Jurors do
 
   def handle_event("show-qr-code", %{"user-id" => user_id}, socket) do
     {:ok, user} = Accounts.get_user(user_id)
-    {:ok, address} = Config.get_private_network_address()
-    host = %{Endpoint.access_struct_url() | host: Utils.ip_to_host(address)}
-    voting_url = Utils.juror_voting_url(host, socket.assigns.competition_id, user_id)
 
-    qr_code =
-      voting_url
-      |> QRCodeEx.encode()
-      |> QRCodeEx.svg(shape: "circle", width: 300)
+    socket =
+      case Config.get_private_network_address() do
+        {:ok, address} ->
+          host = %{Endpoint.access_struct_url() | host: Utils.ip_to_host(address)}
+          voting_url = Utils.juror_voting_url(host, socket.assigns.competition_id, user_id)
 
-    socket = assign(socket, qr_code: qr_code, full_name: "#{user.last_name} #{user.first_name}", voting_url: voting_url)
+          qr_code =
+            voting_url
+            |> QRCodeEx.encode()
+            |> QRCodeEx.svg(shape: "circle", width: 300)
+
+          assign(socket,
+            qr_code: qr_code,
+            full_name: "#{user.last_name} #{user.first_name}",
+            voting_url: voting_url
+          )
+
+        {:error, :address_not_found} ->
+          put_flash(
+            socket,
+            :error,
+            gettext(
+              "Unable to find a local network address. Connect this computer to Wi-Fi or Ethernet so jurors can scan the QR code."
+            )
+          )
+      end
 
     {:noreply, socket}
   end

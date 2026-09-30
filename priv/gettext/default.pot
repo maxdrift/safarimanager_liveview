@@ -19,8 +19,8 @@ msgstr ""
 #: lib/safarimanager_web/live/admin/subjects/index.html.heex:142
 #: lib/safarimanager_web/live/admin/teams/index.html.heex:190
 #: lib/safarimanager_web/live/admin/users/index.html.heex:228
-#: lib/safarimanager_web/live/validation/validation_launcher.html.heex:159
-#: lib/safarimanager_web/live/validation/validation_launcher.html.heex:289
+#: lib/safarimanager_web/live/validation/validation_launcher.html.heex:162
+#: lib/safarimanager_web/live/validation/validation_launcher.html.heex:290
 #, elixir-autogen, elixir-format
 msgid "Actions"
 msgstr ""
@@ -176,7 +176,7 @@ msgstr ""
 #: lib/safarimanager_web/live/validation/validation.ex:423
 #: lib/safarimanager_web/live/validation/validation_launcher.ex:253
 #: lib/safarimanager_web/live/validation/validation_launcher.html.heex:28
-#: lib/safarimanager_web/live/validation/validation_launcher.html.heex:359
+#: lib/safarimanager_web/live/validation/validation_launcher.html.heex:360
 #, elixir-autogen, elixir-format
 msgid "Jury"
 msgstr ""
@@ -195,7 +195,7 @@ msgstr ""
 #: lib/safarimanager_web/components/steps_header.ex:68
 #: lib/safarimanager_web/live/new_competition/new_competition.html.heex:115
 #: lib/safarimanager_web/live/slides/slides.html.heex:472
-#: lib/safarimanager_web/live/validation/validation_launcher.html.heex:352
+#: lib/safarimanager_web/live/validation/validation_launcher.html.heex:353
 #, elixir-autogen, elixir-format
 msgid "Selection"
 msgstr ""
@@ -596,17 +596,17 @@ msgstr ""
 msgid "Unable to import slide selection: subject not found"
 msgstr ""
 
-#: lib/safarimanager_web/components/grid.ex:213
+#: lib/safarimanager_web/components/grid.ex:218
 #, elixir-autogen, elixir-format
 msgid "Are you sure you want to delete 1 record?"
 msgstr ""
 
-#: lib/safarimanager_web/components/grid.ex:198
+#: lib/safarimanager_web/components/grid.ex:203
 #, elixir-autogen, elixir-format
 msgid "Are you sure you want to delete all records?"
 msgstr ""
 
-#: lib/safarimanager_web/components/grid.ex:181
+#: lib/safarimanager_web/components/grid.ex:186
 #, elixir-autogen, elixir-format
 msgid "Are you sure you want to delete this record?"
 msgstr ""
@@ -664,13 +664,13 @@ msgstr ""
 msgid "Created"
 msgstr ""
 
-#: lib/safarimanager_web/components/grid.ex:58
-#: lib/safarimanager_web/components/grid.ex:182
-#: lib/safarimanager_web/components/grid.ex:199
-#: lib/safarimanager_web/components/grid.ex:214
-#: lib/safarimanager_web/components/grid.ex:233
+#: lib/safarimanager_web/components/grid.ex:63
+#: lib/safarimanager_web/components/grid.ex:187
+#: lib/safarimanager_web/components/grid.ex:204
+#: lib/safarimanager_web/components/grid.ex:219
+#: lib/safarimanager_web/components/grid.ex:238
 #: lib/safarimanager_web/live/admin/categories/index.html.heex:133
-#: lib/safarimanager_web/live/admin/competitions/index.ex:192
+#: lib/safarimanager_web/live/admin/competitions/index.ex:193
 #: lib/safarimanager_web/live/admin/competitions/index.html.heex:722
 #: lib/safarimanager_web/live/admin/evaluations/index.html.heex:175
 #: lib/safarimanager_web/live/admin/organizations/index.html.heex:211
@@ -686,18 +686,18 @@ msgstr ""
 msgid "Delete"
 msgstr ""
 
-#: lib/safarimanager_web/components/grid.ex:197
+#: lib/safarimanager_web/components/grid.ex:202
 #, elixir-autogen, elixir-format
 msgid "Delete all records"
 msgstr ""
 
-#: lib/safarimanager_web/components/grid.ex:180
-#: lib/safarimanager_web/components/grid.ex:212
+#: lib/safarimanager_web/components/grid.ex:185
+#: lib/safarimanager_web/components/grid.ex:217
 #, elixir-autogen, elixir-format
 msgid "Delete record"
 msgstr ""
 
-#: lib/safarimanager_web/components/grid.ex:227
+#: lib/safarimanager_web/components/grid.ex:232
 #, elixir-autogen, elixir-format
 msgid "Delete records"
 msgstr ""
@@ -723,12 +723,12 @@ msgstr ""
 msgid "Edited subject"
 msgstr ""
 
-#: lib/safarimanager_web/components/grid.ex:40
+#: lib/safarimanager_web/components/grid.ex:45
 #, elixir-autogen, elixir-format
 msgid "Export to CSV"
 msgstr ""
 
-#: lib/safarimanager_web/components/grid.ex:50
+#: lib/safarimanager_web/components/grid.ex:55
 #, elixir-autogen, elixir-format
 msgid "Merge into"
 msgstr ""
@@ -1129,7 +1129,7 @@ msgstr ""
 msgid "Successfully merged organizations"
 msgstr ""
 
-#: lib/safarimanager_web/live/admin/competitions/index.ex:275
+#: lib/safarimanager_web/live/admin/competitions/index.ex:276
 #, elixir-autogen, elixir-format
 msgid "All competitions deleted successfully"
 msgstr ""
@@ -1155,7 +1155,7 @@ msgstr ""
 msgid "Competition created successfully"
 msgstr ""
 
-#: lib/safarimanager_web/live/admin/competitions/index.ex:252
+#: lib/safarimanager_web/live/admin/competitions/index.ex:253
 #, elixir-autogen, elixir-format
 msgid "Competition deleted successfully"
 msgstr ""
@@ -1168,7 +1168,7 @@ msgstr ""
 msgid "Competition details"
 msgstr ""
 
-#: lib/safarimanager_web/live/admin/competitions/index.ex:263
+#: lib/safarimanager_web/live/admin/competitions/index.ex:264
 #, elixir-autogen, elixir-format
 msgid "Competitions deleted successfully"
 msgstr ""
@@ -1445,17 +1445,17 @@ msgstr ""
 msgid "To"
 msgstr ""
 
-#: lib/safarimanager_web/live/admin/competitions/index.ex:253
+#: lib/safarimanager_web/live/admin/competitions/index.ex:254
 #, elixir-autogen, elixir-format
 msgid "Unable to delete Competition"
 msgstr ""
 
-#: lib/safarimanager_web/live/admin/competitions/index.ex:266
+#: lib/safarimanager_web/live/admin/competitions/index.ex:267
 #, elixir-autogen, elixir-format
 msgid "Unable to delete Competitions"
 msgstr ""
 
-#: lib/safarimanager_web/live/admin/competitions/index.ex:227
+#: lib/safarimanager_web/live/admin/competitions/index.ex:228
 #, elixir-autogen, elixir-format
 msgid "Unable to retrieve this Competition"
 msgstr ""
@@ -1864,7 +1864,7 @@ msgstr ""
 #: lib/safarimanager_web/controllers/slides_printout_html/show_teams.html.heex:24
 #: lib/safarimanager_web/live/results/results.html.heex:199
 #: lib/safarimanager_web/live/results/team_results.html.heex:172
-#: lib/safarimanager_web/live/validation/validation_launcher.html.heex:78
+#: lib/safarimanager_web/live/validation/validation_launcher.html.heex:80
 #: lib/safarimanager_web/live/validation/validation_launcher.html.heex:251
 #, elixir-autogen, elixir-format
 msgid "File name"
@@ -2013,7 +2013,7 @@ msgstr ""
 msgid "Prev"
 msgstr ""
 
-#: lib/safarimanager_web/live/validation/validation_launcher.html.heex:81
+#: lib/safarimanager_web/live/validation/validation_launcher.html.heex:83
 #, elixir-autogen, elixir-format
 msgid "Wrong subject"
 msgstr ""
@@ -2049,7 +2049,7 @@ msgid "Dup. Subjects"
 msgstr ""
 
 #: lib/safarimanager_web/live/validation/validation_launcher.html.heex:34
-#: lib/safarimanager_web/live/validation/validation_launcher.html.heex:75
+#: lib/safarimanager_web/live/validation/validation_launcher.html.heex:77
 #, elixir-autogen, elixir-format
 msgid "Flags"
 msgstr ""
@@ -2059,8 +2059,8 @@ msgstr ""
 msgid "Jury Count"
 msgstr ""
 
-#: lib/safarimanager_web/live/validation/validation_launcher.html.heex:155
-#: lib/safarimanager_web/live/validation/validation_launcher.html.heex:285
+#: lib/safarimanager_web/live/validation/validation_launcher.html.heex:158
+#: lib/safarimanager_web/live/validation/validation_launcher.html.heex:286
 #, elixir-autogen, elixir-format
 msgid "Open"
 msgstr ""
@@ -2078,7 +2078,7 @@ msgstr ""
 #: lib/safarimanager_web/live/results/results.html.heex:205
 #: lib/safarimanager_web/live/results/team_results.html.heex:178
 #: lib/safarimanager_web/live/slides/slide_selection.html.heex:335
-#: lib/safarimanager_web/live/validation/validation_launcher.html.heex:80
+#: lib/safarimanager_web/live/validation/validation_launcher.html.heex:82
 #: lib/safarimanager_web/live/validation/validation_launcher.html.heex:253
 #, elixir-autogen, elixir-format
 msgid "Status"
@@ -2090,7 +2090,7 @@ msgstr ""
 #: lib/safarimanager_web/live/admin/competitions/index.html.heex:597
 #: lib/safarimanager_web/live/admin/competitions/new_form.ex:419
 #: lib/safarimanager_web/live/slides/slide_selection.html.heex:318
-#: lib/safarimanager_web/live/validation/validation_launcher.html.heex:79
+#: lib/safarimanager_web/live/validation/validation_launcher.html.heex:81
 #: lib/safarimanager_web/live/validation/validation_launcher.html.heex:252
 #, elixir-autogen, elixir-format
 msgid "Subject"
@@ -2480,12 +2480,12 @@ msgstr ""
 msgid "Delete all slides"
 msgstr ""
 
-#: lib/safarimanager_web/live/validation/validation_launcher.html.heex:214
+#: lib/safarimanager_web/live/validation/validation_launcher.html.heex:217
 #, elixir-autogen, elixir-format
 msgid "Clear all flags"
 msgstr ""
 
-#: lib/safarimanager_web/live/validation/validation_launcher.html.heex:83
+#: lib/safarimanager_web/live/validation/validation_launcher.html.heex:85
 #, elixir-autogen, elixir-format
 msgid "Distinction"
 msgstr ""
@@ -2515,25 +2515,25 @@ msgstr ""
 msgid "Insert a note here..."
 msgstr ""
 
-#: lib/safarimanager_web/live/validation/validation_launcher.html.heex:205
-#: lib/safarimanager_web/live/validation/validation_launcher.html.heex:321
+#: lib/safarimanager_web/live/validation/validation_launcher.html.heex:208
+#: lib/safarimanager_web/live/validation/validation_launcher.html.heex:322
 #, elixir-autogen, elixir-format
 msgid "Move to discarded"
 msgstr ""
 
-#: lib/safarimanager_web/live/validation/validation_launcher.html.heex:196
-#: lib/safarimanager_web/live/validation/validation_launcher.html.heex:312
+#: lib/safarimanager_web/live/validation/validation_launcher.html.heex:199
+#: lib/safarimanager_web/live/validation/validation_launcher.html.heex:313
 #, elixir-autogen, elixir-format
 msgid "Move to fixed points"
 msgstr ""
 
-#: lib/safarimanager_web/live/validation/validation_launcher.html.heex:186
-#: lib/safarimanager_web/live/validation/validation_launcher.html.heex:302
+#: lib/safarimanager_web/live/validation/validation_launcher.html.heex:189
+#: lib/safarimanager_web/live/validation/validation_launcher.html.heex:303
 #, elixir-autogen, elixir-format
 msgid "Move to jury"
 msgstr ""
 
-#: lib/safarimanager_web/live/validation/validation_launcher.html.heex:84
+#: lib/safarimanager_web/live/validation/validation_launcher.html.heex:86
 #, elixir-autogen, elixir-format
 msgid "Note"
 msgstr ""
@@ -2558,12 +2558,12 @@ msgstr ""
 msgid "Slide moved to jury"
 msgstr ""
 
-#: lib/safarimanager_web/live/validation/validation_launcher.html.heex:82
+#: lib/safarimanager_web/live/validation/validation_launcher.html.heex:84
 #, elixir-autogen, elixir-format
 msgid "Unrecognizable"
 msgstr ""
 
-#: lib/safarimanager_web/live/validation/validation_launcher.html.heex:176
+#: lib/safarimanager_web/live/validation/validation_launcher.html.heex:179
 #, elixir-autogen, elixir-format
 msgid "Apply subject correction"
 msgstr ""
@@ -3009,17 +3009,17 @@ msgstr ""
 msgid "Highest votes image"
 msgstr ""
 
-#: lib/safarimanager_web/live/admin/competitions/index.ex:448
+#: lib/safarimanager_web/live/admin/competitions/index.ex:449
 #, elixir-autogen, elixir-format
 msgid "discarded"
 msgstr ""
 
-#: lib/safarimanager_web/live/admin/competitions/index.ex:447
+#: lib/safarimanager_web/live/admin/competitions/index.ex:448
 #, elixir-autogen, elixir-format
 msgid "submitted_fixed"
 msgstr ""
 
-#: lib/safarimanager_web/live/admin/competitions/index.ex:446
+#: lib/safarimanager_web/live/admin/competitions/index.ex:447
 #, elixir-autogen, elixir-format
 msgid "submitted_jury"
 msgstr ""
@@ -3029,12 +3029,12 @@ msgstr ""
 msgid "Slides size"
 msgstr ""
 
-#: lib/safarimanager_web/live/admin/competitions/index.ex:191
+#: lib/safarimanager_web/live/admin/competitions/index.ex:192
 #, elixir-autogen, elixir-format
 msgid "Are you sure you want to delete all discarded slides?"
 msgstr ""
 
-#: lib/safarimanager_web/live/admin/competitions/index.ex:180
+#: lib/safarimanager_web/live/admin/competitions/index.ex:181
 #, elixir-autogen, elixir-format
 msgid "Deleted all discarded slides"
 msgstr ""
@@ -3044,12 +3044,12 @@ msgstr ""
 msgid "Erase"
 msgstr ""
 
-#: lib/safarimanager_web/live/admin/competitions/index.ex:190
+#: lib/safarimanager_web/live/admin/competitions/index.ex:191
 #, elixir-autogen, elixir-format
 msgid "Erase discarded slides"
 msgstr ""
 
-#: lib/safarimanager_web/live/admin/competitions/index.ex:184
+#: lib/safarimanager_web/live/admin/competitions/index.ex:185
 #, elixir-autogen, elixir-format
 msgid "Error deleting discarded slides"
 msgstr ""
@@ -3446,7 +3446,7 @@ msgstr ""
 msgid "Competition directory"
 msgstr ""
 
-#: lib/safarimanager_web/components/competition_directory_panel.ex:374
+#: lib/safarimanager_web/components/competition_directory_panel.ex:375
 #, elixir-autogen, elixir-format
 msgid "Folder must stay inside the competition root."
 msgstr ""
@@ -3461,12 +3461,12 @@ msgstr ""
 msgid "Link directory…"
 msgstr ""
 
-#: lib/safarimanager_web/components/originals_reachability_banner.ex:39
+#: lib/safarimanager_web/components/originals_reachability_banner.ex:43
 #, elixir-autogen, elixir-format
 msgid "Locate folder"
 msgstr ""
 
-#: lib/safarimanager_web/components/originals_reachability_banner.ex:20
+#: lib/safarimanager_web/components/originals_reachability_banner.ex:24
 #, elixir-autogen, elixir-format
 msgid "Original slide images for this competition are unreachable. Thumbnails and previews may be shown instead."
 msgstr ""
@@ -3476,7 +3476,7 @@ msgstr ""
 msgid "Participant folders"
 msgstr ""
 
-#: lib/safarimanager_web/components/competition_directory_panel.ex:386
+#: lib/safarimanager_web/components/competition_directory_panel.ex:387
 #, elixir-autogen, elixir-format
 msgid "Reachable"
 msgstr ""
@@ -3491,7 +3491,7 @@ msgstr ""
 msgid "Remove all linked slides before unlinking the directory."
 msgstr ""
 
-#: lib/safarimanager_web/components/competition_directory_panel.ex:376
+#: lib/safarimanager_web/components/competition_directory_panel.ex:377
 #, elixir-autogen, elixir-format
 msgid "Remove linked slides before unlinking."
 msgstr ""
@@ -3506,7 +3506,7 @@ msgstr ""
 msgid "Rescan folders"
 msgstr ""
 
-#: lib/safarimanager_web/components/originals_reachability_banner.ex:32
+#: lib/safarimanager_web/components/originals_reachability_banner.ex:36
 #, elixir-autogen, elixir-format
 msgid "Retry"
 msgstr ""
@@ -3516,7 +3516,7 @@ msgstr ""
 msgid "Root:"
 msgstr ""
 
-#: lib/safarimanager_web/components/competition_directory_panel.ex:388
+#: lib/safarimanager_web/components/competition_directory_panel.ex:389
 #, elixir-autogen, elixir-format
 msgid "Unknown"
 msgstr ""
@@ -3526,7 +3526,7 @@ msgstr ""
 msgid "Unlink"
 msgstr ""
 
-#: lib/safarimanager_web/components/competition_directory_panel.ex:387
+#: lib/safarimanager_web/components/competition_directory_panel.ex:388
 #, elixir-autogen, elixir-format
 msgid "Unreachable"
 msgstr ""
@@ -3541,27 +3541,27 @@ msgstr ""
 msgid "Change folder…"
 msgstr ""
 
-#: lib/safarimanager_web/components/originals_reachability_banner.ex:30
+#: lib/safarimanager_web/components/originals_reachability_banner.ex:34
 #, elixir-autogen, elixir-format
 msgid "Checking…"
 msgstr ""
 
-#: lib/safarimanager_web/components/competition_directory_panel.ex:383
+#: lib/safarimanager_web/components/competition_directory_panel.ex:384
 #, elixir-autogen, elixir-format
 msgid "Choose an existing folder other than the filesystem root."
 msgstr ""
 
-#: lib/safarimanager_web/components/competition_directory_panel.ex:377
+#: lib/safarimanager_web/components/competition_directory_panel.ex:378
 #, elixir-autogen, elixir-format
 msgid "Competition directory not found on any connected drive."
 msgstr ""
 
-#: lib/safarimanager_web/components/competition_directory_panel.ex:381
+#: lib/safarimanager_web/components/competition_directory_panel.ex:382
 #, elixir-autogen, elixir-format
 msgid "Could not write the marker file: is the folder read-only?"
 msgstr ""
 
-#: lib/safarimanager_web/components/competition_directory_panel.ex:375
+#: lib/safarimanager_web/components/competition_directory_panel.ex:376
 #, elixir-autogen, elixir-format
 msgid "Folder not found."
 msgstr ""
@@ -3581,7 +3581,7 @@ msgstr ""
 msgid "No subfolders"
 msgstr ""
 
-#: lib/safarimanager_web/components/competition_directory_panel.ex:384
+#: lib/safarimanager_web/components/competition_directory_panel.ex:385
 #, elixir-autogen, elixir-format
 msgid "Operation failed."
 msgstr ""
@@ -3606,12 +3606,12 @@ msgstr ""
 msgid "Scanning…"
 msgstr ""
 
-#: lib/safarimanager_web/components/competition_directory_panel.ex:379
+#: lib/safarimanager_web/components/competition_directory_panel.ex:380
 #, elixir-autogen, elixir-format
 msgid "This folder contains an unreadable Safari Manager marker file."
 msgstr ""
 
-#: lib/safarimanager_web/live/admin/competitions/index.ex:170
+#: lib/safarimanager_web/live/admin/competitions/index.ex:171
 #, elixir-autogen, elixir-format
 msgid "Erase discarded slides is disabled while a competition directory is linked."
 msgstr ""
@@ -3639,4 +3639,9 @@ msgstr ""
 #: lib/safarimanager_web/components/competition_directory_panel.ex:172
 #, elixir-autogen, elixir-format
 msgid "manual override"
+msgstr ""
+
+#: lib/safarimanager_web/live/jurors/jurors.ex:89
+#, elixir-autogen, elixir-format
+msgid "Unable to find a local network address. Connect this computer to Wi-Fi or Ethernet so jurors can scan the QR code."
 msgstr ""
