@@ -131,7 +131,76 @@ fn is_printout_url(url: &Url) -> bool {
     url.path().contains("_printout")
 }
 
-async fn open_print_url(app: &tauri::AppHandle, url: Url) -> Result<(), String> {
+fn is_export_url(url: &Url) -> bool {
+    matches!(url.path(), "/csv_export" | "/image_export")
+}
+
+/// Avoid clobbering an existing file in Downloads (`report.csv` → `report (1).csv`).
+fn unique_download_path(path: PathBuf) -> PathBuf {
+    if !path.exists() {
+        return path;
+    }
+
+    let stem = path
+        .file_stem()
+        .and_then(|s| s.to_str())
+        .unwrap_or("download");
+    let ext = path
+        .extension()
+        .and_then(|s| s.to_str())
+        .map(|e| format!(".{e}"))
+        .unwrap_or_default();
+    let parent = path.parent().map(Path::to_path_buf).unwrap_or_default();
+
+    for n in 1..10_000 {
+        let candidate = parent.join(format!("{stem} ({n}){ext}"));
+        if !candidate.exists() {
+            return candidate;
+        }
+    }
+
+    path
+}
+
+fn filename_from_content_disposition(header: &str) -> Option<String> {
+    // attachment; filename="foo.csv"  OR  filename=foo.csv
+    for part in header.split(';') {
+        let part = part.trim();
+        let Some(value) = part
+            .strip_prefix("filename*=")
+            .or_else(|| part.strip_prefix("filename="))
+        else {
+            continue;
+        };
+        let value = value
+            .strip_prefix("utf-8''")
+            .or_else(|| value.strip_prefix("UTF-8''"))
+            .unwrap_or(value);
+        let value = value.trim_matches('"');
+        if !value.is_empty() {
+            return Some(value.to_string());
+        }
+    }
+    None
+}
+
+fn fallback_export_filename(url: &Url) -> String {
+    if url.path() == "/csv_export" {
+        let entity = url
+            .query_pairs()
+            .find(|(k, _)| k == "entity")
+            .map(|(_, v)| v.into_owned())
+            .unwrap_or_else(|| "export".into());
+        format!("{entity}-export.csv")
+    } else {
+        "slide-export".into()
+    }
+}
+
+async fn fetch_with_webview_cookies(
+    app: &tauri::AppHandle,
+    url: &Url,
+) -> Result<reqwest::Response, String> {
     let window = app
         .get_webview_window("main")
         .ok_or_else(|| "main window missing".to_string())?;
@@ -155,7 +224,43 @@ async fn open_print_url(app: &tauri::AppHandle, url: Url) -> Result<(), String> 
         request = request.header("Cookie", cookie_header);
     }
 
-    let response = request.send().await.map_err(|e| e.to_string())?;
+    request.send().await.map_err(|e| e.to_string())
+}
+
+/// Same pattern as printouts: `target="_blank"` is intercepted, response is fetched with the
+/// webview session cookies, then written outside the WKWebView (Downloads).
+async fn save_export_url(app: &tauri::AppHandle, url: Url) -> Result<(), String> {
+    let response = fetch_with_webview_cookies(app, &url).await?;
+    if !response.status().is_success() {
+        return Err(format!("export fetch failed: {}", response.status()));
+    }
+
+    let filename = response
+        .headers()
+        .get(reqwest::header::CONTENT_DISPOSITION)
+        .and_then(|v| v.to_str().ok())
+        .and_then(filename_from_content_disposition)
+        .unwrap_or_else(|| fallback_export_filename(&url));
+
+    // Basename only — never trust path segments from Content-Disposition.
+    let filename = Path::new(&filename)
+        .file_name()
+        .and_then(|n| n.to_str())
+        .unwrap_or("download")
+        .to_string();
+
+    let bytes = response.bytes().await.map_err(|e| e.to_string())?;
+    let target = dirs::download_dir()
+        .unwrap_or_else(std::env::temp_dir)
+        .join(filename);
+    let path = unique_download_path(target);
+    std::fs::write(&path, &bytes).map_err(|e| e.to_string())?;
+    eprintln!("export saved: {}", path.display());
+    Ok(())
+}
+
+async fn open_print_url(app: &tauri::AppHandle, url: Url) -> Result<(), String> {
+    let response = fetch_with_webview_cookies(app, &url).await?;
     if !response.status().is_success() {
         return Err(format!("printout fetch failed: {}", response.status()));
     }
@@ -342,14 +447,24 @@ fn create_main_window(app: &tauri::AppHandle, port: u16) {
     match tauri::webview::WebviewWindowBuilder::new(app, "main", tauri::WebviewUrl::External(parsed))
         .title("Safari Manager")
         .inner_size(1280.0, 800.0)
-        // Printouts (`target="_blank"`) are fetched with the webview session and opened
-        // in the system browser. Other `_blank` links get an auxiliary window.
+        // Printouts and CSV/image exports use `target="_blank"`: fetch with the webview
+        // session and handle outside WKWebView. Other `_blank` links get an aux window.
         .on_new_window(move |url, features| {
             if is_printout_url(&url) {
                 let app = app_handle.clone();
                 tauri::async_runtime::spawn(async move {
                     if let Err(err) = open_print_url(&app, url).await {
                         eprintln!("printout: {err}");
+                    }
+                });
+                return tauri::webview::NewWindowResponse::Deny;
+            }
+
+            if is_export_url(&url) {
+                let app = app_handle.clone();
+                tauri::async_runtime::spawn(async move {
+                    if let Err(err) = save_export_url(&app, url).await {
+                        eprintln!("export: {err}");
                     }
                 });
                 return tauri::webview::NewWindowResponse::Deny;

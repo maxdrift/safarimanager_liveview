@@ -37,8 +37,8 @@ defmodule SMWeb.Router do
     pipe_through [:browser, :require_authenticated_user]
 
     get "/", HomeController, :new
-    post "/csv_export", CSVExportController, :create
-    post "/image_export", ImageExportController, :create
+    get "/csv_export", CSVExportController, :create
+    get "/image_export", ImageExportController, :create
     get "/slides/:id/original", SlideOriginalController, :show
     get "/:competition_id/results_printout", ResultsPrintoutController, :show
     get "/:competition_id/slides_printout", SlidesPrintoutController, :show

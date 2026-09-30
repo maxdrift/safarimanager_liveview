@@ -36,7 +36,12 @@ defmodule SMWeb.Components.Grid do
             <.link :if={@create_path} patch={@create_path} class="btn btn-sm btn-success">
               {gettext("Create")}
             </.link>
-            <.link :if={@export_path} href={@export_path} method="post" class="btn btn-sm btn-outline">
+            <.link
+              :if={@export_path}
+              href={@export_path}
+              target="_blank"
+              class="btn btn-sm btn-outline"
+            >
               {gettext("Export to CSV")}
             </.link>
             <button
