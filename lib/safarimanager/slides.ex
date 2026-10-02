@@ -6,6 +6,7 @@ defmodule SM.Slides do
 
   alias Ecto.Multi
   alias SM.Competitions
+  alias SM.Competitions.Competition
   alias SM.Competitions.CompetitionSubject
   alias SM.ImageProcessing
   alias SM.Jurors.Juror
@@ -555,21 +556,42 @@ defmodule SM.Slides do
   end
 
   @doc """
-  Returns a count of all participants that submitted slides
+  Returns a count of distinct participants with at least one submitted slide
+  (`submitted_jury` or `submitted_fixed`). Discarded-only uploaders are excluded.
   """
-  @spec count_submitting_participants(String.t()) :: Decimal.t()
+  @spec count_submitting_participants(String.t()) :: non_neg_integer()
   def count_submitting_participants(competition_id) do
     # TODO: Rewrite this query in the Participants context querying by 'participants'
     # this should avoid the DISTINCT count
     query =
       from(sl in Slide,
         where: [competition_id: ^competition_id],
-        where: not is_nil(sl.status),
+        where: sl.status in [:submitted_jury, :submitted_fixed],
         # Workaround added due to ecto_sqlite3 v0.10.0 not supporting
         # DISTINCT inside the count expression.
         # Was failing with error "Distinct not supported in expressions in query"
         # Used to be: select: count(sl.user_id, :distinct)
         select: fragment("count(DISTINCT ?)", sl.user_id)
+      )
+
+    Repo.one(query)
+  end
+
+  @doc """
+  Returns a count of distinct teams with at least one submitted slide
+  (`submitted_jury` or `submitted_fixed`) from any member.
+  """
+  @spec count_submitting_teams(String.t()) :: non_neg_integer()
+  def count_submitting_teams(competition_id) do
+    query =
+      from(sl in Slide,
+        join: tm in TeamMember,
+        on: tm.user_id == sl.user_id,
+        join: t in assoc(tm, :team),
+        where: [competition_id: ^competition_id],
+        where: t.competition_id == ^competition_id,
+        where: sl.status in [:submitted_jury, :submitted_fixed],
+        select: fragment("count(DISTINCT ?)", t.id)
       )
 
     Repo.one(query)
@@ -618,9 +640,40 @@ defmodule SM.Slides do
     Repo.one(query)
   end
 
-  @spec subjects_distribution(String.t()) :: [Subject.t()]
-  def subjects_distribution(competition_id) do
-    p_count = count_submitting_participants(competition_id)
+  @doc """
+  Per-subject distribution of score-eligible submissions.
+
+  For individual competitions, counts distinct participants. For team competitions
+  (`for_teams: true`), counts distinct teams. Multiple slides (or members) from the
+  same competing entity count once. The virtual `count` field mirrors that numerator.
+  """
+  @spec subjects_distribution(Competition.t()) :: [Subject.t()]
+  def subjects_distribution(%Competition{for_teams: true, id: competition_id}) do
+    entity_count = count_submitting_teams(competition_id)
+
+    query =
+      from(sl in Slide,
+        join: tm in TeamMember,
+        on: tm.user_id == sl.user_id,
+        join: t in assoc(tm, :team),
+        join: su in assoc(sl, :subject),
+        where: [competition_id: ^competition_id],
+        where: t.competition_id == ^competition_id,
+        where: sl.status in [:submitted_jury, :submitted_fixed],
+        group_by: [:subject_id],
+        order_by: [asc: su.numeric_id],
+        select: %{
+          su
+          | distribution: type(fragment("count(DISTINCT ?)", t.id) / type(^entity_count, :float), :decimal),
+            count: fragment("count(DISTINCT ?)", t.id)
+        }
+      )
+
+    Repo.all(query)
+  end
+
+  def subjects_distribution(%Competition{id: competition_id}) do
+    entity_count = count_submitting_participants(competition_id)
 
     query =
       from(sl in Slide,
@@ -631,8 +684,8 @@ defmodule SM.Slides do
         order_by: [asc: su.numeric_id],
         select: %{
           su
-          | distribution: type(count(su.id) / type(^p_count, :float), :decimal),
-            count: count(su.id)
+          | distribution: type(fragment("count(DISTINCT ?)", sl.user_id) / type(^entity_count, :float), :decimal),
+            count: fragment("count(DISTINCT ?)", sl.user_id)
         }
       )
 
@@ -1190,6 +1243,7 @@ defmodule SM.Slides do
       end)
       |> Task.await_many(30_000)
       |> Enum.reduce_while({:ok, :deleted}, fn
+        # Slide Flags
         :ok, acc ->
           {:cont, acc}
 
@@ -1269,6 +1323,7 @@ defmodule SM.Slides do
   end
 
   defp delete_thumbnails(thumbnails_path, file_name) do
+    # Internal
     Enum.reduce_while([:small, :medium, :large], :ok, fn size_type, acc ->
       case delete_thumbnail(thumbnails_path, size_type, file_name) do
         :ok -> {:cont, acc}
@@ -1319,8 +1374,6 @@ defmodule SM.Slides do
 
     Repo.one!(query)
   end
-
-  # Slide Flags
 
   @spec list_slide_flags(String.t()) :: %{atom() => SlideFlag.t()}
   def list_slide_flags(slide_id) do
@@ -1409,8 +1462,6 @@ defmodule SM.Slides do
     |> Keyword.merge(flags)
     |> Map.new()
   end
-
-  # Internal
 
   defp extension_less_file_name?(file_name) do
     Path.extname(file_name) == ""
@@ -1508,7 +1559,7 @@ defmodule SM.Slides do
     :ok
   end
 
-  @spec max_slide_votes(Competitions.Competition.t() | map()) :: pos_integer()
+  @spec max_slide_votes(Competition.t() | map()) :: pos_integer()
   def max_slide_votes(%{jurors: jurors}) do
     max(Enum.count(jurors), 1)
   end

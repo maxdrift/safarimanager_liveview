@@ -128,7 +128,12 @@ The dynamic coefficient is a bonus multiplier that rewards photographing subject
 
 ### Distribution
 
-For each subject, the system computes a **distribution**: the fraction of participating photographers who submitted at least one slide of that species. A distribution of 0.2 means 20% of participants photographed this subject.
+For each subject, the system computes a **distribution**: the fraction of submitting competitors who submitted at least one slide of that species.
+
+- **Individual competitions** — competitors are distinct participants (`user_id`) with at least one `submitted_jury` or `submitted_fixed` slide. Multiple slides of the same species by one participant count once.
+- **Team competitions** (`for_teams: true`) — competitors are distinct teams. A team counts once if any member submitted that species; multiple members or slides do not inflate the count.
+
+Entities that only have discarded slides are excluded from both the numerator and the denominator. A distribution of 0.2 means 20% of submitting competitors photographed this subject.
 
 ### Interval Rules
 
@@ -138,7 +143,7 @@ The default configuration ships three intervals (all defaulting to value 1):
 
 | Interval name | Distribution range | Typical intent |
 |---------------|-------------------|----------------|
-| High rarity | 0% – 33% | Few participants photographed it → higher bonus |
+| High rarity | 0% – 33% | Few competitors photographed it → higher bonus |
 | Medium rarity | 33% – 66% | Moderately common |
 | Low rarity | 66% – 100% | Very common → lower bonus |
 
@@ -215,4 +220,4 @@ The following competition settings directly control scoring behaviour:
 | `evaluations_per_juror` | Expected number of votes each juror casts per slide |
 | `max_slides` | Maximum total slides a participant may submit |
 | `max_jury_slides` | Maximum slides a participant may send to jury evaluation |
-| `dynamic_coefficient_intervals` | List of distribution-range → bonus-value rules for the dynamic coefficient |
+| `dynamic_coefficients` | List of distribution-range → bonus-value rules for the dynamic coefficient |

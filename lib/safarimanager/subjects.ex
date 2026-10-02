@@ -258,7 +258,7 @@ defmodule SM.Subjects do
   @spec list_with_coefficients(Ecto.UUID.t()) :: [Subject.t()]
   def list_with_coefficients(competition_id) do
     {:ok, competition} = Competitions.get(competition_id)
-    slides_subjects = Slides.subjects_distribution(competition_id)
+    slides_subjects = Slides.subjects_distribution(competition)
     overrides = Competitions.subject_static_coefficient_overrides(competition_id)
 
     competition
