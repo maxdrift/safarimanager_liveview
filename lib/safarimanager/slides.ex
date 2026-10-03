@@ -429,31 +429,36 @@ defmodule SM.Slides do
     Repo.all(query)
   end
 
-  @spec list_teams_duplicate_subjects(String.t()) :: [{Participant.t(), Subject.t(), non_neg_integer()}]
+  @spec list_teams_duplicate_subjects(String.t()) :: [
+          {non_neg_integer(), non_neg_integer(), Slide.t()}
+        ]
   def list_teams_duplicate_subjects(competition_id) do
+    # Count distinct submitted slides per team+subject (not per member), mirroring
+    # list_duplicate_subjects/1 for individual competitions.
     subquery =
       from(sl in Slide,
-        join: su in assoc(sl, :subject),
-        join: p in Participant,
-        on: p.user_id == sl.user_id and p.competition_id == ^competition_id,
-        where: [competition_id: ^competition_id],
+        join: tm in TeamMember,
+        on: tm.user_id == sl.user_id,
+        join: t in assoc(tm, :team),
+        where: sl.competition_id == ^competition_id,
+        where: t.competition_id == ^competition_id,
         where: sl.status in [:submitted_fixed, :submitted_jury],
-        group_by: [sl.user_id, sl.subject_id],
-        having: count(sl.id) > 1
+        group_by: [t.id, sl.subject_id],
+        having: count(sl.id) > 1,
+        select: %{team_id: t.id, subject_id: sl.subject_id}
       )
 
     query =
       from(sl in Slide,
-        join: dup in subquery(subquery),
-        on:
-          dup.competition_id == sl.competition_id and dup.user_id == sl.user_id and
-            dup.subject_id == sl.subject_id,
         join: tm in TeamMember,
         on: tm.user_id == sl.user_id,
         join: t in assoc(tm, :team),
-        where: t.competition_id == ^competition_id,
+        join: dup in subquery(subquery),
+        on: dup.team_id == t.id and dup.subject_id == sl.subject_id,
         join: p in Participant,
         on: p.user_id == sl.user_id and p.competition_id == ^competition_id,
+        where: sl.competition_id == ^competition_id,
+        where: t.competition_id == ^competition_id,
         where: sl.status in [:submitted_fixed, :submitted_jury],
         order_by: [asc: t.number, asc: p.number, asc: sl.id],
         preload: [:subject],
